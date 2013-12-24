@@ -1,0 +1,271 @@
+%\vspace{-4ex}
+\section{Introduction}
+\label{sec-intro}
+%\vspace{-1ex}
+
+Extensions of functional dependencies (\FDs) and inclusion dependencies
+(\INDs),
+known as {\em conditional functional dependencies} (\CFDs~\cite{CFDs})
+and {\em conditional inclusion dependencies} (\CINDs~\cite{CINDs}),
+respectively, have recently been proposed for improving data quality.
+These extensions enforce patterns of semantically
+related data values, and
+detect errors as violations of the dependencies.
+Conditional dependencies are able to capture more inconsistencies
+than \FDs and \INDs~\cite{CFDs,CINDs}.
+
+Conditional dependencies specify constant patterns in terms of
+equality $(=)$. In practice, however, the semantics of data often
+needs to be specified in terms of other predicates such as
+$\ne, <, \le, >$ and $\ge$, as illustrated by the example below.
+
+%\vspace{-1ex}
+\begin{example}
+\label{exa-motivation}
+An online store maintains a database of
+two relations: (a) \at{item} for items sold
+by the store, and (b) \at{tax} for
+the sale tax rates for the items, except artwork,
+in various states.
+The relations are specified by the following schemas:
+
+\vspace{-.5ex} 
+\mat{2ex}{
+\at{item}(\=\at{id}:~string,
+\at{name}:~string, \at{type}:~string, \at{price}:~float,  \\
+ \> \at{shipping}:~float,\at{sale}:~bool, \at{state}:~string)\\
+\at{tax}(\at{state}:~string, \at{rate}:~float)
+} \vspace{-.5ex}
+
+
+%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[!tp]
+\vspace{-1ex}
+\begin{center}
+\begin{small}
+\begin{minipage}[bt]{3.4in}
+\subfigure[{\small An \at{item} relation}]{
+    \label{fig-sales}
+%%(a)pku
+\begin{tabular}{c | c | c | c | c | c | c | c |}
+\cline{2-8} \multicolumn{1}{c|}{}&\ $\attr{id}$ & \
+$\attr{name}$ &\ $\attr{type}$ &\ $\attr{price}$\ &\ $\attr{shipping}$
+&\ $\attr{sale}$ &\ $\attr{state}$\\
+\cline{2-8}
+$t_1$: & b1  & Harry Potter   & book & 25.99\ & 0 & T & WA \\
+$t_2$: & c1  & Snow White   & CD & 9.99  & 2 & F & NY\\
+$t_3$: & b2  & Catch-22   & book & 34.99 & 20 & F & DL\\
+$t_4$: & a1  & Sunflowers  & art & 5m  & 500 & F & DL \\
+\cline{2-8}
+\end{tabular}
+}
+\end{minipage}
+\quad\quad\quad\quad
+\begin{minipage}[bt]{1.2in}
+\subfigure[{\small \at{tax} rates}]{
+\label{fig-rd}
+\begin{tabular}{ c | c | c |}
+\cline{2-3} \multicolumn{1}{c|}{}&\ $\attr{state}$ &\
+$\attr{rate}$ \\
+\cline{2-3}
+$t_5$: & PA & 6\\
+$t_6$: & NY & 4\\
+$t_7$: & DL & 0\\
+$t_8$: & NJ & 3.5\\
+\cline{2-3}
+\end{tabular}
+}
+\end{minipage}
+\end{small}
+\vspace{-2ex}
+\end{center}
+%\vspace{-1ex}
+\caption{Example instance $D_0$ of \at{item} and \at{tax}}
+\label{fig-instance}
+\vspace{-4ex}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%
+
+\noindent where
+each item is specified by its \at{id}, \at{name}, \at{type}
+(\eg~book, {\sc cd}), \at{price}, \at{shipping} fee,
+the \at{state} to which it is shipped, and whether it
+is on \at{sale}. A \at{tax} tuple specifies the sale
+tax rate in a state. An instance $D_0$ of \at{item} and \at{tax} is shown
+in Fig.~\ref{fig-instance}.
+
+One wants to specify dependencies on the relations as data quality rules
+to detect errors in the data, such that inconsistencies emerge as violations of
+the dependencies. Traditional dependencies (\FDs, \INDs; see, \eg~\cite{AbHuVi1995})
+and conditional dependencies (\CFDs, \CINDs~\cite{CFDs,CINDs})
+on the data include the following:
+
+\vspace{-0.5ex} \mat{3.5ex}{ $\kw{cfd}_1$: \ \=
+\at{item}(\at{id} $\ra$ \at{name}, \at{type}, \at{price}, \at{shipping},
+\at{sale})\\
+$\kw{cfd}_2$:  \> \at{tax}(\at{state} $\ra$ \at{rate})\\
+$\kw{cfd}_3$: \>
+ \at{item}(\at{sale} = `T' $\ra$ \at{shipping} = 0)
+} \vspace{-.5ex}
+
+\noindent These are \CFDs: (a) $\kw{cfd}_1$ assures that the \at{id}
+of an \at{item} uniquely determines the \at{name}, \at{type},
+\at{price}, \at{shipping}, \at{sale} of the item; (b) $\kw{cfd}_2$
+states that \at{state} is a key for \at{tax}, \ie~for each state
+there is a unique sale tax rate; and (c) $\kw{cfd}_3$ is to ensure
+that for any \at{item} tuple $t$, if $t[\at{sale}] = $ `T' then
+$t[\at{shipping}]$ must be $0$; \ie~the store provides free shipping
+for items on sale. Here $\kw{cfd}_3$ is specified in terms of
+patterns of semantically related data values, namely, \at{sale} =
+`T' and \at{shipping} = 0. It is to hold only on \at{item} tuples
+that match the pattern \at{sale} = `T'. In contrast, $\kw{cfd}_1$
+and $\kw{cfd}_2$ are traditional \FDs without constant patterns, a
+special case of \CFDs. One  can verify that no sensible \INDs or
+\CINDs can be defined across \at{item} and \at{tax}.
+
+Note that $D_0$ of Fig.~\ref{fig-instance} satisfies $\kw{cfd}_1$,
+$\kw{cfd}_2$ and $\kw{cfd}_3$. That is, when these dependencies are
+used as data quality rules, no errors are found in $D_0$.
+
+
+In practice, the shipment fee of an item is typically determined
+by the price of the item. Moreover, when an item is on sale, the
+price of the item is often in a certain range.
+Furthermore, for any item sold by the store to
+a customer in a state, if the item is {\em not} artwork, then one expects to
+find the sale tax rate in the state from the \at{tax} table.
+These semantic relations cannot be expressed
+as \CFDs of \cite{CFDs} or \CINDs of \cite{CINDs},
+but can be expressed as the following
+dependencies:
+
+%\begin{small}
+\vspace{-.5ex} \mat{0ex}{
+$\kw{pfd}_1$: \ \=
+ \at{item}(\at{sale}$=$ `F' $\And$ \at{price}$\le$ 20 $\ra$ \at{shipping} = 3) \\
+ $\kw{pfd}_2$:  \> \at{item}(\at{sale}$=$ `F' $\And$ \at{price}$>$ 20 $\And$
+                \at{price}$\le$ 40 \\
+ \>$\ra$ \at{shipping} = 6) \\
+$\kw{pfd}_3$: \>  \at{item}(\at{sale}$=$ `F' $\And$ \at{price}$>$ 40 $\ra$ \at{shipping} = 10) \\
+$\kw{pfd}_4$:\> \at{item}(\at{sale}$=$ `T' $\ra$ \at{price}$\ge$
+2.99 $\And$
+\at{price}$<$ 9.99) \\
+$\kw{pind}_1$: \>  \at{item}(\at{state}; \at{type} $\ne$ `art')
+$\subseteq$ \at{tax}(\at{state}; $\kw{nil}$) }
+\vspace{-.5ex}
+%\end{small}
+
+\noindent Here $\kw{pfd}_2$ states that for any \at{item} tuple, if
+it is not on sale and
+its \at{price} is in the range $(20, 40]$, then its shipment fee
+must be $6$; similarly for $\kw{pfd}_1$ and $\kw{pfd}_3$. These
+dependencies extend \CFDs~\cite{CFDs} by specifying patterns of
+semantically related data values in terms of predicates $<,
+\le, >$, and $\ge$. Similarly, $\kw{pfd}_4$ assures that for any
+\at{item} tuple, if it is on sale, then its price must be in the
+range $[2.99, 9.99)$. Dependency $\kw{pind}_1$ extends
+\CINDs~\cite{CINDs} by specifying patterns with $\ne$: for any
+\at{item} tuple $t$, if $t[\at{type}]$ is {\em not} artwork, then
+there must exist a \at{tax} tuple $t'$ such that $t[\at{state}] =
+t'[\at{state}]$, \ie~the sale tax of the item can be found from the
+\at{tax} relation.
+
+Using $\kw{pfd}_1$--$\kw{pfd}_4$ and $\kw{pind}_1$ as data quality
+rules, we find that $D_0$ of  Fig.~\ref{fig-instance} is {\em not}
+clean. Indeed, (a) $t_2$ violates $\kw{pfd}_1$: its price is less
+than 20, but its shipping fee is $2$ rather than $3$; similarly,
+ $t_3$ violates $\kw{pfd}_2$, and $t_4$ violates $\kw{pfd}_3$. (b) Tuple $t_1$
+violates $\kw{pfd}_4$: it is on sale but its price is not in the
+range $[2.99, 9.99)$. (c) The database $D_0$ also violates
+$\kw{pind}_1$: $t_1$ is not artwork, but its state cannot find a
+match in the \at{tax} relation, \ie~no tax rate for WA is found in
+$D_0$. \eop
+\end{example}
+\vspace{-0.5ex}
+
+None of $\kw{pfd}_1$--$\kw{pfd}_4$ and $\kw{pind}_1$
+can be expressed as
+\FDs or \INDs~\cite{AbHuVi1995}, which do not allows constants,
+or as \CFDs~\cite{CFDs} or \CINDs~\cite{CINDs}, which specify
+patterns with  equality $(=)$ only. While there have been
+extensions of \CFDs~\cite{icde08,divesh08}, none of these allows
+dependencies to be specified with patterns on data values in terms of
+built-in predicates $\ne, <, \le, >$ or $\ge$.  To the best of our
+knowledge, no previous work has studied extensions of \CINDs
+(see Section~\ref{sec-related} for detailed discussions).
+
+These highlight the
+need for extending \CFDs and \CINDs to capture errors
+commonly found in real-life data.
+While one can consider arbitrary extensions,
+it is necessary to strike a balance between the expressive power
+of the extensions and their complexity.
+In particular, we want to be able to reason about data quality rules
+expressed as extended \CFDs and \CINDs. Furthermore, we want to
+have effective algorithms to detect inconsistencies
+based on these extensions.
+
+
+\stitle{Contributions}. This paper proposes
+a natural extension of \CFDs and \CINDs, provides complexity
+bounds for reasoning about the extension, and develops
+effective \SQL-based techniques for detecting errors
+based on the extension.
+
+\sstab
+\noindent(1) We propose two classes of dependencies, denoted by
+\pCFDs and \pCINDs, which respectively extend \CFDs and \CINDs by supporting
+$\ne, <, \le, >, \ge$ predicates. For example, all
+the dependencies we have encountered so far can be expressed as
+\pCFDs or \pCINDs. These dependencies are capable of capturing
+errors
+%in a single relation (\pCFDs) or across different relations (\pCINDs)
+in real-world data that cannot be detected by \CFDs or \CINDs.
+
+\sstab
+\noindent(2) We establish complexity bounds for  the satisfiability
+problem and the implication problem for \pCFDs and \pCINDs,
+taken separately or together. The
+satisfiability problem is to determine whether a set $\Sigma$ of
+dependencies has a nonempty model, \ie~whether the rules in $\Sigma$
+are consistent themselves. The implication problem is to decide whether
+a set $\Sigma$ of dependencies entails another dependency $\varphi$,
+\ie~whether the rule $\varphi$ is redundant in the presence of
+the rules in $\Sigma$. These are the central technical problems
+associated with any dependency language.
+
+We show that despite the increased expressive power,
+\pCFDs and \pCINDs do not increase the complexity for
+reasoning about them. In particular, we show that
+the satisfiability and implication problems remain
+(a) \NP-complete and \coNP-complete for \pCFDs, respectively,
+(b) in $O(1)$-time (constant-time) and \EXPTIME-complete
+for \pCINDs, respectively,
+and (c) are undecidable when \pCFDs and \pCINDs are taken together.
+These are {\em the same as} their \CFDs and \CINDs counterparts.
+While data with linearly ordered domains often makes our
+lives harder (see, \eg~\cite{Mayden97}), \pCFDs and \pCINDs
+do not complicate their static analyses.
+
+\sstab
+\noindent(3) We provide \SQL-based techniques to detect errors
+based on \pCFDs and \pCINDs. Given a set $\Sigma$ of {\pCFDs}
+and \pCINDs on a database $D$, we automatically generate
+a set of \SQL queries that, when evaluated on $D$, find all tuples in $D$ that
+violate some dependencies in $\Sigma$. Further,
+the \SQL queries are independent of the size and cardinality
+of $\Sigma$.
+No previous work has been studied error detection based on \CINDs,
+not to mention \pCFDs and \pCINDs taken together.
+These provide the capability of detecting errors in a single
+relation (\pCFDs) and across different relations (\pCINDs)
+within the immediate reach of commercial \rdms.
+
+%\vspace{-0.5ex}
+\stitle{Organizations}. Sections~\ref{sec-cfd} and \ref{sec-cind}
+introduce \pCFDs and \pCINDs, respectively.
+Section~\ref{sec-reasoning} establishes complexity bounds for
+reasoning about \pCFDs and \pCINDs. Section~\ref{sec-detect}
+provides \SQL techniques for error detection. Related work is
+discussed in Section~\ref{sec-related}, followed by topics for
+future work in Section~\ref{sec-conclude}.

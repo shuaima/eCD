@@ -1,0 +1,296 @@
+%\vspace{-0.5ex}
+\section{Reasoning about CFD$^p$s and CIND$^p$s}
+\label{sec-reasoning}
+%\vspace{-1ex}
+
+The satisfiability problem and the implication problem are the two
+central technical questions associated with any dependency languages.
+In this section we investigate these
+problems for \pCFDs and \pCINDs, separately and taken together.
+
+%%%%%%%%%%%%%%%%%
+\vspace{-1ex}
+\subsection{The Satisfiability Analysis}
+
+The satisfiability problem is to determine, given a set $\Sigma$ of
+constraints, whether there exists a {\em nonempty} database that
+satisfies $\Sigma$.
+
+The satisfiability analysis of conditional dependencies is not only
+of theoretical interest, but is also important in practice. Indeed,
+when \pCFDs and \pCINDs are used as data quality rules, this
+analysis helps one check whether the rules make sense themselves.
+The need for this is particularly evident when the rules are
+manually designed or discovered from various
+datasets~\cite{CM08,divesh08,icde09}.
+
+\stitle{The satisfiability analysis of CFD$^p$s}.~Given any
+\FDs, one does not need to worry about their satisfiability
+since any set of \FDs is always satisfiable. However, as observed
+in~\cite{CFDs}, for a set $\Sigma$ of \CFDs on a relational schema
+$R$, there may not exist a {\em nonempty} instance $I$ of $R$ such
+that $I\models\Sigma$. As \CFDs are a special case of \pCFDs, the
+same problem exists when it comes to \pCFDs.
+
+\vspace{-0.5ex}
+\begin{example}
+\label{exam-sat-cfd} Consider \pCFD $\varphi$ = $(R: A\ra
+B,\ T_p)$ such that $T_p$ = $\{(\_\pa = a), (\_ \pa \ne a)\}$.
+Then there exists no {\em nonempty} instance $I$ of $R$ that
+satisfies $\varphi$. Indeed, for any tuple $t$ of $R$,
+$\varphi$ requires that both $t[B] = a$ and
+$t[B]\ne a$.
+\eop
+\end{example}
+\vspace{-0.5ex}
+
+This problem is already \NP-complete for \CFDs~\cite{CFDs}.
+Below we show that it has the
+same complexity for \pCFDs despite their increased
+expressive power.
+
+%\vspace{-0.5ex}
+\begin{prop}
+\label{thm-sat-pcfd-fin} The satisfiability problem for \pCFDs is
+\NP-complete. \eop
+\end{prop}
+\vspace{-0.5ex}
+
+\proofs The lower bound follows from the \NP-hardness of their \CFDs
+counterparts~\cite{CFDs}, since \CFDs are a special case of \pCFDs.
+The upper bound is verified by presenting an \NP algorithm that,
+given a set $\Sigma$ of \pCFDs defined on a relation schema $R$,
+determines whether $\Sigma$ is satisfiable. \eop \vspace{1ex}
+
+\eat{This requires the establishment of a small model property.}
+
+It is known~\cite{CFDs} that the satisfiability problem for \CFDs is
+in \PTIME when the \CFDs considered are defined over attributes that
+have an infinite domain, \ie in the absence of finite domain
+attributes. However, this is no longer the case for \pCFDs. This
+tells us that the increased expressive power of \pCFDs does take a
+toll in this special case. It should be remarked that while the
+proof of Proposition~\ref{thm-sat-pcfd-fin} is an extension of its
+counterpart in~\cite{CFDs}, the result below is new.
+
+
+\begin{theorem}
+\label{thm-sat-pcfd-infin} In the absence of finite domain
+attributes, the satisfiability problem for \pCFDs remains
+\NP-complete. \eop
+\end{theorem}
+
+\vspace{-0.5ex} \proofs The problem is in \NP by
+Proposition~\ref{thm-sat-pcfd-fin}. Its \NP-hardness is shown by
+reduction from the \kSAT\ problem, which is \NP-complete
+(cf.~\cite{GaJo79}).\eop
+\vspace{0.5ex}
+
+
+\stitle{The satisfiability analysis  of CIND$^p$s}. Like \FDs,
+one can specify arbitrary \INDs or \CINDs without worrying about
+their satisfiability. Below we show that \pCINDs also have this
+property, by extending the proof of its counterpart in~\cite{CINDs}.
+
+\begin{prop}
+\label{thm-sat-pcind} Any set $\Sigma$ of \pCINDs is always
+satisfiable. \eop
+\end{prop}
+\vspace{-1ex}
+
+\proofs Given a set $\Sigma$ of \pCINDs over a
+database schema $\cal R$, one can always construct a
+{\em nonempty} instance $D$ of $\cal R$ such that $D \models
+\Sigma$. \eop
+\vspace{0.5ex}
+
+
+\stitle{The satisfiability  analysis of CFD$^p$s and
+CIND$^p$s}. The satisfiability problem for \CFDs
+and \CINDs taken together is undecidable~\cite{CINDs}. Since \pCFDs and
+\pCINDs subsume \CFDs and \CINDs, respectively, from these we
+immediately have:
+
+\vspace{-0.5ex}
+\begin{cor}
+\label{thm-sat-pcfd-pcind}The satisfiability problem for \pCFDs and
+\pCINDs is undecidable.\eop
+\end{cor}
+
+
+%%%%%%%%%%%%%%
+\vspace{-3ex}
+\subsection{The Implication Analysis}
+
+The implication problem is to determine, given a set $\Sigma$ of
+dependencies and another dependency $\phi$, whether or not
+$\Sigma$ entails $\phi$, denoted by $\Sigma\models\phi$. That is,
+whether or not for all databases $D$, if $D\models\Sigma$ then
+$D\models\phi$.
+
+The implication analysis helps us
+remove redundant data quality rules, and thus improve the
+performance of error detection and repairing based on
+the rules.
+
+\begin{example}
+\label{exa-implication} The \pCFDs of Fig.~\ref{fig-pcfd} imply
+\pCFDs $\varphi =$ \at{item}(\at{sale}, \at{price} $\ra$
+\at{shipping}, $T$), where $T$ consists of a single pattern tuple
+$(\at{sale} = $`F', $\at{price} = 30 \pa \at{shipping} = 6)$. Thus
+in the presence of the \pCFDs of  Fig.~\ref{fig-pcfd}, $\varphi$ is
+redundant. \eop
+\end{example}
+\vspace{-1ex}
+
+\stitle{The implication analysis of CFD$^p$s}.~We first show that
+the implication problem for \pCFDs retains
+the same complexity as their \CFDs counterpart. The result
+below is verified by
+extending the proof of its counterpart in~\cite{CFDs}.
+
+\begin{prop}
+\label{thm-imp-pcfd-fin}The implication problem for \pCFDs is
+\coNP-complete. \eop
+\end{prop}
+\vspace{-1ex}
+
+\proofs The lower bound follows from the
+\coNP-hardness of their \CFDs counterpart~\cite{CFDs}, since \CFDs
+are a special case of \pCFDs. The \coNP upper bound is verified
+by presenting an \NP algorithm for its complement problem, \ie
+the problem for determining whether $\Sigma\not\models\varphi$. \eop
+\vspace{0.5ex}
+
+Similar to the satisfiability analysis,
+it is known~\cite{CFDs} that the implication analysis of
+\CFDs is in \PTIME when the \CFDs are defined only with attributes that
+have an infinite domain. Analogous to Theorem~\ref{thm-sat-pcfd-infin},
+the result below shows that this is no longer the case for \pCFDs,
+which does not find a counterpart in~\cite{CFDs}.
+
+\begin{theorem}
+\label{thm-imp-pcfd-infin} In the absence of finite domain
+attributes, the implication problem for \pCFDs remains
+\coNP-complete. \eop
+\end{theorem}
+\vspace{-1ex}
+
+\proofs It is in \coNP by
+Proposition~\ref{thm-imp-pcfd-fin}. The \coNP-hardness is shown
+by reduction from the \kSAT\ problem to its complement problem, \ie
+the problem for determining whether $\Sigma\not\models\varphi$.
+\eop
+\vspace{0.5ex}
+
+
+\stitle{The implication analysis of CIND$^p$s}.~We next show that \pCINDs
+do not make their implication
+analysis harder. This is verified by extending the proof of
+their \CINDs counterpart given in~\cite{CINDs}.
+
+\begin{prop}
+\label{thm-imp-pcind-fin}The implication problem for \pCINDs is
+\EXPTIME-complete. \eop
+\end{prop}
+\vspace{-1ex}
+
+\proofs The implication problem for \CINDs is
+\EXPTIME-hard~\cite{CINDs}. The lower bound carries over to \pCINDs
+since \pCINDs subsume \CINDs. The \EXPTIME upper bound is shown
+by presenting an \EXPTIME algorithm that, given a set
+$\Sigma\cup\{\psi\}$ of \pCINDs over a database schema $\cal R$,
+determines whether $\Sigma\models\psi$. \eop
+\vspace{0.5ex}
+
+It is known~\cite{CINDs} that the implication problem is
+\PSPACE-complete for \CINDs defined with infinite-domain
+attributes. Similar to
+Theorem~\ref{thm-imp-pcfd-infin}, below we present a new result
+showing that this no longer holds for \pCINDs.
+
+
+\begin{theorem}
+\label{thm-imp-pcind-infin} In the absence of finite domain
+attributes, the implication problem for \pCINDs remains
+\EXPTIME-complete. \eop
+\end{theorem}
+\vspace{-1ex}
+
+\proofs The \EXPTIME upper bound follows from
+Proposition~\ref{thm-imp-pcind-fin}. The \EXPTIME-hardness is
+shown by reduction from the implication problem for \CINDs in the
+general setting, in which finite-domain attributes may be present;
+the latter is known to be \EXPTIME-complete~\cite{CINDs}. \eop
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%Complexity Summary%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table*}[tb!]
+\vspace{-1ex}
+ \caption{Summary of Complexity Results\label{tab-complexity}}
+\begin{center}
+\begin{small}
+\begin{tabular}{|c|c|c||c|c|} \hline
+&  \multicolumn{2}{|c||}{\at{General\ setting}} & \multicolumn{2}{|c|}{\at{Infinite\ domain\ only}}\\
+\cline{2-5}
+\raisebox{1.5ex}[0pt]{$\Sigma$}  & \at{Satisfiability} & \at{Implication} & \at{Satisfiability} & \at{Implication}\\
+\hline\hline \CFDs~\cite{CFDs} & \NP-complete& \coNP-complete & \PTIME & \PTIME \\
+\hline
+\pCFDs   & \NP-complete& \coNP-complete &\NP-complete& \coNP-complete  \\
+\hline
+\CINDs~\cite{CINDs} & $O(1)$ & \EXPTIME-complete &  $O(1)$ & \PSPACE-complete\\
+\hline
+\pCINDs  &  $O(1)$  & \EXPTIME-complete & $O(1)$  & \EXPTIME-complete\\
+\hline
+\CFDs+ \CINDs~\cite{CINDs} & undecidable& undecidable & undecidable& undecidable\\
+\hline
+\pCFDs+ \pCINDs & undecidable& undecidable & undecidable& undecidable\\
+\hline
+\end{tabular}
+\end{small} 
+\end{center}
+\vspace{-5ex}
+\end{table*}
+
+
+
+\stitle{The implication analysis of  CFD$^p$s and
+CIND$^p$s}. When \pCFDs and \pCINDs are taken together,
+their  implication analysis is beyond reach in practice.
+This is not surprising since
+the implication problem for \FDs and
+\INDs is already undecidable~\cite{AbHuVi1995}. Since
+\pCFDs and \pCINDs subsume \FDs and \INDs, respectively,
+from the undecidability result for \FDs and
+\INDs,  the corollary below follows immediately.
+
+\begin{cor}
+\label{thm-IM-pcfd-pcind} The implication problem for \pCFDs and
+\pCINDs is undecidable.\eop
+\end{cor}
+
+
+
+%\vspace{-0.5ex}
+\stitle{Summary}. The complexity bounds for reasoning about
+\pCFDs and \pCINDs are summarized in Table~\ref{tab-complexity}.
+To give a complete picture we also include
+in Table~\ref{tab-complexity} the complexity bounds for
+the static analyses of
+\CFDs and \CINDs, taken from~\cite{CFDs,CINDs}. The results shown in
+Table~\ref{tab-complexity} tell us the following.
+
+\sstab
+(a) Despite the increased expressive
+power, \pCFDs and \pCINDs do not complicate the static analyses: the
+satisfiability and implication problems for \pCFDs and \pCINDs have
+the same complexity bounds as their
+counterparts for \CFDs and \CINDs, taken separately or together.
+
+\sstab
+(b) In the special case when \pCFDs and \pCINDs are defined
+with infinite-domain attributes only, however, the
+static analyses of \pCFDs and \pCINDs
+do not get simpler, as opposed to their counterparts for
+\CFDs and \CINDs. That is, in this special case the increased
+expressive power of \pCFDs and \pCINDs comes at a price.

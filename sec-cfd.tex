@@ -1,0 +1,176 @@
+%\vspace{-0.5ex}
+\section{Incorporating Built-in Predicates into CFDs}
+\label{sec-cfd}
+%\vspace{-1ex}
+
+We now define \pCFDs, also referred to
+as {\em conditional functional dependencies},
+by extending \CFDs with
+predicates ($\ne, <, \le, >,\ge$) in addition to equality ($=$).
+
+Consider a relation schema $R$ defined over a finite set of
+attributes, denoted by $\attrset(R)$. For each attribute $A \in
+\attrset(R)$, its domain is specified in $R$, denoted as $\dom(A)$,
+which is either finite (\eg~\at{bool})
+or infinite (\eg~\at{string}).
+%We use $\fattrset(R)$ to denote
+%the set of attributes of $R$ that have a finite domain.
+We assume \kwlog that a domain is totally ordered if
+$<, \le, >$ or $\ge$ is defined on it.
+
+
+%%%%
+\stitle{Syntax.} A \pCFD $\varphi$ on $R$ is a pair
+$R(X\ra Y,\ T_p)$, where (1)~$X, Y$ are sets of attributes in
+$\attrset(R)$; (2)~$X \ra Y$ is a standard \FD, referred to as the
+\FD~{\em embedded in} $\varphi$; and (3)~$T_p$ is a tableau with
+attributes in $X$ and $Y$, referred to as the {\em pattern tableau}
+of $\varphi$, where for each $A$ in $X \cup Y$ and each tuple $t_p
+\in T_p$, $t_p[A]$ is either an unnamed
+variable `\_' that draws values from $\dom(A)$, or
+`$\op a$', where \op is one of $=, \ne,
+<, \le, >, \ge$,  and `$a$' is a constant in $\dom(A)$.
+
+If attribute $A$
+occurs in both $X$ and $Y$, we use $A_L$ and $A_R$ to indicate the
+occurrence of $A$ in $X$ and $Y$, respectively, and separate the $X$
+and $Y$ attributes in a pattern tuple with `$\pa$'.
+We write $\varphi$ as $(X \ra Y,\ T_p)$ when $R$ is clear from the
+context, and denote $X$ as $\mbox{\LHS}(\varphi)$ and $Y$ as
+$\mbox{\RHS}(\varphi)$.
+
+\vspace{-1ex}
+\begin{example}
+The dependencies \kw{cfd1}--\kw{cfd3} and \kw{pfd1}--\kw{pfd4}
+that
+we have seen in Example~\ref{exa-motivation} can all be expressed as \pCFDs.
+Figure~\ref{fig-pcfd} shows some of these \pCFDs:
+$\varphi_1$ (for \FD\ \kw{cfd_2}),
+$\varphi_2$ (for \CFD\ \kw{cfd_3}), $\varphi_3$ (for \kw{pfd_2}),
+and $\varphi_4$ (for \kw{pfd_4}).
+\eop
+\end{example}
+\vspace{-1ex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[tb!]
+\vspace{-1ex}
+\begin{center}
+(1)~$\varphi_1$ = \at{tax}(\at{state} $\ra$ \at{rate},
+$T_{1}$) \hspace{5ex} (2)~$\varphi_2$ = \at{item}(\at{sale}
+$\ra$ \at{shipping}, $T_{2}$)\\
+\begin{tabular}{cc||c}
+&\at{state} & \at{rate}\\
+\cline{2-3} $T_1$: \ \ \ &\_& \_
+\end{tabular}
+\hspace{30ex}
+\begin{tabular}{cc||c}
+&\at{sale} & \at{shipping}\\
+\cline{2-3} $T_2$: \ \ \  &= T &  = 0
+\end{tabular}
+\end{center}
+\vspace{-0ex}
+
+\begin{center}
+(3)~$\varphi_3$ = \at{item}(\at{sale}, \at{price}$\ra$\at{shipping},
+$T_{3}$) \hspace{2ex} (4)~\pCFD $\varphi_4$ =
+\at{item}(\at{sale} $\ra$ \at{price}, $T_{4}$)\\
+\begin{tabular}{c c | c||c}
+& \at{sale} &\at{price} & \at{shipping}\\
+\cline{2-4}
+& $=$ F &$>$ 20 & = 6   \\
+$T_3$: \ \ \ & $=$ F &$\le$  40 & = 6
+\end{tabular}
+\hspace{20ex}
+\begin{tabular}{cc||c}
+&\at{sale} & \at{price}\\
+\cline{2-3}
+ &$=$ T &\ $\ge$ 2.99 \\
+ $T_4$: \ \ \ & $=$ T &\ $<$ 9.99
+\end{tabular}
+\end{center}
+\vspace{-1ex} \caption{Example \pCFDs} \label{fig-pcfd}
+\vspace{-1ex}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\stitle{Semantics.} Consider \pCFD $\varphi$ =
+$(R:X\ra Y,\ T_p)$, where $T_p = \{t_{p1}, \ldots, t_{pk}\}$.
+
+A data tuple $t$ of $R$ is said to {\em match} $\LHS(\varphi)$,
+denoted by $t[X] \asymp T_p[X]$, if {\em for each tuple
+$t_{pi}$ in $T_p$} and {\em each attribute $A$} in $X$, either
+(a)  $t_{pi}[A]$ is the wildcard `\_' (which matches any value
+in $\dom(A)$),  or
+(b) $t[A]\ \op a$ if $t_{pi}[A]$ is `$\op a$', where
+the operator $\op$ ($=, \ne,
+<, \le, >$ or $\ge$) is interpreted by its standard
+semantics. Similarly, the notion that $t$ {\em matches} $\RHS(\varphi)$
+is defined, denoted by $t[Y] \asymp
+T_p[Y]$.
+
+Intuitively, each pattern tuple $t_{pi}$ specifies a condition via
+$t_{pi}[X]$,
+and $t[X] \asymp T_p[X]$ if
+ $t[X]$ satisfies the {\em conjunction} of all these conditions.
+Similarly, $t[Y] \asymp T_p[Y]$ if $t[Y]$ matches all the patterns
+specified by $t_{pi}[Y]$ for all $t_{pi}$ in $T_p$.
+
+An instance $I$ of $R$ {\em satisfies} the \pCFD $\varphi$, denoted
+by $I \models \varphi$, if  for {\em each pair} of tuples $t_1, t_2$
+in the instance $I$, if $t_1[X] = t_2[X] \asymp T_p[X]$, then
+$t_1[Y] = t_2[Y] \asymp T_p[Y]$.  That is, if $t_1[X]$ and $t_2[X]$
+are equal and in addition, they both match the pattern tableau
+$T_p[X]$, then $t_1[Y]$ and $t_2[Y]$ must also be equal to each
+other and they both match the pattern tableau $T_p[Y]$.
+
+Observe that $\varphi$ is imposed only on the subset of tuples in
+$I$ that match $\LHS(\varphi)$, rather than on the entire $I$. For
+all tuples $t_1, t_2$ in this subset, if $t_1[X] = t_2[X]$, then
+(a)~$t_1[Y] = t_2[Y]$, \ie~the semantics of the embedded \FDs is
+enforced; and (b)~$t_1[Y] \asymp T_p[Y]$, which assures that the
+{\em constants} in $t_1[Y]$ match the {\em constants} in $t_{pi}[Y]$
+for all $t_{pi}$ in $T_p$. Note that here tuples $t_1$ and $t_2$ can
+be the same.
+
+
+
+An instance $I$ of $R$ satisfies a set $\Sigma$ of \pCFDs,
+denoted by $I\models\Sigma$, if $I\models\varphi$ for {\em each}
+\pCFD $\varphi$ in $\Sigma$.
+
+\vspace{-1ex}
+\begin{example}
+The instance $D_0$ of
+Fig.~\ref{fig-instance} satisfies $\varphi_1$ and $\varphi_2$ of
+Fig.~\ref{fig-pcfd}, but neither $\varphi_3$ nor
+$\varphi_4$. Indeed, tuple $t_3$ violates (\ie~does not satisfy)
+$\varphi_3$, since
+$t_3[\at{sale}]$ = `F' {\em and} $20 < t_3[\at{price}] \le 40$,
+but $t_3[\at{shipping}]$ is 20 instead of $6$.
+Note that $t_3$ matches $\LHS(\varphi_3)$ since it satisfies
+the condition specified by the {\em conjunction}
+of the pattern tuples in $T_3$.
+Similarly, $t_1$ violates $\varphi_4$, since
+$t_1[\at{sale}]$ = `T' but $t_1[\at{price}] > 9.99$.
+Observe that while it takes two tuples
+to violate a standard \FD, a single tuple may violate a
+\pCFD. \eop
+\end{example}
+\vspace{-1.5ex}
+
+\stitle{Special cases.}~(1) A standard \FD $X\ra Y$~\cite{AbHuVi1995} can
+be expressed as a \CFD $(X\ra Y,\ T_p)$ in which $T_p$ contains a
+single tuple consisting of `\_' only, without constants. (2) A
+\CFD $(X\ra Y,\ T_p)$~\cite{CFDs} with
+$T_p = \{t_{p1},\ldots, t_{pk}\}$ can be
+expressed as a set $\{\varphi_1,\ldots,\varphi_k\}$ of
+\pCFDs such that for $i\in [1, k]$, $\varphi_i$ = $(X\ra Y,\
+T_{pi})$, where $T_{pi}$ contains a single pattern tuple $t_{pi}$ of
+$T_p$, with equality $(=)$ only.
+For example, $\varphi_1$ and $\varphi_2$ in
+Fig.~\ref{fig-pcfd} are \pCFDs representing \FD $\kw{cfd2}$
+and \CFD $\kw{cfd3}$ in Example~\ref{exa-motivation}, respectively.
+Note that all data quality
+rules in~\cite{CM08,divesh08} can be expressed as
+\pCFDs.
