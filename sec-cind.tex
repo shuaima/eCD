@@ -1,46 +1,8 @@
 %\vspace{-1ex}
-\section{Incorporating Built-in Predicates into CINDs}
+%\section{Incorporating Built-in Predicates into CINDs}
+\section{Extending CINDs with Predicates}
 \label{sec-cind}
 %\vspace{-1ex}
-
-Along the same lines as \pCFDs, we next define \pCINDs, also
-referred to as {\em conditional inclusion dependencies}.
-Consider two relation schemas $R_1$ and $R_2$.
-
-%\vspace{-0.5ex}
-\stitle{Syntax.} A \pCIND $\psi$ is a pair
-$(R_1[X;\ X_p] \subseteq R_2[Y;\ Y_p],\ T_p)$, where (1)~$X, X_p$
-and  $Y, Y_p$ are lists of attributes in $\attrset(R_1)$ and
-$\attrset(R_2)$, respectively; (2)~$R_1[X] \subseteq R_2[Y]$ is a
-standard \IND, referred to as the \IND\ {\em embedded} in $\psi$;
-and (3)~$T_p$ is a tableau, called the {\em pattern tableau} of
-$\psi$ defined over attributes $X_p\cup Y_p$, and for each $A$ in
-$X_p$ or $Y_p$ and each pattern tuple $t_p \in T_p$, $t_p[A]$ is either
-an unnamed variable `\_' that draws values from $\dom(A)$, or
-`\op a', where \op is one of $=, \ne, <, \le, >, \ge$ and `a' is a
-constant in $\dom(A)$.
-
- We denote $X \cup X_p$ as $\LHS(\psi)$ and $Y \cup Y_p$ as $\RHS(\psi)$, and
-separate the $X_p$ and $Y_p$ attributes in a pattern tuple with
-`$\pa$'. We use \kw{nil} to denote an {\em empty} list. \eat{Relation
-$R_1$ (resp. $R_2$) is called the \LHS (resp. \RHS) relation of
-\pCIND $\psi$.}
-
-
-%In addition, we also assume a finite domain contains at least two elements.
-
-\vspace{-0.5ex}
-\begin{example}
-\label{exam-pcind} Figure~\ref{fig-pcind} shows two example \pCINDs:
-$\psi_1$ expresses $\kw{pind}_1$ of Example~\ref{exa-motivation},
-and $\psi_2$ refines $\psi_1$ by stating that for any \at{item}
-tuple $t_1$, if its \at{type} is not art and its \at{state} is DL,
-then there must be a \at{tax} tuple $t_2$ such that its \at{state}
-is DL and \at{rate} is $0$, \ie~$\psi_2$ assures that the sale tax
-rate in Delaware is 0. \eop
-\end{example}
-\vspace{-1ex}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}[tb!]
@@ -62,16 +24,59 @@ $T_2$:
 \end{tabular}
 \end{center}
 \vspace{-2ex} \caption{Example \pCINDs} \label{fig-pcind}
-\vspace{-1ex}
+\vspace{-3ex}
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Along the same lines as \pCFDs, we next define \pCINDs,
+referred to as {\em conditional inclusion dependencies with predicates},
+by extending \CINDs~\cite{tcs-CINDs} with built-in
+predicates ($\ne$, $<$, $\le$, $>$, $\ge$) in addition to equality ($=$).
+Consider two relation schemas $R_1$ and $R_2$.
+
+%\vspace{-0.5ex}
+\stitle{Syntax.} A \pCIND $\psi$ is a pair
+$(R_1[X;\ X_p] \subseteq R_2[Y;\ Y_p],\ T_p)$, where (1)~$X, X_p$
+and  $Y, Y_p$ are lists of attributes in $\attrset(R_1)$ and
+$\attrset(R_2)$, respectively; (2)~$R_1[X] \subseteq R_2[Y]$ is a
+standard \IND, referred to as the \IND\ {\em embedded} in $\psi$;
+and (3)~$T_p$ is a tableau, called the {\em pattern tableau} of
+$\psi$ defined over attributes $X_p\cup Y_p$, and for each $A$ in
+$X_p$ or $Y_p$ and each pattern tuple $t_p \in T_p$, $t_p[A]$ is either
+an unnamed variable `\_' that draws values from $\dom(A)$, or
+`\op a', where \op is one of $=, \ne, <, \le, >, \ge$ and `a' is a
+constant in $\dom(A)$.
+
+ We denote $X \cup X_p$ as $\LHS(\psi)$, $Y \cup Y_p$ as $\RHS(\psi)$, and
+separate the $X_p$ and $Y_p$ attributes in a pattern tuple with
+`$\pa$'. We also use \kw{nil} to denote an {\em empty} list. \eat{Relation
+$R_1$ (resp. $R_2$) is called the \LHS (resp. \RHS) relation of
+\pCIND $\psi$.}
+
+
+%In addition, we also assume a finite domain contains at least two elements.
+
+\vspace{-0.5ex}
+\begin{example}
+\label{exam-pcind} Figure~\ref{fig-pcind} shows two example \pCINDs:
+$\psi_1$ expresses $\kw{pind}_1$ of Example~\ref{exa-motivation},
+and $\psi_2$ refines $\psi_1$ by stating that for any \at{item}
+tuple $t_1$, if its \at{type} is not art and its \at{state} is DL,
+then there must be a \at{tax} tuple $t_2$ such that its \at{state}
+is DL and \at{rate} is $0$, \ie~$\psi_2$ assures that the sale tax
+rate in Delaware is 0. \eop
+\end{example}
+\vspace{-1ex}
+
+
+
 
 
 
 \stitle{Semantics.}~Consider \pCIND $\psi$ =
 $(R_1[X;\ X_p] \subseteq R_2[Y;\ Y_p],\ T_p)$.
 An instance  $(I_1, I_2)$ of $(R_1, R_2)$ {\em satisfies} the \pCIND
-$\psi$, denoted by $(I_1, I_2) \models \psi$, iff for {\em each}
+$\psi$, denoted by $(I_1, I_2) \models \psi$, if and only if for {\em each}
 tuple $t_1\in I_1$, if $t_1[X_p] \asymp T_p[X_p]$, then there {\em
 exists} a tuple $t_2\in I_2$ such that $t_1[X]$ = $t_2[Y]$ and
 moreover, $t_2[Y_p] \asymp T_p[Y_p]$.
@@ -81,7 +86,7 @@ That is, if $t_1[X_p]$ matches
 the pattern tableau $T_p[X_p]$, then $\psi$ requires the
 existence of $t_2$ such that (1)~$t_1[X] = t_2[Y]$ as
 required by the standard \IND embedded in $\psi$;
-and (2)~$t_2[Y_p]$
+and, moreover, (2)~$t_2[Y_p]$
 must match the pattern tableau $T_p[Y_p]$. In other words,
 $\psi$ is ``conditional'' since its embedded \IND is applied only to the
 subset of tuples in $I_1$ that match $T_p[X_p]$, and moreover,
@@ -115,8 +120,8 @@ We say a \pCIND $(R_1[X;\ X_p] \subseteq R_2[Y;\ Y_p],\ T_p)$ is
 such that
 either (a) there exists $B\in Y_p$, such that $t_p[B]$ and $t_p'[B]$
 are not satisfiable when taken together,
-or (b) there exist $C \in Y, A \in X$ such that $A$ corresponds to $B$ in the
-\IND and $t_p[C]$ and $t_p'[A]$ are not satisfiable
+or (b) there exist $C \in Y, A \in X$ such that $A$ corresponds to $C$ in the
+embedded \IND and $t_p[C]$ and $t_p'[A]$ are not satisfiable
 when taken together;
 \eg~$t_p[\at{price}] = 9.99$ and $t_p'[\at{price}] \ge 19.99$.
 
@@ -139,13 +144,13 @@ their corresponding attributes in $Y$.}
 
 
 
-\stitle{Special cases.}~Observe that (1) a standard
+\stitle{Special cases}. (1) A standard
 \CIND $(R_1[X] \subseteq R_2[Y])$ can be expressed as a \pCIND
 $(R_1[X;\ \NIL] \subseteq R_2[Y;\ \NIL],\ T_p)$ such that $T_p$ is
-simply a {\em empty} set; and (2) a \CIND $(R_1[X;\ X_p]
+simply a {\em empty} set. (2) A \CIND $(R_1[X;\ X_p]
 \subseteq R_2[Y;\ Y_p],\ T_p)$ with $T_p = \{t_{p1},\ldots,
 t_{pk}\}$ can be expressed as a set
-$\{\psi_1,\ldots,\psi_k\}$ of \pCINDs, where for $i\in [1, k]$,
+$\{\psi_1,\ldots,\psi_k\}$ of \pCINDs, where for each $i\in [1, k]$,
 $\psi_i$ = $(R_1[X;\ X_p] \subseteq R_2[Y;\ Y_p],\ T_{pi})$ such
-that $T_{pi}$ consists of a single pattern tuple $t_{pi}$ of $T_p$
-defined in terms of equality ($=$) only.
+that $T_{pi}$ consists of the pattern tuple $t_{pi}$ of $T_p$ only,
+defined with equality ($=$) only.
