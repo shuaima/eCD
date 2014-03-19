@@ -57,7 +57,7 @@ expressive power.
 \begin{proof} The lower bound follows from the \NP-hardness of their \CFDs
 counterparts~\cite{CFDs}, since \CFDs are a special case of \pCFDs.
 The upper bound is verified by presenting an \NP algorithm that,
-given a set $\Sigma$ of \pCFDs defined on a relation schema $R$,
+given a set $\Sigma$ of \pCFDs defined on a relational schema $R$,
 determines whether $\Sigma$ is satisfiable. 
 
 We next present an \NP
@@ -137,76 +137,72 @@ attributes, the satisfiability problem for \pCFDs remains
 \begin{proof} The problem is in \NP by
 Proposition~\ref{thm-sat-pcfd-fin}. Its \NP-hardness is shown by
 reduction from the \kSAT\ problem, which is \NP-complete
-(cf.~\cite{GaJo79}). \eop
+(cf.~\cite{GaJo79}). 
 
-
-The problem is in \NP following from
-Proposition~\ref{thm-sat-pcfd-fin}. We next show that the problem is
-\NP-hard by reduction from the \kSAT\ problem, which is \NP-complete
-(cf.~\cite{GaJo79}). Consider an instance $\phi = C_1 \land \cdots
+We next show the reduction from the \kSAT\ problem. Consider an instance $\phi = C_1 \land \cdots
 \land C_n$ of \kSAT, where all the variables in $\phi$ are $x_1,
 \ldots, x_m$, $C_j$ is of the form $y_{j_1} \lor y_{j_2} \lor
-y_{j_3}$, and moreover, for $i\in[1,3]$, $y_{j_i}$ is either
+y_{j_3}$ such that for each $i\in[1,3]$, $y_{j_i}$ is either
 $x_{p_{ji}}$ or $\overline{x_{p_{ji}}}$ for $p_{ji} \in [1, m]$.
-Given $\phi$, we construct a relation schema $R$ and a set $\Sigma$
+Given $\phi$, we construct a relational schema $R$ and a set $\Sigma$
 of \pCFDs defined on $R$ such that $\phi$ is satisfiable iff
 $\Sigma$ is satisfiable.
 
-\noindent (1) Define relation $R$$(X_1, \ldots, X_m, C_1, \ldots,
-C_n, Z)$, where all attributes share an infinite domain $\dom$ and
-constant $a\in\dom$. Intuitively, for each $R$ tuple $t$, $t[X_1,$ $
-\ldots,$ $X_m]$ specifies a truth assignment $\xi$ for variables
-$x_1, \ldots, x_m$ of $\phi$, and $t[C_i]$ and $t[Z]$ are the truth
-values of clause $C_i$ and sentence $\phi$ \wrt $\xi$ respectively.
+\sstab (1) We first define the relational schema $R$$(X_1, \ldots$, $X_m, C_1, \ldots,
+C_n, Z)$, where all attributes share a common infinite domain $\dom$ that contains constant $a$. 
+Intuitively, for each $R$ tuple $t$, $t[X_1, \ldots, X_m]$ specifies a truth assignment $\xi$ for variables
+$x_1, \ldots, x_m$ of $\phi$, and $t[C_i]$ ($i\in[1, n]$) and $t[Z]$ are the truth
+values of clause $C_i$ and sentence $\phi$ \wrt the assignment $\xi$, respectively.
 
-\noindent (2) Let the set $\Sigma$ of \pCFDs be
-$\Sigma_0\cup\Sigma_1\cup\ldots\cup\Sigma_n\cup\Sigma_{n+1}$.
+\sstab (2) We then construct the set \pCFDs $\Sigma$ =
+$\Sigma_0\cup\Sigma_1\cup\ldots\cup\Sigma_n\cup\Sigma_{n+1}$, defined as follows.
 
-\vspace{-1.5ex}\bi
-\item $\Sigma_0$ contains $n + 1$ \pCFDs. Intuitively, $\Sigma_0$
-encodes the relationships between the truth values of clauses $C_1,
-\ldots, C_n$ and the truth value of sentence $\phi$.
+\bi
+\item[(a)] $\Sigma_0$ contains $n + 1$ \pCFDs, which intuitively
+encode the relationships of the truth values  between the clauses $C_1,
+\ldots, C_n$ and  sentence $\phi$.
 
-For each clause $C_i$ ($i\in[1, n]$), we define \pCFD $\varphi_i$ =
-$(C_1,\ldots, C_n\ra Z, T_{pi})$ such that $T_{pi} = \{t_{pi}\}$ and
+For each clause $C_i$ ($i\in[1, n]$), we add to $\Sigma_0$ a \pCFD $\varphi_i$ =
+$(C_1,\ldots, C_n\ra Z, T_{pi})$, in which $T_{pi} = \{t_{pi}\}$ such that
 $t_{pi}[C_i,Z]$ = $(\ne a \pa \ne a)$ and $t_{pi}[C_j]$ = `\_'
-($j\ne i, j\in[1, n]$). Moreover, \pCFD $\varphi_{0}$ =
+for any $j\ne i$ and $j\in[1, n]$. We also add to $\Sigma_0$ a \pCFD $\varphi_{0}$ =
 $(C_1,\ldots, C_n\ra Z, T_{p0})$, where $T_{p0}$ = $\{(= a, \ldots,
 =a \pa = a)\}$. Intuitively, we use $\ne a$ and $= a$ to represent
-{\em false} and {\em true} for the truth values of the clauses and
-the sentence.
+{\em false} and {\em true}, respectively.
 
-\item For $i\in[1, n]$, $\Sigma_i$ contains $8$ \pCFDs.  Intuitively, $\Sigma_i$
-encodes the relationships between the truth values of the three
-variables in clause $C_i$ and clause $C_i$.
+\item[(b)]  For $i\in[1, n]$, $\Sigma_i$ contains $8$ \pCFDs, which intuitively
+encode the relationships of the truth values between the clause $C_i$ and its three
+variables.
 
-Consider clause $C_i$ = $x_{j_1} \lor \overline{x_{j_2}} \lor
-x_{j_3}$ of $\phi$, where $1\le j_1, j_2, j_3 \le m$, we define
-\pCFDs $\varphi_{i,0}$ = $(X_{j_1},X_{j_2},X_{j_3}\ra C_i,
-T_{pi,0})$, where $T_{pi,0}$ = $\{(< a, < a, <a \pa = a)\}$, and
-$\varphi_{i,2}$ = $(X_{j_1},X_{j_2},X_{j_3}\ra C_i, T_{pi,2})$,
-where $T_{pi,2}$ = $\{(< a, \ge a, < a \pa \ne a)\}$. Intuitively,
-we use $<a$ and $\ge a$ to represent {\em false} and {\em true} for
-a variable, respectively. Similarly, we can define the rest $6$
-\pCFDs $\varphi_{i,1}$, $\varphi_{i,3}$, $\varphi_{i,4}$,
-$\varphi_{i,5}$, $\varphi_{i,6}$ and $\varphi_{i,7}$.
+For clause $C_i$ = $x_{j_1} \lor \overline{x_{j_2}} \lor
+x_{j_3}$ of $\phi$ with $1\le j_1$, $j_2$, $j_3 \le m$, we define
+\pCFDs 
+(a) $\varphi_{i,0}$ = $(X_{j_1}, X_{j_2}$, $X_{j_3}\ra C_i, T_{pi,0})$ with $T_{pi,0}$ = $\{(< a, < a, <a$ $\pa = a)\}$, 
+(b) $\varphi_{i,1}$ = $(X_{j_1},X_{j_2},X_{j_3}\ra C_i, T_{pi,2})$ with $T_{pi,1}$ = $\{(< a, <a, \ge  a \pa =a)\}$,  and 
+(c) $\varphi_{i,2}$ = $(X_{j_1},X_{j_2},X_{j_3}\ra C_i, T_{pi,2})$ with $T_{pi,2}$ = $\{(< a, \ge a, < a \pa \ne a)\}$. 
+Similarly, we can define the rest $5$ \pCFDs $\varphi_{i,3}$, $\varphi_{i,4}$,
+$\varphi_{i,5}$, $\varphi_{i,6}$ and $\varphi_{i,7}$. Intuitively,
+we further use $<a$ and $\ge a$ to represent {\em false} and {\em true} for
+a variable, respectively.
 
-\item $\Sigma_{n + 1}$ contains a single \pCFD $\varphi_{n+1}$ =
-$(Z \ra Z, T_{p(n+1)})$, where $T_{p(n+1)}$ = $\{(\_ \pa = a)\}$.
-Intuitively, $\varphi_{n+1}$ requires that for any tuple $t$ of $R$,
-$t[Z]$ = $a$. \ei\vspace{-1.5ex}
+\item[(c)] $\Sigma_{n + 1}$ contains a single \pCFD $\varphi_{n+1}$ =
+$(Z \ra Z$, $T_{p(n+1)})$ with $T_{p(n+1)}$ = $\{(\_ \pa = a)\}$.
+Intuitively, $\varphi_{n+1}$ requires that for any $R$ tuple $t$,
+$t[Z]$ = $a$. 
+\ei
 
-Observe that $\Sigma$ contains $8*m + n + 2$ \pCFDs. Thus the
-reduction is in \PTIME. We now show that $\phi$ is satisfiable if
-and only if $\Sigma$ is satisfiable.
+Observe that $\Sigma$ contains $8*m + n + 2$ \pCFDs in total. Thus the
+reduction is in \PTIME. 
 
-Suppose first $\Sigma$ is satisfiable, then there exists a nonempty
+We now show that $\phi$ is satisfiable iff $\Sigma$ is satisfiable.
+
+Assume first that $\Sigma$ is satisfiable, then we  show thta there exists a nonempty
 instance $I$ of $R$ such that $I\models\Sigma$. For any tuple $t\in
-I$, (1) $\Sigma_{n+1}$ forces $t[Z]$ = $a$, (2) $\Sigma_0$ forces
-$t[C_1, \ldots, C_n]$ = $(a, \ldots, a)$, and for each clause $C_i$
+I$, (a) $\Sigma_{n+1}$ forces $t[Z]$ = $a$, (b) $\Sigma_0$ forces
+$t[C_1, \ldots, C_n]$ = $(a, \ldots, a)$, and (c) for each clause $C_i$
 ($i\in[1, n]$) with variables $X_{j_1},X_{j_2},X_{j_3}$, $\Sigma_j$
 forces that $t[X_{j_1},X_{j_2},X_{j_3}]$  does not match the \LHS of
-the \pCFD that forces $t[C_i]\ne a$. From $t$, we can construct a
+the \pCFDs that force $t[C_i]\ne a$. From the tuple $t$, we can construct a
 truth assignment $\xi$ of $\phi$ such that $\xi(x_i)$ = {\em false}
 if $t[X_i]< a$ and  $\xi(x_i)$ = {\em true} if $t[X_i]\ge a$
 ($i\in[1, m]$). Since $\{t\}\models\Sigma$, it is easy to verify
@@ -215,9 +211,12 @@ that the truth assignment $\xi$ makes $\phi$ true.
 Conversely, if $\phi$ is satisfiable, there exists a truth
 assignment $\xi$ that makes $\phi$ true. We construct a tuple $t$ of
 $R$ as follows: (a) $t[C_1,\ldots, C_n, Z]$ = $(a, \ldots, a)$ and
-(b) for each $i\in[1, m]$, $t[X_i]$ = $a_i$ such that $a_i\in\dom$,
-$a_i\ge a$ if $\xi(x_i)$ = {\em true} and $a_i< a$ otherwise. Let $I
+(b) for each $i\in[1, m]$, $t[X_i]$ = $a_i$ such that (a) $a_i\in\dom$ and
+$a_i\ge a$ if $\xi(x_i)$ = {\em true} and (b) $a_i< a$ otherwise. Let $I
 = \{t\}$, then one can easily verify that $I\models\Sigma$. 
+
+
+Putting these together, we have the conclusion.
 \end{proof}
 
 
@@ -382,12 +381,12 @@ Proposition~\ref{thm-imp-pcfd-fin}. We next show that the problem is
 \coNP-hard by reduction from the \kSAT\ problem to the complement
 problem of the implication problem, where \kSAT\ is \NP-complete
 (cf.~Proposition~\ref{thm-sat-pcfd-infin}). Given an instance $\phi$
-of \kSAT, we construct a relation schema $R$, a set
+of \kSAT, we construct a relational schema $R$, a set
 $\Sigma\cup\{\varphi\}$ of \pCFDs defined on $R$, such that $\phi$
 is satisfiable iff $\Sigma\not\models\varphi$.
 
 
-The relation schema $R$ and the set $\Sigma$ of \pCFDs are the same
+The relational schema $R$ and the set $\Sigma$ of \pCFDs are the same
 as the corresponding ones in Proposition~\ref{thm-sat-pcfd-infin}.
 Moreover, $\varphi$ is defined as $(Z \ra Z, T_p)$, where $T_{p}$ =
 $\{(\_ \pa \ne a)\}$. Intuitively, $\varphi$ requires that for any
