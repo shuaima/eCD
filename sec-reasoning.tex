@@ -223,44 +223,39 @@ Putting these together, we have the conclusion.
 
 \stitle{Satisfiability analysis of CIND$^p$s}. Like \FDs,
 one can specify arbitrary \INDs or \CINDs without worrying about
-their satisfiability. Below we show that \pCINDs also have this
+their satisfiability. Below we show that \pCINDs preserve this nice
 property, by extending the proof of its counterpart in~\cite{tcs-CINDs}.
 
 \begin{prop}
-\label{thm-sat-pcind} Any set $\Sigma$ of \pCINDs is always
-satisfiable. \eop
+\label{thm-sat-pcind} Any set of \pCINDs is always
+satisfiable. 
 \end{prop}
-\vspace{-1ex}
 
-\proofs Given a set $\Sigma$ of \pCINDs over a
-database schema $\cal R$, one can always construct a
+\begin{proof}
+ Given a set $\Sigma$ of \pCINDs over a
+database schema $\cal R$$(R_1,\ldots,R_n)$, we show that one can always construct a
 {\em nonempty} instance $D$ of $\cal R$ such that $D \models
-\Sigma$. \eop
-\vspace{0.5ex}
-
-
-\begin{proof} It suffices to show that given a set $\Sigma$ of \pCINDs over a
-database schema $\cal R$$(R_1,\ldots,R_n)$, we can construct a {\em
-nonempty} instance $D$ of $\cal R$ such that $D \models \Sigma$. We
-build $D$ as follows. First, for each attribute $A$, define the
+\Sigma$.  We build $D$ as follows. First, for each attribute $A$, define the
 active domain of $A$ to be a set $\adom(A)$, which consists of
 certain data values in $\dom(A)$. Second, using these active
 domains, we construct $D$.
 
-We start with the construction of active domains. (1) For each
+\sstab (1) We start with the construction of active domains. (a) For each
 attribute $A$, initialize $\adom(A)$ along the same lines as the one
-for \pCFDs in Proposition~\ref{thm-sat-pcfd-fin}; (2) For each
+for \pCFDs in Proposition~\ref{thm-sat-pcfd-fin}; (b) For each
 \pCIND $(R_a[A_1,A_2,\ldots,A_m;X_p] \subseteq$ $R_b[B_1,$
 $\ldots,B_m;Y_p], T_p)$ in $\Sigma$, let $\adom(B_i)=$ $\adom(B_i)$
-$\cup$ $\adom(A_i)$ for each $i\in [1,m]$; (3) This rule is
+$\cup$ $\adom(A_i)$ for each $i\in [1,m]$, and this rule is
 repeatedly applied until a fixpoint of $\adom(A)$ is reached for
-every attribute $A$. It is easy to verify that this process
-terminates since we start with a finite set of data values.
+all attributes $A$ in $\cal R$. 
+%
+It is easy to verify that this process
+terminates as we start with a finite set of data values.
 
-We next construct $D$. For each relation $R_i(A_1,\dots,A_k) \in
+\sstab (2)  We next construct the database instance $D$. For each relation $R_i(A_1, \dots,$ $A_k)$ $\in
 {\cal R}$, we define $I_i = \adom(A_1)\times \dots \times
 \adom(A_k)$, where $\times$ is the {\em Cartesian Product}
-operation. Let $D = \{I_1,\dots,I_n\}$, then it is easy to verify
+operation~\cite{AbHuVi1995}. Let $D = \{I_1,\dots,I_n\}$, then it is easy to verify
 that $D$ is nonempty and $D \models \Sigma$. 
 \end{proof}
 
@@ -276,6 +271,8 @@ immediately have:
 \label{thm-sat-pcfd-pcind}The satisfiability problem for \pCFDs and
 \pCINDs is undecidable.\eop
 \end{cor}
+
+
 
 
 %%%%%%%%%%%%%%
@@ -581,7 +578,6 @@ $\Sigma'\models\Sigma_{\psi}$, \ie $\Sigma'\models\psi'$ for each
 \EXPTIME-hard. 
 \end{proof}
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%Complexity Summary%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{table*}[tb!]
 \vspace{-1ex}
@@ -612,6 +608,7 @@ $\Sigma'\models\Sigma_{\psi}$, \ie $\Sigma'\models\psi'$ for each
 
 
 
+
 \stitle{The implication analysis of  CFD$^p$s and
 CIND$^p$s}. When \pCFDs and \pCINDs are taken together,
 their  implication analysis is beyond reach in practice.
@@ -626,6 +623,7 @@ from the undecidability result for \FDs and
 \label{thm-IM-pcfd-pcind} The implication problem for \pCFDs and
 \pCINDs is undecidable.\eop
 \end{cor}
+
 
 
 
