@@ -75,8 +75,8 @@ $A_m\}$ and the total number of pattern tuples in all pattern
 tableaux $T_p$ of \pCFDs in $\Sigma$ is $h$. For each $i\in [1, m]$, define
 the active domain of $A_i$ to be a set $\adom(A_i)$ = $C_0\cup C_1$,
 where (1) $C_0$ consists of all constants in $T_p[A_i]$ of all
-pattern tableaux $T_p$ in $\Sigma$, and if $C_0$ is empty, we further let $C_0$ = $\{a_1\}$, where
-$a_1\in\dom(A_i)$, and (2) $C_1$ contains the
+pattern tableaux $T_p$ in $\Sigma$, and if $C_0$ is empty, we further let $C_0$ = $\{a_1, a_2\}$, where
+$a_1, a_2 \in\dom(A_i)$ and $a_1\ne a_2$, and (2) $C_1$ contains the
 following set of constants for the attributes whose domains have
 total orders, \ie involved with predicates $\ne$, $<$, $\le$, $>$ or $\ge$: 
 
@@ -87,12 +87,12 @@ assume that the resulting $C_0$ = $\{a_1, \ldots, a_k\}$ ($k\ge 1$);
 
 \item[(2)] Add a constant $b_{01}\in\dom(A_i)$ to $C_1$ such that $b_{01}$ $<$ $a_1$ if there
 exists one; And also add another constant $b_{02}\in\dom(A_i)$ to $C_1$
-such that $b_{01} < a_1$ and $b_{01}\ne b_{02}$ if there exists one;
+such that $b_{02} < a_1$ and $b_{02}\ne b_{01}$ if there exists one;
 
 \item[(3)] Similarly, for each $j\in[1, k - 1]$, add a constant $b_{j1}\in\dom(A_i)$ to $C_1$
 such that $a_j < b_{j1} < a_{j+1}$ if there exists
 one; And also add another constant $b_{j2}\in\dom(A_i)$ to $C_1$ such
-that $a_j < b_{j2} < a_{j+1}$ and $b_{j1}\ne b_{j2}$ if
+that $a_j < b_{j2} < a_{j+1}$ and $b_{j2}\ne b_{j1}$ if
 there exists one;
 
 \item[(4)] Finally, add a constant $b_{k1}\in\dom(A_i)$ to $C_1$ such that $b_{k1} > a_k$ if there exists one;
@@ -306,49 +306,46 @@ the same complexity as their \CFDs counterpart, verified by
 extending the proof of its counterpart in~\cite{CFDs}.
 
 \begin{prop}
-\label{thm-imp-pcfd-fin}The implication problem for \pCFDs is
-\coNP-complete. \eop
+\label{thm-imp-pcfd-fin} The implication problem for \pCFDs is
+\coNP-complete.
 \end{prop}
-\vspace{-1ex}
 
-\proofs The lower bound follows from the
-\coNP-hardness of their \CFDs counterpart~\cite{CFDs}, since \CFDs
-are a special case of \pCFDs. The \coNP upper bound is verified
-by presenting an \NP algorithm for its complement problem, \ie
-the problem for determining whether $\Sigma\not\models\varphi$. \eop
+
 
 \begin{proof}
-The lower bound follows from the \coNP-hardness of their \CFDs
-counterparts~\cite{CFDs}, since \CFDs are a special case of \pCFDs.
+The lower bound follows from the
+\coNP-hardness of their \CFDs counterpart~\cite{CFDs}, since \CFDs
+are a special case of \pCFDs. The \coNP upper bound is verified
+by presenting an \NP algorithm for its complement problem for determining whether $\Sigma\not\models\varphi$.
 
-We show that the problem is in \coNP by presenting an \NP algorithm
-for its complement problem, \ie for determining whether
-$\Sigma\not\models\varphi$. The algorithm is based on a small model
+
+
+We next present the a \NP algorithm
+for its complement problem. The algorithm is based on a small model
 property: if $\varphi = (R: X \ra Y, T_p)$ and $\Sigma
 \not\models\varphi$, then there exists an instance $I$ of $R$ with
 two tuples $t_1$ and $t_2$ such that $I\models\Sigma$ and $t_1[X] =
 t_2[X] \asymp T_p[X]$, but either $t_1[Y]\ne t_2[Y]$ or
 $t_1[Y]\not\asymp T_p[Y]$ (resp. $t_2[Y]\not\asymp T_p[Y]$). Thus it
-suffices to consider instances $I$ with two tuples for deciding
+suffices to consider instances $I$ with two tuples only for deciding
 whether $\Sigma\not\models\varphi$.
 
-Assume \kwlog that the attributes $\attrset(R)$ = $\{A_1,\dots,
-A_m\}$. For each $i\in [1, m]$, define the active domain of $A_i$ to
-be a set $\adom(A_i)$ in the same way as
+Assume that the attributes $\attrset(R)$ = $\{A_1,\dots,$
+$A_m\}$. For each $i\in [1, m]$, let $\adom(A_i)$ be the active domain defined in
 Proposition~\ref{thm-sat-pcfd-fin}. Then one can easily verify that
-$\Sigma\not\models\varphi$ iff there exist two mappings $\rho_1$,
-$\rho_2$ from $t[A_i]$ to $\adom(A_i)$ ($i\in [1, m]$) such that $I$
-= $\{(\rho_1(t[A_1]), \ldots, \rho_1(t[A_m]))$, $(\rho_2(t[A_1]),
-\ldots, \rho_2(t[A_m]))\}$, $I \models\Sigma$ and
+$\Sigma\not\models\varphi$ iff there exist two mappings $\rho_1$ and
+$\rho_2$ from all attributes $A_i$ to $\adom(A_i)$ ($i\in [1, m]$) such that $I$
+= $\{(\rho_1(A_1), \ldots, \rho_1(A_m))$, $(\rho_2(A_1),
+\ldots, \rho_2(A_m))\}$, $I \models\Sigma$, but 
 $I\not\models\varphi$.
 
 Based on these, we give an \NP algorithm as follows: (1) Guess two
-tuples $t_1$, $t_2$ of $R$ such that $t_1[A_i],t_2[A_i]
+$R$ tuples $t_1$ and $t_2$ such that $t_1[A_i],t_2[A_i]
 \in\adom(A_i)$ for each $i \in [1, m]$. (2) Check whether $I =
 \{t_1, t_2\}$ satisfies $\Sigma$, but not $\varphi$. If so the
 algorithm returns ``yes'', and otherwise it repeats steps (1) and
-(2). Obviously step (2) can be done in \PTIME in the size $\Sigma$.
-Hence the algorithm is in \NP, and the problem is in \coNP.
+(2). Obviously step (2) can be done in \PTIME in the size of $\Sigma$.
+Hence the algorithm is in \NP, and so is the problem.
 \end{proof}
 
 Similar to the satisfiability analysis,
@@ -361,9 +358,9 @@ which does not find a counterpart in~\cite{CFDs}.
 \begin{theorem}
 \label{thm-imp-pcfd-infin} In the absence of finite domain
 attributes, the implication problem for \pCFDs remains
-\coNP-complete. \eop
+\coNP-complete. 
 \end{theorem}
-\vspace{-1ex}
+
 
 \proofs It is in \coNP by
 Proposition~\ref{thm-imp-pcfd-fin}. The \coNP-hardness is shown
