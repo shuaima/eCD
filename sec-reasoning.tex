@@ -499,7 +499,7 @@ in \EXPTIME, and thus the problem is in \EXPTIME. }
 \end{proof}
 
 It is known~\cite{tcs-CINDs} that the implication problem is
-\PSPACE-complete for \CINDs defined with infinite-domain
+\PSPACE-complete for \CINDs defined with infinite domain
 attributes. Similar to Theorem~\ref{thm-imp-pcfd-infin},
  below we show that this no longer holds for \pCINDs.
 
@@ -511,50 +511,47 @@ attributes, the implication problem for \pCINDs remains
 \end{theorem}
 \vspace{-1ex}
 
-\proofs The \EXPTIME upper bound follows from
+\begin{proof} The problem is in \EXPTIME by
 Proposition~\ref{thm-imp-pcind-fin}. The \EXPTIME-hardness is
 shown by reduction from the implication problem for \CINDs in the
-general setting, in which finite-domain attributes may be present;
-the latter is known to be \EXPTIME-complete~\cite{CINDs}. \eop
+general setting, in which finite-domain attributes may be present, that is known to be \EXPTIME-complete~\cite{tcs-CINDs}. 
 
 
-\begin{proof}
-The problem is in \EXPTIME following from
-Proposition~\ref{thm-imp-pcind-fin}. We next show that the problem
-is \EXPTIME-hard by reduction from the implication problem for
-\CINDs in the general setting, which is \EXPTIME-complete
-(cf.~\cite{CINDs}). Given a set $\Sigma\cup\{\psi\}$ of \CINDs
-defined on a database schema ${\cal R}$ = $(R_1,\ldots, R_n)$, we
-construct a database schema ${\cal R'}$ = $(R'_1,\ldots, R'_n)$,
-where each relation $R'_i$ ($i\in[1, n]$) consists of infinite
+We next present the reduction from the implication problem for
+\CINDs in the general setting. Given a set $\Sigma$ $\cup$ $\{\psi\}$ of \CINDs
+defined on a database schema ${\cal R}$ $(R_1,$ $\ldots,$ $R_n)$, we
+construct another database schema ${\cal R'}$$(R'_1,\ldots, R'_n)$,
+in which each relation $R'_i$ ($i\in[1, n]$) consists of infinite
 domain attributes only, and a set $\Sigma'\cup\{\psi'\}$ of \pCINDs
-on ${\cal R'}$. And, moreover, $\Sigma\models\psi$ iff
+on ${\cal R'}$ such that $\Sigma\models\psi$ iff
 $\Sigma'\models\psi'$.
 
+\bi
+\item[(1)]
 We start with constructing ${\cal R'}$. For each
-$R_i(A_1,\ldots,A_k)$ of ${\cal R}$, we define
+$R_i(A_1,$ $\ldots, A_k)$ of ${\cal R}$, we define
 $R'_i(A'_1,\ldots,A'_k)$ such that for each attribute $A'_j$
-($j\in[1, k]$), $\dom(A'_j)$ = $\dom(A_j)$ if $\dom(A_j)$ is
-infinite and $\dom(A'_j)$ is \kw{integer}, a totally ordered
-infinite domain. Moreover, we define a mapping $\rho_{i,j}$  for
-each for each finite domain $\dom(A_j)$ = $\{a_1,\ldots,a_h\}$ to
-\kw{integer}: (1) Randomly choose $h$ consecutive integers $\{b_1,
+($j\in[1, k]$), let $\dom(A'_j)$ = $\dom(A_j)$ if $\dom(A_j)$ is
+infinite, and let $\dom(A'_j)$ be \kw{integer}, a totally ordered
+infinite domain, if $\dom(A_j)$ is finite. Moreover, we define a mapping $\rho_{i,j}$  for
+each finite domain $\dom(A_j)$ = $\{a_1,\ldots,a_h\}$ to
+\kw{integer}: (a) Randomly choose $h$ consecutive integers $\{b_1,
 \ldots, b_h\}$ such that for each $i\in[1, h-1]$, $b_{i+1} = b_i +
-1$. (2) We now define the mapping $\rho_{i,j}(a_i)$ = $b_i$ for
+1$. (b) We now define the mapping $\rho_{i,j}(a_i)$ = $b_i$ for
 $i\in[1, h]$. Moreover, we require two extra integers $b_0$ = $b_1 -
 1$ and $b_{h+1} = b_h + 1$, denoted as $\rho_{i,j}.b_0$ and
 $\rho_{i,j}.b_{h+1}$. Note that this is always doable. For clarity,
 we also denote $\rho_{i,j}$ as $\rho$ when it is clear from the
 context.
 
+\item[(2)]
 We next define  $\Sigma'$ and $\psi'$ on ${\cal R'}$ based on the
-mappings defined above. For each \CIND $(R_a[X; A_1,\ldots,A_{m1}]
-\subseteq$ $R_b[Y; B_1,\ldots,B_{m2}], T_p)$ in $\Sigma$ and each
-$t_p\in T_p$, we define a \pCIND $(R'_a[X';
-A'_1,\ldots,A'_{m1},X'_p] \subseteq$ $R'_b[Y';
-B'_1,\ldots,B'_{m2},Y'_p], T'_p)$, where (1) $X'$ (resp. $Y'$,
-$A'_1,\ldots,A'_{m1}$, $B'_1,\ldots,B'_{m2}$) corresponds to $X$
-(resp. $Y$, $A_1,\ldots,A_{m1}$, $B_1,\ldots,B_{m2}$); (2) $X'_p$
+mappings defined above. For each \CIND $(R_a[X;$ $A_1, \ldots,A_{m1}]
+\subseteq$ $R_b[Y; B_1, \ldots, B_{m2}], T_p)$ in $\Sigma$ and each
+$t_p\in T_p$, we define another \pCIND $(R'_a[X'; A'_1,\ldots,A'_{m1},X'_p] \subseteq$ $R'_b[Y';$
+$B'_1,\ldots,B'_{m2},Y'_p], T'_p)$, where (1) $X'$ (resp. $Y'$,
+$A'_1,\ldots,A'_{m1}$, and $B'_1,\ldots,B'_{m2}$) corresponds to $X$
+(resp. $Y$, $A_1,\ldots,A_{m1}$, and $B_1,\ldots,B_{m2}$); (2) $X'_p$
 (resp. $Y'_p$) corresponds to those finite domain attributes in
 $R_a$ (resp. $R_b$), but not in $A_1,\ldots,A_{m1}$ (resp.
 $B_1,\ldots,B_{m2}$); and (3) $T'_p = \{t'_{p1},t'_{p2},t'_{p3}\}$
@@ -567,6 +564,7 @@ in $X'_p$ or $Y'_p$, $t'_{p1}[A']$ = `\_', $t'_{p2}[A']$ =
 `$>\rho.b_0$', and $t'_{p3}[A']$ = `$<\rho.b_{h+1}$'. Similarly, we
 can define a set $\Sigma_{\psi}$ of \pCINDs from $\psi$ based on the
 mappings.
+\ei
 
 Finally, one can easily verify that $\Sigma\models\psi$ iff
 $\Sigma'\models\Sigma_{\psi}$, \ie $\Sigma'\models\psi'$ for each
@@ -642,6 +640,6 @@ counterparts for \CFDs and \CINDs, taken separately or together.
 
 \sstab
 (2) In the special case when \pCFDs and \pCINDs are defined
-with infinite-domain attributes only, however, their
+with infinite domain attributes only, however, their
 static analyses do not get simpler, as opposed to their counterparts for
 \CFDs and \CINDs. That is, the increased expressive power of \pCFDs and \pCINDs comes at a price in this special case.
