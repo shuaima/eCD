@@ -403,52 +403,56 @@ their \CINDs counterpart given in~\cite{tcs-CINDs}.
 
 \begin{proof}
 The implication problem for \CINDs is
-\EXPTIME-hard~\cite{tcs-CINDs}. The lower bound carries over to \pCINDs
-since \pCINDs subsume \CINDs. The \EXPTIME upper bound is shown
+\EXPTIME-hard \cite{tcs-CINDs}. Since \pCINDs subsume \CINDs, the lower bound carries over to \pCINDs. 
+The \EXPTIME upper bound is shown
 by presenting an \EXPTIME algorithm that, given a set
 $\Sigma\cup\{\psi\}$ of \pCINDs over a database schema $\cal R$,
 determines whether $\Sigma\models\psi$.
 
-We next present an \EXPTIME algorithm that, given a set
-$\Sigma\cup\{\psi\}$ of \pCINDs defined on a database schema $\cal
-R$, determines whether $\Sigma\models\psi$.
+We next present the \EXPTIME algorithm.
 %
 Consider $\cal R$ = $(R_1,$ $\ldots,$ $R_n)$ and $\psi$ = $(R_a[X;$ $X_p]
 \subseteq$ $R_b[Y;Y_p], T_p)$. And for each attribute $A$,
 define the active domain $\adom(A)$ of $A$ based on
-$\Sigma\cup\{\psi\}$ along the same way as
+$\Sigma\cup\{\psi\}$ along the same line as the proof of
 Proposition~\ref{thm-sat-pcind}. One can easily verify that if
-$\Sigma\not\models\psi$, there exists an instance $D$ of ${\cal
-R}$ such that $D\models\Sigma$ and $D\not\models\psi$.
+$\Sigma\not\models\psi$, there exists a non-empty instance $D$ of ${\cal
+R}$ such that (a) $D\models\Sigma$ and $D\not\models\psi$, and (b) $D$ consists of data values from the active domains only.
 
 The detailed \EXPTIME algorithm is given as follows.
 
 \bi
 \item[(1)]
-Build a directed graph $G(V, E)$.  Each node $u\in V$ is a possible
+We first build a labeled directed graph $G(V, E, l)$.  Each node $u\in V$ is a possible
 tuple `$R_i:t_i$' such that $t_i[A]\in \adom(A)$ for each attribute
-$A\in\attrset(R_i)$. There is an edge $e$ = (`$R_i:t_i$',
-`$R_j:t_j$') in $E$ if and only if there exists a \pCIND $\phi =
-(R_i[U; U_p]$ $\subseteq$ $ R_j[V; V_p], T_{p_{\phi}})$ in $\Sigma$
+$A$ $\in$ $\attrset(R_i)$. There is an edge $e$ = (`$R_i:t_i$',
+`$R_j:t_j$') in $E$ iff there exists a \pCIND $\phi$ =
+$(R_i[U; U_p]$ $\subseteq$ $ R_j[V; V_p], T_{p_{\phi}})$ in $\Sigma$
 such that $t_i[U_p] \asymp T_{p_{\phi}}[U_p]$, $t_j[V]$ = $t_i[U]$
-and $t_j[V_p] \asymp T_{p_{\phi}}[V_p]$.
+and $t_j[V_p] \asymp T_{p_{\phi}}[V_p]$, and $e$ is labeled with the \pCIND $\phi$, \ie  $\phi \in l(e)$. Note that an edge may have multiple labels. 
 
 \item[(2)]
-Let $S_a$ be the set of all nodes that are reachable from node
-`$R_a:t_a$' such that $t_a[X_p] \asymp T_{p}[X_p]$;
- Let $S_b$ be the
-set of nodes `$R_b:t_b$' such that $t_b[Y_p] \asymp T_{p}[Y_p]$.
+Let $S_a$ be the set of nodes `$R_a:t_a$' such that $t_a[X_p] \asymp T_{p}[X_p]$, and $S_b$ be the
+set of nodes `$R_b:t_b$' such that $t_b[Y_p] \asymp T_{p}[Y_p]$, respectively. 
 
 \item[(3)]
-If there exists a node `$R_i:t_i$' in $S_a$, which is reachable from
-node `$R_a:t_a$' and not reachable to any node `$R_b:t_b$' in $S_b$
-such that $t_b[Y] = t_a[X]$, return `no'. And return `yes' if such
-case cannot be found. \ei
+For each node $u$ = `$R_a:t_a$' in $S_a$, let $G_u$ be the induced  subgraph of $G$ that contains all the nodes reachable from $u$,
+and exactly  the edges that appear in $G$ over the same set of nodes. We also refer to $u$ as the root of $G_u$.
+ 
+
+
+ \item[(4)] 
+For an induced subgraph $G_u$ of $G$ with root $u$ = `$R_a:t_a$', we derive another graph $G'_u$ by recursively removing edges as follows. For any $v$ in $G_u$, if $v$ has a child $v'$ from which no nodes in `$R_b:t_b$' in $S_b$ with $t_b[X] = t_b[Y]$ are reachable, then for all children $v''$ of $v$, we remove from labels $l(v, v'')$ all the labels in $l(v, v')$, and edge $(v, v'')$ is removed when $l(v, v'')$ becomes empty.  
+
+ \item[(5)] 
+If there exists a subgraph $G'_u$ derived from  an induced subgraph $G_u$ of $G$ with root $u$ = `$R_a:t_a$' such that  no nodes `$R_b:t_b$' in $S_b$ with $t_a[X] = t_b[Y]$ are reachable from $u$, we return `no', and return `yes', otherwise. 
+\ei
 
 
 It can be verified that (a) if the algorithm returns `no', we can
 construct an instance $D$ such that $D\models\Sigma$, but not
-$\psi$; and (b) if the algorithm returns `yes', there exist no
+$\psi$, by collecting those tuples attached on the end nodes of edges whole labels become empty at setp 4; 
+and (b) if the algorithm returns `yes', there exist no
 instances $D$ such that $D\models\Sigma$, but not $\psi$.
 
 We next show that the above algorithm indeed runs in exponential
@@ -459,9 +463,9 @@ $|\cal R|$ be the sum of arities of all relations in $\cal R$. Then
 the number of tuples in a database instance is bounded by
 $O(|\Sigma\cup\{\psi\}|^{|\cal
  R|})$; (b) The number of nodes in sets $S_a$ or $S_b$ is bounded by
-the maximum number of tuples in a database too; (c) The reachability
-testing can be done in quadratic-time in the size of the
-input~\cite{Papa1994}.
+the maximum number of tuples in a database too; (c) The induced subgraph and the reachability
+testing can be done in linear-time in the size of the
+input~\cite{CormenLRS01}.
 
 Putting all these together, we show that the algorithm runs in
 exponential time. And, thus, the problem is in \EXPTIME.
@@ -494,11 +498,10 @@ Following from these, we can conclude that the algorithm is indeed
 in \EXPTIME, and thus the problem is in \EXPTIME. }
 \end{proof}
 
-It is known~\cite{CINDs} that the implication problem is
+It is known~\cite{tcs-CINDs} that the implication problem is
 \PSPACE-complete for \CINDs defined with infinite-domain
-attributes. Similar to
-Theorem~\ref{thm-imp-pcfd-infin}, below we present a new result
-showing that this no longer holds for \pCINDs.
+attributes. Similar to Theorem~\ref{thm-imp-pcfd-infin},
+ below we show that this no longer holds for \pCINDs.
 
 
 \begin{theorem}
@@ -586,11 +589,11 @@ $\Sigma'\models\Sigma_{\psi}$, \ie $\Sigma'\models\psi'$ for each
 \hline
 \pCFDs   & \NP-complete& \coNP-complete &\NP-complete& \coNP-complete  \\
 \hline
-\CINDs~\cite{CINDs} & $O(1)$ & \EXPTIME-complete &  $O(1)$ & \PSPACE-complete\\
+\CINDs~\cite{tcs-CINDs} & $O(1)$ & \EXPTIME-complete &  $O(1)$ & \PSPACE-complete\\
 \hline
 \pCINDs  &  $O(1)$  & \EXPTIME-complete & $O(1)$  & \EXPTIME-complete\\
 \hline
-\CFDs+ \CINDs~\cite{CINDs} & undecidable& undecidable & undecidable& undecidable\\
+\CFDs+ \CINDs~\cite{tcs-CINDs} & undecidable& undecidable & undecidable& undecidable\\
 \hline
 \pCFDs+ \pCINDs & undecidable& undecidable & undecidable& undecidable\\
 \hline
