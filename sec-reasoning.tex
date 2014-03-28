@@ -421,8 +421,7 @@ R}$ such that (a) $D\models\Sigma$ and $D\not\models\psi$, and (b) $D$ consists 
 
 The detailed \EXPTIME algorithm is given as follows.
 
-\bi
-\item[(1)]
+\sstab(1)
 We first build a labeled directed graph $G(V, E, l)$.  Each node $u\in V$ is a possible
 tuple `$R_i:t_i$' such that $t_i[A]\in \adom(A)$ for each attribute
 $A$ $\in$ $\attrset(R_i)$. There is an edge $e$ = (`$R_i:t_i$',
@@ -431,22 +430,22 @@ $(R_i[U; U_p]$ $\subseteq$ $ R_j[V; V_p], T_{p_{\phi}})$ in $\Sigma$
 such that $t_i[U_p] \asymp T_{p_{\phi}}[U_p]$, $t_j[V]$ = $t_i[U]$
 and $t_j[V_p] \asymp T_{p_{\phi}}[V_p]$, and $e$ is labeled with the \pCIND $\phi$, \ie  $\phi \in l(e)$. Note that an edge may have multiple labels. 
 
-\item[(2)]
+\sstab(2)
 Let $S_a$ be the set of nodes `$R_a:t_a$' such that $t_a[X_p] \asymp T_{p}[X_p]$, and $S_b$ be the
 set of nodes `$R_b:t_b$' such that $t_b[Y_p] \asymp T_{p}[Y_p]$, respectively. 
 
-\item[(3)]
+\sstab(3)
 For each node $u$ = `$R_a:t_a$' in $S_a$, let $G_u$ be the induced  subgraph of $G$ that contains all the nodes reachable from $u$,
 and exactly  the edges that appear in $G$ over the same set of nodes. We also refer to $u$ as the root of $G_u$.
  
 
 
- \item[(4)] 
+\sstab(4)
 For an induced subgraph $G_u$ of $G$ with root $u$ = `$R_a:t_a$', we derive another graph $G'_u$ by recursively removing edges as follows. For any $v$ in $G_u$, if $v$ has a child $v'$ from which no nodes in `$R_b:t_b$' in $S_b$ with $t_b[X] = t_b[Y]$ are reachable, then for all children $v''$ of $v$, we remove from labels $l(v, v'')$ all the labels in $l(v, v')$, and edge $(v, v'')$ is removed when $l(v, v'')$ becomes empty.  
 
- \item[(5)] 
+\sstab(5)
 If there exists a subgraph $G'_u$ derived from  an induced subgraph $G_u$ of $G$ with root $u$ = `$R_a:t_a$' such that  no nodes `$R_b:t_b$' in $S_b$ with $t_a[X] = t_b[Y]$ are reachable from $u$, we return `no', and return `yes', otherwise. 
-\ei
+
 
 
 It can be verified that (a) if the algorithm returns `no', we can
@@ -526,8 +525,7 @@ domain attributes only, and a set $\Sigma'\cup\{\psi'\}$ of \pCINDs
 on ${\cal R'}$ such that $\Sigma\models\psi$ iff
 $\Sigma'\models\psi'$.
 
-\bi
-\item[(1)]
+\sstab(1)
 We start with constructing ${\cal R'}$. For each
 $R_i(A_1,$ $\ldots, A_k)$ of ${\cal R}$, we define
 $R'_i(A'_1,\ldots,A'_k)$ such that for each attribute $A'_j$
@@ -544,36 +542,8 @@ $\rho_{i,j}.b_{h+1}$. Note that this is always doable. For clarity,
 we also denote $\rho_{i,j}$ as $\rho$ when it is clear from the
 context.
 
-\item[(2)]
-We next define  $\Sigma'$ and $\psi'$ on ${\cal R'}$ based on the
-mappings defined above. For each \CIND $(R_a[X;$ $A_1, \ldots,A_{m1}]
-\subseteq$ $R_b[Y; B_1, \ldots, B_{m2}], T_p)$ in $\Sigma$ and each
-$t_p\in T_p$, we define another \pCIND $(R'_a[X'; A'_1,\ldots,A'_{m1},X'_p] \subseteq$ $R'_b[Y';$
-$B'_1,\ldots,B'_{m2},Y'_p], T'_p)$, where (1) $X'$ (resp. $Y'$,
-$A'_1,\ldots,A'_{m1}$, and $B'_1,\ldots,B'_{m2}$) corresponds to $X$
-(resp. $Y$, $A_1,\ldots,A_{m1}$, and $B_1,\ldots,B_{m2}$); (2) $X'_p$
-(resp. $Y'_p$) corresponds to those finite domain attributes in
-$R_a$ (resp. $R_b$), but not in $A_1,\ldots,A_{m1}$ (resp.
-$B_1,\ldots,B_{m2}$); and (3) $T'_p = \{t'_{p1},t'_{p2},t'_{p3}\}$
-such that for each attribute $A'$ in $A'_1,\ldots,A'_{m1}$ or
-$B'_1,\ldots,B'_{m2}$, (a) $t'_{p1}[A']$ = $t_p[A]$ and
-$t'_{p2}[A']$ = $t'_{p3}[A']$ = `\_' if $\dom(A)$ is infinite, and
-(b) $t'_{p1}[A']$ = $\rho(t_p[A])$ and $t'_{p2}[A']$ = $t'_{p3}[A']$
-= `\_' if $\dom(A)$ is finite; and (c) for the rest attributes $A'$
-in $X'_p$ or $Y'_p$, $t'_{p1}[A']$ = `\_', $t'_{p2}[A']$ =
-`$>\rho.b_0$', and $t'_{p3}[A']$ = `$<\rho.b_{h+1}$'. Similarly, we
-can define a set $\Sigma_{\psi}$ of \pCINDs from $\psi$ based on the
-mappings.
-\ei
-
-Finally, one can easily verify that $\Sigma\models\psi$ iff
-$\Sigma'\models\Sigma_{\psi}$, \ie $\Sigma'\models\psi'$ for each
-\pCIND $\psi'\in\Sigma_{\psi}$. Following from this, the problem is
-\EXPTIME-hard.
-\end{proof}
-
 %%%%%%%%%%%%%%%%%%%%%%%%Complexity Summary%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{table*}[tb!]
+\begin{table*}[tbh!]
 \vspace{-2ex}
  \caption{Summary of Complexity Results\label{tab-complexity}}
  \vspace{-3ex}
@@ -600,6 +570,39 @@ $\Sigma'\models\Sigma_{\psi}$, \ie $\Sigma'\models\psi'$ for each
 \end{center}
 \vspace{-5ex}
 \end{table*}
+
+
+
+\sstab(2)
+We next define  $\Sigma'$ and $\psi'$ on ${\cal R'}$ based on the
+mappings defined above. 
+For each \CIND $(R_a[X;$ $A_1, \ldots,A_{m1}]
+\subseteq$ $R_b[Y; B_1, \ldots, B_{m2}], T_p)$ in $\Sigma$ and each
+$t_p\in T_p$, we define another \pCIND $(R'_a[X'; A'_1,\ldots,A'_{m1},X'_p] \subseteq$ $R'_b[Y';$
+$B'_1,\ldots,B'_{m2},Y'_p],$ $T'_p)$, where (a) $X'$ (resp. $Y'$,
+$A'_1,\ldots,A'_{m1}$, and $B'_1,\ldots,B'_{m2}$) corresponds to $X$
+(resp. $Y$, $A_1,\ldots,A_{m1}$, and $B_1,\ldots,B_{m2}$); (b) $X'_p$
+(resp. $Y'_p$) corresponds to those finite domain attributes in
+$R_a$ (resp. $R_b$), but not in $A_1,\ldots,A_{m1}$ (resp.
+$B_1,\ldots,B_{m2}$); and (c) $T'_p = \{t'_{p1},t'_{p2},t'_{p3}\}$
+such that for each attribute $A'$ in $A'_1,\ldots,A'_{m1}$ or
+$B'_1,\ldots,B'_{m2}$, (i) $t'_{p1}[A']$ = $t_p[A]$ and
+$t'_{p2}[A']$ = $t'_{p3}[A']$ = `\_' if $\dom(A)$ is infinite, and
+(ii) $t'_{p1}[A']$ = $\rho(t_p[A])$ and $t'_{p2}[A']$ = $t'_{p3}[A']$
+= `\_' if $\dom(A)$ is finite; and (iii) for the rest attributes $A'$
+in $X'_p$ or $Y'_p$, $t'_{p1}[A']$ = `\_', $t'_{p2}[A']$ =
+`$>\rho.b_0$', and $t'_{p3}[A']$ = `$<\rho.b_{h+1}$'. Similarly, we
+can define a set $\Sigma_{\psi}$ of \pCINDs from $\psi$ based on the
+mappings.
+
+
+Finally, one can easily verify that $\Sigma\models\psi$ iff
+$\Sigma'\models\Sigma_{\psi}$, \ie $\Sigma'\models\psi'$ for each
+\pCIND $\psi'\in\Sigma_{\psi}$. Following from this, the problem is
+\EXPTIME-hard.
+\end{proof}
+
+
 
 
 
