@@ -35,7 +35,7 @@ ${\cal R}$ = $(R_1,$ $\dots,R_n)$, a set of \SQL queries can be
 automatically generated such that (a) the collection of the answers
 to the \SQL queries in $D$ is $\kw{vio}(D,\Sigma)$, (b) the number
 and size of the set of \SQL queries depend only on the number $n$ of
-relations and their arities in $\R$, regardless of $\Sigma$.\eop
+relations and their arities in $\R$, regardless of $\Sigma$. 
 \end{theorem}
 %\vspace{-0.5ex}
 
@@ -110,18 +110,19 @@ We populate \Enc{L}, \Enc{R} and \Enc{\ne}  as follows. For each
 \pCFD $\varphi$ = $R(X\ra Y,\ T_p)$ in $\SCFD^i$,
 we generate a distinct \at{cid} $\kw{id}_\varphi$ for it, and do the following.
 \bi
-\item Add a tuple $t_1$ to \Enc{L} such that
+\item[(1)] Add a tuple $t_1$ to \Enc{L} such that
 (a) $t[\at{cid}] = \kw{id}_\varphi$; (b) for each $A\in X$,
 $t[A]$ = \_ if $T'_p(\_,A)$ is `\_', and for each non-negation
 predicate \op, $t[A_{\kw{op}}]$ = `$a$' if $T'_p(\kw{op},A)$
 is `\op $a$'; (c) we let $t[B]$ = `null' for all other attributes $B$
 in \Enc{L}.
-\vspace{0.8ex}
 
-\item Similarly add a tuple $t_2$ to \Enc{R} for attributes in $Y$.
-\vspace{0.5ex}
 
-\item For each attribute $A\in X\cup Y$ and each $\ne a$ pattern in
+
+\item[(2)] Similarly add a tuple $t_2$ to \Enc{R} for attributes in $Y$.
+
+
+\item[(3)] For each attribute $A\in X\cup Y$ and each $\ne a$ pattern in
 $T_p[A]$, add a tuple $t$ to \Enc{\ne} such that $t[\at{cid}] =
 \kw{id}_\varphi$, $t[\at{att}]$ = `$A$', $t[\at{val}]$ = `a', and
 $t[\at{pos}]$ = `\LHS' (resp.~$t[\at{pos}]$ = `\RHS') if attribute
@@ -165,7 +166,7 @@ $A$ appears in $X$ (resp. $Y$). \ei\vspace{-1ex}
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\vspace{-0.5ex}
+ 
 \begin{example}
 Recall from Fig.~\ref{fig-pcfd} \pCFDs $\varphi_2$, $\varphi_3$ and
 $\varphi_4$ defined on relation \at{item}. The three \pCFDs are
@@ -178,12 +179,12 @@ values do not contribute to error detection, and are thus omitted;
 (c) \Enc{\ne} is empty since all these \pCFDs have no negation
 patterns. One can easily reconstruct these \pCFDs from tables
 \Enc{L}, \Enc{R} and \Enc{\ne} by collating tuples based on
-\at{cid}. \eop
-\end{example}\vspace{-1ex}
+\at{cid}. 
+\end{example} 
 
 
 %%%
-\stitle{Encoding CIND$^p$s}.~All \pCINDs in $\SCIND^{(i,j)}$
+\stitle{Encoding CIND$^p$s}. All \pCINDs in $\SCIND^{(i,j)}$
 can be encoded with four tables
 \Enc{}, \Enc{L}, \Enc{R} and \Enc{\ne}.
 Here \Enc{L} (resp.~\Enc{R}) and \Enc{\ne} encode non-negation
@@ -257,15 +258,15 @@ For each $k\in[1, m]$,  let $t[A_k]$ = $t[B_k]$ = $k$, and $t[A]$ =
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\vspace{-1.5ex}
+ 
 \begin{example} \label{exa-enc-pfind}
 Figure~\ref{fig-pcfd-encoding} shows the coding of \pCINDs $\psi_1$
 and  $\psi_2$ given in Fig.~\ref{fig-pcind}. We use \at{state_L} and
 \at{state_R} in \Enc{} to denote the occurrences of attribute
 \at{state} in \at{item} and \at{tax}, respectively. In tables
 \Enc{L} and \Enc{R}, attributes with only `null' patterns are
-omitted, for the same reason as for \pCFDs mentioned above. \eop
-\end{example}\vspace{-0.5ex}
+omitted, for the same reason as for \pCFDs mentioned above.  
+\end{example} 
 
 Putting these together, it is easy to verify that at most $O(n^2)$
 data tables are needed to encode dependencies in $\Sigma$,
@@ -300,15 +301,15 @@ $\SCIND^{(i,j)}$.
 
 
 
-\vspace{-1ex} \begin{footnotesize}\mat{4ex}{
+\begin{footnotesize}\mat{4ex}{
 \= \=\bd{select} \=  $R_i.*$ \\
 \> \>\bd{from} $R_i$, \Enc{L} $L$, \Enc{\ne} $N$ \\
 \>\> \bd{where}  $R_i.X\asymp L$ \bd{and} $R_i.X\asymp N$ \bd{and not exists} (\\
 \>\>\> \bd{select} $R_j.*$ \\
 \> \>\> \bd{from} $R_j$, \Enc{} $H$, \Enc{R} $R$, \Enc{\ne} $N$ \\
 \>\>\> \bd{where} \= $R_i.X = R_j.Y$ \bd{and} $L$.\at{cid} =
-$R$.\at{cid}  \bd{and} $L$.\at{cid} = $H$.\at{cid} \bd{and}\\
-\>\>\>\>$R_j.Y\asymp R$ \bd{and} $R_j.Y\asymp N$) }\vspace{-1ex}
+$R$.\at{cid}  \bd{and} \\
+\>\>\>\>  $L$.\at{cid} = $H$.\at{cid} \bd{and} $R_j.Y\asymp R$ \bd{and} $R_j.Y\asymp N$) }
 \end{footnotesize}
 
 \noindent Here (1) $X = \{\at{A_1,\dots, A_{m1}}\}$ and $Y$ =
@@ -316,14 +317,14 @@ $\{\at{B_1,\dots, B_{m2}}\}$ are the sets of attributes of $R_i$ and
  $R_j$ appearing in $\SCIND^{(i,j)}$, respectively;
 (2) $R_i.X\asymp L$ is the conjunction of
 
-\vspace{-1.5ex} \begin{footnotesize}\mat{1ex}{
+
+\begin{footnotesize}\mat{1ex}{
 $L.A_k$\=\ \bd{is null or} $R_i.A_k$ = $L.A_k$ \bd{or} ($L.A_k$ = `\_'\\
-\> \bd{and} ($L.A_{i_{>}}$ \bd{is null or} $R_i.A_k$ $>$ $L.A_{i_{>}}$)
-  \bd{and} ($L.A_{i_{\ge}}$ \bd{is null or} $R_i.A_k$ $\ge$ $L.A_{k_{\ge}}$)\\
-\> \bd{and} ($L.A_{k_{<}}$ \bd{is null or} $R_i.A_k$ $<$ $L.A_{k_{<}}$)
- \bd{and}
-($L.A_{i_{\le}}$ \bd{is null or} $R_i.A_k$ $\le$ $L.A_{i_{\le}}$))
-}\vspace{-1.5ex}
+\> \bd{and} ($L.A_{i_{>}}$ \bd{is null or} $R_i.A_k$ $>$ $L.A_{i_{>}}$)\\
+\>  \bd{and} ($L.A_{i_{\ge}}$ \bd{is null or} $R_i.A_k$ $\ge$ $L.A_{k_{\ge}}$)\\
+\> \bd{and} ($L.A_{k_{<}}$ \bd{is null or} $R_i.A_k$ $<$ $L.A_{k_{<}}$)\\
+\> \bd{and} ($L.A_{i_{\le}}$ \bd{is null or} $R_i.A_k$ $\le$ $L.A_{i_{\le}}$))
+}
 \end{footnotesize}
 
 \noindent
@@ -333,14 +334,14 @@ for $k\in[1, m_1]$;
 (4) $R_i.X\asymp N$ is a shorthand for the conjunction below,
 for $k\in[1, m_1]$:
 
-\vspace{-1.5ex} \begin{footnotesize}\mat{2ex}{
+\begin{footnotesize}\mat{2ex}{
 \bd{not exists}
-(\bd{select} $*$ \bd{from} $N$ \bd{where} \= $L.\at{cid}$ =
+(\=\bd{select} $*$ \bd{from} $N$ \\
+\>\bd{where} \= $L.\at{cid}$ =
 $N.\at{cid}$ \bd{and} $N.\at{pos}$ = `\LHS' \bd{and}\\
- \>  $N.\at{att}$ =
-`$A_k$' \bd{and}
+\>\>  $N.\at{att}$ = `$A_k$' \bd{and}
  $R_i.A_k$ = $N.\at{val}$);
-}\vspace{-1.5ex}
+}
 \end{footnotesize}
 
 \noindent
@@ -368,41 +369,39 @@ exists} in $Q$ ensures that the $R_i$ tuples selected violate
 \pCINDs in $\SCIND^{(i,j)}$.
 
 
-\vspace{-0.5ex}
+ 
 \begin{example}\label{exa-cind-query}
 Using the coding of Fig.~\ref{fig-pcind-encoding}, an \SQL query $Q$
 for checking \pCINDs $\psi_1$ and $\psi_2$ of Fig.~\ref{fig-pcind}
 is given as follows:
 
 
-\vspace{-1ex}\begin{footnotesize}\mat{4ex}{
+\begin{footnotesize}\mat{4ex}{
 \hspace{-5ex} \=  \bd{select} $R_1.*$ \bd{from} \at{item} $R_1$, \Enc{L} L, \Enc{\ne} N \\
-\> \bd{where} ($L.$\at{type} \bd{is null or}  $R_1.$\at{type} =
-$L.$\at{type} \bd{or} $L.$\at{type} = `\_') \bd{and not exist} (\\
-\>\hspace{2ex}\=\bd{select * }\bd{from} $N$ \\
-\>\>\bd{where} $N.\at{cid}$ =
-$L.\at{cid}$ \bd{and} $N.\at{pos} = $ `\LHS' \bd{and} $N.\at{att} = $ `type')\\
-\>\> \bd{and} ($L.$\at{state} \bd{is null or}  $R_1.$\at{state} =
-$L.$\at{state} \bd{or} $L.$\at{state} = `\_') \bd{and not exist} (\\
-\>\>\bd{select * }\bd{from} $N$ \\
-\>\>\bd{where} $N.\at{cid}$ = $L.\at{cid}$ \bd{and} $N.\at{pos} = $
-`\LHS' \bd{and} $N.\at{att} = $ `state' \bd{and} $R_1.\at{state} =
-$N.\at{val})\\
-\stab
+\> \bd{where} \= ($L.$\at{type} \bd{is null or}  $R_1.$\at{type} =
+$L.$\at{type} \bd{or} $L.$\at{type} = `\_') \bd{and} \\
+\>\>\bd{not exist} (\=\bd{select * }\bd{from} $N$ \\
+\>\>\>\bd{where} \=$N.\at{cid}$ = $L.\at{cid}$ \bd{and} $N.\at{pos} = $ `\LHS' \bd{and} \\
+\>\>\>\> $N.\at{att} = $ `type') \bd{and} \\
 
-\> \>  \bd{and not exists} (\\
-\>\>\bd{select} $R_2.*$ \bd{from} \at{tax} $R_2$, \Enc{} H, \Enc{R} R\\
-\>\>  \bd{where}  ($H.\at{state_L}$ \bd{is null or}
-$H.\at{state_R}$ \bd{is null or} $H.\at{state_L} != H.\at{state_R}$ \bd{or}\\
-\>\>\hspace{2ex}\=$R_2.\at{state}$ = $R_1.\at{state}$) \bd{and}
-$L.\at{cid}$ =
-$H.\at{cid}$  \bd{and} $L.\at{cid}$ = $R.\at{cid}$ \bd{and}\\
-\>\>\>($R.$\at{rate} \bd{is null or}  $R_2.$\at{rate} =
-$R.$\at{rate} \bd{or} $R.$\at{rate} = `\_') \bd{and not exist} (\\
-\>\>\>\bd{select * }\bd{from} $N$ \\
-\>\>\>\bd{where} $N.\at{cid}$ = $R.\at{cid}$ \bd{and} $N.\at{pos} =
-$ `\RHS' \bd{and} $N.\at{att} = $ `rate' \bd{and} $R_2.\at{rate} =
-$N.\at{val})) }\end{footnotesize}
+\>\> ($L.$\at{state} \bd{is null or}  $R_1.$\at{state} =
+$L.$\at{state} \bd{or} $L.$\at{state} = `\_') \bd{and}\\
+
+\>\> \bd{not exist} (\bd{select * }\bd{from} $N$ \\
+\>\>\>\bd{where} $N.\at{cid}$ = $L.\at{cid}$ \bd{and} $N.\at{pos} = $ `\LHS' \bd{and} \\
+\>\>\>\> $N.\at{att} = $ `state' \bd{and} $R_1.\at{state} = $N.\at{val}) \bd{and}\\
+
+
+\> \>  \bd{not exists} (\bd{select} $R_2.*$ \bd{from} \at{tax} $R_2$, \Enc{} H, \Enc{R} R\\
+\>\>\>  \bd{where}  ($H.\at{state_L}$ \bd{is null or} $H.\at{state_R}$ \bd{is null or} \\
+\>\>\>\> $H.\at{state_L} != H.\at{state_R}$ \bd{or} $R_2.\at{state}$ = $R_1.\at{state}$)\\
+\>\>\>\> \bd{and} $L.\at{cid}$ = $H.\at{cid}$  \bd{and} $L.\at{cid}$ = $R.\at{cid}$ \bd{and}\\
+\>\>\>\>($R.$\at{rate} \bd{is null or}  $R_2.$\at{rate} = $R.$\at{rate} \bd{or} \\
+\>\>\>\> $R.$\at{rate} = `\_')  \bd{and not exist} (\=\bd{select * }\bd{from} $N$ \\
+\>\>\>\>\bd{where} $N.\at{cid}$ = $R.\at{cid}$ \bd{and} $N.\at{pos} =$ \\
+\>\>\>\> `\RHS' \bd{and} $N.\at{att} = $ `rate' \bd{and} $R_2.\at{rate} = $N.\at{val})\\
+\>\>\>\>) }
+\end{footnotesize}
 
 
 
@@ -414,8 +413,8 @@ the table. Similarly, if an attribute $A$ does not appear in any
 tuple in \Enc{\ne},  the queries need not check $A$ either. From
 this, it follows that we do not even need to generate those
 attributes with only `null' patterns for data tables \Enc{}, \Enc{L}
-or \Enc{R} when encoding \pCINDs or \pCFDs. \eop
-\end{example}\vspace{-1.5ex}
+or \Enc{R} when encoding \pCINDs or \pCFDs.  
+\end{example} 
 
 \eat{
 
