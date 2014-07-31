@@ -38,10 +38,16 @@ $\psi _3$: \at{R_1}(\at{state, mn}; \at{cnr}='better', \at{lmre}=15, \at{umre}=1
 %\end{small}
 
 
-(2) DBLP \textit{data} is from the DBLP Bibliography\footnote{http://dblp.uni-trier.de/xml/}. We first transformed the XML data into four tables: \at{author}, \at{pub}, \at{proceedings}, \at{homepage}. We then create a table \at{wrote} by.
+(2) DBLP \textit{data} is from the DBLP Bibliography\footnote{http://dblp.uni-trier.de/xml/}. We first transformed the XML data into two relations: \at{pub} and \at{pro}. We extracted attributes for our experiments: \at{key}, \at{rec} (record type), \at{title}, \at{title}, \at{year}, \at{bt} (booktitle), \at{isbn}, \at{publisher}, \at{fb} (first page) and \at{lp} (last page).
 
 We designed \pCFDs and \pCINDs for the DBLP data, shown below.\\
-$\psi _1$: \at{pub}(\at{crossref}, \at{year}; \at{record}='inproceedings') $\subseteq$ \at{proceedings}(\at{key}, \at{year}; nil);\\
+%\begin{small}
+\vspace{-.5ex} \mat{0ex}{
+$\varphi _1$: \at{pub}(\at{key}, \at{rec}='book', \at{fp}=15, \at{lp}$\geq$15 $\ra$ \at{isbn});\\
+$\psi _1$: \at{pub}(\at{bt}, \at{year}; \at{rec}='inproceedings', \at{fp}=15, \at{lp}$\geq$15)\\
+$\subseteq$ \at{pro}(\at{bt}, \at{year}; nil);\\ }
+\vspace{-.5ex}
+%\end{small}
 
 We varied two parameters of the data in our experiments, denoted by \texttt{SZ} and \texttt{NOISE}. \texttt{SZ} determines the number of tuples in the test relation and \texttt{NOISE} the percentage of dirty tuples. A dirty data generator was developed to produce dirty tuples by changing correct values of attributes on \RHS of \pCFDs or \LHS of \pCINDs to incorrect values randomly. We kept a copy of clean data before adding any noise for checking whether a tuple detected by \pCFDs or \pCINDs is a true or false dirty tuple.
 
