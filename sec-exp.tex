@@ -3,203 +3,111 @@
 \label{sec-exp}
 %\vspace{-1ex}
 
-We next present an experimental study by using real life data. Three sets of experiments
-were conducted to verify (1) the scalability of our techniques for detecting \pCFDs and \pCINDs
-violations over a variety of data sizes, and number and complexity of \pCFDs and \pCINDs; (2) the
-effectiveness of \pCFDs in detecting dirty tuples versus its \CFDs counterpart, as well as their
-running time; and (3) the effectiveness of \pCINDs in detecting dirty tuples versus its \CINDs counterpart,
-as well as their running time.
+We next present an experimental study by using real life data. Two sets of experiments
+were conducted to verify the efficiency and effectiveness of our techniques for detecting \pCFDs and \pCINDs
+violations.
 
-\stitle{Experimental setting}. Real-life datasets were employed to examine the applicability of our method in practice.
+\stitle{Experimental data}. Real-life datasets were employed to examine the applicability of our method in practice.
 
 (1) HOSP \textit{(Hospital Compare)} is publicly available from U.S. Department of Health
-\& Human Services\footnote{https://data.medicare.gov/data/hospital-compare}. We used four tables: HOSP, HOSP\_MORTALITY\_READM\_XWLK, STATE\_MORTALITY\_READM\_SCRE, and NATIONAL\_MORTALITY\_READM\_RATE, which record the hospital information, the scores of 30-day Mortality and Readmission Measures (MRMs) of each hospital, the average score of MRMs of each state and the score of MRMs of the whole nation. We created a table \at{R_1} by join operation upon the four tables, among which we chose 15 attributes for our experiments: \at{hname} (hospital name), \at{zip} (zip code), \at{state}, \at{city}, \at{county}, \at{address}, \at{con} (condition), \at{mn} (measure name), \at{mrcr} (mortality and readmission completed rate), \at{lmre} (lower mortality and readmission estimate), \at{umre} (upper mortality and readmission estimate), \at{nmr} (national mortality and readmission rate), \at{cnr} (comparison to national rate), \at{cat} (category) and \at{nh} (number of hospitals). We created another table \at{R_2} by projection upon STATE\_MORTALITY\_READM\_SCRE.
+\& Human Services\footnote{https://data.medicare.gov/data/hospital-compare}. We used two tables: HCAHPS-Hospital and HCAHPS-State, which record the survey responses and the state average of survey responses of hospital patients about their experiences during a recent inpatient hospital stay, respectively. We chose 15 attributes for the schema of the relation $R_1$: \at{pid} (Provider ID), \at{hname} (Hospital Name), \at{addr} (Address), \at{city}, \at{state}, \at{zip}, \at{county}, \at{phn} (Phone Number), \at{hid} (HCAHPS Measure ID), \at{hq} (HCAHPS Question), \at{had} (HCAHPS Answer Description), \at{hap} (HCAHPS Answer Percent), \at{ncs} (Number of Completed Surveys), \at{srrp} (Survey Response Rate Percent) and \at{ft} (Footnote), and 4 attributes for the schema of the relation $R_2$: \at{state}, \at{hid}, \at{hq} and \at{hap}.
 
-We designed \pCFDs and \pCINDs for the HOSP data, with seven representative ones as follows:\\
+We designed 6 \pCFDs and 3 \pCINDs for the HOSP data, shown below.
 
-%\begin{small}
-\vspace{-.5ex} \mat{0ex}{
-$\varphi _1$: \at{R_1}(\at{zip}, \at{city} $\ra$ \at{state}); \\
-$\varphi _2$: \at{R_1}(\at{pn}, \at{hname} $\ra$ \at{state}, \at{city}); \\
-$\varphi _3$: \at{R_1}(\at{mrcr}='not available' $\ra$ \at{lmre}='not available',\\
- \at{umre}='not available');\\
-$\varphi _4$: \at{R_1}(\at{pn}, \at{con}, \at{mn}, \at{lmre}=12.7, \at{umre}=17.5 $\ra$ \\
-\at{mrcr} $\geq$ 12.7, \at{mrcr} $\leq$ 17.5);\\
-$\varphi _5$: \at{R_1}(\at{nh}=0, \at{cat}='worse', \at{mrcr}$\neq$'not available' $\ra$ \\
-\at{cnr} $\neq$ 'worse');\\
-$\psi _1$: \at{R_1}(\at{con, mn}; \at{mrcr}$\neq$'not available') $\subseteq$ \at{R_2}( \at{con, mn}; \\
-\at{nil} );\\
-$\psi _2$: \at{R_1}(\at{con, mn}; \at{state}='AL', \at{cnr}='worse') $\subseteq$ \at{R_2}( \\
-\at{con, mn}; \at{state}='AL', \at{cat}='worse' );\\
-$\psi _3$: \at{R_1}(\at{state, mn}; \at{cnr}='better', \at{lmre}=15, \at{umre}=19, \\
-\at{mrcr}$\geq$15, \at{mrcr}$\leq$19) $\subseteq$ \at{R_2}( \at{state, mn}; \at{cat}='better',\\
- \at{nh}$>$0);\\ }
-\vspace{-.5ex}
-%\end{small}
+\begin{footnotesize}\mat{0ex}{
+$\varphi _1$: \=$R_1$(\at{zip}$=$'\_' \And \at{city}$=$'\_' $\rightarrow$ \at{state}$=$'\_') \\
+$\varphi _2$: $R_1$(\at{pid}$=$'\_' $\rightarrow$ \at{hname}$=$'\_' \And \at{county}$=$'\_' \And \at{addr}$=$'\_' \\
+\> \And \at{phn}$=$'\_') \\
+$\varphi _3$: $R_1$(\at{pid}$=$'\_' $\rightarrow$ \at{srrp}$=$'\_') \\
+$\varphi _4$: $R_1$(\at{hid}$=$'\_' $\rightarrow$ \at{hq}$=$'\_' \And \at{had}$=$'\_') \\
+$\varphi _5$: $R_1$(\at{pid}$=$'\_' \And \at{ncs}$=$'Not Available' $\rightarrow$ \at{ft}$\geq 1$ \And \at{ft}$\leq 14$) \\
+$\varphi _6$: $R_1$(\at{pid}$=$'\_' \And \at{hid}$=$'\_' \And \at{ncs}$\neq$'Not Available' \And \at{ncs}\\
+\> $\neq$'Fewer than 100' $\rightarrow$ \at{hap}$\geq 0$ \And \at{hap}$\leq 100$) \\
+$\psi _1$: $R_1$(\at{hid}, \at{hq}; \at{nil}) $\subseteq$ $R_2$(\at{hid}, \at{hq}; \at{nil}) \\
+$\psi _2$: $R_1$(\at{hid}, \at{state}; \at{nil}) $\subseteq$ $R_2$(\at{hid}, \at{state}; \at{nil}) \\
+$\psi _3$: $R_1$(\at{hid}, \at{state}; \at{ncs}$\neq$'Not Available') $\subseteq$ $R_2$(\at{hid}, \at{state}; \at{hap}$\geq 0$\\
+\> \And \at{hap}$\leq 100$) }
+\end{footnotesize}
+
+(2) DBLP \textit{data} is from the DBLP Bibliography\footnote{http://dblp.uni-trier.de/xml/}. We first transformed the XML data into relations, and then we created two tables for \textit{publications}, including \textit{book}, \textit{article} (journals papers) and \textit{inproceedings} (conferences papers), and \textit{proceedings} (conferences) respectively. We chose 8 attributes for the schema of relation $R_1$: \at{key}, \at{type}, \at{title}, \at{booktitle}, \at{year}, \at{crossref}, \at{isbn} and \at{publisher}, and 4 attributes for the schema of $R_2$: \at{key}, \at{year}, \at{isbn} and \at{publisher}.
 
 
-(2) DBLP \textit{data} is from the DBLP Bibliography\footnote{http://dblp.uni-trier.de/xml/}. We first transformed the XML data into two relations: \at{pub} and \at{pro}. We extracted attributes for our experiments: \at{key}, \at{rec} (record type), \at{title}, \at{title}, \at{year}, \at{bt} (booktitle), \at{isbn}, \at{publisher}, \at{fb} (first page) and \at{lp} (last page).
+We designed 771 \pCFDs and 255 \pCINDs for the DBLP data, with nine representative ones as follows:\\
 
-We designed \pCFDs and \pCINDs for the DBLP data, shown below.\\
-%\begin{small}
-\vspace{-.5ex} \mat{0ex}{
-$\varphi _1$: \at{pub}(\at{key}, \at{rec}='book', \at{fp}=15, \at{lp}$\geq$15 $\ra$ \at{isbn});\\
-$\psi _1$: \at{pub}(\at{bt}, \at{year}; \at{rec}='inproceedings', \at{fp}=15, \at{lp}$\geq$15)\\
-$\subseteq$ \at{pro}(\at{bt}, \at{year}; nil);\\ }
-\vspace{-.5ex}
-%\end{small}
+\begin{footnotesize}\mat{0ex}{
+$\varphi _1$: \=$R_1$(\at{isbn}$=$'\_' \And \at{booktitle}$=$'\_' $\rightarrow$ \at{publisher}$=$'\_') \\
+$\varphi _2$: $R_1$(\at{title}$=$'\_' \And \at{year}$=$'\_' \And \at{booktitle}$=$'\_' $\rightarrow$ \at{type}$=$'\_') \\
+$\varphi _3$: $R_1$(\at{booktitle}$=$'AICT/ICIW' $\rightarrow$ \at{year}$=$2006) \\
+$\varphi _4$: $R_1$(\at{booktitle}$=$'VLDB' \And \at{year_L}$=$'\_' $\rightarrow$ \at{year_R}$\geq 1975$ \\
+\> \And \at{year_R}$\leq 2007$) \\
+$\varphi _5$: $R_1$(\at{booktitle}$=$'PVLDB' \And \at{year_L}$=$'\_' $\rightarrow$ \at{year_R}$\geq 2008$) \\
+$\psi _1$: $R_1$(\at{crossref}, \at{publisher}; \at{type}$=$'inproceedings') $\subseteq$ $R_2$(\at{key}, \\
+\> \at{publisher}; \at{nil}) \\
+$\psi _2$: $R_1$(\at{crossref}, \at{isbn}, \at{publisher}; \at{booktitle}$=$'ACST') $\subseteq$ $R_2$(\at{key},\\
+\> \at{isbn}, \at{publisher}; \at{year}$=$2006)  \\
+$\psi _3$: $R_1$(\at{crossref}, \at{isbn}, \at{publisher}; \at{booktitle}$=$'VLDB') $\subseteq$ $R_2$(\at{key},\\
+\> \at{isbn}, \at{publisher}; \at{year}$\geq 1975$ \And \at{year}$\leq 2007$)  \\
+$\psi _4$: $R_1$(\at{crossref}, \at{isbn}, \at{publisher}; \at{booktitle}$=$'ICDE') $\subseteq$ $R_2$(\at{key},\\
+\> \at{isbn}, \at{publisher}; \at{year}$\geq 1984$)  }
+\end{footnotesize}
 
-We varied two parameters of the data in our experiments, denoted by \texttt{SZ} and \texttt{NOISE}. \texttt{SZ} determines the number of tuples in the test relation and \texttt{NOISE} the percentage of dirty tuples. A dirty data generator was developed to produce dirty tuples by changing correct values of attributes on \RHS of \pCFDs or \LHS of \pCINDs to incorrect values randomly. We kept a copy of clean data before adding any noise for checking whether a tuple detected by \pCFDs or \pCINDs is a true or false dirty tuple.
+We varied three parameters of the data in our experiments, denoted by $|I_1|$, $|I_2|$ and $noise\%$. $|I_1|$ is the number of tuples in the instance $I_1$ of relation $R_1$. Similarly, $|I_2|$ is the number of the instance $I_2$ of relation $R_2$. $noise\%$ is the percentage of dirty tuples in $I_1$ that were modified to violate a \pCFD or \pCIND, ranging from 0\% to 9\%. For each dirty tuple $t$, an attribute of $t$ in $Y$ of a \pCFD or $X \cup Y_p$ of a \pCIND was changed from a correct to incorrect value. We kept a copy of clean data before adding any noise to tell whether a tuple detected by \pCFDs or \pCINDs is a true or false dirty tuple.
 
-We varied our \pCFDs and \pCINDs using the following parameters: \texttt{NUMATTRs} the (max) attribute number in the \pCFDs and \pCINDs, \texttt{TABSZ} the tuple number in the \pCFDs and \pCINDs, and \texttt{NUMCONSTs} the percentage of tuples with constants vs. tuples with variables in \pCFDs and \pCINDs.
-
-\stitle{Implementation}. All algorithms were implemented in C\# and all data was stored in SQL Server 2008. The experiments were run on a machine with an Intel Core i5 (3.1GHz) CPU and 8GB of RAM. Each experiment was repeated 5 times and the average is reported here.
-
-\begin{figure*}
-  \centering
-  % Requires \usepackage{graphicx}
-  \subfigure[Scalability in SZ]{\epsfig{file=exp-fig/a.eps}} %, height=1.5in, width=2.4in
-  \subfigure[Scalability in SZ]{\epsfig{file=exp-fig/b.eps}}
-  \subfigure[$Q^C_\varphi$ vs. $Q^V_\varphi$]{\epsfig{file=exp-fig/c.eps}}
-  \subfigure[Scalability in TABSZ]{\epsfig{file=exp-fig/d.eps}}
-  \subfigure[Scalability in NUMCONSTs]{\epsfig{file=exp-fig/e.eps}}
-  \subfigure[Scalability in NOISE]{\epsfig{file=exp-fig/f.eps}}
-  %\includegraphics[width=2.5in]{a.eps}\\
-  \caption{Experimental results of detecting \pCFD and \pCIND violations}\label{fig1}
-\end{figure*}
+\stitle{Implementation}. All methods were implemented in C\# and all data was stored in SQL Server 2012. The experiments were run on a machine with an Intel Core i5 (3.1GHz) CPU and 8GB of RAM. Each experiment was repeated 5 times and the average is reported here.
 
 \stitle{Experimental results}. We next present our findings.
 
-\stitle{Exp-1: Detecting \pCFD and \pCIND Violations}. In this set of experiments, we identify a number of parameters that influence the detection of violations of \pCFDs and \pCINDs. We first vary these parameters, and then investigate the effects of each parameters combination on the detection time of queries.
-
-\noindent---\textit{Scalability in} \texttt{SZ:} Fixing \texttt{TABSZ} = 1K and \texttt{NUMATTRs} = 7, we considered relations with \texttt{SZ} from 10K to 90K and 5\% \texttt{NOISE}. Fig.~\ref{fig1}(a) and Fig.~\ref{fig1}(b) show the execution times for both \pCFDs and \pCINDs with \texttt{NUMCONSTs} 0\% and 50\% respectively. Both graphs show that the time for \pCFDs is nearly double of that for \pCINDs since detecting \pCFD violations needs two queries $Q_\varphi^C$ (finding single-tuple violations) and $Q_\varphi^V$ (detecting multi-tuple violations) while \pCIND needs only one. The execution times are increased linearly with the increase of \texttt{SZ}, which guarantees the scalability of our detection queries in \texttt{SZ}.
-
-\noindent---$Q_\varphi^C$ \textit{vs.} $Q_\varphi^V$: Fixing \texttt{TABSZ} = 1K, \texttt{NUMATTRs} = 7 and \texttt{NUMCONSTs} = 0\%, we varied \texttt{SZ} from 10K to 90K with 5\% \texttt{NOISE} to study how the detection time is split between the $Q_\varphi^C$ and $Q_\varphi^V$ queries for \pCFDs. Fig.~\ref{fig1}(c) shows the evaluation times for each query in isolation and both queries have similar loads and follow the same execution trend.
-
-\noindent---\textit{Scalability in} \texttt{TABSZ:} Fixing \texttt{NUMCONSTs} = 50\%, \texttt{NUMATTRs} = 7, \texttt{SZ} = 50K and \texttt{NOISE} = 5\%, we varied \texttt{TABSZ} from 1K to 9K. As is obvious from Fig.~\ref{fig1}(d), \texttt{TABSZ} has little impact on the detection times due to the dominant factor here are (a) the size of relation \texttt{SZ}, which is much larger than \texttt{TABSZ}, and (b) the number of attributes \texttt{NUMATTRs}, which determines the size of the queries.
-
-\noindent---\textit{Scalability in} \texttt{NUMCONSTs:} Fixing \texttt{TABSZ} = 1K, \texttt{NUMATTRs} = 7, \texttt{SZ} = 50K and \texttt{NOISE} = 5\%, we varied \texttt{NUMCONSTs} between 100\% and 0\% to measured the impact of variables on the detection time. Fig.~\ref{fig1}(e) shows that both times for \pCFDs and \pCINDs are increased slightly with the increase of the percentage of variables, since more comparison operations such as $>, \geq, <, \leq, \neq$ have to be done when an attribute with a variable. In more detail, the time for \pCFDs is increased faster than that of \pCINDs, because the query $Q_\varphi^V$ of \pCFDs has to detect more tuples when attributes on \RHS of \pCFDs with variables.
-
-\noindent---\textit{Scalability in} \texttt{NOISE:} Fixing \texttt{NUMCONSTs} = 50\%, \texttt{NUMATTRs} = 7, \texttt{TABSZ} = 5K and \texttt{SZ} = 50K, we studied the influence of \texttt{NOISE}. Fig.~\ref{fig1}(f) shows the detection times are stable with the increase of \texttt{NOISE}. It means that \texttt{NOISE} has negligible effects on detection times.
-
-
+\stitle{Exp-1: Efficiency}.
 
 \begin{figure*}
   \centering
   % Requires \usepackage{graphicx}
-  \subfigure[The violations of detected by \pCFDs]{\epsfig{file=exp-fig/2a.eps}}
-  \subfigure[The violations of detected by \CFDs]{\epsfig{file=exp-fig/2b.eps}}
-  %\subfigure[The violations of detected by \pCFDs for DBLP]{\epsfig{file=exp-fig/2c.eps}}
-  %\subfigure[The violations of detected by \CFDs for DBLP]{\epsfig{file=exp-fig/2d.eps}}
-  \subfigure[Performance]{\epsfig{file=exp-fig/2e.eps}}
-  %\includegraphics[width=2.5in]{a.eps}\\
-  \caption{\pCFDs versus \CFDs}\label{fig2}
+  \subfigure[Varying $|I_{1}|$]{\epsfig{file=exp-fig/1a.eps}} %, height=1.5in, width=2.4in
+  \subfigure[Varying $|I_{1}|$]{\epsfig{file=exp-fig/1b.eps}}
+  \subfigure[Varying $|I_{1}|$]{\epsfig{file=exp-fig/1c.eps}}
+  \subfigure[Varying $|I_{2}|$]{\epsfig{file=exp-fig/1d.eps}}
+  \subfigure[Varying $|I_{2}|$]{\epsfig{file=exp-fig/1e.eps}} \\
+  \subfigure[Varying $noise\%$]{\epsfig{file=exp-fig/1f.eps}}
+  \subfigure[Varying $noise\%$]{\epsfig{file=exp-fig/1g.eps}}
+  \subfigure[Varying $noise$\%]{\epsfig{file=exp-fig/1h.eps}}
+  \caption{Efficiency of detecting \pCFD and \pCIND violations}\label{fig_exp1}
 \end{figure*}
 
-\stitle{Exp-2: Comparing \pCFDs and \CFDs}. In this set of experiments, we compare the effectiveness and efficiency of \pCFD with their \CFD counterpart, in terms of the quality of dirty tuple they detect, as well as their detection time. We varied \texttt{SZ} from 10K to 90K with 5\% \texttt{NOISE} while \texttt{TABSZ} = 5K, \texttt{NUMATTRs} = 7 and \texttt{NUMCONSTs} = 0\% for both \pCFDs and \CFDs. Moreover, we set the same \LHS for \pCFDs and \pCINDs, but set more patterns in the \RHS of \pCFDs.
+Figure~\ref{fig_exp1}(a), (b), (c): Fixing $noise\% = 9\%$ and $|I_2| = 1.6K$, we varied $|I_1|$ from 10K to 90K.
 
-Fig.~\ref{fig2}(a) presents the number of true dirty tuples detected by both \pCFDs and \CFDs vs. the number of those detected by \pCFDs only. Clearly \pCFDs found more true dirty tuple because the constraints of \pCFDs are more strict than \CFDs.
+Figure~\ref{fig_exp1}(d), (e): Fixing $noise\% = 9\%$ and $|I_1| = 90K$, we varied $|I_2|$ from 1.0K to 1.6K.
 
-The output result of $Q_\varphi^V$ queries may contains false dirty tuples, because given a set of tuples that violate a \FD embedded in \pCFDs or \CFDs, the \FD cannot distinguish which of the tuples is dirty and which is clean. We used constraints at \RHS of \pCFDs and \CFDs to distinguish false dirty tuples from clean tuples. Since \RHS of \pCFDs have more patterns, more false dirty tuples had been removed from the query result. Fig.~\ref{fig2}(b) shows the number of false dirty tuples detected by \pCFDs is less than the number of those detected by \CFDs.
+Figure~\ref{fig_exp1}(f), (g), (h): Fixing $|I_1| = 90K$ and $|I_2| = 1.6K$, we varied $noise\%$ from 0\% to 9\%.
 
-Detection times for \pCFDs and \CFDs are shown in Fig.~\ref{fig2}(c). The time for \pCFDs is close to that of \CFDs since the $Q_\varphi^V$ queries of them are no different. The $Q_\varphi^C$ query of \pCFD is more complex than that of \CFD due to \RHS of \pCFDs have more patterns, but this effect is small when \texttt{NUMATTRs} of \pCFDs is equal to that of \CFDs.
+
+\stitle{Exp-2: Effectiveness}.
 
 \begin{figure*}
   \centering
   % Requires \usepackage{graphicx}
-  \subfigure[The violations of detected by \pCINDs]{\epsfig{file=exp-fig/3a.eps}}
-  %\subfigure[The violations of detected by \CINDs]{\epsfig{file=exp-fig/3b.eps}}
-  %\subfigure[The violations of detected by \pCINDs for DBLP]{\epsfig{file=exp-fig/3c.eps}}
-  %\subfigure[The violations of detected by \CINDs for DBLP]{\epsfig{file=exp-fig/3d.eps}}
-  \subfigure[Performance]{\epsfig{file=exp-fig/3e.eps}}
-  %\includegraphics[width=2.5in]{a.eps}\\
-  \caption{\pCINDs versus \CINDs}\label{fig3}
+  \subfigure[Varying $|I_{1}|$]{\epsfig{file=exp-fig/2a.eps}} %, height=1.5in, width=2.4in
+  \subfigure[Varying $|I_{1}|$]{\epsfig{file=exp-fig/2b.eps}}
+  \subfigure[Varying $|I_{1}|$]{\epsfig{file=exp-fig/2c.eps}}
+  \subfigure[Varying $|I_{2}|$]{\epsfig{file=exp-fig/2d.eps}}
+  \subfigure[Varying $|I_{2}|$]{\epsfig{file=exp-fig/2e.eps}} \\
+  \subfigure[Varying $noise\%$]{\epsfig{file=exp-fig/2f.eps}}
+  \subfigure[Varying $noise\%$]{\epsfig{file=exp-fig/2g.eps}}
+  \subfigure[Varying $noise$\%]{\epsfig{file=exp-fig/2h.eps}}
+  \caption{Effectiveness of detecting \pCFD and \pCIND violations}\label{fig_exp2}
 \end{figure*}
 
-\stitle{Exp-3: Comparing \pCINDs and \CINDs}. In this set of experiments, we compare the effectiveness of \pCIND in detecting dirty tuples versus its \CIND counterpart, as well as their detection time. We set the same \RHS for \pCINDs and \CINDs, but set more patterns in the \LHS of \pCINDs. We fixed other parameters similar to those in the Exp-2.
+Figure~\ref{fig_exp2}(a), (b), (c): Fixing $noise\% = 9\%$ and $|I_2| = 1.6K$, we varied $|I_1|$ from 10K to 90K.
 
-Fig.~\ref{fig3}(a) gives the number of tuples that \pCINDs detected as dirty vs. the number of those detected by both \pCINDs and \CINDs. It is can be seen that \pCINDs detected more dirty tuples than \CINDs with the growth of data size. Comparing with \CINDs which defined with equality (=) only, we set \LHS of \pCINDs with predicates ($\neq, <, \leq, >, \geq$) except =. Therefore, more tuples would satisfy \LHS of \pCINDs and be detected than \CINDs. Notably, the output result of \pCINDs consists of true dirty tuples and it does not contain any false dirty tuples, which is different with the \pCFDs in Exp-2.
+Figure~\ref{fig_exp2}(d), (e): Fixing $noise\% = 9\%$ and $|I_1| = 90K$, we varied $|I_2|$ from 1.0K to 1.6K.
 
-We recorded the detection times for both \pCINDs and \CINDs shown in Fig.~\ref{fig3}(b). As expected, since the size of queries are equal to each other given the same \texttt{NUMATTRs}, both times follow the same execution trend. Moreover, the time for \CINDs is slightly less than that for \pCINDs due to the \LHS of \pCINDs has more patterns.
-
+Figure~\ref{fig_exp2}(f), (g), (h): Fixing $|I_1| = 90K$ and $|I_2| = 1.6K$, we varied $noise\%$ from 0\% to 9\%.
 
 \stitle{Summary}. The experimental results show the followings.
 
-\eat{
-
-\stitle{SQL queries for \pCFDs}. The two queries for the violations of $\SCFD^i$ is given as follows, which capitalize on the data table \Enc{L}, \Enc{R} and \Enc{\ne} that encode \pCFDs in $\SCFD^i$.
-
-\begin{footnotesize}\mat{4ex}{
-\= \=\bd{select} \=  $R_i.*$ \bd{from} $R_i$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$ \\
-\>\>  \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and} $R_i.X\asymp L$ \bd{and} $R_i.X\asymp N$ \\
-\> \> \> \bd{and not} ($R_i.Y\asymp R$ \bd{and} $R_i.Y\asymp N$)}
-\end{footnotesize}
-
-\begin{footnotesize}\mat{4ex}{
-\= \= \bd{select distinct} \=  $X$ \bd{from (select } \\
-\> \> \bd{(case when} $L.X_j$ \bd{is null then} $L.\at{cid}$ \bd{else} $R_i.X_j$ \bd{end) as} $X_j$\bd{...} \\
-\> \> \bd{(case when} $R.Y_k$ \bd{is null then} $R.\at{cid}$ \bd{else} $R_i.Y_k$ \bd{end) as} $Y_k$\bd{...}\\
-\> \> \bd{from} $R_i$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$ \\
-\> \> \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and} $R_i.X\asymp L$ \bd{and} $R_i.X\asymp N$ \bd{and} \\
-\> \> \> \bd{(}$R.Y_1='\_'$ \bd{or} $R.Y_2='\_'$ \bd{or ...))} $M$\\
-\> \> \> \bd{group by} $X$ \bd{having count (distinct} $Y$\bd{)}$>1$}
-\end{footnotesize}
 
 
 
 
-\begin{footnotesize}\mat{4ex}{
-\= \= \bd{select distinct} \=  $X$ \bd{from (select } \\
-\> \> \bd{(case when} $L.X_j$ \bd{is null then null else} $R_i.X_j$ \bd{end) as} $X_j$\bd{...} \\
-\> \> \bd{(case when} $R.Y_k$ \bd{is null then null else} $R_i.Y_k$ \bd{end) as} $Y_k$\bd{...} \\
-\> \> \bd{from} $R_i$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$ \\
-\> \> \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and} $R_i.X\asymp L$ \bd{and} $R_i.X\asymp N$ \\
-\> \> \bd{and not exists(select} $R_1.*$ \bd{from} $R_i$ $R_1$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$ \\
-\>\>  \> \bd{where} $R_i.\at{id}=R_1.\at{id}$ \bd{and} $L.\at{cid}=R.\at{cid}$ \bd{and} $R_i.X\asymp L$ \\
-\> \> \> \bd{and} $R_1.X\asymp N$ \bd{and not(}$R_1.Y\asymp R$ \bd{and} $R_1.Y\asymp N$\bd{))}\\
-\> \> \> \bd{)} $M$ \bd{group by} $X$ \bd{having count (distinct} $Y$\bd{)}$>1$}
-\end{footnotesize}
 
 
-\begin{example}\label{exa-cfd-query} Using the coding of Fig.~\ref{fig-pcfd-encoding}, two SQL queries for checking \pCFDs $\varphi_2$, $\varphi_3$ and $\varphi_4$ of Fig.~\ref{fig-pcfd} are given as follows:
 
-\begin{footnotesize}\mat{4ex}{
-\= \=\bd{select} \=  $R_1.*$ \bd{from} \at{item} $R_1$, \Enc{L} $L$, \Enc{R} $R$ \\
-\> \> \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and}\\
-\> \> \> \bd{(}$L.\at{sale}$ \bd{is null or} $R_1.\at{sale}=L.\at{sale}$ \bd{or} $L.\at{sale}='\_'$\bd{)}\\
-\> \> \> \bd{and} ($L.\at{price}$ \bd{is null or} $R_1.\at{price}=L.\at{price}$ \bd{or (}$L.\at{price}='\_'$  \\
-\> \> \> \bd{and} ($L.\at{price_>}$ \bd{is null or} $R_1.\at{price}>L.\at{price_>}$)  \\
-\> \> \> \bd{and} ($L.\at{price_\leq}$ \bd{is null or} $R_1.\at{price}\leq L.\at{price_\leq}$))  \\
-\> \> \> \bd{and not ((}$R.\at{shipping}$ \bd{is null or} $R_1.\at{shipping}=$  \\
-\> \> \> $R.\at{shipping}$ \bd{or} $R.\at{shipping}='\_'$\bd{) and}  \\
-\> \> \> \bd{(}$R.\at{price}$ \bd{is null or} $R_1.\at{price}=R.\at{price}$ \bd{or}  \\
-\> \> \> \bd{(}$R.\at{price}='\_'$ \bd {and} \bd{(}$R.\at{price_\geq}$ \bd{is null or}   \\
-\> \> \> $R_1.\at{price}\geq R.\at{price_\geq}$\bd{) and (}$R.\at{price_<}$ \\
-\> \> \> \bd{is null or} $R_1.\at{price}<R.\at{price_<}$\bd{))))} }
-\end{footnotesize}
-
-\begin{footnotesize}\mat{4ex}{
-\= \=\bd{select distinct} \= \at{sale_x}, \at{price_x} \bd{from (select }\\
-\> \> \bd{(case when} $L.\at{sale}$ \bd{is null then null else} $R1.\at{sale}$\\
-\> \> \bd{end) as} \at{sale_x}, \bd{(case when} $L.\at{price}$ \bd{is null}\\
-\> \> \bd{then null else} $R1.\at{price}$ \bd{end) as} \at{price_x},\\
-\> \> \bd{(case when} $R.\at{shipping}$ \bd{is null then null else} \\
-\> \> $R1.\at{shipping}$ \bd{end) as} \at{shipping_y}, \bd{(case when} $R.\at{price}$ \\
-\> \> \bd{is null then null else} $R1.\at{price}$ \bd{end) as} \at{price_y}  \\
-\> \> \bd{from} \at{item} $R_1$, \Enc{L} $L$, \Enc{R} $R$ \\
-\> \> \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and}\\
-\> \> \bd{(}$L.\at{sale}$ \bd{is null or} $R_1.\at{sale}=L.\at{sale}$ \bd{or} $L.\at{sale}='\_'$\bd{)}\\
-\> \> \bd{and} ($L.\at{price}$ \bd{is null or} $R_1.\at{price}=L.\at{price}$ \bd{or (}$L.\at{price}='\_'$  \\
-\> \> \bd{and} ($L.\at{price_>}$ \bd{is null or} $R_1.\at{price}>L.\at{price_>}$)  \\
-\> \> \bd{and} ($L.\at{price_\leq}$ \bd{is null or} $R_1.\at{price}\leq L.\at{price_\leq}$))  \\
-\> \> \bd{and (}$R.\at{shipping}$ \bd{is null or} $R.\at{shipping}='\_'$\bd{) and}  \\
-\> \> \bd{(}$R.\at{price}$ \bd{is null or} \bd{(}$R.\at{price}='\_'$ \bd {and}  \\
-\> \> \bd{(}$R.\at{price_\geq}$ \bd{is null or} $R_1.\at{price}\geq R.\at{price_\geq}$\bd{) and}  \\
-\> \> \bd{(}$R.\at{price_<}$ \bd{is null or} $R_1.\at{price}<R.\at{price_<}$\bd{))))} $M$ \\
-\> \> \bd{group by} $\at{sale_x}, \at{price_x}$ \\
-\> \> \bd{having count (distinct} $\at{shipping_y}, \at{price_y}$\bd{)}$>1$  }
-\end{footnotesize}
-
-\end{example}
-
-}
