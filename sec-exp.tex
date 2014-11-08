@@ -3,104 +3,218 @@
 \label{sec-exp}
 %\vspace{-1ex}
 
-We next present an experimental study by using real life data. Two sets of experiments
-were conducted to verify the efficiency and effectiveness of our techniques for detecting \pCFDs and \pCINDs
-violations.
+We next present an experimental study by using real-life data. Two sets of experiments were conducted to verify the efficiency and effectiveness of our method for detecting \pCFDs and \pCINDs violations.
 
 \stitle{Experimental data}. Real-life datasets were employed to examine the applicability of our method in practice.
 
 (1) HOSP \textit{(Hospital Compare)} is publicly available from U.S. Department of Health
-\& Human Services\footnote{https://data.medicare.gov/data/hospital-compare}. We used two tables: HCAHPS-Hospital and HCAHPS-State, which record the survey responses and the state average of survey responses of hospital patients about their experiences during a recent inpatient hospital stay, respectively. We chose 15 attributes for the schema of the relation $R_1$: \at{pid} (Provider ID), \at{hname} (Hospital Name), \at{addr} (Address), \at{city}, \at{state}, \at{zip}, \at{county}, \at{phn} (Phone Number), \at{hid} (HCAHPS Measure ID), \at{hq} (HCAHPS Question), \at{had} (HCAHPS Answer Description), \at{hap} (HCAHPS Answer Percent), \at{ncs} (Number of Completed Surveys), \at{srrp} (Survey Response Rate Percent) and \at{ft} (Footnote), and 4 attributes for the schema of the relation $R_2$: \at{state}, \at{hid}, \at{hq} and \at{hap}.
+\& Human Services\footnote{https://data.medicare.gov/data/hospital-compare}. We used two tables: \at{HCAHPS} and \at{HCAHPS-State}, which record the ratings of the Hospital Consumer Assessment of Healthcare Providers and Systems (HCAHPS) of each hospital and the state averages of the HCAHPS, respectively. We created a table \at{hos} by projecting on the table \at{HCAHPS}. The table \at{hos}'s schema is (\at{pid} (Provider ID), \at{hname} (Hospital Name), \at{addr} (Address), \at{city}, \at{state}, \at{zip}, \at{county}, \at{phn} (Phone Number), \at{hid} (HCAHPS Measure ID), \at{hq} (HCAHPS Question), \at{had} (HCAHPS Answer Description), \at{hap} (HCAHPS Answer Percent), \at{ncs} (Number of Completed Surveys), \at{srrp} (Survey Response Rate Percent) and \at{ft} (Footnote)). We created another table \at{sta} by choosing 4 attributes from table \at{HCAHPS-State}. Its schema is (\at{state}, \at{hid}, \at{hq} and \at{hap}).
 
 We designed 6 \pCFDs and 3 \pCINDs for the HOSP data, shown below.
 
 \begin{footnotesize}\mat{0ex}{
-$\varphi _1$: \=$R_1$(\at{zip}$=$'\_' \And \at{city}$=$'\_' $\rightarrow$ \at{state}$=$'\_') \\
-$\varphi _2$: $R_1$(\at{pid}$=$'\_' $\rightarrow$ \at{hname}$=$'\_' \And \at{county}$=$'\_' \And \at{addr}$=$'\_' \\
+$\varphi _1 $: \=\at{hos}(\at{zip}$=$'\_' \And \at{city}$=$'\_' $\rightarrow$ \at{state}$=$'\_') \\
+$\varphi _2 $: \at{hos}(\at{pid}$=$'\_' $\rightarrow$ \at{hname}$=$'\_' \And \at{county}$=$'\_' \And \at{addr}$=$'\_' \\
 \> \And \at{phn}$=$'\_') \\
-$\varphi _3$: $R_1$(\at{pid}$=$'\_' $\rightarrow$ \at{srrp}$=$'\_') \\
-$\varphi _4$: $R_1$(\at{hid}$=$'\_' $\rightarrow$ \at{hq}$=$'\_' \And \at{had}$=$'\_') \\
-$\varphi _5$: $R_1$(\at{pid}$=$'\_' \And \at{ncs}$=$'Not Available' $\rightarrow$ \at{ft}$\geq 1$ \And \at{ft}$\leq 14$) \\
-$\varphi _6$: $R_1$(\at{pid}$=$'\_' \And \at{hid}$=$'\_' \And \at{ncs}$\neq$'Not Available' \And \at{ncs}\\
+$\varphi _3 $: \at{hos}(\at{pid}$=$'\_' $\rightarrow$ \at{srrp}$=$'\_') \\
+$\varphi _4 $: \at{hos}(\at{hid}$=$'\_' $\rightarrow$ \at{hq}$=$'\_' \And \at{had}$=$'\_') \\
+$\varphi _5 $: \at{hos}(\at{pid}$=$'\_' \And \at{ncs}$=$'Not Available' $\rightarrow$ \at{ft}$\geq 1$ \And \at{ft}$\leq 14$) \\
+$\varphi _6 $: \at{hos}(\at{pid}$=$'\_' \And \at{hid}$=$'\_' \And \at{ncs}$\neq$'Not Available' \And \at{ncs}\\
 \> $\neq$'Fewer than 100' $\rightarrow$ \at{hap}$\geq 0$ \And \at{hap}$\leq 100$) \\
-$\psi _1$: $R_1$(\at{hid}, \at{hq}; \at{nil}) $\subseteq$ $R_2$(\at{hid}, \at{hq}; \at{nil}) \\
-$\psi _2$: $R_1$(\at{hid}, \at{state}; \at{nil}) $\subseteq$ $R_2$(\at{hid}, \at{state}; \at{nil}) \\
-$\psi _3$: $R_1$(\at{hid}, \at{state}; \at{ncs}$\neq$'Not Available') $\subseteq$ $R_2$(\at{hid}, \at{state}; \at{hap}$\geq 0$\\
+$\psi _1 $: \at{hos}(\at{hid}, \at{hq}; \at{nil}) $\subseteq$ \at{sta}(\at{hid}, \at{hq}; \at{nil}) \\
+$\psi _2 $: \at{hos}(\at{hid}, \at{state}; \at{nil}) $\subseteq$ \at{sta}(\at{hid}, \at{state}; \at{nil}) \\
+$\psi _3 $: \at{hos}(\at{hid}, \at{state}; \at{ncs}$\neq$'Not Available') $\subseteq$ \at{sta}(\at{hid}, \at{state}; \at{hap}$\geq 0$\\
 \> \And \at{hap}$\leq 100$) }
 \end{footnotesize}
 
-(2) DBLP \textit{data} is from the DBLP Bibliography\footnote{http://dblp.uni-trier.de/xml/}. We first transformed the XML data into relations, and then we created two tables for \textit{publications}, including \textit{book}, \textit{article} (journals papers) and \textit{inproceedings} (conferences papers), and \textit{proceedings} (conferences) respectively. We chose 8 attributes for the schema of relation $R_1$: \at{key}, \at{type}, \at{title}, \at{booktitle}, \at{year}, \at{crossref}, \at{isbn} and \at{publisher}, and 4 attributes for the schema of $R_2$: \at{key}, \at{year}, \at{isbn} and \at{publisher}.
-
-
-We designed 771 \pCFDs and 255 \pCINDs for the DBLP data, with nine representative ones as follows:\\
-
+Here, $\varphi _1 $-$\varphi _4 $ and $\psi _1 $-$\psi _2 $ can be expressed by \CFDs and \CINDs, but $\varphi _5 $, $\varphi _6 $ and $\psi _3 $ are not. We designed their \CFDs and \CINDs counterparts as follows:
 \begin{footnotesize}\mat{0ex}{
-$\varphi _1$: \=$R_1$(\at{isbn}$=$'\_' \And \at{booktitle}$=$'\_' $\rightarrow$ \at{publisher}$=$'\_') \\
-$\varphi _2$: $R_1$(\at{title}$=$'\_' \And \at{year}$=$'\_' \And \at{booktitle}$=$'\_' $\rightarrow$ \at{type}$=$'\_') \\
-$\varphi _3$: $R_1$(\at{booktitle}$=$'AICT/ICIW' $\rightarrow$ \at{year}$=$2006) \\
-$\varphi _4$: $R_1$(\at{booktitle}$=$'VLDB' \And \at{year_L}$=$'\_' $\rightarrow$ \at{year_R}$\geq 1975$ \\
-\> \And \at{year_R}$\leq 2007$) \\
-$\varphi _5$: $R_1$(\at{booktitle}$=$'PVLDB' \And \at{year_L}$=$'\_' $\rightarrow$ \at{year_R}$\geq 2008$) \\
-$\psi _1$: $R_1$(\at{crossref}, \at{publisher}; \at{type}$=$'inproceedings') $\subseteq$ $R_2$(\at{key}, \\
-\> \at{publisher}; \at{nil}) \\
-$\psi _2$: $R_1$(\at{crossref}, \at{isbn}, \at{publisher}; \at{booktitle}$=$'ACST') $\subseteq$ $R_2$(\at{key},\\
-\> \at{isbn}, \at{publisher}; \at{year}$=$2006)  \\
-$\psi _3$: $R_1$(\at{crossref}, \at{isbn}, \at{publisher}; \at{booktitle}$=$'VLDB') $\subseteq$ $R_2$(\at{key},\\
-\> \at{isbn}, \at{publisher}; \at{year}$\geq 1975$ \And \at{year}$\leq 2007$)  \\
-$\psi _4$: $R_1$(\at{crossref}, \at{isbn}, \at{publisher}; \at{booktitle}$=$'ICDE') $\subseteq$ $R_2$(\at{key},\\
-\> \at{isbn}, \at{publisher}; \at{year}$\geq 1984$)  }
+$\varphi _5 '$: \=\at{hos}(\at{pid}$=$'\_' \And \at{ncs}$=$'\_' $\rightarrow$ \at{ft}$=$'\_') \\
+$\varphi _6 '$: \at{hos}(\at{pid}$=$'\_' \And \at{hid}$=$'\_' \And \at{ncs}$=$'\_' $\rightarrow$ \at{hap}$=$'\_') \\
+$\psi _3 '$: \at{hos}(\at{hid}, \at{state}; \at{ncs}$=$'\_') $\subseteq$ \at{sta}(\at{hid}, \at{state}; \at{hap}$=$'\_')
+}
 \end{footnotesize}
 
-We varied three parameters of the data in our experiments, denoted by $|I_1|$, $|I_2|$ and $noise\%$. $|I_1|$ is the number of tuples in the instance $I_1$ of relation $R_1$. Similarly, $|I_2|$ is the number of the instance $I_2$ of relation $R_2$. $noise\%$ is the percentage of dirty tuples in $I_1$ that were modified to violate a \pCFD or \pCIND, ranging from 0\% to 9\%. For each dirty tuple $t$, an attribute of $t$ in $Y$ of a \pCFD or $X \cup Y_p$ of a \pCIND was changed from a correct to incorrect value. We kept a copy of clean data before adding any noise to tell whether a tuple detected by \pCFDs or \pCINDs is a true or false dirty tuple.
 
-\stitle{Implementation}. All methods were implemented in C\# and all data was stored in SQL Server 2012. The experiments were run on a machine with an Intel Core i5 (3.1GHz) CPU and 8GB of RAM. Each experiment was repeated 5 times and the average is reported here.
+(2) DBLP \textit{data} is from the DBLP Bibliography\footnote{http://dblp.uni-trier.de/xml/}. We first transformed the XML data into relations. We then created a table \at{pub} by extracting the records of books, articles (journal papers) and inproceedings (conference papers) from \textit{publications} data. The schema of table \at{pub} is (\at{key}, \at{type}, \at{title}, \at{booktitle}, \at{year}, \at{crossref}, \at{isbn} and \at{publisher}). A table \at{pro} was created for \textit{proceedings} with 4 attributes: \at{key}, \at{year}, \at{isbn} and \at{publisher}.
+
+We generated 3482 \pCFDs and 2568 \pCINDs for the DBLP data, with eight representative ones as follows:\\
+
+\begin{footnotesize}\mat{0ex}{
+$\phi _1$: \=\at{pub}(\at{isbn}$=$'\_' \And \at{booktitle}$=$'\_' $\rightarrow$ \at{publisher}$=$'\_') \\
+$\phi _2$: \at{pub}(\at{title}$=$'\_' \And \at{year}$=$'\_' \And \at{booktitle}$=$'\_' $\rightarrow$ \at{type}$=$'\_') \\
+$\phi _3$: \at{pub}(\at{booktitle}$=$'CleanDB' $\rightarrow$ \at{year}$=$2006) \\
+$\phi _4$: \at{pub}(\at{booktitle}$=$'VLDB' \And \at{year_L}$=$'\_' $\rightarrow$ \at{year_R}$\geq 1975$ \\
+\> \And \at{year_R}$\leq 2007$) \\
+$\phi _5$: \at{pub}(\at{booktitle}$=$'PVLDB' \And \at{year_L}$=$'\_' $\rightarrow$ \at{year_R}$\geq 2008$) \\
+$\rho _1$: \at{pub}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings', \at{booktitle}\\
+\> $=$'CIKM-CNIKM') $\subseteq$ \at{pro}(\at{key}, \at{isbn}, \at{publisher}; \at{year}$=$2009)  \\
+$\rho _2$: \at{pub}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings', \at{booktitle}\\
+\> $=$'VLDB') $\subseteq$ \at{pro}(\at{key}, \at{isbn}, \at{publisher}; \at{year}$\geq 1975$ \And \at{year}\\
+\> $\leq 2007$)  \\
+$\rho _3$: \at{pub}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings', \at{booktitle}\\
+\> $=$'ICDE') $\subseteq$ \at{pro}(\at{key}, \at{isbn}, \at{publisher}; \at{year}$\geq 1984$)  }
+\end{footnotesize}
+
+We collected all \at{booktitle} and corresponding \at{year} from DBLP data to generate the other \pCFDs and \pCINDs by replacing the values of \at{booktitle} and {year} attributes. Observe that $\phi _1$-$\phi _3$ and $\rho _1$ can be expressed as \CFDs and \CIND. We designed \CFDs and \CINDs for $\phi _4$-$\phi _5$ and $\rho _2$-$\rho _3$ as follows:
+
+\begin{footnotesize}\mat{0ex}{
+$\phi _4 '$: \=\at{pub}(\at{booktitle}$=$'VLDB' \And \at{year_L}$=$'\_' $\rightarrow$ \at{year_R}$=$'\_' \\
+\> \And \at{year_R}$\leq 2007$) \\
+$\phi _5 '$: \at{pub}(\at{booktitle}$=$'PVLDB' \And \at{year_L}$=$'\_' $\rightarrow$ \at{year_R}$=$'\_') \\
+$\rho _2 '$: \at{pub}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings', \at{booktitle}\\
+\> $=$'VLDB') $\subseteq$ \at{pro}(\at{key}, \at{isbn}, \at{publisher}; \at{year}$=$'\_')\\
+$\rho _3 '$: \at{pub}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings', \at{booktitle}\\
+\> $=$'ICDE') $\subseteq$ \at{pro}(\at{key}, \at{isbn}, \at{publisher}; \at{year}$=$'\_')\\
+}
+\end{footnotesize}
+
+We varied three parameters of the data in our experiments, denoted by $|I_1|$, $|I_2|$ and $noise\%$. $|I_1|$ is the number of tuples in the table \at{hos} of HOSP (resp. table \at{pub} of DBLP). Similarly, $|I_2|$ is the number of the table \at{sta} of HOSP (resp. table \at{pro} of DBLP). $noise\%$ is the percentage of dirty tuples in table \at{hos} of HOSP (resp. table \at{pub} of DBLP) that were modified to violate a \pCFD or \pCIND, ranging from 0\% to 9\%. For each dirty tuple $t$, an attribute of $t$ in $Y$ of a \pCFD or $X \cup Y_p$ of a \pCIND was changed from a correct to incorrect value. We kept a copy of clean data before adding any noise to tell whether a tuple detected by \pCFDs or \pCINDs is a true or false dirty tuple.
+
+\stitle{Implementation}. All data was stored in SQL Server 2012. The experiments were run on a machine with an Intel Core i5 (3.1GHz) CPU and 8GB of RAM. Each experiment was repeated 5 times and the average is reported here.
 
 \stitle{Experimental results}. We next present our findings.
 
-\stitle{Exp-1: Efficiency}.
+\stitle{Exp-1: Efficiency}. In this sets of experiments, we evaluated the efficiency of detecting violations of \pCFDs, \pCINDs and both \pCFDs and \pCINDs by comparing the running time with their \CFDs and \CINDs counterparts, respectively.
 
+%Efficiency of detecting CFDP violations
+\begin{figure*}
+  \centering
+  \subfigure[Varying $|I_{1}|$ for HOSP]{\epsfig{file=exp-fig/11a.eps}}  %, height=1.5in, width=1.5in}}
+  \quad
+  \subfigure[Varying $noise\%$ for HOSP]{\epsfig{file=exp-fig/11b.eps}}
+  \quad
+  \subfigure[Varying $|I_{1}|$ for DBLP]{\epsfig{file=exp-fig/11c.eps}}
+  \quad
+  \subfigure[Varying $noise\%$ for DBLP]{\epsfig{file=exp-fig/11d.eps}}
+  \caption{Efficiency of detecting \pCFD violations}\label{fig_exp1_cfdp}
+\end{figure*}
+
+\noindent Figure~\ref{fig_exp1_cfdp}(a): Fixing $noise\% = 9\%$, we varied $|I_1|$ from 10K to 90K.    \\
+Figure~\ref{fig_exp1_cfdp}(b): Fixing $|I_1|=90K$, we varied $noise\%$ from 0\% to 9\%.\\
+Figure~\ref{fig_exp1_cfdp}(c): Fixing $noise\% = 9\%$, we varied $|I_1|$ from 100K to 900K.  \\
+Figure~\ref{fig_exp1_cfdp}(d): Fixing $|I_1|=900K$, we varied $noise\%$ from 0\% to 9\%.  \\
+
+
+%Efficiency of detecting CINDP violations
+\begin{figure*}
+  \centering
+  \subfigure[Varying $|I_{1}|$ for HOSP]{\epsfig{file=exp-fig/12a.eps}}
+  \quad
+  \subfigure[Varying $|I_{2}|$ for HOSP]{\epsfig{file=exp-fig/12b.eps}}
+  \quad
+  \subfigure[Varying $noise\%$ for HOSP]{\epsfig{file=exp-fig/12c.eps}}
+  \quad \\
+  \subfigure[Varying $|I_{1}|$ for DBLP]{\epsfig{file=exp-fig/12d.eps}}
+  \quad
+  \subfigure[Varying $|I_{2}|$ for DBLP]{\epsfig{file=exp-fig/12e.eps}}
+  \quad
+  \subfigure[Varying $noise\%$ for DBLP]{\epsfig{file=exp-fig/12f.eps}}
+  \caption{Efficiency of detecting \pCIND violations}\label{fig_exp1_cindp}
+\end{figure*}
+
+\noindent Figure~\ref{fig_exp1_cindp}(a): Fixing $noise\% = 9\%$ and $|I_2| = 1.6K$, we varied $|I_1|$ from 10K to 90K. \\
+Figure~\ref{fig_exp1_cindp}(b): Fixing $noise\% = 9\%$ and $|I_1| = 90K$, we varied $|I_2|$ from 1K to 1.6K.\\
+Figure~\ref{fig_exp1_cindp}(c): Fixing $|I_1| = 90K$ and $|I_2| = 1.6K$, we varied $noise\%$ from 0\% to 9\%.\\
+Figure~\ref{fig_exp1_cindp}(d): Fixing $noise\% = 9\%$ and $|I_2| = 16K$, we varied $|I_1|$ from 100K to 900K.\\
+Figure~\ref{fig_exp1_cindp}(e): Fixing $noise\% = 9\%$ and $|I_1| = 900K$, we varied $|I_2|$ from 10K to 16K.\\
+Figure~\ref{fig_exp1_cindp}(f): Fixing $|I_1| = 900K$ and $|I_2| = 16K$, we varied $noise\%$ from 0\% to 9\%.\\
+
+
+%Efficiency of detecting CFDP and CINDP violations
+\begin{figure*}
+  \centering
+  \subfigure[Varying $|I_{1}|$ for HOSP]{\epsfig{file=exp-fig/13a.eps}}
+  \quad
+  \subfigure[Varying $|I_{2}|$ for HOSP]{\epsfig{file=exp-fig/13b.eps}}
+  \quad
+  \subfigure[Varying $noise\%$ for HOSP]{\epsfig{file=exp-fig/13c.eps}}
+  \quad \\
+  \subfigure[Varying $|I_{1}|$ for DBLP]{\epsfig{file=exp-fig/13d.eps}}
+  \quad
+  \subfigure[Varying $|I_{2}|$ for DBLP]{\epsfig{file=exp-fig/13e.eps}}
+  \quad
+  \subfigure[Varying $noise\%$ for DBLP]{\epsfig{file=exp-fig/13f.eps}}
+
+  \caption{Efficiency of detecting \pCFD and \pCIND violations}\label{fig_exp1_both}
+\end{figure*}
+
+
+\noindent Figure~\ref{fig_exp1_both}(a): Fixing $noise\% = 9\%$ and $|I_2| = 1.6K$, we varied $|I_1|$ from 10K to 90K.\\
+Figure~\ref{fig_exp1_both}(b): Fixing $noise\% = 9\%$ and $|I_1| = 90K$, we varied $|I_2|$ from 1K to 1.6K.\\
+Figure~\ref{fig_exp1_both}(c): Fixing $|I_1| = 90K$ and $|I_2| = 1.6K$, we varied $noise\%$ from 0\% to 9\%.\\
+Figure~\ref{fig_exp1_both}(d): Fixing $noise\% = 9\%$ and $|I_2| = 16K$, we varied $|I_1|$ from 100K to 900K.\\
+Figure~\ref{fig_exp1_both}(e): Fixing $noise\% = 9\%$ and $|I_1| = 900K$, we varied $|I_2|$ from 10K to 16K.\\
+Figure~\ref{fig_exp1_both}(f): Fixing $|I_1| = 900K$ and $|I_2| = 16K$, we varied $noise\%$ from 0\% to 9\%.\\
+
+
+
+
+\stitle{Exp-2: Effectiveness}. In this set of experiments, we verified the effectiveness of our method by comparing the number of true dirty tuples detected by \pCFDs, \pCINDs and both \pCFDs and \pCINDs with their \CFDs and \CINDs counterparts, respectively. Note that changing $|I_{2}|$ might generate more dirty tuples and make it difficulty to distinguish the true dirty tuples and the false dirty tuples. Hence, we do not report its result in this effectiveness study.
+
+%Effectiveness of detecting CFDP violations
 \begin{figure*}
   \centering
   % Requires \usepackage{graphicx}
-  \subfigure[Varying $|I_{1}|$]{\epsfig{file=exp-fig/1a.eps}} %, height=1.5in, width=2.4in
-  \subfigure[Varying $|I_{1}|$]{\epsfig{file=exp-fig/1b.eps}}
-  \subfigure[Varying $|I_{1}|$]{\epsfig{file=exp-fig/1c.eps}}
-  \subfigure[Varying $|I_{2}|$]{\epsfig{file=exp-fig/1d.eps}}
-  \subfigure[Varying $|I_{2}|$]{\epsfig{file=exp-fig/1e.eps}} \\
-  \subfigure[Varying $noise\%$]{\epsfig{file=exp-fig/1f.eps}}
-  \subfigure[Varying $noise\%$]{\epsfig{file=exp-fig/1g.eps}}
-  \subfigure[Varying $noise$\%]{\epsfig{file=exp-fig/1h.eps}}
-  \caption{Efficiency of detecting \pCFD and \pCIND violations}\label{fig_exp1}
+  \centering
+  \subfigure[Varying $|I_{1}|$ for HOSP]{\epsfig{file=exp-fig/21a.eps}}  %, height=1.5in, width=1.5in}}
+  \quad
+  \subfigure[Varying $noise\%$ for HOSP]{\epsfig{file=exp-fig/21b.eps}}
+  \quad
+  \subfigure[Varying $|I_{1}|$ for DBLP]{\epsfig{file=exp-fig/21c.eps}}
+  \quad
+  \subfigure[Varying $noise\%$ for DBLP]{\epsfig{file=exp-fig/21d.eps}}
+  \caption{Effectiveness of detecting \pCFD violations}\label{fig_exp2_cfdp}
 \end{figure*}
 
-Figure~\ref{fig_exp1}(a), (b), (c): Fixing $noise\% = 9\%$ and $|I_2| = 1.6K$, we varied $|I_1|$ from 10K to 90K.
+\noindent Figure~\ref{fig_exp2_cfdp}(a): Fixing $noise\% = 9\%$, we varied $|I_1|$ from 10K to 90K.    \\
+Figure~\ref{fig_exp2_cfdp}(b): Fixing $|I_1|=90K$, we varied $noise\%$ from 0\% to 9\%.\\
+Figure~\ref{fig_exp2_cfdp}(c): Fixing $noise\% = 9\%$, we varied $|I_1|$ from 100K to 900K.  \\
+Figure~\ref{fig_exp2_cfdp}(d): Fixing $|I_1|=900K$, we varied $noise\%$ from 0\% to 9\%.  \\
 
-Figure~\ref{fig_exp1}(d), (e): Fixing $noise\% = 9\%$ and $|I_1| = 90K$, we varied $|I_2|$ from 1.0K to 1.6K.
 
-Figure~\ref{fig_exp1}(f), (g), (h): Fixing $|I_1| = 90K$ and $|I_2| = 1.6K$, we varied $noise\%$ from 0\% to 9\%.
-
-
-\stitle{Exp-2: Effectiveness}.
-
+%Effectiveness of detecting CINDP violations
 \begin{figure*}
   \centering
   % Requires \usepackage{graphicx}
-  \subfigure[Varying $|I_{1}|$]{\epsfig{file=exp-fig/2a.eps}} %, height=1.5in, width=2.4in
-  \subfigure[Varying $|I_{1}|$]{\epsfig{file=exp-fig/2b.eps}}
-  \subfigure[Varying $|I_{1}|$]{\epsfig{file=exp-fig/2c.eps}}
-  \subfigure[Varying $|I_{2}|$]{\epsfig{file=exp-fig/2d.eps}}
-  \subfigure[Varying $|I_{2}|$]{\epsfig{file=exp-fig/2e.eps}} \\
-  \subfigure[Varying $noise\%$]{\epsfig{file=exp-fig/2f.eps}}
-  \subfigure[Varying $noise\%$]{\epsfig{file=exp-fig/2g.eps}}
-  \subfigure[Varying $noise$\%]{\epsfig{file=exp-fig/2h.eps}}
-  \caption{Effectiveness of detecting \pCFD and \pCIND violations}\label{fig_exp2}
+  \centering
+  \subfigure[Varying $|I_{1}|$ for HOSP]{\epsfig{file=exp-fig/22a.eps}}  %, height=1.5in, width=1.5in}}
+  \quad
+  \subfigure[Varying $noise\%$ for HOSP]{\epsfig{file=exp-fig/22b.eps}}
+  \quad
+  \subfigure[Varying $|I_{1}|$ for DBLP]{\epsfig{file=exp-fig/22c.eps}}
+  \quad
+  \subfigure[Varying $noise\%$ for DBLP]{\epsfig{file=exp-fig/22d.eps}}
+  \caption{Effectiveness of detecting \pCIND violations}\label{fig_exp2_cindp}
 \end{figure*}
 
-Figure~\ref{fig_exp2}(a), (b), (c): Fixing $noise\% = 9\%$ and $|I_2| = 1.6K$, we varied $|I_1|$ from 10K to 90K.
+\noindent Figure~\ref{fig_exp2_cindp}(a): Fixing $noise\% = 9\%$ and $|I_2| = 1.6K$, we varied $|I_1|$ from 10K to 90K.\\
+Figure~\ref{fig_exp2_cindp}(b): Fixing $|I_1| = 90K$ and $|I_2| = 1.6K$, we varied $noise\%$ from 0\% to 9\%.\\
+Figure~\ref{fig_exp2_cindp}(c): Fixing $noise\% = 9\%$ and $|I_2| = 16K$, we varied $|I_1|$ from 100K to 900K.\\
+Figure~\ref{fig_exp2_cindp}(d): Fixing $|I_1| = 900K$ and $|I_2| = 16K$, we varied $noise\%$ from 0\% to 9\%.\\
 
-Figure~\ref{fig_exp2}(d), (e): Fixing $noise\% = 9\%$ and $|I_1| = 90K$, we varied $|I_2|$ from 1.0K to 1.6K.
 
-Figure~\ref{fig_exp2}(f), (g), (h): Fixing $|I_1| = 90K$ and $|I_2| = 1.6K$, we varied $noise\%$ from 0\% to 9\%.
+
+%Effectiveness of detecting CFDP and CINDP violations
+\begin{figure*}
+  \centering
+  % Requires \usepackage{graphicx}
+  \subfigure[Varying $|I_{1}|$ for HOSP]{\epsfig{file=exp-fig/23a.eps}}  %, height=1.5in, width=1.5in}}
+  \quad
+  \subfigure[Varying $noise\%$ for HOSP]{\epsfig{file=exp-fig/23b.eps}}
+  \quad
+  \subfigure[Varying $|I_{1}|$ for DBLP]{\epsfig{file=exp-fig/23c.eps}}
+  \quad
+  \subfigure[Varying $noise\%$ for DBLP]{\epsfig{file=exp-fig/23d.eps}}
+  \caption{Effectiveness of detecting \pCFD and \pCIND violations}\label{fig_exp2_both}
+\end{figure*}
+
+\noindent Figure~\ref{fig_exp2_both}(a): Fixing $noise\% = 9\%$ and $|I_2| = 1.6K$, we varied $|I_1|$ from 10K to 90K.\\
+Figure~\ref{fig_exp2_both}(b): Fixing $|I_1| = 90K$ and $|I_2| = 1.6K$, we varied $noise\%$ from 0\% to 9\%.\\
+Figure~\ref{fig_exp2_both}(c): Fixing $noise\% = 9\%$ and $|I_2| = 16K$, we varied $|I_1|$ from 100K to 900K.\\
+Figure~\ref{fig_exp2_both}(d): Fixing $|I_1| = 900K$ and $|I_2| = 16K$, we varied $noise\%$ from 0\% to 9\%.\\
+
+
 
 \stitle{Summary}. The experimental results show the followings.
 
