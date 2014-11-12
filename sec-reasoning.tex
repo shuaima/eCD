@@ -75,13 +75,13 @@ the active domain of $A_i$ to be a set $\adom(A_i)$ = $C_0\cup C_1$,
 where (1) $C_0$ consists of all constants in $T_p[A_i]$ of all
 pattern tableaux $T_p$ in $\Sigma$, and if $C_0$ is empty, we further let $C_0$ = $\{a_1, a_2\}$, where
 $a_1, a_2 \in\dom(A_i)$ and $a_1\ne a_2$, and (2) $C_1$ contains the
-following set of constants for the attributes whose domains have
+ set of constants for the attributes whose domains have
 total orders, \ie involved with predicates $\ne$, $<$, $\le$, $>$ or $\ge$:
 
 
 \bi
 \item[(1)] Arrange all constants in $C_0$ in the increasing order, and
-assume that the resulting $C_0$ = $\{a_1, \ldots, a_k\}$ ($k\ge 1$);
+assume the resulting $C_0$ = $\{a_1, \ldots, a_k\}$ ($k\ge 1$);
 
 \item[(2)] Add a constant $b_{01}\in\dom(A_i)$ to $C_1$ such that $b_{01}$ $<$ $a_1$ if there
 exists one; And also add another constant $b_{02}\in\dom(A_i)$ to $C_1$
@@ -233,7 +233,9 @@ satisfiable.
  Given a set $\Sigma$ of \pCINDs over a
 database schema $\cal R$$(R_1,\ldots,R_n)$, we show that one can always construct a
 {\em nonempty} instance $D$ of $\cal R$ such that $D \models
-\Sigma$.  We build $D$ as follows. First, for each attribute $A$, define the
+\Sigma$.  
+
+We build $D$ as follows. First, for each attribute $A$, define the
 active domain of $A$ to be a set $\adom(A)$, which consists of
 certain data values in $\dom(A)$. Second, using these active
 domains, we construct $D$.
@@ -246,8 +248,8 @@ $\ldots,B_m;Y_p], T_p)$ in $\Sigma$, let $\adom(B_i)=$ $\adom(B_i)$
 $\cup$ $\adom(A_i)$ for each $i\in [1,m]$, and this rule is
 repeatedly applied until a fixpoint of $\adom(A)$ is reached for
 all attributes $A$ in $\cal R$.
-%
-It is easy to verify that this process
+
+It is easy to verify that this process always
 terminates as we start with a finite set of data values.
 
 \sstab (2)  We next construct the database instance $D$. For each relation $R_i(A_1, \dots,$ $A_k)$ $\in
@@ -261,8 +263,7 @@ that $D$ is nonempty and $D \models \Sigma$.
 \stitle{Satisfiability  analysis of CFD$^p$s and
 CIND$^p$s}. The satisfiability problem for \CFDs
 and \CINDs taken together is undecidable~\cite{CINDs}. Since \pCFDs and
-\pCINDs subsume \CFDs and \CINDs, respectively, from these we
-immediately have the following.
+\pCINDs subsume \CFDs and \CINDs, respectively, we immediately have the following.
 
 \vspace{-0.5ex}
 \begin{cor}
@@ -367,7 +368,7 @@ the problem for determining whether $\Sigma\not\models\varphi$.
 
 
 We next show the reduction from the \kSAT\ problem to the complement
-problem of the implication problem, where \kSAT\ is \NP-complete
+problem of the implication problem for \pCFDs, where \kSAT\ is \NP-complete
 (cf.~Proposition~\ref{thm-sat-pcfd-infin}). Given an instance $\phi$
 of \kSAT, we construct a relational schema $R$ and a set
 $\Sigma\cup\{\varphi\}$ of \pCFDs defined on $R$ such that $\phi$
@@ -400,11 +401,11 @@ their \CINDs counterpart given in~\cite{tcs-CINDs}.
 
 \begin{proof}
 The implication problem for \CINDs is
-\EXPTIME-hard \cite{tcs-CINDs}. Since \pCINDs subsume \CINDs, the lower bound carries over to \pCINDs.
+\EXPTIME-hard \cite{tcs-CINDs}. Since \pCINDs subsume \CINDs, the lower bound carries over to \pCINDs immediately.
 The \EXPTIME upper bound is shown
 by presenting an \EXPTIME algorithm that, given a set
 $\Sigma\cup\{\psi\}$ of \pCINDs over a database schema $\cal R$,
-determines whether $\Sigma\models\psi$.
+determines whether $\Sigma\models\psi$ or not.
 
 We next present the \EXPTIME algorithm.
 %
@@ -464,7 +465,7 @@ testing can be done in linear-time in the size of the
 input~\cite{CormenLRS01}.
 
 Putting all these together, we show that the algorithm runs in
-exponential time. And, thus, the problem is in \EXPTIME.
+exponential time. Thus, the problem is in \EXPTIME.
 \eat{ Based on these, we give the \EXPTIME algorithm as follows: (1)
 Initialize set $S_d$ = $\{D_0\}$, where $D_0$ is a database instance
 with $I_a = \{t_a\}$ of $R_a$ such that $t_a[A]\in\adom(A)$ for each
@@ -628,8 +629,7 @@ from the undecidability result for \FDs and
 To give a complete picture we also include
 in Table~\ref{tab-complexity} the complexity bounds for
 the static analyses of
-\CFDs and \CINDs, taken from~\cite{CFDs,tcs-CINDs}. The results shown in
-Table~\ref{tab-complexity} tell us the following.
+\CFDs and \CINDs, taken from~\cite{CFDs,tcs-CINDs}. The results tell us the following.
 
 \sstab
 (1) Despite the increased expressive
