@@ -130,7 +130,7 @@ $A$ appears in $X$ (resp. $Y$). \ei\vspace{-1ex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}[tb!]
-\vspace{-1ex}
+%\vspace{-1ex}
 \begin{center}
 \begin{small}
 \hspace{5ex}(1)~\Enc{L} \hspace{35ex}  (2)~\Enc{R} \hspace{30ex} (3)~\Enc{\ne}\\
@@ -171,7 +171,7 @@ $A$ appears in $X$ (resp. $Y$). \ei\vspace{-1ex}
 \begin{example}
 Recall from Fig.~\ref{fig-pcfd} \pCFDs $\varphi_2$, $\varphi_3$ and
 $\varphi_4$ defined on relation \at{item}. The three \pCFDs are
-encoded with tables shown in Fig.~\ref{fig-pcfd-encoding}: (a)
+encoded with the tables shown in Fig.~\ref{fig-pcfd-encoding}: (a)
 \Enc{L} consists of attributes: \at{cid}, \at{sale}, \at{price},
 \at{price_{>}} and \at{price_{\le}}; (b) \Enc{R} consists of
 \at{cid}, \at{shipping}, \at{price}, \at{price_{\ge}} and
@@ -179,7 +179,7 @@ encoded with tables shown in Fig.~\ref{fig-pcfd-encoding}: (a)
 values do not contribute to error detection, and are thus omitted;
 And (c) \Enc{\ne} is empty since all these \pCFDs have no negation
 patterns. One can easily reconstruct these \pCFDs from tables
-\Enc{L}, \Enc{R} and \Enc{\ne} by collating tuples based on
+\Enc{L}, \Enc{R} and \Enc{\ne} by collating the tuples based on
 \at{cid}.
 \end{example}
 
@@ -202,8 +202,8 @@ Note that the number of attributes in \Enc{} is bounded by $|R_i| + |R_j|
 
 \eat{We populate these tables as follows.}
 
-For each \pCIND $\psi$ = $(R_i[A_1\ldots A_m;\ X_p] \subseteq
-R_j[B_1\ldots B_m;\ Y_p],\ T_p)$ in $\SCIND^{(i,j)}$, we generate a
+For each \pCIND $\psi$ = $(R_i[A_1\ldots A_m;\ X_p]$ $\subseteq$
+$R_j[B_1\ldots B_m;\ Y_p],\ T_p)$ in $\SCIND^{(i,j)}$, we generate a
 distinct \at{cid} $\kw{id}_\psi$ for it, and do the following.
 
 \vspace{-0.5ex}\bi
@@ -218,7 +218,7 @@ For each $k\in[1, m]$,  let $t[A_k]$ = $t[B_k]$ = $k$, and $t[A]$ =
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}[tb!]
-\vspace{-1ex}
+%\vspace{-1ex}
 
 \begin{center}
 \begin{small}
@@ -266,17 +266,17 @@ For each $k\in[1, m]$,  let $t[A_k]$ = $t[B_k]$ = $k$, and $t[A]$ =
 
 \begin{example} \label{exa-enc-pfind}
 Figure~\ref{fig-pcfd-encoding} shows the coding of \pCINDs $\psi_1$
-and  $\psi_2$ given in Fig.~\ref{fig-pcind}. We use \at{state_L} and
+and $\psi_2$ given in Fig.~\ref{fig-pcind}. We use \at{state_L} and
 \at{state_R} in \Enc{} to denote the occurrences of attribute
-\at{state} in \at{item} and \at{tax}, respectively. In tables
-\Enc{L} and \Enc{R}, attributes with only `null' patterns are
-omitted, for the same reason as for \pCFDs mentioned above.
+\at{state} in \at{item} and \at{tax}, respectively. In 
+\Enc{L} and \Enc{R}, the attributes with only `null' patterns are
+omitted, for the same reason as \pCFDs mentioned above.
 \end{example}
 
 Putting these together, it is easy to verify that at most $O(n^2)$
 data tables are needed to encode dependencies in $\Sigma$,
 regardless of the size of $\Sigma$. Recall that $n$ is the number of
-relations in database $\R$.
+relations in the database $\R$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -418,7 +418,7 @@ $\SCIND^{(i,j)}$.
 
 
 
-\begin{footnotesize}\mat{4ex}{
+\begin{footnotesize}\mat{3ex}{
 \= \=\bd{select} \=  $R_i.*$ \\
 \> \>\bd{from} $R_i$, \Enc{L} $L$, \Enc{\ne} $N$ \\
 \>\> \bd{where}  $R_i.X\asymp L$ \bd{and} $R_i.X\asymp N$ \bd{and not exists} (\\
@@ -435,7 +435,7 @@ $\{\at{B_1,\dots, B_{m2}}\}$ are the sets of attributes of $R_i$ and
 (2) $R_i.X\asymp L$ is the conjunction of
 
 
-\begin{footnotesize}\mat{1ex}{
+\begin{footnotesize}\mat{3ex}{
 $L.A_k$\=\ \bd{is null or} $R_i.A_k$ = $L.A_k$ \bd{or} ($L.A_k$ = `\_'\\
 \> \bd{and} ($L.A_{i_{>}}$ \bd{is null or} $R_i.A_k$ $>$ $L.A_{i_{>}}$)\\
 \>  \bd{and} ($L.A_{i_{\ge}}$ \bd{is null or} $R_i.A_k$ $\ge$ $L.A_{k_{\ge}}$)\\
@@ -451,7 +451,7 @@ for $k\in[1, m_1]$;
 (4) $R_i.X\asymp N$ is a shorthand for the conjunction below,
 for $k\in[1, m_1]$:
 
-\begin{footnotesize}\mat{2ex}{
+\begin{footnotesize}\mat{3ex}{
 \bd{not exists}
 (\=\bd{select} $*$ \bd{from} $N$ \\
 \>\bd{where} \= $L.\at{cid}$ =
@@ -494,7 +494,7 @@ is given as follows:
 
 
 \begin{footnotesize}\mat{4ex}{
-\hspace{-5ex} \=  \bd{select} $R_1.*$ \bd{from} \at{item} $R_1$, \Enc{L} L, \Enc{\ne} N \\
+\hspace{-3ex} \=  \bd{select} $R_1.*$ \bd{from} \at{item} $R_1$, \Enc{L} L, \Enc{\ne} N \\
 \> \bd{where} \= ($L.$\at{type} \bd{is null or}  $R_1.$\at{type} =
 $L.$\at{type} \bd{or} $L.$\at{type} = `\_') \bd{and} \\
 \>\>\bd{not exist} (\=\bd{select * }\bd{from} $N$ \\

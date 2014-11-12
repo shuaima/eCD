@@ -1,10 +1,6 @@
-\newpage
-\section*{{\Large \sf APPENDIX}}
-\label{sec-appendix}
-
-
-\subsection{SQL queries for CFD$^p$s}
-
+%\newpage
+\appendix
+\subsection{SQL Queries for CFD$^p$s}
  We first present the generation of
 detection queries for \pCFDs, which is an extension of the
 \SQL techniques for \CFDs and \eCFDs discussed in~\cite{CFDs} and ~\cite{icde08}, respectively.
@@ -110,10 +106,73 @@ $Q^V$\= \bd{select} \= \bd{distinct} \= \at{sale_x}, \at{price_x} \bd{from} ( \b
 \end{example}
 
 
-%%%%%%%%% DL
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Constraints for the HOSP Dataset}
+
+
+Six \pCFDs and three \pCINDs are designed for the HOSP dataset, as shown below.
+
+\begin{footnotesize}\mat{0ex}{
+$\varphi _1 $: \=\at{hos}(\at{zip}$=$'\_' \And \at{city}$=$'\_' $\rightarrow$ \at{state}$=$'\_') \\
+$\varphi _2 $: \at{hos}(\at{pid}$=$'\_' $\rightarrow$ \at{hname}$=$'\_' \And \at{county}$=$'\_' \And \at{addr}$=$'\_' \\
+\> \And \at{phn}$=$'\_') \\
+$\varphi _3 $: \at{hos}(\at{pid}$=$'\_' $\rightarrow$ \at{srrp}$=$'\_') \\
+$\varphi _4 $: \at{hos}(\at{hid}$=$'\_' $\rightarrow$ \at{hq}$=$'\_' \And \at{had}$=$'\_') \\
+$\varphi _5 $: \at{hos}(\at{pid}$=$'\_' \And \at{ncs}$=$'Not Available' $\rightarrow$ \at{ft}$\geq 1$ \And \at{ft}$\leq 14$) \\
+$\varphi _6 $: \at{hos}(\at{pid}$=$'\_' \And \at{hid}$=$'\_' \And \at{ncs}$\neq$'Not Available' \And \at{ncs}\\
+\> $\neq$'Fewer than 100' $\rightarrow$ \at{hap}$\geq 0$ \And \at{hap}$\leq 100$) \\
+$\psi _1 $: \at{hos}(\at{hid}, \at{hq}; \at{nil}) $\subseteq$ \at{sta}(\at{hid}, \at{hq}; \at{nil}) \\
+$\psi _2 $: \at{hos}(\at{hid}, \at{state}; \at{nil}) $\subseteq$ \at{sta}(\at{hid}, \at{state}; \at{nil}) \\
+$\psi _3 $: \at{hos}(\at{hid}, \at{state}; \at{ncs}$\neq$'Not Available') $\subseteq$ \at{sta}(\at{hid}, \at{state}; \at{hap}$\geq 0$\\
+\> \And \at{hap}$\leq 100$) }
+\end{footnotesize}
+
+Here, $\varphi _1 $-$\varphi _4 $ and $\psi _1 $-$\psi _2 $ can be expressed by \CFDs and \CINDs, but $\varphi _5 $, $\varphi _6 $ and $\psi _3 $ are not. We designed their \CFDs and \CINDs counterparts as follows:
+\begin{footnotesize}\mat{0ex}{
+$\varphi _5 '$: \=\at{hos}(\at{pid}$=$'\_' \And \at{ncs}$=$'\_' $\rightarrow$ \at{ft}$=$'\_') \\
+$\varphi _6 '$: \at{hos}(\at{pid}$=$'\_' \And \at{hid}$=$'\_' \And \at{ncs}$=$'\_' $\rightarrow$ \at{hap}$=$'\_') \\
+$\psi _3 '$: \at{hos}(\at{hid}, \at{state}; \at{ncs}$=$'\_') $\subseteq$ \at{sta}(\at{hid}, \at{state}; \at{hap}$=$'\_')
+}
+\end{footnotesize}
+
+
+
+\subsection{Constraints for the DBLP Dataset}
+
+We generated 3482 \pCFDs and 2568 \pCINDs for the DBLP data, with eight representative ones as follows:\\
+
+\begin{footnotesize}\mat{0ex}{
+$\phi _1$: \=\at{pub}(\at{isbn}$=$'\_' \And \at{booktitle}$=$'\_' $\rightarrow$ \at{publisher}$=$'\_') \\
+$\phi _2$: \at{pub}(\at{title}$=$'\_' \And \at{year}$=$'\_' \And \at{booktitle}$=$'\_' $\rightarrow$ \at{type}$=$'\_') \\
+$\phi _3$: \at{pub}(\at{booktitle}$=$'CleanDB' $\rightarrow$ \at{year}$=$2006) \\
+$\phi _4$: \at{pub}(\at{booktitle}$=$'VLDB' \And \at{year_L}$=$'\_' $\rightarrow$ \at{year_R}$\geq 1975$ \\
+\> \And \at{year_R}$\leq 2007$) \\
+$\phi _5$: \at{pub}(\at{booktitle}$=$'PVLDB' \And \at{year_L}$=$'\_' $\rightarrow$ \at{year_R}$\geq 2008$) \\
+$\rho _1$: \at{pub}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings', \at{booktitle}\\
+\> $=$'CIKM-CNIKM') $\subseteq$ \at{pro}(\at{key}, \at{isbn}, \at{publisher}; \at{year}$=$2009)  \\
+$\rho _2$: \at{pub}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings', \at{booktitle}\\
+\> $=$'VLDB') $\subseteq$ \at{pro}(\at{key}, \at{isbn}, \at{publisher}; \at{year}$\geq 1975$ \And \at{year}\\
+\> $\leq 2007$)  \\
+$\rho _3$: \at{pub}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings', \at{booktitle}\\
+\> $=$'ICDE') $\subseteq$ \at{pro}(\at{key}, \at{isbn}, \at{publisher}; \at{year}$\geq 1984$)  }
+\end{footnotesize}
+
+We collected all \at{booktitle} and corresponding \at{year} from DBLP data to generate the other \pCFDs and \pCINDs by replacing the values of \at{booktitle} and {year} attributes. Observe that $\phi _1$-$\phi _3$ and $\rho _1$ can be expressed as \CFDs and \CIND. We designed \CFDs and \CINDs for $\phi _4$-$\phi _5$ and $\rho _2$-$\rho _3$ as follows:
+
+\begin{footnotesize}\mat{0ex}{
+$\phi _4 '$: \=\at{pub}(\at{booktitle}$=$'VLDB' \And \at{year_L}$=$'\_' $\rightarrow$ \at{year_R}$=$'\_' \\
+\> \And \at{year_R}$\leq 2007$) \\
+$\phi _5 '$: \at{pub}(\at{booktitle}$=$'PVLDB' \And \at{year_L}$=$'\_' $\rightarrow$ \at{year_R}$=$'\_') \\
+$\rho _2 '$: \at{pub}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings', \at{booktitle}\\
+\> $=$'VLDB') $\subseteq$ \at{pro}(\at{key}, \at{isbn}, \at{publisher}; \at{year}$=$'\_')\\
+$\rho _3 '$: \at{pub}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings', \at{booktitle}\\
+\> $=$'ICDE') $\subseteq$ \at{pro}(\at{key}, \at{isbn}, \at{publisher}; \at{year}$=$'\_')\\
+}
+\end{footnotesize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%old proofs%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 \eat{%%%%%%%%%%%%%%%%%
 %Proposition 1
 \noindent\bd{Proposition}~\ref{thm-sat-pcfd-fin}.~The satisfiability
