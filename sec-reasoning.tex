@@ -3,8 +3,8 @@
 \label{sec-reasoning}
 %\vspace{-1ex}
 
-The satisfiability problem and the implication problem are the two
-central technical questions associated with any dependency languages~\cite{AbHuVi1995,CFDs,tcs-CINDs}.
+The satisfiability and implication problems are the two
+classical questions associated with any dependency languages \cite{AbHuVi1995,CFDs,tcs-CINDs}.
 In this section we investigate these
 problems for \pCFDs and \pCINDs, separately and taken together.
 
@@ -35,8 +35,8 @@ same problem exists when it comes to \pCFDs.
 \begin{example}
 \label{exam-sat-cfd} Consider a \pCFD $\varphi$ = $(R: A\ra
 B,\ T_p)$ such that $T_p$ = $\{(\_\pa = a), (\_ \pa \ne a)\}$.
-Then there exists no {\em nonempty} instance $I$ of $R$ that
-satisfies $\varphi$. Indeed, for any tuple $t$ of $R$,
+There is no {\em nonempty} instance $I$ of $R$ that
+satisfies $\varphi$. Indeed, for any $R$ tuple $t$,
 $\varphi$ requires that both $t[B] = a$ and
 $t[B]\ne a$, which is impossible.
 \end{example}
@@ -63,9 +63,8 @@ We next present an \NP
 algorithm that, given a set $\Sigma$ of \pCFDs defined on a
 relational schema $R$, determines whether $\Sigma$ is satisfiable or not.
 The satisfiability problem has the following small model property:
-If there exists a nonempty instance $I$ of $R$ such that
-$I\models\Sigma$, then for any tuple $t\in I$, $I_t$ =$\{t\}$ is an
-instance of $R$ and $I_t\models\Sigma$. Thus it suffices to consider
+If there is a nonempty $R$ instance $I$ such that
+$I\models\Sigma$, then for any tuple $t\in I$, instance $I_t$ =$\{t\}$ satisfies $\Sigma$. Thus it suffices to consider
 single-tuple instances $I$ = $\{t\}$ for deciding whether $\Sigma$
 is satisfiable.
 
@@ -401,7 +400,7 @@ their \CINDs counterpart given in~\cite{tcs-CINDs}.
 
 \begin{proof}
 The implication problem for \CINDs is
-\EXPTIME-hard \cite{tcs-CINDs}. Since \pCINDs subsume \CINDs, the lower bound carries over to \pCINDs. 
+\EXPTIME-hard \cite{tcs-CINDs}. Since \pCINDs subsume \CINDs, the lower bound carries over to \pCINDs.
 The \EXPTIME upper bound is shown
 by presenting an \EXPTIME algorithm that, given a set
 $\Sigma\cup\{\psi\}$ of \pCINDs over a database schema $\cal R$,
@@ -426,29 +425,29 @@ $A$ $\in$ $\attrset(R_i)$. There is an edge $e$ = (`$R_i:t_i$',
 `$R_j:t_j$') in $E$ iff there exists a \pCIND $\phi$ =
 $(R_i[U; U_p]$ $\subseteq$ $ R_j[V; V_p], T_{p_{\phi}})$ in $\Sigma$
 such that $t_i[U_p] \asymp T_{p_{\phi}}[U_p]$, $t_j[V]$ = $t_i[U]$
-and $t_j[V_p] \asymp T_{p_{\phi}}[V_p]$, and $e$ is labeled with the \pCIND $\phi$, \ie  $\phi \in l(e)$. Note that an edge may have multiple labels. 
+and $t_j[V_p] \asymp T_{p_{\phi}}[V_p]$, and $e$ is labeled with the \pCIND $\phi$, \ie  $\phi \in l(e)$. Note that an edge may have multiple labels.
 
 \sstab(2)
 Let $S_a$ be the set of nodes `$R_a:t_a$' such that $t_a[X_p] \asymp T_{p}[X_p]$, and $S_b$ be the
-set of nodes `$R_b:t_b$' such that $t_b[Y_p] \asymp T_{p}[Y_p]$, respectively. 
+set of nodes `$R_b:t_b$' such that $t_b[Y_p] \asymp T_{p}[Y_p]$, respectively.
 
 \sstab(3)
 For each node $u$ = `$R_a:t_a$' in $S_a$, let $G_u$ be the induced  subgraph of $G$ that contains all the nodes reachable from $u$,
 and exactly  the edges that appear in $G$ over the same set of nodes. We also refer to $u$ as the root of $G_u$.
- 
+
 
 
 \sstab(4)
-For an induced subgraph $G_u$ of $G$ with root $u$ = `$R_a:t_a$', we derive another graph $G'_u$ by recursively removing edges as follows. For any $v$ in $G_u$, if $v$ has a child $v'$ from which no nodes in `$R_b:t_b$' in $S_b$ with $t_b[X] = t_b[Y]$ are reachable, then for all children $v''$ of $v$, we remove from labels $l(v, v'')$ all the labels in $l(v, v')$, and edge $(v, v'')$ is removed when $l(v, v'')$ becomes empty.  
+For an induced subgraph $G_u$ of $G$ with root $u$ = `$R_a:t_a$', we derive another graph $G'_u$ by recursively removing edges as follows. For any $v$ in $G_u$, if $v$ has a child $v'$ from which no nodes in `$R_b:t_b$' in $S_b$ with $t_b[X] = t_b[Y]$ are reachable, then for all children $v''$ of $v$, we remove from labels $l(v, v'')$ all the labels in $l(v, v')$, and edge $(v, v'')$ is removed when $l(v, v'')$ becomes empty.
 
 \sstab(5)
-If there exists a subgraph $G'_u$ derived from  an induced subgraph $G_u$ of $G$ with root $u$ = `$R_a:t_a$' such that  no nodes `$R_b:t_b$' in $S_b$ with $t_a[X] = t_b[Y]$ are reachable from $u$, we return `no', and return `yes', otherwise. 
+If there exists a subgraph $G'_u$ derived from  an induced subgraph $G_u$ of $G$ with root $u$ = `$R_a:t_a$' such that  no nodes `$R_b:t_b$' in $S_b$ with $t_a[X] = t_b[Y]$ are reachable from $u$, we return `no', and return `yes', otherwise.
 
 
 
 It can be verified that (a) if the algorithm returns `no', we can
 construct an instance $D$ such that $D\models\Sigma$, but not
-$\psi$, by collecting those tuples attached on the end nodes of edges whole labels become empty at setp 4; 
+$\psi$, by collecting those tuples attached on the end nodes of edges whole labels become empty at setp 4;
 and (b) if the algorithm returns `yes', there exist no
 instances $D$ such that $D\models\Sigma$, but not $\psi$.
 
@@ -511,7 +510,7 @@ attributes, the implication problem for \pCINDs remains
 \begin{proof} The problem is in \EXPTIME by
 Proposition~\ref{thm-imp-pcind-fin}. The \EXPTIME-hardness is
 shown by reduction from the implication problem for \CINDs in the
-general setting, in which finite-domain attributes may be present, that is known to be \EXPTIME-complete~\cite{tcs-CINDs}. 
+general setting, in which finite-domain attributes may be present, that is known to be \EXPTIME-complete~\cite{tcs-CINDs}.
 
 
 We next present the reduction from the implication problem for
@@ -573,7 +572,7 @@ context.
 
 \sstab(2)
 We next define  $\Sigma'$ and $\psi'$ on ${\cal R'}$ based on the
-mappings defined above. 
+mappings defined above.
 For each \CIND $(R_a[X;$ $A_1, \ldots,A_{m1}]
 \subseteq$ $R_b[Y; B_1, \ldots, B_{m2}], T_p)$ in $\Sigma$ and each
 $t_p\in T_p$, we define another \pCIND $(R'_a[X'; A'_1,\ldots,A'_{m1},X'_p] \subseteq$ $R'_b[Y';$
