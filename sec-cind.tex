@@ -6,7 +6,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}[tb!]
-\vspace{-1ex}
+%\vspace{-1ex}
 \begin{center}
 (1) $\psi_1$ = (\at{item}\lbrack\at{state}; $\at{type}\rbrack$
 $\subseteq$ \at{tax}\lbrack\at{state}; $\NIL\rbrack$, \ $T_{1}$), \\
@@ -28,10 +28,9 @@ $T_2$:
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Along the same lines as \pCFDs, we next define {\em conditional inclusion dependencies with predicates}, denoted by \pCINDs,
-by extending \CINDs~\cite{tcs-CINDs} with built-in
-predicates ($\ne$, $<$, $\le$, $>$, $\ge$) in addition to equality ($=$).
-
+Similar to \pCFDs, we define {\em conditional inclusion dependencies with predicates}, denoted by \pCINDs,
+by extending \CINDs~\cite{tcs-CINDs} with built-in predicates ($\ne$, $<$, $\le$, $>$, $\ge$) in addition to equality ($=$).
+%
 Consider two relational schemas $R_1$ and $R_2$.
 
 %\vspace{-0.5ex}
@@ -59,7 +58,7 @@ $R_1$ (resp. $R_2$) is called the \LHS (resp. \RHS) relation of
 \vspace{-0.5ex}
 \begin{example}
 \label{exam-pcind} Figure~\ref{fig-pcind} shows two example \pCINDs:
-$\psi_1$ expresses $\kw{pind}_1$ of Example~\ref{exa-motivation},
+$\psi_1$ expresses the $\kw{pind}_1$ in Example~\ref{exa-motivation},
 and $\psi_2$ refines $\psi_1$ by stating that for any \at{item}
 tuple $t_1$, if its \at{type} is not art and its \at{state} is DL,
 then there must be a \at{tax} tuple $t_2$ such that its \at{state}
@@ -82,17 +81,17 @@ exists} a tuple $t_2\in I_2$ such that $t_1[X]$ = $t_2[Y]$ and $t_2[Y_p] \asymp 
 
 
 That is, if $t_1[X_p]$ matches
-the pattern tableau $T_p[X_p]$, then $\psi$ requires the
+the pattern tableau $T_p[X_p]$, then $\psi$ assures the
 existence of $t_2$ such that (1)~$t_1[X] = t_2[Y]$ as
-required by the standard \IND embedded in $\psi$;
+needed by the standard \IND embedded in $\psi$;
 and, moreover, (2)~$t_2[Y_p]$
 must match the pattern tableau $T_p[Y_p]$. In other words,
 $\psi$ is ``conditional'' since its embedded \IND is applied only to the
-subset of tuples in $I_1$ that match $T_p[X_p]$, and moreover,
-the pattern $T_p[Y_p]$ is enforced on the tuples in $I_2$
+subset of tuples in $I_1$ that match $T_p[X_p]$, and
+$T_p[Y_p]$ is enforced on the tuples in $I_2$
 that match those tuples in $I_1$. As remarked in Section~\ref{sec-cfd},
 the pattern tableau $T_p$ specifies the {\em conjunction} of
-patterns of all tuples in $T_p$.
+all the pattern tuples in $T_p$.
 
 \vspace{-0.5ex}
 \begin{example}
@@ -113,18 +112,18 @@ $D$ satisfies a set $\Sigma$ of \CINDs, denoted by $D \models
 
 \stitle{Safe CIND$^p$s}.
 %Consider \pCIND $\psi$ = $(R_1[X;\ X_p] \subseteq R_2[Y;\ Y_p],\ T_p)$.
-We say a \pCIND $(R_1[X;\ X_p] \subseteq R_2[Y;\ Y_p],\ T_p)$ is
+We say a \pCIND $(R_1[X;\ X_p] \subseteq R_2[Y;$$\ Y_p],\ T_p)$ is
 {\em unsafe} if  there exist pattern tuples $t_p, t_p'$ in $T_p$
 such that
 either (a) there exists $B\in Y_p$, such that $t_p[B]$ and $t_p'[B]$
 are not satisfiable when taken together,
-or (b) there exist $C \in Y, A \in X$ such that $A$ corresponds to $C$ in the
+or (b) there exist $C \in Y$, $A \in X$ such that $A$ corresponds to $C$ in the
 embedded \IND and $t_p[C]$ and $t_p'[A]$ are not satisfiable
 when taken together;
 \eg~$t_p[\at{price}] = 9.99$ and $t_p'[\at{price}] \ge 19.99$.
 
-Obviously unsafe \pCINDs do not make sense: there exist no nonempty
-database that satisfies unsafe \pCINDs. It takes $O(|T_p|^2)$-time
+Obviously unsafe \pCINDs do not make sense: no nonempty
+databases satisfy unsafe \pCINDs. It takes $O(|T_p|^2)$ time
 in the size $|T_p|$ of $T_p$ to decide whether a \pCIND is unsafe.
 Thus in the sequel we consider safe \pCIND only.
 
@@ -150,5 +149,5 @@ simply a {\em empty} set. (2) A \CIND $(R_1[X;\ X_p]
 t_{pk}\}$ can be expressed as a set
 $\{\psi_1,\ldots,\psi_k\}$ of \pCINDs, where for each $i\in [1, k]$,
 $\psi_i$ = $(R_1[X;\ X_p] \subseteq R_2[Y;\ Y_p],\ T_{pi})$ such
-that $T_{pi}$ consists of the pattern tuple $t_{pi}$ of $T_p$ only,
+that $T_{pi}$ consists of the pattern tuple $t_{pi}$ of $T_p$,
 defined with equality ($=$) only.
