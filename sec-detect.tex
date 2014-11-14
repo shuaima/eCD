@@ -66,6 +66,93 @@ represented as
 {\em four data tables}, no matter how many dependencies are
 in the sets and how large they are.
 
+%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[tb!]
+%\vspace{-1ex}
+\begin{center}
+\begin{small}
+\hspace{5ex}(1)~\Enc{L} \hspace{35ex}  (2)~\Enc{R} \hspace{30ex} (3)~\Enc{\ne}\\
+\vspace{0.5ex}
+\begin{tabular}{|c|c|c|c|c|}
+\hline \at{cid} & \at{sale} & \at{price} &
+\at{price_{>}} & \at{price_{\le}}\\
+\hline 2&  T & null & null &null \\
+3&  F&  \_ & 20  & 40 \\
+4&    T &  null & null & null \\
+\hline
+\end{tabular}
+\hspace{2ex}
+\begin{tabular}{|c|c|c|c|c|}
+\hline \at{cid} & \at{shipping}
+& \at{price} & \at{price_{\ge}} & \at{price_{<}}\\
+\hline
+2&  0 &  null & null & null \\
+3&  6 &  null & null & null \\
+4&  null & \_ & 2.99 & 9.99 \\
+\hline
+\end{tabular}
+%\\
+%\vspace{1ex}
+\hspace{2ex}
+\begin{tabular}{|c|c|c|c|}
+\cline{1-4} \at{cid} & \at{pos} & \at{att} & \at{val}\\
+\cline{1-4}
+\end{tabular}
+\end{small}
+\end{center}
+\vspace{-1ex} \caption{Encoding example of \pCFDs}
+\label{fig-pcfd-encoding} \vspace{-1ex}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[tb!]
+%\vspace{-1ex}
+
+\begin{center}
+\begin{small}
+\hspace{0ex} (1)~\Enc{} \hspace{20ex} (2)~\Enc{L} \hspace{18ex} (3)~\Enc{R} \hspace{20ex}(4)~\Enc{\ne} \\
+\vspace{0.5ex}
+\begin{tabular}{|c|c|c|}
+\hline \at{cid} & \at{state_L} & \at{state_R}\\
+\hline
+1& 1 & 1 \\
+2& 1 & 1 \\
+\hline
+\end{tabular}
+\hspace{8ex}
+\begin{tabular}{|c|c|c|}
+\hline \at{cid} & \at{type} & \at{state}\\
+\hline
+1&  \_ & null\\
+2&  \_ & DL\\
+\hline
+\end{tabular}
+\hspace{8ex}
+\begin{tabular}{|c|c|}
+\hline \at{cid} & \at{rate}\\
+\hline
+1 & null\\
+2 & 0 \\
+\hline
+\end{tabular}
+\hspace{8ex}
+\begin{tabular}{|c|c|c|c|}
+\hline \at{cid} & \at{pos} & \at{att} & \at{val}\\
+\hline
+1 & \LHS & type & art \\
+2 & \LHS & type & art \\
+\hline
+\end{tabular}
+\end{small}
+\end{center}
+
+\vspace{-1ex} \caption{Encoding example of \pCINDs}
+\label{fig-pcind-encoding} \vspace{-1ex}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \stitle{Encoding CFD$^p$s}. We encode all  pattern tableaux
 in $\SCFD^i$ with three tables \Enc{L}, \Enc{R} and \Enc{\ne}, where
@@ -128,44 +215,7 @@ $t[\at{pos}]$ = `\LHS' (resp.~$t[\at{pos}]$ = `\RHS') if attribute
 $A$ appears in $X$ (resp. $Y$). \ei\vspace{-1ex}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure*}[tb!]
-%\vspace{-1ex}
-\begin{center}
-\begin{small}
-\hspace{5ex}(1)~\Enc{L} \hspace{35ex}  (2)~\Enc{R} \hspace{30ex} (3)~\Enc{\ne}\\
-\vspace{0.5ex}
-\begin{tabular}{|c|c|c|c|c|}
-\hline \at{cid} & \at{sale} & \at{price} &
-\at{price_{>}} & \at{price_{\le}}\\
-\hline 2&  T & null & null &null \\
-3&  F&  \_ & 20  & 40 \\
-4&    T &  null & null & null \\
-\hline
-\end{tabular}
-\hspace{2ex}
-\begin{tabular}{|c|c|c|c|c|}
-\hline \at{cid} & \at{shipping}
-& \at{price} & \at{price_{\ge}} & \at{price_{<}}\\
-\hline
-2&  0 &  null & null & null \\
-3&  6 &  null & null & null \\
-4&  null & \_ & 2.99 & 9.99 \\
-\hline
-\end{tabular}
-%\\
-%\vspace{1ex}
-\hspace{2ex}
-\begin{tabular}{|c|c|c|c|}
-\cline{1-4} \at{cid} & \at{pos} & \at{att} & \at{val}\\
-\cline{1-4}
-\end{tabular}
-\end{small}
-\end{center}
-\vspace{-1ex} \caption{Encoding example of \pCFDs}
-\label{fig-pcfd-encoding} \vspace{-1ex}
-\end{figure*}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 
 \begin{example}
@@ -185,6 +235,9 @@ patterns. One can easily reconstruct these \pCFDs from tables
 
 
 %%%
+
+
+
 \stitle{Encoding CIND$^p$s}. All \pCINDs in $\SCIND^{(i,j)}$
 can be encoded with four tables
 \Enc{}, \Enc{L}, \Enc{R} and \Enc{\ne}.
@@ -216,59 +269,14 @@ same lines as their \pCFD counterpart.
 For each $k\in[1, m]$,  let $t[A_k]$ = $t[B_k]$ = $k$, and $t[A]$ =
 `null' for the rest attributes $A$ of \Enc{}. \ei \vspace{-1ex}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure*}[tb!]
-%\vspace{-1ex}
 
-\begin{center}
-\begin{small}
-\hspace{0ex} (1)~\Enc{} \hspace{20ex} (2)~\Enc{L} \hspace{18ex} (3)~\Enc{R} \hspace{20ex}(4)~\Enc{\ne} \\
-\vspace{0.5ex}
-\begin{tabular}{|c|c|c|}
-\hline \at{cid} & \at{state_L} & \at{state_R}\\
-\hline
-1& 1 & 1 \\
-2& 1 & 1 \\
-\hline
-\end{tabular}
-\hspace{8ex}
-\begin{tabular}{|c|c|c|}
-\hline \at{cid} & \at{type} & \at{state}\\
-\hline
-1&  \_ & null\\
-2&  \_ & DL\\
-\hline
-\end{tabular}
-\hspace{8ex}
-\begin{tabular}{|c|c|}
-\hline \at{cid} & \at{rate}\\
-\hline
-1 & null\\
-2 & 0 \\
-\hline
-\end{tabular}
-\hspace{8ex}
-\begin{tabular}{|c|c|c|c|}
-\hline \at{cid} & \at{pos} & \at{att} & \at{val}\\
-\hline
-1 & \LHS & type & art \\
-2 & \LHS & type & art \\
-\hline
-\end{tabular}
-\end{small}
-\end{center}
-
-\vspace{-1ex} \caption{Encoding example of \pCINDs}
-\label{fig-pcind-encoding} \vspace{-1ex}
-\end{figure*}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \begin{example} \label{exa-enc-pfind}
-Figure~\ref{fig-pcfd-encoding} shows the coding of \pCINDs $\psi_1$
+Figure~\ref{fig-pcind-encoding} shows the coding of \pCINDs $\psi_1$
 and $\psi_2$ given in Fig.~\ref{fig-pcind}. We use \at{state_L} and
 \at{state_R} in \Enc{} to denote the occurrences of attribute
-\at{state} in \at{item} and \at{tax}, respectively. In 
+\at{state} in \at{item} and \at{tax}, respectively. In
 \Enc{L} and \Enc{R}, the attributes with only `null' patterns are
 omitted, for the same reason as \pCFDs mentioned above.
 \end{example}
