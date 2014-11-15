@@ -1,5 +1,6 @@
 \newcommand{\dblp}{{\sc Dblp}\xspace}
 \newcommand{\hosp}{{\sc Hosp}\xspace}
+\newcommand{\hcahps}{{\sc hcahps}\xspace}
 
 
 
@@ -15,78 +16,84 @@ We first present our experimental settings.
 
 \stitle{Datasets}. We used two real-life datasets that were stored in an SQL Server 2012 database.
 
-\ni(1) \hosp \textit{(Hospital Compare)} is publicly available from U.S. Department of Health
-\& Human Services~\cite{hosp}. We used two tables: \at{HCAHPS} and \at{HCAHPS-State}, which record the ratings of the Hospital Consumer Assessment of Healthcare Providers and Systems (HCAHPS) of each hospital and the state averages of the HCAHPS, respectively. We created a table \at{hos} by projecting on the table \at{HCAHPS}. The table \at{hos}'s schema is (\at{pid} (Provider ID), \at{hname} (Hospital Name), \at{addr} (Address), \at{city}, \at{state}, \at{zip}, \at{county}, \at{phn} (Phone Number), \at{hid} (HCAHPS Measure ID), \at{hq} (HCAHPS Question), \at{had} (HCAHPS Answer Description), \at{hap} (HCAHPS Answer Percent), \at{ncs} (Number of Completed Surveys), \at{srrp} (Survey Response Rate Percent) and \at{ft} (Footnote)). We created another table \at{sta} by choosing 4 attributes from table \at{HCAHPS-State}. Its schema is (\at{state}, \at{hid}, \at{hq} and \at{hap}).
+\ni(1) \hosp (Hospital Compare) is a database publicly available from U.S. Department of Health %\at{HCAHPS} and \at{HCAHPS}-\at{State}
+\& Human Services~\cite{hosp}. We used two tables \at{hcahps} and \at{hcahps}-\at{state}, which record the hospital level and state level ratings of the Hospital Consumer Assessment of Healthcare Providers and Systems (HCAHPS), respectively.
+%
+For table \at{hcahps}, it records (a) the hospital information: \at{hid} (hospital ID), \at{hname} (hospital name), \at{addr} (address), \at{city}, \at{state}, \at{zip}, \at{county}, \at{phn} (phone number), and (b) the measure information: \at{mid} (measure ID), \at{mq} (question), \at{mad} (answer description), \at{map} (answer percent), \at{mncs} (number of completed surveys), \at{msrrp} (survey response rate percent), \at{mfn} (footnote).
+%
+And for table \at{hcahps}-\at{state}, it records state level measure information: \at{state}, \at{mid}, \at{mq} and \at{map}, among other things. 
 
-We designed 6 \pCFDs and 3 \pCINDs for the HOSP data, shown below.
+
+We designed 6 \pCFDs and 3 \pCINDs for \hosp, shown below in an informal way for easy of understanding. 
 
 \begin{footnotesize}\mat{0ex}{
-$\varphi _1 $: \=\at{hos}(\at{zip}$=$'\_' \And \at{city}$=$'\_' $\rightarrow$ \at{state}$=$'\_') \\
-$\varphi _2 $: \at{hos}(\at{pid}$=$'\_' $\rightarrow$ \at{hname}$=$'\_' \And \at{county}$=$'\_' \And \at{addr}$=$'\_' \\
-\> \And \at{phn}$=$'\_') \\
-$\varphi _3 $: \at{hos}(\at{pid}$=$'\_' $\rightarrow$ \at{srrp}$=$'\_') \\
-$\varphi _4 $: \at{hos}(\at{hid}$=$'\_' $\rightarrow$ \at{hq}$=$'\_' \And \at{had}$=$'\_') \\
-$\varphi _5 $: \at{hos}(\at{pid}$=$'\_' \And \at{ncs}$=$'Not Available' $\rightarrow$ \at{ft}$\geq 1$ \And \at{ft}$\leq 14$) \\
-$\varphi _6 $: \at{hos}(\at{pid}$=$'\_' \And \at{hid}$=$'\_' \And \at{ncs}$\neq$'Not Available' \And \at{ncs}\\
-\> $\neq$'Fewer than 100' $\rightarrow$ \at{hap}$\geq 0$ \And \at{hap}$\leq 100$) \\
-$\psi _1 $: \at{hos}(\at{hid}, \at{hq}; \at{nil}) $\subseteq$ \at{sta}(\at{hid}, \at{hq}; \at{nil}) \\
-$\psi _2 $: \at{hos}(\at{hid}, \at{state}; \at{nil}) $\subseteq$ \at{sta}(\at{hid}, \at{state}; \at{nil}) \\
-$\psi _3 $: \at{hos}(\at{hid}, \at{state}; \at{ncs}$\neq$'Not Available') $\subseteq$ \at{sta}(\at{hid}, \at{state}; \at{hap}$\geq 0$\\
-\> \And \at{hap}$\leq 100$) }
+$\varphi _1 $: \= \at{hcahps}(\at{zip} = `\_' \And \at{city} = `\_' $\rightarrow$ \at{state} = `\_') \\
+$\varphi _2 $: \at{hcahps}(\at{hid} = `\_' $\rightarrow$ \at{hname} = `\_' \And \at{county} = `\_' \And \at{addr} = `\_' \And \\
+\>  \at{phn}=  `\_') \\
+$\varphi _3 $: \at{hcahps}(\at{hid} = `\_' $\rightarrow$ \at{msrrp} = `\_') \\
+$\varphi _4 $: \at{hcahps}(\at{hid} = `\_' $\rightarrow$ \at{mq} = `\_' \And \at{mad} = '\_') \\
+$\varphi _5 $: \at{hcahps}(\at{hid} = `\_' \And \at{mncs} = `Not Available' $\rightarrow$ \at{mfn} $\geq 1$ \And \at{mfn} $\leq 14$) \\
+$\varphi _6 $: \at{hcahps}(\at{hid} = `\_' \And \at{mid} = `\_' \And \at{mncs} $\neq$ `Not Available' \And \\
+\> \at{mncs} $\neq$ `Fewer than 100' $\rightarrow$ \at{map} $\geq 0$ \And \at{map} $\leq 100$) \\
+$\psi _1 $: \at{hcahps}(\at{mid}, \at{mq}; \at{nil}) $\subseteq$ \at{hcahps}-\at{state}(\at{mid}, \at{mq}; \at{nil}) \\
+$\psi _2 $: \at{hcahps}(\at{mid}, \at{state}; \at{nil}) $\subseteq$ \at{hcahps}-\at{state}(\at{mid}, \at{state}; \at{nil}) \\
+$\psi _3 $: \at{hcahps}(\at{mid}, \at{state}; \at{mncs}$\neq$ 'Not Available') $\subseteq$ \at{hcahps}-\at{state}(\at{mid}, \at{state}; \\
+\> \at{map} $\geq 0$ \And \at{map} $\leq 100$)}
 \end{footnotesize}
 
-Here, $\varphi _1 $-$\varphi _4 $ and $\psi _1 $-$\psi _2 $ can be expressed by \CFDs and \CINDs, but $\varphi _5 $, $\varphi _6 $ and $\psi _3 $ are not. We designed their \CFDs and \CINDs counterparts as follows:
+For comparison, we also designed the \CFDs and \CINDs counterparts of the above \pCFDs and \pCINDs. Here
+$\varphi_1$-$\varphi_4 $ and $\psi_1 $-$\psi_2 $ are indeed \CFDs and \CINDs, respectively, while $\varphi_5$, $\varphi_6$ and $\psi_3$ cannot.
+We hence further designed $\varphi_5'$, $\varphi_6'$ and $\psi_3'$ to approximate $\varphi_5$, $\varphi_6$ and $\psi_3$, respectively.
+
 \begin{footnotesize}\mat{0ex}{
-$\varphi _5 '$: \=\at{hos}(\at{pid}$=$'\_' \And \at{ncs}$=$'\_' $\rightarrow$ \at{ft}$=$'\_') \\
-$\varphi _6 '$: \at{hos}(\at{pid}$=$'\_' \And \at{hid}$=$'\_' \And \at{ncs}$=$'\_' $\rightarrow$ \at{hap}$=$'\_') \\
-$\psi _3 '$: \at{hos}(\at{hid}, \at{state}; \at{ncs}$=$'\_') $\subseteq$ \at{sta}(\at{hid}, \at{state}; \at{hap}$=$'\_')
+$\varphi_5'$: \=\at{hcahps}(\at{hid} = `\_' \And \at{mncs} = `\_' $\rightarrow$ \at{mfn} = `\_') \\
+$\varphi_6'$: \at{hcahps}(\at{hid} = `\_' \And \at{mid} = `\_' \And \at{mncs} = `\_' $\rightarrow$ \at{map} = `\_') \\
+$\psi_3'$: \at{hcahps}(\at{mid}, \at{state}; \at{mncs} = `\_') $\subseteq$ \at{hcahps}-\at{state}(\at{mid}, \at{state}; \at{map} = `\_')
 }
 \end{footnotesize}
 
 
-\ni(2) \dblp \textit{data} is from the DBLP Bibliography~\cite{dblp}. We first transformed the XML data into relations. We then created a table \at{pub} by extracting the records of books, articles (journal papers) and inproceedings (conference papers) from \textit{publications} data. The schema of table \at{pub} is (\at{key}, \at{type}, \at{title}, \at{booktitle}, \at{year}, \at{crossref}, \at{isbn} and \at{publisher}). A table \at{pro} was created for \textit{proceedings} with 4 attributes: \at{key}, \at{year}, \at{isbn} and \at{publisher}.
+\ni(2) \dblp is a repository of computer science publications from 1936 to 2014~\cite{dblp}.
+ We further transformed its XML format into two tables  \at{paper} and \at{proceeding} that record the paper and proceeding information, respectively, 
+such that \at{paper}(\at{key}, \at{type}, \at{title}, \at{booktitle}, \at{year}, \at{crossref}, \at{isbn}, \at{publisher}) records books, journal articles and conference papers, and \at{proceeding}(\at{key}, \at{year}, \at{isbn}, \at{publisher}) records the proceedings of conference papers, respectively.
 
-We generated 3482 \pCFDs and 2568 \pCINDs for the DBLP data, with eight representative ones as follows:\\
-
-\begin{footnotesize}\mat{0ex}{
-$\phi _1$: \=\at{pub}(\at{isbn}$=$'\_' \And \at{booktitle}$=$'\_' $\rightarrow$ \at{publisher}$=$'\_') \\
-$\phi _2$: \at{pub}(\at{title}$=$'\_' \And \at{year}$=$'\_' \And \at{booktitle}$=$'\_' $\rightarrow$ \at{type}$=$'\_') \\
-$\phi _3$: \at{pub}(\at{booktitle}$=$'CleanDB' $\rightarrow$ \at{year}$=$2006) \\
-$\phi _4$: \at{pub}(\at{booktitle}$=$'VLDB' \And \at{year_L}$=$'\_' $\rightarrow$ \at{year_R}$\geq 1975$ \\
-\> \And \at{year_R}$\leq 2007$) \\
-$\phi _5$: \at{pub}(\at{booktitle}$=$'PVLDB' \And \at{year_L}$=$'\_' $\rightarrow$ \at{year_R}$\geq 2008$) \\
-$\rho _1$: \at{pub}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings', \at{booktitle}\\
-\> $=$'CIKM-CNIKM') $\subseteq$ \at{pro}(\at{key}, \at{isbn}, \at{publisher}; \at{year}$=$2009)  \\
-$\rho _2$: \at{pub}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings', \at{booktitle}\\
-\> $=$'VLDB') $\subseteq$ \at{pro}(\at{key}, \at{isbn}, \at{publisher}; \at{year}$\geq 1975$ \And \at{year}\\
-\> $\leq 2007$)  \\
-$\rho _3$: \at{pub}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings', \at{booktitle}\\
-\> $=$'ICDE') $\subseteq$ \at{pro}(\at{key}, \at{isbn}, \at{publisher}; \at{year}$\geq 1984$)  }
-\end{footnotesize}
-
-We collected all \at{booktitle} and corresponding \at{year} from DBLP data to generate the other \pCFDs and \pCINDs by replacing the values of \at{booktitle} and {year} attributes. Observe that $\phi _1$-$\phi _3$ and $\rho _1$ can be expressed as \CFDs and \CIND. We designed \CFDs and \CINDs for $\phi _4$-$\phi _5$ and $\rho _2$-$\rho _3$ as follows:
+We generated 3482 \pCFDs and 2568 \pCINDs for the DBLP data, with their representatives shown below.
 
 \begin{footnotesize}\mat{0ex}{
-$\phi _4 '$: \=\at{pub}(\at{booktitle}$=$'VLDB' \And \at{year_L}$=$'\_' $\rightarrow$ \at{year_R}$=$'\_' \\
-\> \And \at{year_R}$\leq 2007$) \\
-$\phi _5 '$: \at{pub}(\at{booktitle}$=$'PVLDB' \And \at{year_L}$=$'\_' $\rightarrow$ \at{year_R}$=$'\_') \\
-$\rho _2 '$: \at{pub}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings', \at{booktitle}\\
-\> $=$'VLDB') $\subseteq$ \at{pro}(\at{key}, \at{isbn}, \at{publisher}; \at{year}$=$'\_')\\
-$\rho _3 '$: \at{pub}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings', \at{booktitle}\\
-\> $=$'ICDE') $\subseteq$ \at{pro}(\at{key}, \at{isbn}, \at{publisher}; \at{year}$=$'\_')\\
+$\phi_1$:  \= \at{paper}(\at{isbn} = '\_' \And \at{booktitle} = '\_' $\rightarrow$ \at{publisher} = '\_') \\
+$\phi_2$: \at{paper}(\at{title} = '\_' \And \at{year} = '\_' \And \at{booktitle} = '\_' $\rightarrow$ \at{type} = '\_')  \\
+$\phi_3$: \at{paper}(\at{booktitle} = 'CleanDB' $\rightarrow$ \at{year} = 2006) \\
+$\phi_4$: \at{paper}(\at{booktitle} = 'VLDB' \And \at{year_L} = '\_' $\rightarrow$ \at{year_R} $\geq$ 1975 \\
+\> \at{year_R}  $\leq$ 2007) \\
+$\phi_5$: \at{paper}(\at{booktitle} = 'PVLDB' \And \at{year_L} = '\_' $\rightarrow$ \at{year_R} $\geq$ 2008) \\
+$\rho_1$: \at{paper}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type} = 'inproceedings' \And \\
+\>  \at{booktitle} = 'CIKM-CNIKM') $\subseteq$ \at{proceeding}(\at{key}, \at{isbn}, \at{publisher}; \\
+\>  \at{year} = 2009)  \\
+$\rho_2$: \at{paper}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type} = 'inproceedings' \And \\
+\>  \at{booktitle} = 'VLDB') $\subseteq$ \at{proceeding}(\at{key}, \at{isbn}, \at{publisher}; \\
+\>  \at{year} $\geq$ 1975 \And \at{year} $\leq$ 2007)  \\
+$\rho_3$: \at{paper}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type} = 'inproceedings' \And \\
+\> \at{booktitle} = 'ICDE') $\subseteq$ \at{proceeding}(\at{key}, \at{isbn}, \at{publisher}; \at{year} $\geq$ 1984) 
 }
 \end{footnotesize}
 
+We collected all the \at{booktitle} and corresponding \at{year} from \dblp to generate the other \pCFDs and \pCINDs by instantiating the values of their \at{booktitle} and \at{year} attributes. Observe that $\phi_1$-$\phi_3$ and $\rho _1$ are \CFDs and \CINDs, respectively. For comparison,  we further designed the following \CFDs and \CINDs to approximate $\phi_4$-$\phi_5$ and $\rho_2$-$\rho_3$.
 
- 
+\begin{footnotesize}\mat{0ex}{
+$\phi_4'$: \=\at{paper}(\at{booktitle} = 'VLDB' \And \at{year_L} = '\_' $\rightarrow$ \at{year_R} = '\_') \\
+$\phi_5'$: \at{paper}(\at{booktitle} = 'PVLDB' \And \at{year_L} = '\_' $\rightarrow$ \at{year_R} = '\_') \\
+$\rho_2'$: \at{paper}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings' \And \\
+\> \at{booktitle} = 'VLDB') $\subseteq$ \at{proceeding}(\at{key}, \at{isbn}, \at{publisher}; \at{year} = '\_')\\
+$\rho_3'$: \at{paper}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type} = 'inproceedings' \And \\
+\> \at{booktitle} = 'ICDE') $\subseteq$ \at{proceeding}(\at{key}, \at{isbn}, \at{publisher}; \at{year} = '\_')
+}
+\end{footnotesize}
 
-
-
-We varied three parameters of the data in our experiments, denoted by $|I_1|$, $|I_2|$ and $noise\%$. $|I_1|$ is the number of tuples in the table \at{hos} of HOSP (resp. table \at{pub} of DBLP). Similarly, $|I_2|$ is the number of the table \at{sta} of HOSP (resp. table \at{pro} of DBLP). $noise\%$ is the percentage of dirty tuples in table \at{hos} of HOSP (resp. table \at{pub} of DBLP) that were modified to violate a \pCFD or \pCIND, ranging from 0\% to 9\%. For each dirty tuple $t$, an attribute of $t$ in $Y$ of a \pCFD or $X \cup Y_p$ of a \pCIND was changed from a correct to incorrect value. We kept a copy of clean data before adding any noise to tell whether a tuple detected by \pCFDs or \pCINDs is a true or false dirty tuple.
 
 \stitle{Implementation}. All the experiments were run within an SQL Server 2012 database installed on a machine with an Intel Core i5 (3.1GHz) CPU and 8GB of RAM. Each test was repeated 5 times, and the average is reported here.
 
 \subsection{Experimental Results}
+We varied three parameters of the data in our experiments, denoted by $|I_1|$, $|I_2|$ and $noise\%$. $|I_1|$ is the number of tuples in the table \at{hos} of HOSP (resp. table \at{paper} of DBLP). Similarly, $|I_2|$ is the number of the table \at{sta} of HOSP (resp. table \at{proceeding} of DBLP). $noise\%$ is the percentage of dirty tuples in table \at{hos} of HOSP (resp. table \at{paper} of DBLP) that were modified to violate a \pCFD or \pCIND, ranging from 0\% to 9\%. For each dirty tuple $t$, an attribute of $t$ in $Y$ of a \pCFD or $X \cup Y_p$ of a \pCIND was changed from a correct to incorrect value. We kept a copy of clean data before adding any noise to tell whether a tuple detected by \pCFDs or \pCINDs is a true or false dirty tuple.
 
 We next present our findings.
 
