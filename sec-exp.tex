@@ -21,10 +21,10 @@ We first present our experimental settings.
 %
 For table \at{hcahps}, it records (a) the hospital information: \at{hid} (hospital ID), \at{hname} (hospital name), \at{addr} (address), \at{city}, \at{state}, \at{zip}, \at{county}, \at{phn} (phone number), and (b) the measure information: \at{mid} (measure ID), \at{mq} (question), \at{mad} (answer description), \at{map} (answer percent), \at{mncs} (number of completed surveys), \at{msrrp} (survey response rate percent), \at{mfn} (footnote).
 %
-And for table \at{hcahps}-\at{state}, it records state level measure information: \at{state}, \at{mid}, \at{mq} and \at{map}, among other things. 
+And for table \at{hcahps}-\at{state}, it records state level measure information: \at{state}, \at{mid}, \at{mq} and \at{map}, among other things.
 
 
-We designed 6 \pCFDs and 3 \pCINDs for \hosp, shown below in an informal way for easy of understanding. 
+We designed 6 \pCFDs and 3 \pCINDs for \hosp, shown below in an informal way for easy of understanding.
 
 \begin{footnotesize}\mat{0ex}{
 $\varphi _1 $: \= \at{hcahps}(\at{zip} = `\_' \And \at{city} = `\_' $\rightarrow$ \at{state} = `\_') \\
@@ -53,8 +53,8 @@ $\psi_3'$: \at{hcahps}(\at{mid}, \at{state}; \at{mncs} = `\_') $\subseteq$ \at{h
 \end{footnotesize}
 
 
-\ni(2) \dblp is a repository of computer science publications from 1936 to 2014~\cite{dblp}.
- We further transformed its XML format into two tables  \at{paper} and \at{proceeding} that record the paper and proceeding information, respectively, 
+\ni(2) \dblp is a repository of computer science publications from 1946 to 2014~\cite{dblp}.
+ We further transformed its XML format into two tables  \at{paper} and \at{proceeding} that record the paper and proceeding information, respectively,
 such that \at{paper}(\at{key}, \at{type}, \at{title}, \at{booktitle}, \at{year}, \at{crossref}, \at{isbn}, \at{publisher}) records books, journal articles and conference papers, and \at{proceeding}(\at{key}, \at{year}, \at{isbn}, \at{publisher}) records the proceedings of conference papers, respectively.
 
 We generated 3482 \pCFDs and 2568 \pCINDs for the DBLP data, with their representatives shown below.
@@ -73,7 +73,7 @@ $\rho_2$: \at{paper}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type} = 'inpr
 \>  \at{booktitle} = 'VLDB') $\subseteq$ \at{proceeding}(\at{key}, \at{isbn}, \at{publisher}; \\
 \>  \at{year} $\geq$ 1975 \And \at{year} $\leq$ 2007)  \\
 $\rho_3$: \at{paper}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type} = 'inproceedings' \And \\
-\> \at{booktitle} = 'ICDE') $\subseteq$ \at{proceeding}(\at{key}, \at{isbn}, \at{publisher}; \at{year} $\geq$ 1984) 
+\> \at{booktitle} = 'ICDE') $\subseteq$ \at{proceeding}(\at{key}, \at{isbn}, \at{publisher}; \at{year} $\geq$ 1984)
 }
 \end{footnotesize}
 
@@ -90,17 +90,12 @@ $\rho_3'$: \at{paper}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type} = 'inp
 \end{footnotesize}
 
 
-\stitle{Implementation}. All the experiments were run within an SQL Server 2012 database installed on a machine with an Intel Core i5 (3.1GHz) CPU and 8GB of RAM. Each test was repeated 5 times, and the average is reported here.
+\stitle{Implementation}. All the experiments were run with an SQL Server 2012 database installed on a machine with an Intel Core i5 (3.1GHz) CPU and 8GB of RAM. Each test was repeated 5 times, and the average is reported here.
 
 \subsection{Experimental Results}
-We varied three parameters of the data in our experiments, denoted by $|I_1|$, $|I_2|$ and $noise\%$. $|I_1|$ is the number of tuples in the table \at{hos} of HOSP (resp. table \at{paper} of DBLP). Similarly, $|I_2|$ is the number of the table \at{sta} of HOSP (resp. table \at{proceeding} of DBLP). $noise\%$ is the percentage of dirty tuples in table \at{hos} of HOSP (resp. table \at{paper} of DBLP) that were modified to violate a \pCFD or \pCIND, ranging from 0\% to 9\%. For each dirty tuple $t$, an attribute of $t$ in $Y$ of a \pCFD or $X \cup Y_p$ of a \pCIND was changed from a correct to incorrect value. We kept a copy of clean data before adding any noise to tell whether a tuple detected by \pCFDs or \pCINDs is a true or false dirty tuple.
-
-We next present our findings.
-
-\stitle{Exp-1: Efficiency}. In this sets of experiments, we evaluated the efficiency of detecting violations of \pCFDs, \pCINDs and both \pCFDs and \pCINDs by comparing the running time with their \CFDs and \CINDs counterparts, respectively.
 
 %Efficiency of detecting CFDP violations
-\begin{figure*}
+\begin{figure*}[tb!]
   \centering
   \subfigure[Varying $|I_{1}|$ for HOSP]{\epsfig{file=exp-fig/11a.eps}}  %, height=1.5in, width=1.5in}}
   \quad
@@ -112,14 +107,8 @@ We next present our findings.
   \caption{Efficiency of detecting \pCFD violations}\label{fig_exp1_cfdp}
 \end{figure*}
 
-\noindent Figure~\ref{fig_exp1_cfdp}(a): Fixing $noise\% = 9\%$, we varied $|I_1|$ from 10K to 90K.    \\
-Figure~\ref{fig_exp1_cfdp}(b): Fixing $|I_1|=90K$, we varied $noise\%$ from 0\% to 9\%.\\
-Figure~\ref{fig_exp1_cfdp}(c): Fixing $noise\% = 9\%$, we varied $|I_1|$ from 100K to 900K.  \\
-Figure~\ref{fig_exp1_cfdp}(d): Fixing $|I_1|=900K$, we varied $noise\%$ from 0\% to 9\%.  \\
-
-
 %Efficiency of detecting CINDP violations
-\begin{figure*}
+\begin{figure*}[tb!]
   \centering
   \subfigure[Varying $|I_{1}|$ for HOSP]{\epsfig{file=exp-fig/12a.eps}}
   \quad
@@ -135,16 +124,8 @@ Figure~\ref{fig_exp1_cfdp}(d): Fixing $|I_1|=900K$, we varied $noise\%$ from 0\%
   \caption{Efficiency of detecting \pCIND violations}\label{fig_exp1_cindp}
 \end{figure*}
 
-\noindent Figure~\ref{fig_exp1_cindp}(a): Fixing $noise\% = 9\%$ and $|I_2| = 1.6K$, we varied $|I_1|$ from 10K to 90K. \\
-Figure~\ref{fig_exp1_cindp}(b): Fixing $noise\% = 9\%$ and $|I_1| = 90K$, we varied $|I_2|$ from 1K to 1.6K.\\
-Figure~\ref{fig_exp1_cindp}(c): Fixing $|I_1| = 90K$ and $|I_2| = 1.6K$, we varied $noise\%$ from 0\% to 9\%.\\
-Figure~\ref{fig_exp1_cindp}(d): Fixing $noise\% = 9\%$ and $|I_2| = 16K$, we varied $|I_1|$ from 100K to 900K.\\
-Figure~\ref{fig_exp1_cindp}(e): Fixing $noise\% = 9\%$ and $|I_1| = 900K$, we varied $|I_2|$ from 10K to 16K.\\
-Figure~\ref{fig_exp1_cindp}(f): Fixing $|I_1| = 900K$ and $|I_2| = 16K$, we varied $noise\%$ from 0\% to 9\%.\\
-
-
 %Efficiency of detecting CFDP and CINDP violations
-\begin{figure*}
+\begin{figure*}[tb!]
   \centering
   \subfigure[Varying $|I_{1}|$ for HOSP]{\epsfig{file=exp-fig/13a.eps}}
   \quad
@@ -161,6 +142,41 @@ Figure~\ref{fig_exp1_cindp}(f): Fixing $|I_1| = 900K$ and $|I_2| = 16K$, we vari
   \caption{Efficiency of detecting \pCFD and \pCIND violations}\label{fig_exp1_both}
 \end{figure*}
 
+We next present our findings.
+%
+Three parameters were used in our tests:
+(1) $|I_1|$, the number of tuples in table \at{hcahps} of \hosp or \at{paper} of \dblp,
+(2) $|I_2|$, the number of tuples in table \at{hcahps}-\at{state} of \hosp or in \at{proceeding} of \dblp, and
+(3) $noise\%$, the percentage of dirty tuples in table \at{hcahps} of \hosp or  \at{paper} of \dblp, ranging from 0\% to 9\%.
+A clean copy of \hosp and \dblp is also kept to tell whether a detected tuple is dirty or not.
+
+
+
+
+
+\stitle{Exp-1: Efficiency}. In this sets of experiments, we evaluated the efficiency of detecting violations of \pCFDs, \pCINDs and both \pCFDs and \pCINDs by comparing the running time with their \CFDs and \CINDs counterparts, respectively.
+
+
+
+
+\noindent Figure~\ref{fig_exp1_cfdp}(a): Fixing $noise\% = 9\%$, we varied $|I_1|$ from 10K to 90K.    \\
+Figure~\ref{fig_exp1_cfdp}(b): Fixing $|I_1|=90K$, we varied $noise\%$ from 0\% to 9\%.\\
+Figure~\ref{fig_exp1_cfdp}(c): Fixing $noise\% = 9\%$, we varied $|I_1|$ from 100K to 900K.  \\
+Figure~\ref{fig_exp1_cfdp}(d): Fixing $|I_1|=900K$, we varied $noise\%$ from 0\% to 9\%.  \\
+
+
+
+
+\noindent Figure~\ref{fig_exp1_cindp}(a): Fixing $noise\% = 9\%$ and $|I_2| = 1.6K$, we varied $|I_1|$ from 10K to 90K. \\
+Figure~\ref{fig_exp1_cindp}(b): Fixing $noise\% = 9\%$ and $|I_1| = 90K$, we varied $|I_2|$ from 1K to 1.6K.\\
+Figure~\ref{fig_exp1_cindp}(c): Fixing $|I_1| = 90K$ and $|I_2| = 1.6K$, we varied $noise\%$ from 0\% to 9\%.\\
+Figure~\ref{fig_exp1_cindp}(d): Fixing $noise\% = 9\%$ and $|I_2| = 16K$, we varied $|I_1|$ from 100K to 900K.\\
+Figure~\ref{fig_exp1_cindp}(e): Fixing $noise\% = 9\%$ and $|I_1| = 900K$, we varied $|I_2|$ from 10K to 16K.\\
+Figure~\ref{fig_exp1_cindp}(f): Fixing $|I_1| = 900K$ and $|I_2| = 16K$, we varied $noise\%$ from 0\% to 9\%.\\
+
+
+
+
 
 \noindent Figure~\ref{fig_exp1_both}(a): Fixing $noise\% = 9\%$ and $|I_2| = 1.6K$, we varied $|I_1|$ from 10K to 90K.\\
 Figure~\ref{fig_exp1_both}(b): Fixing $noise\% = 9\%$ and $|I_1| = 90K$, we varied $|I_2|$ from 1K to 1.6K.\\
@@ -174,8 +190,12 @@ Figure~\ref{fig_exp1_both}(f): Fixing $|I_1| = 900K$ and $|I_2| = 16K$, we varie
 
 \stitle{Exp-2: Effectiveness}. In this set of experiments, we verified the effectiveness of our method by comparing the number of true dirty tuples detected by \pCFDs, \pCINDs and both \pCFDs and \pCINDs with their \CFDs and \CINDs counterparts, respectively. Note that changing $|I_{2}|$ might generate more dirty tuples and make it difficulty to distinguish the true dirty tuples and the false dirty tuples. Hence, we do not report its result in this effectiveness study.
 
+
+For each dirty tuple $t$, an attribute of $t$ in $Y$ of a \pCFD or $X \cup Y_p$ of a \pCIND was changed from a correct to incorrect value.
+
+
 %Effectiveness of detecting CFDP violations
-\begin{figure*}
+\begin{figure*}[tb!]
   \centering
   % Requires \usepackage{graphicx}
   \centering
@@ -196,7 +216,7 @@ Figure~\ref{fig_exp2_cfdp}(d): Fixing $|I_1|=900K$, we varied $noise\%$ from 0\%
 
 
 %Effectiveness of detecting CINDP violations
-\begin{figure*}
+\begin{figure*}[tb!]
   \centering
   % Requires \usepackage{graphicx}
   \centering
@@ -218,7 +238,7 @@ Figure~\ref{fig_exp2_cindp}(d): Fixing $|I_1| = 900K$ and $|I_2| = 16K$, we vari
 
 
 %Effectiveness of detecting CFDP and CINDP violations
-\begin{figure*}
+\begin{figure*}[tb!]
   \centering
   % Requires \usepackage{graphicx}
   \subfigure[Varying $|I_{1}|$ for HOSP]{\epsfig{file=exp-fig/23a.eps}}  %, height=1.5in, width=1.5in}}
