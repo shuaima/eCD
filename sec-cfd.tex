@@ -1,52 +1,15 @@
 %\vspace{-0.5ex}
 %\section{Incorporating Built-in Predicates into CFDs}
+
+
 \section{Extending CFDs with Predicates}
 \label{sec-cfd}
 %\vspace{-1ex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure*}[tb!]
-%\vspace{-1ex}
-\begin{center}
-(1)~$\varphi_1$ = \at{tax}(\at{state} $\ra$ \at{rate},
-$T_{1}$) \hspace{5ex} (2)~$\varphi_2$ = \at{item}(\at{sale}
-$\ra$ \at{shipping}, $T_{2}$)\\
-\begin{tabular}{cc||c}
-&\at{state} & \at{rate}\\
-\cline{2-3} $T_1$: \ \ \ &\_& \_
-\end{tabular}
-\hspace{30ex}
-\begin{tabular}{cc||c}
-&\at{sale} & \at{shipping}\\
-\cline{2-3} $T_2$: \ \ \  &= T &  = 0
-\end{tabular}
-\end{center}
-\vspace{-0ex}
-
-\begin{center}
-(3)~$\varphi_3$ = \at{item}(\at{sale}, \at{price} $\ra$ \at{shipping},
-$T_{3}$) \hspace{2ex} (4)~\pCFD $\varphi_4$ =
-\at{item}(\at{sale} $\ra$ \at{price}, $T_{4}$)\\
-\begin{tabular}{c c | c||c}
-& \at{sale} & \at{price} & \at{shipping}\\
-\cline{2-4}
-& $=$ F &$>$ 20 & = 6   \\
-$T_3$: \ \ \ & $=$ F &$\le$  40 & = 6
-\end{tabular}
-\hspace{20ex}
-\begin{tabular}{cc||c}
-&\at{sale} & \at{price}\\
-\cline{2-3}
- &$=$ T &\ $\ge$ 2.99 \\
- $T_4$: \ \ \ & $=$ T &\ $<$ 9.99
-\end{tabular}
-\end{center}
-\vspace{-1ex} \caption{Example \pCFDs} \label{fig-pcfd}
-\vspace{-3ex}
-\end{figure*}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-We now define {\em conditional functional dependencies with predicates}, denoted by \pCFDs, 
+
+We now define {\em conditional functional dependencies with predicates}, denoted by \pCFDs,
 by extending \CFDs~\cite{CFDs} with built-in
 predicates ($\ne$, $<$, $\le$, $>$, $\ge$) in addition to equality ($=$).
 
@@ -137,6 +100,32 @@ An instance $I$ of $R$ satisfies a set $\Sigma$ of \pCFDs,
 denoted by $I\models\Sigma$, if $I\models\varphi$ for {\em each}
 \pCFD $\varphi$ in $\Sigma$.
 
+
+%%%%%%%%%%%%%%%%%%%%%pCIND exmaple%%%%%%%%%%%%
+\begin{figure*}[tbh!]
+%\vspace{-1ex}
+\begin{center}
+(1) $\psi_1$ = (\at{item}\lbrack\at{state}; $\at{type}\rbrack$
+$\subseteq$ \at{tax}\lbrack\at{state}; $\NIL\rbrack$, \ $T_{1}$), \\
+\sstab (2) $\psi_2$ = (\at{item}\lbrack\at{state}; $\at{type,
+state}\rbrack$ $\subseteq$ \at{tax}\lbrack\at{state};
+$\at{rate}\rbrack$, \ $T_{2}$)\\ \sstab $T_1$: \begin{tabular}{c||c}
+\at{type} &  \kw{ nil} \\ \hline
+ $\ne$ art  &  \\
+\end{tabular}
+\hspace{10ex}
+$T_2$:
+\begin{tabular}{c | c || c}
+\at{type} & \at{state} & \at{rate} \\ \hline
+ $\ne$ art  & $=$ DL & $=$ 0 \\
+\end{tabular}
+\end{center}
+\vspace{-2ex} \caption{Example \pCINDs} \label{fig-pcind}
+\vspace{-3ex}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 \vspace{-1ex}
 \begin{example}
 The instance $D_0$ of
@@ -156,6 +145,11 @@ to violate a standard \FD, a single tuple may violate a
 \pCFD.
 \end{example}
 \vspace{-1.5ex}
+
+
+
+
+
 
 \stitle{Special cases.}~(1) A standard \FD $X\ra Y$~\cite{AbHuVi1995} can
 be expressed as a \CFD $(X\ra Y,\ T_p)$ in which $T_p$ contains a

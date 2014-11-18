@@ -269,8 +269,8 @@ within the immediate reach of commercial \rdms.
 
 
 \sstab
-\noindent(4) Using both real-life data (Amazon and YouTube) and synthetic data, we finally conduct
-an extensive experimental study (Section \ref{sec-exp}). We show that...
+\noindent(4) Using real-life data (\hosp and \dblp), we finally conduct
+an extensive experimental study (Section \ref{sec-exp}). We show that (a) the running time of \pCFDs and \pCINDs is comparable to their \CFDs and \CINDs counterparts, which is consistent with the static analyses in Section~\ref{sec-reasoning}, and (b) \pCFDs and \pCINDs are able to capture more errors (22\% on \hosp and  75\% on \dblp) than their \CFDs and \CINDs counterparts, due to their increased expressive power.
 
 
 
@@ -280,6 +280,47 @@ implication analyses of \pCFDs and \pCINDs, separately and taken together (Secti
 (b) an experimental study \pCFDs and \pCINDs (Section~\ref{sec-exp}), which was not investigated in~\cite{dexaChenFM09}.
 
 
+%%%%%%%%%%%%%%%%%%pCFD example
+\begin{figure*}[tb!]
+%\vspace{-1ex}
+\begin{center}
+(1)~$\varphi_1$ = \at{tax}(\at{state} $\ra$ \at{rate},
+$T_{1}$) \hspace{5ex} (2)~$\varphi_2$ = \at{item}(\at{sale}
+$\ra$ \at{shipping}, $T_{2}$)\\
+\begin{tabular}{cc||c}
+&\at{state} & \at{rate}\\
+\cline{2-3} $T_1$: \ \ \ &\_& \_
+\end{tabular}
+\hspace{30ex}
+\begin{tabular}{cc||c}
+&\at{sale} & \at{shipping}\\
+\cline{2-3} $T_2$: \ \ \  &= T &  = 0
+\end{tabular}
+\end{center}
+\vspace{-0ex}
+
+\begin{center}
+(3)~$\varphi_3$ = \at{item}(\at{sale}, \at{price} $\ra$ \at{shipping},
+$T_{3}$) \hspace{2ex} (4)~\pCFD $\varphi_4$ =
+\at{item}(\at{sale} $\ra$ \at{price}, $T_{4}$)\\
+\begin{tabular}{c c | c||c}
+& \at{sale} & \at{price} & \at{shipping}\\
+\cline{2-4}
+& $=$ F &$>$ 20 & = 6   \\
+$T_3$: \ \ \ & $=$ F &$\le$  40 & = 6
+\end{tabular}
+\hspace{20ex}
+\begin{tabular}{cc||c}
+&\at{sale} & \at{price}\\
+\cline{2-3}
+ &$=$ T &\ $\ge$ 2.99 \\
+ $T_4$: \ \ \ & $=$ T &\ $<$ 9.99
+\end{tabular}
+\end{center}
+\vspace{-1ex} \caption{Example \pCFDs} \label{fig-pcfd}
+\vspace{-3ex}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Constraint-based data cleaning was introduced in~\cite{leo99}, which
 proposed to use dependencies, \eg~\FDs, \INDs and denial
@@ -301,6 +342,10 @@ it is the first work to develop \SQL techniques for checking
 violations of \CINDs and violations of \pCFDs and \pCINDs taken
 together.
 
+
+
+
+
 Extensions of \CFDs have been proposed to support disjunction and
 negation~\cite{icde08}, cardinality constraints and synonym
 rules~\cite{ChenFM09}, and to specify patterns in terms of value
@@ -321,6 +366,8 @@ constraints~\cite{BertossiBFL08,ChomickiM05}, aggregate
 constraints~\cite{FlescaFP05}, matching dependencies~\cite{FanGJLM11-md}, matching dependencies and \CFDs~\cite{FanLMTY-interaction}, or editing rules and master data \cite{FanLMTY12-vldbj}. We defer the treatment of these topics for \pCFDs and \pCINDs to future work.
 
 
+
+
 A variety of extensions of \FDs and \INDs have been studied for
 specifying constraint databases and constraint logic
 programs~\cite{BCW99,BP83,Maher97,MS96}. While the languages
@@ -339,14 +386,3 @@ of this work provide lower bounds for the consistency and implication analyses
 of \CGDs, by using patterns with built-in predicates only.
 
 
-
-%\vspace{-0.5ex}
-\eat{
-\stitle{Organizations}. Sections~\ref{sec-cfd} and \ref{sec-cind}
-introduce \pCFDs and \pCINDs, respectively.
-Section~\ref{sec-reasoning} establishes complexity bounds for
-reasoning about \pCFDs and \pCINDs. Section~\ref{sec-detect}
-provides \SQL techniques for error detection. Related work is
-discussed in Section~\ref{sec-related}, followed by topics for
-future work in Section~\ref{sec-conclude}.
-}
