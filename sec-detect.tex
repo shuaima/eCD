@@ -58,13 +58,13 @@ these Theorem~\ref{thm-detect} follows immediately.
 
 We first show the following, by extending the encoding
 of~\cite{CFDs,icde08}.
-(a) The pattern tableaux
+The pattern tableaux
 of all \pCFDs in $\SCFD^i$ can be encoded with {\em three data tables},
 and
-(b) the pattern tableaux of all \pCINDs in $\SCIND^{(i,j)}$ can be
+ the pattern tableaux of all \pCINDs in $\SCIND^{(i,j)}$ can be
 represented as
 {\em four data tables}, no matter how many dependencies are
-in the sets and how large they are.
+in the sets. %and how large they are.
 
 %%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -256,7 +256,7 @@ Note that the number of attributes in \Enc{} is bounded by $|R_i| + |R_j|
 \eat{We populate these tables as follows.}
 
 For each \pCIND $\psi$ = $(R_i[A_1\ldots A_m;\ X_p]$ $\subseteq$
-$R_j[B_1\ldots B_m;\ Y_p],\ T_p)$ in $\SCIND^{(i,j)}$, we generate a
+$R_j[B_1\ldots B_m;$ $\ Y_p],\ T_p)$ in $\SCIND^{(i,j)}$, we generate a
 distinct \at{cid} $\kw{id}_\psi$ for it, and do the following.
 
 \vspace{-0.5ex}\bi
@@ -301,17 +301,18 @@ $D$ \wrt $\Sigma$.
 
 
 
-\stitle{SQL queries for CFD$^p$s}. We first present the generation of
-detection queries for \pCFDs, which is an extension of the
+\stitle{SQL queries for CFD$^p$s}.
+Below we first show how the \SQL queries $Q_{i}^c$ and $Q_{i}^v$ are generated for
+validating \pCFDs in $\SCFD^i$, which is an extension of the
 \SQL techniques for \CFDs and \eCFDs discussed in~\cite{CFDs} and ~\cite{icde08}, respectively.
 
 %%%%%%%%% DL 2014-08-09
-The queries for the violations of $\SCFD^i$ are given as follows, which capitalize on the data table \Enc{L}, \Enc{R} and \Enc{\ne} that encode \pCFDs in $\SCFD^i$.
+The queries $Q_{i}^c$ and $Q_{i}^v$ for the violations of $\SCFD^i$ are given as follows, which capitalize on the data table \Enc{L}, \Enc{R} and \Enc{\ne} that encode \pCFDs in $\SCFD^i$.
 
 \begin{footnotesize}\mat{0ex}{
 $Q^C$ \= \bd{select} \=  $R_i.*$ \bd{from} $R_i$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$ \\
-\>  \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and} $R_i.X\asymp L$ \bd{and} $R_i.X\asymp N$ \\
-\> \> \bd{and not} ($R_i.Y\asymp R$ \bd{and} $R_i.Y\asymp N$)}
+\>  \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and} $L.\at{cid}=N.\at{cid}$ \bd{and}  $R_i.X\asymp L$ \bd{and} \\
+\> \> $R_i.X\asymp N$  \bd{and not} ($R_i.Y\asymp R$ \bd{and} $R_i.Y\asymp N$)}
 \end{footnotesize}
 
 \begin{footnotesize}\mat{0ex}{
@@ -319,12 +320,12 @@ $Q^V$ \= \bd{select} \= \bd{distinct } \= $X$ \bd{from ( select} $L.\at{cid}$, \
 \>  (\bd{case when} $L.X_j$ \bd{is null then null} \bd{else} $R_i.X_j$ \bd{end}) \bd{as} $X_j$\bd{...} \\
 \>  (\bd{case when} $R.Y_k$ \bd{is null then null} \bd{else} $R_i.Y_k$ \bd{end}) \bd{as} $Y_k$\bd{...}\\
 \>\> \bd{from} $R_i$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$ \\
-\>\> \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and} $R_i.X\asymp L$ \bd{and} $R_i.X\asymp N$ \\
-\>\>\> \bd{and} ($R.Y_1='\_'$ \bd{or} $R.Y_2='\_'$ \bd{or ...} )) $M$\\
+\>\> \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and} $L.\at{cid}=N.\at{cid}$ \bd{and} $R_i.X\asymp L$ \bd{and} \\
+\>\>\> $R_i.X\asymp N$ \bd{and} ($R.Y_1='\_'$ \bd{or} $R.Y_2='\_'$ \bd{or ...} )) $M$\\
 \>\>\> \bd{group by} $X$, \at{cid} \bd{having count} (\bd{distinct} $Y$)$>1$}
 \end{footnotesize}
 
-\noindent Here (1) $X$ and $Y$ are the sets of attributes in \LHS and \RHS of $\SCFD^i$ respectively; (2) $R_i.X\asymp L$ is shorthand for the conjunction of
+\noindent Here (1) $X$ and $Y$ are the sets of attributes in \LHS and \RHS of $\SCFD^i$ respectively; (2) $R_i.X\asymp L$ is the conjunction of
 
 \begin{footnotesize}\mat{0ex}{
 $L.A_k$ \= \bd{is null or} $R_i.A_k$ = $L.A_k$ \bd{or} ($L.A_k$ = '\_'\\
@@ -410,8 +411,8 @@ $Q^V$\= \bd{select} \= \bd{distinct} \= \at{sale_x}, \at{price_x} \bd{from} ( \b
 
 \stitle{SQL queries for CIND$^p$s}. Below we show how the \SQL query $Q_{(i,j)}$ is generated for
 validating \pCINDs in $\SCIND^{(i,j)})$. %, which has not been studied by previous work.
-For the lack of space, we omit the generation of detection queries for \pCFDs, which is an extension of
-the \SQL techniques for \CFDs discussed in~\cite{CFDs,icde08}.
+%For the lack of space, we omit the generation of detection queries for \pCFDs, which is an extension of
+%the \SQL techniques for \CFDs discussed in~\cite{CFDs,icde08}.
 
 
 
