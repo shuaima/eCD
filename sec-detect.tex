@@ -299,15 +299,132 @@ of $D$, returns $\kw{vio}(D, \SCIND^{(i,j)})$. Putting these query
 answers together, we get $\kw{vio}(D, \Sigma)$, the violation set of
 $D$ \wrt $\Sigma$.
 
-
-
 \stitle{SQL queries for CFD$^p$s}.
 Below we first show how the \SQL queries $Q_{i}^c$ and $Q_{i}^v$ are generated for
 validating \pCFDs in $\SCFD^i$, which is an extension of the
 \SQL techniques for \CFDs and \eCFDs discussed in~\cite{CFDs} and ~\cite{icde08}, respectively.
 
-%%%%%%%%% DL 2014-08-09
 The queries $Q_{i}^c$ and $Q_{i}^v$ for the violations of $\SCFD^i$ are given as follows, which capitalize on the data table \Enc{L}, \Enc{R} and \Enc{\ne} that encode \pCFDs in $\SCFD^i$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% begin duan 2014-11-18
+\begin{footnotesize}\mat{0ex}{
+$Q_{i}^c$: \= \bd{select} \=  $R_i.*$ \bd{from} \= $R_i$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$  \\
+\>  \bd{where} \=  $L.\at{cid}=R.\at{cid}$ \bd{and}  $R_i.X\asymp L$ \bd{and} $R_i.X\asymp N$ \bd{and}\\
+\> \> \bd{not} ($R_i.Y\asymp R$ \bd{and} $R_i.Y\asymp N$)}
+\end{footnotesize}
+
+\begin{footnotesize}\mat{0ex}{
+$Q_{j}^v$: \= \bd{select} \= \bd{distinct } \= $X_{L}$ \\
+\>  \bd{from} (\=\bd{select} \= $L.\at{cid}$ \bd{as} \at{cid}, $X_{L}$, $Y_{R}$ \bd{from} $R_i$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$ \\
+\>\> \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and} $R_i.X\asymp L$ \bd{and} \\
+\>\>\> $R_i.X\asymp N$ \bd{and} $R.Y='\_'$ ) \bd{as} $M$\\
+\>\>\bd{group by} \at{cid}, $X_{L}$ \bd{having count} (\bd{distinct} $Y_{R}$)$>1$}
+\end{footnotesize}
+
+\noindent Here (1) $X = \{\at{A_1,\dots, A_{m1}}\}$ and $Y = \{\at{B_1,\dots, B_{m2}}\}$ are the sets of attributes in \LHS and \RHS of $\SCFD^i$ respectively; (2) $R_i.X\asymp L$ is the conjunction of
+
+\begin{footnotesize}\mat{0ex}{
+$L.A_j$ \= \bd{is null or} $R_i.A_j$ = $L.A_j$ \bd{or} ($L.A_j$ = `\_'\\
+\> \bd{and} ($L.A_{j_{>}}$ \bd{is null or} $R_i.A_j$ $>$ $L.A_{j_{>}}$)\\
+\>  \bd{and} ($L.A_{j_{\ge}}$ \bd{is null or} $R_i.A_j$ $\ge$ $L.A_{j_{\ge}}$)\\
+\> \bd{and} ($L.A_{j_{<}}$ \bd{is null or} $R_i.A_j$ $<$ $L.A_{j_{<}}$)\\
+\> \bd{and} ($L.A_{j_{\le}}$ \bd{is null or} $R_i.A_j$ $\le$ $L.A_{j_{\le}}$))
+}
+\end{footnotesize}
+
+\noindent for $j\in[1, m_1]$; (3) $R_i.Y\asymp R$ is defined similarly for attributes in $Y$; (4) $R_i.X\asymp N$ is the conjunction of
+
+\begin{footnotesize}\mat{1ex}{
+\bd{not exists}
+(\=\bd{select} $*$ \bd{from} $N$ \\
+\>\bd{where} \= $L.\at{cid}$ = $N.\at{cid}$ \bd{and} $N.\at{pos}$ = `\LHS' \bd{and}\\
+\>\>  $N.\at{att}$ = `$A_j$' \bd{and}
+ $R_i.A_j$ = $N.\at{val}$);
+}
+\end{footnotesize}
+
+\noindent for $j\in[1, m_1]$; (5) $R_i.Y\asymp N$ is defined similarly, but with $N.\at{pos}='\RHS'$; (6) $X_{L}$ is the set of following attributes
+
+\begin{footnotesize}\mat{3ex}{
+(\bd{case when} $L.A_j$ \bd{is not null then} $R_i.A_j$ \bd{end}) \bd{as} ${A_L}_j$
+}
+\end{footnotesize}
+\noindent for $j \in [1, m_1]$; (7) Similarly, $Y_{R}$ is the set of
+\begin{footnotesize}\mat{3ex}{
+(\bd{case when} $R.B_k$ \bd{is not null then } $R_i.B_k$ \bd{end}) \bd{as} ${B_R}_k$
+}
+\end{footnotesize}
+\noindent for $k \in [1, m_2]$; (8) $R.Y$ = `\_' is the disjunction of $R.B_k$ = `\_' for  $k \in [1, m_2]$.
+
+Intuitively, detecting violations of \pCFDs is a two-step process. First, query $Q_{i}^{c}$ detects single-tuple violations, \ie the tuples $t$ in $I_{i}$ that match the \LHS of a \pCFD in $\SCFD^i$, but do not match its \RHS. Second, query $Q_{i}^{v}$ finds multi-tuple violations, \ie the tuples $t$ in $I_{i}$ such that (a) there exists another tuple $t'$ in $I_{i}$, $t$ and $t'$ match and agree on the \LHS of a \pCFD in $\SCFD^i$, but do not agree on the \RHS of the \pCFD.
+
+%For each \CFD, query $Q_{i}^{v}$ uses the \bd{group by} clause to group tuples with the same value on $X$ and it counts the number of distinct $Y$. If there is more than one instantiation, then there is a violation.
+
+\begin{example}\label{exa-cfd-query} Using the coding of Fig.~\ref{fig-pcfd-encoding}, two SQL queries for checking \pCFDs $\varphi_2$, $\varphi_3$ and $\varphi_4$ of Fig.~\ref{fig-pcfd} are given as follows:
+
+\begin{footnotesize}\mat{0ex}{
+$Q_{1}^{c}$: \= \bd{select} \=  $R_1.*$ \= \bd{from}  \at{item} $R_1$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$\\
+ \> \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and} \\
+
+ \> \> ($L.\at{sale}$ \bd{is null or} $R_1.\at{sale}=L.\at{sale}$ \bd{or} $L.\at{sale}='\_'$ ) \bd{and} \\
+ \> \> \bd{not exists} (\bd{select * from} $N$\\
+ \> \> \> \bd{where} $N.\at{cid}=L.\at{cid}$ \bd{and} $N.\at{pos}='\LHS'$ \bd{and} \\
+ \> \> \> $N.\at{att}='sale'$ \bd{and} $R_{1}.\at{sale}=N.\at{val}$ ) \bd{and} \\
+
+ \> \> ($L.\at{price}$ \bd{is null or} $R_1.\at{price}=L.\at{price}$ \bd{or} ( $L.\at{price}='\_'$ \bd{and} \\
+ \> \> ($L.\at{price_>}$ \bd{is null or} $R_1.\at{price}>L.\at{price_>}$ ) \bd{and}\\
+ \> \> ($L.\at{price_\leq}$ \bd{is null or} $R_1.\at{price}\leq L.\at{price_\leq}$ ))) \bd{and} \\
+ \> \> \bd{not exists} ( \bd{select * from} $N$ \\
+ \>\>\> \bd{where} $N.\at{cid}=L.\at{cid}$ \bd{and} $N.\at{pos}='\LHS'$ \bd{and} \\
+ \> \> \> $N.\at{att}='price'$ \bd{and} $R_{1}.\at{price}=N.\at{val}$) \bd{and}\\
+
+ \> \> \bd{not} (( $R.\at{shipping}$ \bd{is null or} $R_1.\at{shipping}=R.\at{shipping}$ \bd{or}\\
+ \> \> $R.\at{shipping}='\_'$ ) \bd{and} \\
+ \> \>  \bd{not exists} ( \bd{select * from} $N$  \\
+ \> \> \> \bd{where} $N.\at{cid}=R.\at{cid}$ \bd{and} $N.\at{pos}='\RHS'$ \bd{and} \\
+ \> \> \> $N.\at{att}='shipping'$ \bd{and} $R_{1}.\at{shipping}=N.\at{val}$) \bd{and} \\
+
+ \> \> ($R.\at{price}$ \bd{is null or} $R_1.\at{price}=R.\at{price}$ \bd{or} ( $R.\at{price}='\_'$ \bd{and}\\
+ \> \> ($R.\at{price_\geq}$ \bd{is null or} $R_1.\at{price}\geq R.\at{price_\geq}$ ) \bd{and}   \\
+ \> \> ($R.\at{price_<}$ \bd{is null or} $R_1.\at{price}<R.\at{price_<}$ ))) \bd{and}   \\
+ \> \> \bd{not exists} ( \bd{select * from} $N$  \\
+ \> \> \> \bd{where} $N.\at{cid}=R.\at{cid}$ \bd{and} $N.\at{pos}='\RHS'$ \bd{and} \\
+ \> \> \> $N.\at{att}='price'$ \bd{and} $R_{1}.\at{price}=N.\at{val}$ )) }
+\end{footnotesize}
+
+\begin{footnotesize}\mat{0ex}{
+$Q_{1}^{v}$: \= \bd{select} \= \bd{distinct} \= \at{sale_L}, \=\at{price_L} \bd{from} ( \\
+ \> \bd{select} $L.\at{cid}$ \bd{as} \at{cid} , \\
+ \> (\bd{case when} $L.\at{sale}$ \bd{is not null then} $R_1.\at{sale}$ \bd{end}) \bd{as} \at{sale_L},\\
+ \> (\bd{case when} $L.\at{price}$ \bd{is not null then} $R_1.\at{price}$ \bd{end}) \bd{as} \at{price_L},\\
+ \> (\bd{case when} $R.\at{shipping}$ \bd{is not null then} $R_1.\at{shipping}$ \bd{end}) \bd{as} \at{shipping_R},  \\
+ \> (\bd{case when} $R.\at{price}$ \bd{is  not null then} $R_1.\at{price}$ \bd{end}) \bd{as} \at{price_R}  \\
+ \> \bd{from} \at{item} $R_1$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$ \\
+ \>\> \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and} \\
+
+ \>\> ($L.\at{sale}$ \bd{is null or} $R_1.\at{sale}=L.\at{sale}$ \bd{or} $L.\at{sale}='\_'$) \bd{and}\\
+ \> \> \bd{not exists} ( \bd{select * from} $N$\\
+ \> \> \>  \bd{where} $N.\at{cid}=L.\at{cid}$ \bd{and} $N.\at{pos}='\LHS'$ \bd{and} \\
+ \> \> \>  $N.\at{att}='sale'$ \bd{and} $R_{1}.\at{sale}=N.\at{val}$) \bd{and} \\
+
+ \>\>  ($L.\at{price}$ \bd{is null or} $R_1.\at{price}=L.\at{price}$ \bd{or} ($L.\at{price}='\_'$ \bd{and} \\
+ \> \> ($L.\at{price_>}$ \bd{is null or} $R_1.\at{price}>L.\at{price_>}$) \bd{and}   \\
+ \> \> ($L.\at{price_\leq}$ \bd{is null or} $R_1.\at{price}\leq L.\at{price_\leq}$))) \bd{and} \\
+ \> \>  \bd{not exists} (\bd{select * from} $N$ \\
+ \>\>\>  \bd{where} $N.\at{cid}=L.\at{cid}$ \bd{and} $N.\at{pos}='\LHS'$ \bd{and} \\
+ \> \> \>  $N.\at{att}='price'$ \bd{and} $R_{1}.\at{price}=N.\at{val}$) \bd{and}\\
+
+ \> \> ($R.\at{shipping}='\_'$\bd{or} $R.\at{price}='\_'$ )) \bd{as} $M$ \\
+ \>  \bd{group by} \at{cid}, $\at{sale_L}, \at{price_L}$ \\
+ \>  \bd{having count} (\bd{distinct} $\at{shipping_R}, \at{price_R}$)$>1$ }
+\end{footnotesize}
+\end{example}
+
+
+\eat{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% end duan 2014-11-18
+
+
 
 \begin{footnotesize}\mat{0ex}{
 $Q^C$ \= \bd{select} \=  $R_i.*$ \bd{from} $R_i$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$ \\
@@ -406,7 +523,7 @@ $Q^V$\= \bd{select} \= \bd{distinct} \= \at{sale_x}, \at{price_x} \bd{from} ( \b
 \end{example}
 
 
-%%%%%%%% DL
+}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \stitle{SQL queries for CIND$^p$s}. Below we show how the \SQL query $Q_{(i,j)}$ is generated for
@@ -424,11 +541,9 @@ $\SCIND^{(i,j)}$.
 
 
 \begin{footnotesize}\mat{3ex}{
-\= \=\bd{select} \=  $R_i.*$ \\
-\> \>\bd{from} $R_i$, \Enc{L} $L$, \Enc{\ne} $N$ \\
+\= \=\bd{select} \=  $R_i.*$ \bd{from} $R_i$, \Enc{L} $L$, \Enc{\ne} $N$ \\
 \>\> \bd{where}  $R_i.X\asymp L$ \bd{and} $R_i.X\asymp N$ \bd{and not exists} (\\
-\>\>\> \bd{select} $R_j.*$ \\
-\> \>\> \bd{from} $R_j$, \Enc{} $H$, \Enc{R} $R$, \Enc{\ne} $N$ \\
+\>\>\> \bd{select} $R_j.*$ \bd{from} $R_j$, \Enc{} $H$, \Enc{R} $R$, \Enc{\ne} $N$ \\
 \>\>\> \bd{where} \= $R_i.X = R_j.Y$ \bd{and} $L$.\at{cid} =
 $R$.\at{cid}  \bd{and} \\
 \>\>\>\>  $L$.\at{cid} = $H$.\at{cid} \bd{and} $R_j.Y\asymp R$ \bd{and} $R_j.Y\asymp N$) }
