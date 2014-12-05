@@ -12,7 +12,7 @@ We next present an extensive experimental study of \pCFDs and \pCINDs. Using rea
 %\vspace{-0.5ex}
 We first present our experimental settings.
 
-\stitle{Datasets}. We used two real-life datasets that were stored in an SQL Server 2012 database.
+\stitle{Datasets}. We used two real-life datasets that were stored in an \SQL Server 2012 database.
 
 \ni(1) \hosp (Hospital Compare) is a database publicly available from U.S. Department of Health %\at{HCAHPS} and \at{HCAHPS}-\at{State}
 \& Human Services~\cite{hosp}. We used two tables \at{hcahps} and \at{hcahps}-\at{state}, which record the hospital level and state level ratings of the Hospital Consumer Assessment of Healthcare Providers and Systems (HCAHPS), respectively.
@@ -44,7 +44,7 @@ $\varphi_1$-$\varphi_4 $ and $\psi_1 $-$\psi_2 $ are indeed \CFDs and \CINDs, re
 We hence further designed $\varphi_5'$, $\varphi_6'$ and $\psi_3'$ to approximate $\varphi_5$, $\varphi_6$ and $\psi_3$, respectively.
 
 \begin{footnotesize}\mat{0ex}{
-$\varphi_5'$: \=\at{hcahps}(\at{hid} = `\_' \And \at{mncs} = `\_' $\rightarrow$ \at{mfn} = `\_') \\
+$\varphi_5'$: \=\at{hcahps}(\at{hid} = `\_' \And \at{mncs} = `Not Available' $\rightarrow$ \at{mfn} = `\_') \\
 $\varphi_6'$: \at{hcahps}(\at{hid} = `\_' \And \at{mid} = `\_' \And \at{mncs} = `\_' $\rightarrow$ \at{map} = `\_') \\
 $\psi_3'$: \at{hcahps}(\at{mid}, \at{state}; \at{mncs} = `\_') $\subseteq$ \at{hcahps}-\at{state}(\at{mid}, \at{state}; \at{map} = `\_')
 }
@@ -61,7 +61,7 @@ We generated 3482 \pCFDs and 2568 \pCINDs for the DBLP data, with their represen
 $\phi_1$:  \= \at{paper}(\at{isbn} = '\_' \And \at{booktitle} = '\_' $\rightarrow$ \at{publisher} = '\_') \\
 $\phi_2$: \at{paper}(\at{title} = '\_' \And \at{year} = '\_' \And \at{booktitle} = '\_' $\rightarrow$ \at{type} = '\_')  \\
 $\phi_3$: \at{paper}(\at{booktitle} = 'CleanDB' $\rightarrow$ \at{year} = 2006) \\
-$\phi_4$: \at{paper}(\at{booktitle} = 'VLDB' \And \at{year_L} = '\_' $\rightarrow$ \at{year_R} $\geq$ 1975 \\
+$\phi_4$: \at{paper}(\at{booktitle} = 'VLDB' \And \at{year_L} = '\_' $\rightarrow$ \at{year_R} $\geq$ 1975 \And\\
 \> \at{year_R}  $\leq$ 2007) \\
 $\phi_5$: \at{paper}(\at{booktitle} = 'PVLDB' \And \at{year_L} = '\_' $\rightarrow$ \at{year_R} $\geq$ 2008) \\
 $\rho_1$: \at{paper}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type} = 'inproceedings' \And \\
@@ -88,7 +88,7 @@ $\rho_3'$: \at{paper}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type} = 'inp
 \end{footnotesize}
 
 
-\stitle{Implementation}. All the experiments were run within an SQL Server 2012 database installed on a machine with an Intel Core i5 (3.1GHz) CPU and 8GB of RAM. Each test was repeated 5 times, and the average is reported here.
+\stitle{Implementation}. All the experiments were run within an \SQL Server 2012 database installed on a machine with an Intel Core i5 (3.1GHz) CPU and 8GB of RAM. Each test was repeated 5 times, and the average is reported here.
 
 %Efficiency of detecting CFDP violations
 \begin{figure*}[tb!]
@@ -149,7 +149,7 @@ Three parameters were used in our tests:
 (2) $|I_2|$, the number of tuples in table \at{hcahps}-\at{state} of \hosp or \at{proceeding} of \dblp, and
 (3) $noise\%$, the percentage of dirty tuples in table \at{hcahps} of \hosp or  \at{paper} of \dblp, ranging from 0\% to 9\%.
 %To dirty a tuple $t$, an attribute of $t$ in $Y$ of a \pCFD $R(X\ra Y,\ T_p)$ or $X \cup Y_p$ of a \pCIND $(R_1[X;\ X_p] \subseteq R_2[Y;\ Y_p],\ T_p)$ was changed from a correct to incorrect value.
-For easy of comparison, we deliberately dirty the tuples in \at{hcahps} of \hosp or  \at{paper} of \dblp so that using the \pCFDs and \pCINDs togetehr can detect all the dirty tuples. A clean copy of \hosp and \dblp is also kept to tell whether a tuple is dirty or clean.
+For easy of comparison, we deliberately dirty the tuples in \at{hcahps} of \hosp or  \at{paper} of \dblp so that using the \pCFDs and \pCINDs together can detect all the dirty tuples. A clean copy of \hosp and \dblp is also kept to tell whether a tuple is dirty or clean.
 
 
 \vspace{-1ex}
@@ -168,7 +168,7 @@ The results tell us that for \CFDs and \pCFDs, both their running time (a) incre
 For instance, (a) the \LHS complexity of \CFDs $\varphi_5'$ and $\varphi_6'$ is higher than \pCFDs $\varphi_5$ and $\varphi_6$, as they match more $I_1$ tuples, but the \RHS complexity of \CFDs $\varphi_5'$ and $\varphi_6'$ is lower than \pCFDs $\varphi_5$ and $\varphi_6$, as they are easier to check violations; And
 (b) the \LHS complexity of \CFDs $\phi_4'$ and $\phi_5'$ is the same as  \pCFDs $\phi_4$ and $\phi_5$, but
  the \RHS complexity of \CFDs $\phi_4'$ and $\phi_5'$ is similar to \pCFDs $\phi_4$ and $\phi_5$, as they are easier to check violations.
-As a result, the running time of \CFDs is higher than \pCFDs on \hosp, but close to \pCFDs on \dblp.
+As a combined result, the running time of \CFDs is lower than \pCFDs on \hosp, but close to \pCFDs on \dblp.
 
 %Effectiveness of detecting CFDP violations
 \begin{figure*}[tb!]
@@ -247,7 +247,7 @@ For instance, (a) the \LHS complexity of \CIND $\psi_3'$ is higher than \pCFD $\
 the \RHS complexity of \CIND $\psi_3'$ is lower than \pCIND $\psi_3$, as they are easier to check violations; And
 (b) the \LHS complexity of \CINDs $\rho_2'$ and $\rho_3'$ is the same as  \pCFDs $\phi_4$ and $\phi_5$, but
  the \RHS complexity of \CINDs $\rho_2'$ and $\rho_3'$ is lower than \pCINDs $\rho_2$ and $\rho_3$, as they are easier to check violations.
-As a result, the running time of \CINDs is close to \pCFDs on \hosp, but is lower on \dblp.
+As a combined result, the running time of \CINDs is close to \pCFDs on \hosp, but is lower on \dblp.
 
 \stitle{Exp-1.3:  \pCFDs + \pCINDs vs. \CFDs + \CINDs}.
 Using the same setting as {Exp-1.2}, we evaluated the impacts of $|I_1|$, $|I_2|$ and $noise\%$. The results are reported in Figures~\ref{fig_exp1_both_hosp_I1} and \ref{fig_exp1_both_dblp_I1}, Figures~\ref{fig_exp1_both_hosp_I2} and \ref{fig_exp1_both_dblp_I2} and Figures~\ref{fig_exp1_both_hosp_noise} and \ref{fig_exp1_both_dblp_noise}, respectively. The results show similar findings to {Exp-1.1} and {Exp-1.2}, and are consistent with them.
