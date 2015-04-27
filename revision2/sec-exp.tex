@@ -1,0 +1,364 @@
+
+
+
+
+\section{Experimental Study}
+\label{sec-exp}
+%\vspace{-1ex}
+
+We next present an extensive experimental study of \pCFDs and \pCINDs. Using real-life data, we conducted two sets of experiments to evaluate the efficiency and effectiveness of \pCFDs and \pCINDs vs. their counterparts \CFDs and \CINDs, separately and taken together.
+
+\subsection{Experimental Settings}
+%\vspace{-0.5ex}
+We first present our experimental settings.
+
+\stitle{Datasets}. We used two real-life datasets that were stored in an \SQL Server 2012 database.
+
+\ni(1) \hosp (Hospital Compare) is a database publicly available from U.S. Department of Health %\at{HCAHPS} and \at{HCAHPS}-\at{State}
+\& Human Services~\cite{hosp}. We used two tables \at{hcahps} and \at{hcahps}-\at{state}, which record the hospital level and state level ratings of the Hospital Consumer Assessment of Healthcare Providers and Systems (HCAHPS), respectively.
+%
+For table \at{hcahps}, it records (a) the hospital information: \at{hid} (hospital ID), \at{hname} (hospital name), \at{addr} (address), \at{city}, \at{state}, \at{zip}, \at{county}, \at{phn} (phone number), and (b) the measure information: \at{mid} (measure ID), \at{mq} (question), \at{mad} (answer description), \at{map} (answer percentage), \at{mncs} (number of completed surveys), \at{msrrp} (survey response rate percentage), \at{mfn} (footnote).
+%
+And for table \at{hcahps}-\at{state}, it records state level measure information: \at{state}, \at{mid}, \at{mq} and \at{map}, among other things.
+
+
+We designed 6 \pCFDs and 3 \pCINDs for \hosp, shown below in an informal way for easy of understanding.
+
+\begin{footnotesize}\mat{-2ex}{
+$\varphi_1 $: \= \at{hcahps}(\at{zip} = `\_' \And \at{city} = `\_' $\rightarrow$ \at{state} = `\_') \\
+$\varphi_2 $: \at{hcahps}(\at{hid} = `\_' $\rightarrow$ \at{hname} = `\_' \And \at{county} = `\_' \And \at{addr} = `\_' \And \\
+\>  \at{phn}=  `\_') \\
+$\varphi_3 $: \at{hcahps}(\at{hid} = `\_' $\rightarrow$ \at{msrrp} = `\_') \\
+$\varphi_4 $: \at{hcahps}(\at{mid} = `\_' $\rightarrow$ \at{mq} = `\_' \And \at{mad} = '\_') \\
+$\varphi5 $: \at{hcahps}(\at{hid} = `\_' \And \at{mncs} = `Not Available' $\rightarrow$ \at{mfn} $\geq 1$ \And \at{mfn} $\leq 14$) \\
+$\varphi_6$: \at{hcahps}(\at{hid} = `\_' \And \at{mid} = `\_' \And \at{mncs} $\neq$ `Not Available' \And \\
+\> \at{mncs} $\neq$ `Fewer than 100' $\rightarrow$ \at{map} $\geq 0$ \And \at{map} $\leq 100$) \\
+$\psi_1$: \at{hcahps}(\at{mid}, \at{mq}; \at{nil}) $\subseteq$ \at{hcahps}-\at{state}(\at{mid}, \at{mq}; \at{nil}) \\
+$\psi_2$: \at{hcahps}(\at{mid}, \at{state}; \at{nil}) $\subseteq$ \at{hcahps}-\at{state}(\at{mid}, \at{state}; \at{nil}) \\
+$\psi_3$: \at{hcahps}(\at{mid}, \at{state}; \at{mncs}$\neq$ 'Not Available') $\subseteq$ \at{hcahps}-\at{state}(\at{mid}, \at{state}; \\
+\> \at{map} $\geq 0$ \And \at{map} $\leq 100$)}
+\end{footnotesize}
+
+For comparison, we also designed the \CFDs and \CINDs counterparts of the above \pCFDs and \pCINDs. Here
+$\varphi_1$-$\varphi_4 $ and $\psi_1 $-$\psi_2 $ are indeed \CFDs and \CINDs, respectively, while $\varphi_5$, $\varphi_6$ and $\psi_3$ are not.
+We hence further designed $\varphi_5'$, $\varphi_6'$ and $\psi_3'$ to approximate $\varphi_5$, $\varphi_6$ and $\psi_3$, respectively.
+
+\begin{footnotesize}\mat{0ex}{
+$\varphi_5'$: \=\at{hcahps}(\at{hid} = `\_' \And \at{mncs} = `Not Available' $\rightarrow$ \at{mfn} = `\_') \\
+$\varphi_6'$: \at{hcahps}(\at{hid} = `\_' \And \at{mid} = `\_' \And \at{mncs} = `\_' $\rightarrow$ \at{map} = `\_') \\
+$\psi_3'$: \at{hcahps}(\at{mid}, \at{state}; \at{mncs} = `\_') $\subseteq$ \at{hcahps}-\at{state}(\at{mid}, \at{state}; \at{map} = `\_')
+}
+\end{footnotesize}
+
+
+\ni(2) \dblp is a repository of computer science publications from 1946 to 2014~\cite{dblp}.
+ We further transformed its XML format into two tables  \at{paper} and \at{proceeding} that record the paper and proceeding information, respectively,
+such that \at{paper}(\at{key}, \at{type}, \at{title}, \at{booktitle}, \at{year}, \at{crossref}, \at{isbn}, \at{publisher}) records books, journal articles and conference papers, and \at{proceeding}(\at{key}, \at{year}, \at{isbn}, \at{publisher}) records the proceedings of conference papers, respectively.
+
+We generated 3482 \pCFDs and 2568 \pCINDs for the DBLP data, with their representatives shown below.
+
+\begin{footnotesize}\mat{0ex}{
+$\phi_1$:  \= \at{paper}(\at{isbn} = '\_' \And \at{booktitle} = '\_' $\rightarrow$ \at{publisher} = '\_') \\
+$\phi_2$: \at{paper}(\at{title} = '\_' \And \at{year} = '\_' \And \at{booktitle} = '\_' $\rightarrow$ \at{type} = '\_')  \\
+$\phi_3$: \at{paper}(\at{booktitle} = 'CleanDB' $\rightarrow$ \at{year} = 2006) \\
+$\phi_4$: \at{paper}(\at{booktitle} = 'VLDB' \And \at{year_L} = '\_' $\rightarrow$ \at{year_R} $\geq$ 1975 \And\\
+\> \at{year_R}  $\leq$ 2007) \\
+$\phi_5$: \at{paper}(\at{booktitle} = 'PVLDB' \And \at{year_L} = '\_' $\rightarrow$ \at{year_R} $\geq$ 2008) \\
+$\rho_1$: \at{paper}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type} = 'inproceedings' \And \\
+\>  \at{booktitle} = 'CIKM-CNIKM') $\subseteq$ \at{proceeding}(\at{key}, \at{isbn}, \at{publisher}; \\
+\>  \at{year} = 2009)  \\
+$\rho_2$: \at{paper}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type} = 'inproceedings' \And \\
+\>  \at{booktitle} = 'VLDB') $\subseteq$ \at{proceeding}(\at{key}, \at{isbn}, \at{publisher}; \\
+\>  \at{year} $\geq$ 1975 \And \at{year} $\leq$ 2007)  \\
+$\rho_3$: \at{paper}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type} = 'inproceedings' \And \\
+\> \at{booktitle} = 'ICDE') $\subseteq$ \at{proceeding}(\at{key}, \at{isbn}, \at{publisher}; \at{year} $\geq$ 1984)
+}
+\end{footnotesize}
+
+We collected all the \at{booktitle} and corresponding \at{year} from \dblp to generate the other \pCFDs and \pCINDs by instantiating the values of their \at{booktitle} and \at{year} attributes. Observe that $\phi_1$-$\phi_3$ and $\rho _1$ are \CFDs and \CINDs, respectively. For comparison,  we further designed the following \CFDs and \CINDs to approximate $\phi_4$-$\phi_5$ and $\rho_2$-$\rho_3$.
+
+\begin{footnotesize}\mat{0ex}{
+$\phi_4'$: \=\at{paper}(\at{booktitle} = 'VLDB' \And \at{year_L} = '\_' $\rightarrow$ \at{year_R} = '\_') \\
+$\phi_5'$: \at{paper}(\at{booktitle} = 'PVLDB' \And \at{year_L} = '\_' $\rightarrow$ \at{year_R} = '\_') \\
+$\rho_2'$: \at{paper}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings' \And \\
+\> \at{booktitle} = 'VLDB') $\subseteq$ \at{proceeding}(\at{key}, \at{isbn}, \at{publisher}; \at{year} = '\_')\\
+$\rho_3'$: \at{paper}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type} = 'inproceedings' \And \\
+\> \at{booktitle} = 'ICDE') $\subseteq$ \at{proceeding}(\at{key}, \at{isbn}, \at{publisher}; \at{year} = '\_')
+}
+\end{footnotesize}
+
+
+\stitle{Implementation}. All the experiments were run within an \SQL Server 2012 database installed on a machine with an Intel Core i5 (3.1GHz) CPU and 8GB of RAM. Each test was repeated 5 times, and the average is reported here.
+
+%Efficiency of detecting CFDP violations
+\begin{figure*}[tb!]
+\vspace{2ex}
+  \centering
+  \subfigure[Varying $|I_{1}|$ for HOSP]{\label{fig_exp1_cfdp_hosp_I1}\includegraphics[scale=1]{./exp-fig/11a.eps}}  %, height=1.5in, width=1.5in}}
+   \quad
+  \subfigure[Varying $noise\%$ for \hosp]{\label{fig_exp1_cfdp_hosp_noise}\includegraphics[scale=1]{./exp-fig/11b.eps}}
+  \quad
+  \subfigure[Varying $|I_{1}|$ for \dblp]{\label{fig_exp1_cfdp_dblp_I1}\includegraphics[scale=1]{./exp-fig/11c.eps}}
+  \quad
+  \subfigure[Varying $noise\%$ for \dblp]{\label{fig_exp1_cfdp_dblp_noise}\includegraphics[scale=1]{./exp-fig/11d.eps}}
+  \caption{Efficiency of detecting violations: \spCFDs vs. \sCFDs}\label{fig_exp1_cfdp}
+\end{figure*}
+%Efficiency of detecting CINDP violations
+\begin{figure*}[tb!]
+\vspace{0.5ex}
+  \centering
+  \subfigure[Varying $|I_{1}|$ for \hosp]{\label{fig_exp1_cindp_hosp_I1}\includegraphics[scale=1]{./exp-fig/12a.eps}}
+  \quad
+  \subfigure[Varying $|I_{2}|$ for \hosp]{\label{fig_exp1_cindp_hosp_I2}\includegraphics[scale=1]{./exp-fig/12b.eps}}
+  \quad
+  \subfigure[Varying $noise\%$ for \hosp]{\label{fig_exp1_cindp_hosp_noise}\includegraphics[scale=1]{./exp-fig/12c.eps}}
+  \quad \\
+  \subfigure[Varying $|I_{1}|$ for \dblp]{\label{fig_exp1_cindp_dblp_I1}\includegraphics[scale=1]{./exp-fig/12d.eps}}
+  \quad
+  \subfigure[Varying $|I_{2}|$ for \dblp]{\label{fig_exp1_cindp_dblp_I2}\includegraphics[scale=1]{./exp-fig/12e.eps}}
+  \quad
+  \subfigure[Varying $noise\%$ for \dblp]{\label{fig_exp1_cindp_dblp_noise}\includegraphics[scale=1]{./exp-fig/12f.eps}}
+  \caption{Efficiency of detecting violations: \spCINDs vs. \sCINDs}\label{fig_exp1_cindp}
+\end{figure*}
+
+%Efficiency of detecting CFDP and CINDP violations
+\begin{figure*}[tb!]
+\vspace{0.5ex}
+  \centering
+  \subfigure[Varying $|I_{1}|$ for \hosp]{\label{fig_exp1_both_hosp_I1}\includegraphics[scale=1]{./exp-fig/13a.eps}}
+  \quad
+  \subfigure[Varying $|I_{2}|$ for \hosp]{\label{fig_exp1_both_hosp_I2}\includegraphics[scale=1]{./exp-fig/13b.eps}}
+  \quad
+  \subfigure[Varying $noise\%$ for \hosp]{\label{fig_exp1_both_hosp_noise}\includegraphics[scale=1]{./exp-fig/13c.eps}}
+  \quad \\
+  \subfigure[Varying $|I_{1}|$ for \dblp]{\label{fig_exp1_both_dblp_I1}\includegraphics[scale=1]{./exp-fig/13d.eps}}
+  \quad
+  \subfigure[Varying $|I_{2}|$ for \dblp]{\label{fig_exp1_both_dblp_I2}\includegraphics[scale=1]{./exp-fig/13e.eps}}
+  \quad
+  \subfigure[Varying $noise\%$ for \dblp]{\label{fig_exp1_both_dblp_noise}\includegraphics[scale=1]{./exp-fig/13f.eps}}
+  \caption{Efficiency of detecting violations: \spCFDs + \spCINDs vs. \sCFDs + \sCINDs}\label{fig_exp1_both}
+  \vspace{-3ex}
+\end{figure*}
+
+\subsection{Experimental Results}
+
+
+
+
+
+We next present our findings.
+%
+Three parameters were used in our tests:
+(1) $|I_1|$, the number of tuples in table \at{hcahps} of \hosp or \at{paper} of \dblp,
+(2) $|I_2|$, the number of tuples in table \at{hcahps}-\at{state} of \hosp or \at{proceeding} of \dblp, and
+(3) $noise\%$, the percentage of dirty tuples in table \at{hcahps} of \hosp or  \at{paper} of \dblp, ranging from 0\% to 9\%.
+%To dirty a tuple $t$, an attribute of $t$ in $Y$ of a \pCFD $R(X\ra Y,\ T_p)$ or $X \cup Y_p$ of a \pCIND $(R_1[X;\ X_p] \subseteq R_2[Y;\ Y_p],\ T_p)$ was changed from a correct to incorrect value.
+For easy of comparison, we deliberately dirty the tuples in \at{hcahps} of \hosp or  \at{paper} of \dblp so that using the \pCFDs and \pCINDs together can detect all the dirty tuples. A clean copy of \hosp and \dblp is also kept to tell whether a tuple is dirty or clean.
+
+
+%\vspace{-1ex}
+\subsubsection{Tests of Efficiency}
+
+
+In the first set of experiments, we evaluated the violation detection efficiency of  \pCFDs and \pCINDs vs. their counterparts \CFDs and \CINDs, separately and taken together.
+
+\stitle{Exp-1.1: \pCFDs vs. \CFDs}.
+(1) To evaluate the impacts of $|I_1|$, we fixed $noise\% = 9\%$, and varied $|I_1|$ from 10K to 90K for \hosp (resp. from 100K to 900K for \dblp); And (2) to evaluate the impacts of $noise\%$, we fixed $|I_1|$ = $90K$ for \hosp (resp. $900K$ for \dblp), and varied $noise\%$ from 0\% to 9\%.
+%
+The results are reported in Figures~\ref{fig_exp1_cfdp_hosp_I1} and \ref{fig_exp1_cfdp_dblp_I1} and Figures~\ref{fig_exp1_cfdp_hosp_noise} and \ref{fig_exp1_cfdp_dblp_noise}, respectively.
+
+
+The results tell us that for \CFDs and \pCFDs, both their running time (a) increases with the increment of the size of $I_1$, and (b) is insensitive to the noise. Furthermore, (c) their running time is mainly affected by three factors: the size of $I_1$, the \LHS and \RHS complexity of dependencies.
+For instance, (a) the \LHS complexity of \CFDs $\varphi_5'$ and $\varphi_6'$ is higher than \pCFDs $\varphi_5$ and $\varphi_6$, as they match more $I_1$ tuples, but the \RHS complexity of \CFDs $\varphi_5'$ and $\varphi_6'$ is lower than \pCFDs $\varphi_5$ and $\varphi_6$, as they are easier to check violations; And
+(b) the \LHS complexity of \CFDs $\phi_4'$ and $\phi_5'$ is the same as  \pCFDs $\phi_4$ and $\phi_5$, but
+ the \RHS complexity of \CFDs $\phi_4'$ and $\phi_5'$ is similar to \pCFDs $\phi_4$ and $\phi_5$, as they are easier to check violations.
+As a combined result, the running time of \CFDs is lower than \pCFDs on \hosp, but close to \pCFDs on \dblp.
+
+
+
+
+\vspace{-1ex}
+\stitle{Exp-1.2: \pCINDs vs. \CINDs}.
+(1) To evaluate the impacts of $|I_1|$, we fixed $noise\%$ = $9\%$ and $|I_2|$ = $1.6K$ for \hosp (resp. $16K$ for \dblp), and varied $|I_1|$ from  $10K$ to $90K$ for \hosp (resp. from $100K$ to $900K$ for \dblp);
+%
+(2) To evaluate the impacts of $|I_2|$, we fixed $noise\%$ = $9\%$ and $|I_1|$ = $90K$ for \hosp (resp. $900K$ for \dblp), and varied $|I_2|$ from  $1K$ to $1.6K$ for \hosp (resp. from $10K$ to $16K$ for \dblp); And
+%
+(3) To evaluate the impacts of $noise\%$, we fixed $|I_1|$ = $90K$ for \hosp (resp. $900K$ for \dblp) and $|I_2|$ = $1.6K$ for \hosp (resp. $16K$ for \dblp), and varied  $noise\%$ from 0\% to 9\%.
+%
+The results are reported in Figures~\ref{fig_exp1_cindp_hosp_I1} and \ref{fig_exp1_cindp_dblp_I1},  Figures~\ref{fig_exp1_cindp_hosp_I2} and \ref{fig_exp1_cindp_dblp_I2}, and Figures~\ref{fig_exp1_cindp_hosp_noise} and \ref{fig_exp1_cindp_dblp_noise}, respectively.
+
+
+
+
+
+The results tell us that for \CINDs and \pCINDs, both their running time (a) increases with the increment of the size of $I_1$, (b) is not affected much by $I_2$ as $|I_2|$ is relatively small in the tests, and (c) is insensitive to the noise. Furthermore, (d) their running time is mainly affected by four factors: the size of $I_1$, the size of $I_2$, the \LHS and \RHS complexity of dependencies.
+For instance, (a) the \LHS complexity of \CIND $\psi_3'$ is higher than \pCFD $\psi_3$, as they match more $I_1$ tuples, but
+the \RHS complexity of \CIND $\psi_3'$ is lower than \pCIND $\psi_3$, as they are easier to check violations; And
+(b) the \LHS complexity of \CINDs $\rho_2'$ and $\rho_3'$ is the same as  \pCFDs $\phi_4$ and $\phi_5$, but
+ the \RHS complexity of \CINDs $\rho_2'$ and $\rho_3'$ is lower than \pCINDs $\rho_2$ and $\rho_3$, as they are easier to check violations.
+As a combined result, the running time of \CINDs is close to \pCFDs on \hosp, but is lower on \dblp.
+
+\stitle{Exp-1.3:  \pCFDs + \pCINDs vs. \CFDs + \CINDs}.
+Using the same setting as {Exp-1.2}, we evaluated the impacts of $|I_1|$, $|I_2|$ and $noise\%$. The results are reported in Figures~\ref{fig_exp1_both_hosp_I1} and \ref{fig_exp1_both_dblp_I1}, Figures~\ref{fig_exp1_both_hosp_I2} and \ref{fig_exp1_both_dblp_I2} and Figures~\ref{fig_exp1_both_hosp_noise} and \ref{fig_exp1_both_dblp_noise}, respectively. The results show similar findings to {Exp-1.1} and {Exp-1.2}, and are consistent with them.
+
+
+
+%\vspace{-1ex}
+\subsubsection{Tests of Effectiveness}
+
+
+
+
+In the second set of experiments, we evaluated the violation detection effectiveness of  \pCFDs and \pCINDs vs. their counterparts \CFDs and \CINDs, separately and taken together. Note that we did not report the results of varying $|I_{2}|$ as it has no impacts on the effectiveness tests in our setting.
+
+
+Given one of \CFDs, \pCFDs, \CINDs, \pCINDs,  \CFDs + \CINDs or \pCFDs + \pCINDs, denoted by $x$, its effectiveness of detecting violations is evaluated with the following measure:
+
+\vspace{0ex}
+\mat{2ex}{
+
+$\kw{accuracy}(x)$ = $\frac{\#\kw{dirty\ tuples\ found\ by}\ x}{\#\kw{dirty\ tuples\ found\ by\ {\sc cfd^{p}}{\small s}\ +\ {\sc cind^{p}}{\small s}}}$.
+}
+
+
+
+
+\stitle{Exp-2}. Using the same setting as {Exp-1.1}, {Exp-1.2} and {Exp-1.3}, respectively, we evaluated the impacts of $|I_1|$ and $noise\%$ for
+(a) {\pCFDs vs. \CFDs}, (b) {\pCINDs vs. \CINDs} and (c) {\pCFDs + \pCINDs vs. \CFDs + \CINDs}, respectively.
+%
+The results are reported in Figures~\ref{fig_exp2_cfdp},~\ref{fig_exp2_cindp} and \ref{fig_exp2_both}, respectively, and are summarized in Table~\ref{tab-effectiveness}.
+
+The results tell us that (1) the effectiveness of detecting violations using all classes of dependencies are robust to $|I_1|$ and $noise\%$,
+%
+(2) \pCFDs, \pCINDs and \pCFDs + \pCINDs obviously outperform their counterparts \CFDs, \CINDs and \CFDs + \CINDs, respectively, and
+%
+(3) the increase of effectiveness depends on the increase of the expressive power, and varies from 22\% to 75\% on \hosp and \dblp.
+
+
+
+
+\stitle{Summary}. From these experimental results on real-life data \hosp and \dblp, we find the following.
+(1) The running time of \pCFDs and \pCINDs is comparable to their \CFDs and \CINDs counterparts, which is consistent with the
+the static analyses:  \pCFDs and \pCINDs retain the same complexity
+as their \CFDs and \CINDs counterparts.
+(2) \pCFDs and \pCINDs are able to capture more dirty tuples than \CFDs and \CINDs, due to the increased expressive power.
+
+
+%Effectiveness of detecting CFDP violations
+\begin{figure*}[tb!]
+\vspace{2ex}
+  \centering
+  \subfigure[Varying $|I_{1}|$ for \hosp]{\label{fig_exp2_cfdp_hosp_I1}\includegraphics[scale=1]{./exp-fig/41a.eps}}
+   \quad
+  \subfigure[Varying $noise\%$ for \hosp]{\label{fig_exp2_cfdp_hosp_noise}\includegraphics[scale=1]{./exp-fig/41b.eps}}
+  \quad
+  \subfigure[Varying $|I_{1}|$ for \dblp]{\label{fig_exp2_cfdp_dblp_I1}\includegraphics[scale=1]{./exp-fig/41c.eps}}
+  \quad
+  \subfigure[Varying $noise\%$ for \dblp]{\label{fig_exp2_cfdp_dblp_noise}\includegraphics[scale=1]{./exp-fig/41d.eps}}
+  \caption{Effectiveness of detecting violations: \spCFDs vs. \sCFDs}\label{fig_exp2_cfdp}
+\end{figure*}
+\begin{figure*}[tb!]
+\vspace{0.5ex}
+  \centering
+  \subfigure[Varying $|I_{1}|$ for \hosp]{\label{fig_exp2_cindp_hosp_I1}\includegraphics[scale=1]{./exp-fig/42a.eps}}
+  \quad
+  \subfigure[Varying $noise\%$ for \hosp]{\label{fig_exp2_cindp_hosp_noise}\includegraphics[scale=1]{./exp-fig/42b.eps}}
+  \quad
+  \subfigure[Varying $|I_{1}|$ for \dblp]{\label{fig_exp2_cindp_dblp_I1}\includegraphics[scale=1]{./exp-fig/42c.eps}}
+  \quad
+  \subfigure[Varying $noise\%$ for \dblp]{\label{fig_exp2_cindp_dblp_noise}\includegraphics[scale=1]{./exp-fig/42d.eps}}
+  \caption{Effectiveness of detecting violations: \spCINDs vs. \sCINDs}\label{fig_exp2_cindp}
+\end{figure*}
+\begin{figure*}[tb!]
+\vspace{0.5ex}
+  \centering
+  \subfigure[Varying $|I_{1}|$ for \hosp]{\label{fig_exp2_both_hosp_I1}\includegraphics[scale=1]{./exp-fig/43a.eps}}
+  \quad
+  \subfigure[Varying $noise\%$ for \hosp]{\label{fig_exp2_both_hosp_noise}\includegraphics[scale=1]{./exp-fig/43b.eps}}
+  \quad
+  \subfigure[Varying $|I_{1}|$ for \dblp]{\label{fig_exp2_both_dblp_I1}\includegraphics[scale=1]{./exp-fig/43c.eps}}
+  \quad
+  \subfigure[Varying $noise\%$ for \dblp]{\label{fig_exp2_both_dblp_noise}\includegraphics[scale=1]{./exp-fig/43d.eps}}
+  \caption{Effectiveness of detecting violations: \spCFDs + \spCINDs  vs. \sCFDs + \sCINDs }\label{fig_exp2_both}
+  %\vspace{-3ex}
+\end{figure*}
+
+\begin{table*}[tbh!]
+%\vspace{-2ex}
+ \caption{Summary of violation detection  accuracy}
+ \label{tab-effectiveness}
+ \vspace{-2ex}
+\begin{center}
+\begin{small}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+\at{Datasets} & \at{varying}   & \CFDs(\%)  & \pCFDs(\%)   & \CINDs(\%) & \pCINDs(\%) & \CFDs + \CINDs(\%) & \pCFDs + \pCINDs(\%)  \\
+\hline
+\hosp & \at{|I_1|}     & [74.8, 77.7] & [85.5, 88.8] & [32.1, 33.3] & [44.6, 48.9] & [74.8, 77.7] & 100 \\
+\hline
+\hosp & \at{noise\%}   & [76.6, 77.7] & [87.5, 88.8] & [32.8, 33.3] & [44.5, 47.2] & [76.6, 77.7] & 100 \\
+\hline
+\dblp & \at{|I_1|}     & [12.6, 17.6] & [62.5, 64.5] & [24.8, 25.4] & [49.6, 50.9] & [25.0, 29.5] & 100\\
+\hline
+\dblp & \at{noise\%}   & [15.3, 20.1] & [62.5, 64.5] & [24.9, 26.3] & [50.0, 51.1] & [28.0, 31.9] & 100\\
+\hline
+\end{tabular}
+\end{small}
+\end{center}
+\vspace{-1ex}
+\end{table*}
+
+
+
+
+
+
+\eat{%Effectiveness of detecting CFDP violations
+\begin{figure*}[tb!]
+  \centering
+  % Requires \usepackage{graphicx}
+  \centering
+  \subfigure[Varying $|I_{1}|$ for \hosp]{\epsfig{file=exp-fig/21a.eps}}  %, height=1.5in, width=1.5in}}
+  \quad
+  \subfigure[Varying $noise\%$ for \hosp]{\epsfig{file=exp-fig/21b.eps}}
+  \quad
+  \subfigure[Varying $|I_{1}|$ for \dblp]{\epsfig{file=exp-fig/21c.eps}}
+  \quad
+  \subfigure[Varying $noise\%$ for \dblp]{\epsfig{file=exp-fig/21d.eps}}
+  \caption{Effectiveness of detecting \pCFD violations}\label{fig_exp2_cfdp}
+\end{figure*}
+}
+
+%Effectiveness of detecting CINDP violations
+\eat{\begin{figure*}[tb!]
+  \centering
+  % Requires \usepackage{graphicx}
+  \centering
+  \subfigure[Varying $|I_{1}|$ for \hosp]{\epsfig{file=exp-fig/22a.eps}}  %, height=1.5in, width=1.5in}}
+  \quad
+  \subfigure[Varying $noise\%$ for \hosp]{\epsfig{file=exp-fig/22b.eps}}
+  \quad
+  \subfigure[Varying $|I_{1}|$ for \dblp]{\epsfig{file=exp-fig/22c.eps}}
+  \quad
+  \subfigure[Varying $noise\%$ for \dblp]{\epsfig{file=exp-fig/22d.eps}}
+  \caption{Effectiveness of detecting \pCIND violations}\label{fig_exp2_cindp}
+\end{figure*}
+}
+
+\eat{%Effectiveness of detecting CFDP and CINDP violations
+\begin{figure*}[tb!]
+  \centering
+  % Requires \usepackage{graphicx}
+  \subfigure[Varying $I_{1}|$ for \hosp]{\epsfig{file=exp-fig/23a.eps}}  %, height=1.5in, width=1.5in}}
+  \quad
+  \subfigure[Varying $noise\%$ for \hosp]{\epsfig{file=exp-fig/23b.eps}}
+  \quad
+  \subfigure[Varying $I_{1}|$ for \dblp]{\epsfig{file=exp-fig/23c.eps}}
+  \quad
+  \subfigure[Varying $noise\%$ for \dblp]{\epsfig{file=exp-fig/23d.eps}}
+  \caption{Effectiveness of detecting \pCFD and \pCIND violations}\label{fig_exp2_both}
+\end{figure*}
+}
+
+
+

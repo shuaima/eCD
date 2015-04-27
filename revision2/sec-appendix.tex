@@ -1,0 +1,572 @@
+%\newpage
+\appendix
+\subsection{SQL Queries for CFD$^p$s}
+ We first present the generation of
+detection queries for \pCFDs, which is an extension of the
+\SQL techniques for \CFDs and \eCFDs discussed in~\cite{CFDs} and ~\cite{icde08}, respectively.
+
+%%%%%%%%% DL 2014-08-09
+The queries for the violations of $\SCFD^i$ are given as follows, which capitalize on the data table \Enc{L}, \Enc{R} and \Enc{\ne} that encode \pCFDs in $\SCFD^i$.
+
+\begin{footnotesize}\mat{0ex}{
+$Q^C$ \= \bd{select} \=  $R_i.*$ \bd{from} $R_i$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$ \\
+\>  \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and} $R_i.X\asymp L$ \bd{and} $R_i.X\asymp N$ \\
+\> \> \bd{and not} ($R_i.Y\asymp R$ \bd{and} $R_i.Y\asymp N$)}
+\end{footnotesize}
+
+\begin{footnotesize}\mat{0ex}{
+$Q^V$ \= \bd{select} \= \bd{distinct } \= $X$ \bd{from ( select} $L.\at{cid}$, \\
+\>  (\bd{case when} $L.X_j$ \bd{is null then null} \bd{else} $R_i.X_j$ \bd{end}) \bd{as} $X_j$\bd{...} \\
+\>  (\bd{case when} $R.Y_k$ \bd{is null then null} \bd{else} $R_i.Y_k$ \bd{end}) \bd{as} $Y_k$\bd{...}\\
+\>\> \bd{from} $R_i$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$ \\
+\>\> \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and} $R_i.X\asymp L$ \bd{and} $R_i.X\asymp N$ \\
+\>\>\> \bd{and} ($R.Y_1='\_'$ \bd{or} $R.Y_2='\_'$ \bd{or ...} )) $M$\\
+\>\>\> \bd{group by} $X$, \at{cid} \bd{having count} (\bd{distinct} $Y$)$>1$}
+\end{footnotesize}
+
+\noindent Here (1) $X$ and $Y$ are the sets of attributes in \LHS and \RHS of $\SCFD^i$ respectively; (2) $R_i.X\asymp L$ is shorthand for the conjunction of
+
+\begin{footnotesize}\mat{0ex}{
+$L.A_k$ \= \bd{is null or} $R_i.A_k$ = $L.A_k$ \bd{or} ($L.A_k$ = '\_'\\
+\> \bd{and} ($L.A_{k_{>}}$ \bd{is null or} $R_i.A_k$ $>$ $L.A_{k_{>}}$)\\
+\>  \bd{and} ($L.A_{k_{\ge}}$ \bd{is null or} $R_i.A_k$ $\ge$ $L.A_{k_{\ge}}$)\\
+\> \bd{and} ($L.A_{k_{<}}$ \bd{is null or} $R_i.A_k$ $<$ $L.A_{k_{<}}$)\\
+\> \bd{and} ($L.A_{k_{\le}}$ \bd{is null or} $R_i.A_k$ $\le$ $L.A_{k_{\le}}$))
+}
+\end{footnotesize}
+
+\noindent for each $A_{k} \in X$; (3) $R_i.Y\asymp R$ is defined similarly for attributes in $Y$; (4) $R_i.X\asymp N$ is the conjunction
+
+\begin{footnotesize}\mat{1ex}{
+\bd{not exists}
+(\=\bd{select} $*$ \bd{from} $N$ \\
+\>\bd{where} \= $L.\at{cid}$ = $N.\at{cid}$ \bd{and} $N.\at{pos}$ = `\LHS' \bd{and}\\
+\>\>  $N.\at{att}$ = `$A_k$' \bd{and}
+ $R_i.A_k$ = $N.\at{val}$);
+}
+\end{footnotesize}
+
+\noindent for $A_{k} \in X$; (5) $R_i.Y\asymp N$ is defined similarly, but with $N.\at{pos}='\RHS'$.
+
+Intuitively, detecting violations of \pCFDs in $\SCFD^i$ is a two-step process. Firstly, query $Q^{C}$ detects single-tuple violations, that is the tuples $t$ in $I_{i}$ that match the \LHS patterns of some \pCFDs in $\SCFD^i$, but $t$ does not match the corresponding \RHS patterns of these \pCFDs. Secondly, query $Q^{V}$ finds multi-tuple violations, that is, tuples $t$ in $I_{i}$ for which there exists a tuple $t'$ in $I_{i}$ such that $t[X]=t'[X] \asymp L$, but $t[Y] \neq t'[Y]$. Query $Q^{V}$ uses the \bd{group by} clause to group tuples with the same value on $X$ and it counts the number of distinct $Y$. If there is more than one instantiation, then there is a violation.
+
+\begin{example}\label{exa-cfd-query} Using the coding of Fig.~\ref{fig-pcfd-encoding}, two SQL queries for checking \pCFDs $\varphi_2$, $\varphi_3$ and $\varphi_4$ of Fig.~\ref{fig-pcfd} are given as follows:
+
+\begin{footnotesize}\mat{0ex}{
+$Q^C$ \= \bd{select} \=  $R_1.*$ \= \bd{from}  \at{item} $R_1$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$\\
+ \> \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and} ($L.\at{sale}$ \bd{is null or} $R_1.\at{sale}=L.\at{sale}$\\
+ \> \> \bd{or} $L.\at{sale}='\_'$) \bd{and not exists} ( \bd{select * from} $N$\\
+ \> \> \> \bd{where} $N.\at{cid}=L.\at{cid}$ \bd{and} $N.\at{pos}='\LHS'$ \bd{and} \\
+ \> \> \> $N.\at{att}='sale'$ \bd{and} $R_{1}.\at{sale}=N.\at{val}$) \bd{and} \\
+ \>\> ($L.\at{price}$ \bd{is null or} $R_1.\at{price}=L.\at{price}$ \bd{or} ($L.\at{price}='\_'$  \\
+ \> \> \bd{and} ($L.\at{price_>}$ \bd{is null or} $R_1.\at{price}>L.\at{price_>}$)  \\
+ \> \> \bd{and} ($L.\at{price_\leq}$ \bd{is null or} $R_1.\at{price}\leq L.\at{price_\leq}$))) \\
+ \> \> \bd{and not exists} ( \bd{select * from} $N$ \\
+ \>\>\> \bd{where} $N.\at{cid}=L.\at{cid}$ \bd{and} $N.\at{pos}='\LHS'$ \bd{and} \\
+ \> \> \> $N.\at{att}='price'$ \bd{and} $R_{1}.\at{price}=N.\at{val}$) \bd{and not}\\
+
+ \> \> (($R.\at{shipping}$ \bd{is null or} $R_1.\at{shipping}=R.\at{shipping}$ \bd{or}\\
+ \> \> $R.\at{shipping}='\_'$\bd{) and not exists} ( \bd{select * from} $N$  \\
+ \> \> \> \bd{where} $N.\at{cid}=R.\at{cid}$ \bd{and} $N.\at{pos}='\RHS'$ \bd{and} \\
+ \> \> \> $N.\at{att}='shipping'$ \bd{and} $R_{1}.\at{shipping}=N.\at{val}$) \bd{and} \\
+
+ \> \> ($R.\at{price}$ \bd{is null or} $R_1.\at{price}=R.\at{price}$ \bd{or} ($R.\at{price}='\_'$  \\
+ \> \> \bd{and} ($R.\at{price_\geq}$ \bd{is null or} $R_1.\at{price}\geq R.\at{price_\geq}$)   \\
+ \> \> \bd{and} ($R.\at{price_<}$ \bd{is null or} $R_1.\at{price}<R.\at{price_<}$)))  \\
+ \> \> \bd{and not exists} (\bd{select * from} $N$  \\
+ \> \> \> \bd{where} $N.\at{cid}=R.\at{cid}$ \bd{and} $N.\at{pos}='\RHS'$ \bd{and} \\
+ \> \> \> $N.\at{att}='price'$ \bd{and} $R_{1}.\at{price}=N.\at{val}$) ) }
+\end{footnotesize}
+
+\begin{footnotesize}\mat{0ex}{
+$Q^V$\= \bd{select} \= \bd{distinct} \= \at{sale_x}, \at{price_x} \bd{from} ( \bd{select} $L.\at{cid}$, \\
+ \> (\bd{case when} $L.\at{sale}$ \bd{is null then null else} $R_1.\at{sale}$ \bd{end}) \bd{as} \at{sale_x},\\
+ \> (\bd{case when} $L.\at{price}$ \bd{is null then null else} $R_1.\at{price}$ \bd{end}) \bd{as} \at{price_x},\\
+ \> (\bd{case when} $R.\at{shipping}$ \bd{is null then null else} $R_1.\at{shipping}$ \bd{end})\\
+ \> \bd{as} \at{shipping_y},  \\
+ \> (\bd{case when} $R.\at{price}$ \bd{is null then null else} $R_1.\at{price}$ \bd{end}) \bd{as} \at{price_y}  \\
+ \> \bd{from} \at{item} $R_1$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$ \\
+
+ \> \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and} ($L.\at{sale}$ \bd{is null or} $R_1.\at{sale}=L.\at{sale}$\\
+ \> \> \bd{or} $L.\at{sale}='\_'$) \bd{and not exists} ( \bd{select * from} $N$\\
+ \> \> \> \bd{where} $N.\at{cid}=L.\at{cid}$ \bd{and} $N.\at{pos}='\LHS'$ \bd{and} \\
+ \> \> \> $N.\at{att}='sale'$ \bd{and} $R_{1}.\at{sale}=N.\at{val}$) \bd{and} \\
+ \>\> ($L.\at{price}$ \bd{is null or} $R_1.\at{price}=L.\at{price}$ \bd{or} ($L.\at{price}='\_'$  \\
+ \> \> \bd{and} ($L.\at{price_>}$ \bd{is null or} $R_1.\at{price}>L.\at{price_>}$)  \\
+ \> \> \bd{and} ($L.\at{price_\leq}$ \bd{is null or} $R_1.\at{price}\leq L.\at{price_\leq}$))) \\
+ \> \> \bd{and not exists} (\bd{select * from} $N$ \\
+ \>\>\> \bd{where} $N.\at{cid}=L.\at{cid}$ \bd{and} $N.\at{pos}='\LHS'$ \bd{and} \\
+ \> \> \> $N.\at{att}='price'$ \bd{and} $R_{1}.\at{price}=N.\at{val}$) \bd{and}\\
+
+ \> \> ($R.\at{shipping}='\_'$\bd{or} $R.\at{price}='\_'$))  $M$ \\
+ \> \> \bd{group by} $\at{sale_x}, \at{price_x}$, \at{cid} \\
+ \> \> \> \bd{having count} (\bd{distinct} $\at{shipping_y}, \at{price_y}$)$>1$ }
+\end{footnotesize}
+
+\end{example}
+
+
+\eat{
+
+\subsection{Constraints for the HOSP Dataset}
+
+
+Six \pCFDs and three \pCINDs are designed for the HOSP dataset, as shown below.
+
+\begin{footnotesize}\mat{0ex}{
+$\varphi _1 $: \=\at{hos}(\at{zip}$=$'\_' \And \at{city}$=$'\_' $\rightarrow$ \at{state}$=$'\_') \\
+$\varphi _2 $: \at{hos}(\at{pid}$=$'\_' $\rightarrow$ \at{hname}$=$'\_' \And \at{county}$=$'\_' \And \at{addr}$=$'\_' \\
+\> \And \at{phn}$=$'\_') \\
+$\varphi _3 $: \at{hos}(\at{pid}$=$'\_' $\rightarrow$ \at{srrp}$=$'\_') \\
+$\varphi _4 $: \at{hos}(\at{hid}$=$'\_' $\rightarrow$ \at{hq}$=$'\_' \And \at{had}$=$'\_') \\
+$\varphi _5 $: \at{hos}(\at{pid}$=$'\_' \And \at{ncs}$=$'Not Available' $\rightarrow$ \at{ft}$\geq 1$ \And \at{ft}$\leq 14$) \\
+$\varphi _6 $: \at{hos}(\at{pid}$=$'\_' \And \at{hid}$=$'\_' \And \at{ncs}$\neq$'Not Available' \And \at{ncs}\\
+\> $\neq$'Fewer than 100' $\rightarrow$ \at{hap}$\geq 0$ \And \at{hap}$\leq 100$) \\
+$\psi _1 $: \at{hos}(\at{hid}, \at{hq}; \at{nil}) $\subseteq$ \at{sta}(\at{hid}, \at{hq}; \at{nil}) \\
+$\psi _2 $: \at{hos}(\at{hid}, \at{state}; \at{nil}) $\subseteq$ \at{sta}(\at{hid}, \at{state}; \at{nil}) \\
+$\psi _3 $: \at{hos}(\at{hid}, \at{state}; \at{ncs}$\neq$'Not Available') $\subseteq$ \at{sta}(\at{hid}, \at{state}; \at{hap}$\geq 0$\\
+\> \And \at{hap}$\leq 100$) }
+\end{footnotesize}
+
+Here, $\varphi _1 $-$\varphi _4 $ and $\psi _1 $-$\psi _2 $ can be expressed by \CFDs and \CINDs, but $\varphi _5 $, $\varphi _6 $ and $\psi _3 $ are not. We designed their \CFDs and \CINDs counterparts as follows:
+\begin{footnotesize}\mat{0ex}{
+$\varphi _5 '$: \=\at{hos}(\at{pid}$=$'\_' \And \at{ncs}$=$'\_' $\rightarrow$ \at{ft}$=$'\_') \\
+$\varphi _6 '$: \at{hos}(\at{pid}$=$'\_' \And \at{hid}$=$'\_' \And \at{ncs}$=$'\_' $\rightarrow$ \at{hap}$=$'\_') \\
+$\psi _3 '$: \at{hos}(\at{hid}, \at{state}; \at{ncs}$=$'\_') $\subseteq$ \at{sta}(\at{hid}, \at{state}; \at{hap}$=$'\_')
+}
+\end{footnotesize}
+
+
+
+\subsection{Constraints for the DBLP Dataset}
+
+We generated 3482 \pCFDs and 2568 \pCINDs for the DBLP data, with eight representative ones as follows:\\
+
+\begin{footnotesize}\mat{0ex}{
+$\phi _1$: \=\at{pub}(\at{isbn}$=$'\_' \And \at{booktitle}$=$'\_' $\rightarrow$ \at{publisher}$=$'\_') \\
+$\phi _2$: \at{pub}(\at{title}$=$'\_' \And \at{year}$=$'\_' \And \at{booktitle}$=$'\_' $\rightarrow$ \at{type}$=$'\_') \\
+$\phi _3$: \at{pub}(\at{booktitle}$=$'CleanDB' $\rightarrow$ \at{year}$=$2006) \\
+$\phi _4$: \at{pub}(\at{booktitle}$=$'VLDB' \And \at{year_L}$=$'\_' $\rightarrow$ \at{year_R}$\geq 1975$ \\
+\> \And \at{year_R}$\leq 2007$) \\
+$\phi _5$: \at{pub}(\at{booktitle}$=$'PVLDB' \And \at{year_L}$=$'\_' $\rightarrow$ \at{year_R}$\geq 2008$) \\
+$\rho _1$: \at{pub}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings', \at{booktitle}\\
+\> $=$'CIKM-CNIKM') $\subseteq$ \at{pro}(\at{key}, \at{isbn}, \at{publisher}; \at{year}$=$2009)  \\
+$\rho _2$: \at{pub}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings', \at{booktitle}\\
+\> $=$'VLDB') $\subseteq$ \at{pro}(\at{key}, \at{isbn}, \at{publisher}; \at{year}$\geq 1975$ \And \at{year}\\
+\> $\leq 2007$)  \\
+$\rho _3$: \at{pub}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings', \at{booktitle}\\
+\> $=$'ICDE') $\subseteq$ \at{pro}(\at{key}, \at{isbn}, \at{publisher}; \at{year}$\geq 1984$)  }
+\end{footnotesize}
+
+We collected all \at{booktitle} and corresponding \at{year} from DBLP data to generate the other \pCFDs and \pCINDs by replacing the values of \at{booktitle} and {year} attributes. Observe that $\phi _1$-$\phi _3$ and $\rho _1$ can be expressed as \CFDs and \CIND. We designed \CFDs and \CINDs for $\phi _4$-$\phi _5$ and $\rho _2$-$\rho _3$ as follows:
+
+\begin{footnotesize}\mat{0ex}{
+$\phi _4 '$: \=\at{pub}(\at{booktitle}$=$'VLDB' \And \at{year_L}$=$'\_' $\rightarrow$ \at{year_R}$=$'\_' \\
+\> \And \at{year_R}$\leq 2007$) \\
+$\phi _5 '$: \at{pub}(\at{booktitle}$=$'PVLDB' \And \at{year_L}$=$'\_' $\rightarrow$ \at{year_R}$=$'\_') \\
+$\rho _2 '$: \at{pub}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings', \at{booktitle}\\
+\> $=$'VLDB') $\subseteq$ \at{pro}(\at{key}, \at{isbn}, \at{publisher}; \at{year}$=$'\_')\\
+$\rho _3 '$: \at{pub}(\at{crossref}, \at{isbn}, \at{publisher}; \at{type}$=$'inproceedings', \at{booktitle}\\
+\> $=$'ICDE') $\subseteq$ \at{pro}(\at{key}, \at{isbn}, \at{publisher}; \at{year}$=$'\_')\\
+}
+\end{footnotesize}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%old proofs%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+\eat{%%%%%%%%%%%%%%%%%
+%Proposition 1
+\noindent\bd{Proposition}~\ref{thm-sat-pcfd-fin}.~The satisfiability
+problem for \pCFDs is \NP-complete. \eop
+
+\begin{proof}
+The lower bound follows from the \NP-hardness of their \CFDs
+counterparts~\cite{CFDs}, since \CFDs are a special case of \pCFDs.
+
+We next show that the problem is in \NP by presenting an \NP
+algorithm that, given a set $\Sigma$ of \pCFDs defined on a
+relational schema $R$, determines whether $\Sigma$ is satisfiable.
+The satisfiability problem has the following small model property:
+If there exists a nonempty instance $I$ of $R$ such that
+$I\models\Sigma$, then for any tuple $t\in I$, $I_t$ =$\{t\}$ is an
+instance of $R$ and $I_t\models\Sigma$. Thus it suffices to consider
+single-tuple instances $I$ = $\{t\}$ for deciding whether $\Sigma$
+is satisfiable.
+
+Assume \kwlog that the attributes $\attrset(R)$ = $\{A_1,\dots,
+A_m\}$ and the total number of pattern tuples of all pattern
+tableaux $T_p$ in $\Sigma$ is $h$. For each $i\in [1, m]$, define
+the active domain of $A_i$ to be a set $\adom(A_i)$ = $C_0\cup C_1$,
+where (1) set $C_0$ consists of all constants in $T_p[A_i]$ of all
+pattern tableaux $T_p$ in $\Sigma$ and let $C_0$ = $\{a_1\}$, where
+$a_1\in\dom(A_i)$, if $C_0$ is empty, and (2) set $C_1$ contains the
+following set of constants for those attributes whose domains have
+total orders: \vspace{-0.5ex}\bi
+\item Arrange all constants in $C_0$ in the increasing order, and
+assume that the resulting $C_0$ = $\{a_1, \ldots, a_k\}$ ($k\ge 1$);
+\item Add a constant $b_{01}\in\dom(A_i)$ to $C_1$ such that $b_{01} < a_1$ if there
+exists one; And add another constant $b_{02}\in\dom(A_i)$ to $C_1$
+such that $b_{01} < a_1$ and $b_{01}\ne b_{02}$ if there exists one;
+\item Similarly, for each $j\in[1, k - 1]$, add a constant $b_{j1}\in\dom(A_i)$ to $C_1$
+such that $b_{j1} > a_j$ and $ b_{j1} < a_{j+1}$ if there exists
+one; And add another constant $b_{j2}\in\dom(A_i)$ to $C_1$ such
+that $b_{j2} > a_j$, $ b_{j2} < a_{j+1}$ and $b_{j1}\ne b_{j2}$ if
+there exists one;
+\item Add a constant $b_{k1}\in\dom(A_i)$ to $C_1$ such that $b_{k1} > a_k$ if there exists one;
+And add another constant $b_{k2}\in\dom(A_i)$ to $C_1$ such that
+$b_{k2} > a_k$ if there exists one. \ei\vspace{-1.5ex}
+
+\noindent Moveover, the number of elements in $\adom(A_i)$ is at
+most $O(3*h + 2)$. Then one can easily verify that $\Sigma$ is
+satisfiable iff there exists a mapping $\rho$ from $t[A_i]$ to
+$\adom(A_i)$ ($i\in [1, m]$) such that $I$ = $\{(\rho(t[A_1]),
+\ldots, \rho(t[A_m]))\}$ and $I \models \Sigma$.
+
+
+Based on these, we give an \NP algorithm as follows: (1) Guess an
+instance, which contains a single tuple $t$ of $R$ such that
+$t[A_i]\in\adom{A_i}$ for each $i \in [1, m]$. (2) Check whether $I
+\models \Sigma$. If so the algorithm returns ``yes'', and otherwise
+it repeats steps (1) and (2). Obviously step (2) can be done in
+\PTIME in the size of $\Sigma$. Hence the algorithm is in \NP, and
+so is the problem. \eop
+\end{proof}
+
+%Theorem 2
+\vspace{2ex} \noindent\bd{Theorem}~\ref{thm-sat-pcfd-infin}.~In the
+absence of finite domain attributes, the satisfiability problem for
+\pCFDs remains \NP-complete. \eop
+
+\begin{proof}
+The problem is in \NP following from
+Proposition~\ref{thm-sat-pcfd-fin}. We next show that the problem is
+\NP-hard by reduction from the \kSAT\ problem, which is \NP-complete
+(cf.~\cite{GaJo79}). Consider an instance $\phi = C_1 \land \cdots
+\land C_n$ of \kSAT, where all the variables in $\phi$ are $x_1,
+\ldots, x_m$, $C_j$ is of the form $y_{j_1} \lor y_{j_2} \lor
+y_{j_3}$, and moreover, for $i\in[1,3]$, $y_{j_i}$ is either
+$x_{p_{ji}}$ or $\overline{x_{p_{ji}}}$ for $p_{ji} \in [1, m]$.
+Given $\phi$, we construct a relation schema $R$ and a set $\Sigma$
+of \pCFDs defined on $R$ such that $\phi$ is satisfiable iff
+$\Sigma$ is satisfiable.
+
+\noindent (1) Define relation $R$$(X_1, \ldots, X_m, C_1, \ldots,
+C_n, Z)$, where all attributes share an infinite domain $\dom$ and
+constant $a\in\dom$. Intuitively, for each $R$ tuple $t$, $t[X_1,$ $
+\ldots,$ $X_m]$ specifies a truth assignment $\xi$ for variables
+$x_1, \ldots, x_m$ of $\phi$, and $t[C_i]$ and $t[Z]$ are the truth
+values of clause $C_i$ and sentence $\phi$ \wrt $\xi$ respectively.
+
+\noindent (2) Let the set $\Sigma$ of \pCFDs be
+$\Sigma_0\cup\Sigma_1\cup\ldots\cup\Sigma_n\cup\Sigma_{n+1}$.
+
+\vspace{-1.5ex}\bi
+\item $\Sigma_0$ contains $n + 1$ \pCFDs. Intuitively, $\Sigma_0$
+encodes the relationships between the truth values of clauses $C_1,
+\ldots, C_n$ and the truth value of sentence $\phi$.
+
+For each clause $C_i$ ($i\in[1, n]$), we define \pCFD $\varphi_i$ =
+$(C_1,\ldots, C_n\ra Z, T_{pi})$ such that $T_{pi} = \{t_{pi}\}$ and
+$t_{pi}[C_i,Z]$ = $(\ne a \pa \ne a)$ and $t_{pi}[C_j]$ = `\_'
+($j\ne i, j\in[1, n]$). Moreover, \pCFD $\varphi_{0}$ =
+$(C_1,\ldots, C_n\ra Z, T_{p0})$, where $T_{p0}$ = $\{(= a, \ldots,
+=a \pa = a)\}$. Intuitively, we use $\ne a$ and $= a$ to represent
+{\em false} and {\em true} for the truth values of the clauses and
+the sentence.
+
+\item For $i\in[1, n]$, $\Sigma_i$ contains $8$ \pCFDs.  Intuitively, $\Sigma_i$
+encodes the relationships between the truth values of the three
+variables in clause $C_i$ and clause $C_i$.
+
+Consider clause $C_i$ = $x_{j_1} \lor \overline{x_{j_2}} \lor
+x_{j_3}$ of $\phi$, where $1\le j_1, j_2, j_3 \le m$, we define
+\pCFDs $\varphi_{i,0}$ = $(X_{j_1},X_{j_2},X_{j_3}\ra C_i,
+T_{pi,0})$, where $T_{pi,0}$ = $\{(< a, < a, <a \pa = a)\}$, and
+$\varphi_{i,2}$ = $(X_{j_1},X_{j_2},X_{j_3}\ra C_i, T_{pi,2})$,
+where $T_{pi,2}$ = $\{(< a, \ge a, < a \pa \ne a)\}$. Intuitively,
+we use $<a$ and $\ge a$ to represent {\em false} and {\em true} for
+a variable, respectively. Similarly, we can define the rest $6$
+\pCFDs $\varphi_{i,1}$, $\varphi_{i,3}$, $\varphi_{i,4}$,
+$\varphi_{i,5}$, $\varphi_{i,6}$ and $\varphi_{i,7}$.
+
+\item $\Sigma_{n + 1}$ contains a single \pCFD $\varphi_{n+1}$ =
+$(Z \ra Z, T_{p(n+1)})$, where $T_{p(n+1)}$ = $\{(\_ \pa = a)\}$.
+Intuitively, $\varphi_{n+1}$ requires that for any tuple $t$ of $R$,
+$t[Z]$ = $a$. \ei\vspace{-1.5ex}
+
+Observe that $\Sigma$ contains $8*m + n + 2$ \pCFDs. Thus the
+reduction is in \PTIME. We now show that $\phi$ is satisfiable if
+and only if $\Sigma$ is satisfiable.
+
+Suppose first $\Sigma$ is satisfiable, then there exists a nonempty
+instance $I$ of $R$ such that $I\models\Sigma$. For any tuple $t\in
+I$, (1) $\Sigma_{n+1}$ forces $t[Z]$ = $a$, (2) $\Sigma_0$ forces
+$t[C_1, \ldots, C_n]$ = $(a, \ldots, a)$, and for each clause $C_i$
+($i\in[1, n]$) with variables $X_{j_1},X_{j_2},X_{j_3}$, $\Sigma_j$
+forces that $t[X_{j_1},X_{j_2},X_{j_3}]$  does not match the \LHS of
+the \pCFD that forces $t[C_i]\ne a$. From $t$, we can construct a
+truth assignment $\xi$ of $\phi$ such that $\xi(x_i)$ = {\em false}
+if $t[X_i]< a$ and  $\xi(x_i)$ = {\em true} if $t[X_i]\ge a$
+($i\in[1, m]$). Since $\{t\}\models\Sigma$, it is easy to verify
+that the truth assignment $\xi$ makes $\phi$ true.
+
+Conversely, if $\phi$ is satisfiable, there exists a truth
+assignment $\xi$ that makes $\phi$ true. We construct a tuple $t$ of
+$R$ as follows: (a) $t[C_1,\ldots, C_n, Z]$ = $(a, \ldots, a)$ and
+(b) for each $i\in[1, m]$, $t[X_i]$ = $a_i$ such that $a_i\in\dom$,
+$a_i\ge a$ if $\xi(x_i)$ = {\em true} and $a_i< a$ otherwise. Let $I
+= \{t\}$, then one can easily verify that $I\models\Sigma$. \eop
+\end{proof}
+
+
+%Proposition 3
+\vspace{2ex} \noindent\bd{Proposition}~\ref{thm-sat-pcind}.~A set
+$\Sigma$ of \pCINDs is always satisfiable. \eop
+
+
+\begin{proof} It suffices to show that given a set $\Sigma$ of \pCINDs over a
+database schema $\cal R$$(R_1,\ldots,R_n)$, we can construct a {\em
+nonempty} instance $D$ of $\cal R$ such that $D \models \Sigma$. We
+build $D$ as follows. First, for each attribute $A$, define the
+active domain of $A$ to be a set $\adom(A)$, which consists of
+certain data values in $\dom(A)$. Second, using these active
+domains, we construct $D$.
+
+We start with the construction of active domains. (1) For each
+attribute $A$, initialize $\adom(A)$ along the same lines as the one
+for \pCFDs in Proposition~\ref{thm-sat-pcfd-fin}; (2) For each
+\pCIND $(R_a[A_1,A_2,\ldots,A_m;X_p] \subseteq$ $R_b[B_1,$
+$\ldots,B_m;Y_p], T_p)$ in $\Sigma$, let $\adom(B_i)=$ $\adom(B_i)$
+$\cup$ $\adom(A_i)$ for each $i\in [1,m]$; (3) This rule is
+repeatedly applied until a fixpoint of $\adom(A)$ is reached for
+every attribute $A$. It is easy to verify that this process
+terminates since we start with a finite set of data values.
+
+We next construct $D$. For each relation $R_i(A_1,\dots,A_k) \in
+{\cal R}$, we define $I_i = \adom(A_1)\times \dots \times
+\adom(A_k)$, where $\times$ is the {\em Cartesian Product}
+operation. Let $D = \{I_1,\dots,I_n\}$, then it is easy to verify
+that $D$ is nonempty and $D \models \Sigma$. \eop
+\end{proof}
+
+
+
+%Proposition 5
+\vspace{2ex} \noindent\bd{Proposition}~\ref{thm-imp-pcfd-fin}.~The
+implication problem for \pCFDs is \coNP-complete. \eop
+
+\begin{proof}
+The lower bound follows from the \coNP-hardness of their \CFDs
+counterparts~\cite{CFDs}, since \CFDs are a special case of \pCFDs.
+
+We show that the problem is in \coNP by presenting an \NP algorithm
+for its complement problem, \ie for determining whether
+$\Sigma\not\models\varphi$. The algorithm is based on a small model
+property: if $\varphi = (R: X \ra Y, T_p)$ and $\Sigma
+\not\models\varphi$, then there exists an instance $I$ of $R$ with
+two tuples $t_1$ and $t_2$ such that $I\models\Sigma$ and $t_1[X] =
+t_2[X] \asymp T_p[X]$, but either $t_1[Y]\ne t_2[Y]$ or
+$t_1[Y]\not\asymp T_p[Y]$ (resp. $t_2[Y]\not\asymp T_p[Y]$). Thus it
+suffices to consider instances $I$ with two tuples for deciding
+whether $\Sigma\not\models\varphi$.
+
+Assume \kwlog that the attributes $\attrset(R)$ = $\{A_1,\dots,
+A_m\}$. For each $i\in [1, m]$, define the active domain of $A_i$ to
+be a set $\adom(A_i)$ in the same way as
+Proposition~\ref{thm-sat-pcfd-fin}. Then one can easily verify that
+$\Sigma\not\models\varphi$ iff there exist two mappings $\rho_1$,
+$\rho_2$ from $t[A_i]$ to $\adom(A_i)$ ($i\in [1, m]$) such that $I$
+= $\{(\rho_1(t[A_1]), \ldots, \rho_1(t[A_m]))$, $(\rho_2(t[A_1]),
+\ldots, \rho_2(t[A_m]))\}$, $I \models\Sigma$ and
+$I\not\models\varphi$.
+
+Based on these, we give an \NP algorithm as follows: (1) Guess two
+tuples $t_1$, $t_2$ of $R$ such that $t_1[A_i],t_2[A_i]
+\in\adom(A_i)$ for each $i \in [1, m]$. (2) Check whether $I =
+\{t_1, t_2\}$ satisfies $\Sigma$, but not $\varphi$. If so the
+algorithm returns ``yes'', and otherwise it repeats steps (1) and
+(2). Obviously step (2) can be done in \PTIME in the size $\Sigma$.
+Hence the algorithm is in \NP, and the problem is in \coNP.\eop
+\end{proof}
+
+
+%Theorem 6
+\vspace{2ex} \noindent\bd{Theorem}~\ref{thm-imp-pcfd-infin}.~In the
+absence of finite domain attributes, the implication problem for
+\pCFDs remains \coNP-complete. \eop
+
+\begin{proof}
+The problem is in \coNP following from
+Proposition~\ref{thm-imp-pcfd-fin}. We next show that the problem is
+\coNP-hard by reduction from the \kSAT\ problem to the complement
+problem of the implication problem, where \kSAT\ is \NP-complete
+(cf.~Proposition~\ref{thm-sat-pcfd-infin}). Given an instance $\phi$
+of \kSAT, we construct a relation schema $R$, a set
+$\Sigma\cup\{\varphi\}$ of \pCFDs defined on $R$, such that $\phi$
+is satisfiable iff $\Sigma\not\models\varphi$.
+
+
+The relation schema $R$ and the set $\Sigma$ of \pCFDs are the same
+as the corresponding ones in Proposition~\ref{thm-sat-pcfd-infin}.
+Moreover, $\varphi$ is defined as $(Z \ra Z, T_p)$, where $T_{p}$ =
+$\{(\_ \pa \ne a)\}$. Intuitively, $\varphi$ requires that for any
+tuple $t$ of $R$, $t[Z] \ne a$. Along the same lines as
+Proposition~\ref{thm-sat-pcfd-infin}, one can easily verify that
+$\phi$ is satisfiable iff $\Sigma\not\models\varphi$. Thus the
+problem is \coNP-hard. \eop
+\end{proof}
+
+
+%Proposition 7
+\vspace{2ex} \noindent\bd{Proposition}~\ref{thm-imp-pcind-fin}.~The
+implication problem for \pCINDs is \EXPTIME-complete. \eop
+
+\begin{proof} The implication problem for \CINDs is
+\EXPTIME-hard~\cite{CINDs}. The lower bound carries over to \pCINDs,
+which subsume \CINDs. We next show that the problem is in \EXPTIME
+by presenting an \EXPTIME algorithm that, given a set
+$\Sigma\cup\{\psi\}$ of \pCINDs defined on a database schema $\cal
+R$, determines whether $\Sigma\models\psi$.
+
+Consider $\cal R$ = $(R_1,\ldots,R_n)$ and $\psi$ = $(R_a[X;$ $X_p]
+\subseteq$ $R_b[Y;Y_p], T_p)$. Moreover, for each attribute $A$,
+define the active domain $\adom(A)$ of $A$ based on
+$\Sigma\cup\{\psi\}$ along the same way as
+Proposition~\ref{thm-sat-pcind}. One can easily verify that if
+$\Sigma\not\models\psi$, there must exist an instance $D$ of ${\cal
+R}$ such that $D\models\Sigma$ and $D\not\models\psi$.
+
+Based on these, we give the \EXPTIME algorithm as follows:
+
+\bi
+\item
+Build a directed graph $G(V, E)$.  Each node $u\in V$ is a possible
+tuple `$R_i:t_i$' such that $t_i[A]\in \adom(A)$ for each attribute
+$A\in\attrset(R_i)$. There is an edge $e$ = (`$R_i:t_i$',
+`$R_j:t_j$') in $E$ if and only if there exists a \pCIND $\phi =
+(R_i[U; U_p]$ $\subseteq$ $ R_j[V; V_p], T_{p_{\phi}})$ in $\Sigma$
+such that $t_i[U_p] \asymp T_{p_{\phi}}[U_p]$, $t_j[V]$ = $t_i[U]$
+and $t_j[V_p] \asymp T_{p_{\phi}}[V_p]$.
+\item
+Let $S_a$ be the set of all nodes that are reachable from node
+`$R_a:t_a$' such that $t_a[X_p] \asymp T_{p}[X_p]$;
+ Let $S_b$ be the
+set of nodes `$R_b:t_b$' such that $t_b[Y_p] \asymp T_{p}[Y_p]$.
+\item
+If there exists a node `$R_i:t_i$' in $S_a$, which is reachable from
+node `$R_a:t_a$' and not reachable to any node `$R_b:t_b$' in $S_b$
+such that $t_b[Y] = t_a[X]$, return `no'. And return `yes' if such
+case cannot be found. \ei
+
+
+It can be verified that (a) if the algorithm returns `no', we can
+construct an instance $D$ such that $D\models\Sigma$, but not
+$\psi$; and (b) if the algorithm returns `yes', there exist no
+instances $D$ such that $D\models\Sigma$, but not $\psi$.
+
+We next show that the above algorithm indeed runs in exponential
+time: (a) The number of nodes in graph $G$ is bounded by the maximum
+number of tuples in a database instance on $\R$. Let
+$|\Sigma\cup\{\psi\}|$ be the size of $\Sigma$ and $\psi$, and
+$|\cal R|$ be the sum of arities of all relations in $\cal R$. Then
+the number of tuples in a database instance is bounded by
+$O(|\Sigma\cup\{\psi\}|^{|\cal
+ R|})$; (b) The number of nodes in sets $S_a$ or $S_b$ is bounded by
+the maximum number of tuples in a database too; (c) The reachability
+testing can be done in quadratic-time in the size of the
+input~\cite{Papa1994}.
+
+Putting all these together, we show that the algorithm runs in
+exponential time. And, thus, the problem is in \EXPTIME. \eop
+
+\eat{ Based on these, we give the \EXPTIME algorithm as follows: (1)
+Initialize set $S_d$ = $\{D_0\}$, where $D_0$ is a database instance
+with $I_a = \{t_a\}$ of $R_a$ such that $t_a[A]\in\adom(A)$ for each
+attribute $A\in\attrset(R_a)$, and $I_i = \{\}$ for any other
+relation $R_i$ ($1\le i\le n$) in $\cal R$. (2) For each \pCIND
+$(R_i[X';$ $X'_p] \subseteq$ $R_j[Y';Y'_p], T'_p)$ in $\Sigma$ and
+each tuple $t_i\in I_i$ such that $t_i\asymp T'_p[X'_p]$, add the
+following set of tuples to $I_j$. Let $\attrset(R_j)\setminus Y'$ =
+$E_1,\ldots,E_k$ and $S$ = $\adom(E_1)\times\ldots\times\adom(E_k)$,
+where $\times$ is the {\em Cartesian Product} operation. For each
+tuple $t\in S$, if $t\asymp T'_p[Y'_p]$, add a tuple $t_j$ to $I_j$
+such that $t_j[\attrset(R_j)\setminus Y']$ =
+$t[\attrset(R_j)\setminus Y']$ and $t_j[Y'] = t_i[X']$. This rule is
+repeatedly applied until all instances reach their fixpoints. (3)
+Check whether $D = \{I_1, \ldots, I_n\}$ satisfies $\Sigma$, but not
+$\psi$. If so, the algorithm returns ``no'', and otherwise it
+repeats steps (1) (2) and (3). If all cases in step (1) are tested
+and no instance $D$ is found such that $D\models\Sigma$ and
+$D\not\models\psi$, the algorithm returns ``yes''.
+
+Let $|\Sigma\cup\{\psi\}|$ be the size of $\Sigma$ and $\psi$, and
+$|\cal R|$ be the sum of arities of relations in $\cal R$. Then it
+is easy to know that (a) the instance $D$ in step (3) contains at
+most $O(|\Sigma\cup\{\psi\}|^{|\cal R|})$ tuples, and (b) there are
+at most $O(|\Sigma\cup\{\psi\}|^{|\cal R|})$ cases for step (1).
+Following from these, we can conclude that the algorithm is indeed
+in \EXPTIME, and thus the problem is in \EXPTIME. }
+\end{proof}
+
+
+%Theorem 8
+\vspace{2ex} \noindent\bd{Theorem}~\ref{thm-imp-pcind-infin}.~In the
+absence of finite domain attributes, the implication problem for
+\pCINDs remains \EXPTIME-complete. \eop
+
+\begin{proof}
+The problem is in \EXPTIME following from
+Proposition~\ref{thm-imp-pcind-fin}. We next show that the problem
+is \EXPTIME-hard by reduction from the implication problem for
+\CINDs in the general setting, which is \EXPTIME-complete
+(cf.~\cite{CINDs}). Given a set $\Sigma\cup\{\psi\}$ of \CINDs
+defined on a database schema ${\cal R}$ = $(R_1,\ldots, R_n)$, we
+construct a database schema ${\cal R'}$ = $(R'_1,\ldots, R'_n)$,
+where each relation $R'_i$ ($i\in[1, n]$) consists of infinite
+domain attributes only, and a set $\Sigma'\cup\{\psi'\}$ of \pCINDs
+on ${\cal R'}$. And, moreover, $\Sigma\models\psi$ iff
+$\Sigma'\models\psi'$.
+
+We start with constructing ${\cal R'}$. For each
+$R_i(A_1,\ldots,A_k)$ of ${\cal R}$, we define
+$R'_i(A'_1,\ldots,A'_k)$ such that for each attribute $A'_j$
+($j\in[1, k]$), $\dom(A'_j)$ = $\dom(A_j)$ if $\dom(A_j)$ is
+infinite and $\dom(A'_j)$ is \kw{integer}, a totally ordered
+infinite domain. Moreover, we define a mapping $\rho_{i,j}$  for
+each for each finite domain $\dom(A_j)$ = $\{a_1,\ldots,a_h\}$ to
+\kw{integer}: (1) Randomly choose $h$ consecutive integers $\{b_1,
+\ldots, b_h\}$ such that for each $i\in[1, h-1]$, $b_{i+1} = b_i +
+1$. (2) We now define the mapping $\rho_{i,j}(a_i)$ = $b_i$ for
+$i\in[1, h]$. Moreover, we require two extra integers $b_0$ = $b_1 -
+1$ and $b_{h+1} = b_h + 1$, denoted as $\rho_{i,j}.b_0$ and
+$\rho_{i,j}.b_{h+1}$. Note that this is always doable. For clarity,
+we also denote $\rho_{i,j}$ as $\rho$ when it is clear from the
+context.
+
+We next define  $\Sigma'$ and $\psi'$ on ${\cal R'}$ based on the
+mappings defined above. For each \CIND $(R_a[X; A_1,\ldots,A_{m1}]
+\subseteq$ $R_b[Y; B_1,\ldots,B_{m2}], T_p)$ in $\Sigma$ and each
+$t_p\in T_p$, we define a \pCIND $(R'_a[X';
+A'_1,\ldots,A'_{m1},X'_p] \subseteq$ $R'_b[Y';
+B'_1,\ldots,B'_{m2},Y'_p], T'_p)$, where (1) $X'$ (resp. $Y'$,
+$A'_1,\ldots,A'_{m1}$, $B'_1,\ldots,B'_{m2}$) corresponds to $X$
+(resp. $Y$, $A_1,\ldots,A_{m1}$, $B_1,\ldots,B_{m2}$); (2) $X'_p$
+(resp. $Y'_p$) corresponds to those finite domain attributes in
+$R_a$ (resp. $R_b$), but not in $A_1,\ldots,A_{m1}$ (resp.
+$B_1,\ldots,B_{m2}$); and (3) $T'_p = \{t'_{p1},t'_{p2},t'_{p3}\}$
+such that for each attribute $A'$ in $A'_1,\ldots,A'_{m1}$ or
+$B'_1,\ldots,B'_{m2}$, (a) $t'_{p1}[A']$ = $t_p[A]$ and
+$t'_{p2}[A']$ = $t'_{p3}[A']$ = `\_' if $\dom(A)$ is infinite, and
+(b) $t'_{p1}[A']$ = $\rho(t_p[A])$ and $t'_{p2}[A']$ = $t'_{p3}[A']$
+= `\_' if $\dom(A)$ is finite; and (c) for the rest attributes $A'$
+in $X'_p$ or $Y'_p$, $t'_{p1}[A']$ = `\_', $t'_{p2}[A']$ =
+`$>\rho.b_0$', and $t'_{p3}[A']$ = `$<\rho.b_{h+1}$'. Similarly, we
+can define a set $\Sigma_{\psi}$ of \pCINDs from $\psi$ based on the
+mappings.
+
+Finally, one can easily verify that $\Sigma\models\psi$ iff
+$\Sigma'\models\Sigma_{\psi}$, \ie $\Sigma'\models\psi'$ for each
+\pCIND $\psi'\in\Sigma_{\psi}$. Following from this, the problem is
+\EXPTIME-hard. \eop
+\end{proof}
+}%%%%%%%%%%%%%%%%%
