@@ -1,0 +1,714 @@
+%\vspace{-0.5ex}
+\section{Validation of CFD$^p$s and CIND$^p$s}
+\label{sec-detect}
+%\vspace{-1ex}
+
+If \pCFDs and \pCINDs are to be used as data quality rules, the
+first question we have to settle is how to effectively detect errors
+and inconsistencies as violations of these dependencies, by
+leveraging functionality supported by commercial \rdms. More
+specifically, consider a database schema ${\cal R}$ = $(R_1,$
+$\dots,R_n)$, where $R_i$ is a relational schema for $i \in [1, n]$.
+The error detection problem is stated as follows.
+
+
+The {\em error detection problem} is to find, given a  set $\Sigma$
+of \pCFDs and \pCINDs defined on $\R$, and a database instance $D$ =
+$(I_1,\dots,I_n)$ of ${\cal R}$ as input, the subset
+$(I'_1,\dots,I'_n)$ of $D$ such that for each $i\in[1,n]$,
+$I'_i\subseteq I_i$ and
+ each tuple in $I'_i$ violates at least one  \pCFD or
+\pCIND in $\Sigma$. We denote the set as $\kw{vio}(D, \Sigma)$,
+referred to it as {\em the violation set} of $D$ \wrt $\Sigma$.
+%The set $\Sigma$ is partitioned into $\SCFD$ and $\SCIND$,
+%consisting of \pCFDs and \pCINDs, respectively.
+
+In this section we develop \SQL-based techniques for error detection
+based on \pCFDs and \pCINDs. The main result of the section is
+as follows.
+
+%\vspace{-0.5ex}
+\begin{theorem}
+\label{thm-detect} Given a set $\Sigma$  of \pCFDs and \pCINDs
+defined on $\R$ = $(R_1,\dots, R_n)$ and a database instance $D$ of ${\cal R}$, a set of \SQL queries can be
+automatically generated such that (a) the collection of the answers
+to the \SQL queries in $D$ is $\kw{vio}(D,\Sigma)$, and (b) the number
+and size of the set of \SQL queries depend only on the number $n$ of
+relations and their arities in $\R$, regardless of $\Sigma$.
+\end{theorem}
+%\vspace{-0.5ex}
+
+Let $\SCFD^i$ be the set of all \pCFDs in $\Sigma$
+defined on the same relational schema $R_i$, and $\SCIND^{(i,j)}$ the
+set of all \pCINDs in $\Sigma$ from $R_i$ to $R_j$, for
+$i, j \in [1, n]$. We show the following. (a) The violation
+set $\kw{vio}(D, \SCFD^i)$ can be computed by {\em two}
+\SQL queries. (b) Similarly,  $\kw{vio}(D, \SCIND^{(i,j)})$
+can be computed by a {\em single} \SQL query.
+(c) These \SQL queries use pattern tableaux
+of \pCFDs (\pCINDs) encoded with data tables, and hence
+their sizes are independent of $\Sigma$. {From}
+these Theorem~\ref{thm-detect} follows immediately.
+
+We next present the main techniques for the query generation
+method, and the key idea is to encode \pCFDs and \pCINDs with data tables so that data dependencies and data themselves are uniformly represented,
+and \SQL queries are then automatically generated to detect those tuples that violate certain \pCFDs or \pCINDs. 
+
+
+
+%%%%%%%%%%%%%%%%%%5
+\subsection{Encoding CFD$^p$s and CIND$^p$s with Data Tables}
+
+We first show the following, by extending the encoding
+of~\cite{CFDs,icde08}.
+The pattern tableaux
+of all \pCFDs in $\SCFD^i$ can be encoded with {\em three data tables},
+and
+ the pattern tableaux of all \pCINDs in $\SCIND^{(i,j)}$ can be
+represented as
+{\em four data tables}, no matter how many dependencies are
+in the sets. %and how large they are.
+
+%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[tb!]
+\vspace{1ex}
+\begin{center}
+\begin{small}
+\hspace{5ex}(1)~\Enc{L} \hspace{35ex}  (2)~\Enc{R} \hspace{30ex} (3)~\Enc{\ne}\\
+\vspace{0.5ex}
+\begin{tabular}{|c|c|c|c|c|}
+\hline \at{cid} & \at{sale} & \at{price} &
+\at{price_{>}} & \at{price_{\le}}\\
+\hline 2&  T & null & null &null \\
+3&  F&  \_ & 20  & 40 \\
+4&    T &  null & null & null \\
+\hline
+\end{tabular}
+\hspace{2ex}
+\begin{tabular}{|c|c|c|c|c|}
+\hline \at{cid} & \at{shipping}
+& \at{price} & \at{price_{\ge}} & \at{price_{<}}\\
+\hline
+2&  0 &  null & null & null \\
+3&  6 &  null & null & null \\
+4&  null & \_ & 2.99 & 9.99 \\
+\hline
+\end{tabular}
+%\\
+%\vspace{1ex}
+\hspace{2ex}
+\begin{tabular}{|c|c|c|c|}
+\cline{1-4} \at{cid} & \at{pos} & \at{att} & \at{val}\\
+\cline{1-4}
+\end{tabular}
+\end{small}
+\end{center}
+\vspace{-1ex} \caption{Encoding example of \pCFDs}
+\label{fig-pcfd-encoding} \vspace{-1ex}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[tb!]
+%\vspace{-1ex}
+
+\begin{center}
+\begin{small}
+\hspace{0ex} (1)~\Enc{} \hspace{20ex} (2)~\Enc{L} \hspace{18ex} (3)~\Enc{R} \hspace{20ex}(4)~\Enc{\ne} \\
+\vspace{0.5ex}
+\begin{tabular}{|c|c|c|}
+\hline \at{cid} & \at{state_L} & \at{state_R}\\
+\hline
+1& 1 & 1 \\
+2& 1 & 1 \\
+\hline
+\end{tabular}
+\hspace{8ex}
+\begin{tabular}{|c|c|c|}
+\hline \at{cid} & \at{type} & \at{state}\\
+\hline
+1&  \_ & null\\
+2&  \_ & DL\\
+\hline
+\end{tabular}
+\hspace{8ex}
+\begin{tabular}{|c|c|}
+\hline \at{cid} & \at{rate}\\
+\hline
+1 & null\\
+2 & 0 \\
+\hline
+\end{tabular}
+\hspace{8ex}
+\begin{tabular}{|c|c|c|c|}
+\hline \at{cid} & \at{pos} & \at{att} & \at{val}\\
+\hline
+1 & \LHS & type & art \\
+2 & \LHS & type & art \\
+\hline
+\end{tabular}
+\end{small}
+\end{center}
+
+\vspace{-1ex} \caption{Encoding example of \pCINDs}
+\label{fig-pcind-encoding} \vspace{-3ex}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\stitle{Encoding CFD$^p$s}. We encode all  pattern tableaux
+in $\SCFD^i$ with three tables \Enc{L}, \Enc{R} and \Enc{\ne}, where
+\Enc{L} (resp.~\Enc{R}) encodes the non-negation ($=,<,
+\le, >, \ge$) patterns in \LHS (resp.~\RHS),
+and
+\Enc{\ne} encodes those negation ($\ne$) patterns.
+More specifically, we associate a unique id \at{cid} with each
+\pCFDs in $\SCFD^i$, and let
+\Enc{L} consist of the following
+attributes: (a) \at{cid}, (b)
+each attribute $A$ appearing in the \LHS of some \pCFDs in $\SCFD^i$, and
+ (c) its four companion attributes $A_{>}$, $A_{\ge}$, $A_{<}$, and
+ $A_{\le}$. That is, for each attribute, there are five columns in
+ \Enc{L}, one for each non-negation operator.
+Similarly, \Enc{R} is defined. We use an \Enc{\ne} tuple to encode a
+pattern $A \ne c$ in a \pCFD, consisting of \at{cid}, \at{att},
+\at{pos}, and \at{val}, encoding the \pCFD id, the attribute $A$,
+the position (`\LHS' or `\RHS'), and the constant $c$, respectively.
+Note that the arity of \Enc{L} (\Enc{R}) is bounded by $5*|R_i|+1$,
+where $|R_i|$ is the arity of $R_i$, and the arity of \Enc{\ne} is
+$4$.
+
+Before we populate these tables, let us first describe a preferred
+form of \pCFDs that would simplify the analysis to be given.
+Consider a \pCFD $\varphi$ = $R(X\ra Y,\ T_p)$. If $\varphi$ is not
+satisfiable we can simply drop it from $\Sigma$. Otherwise it is
+equivalent to a \pCFD $\varphi'$ = $R(X\ra Y,\ T_p')$ such that for
+any pattern tuples $t_p, t_p'$ in $T_p'$ and for any attribute $A$
+in $X\cup Y$, (a) if $t_p[A]$ is $\op a$ and $t_p'[A]$ is $\op b$,
+where \op is not $\ne$, then $a=b$, and (b) if $t_p[A]$ is `\_' then so
+is $t_p'[A]$. That is, for each non-negation \op (resp.~\_), there
+is a {\em unique} constant $a$ such that $t_p[A]$ = `$\op a$'
+(resp.~$t_p[A]=\_$) is the only \op (resp.~\_) pattern appearing in
+the $A$ column of $T'_p$. We refer to $t_p[A]$ as $T'_p(\kw{op},A)$
+(resp.~$T'_p(\_,A)$), and consider \kwlog~\pCFDs of this form only.
+Note that there are possibly multiple $t_p[A] \ne c$ patterns in
+$T'_p$,
+
+We populate \Enc{L}, \Enc{R} and \Enc{\ne}  as follows. For each
+\pCFD $\varphi$ = $R(X\ra Y,\ T_p)$ in $\SCFD^i$,
+we generate a distinct \at{cid} $\kw{id}_\varphi$ for it, and do the following.
+\bi
+\item[(1)] Add a tuple $t_1$ to \Enc{L} such that
+(a) $t_1[\at{cid}] = \kw{id}_\varphi$; (b) for each $A\in X$,
+$t_1[A]$ = `\_' if $T'_p(\_,A)$ is `\_', and for each non-negation
+predicate \op, $t_1[A_{\kw{op}}]$ = `$a$' if $T'_p(\kw{op},A)$
+is `\op $a$'; (c) we let $t_1[B]$ = \bd{null} for all other attributes $B$
+in \Enc{L}.
+
+
+
+\item[(2)] Similarly add a tuple $t_2$ to \Enc{R} for attributes in $Y$.
+
+
+\item[(3)] For each attribute $A\in X\cup Y$ and each $\ne a$ pattern in
+$T_p[A]$, add a tuple $t$ to \Enc{\ne} such that $t[\at{cid}] =
+\kw{id}_\varphi$, $t[\at{att}]$ = `$A$', $t[\at{val}]$ = `a', and
+$t[\at{pos}]$ = `\LHS' (resp.~$t[\at{pos}]$ = `\RHS') if attribute
+$A$ appears in $X$ (resp. $Y$). \ei\vspace{-1ex}
+
+
+
+
+
+\begin{example}
+Recall from Fig.~\ref{fig-pcfd} \pCFDs $\varphi_2$, $\varphi_3$ and
+$\varphi_4$ defined on relation \at{item}. The three \pCFDs are
+encoded with the tables shown in Fig.~\ref{fig-pcfd-encoding}: (a)
+\Enc{L} consists of attributes: \at{cid}, \at{sale}, \at{price},
+\at{price_{>}} and \at{price_{\le}}; (b) \Enc{R} consists of
+\at{cid}, \at{shipping}, \at{price}, \at{price_{\ge}} and
+\at{price_{<}}; those attributes in a table with only `null' pattern
+values do not contribute to error detection, and are thus omitted;
+And (c) \Enc{\ne} is empty since all these \pCFDs have no negation
+patterns. One can easily reconstruct these \pCFDs from tables
+\Enc{L}, \Enc{R} and \Enc{\ne} by collating the tuples based on
+\at{cid}.
+\end{example}
+
+
+%%%
+
+
+
+\stitle{Encoding CIND$^p$s}. All \pCINDs in $\SCIND^{(i,j)}$
+can be encoded with four tables
+\Enc{}, \Enc{L}, \Enc{R} and \Enc{\ne}.
+Here \Enc{L} (resp.~\Enc{R}) and \Enc{\ne} encode non-negation
+patterns on relation $R_i$ (resp.~$R_j$)
+and negation patterns on relations $R_i$ or $R_j$,
+respectively, along the same lines as their counterparts for
+\pCFDs. We use
+\Enc{} to encode the \INDs\ {\em embedded} in
+\pCINDs, which consists of the following attributes: (1) \at{cid}
+representing the id of a \pCIND,  and (2) those $X$ attributes of $R_i$
+and $Y$ attributes of $R_j$ appearing in some \pCINDs in $\SCIND^{(i,j)}$.
+Note that the number of attributes in \Enc{} is bounded by $|R_i| + |R_j|
++ 1$, where $|R_i|$ is the arity of $R_i$.
+
+\eat{We populate these tables as follows.}
+
+For each \pCIND $\psi$ = $(R_i[A_1\ldots A_m;\ X_p]$ $\subseteq$
+$R_j[B_1\ldots B_m;$ $\ Y_p],\ T_p)$ in $\SCIND^{(i,j)}$, we generate a
+distinct \at{cid} $\kw{id}_\psi$ for it, and do the following.
+
+\vspace{-0.5ex}\bi
+\item[(1)] Add tuples $t_1$ and $t_2$ to \Enc{L} and \Enc{R}
+based on attributes $X_p$ and $Y_p$, respectively, along the
+same lines as their \pCFD counterpart.
+\item[(2)] Add tuples to \Enc{\ne} in the same way as their
+\pCFD counterparts.
+\item[(3)] Add tuple $t$ to \Enc{} such that $t[\at{cid}] = \kw{id}_\psi$.
+For each $k\in[1, m]$,  let $t[A_k]$ = $t[B_k]$ = $k$, and $t[A]$ =
+\bd{null} for the rest attributes $A$ of \Enc{}. \ei \vspace{-1ex}
+
+
+
+
+\begin{example} \label{exa-enc-pfind}
+Figure~\ref{fig-pcind-encoding} shows the coding of \pCINDs $\psi_1$
+and $\psi_2$ given in Fig.~\ref{fig-pcind}. We use \at{state_L} and
+\at{state_R} in \Enc{} to denote the occurrences of attribute
+\at{state} in \at{item} and \at{tax}, respectively. In
+\Enc{L} and \Enc{R}, the attributes with only `null' patterns are
+omitted, for the same reason as \pCFDs mentioned above.
+\end{example}
+
+Putting these together, it is easy to verify that at most $O(n^2)$
+data tables are needed to encode dependencies in $\Sigma$,
+regardless of the size of $\Sigma$. Recall that $n$ is the number of
+relations in the database $\R$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{SQL-based Detection Methods}
+
+We next show how to generate \SQL queries based on the encoding
+above. For each $i\in [1, n]$, we generate {\em two} \SQL queries
+that, when evaluated on the $I_i$ table of $D$, find $\kw{vio}(D,
+\SCFD^i)$. Similarly, for each $i,j \in [1, n]$, we generate a {\em
+single} \SQL query $Q_{(i,j)}$ that, when evaluated on $(I_i, I_j)$
+of $D$, returns $\kw{vio}(D, \SCIND^{(i,j)})$. Putting these query
+answers together, we get $\kw{vio}(D, \Sigma)$, the violation set of
+$D$ \wrt $\Sigma$.
+
+
+
+\eat{%%%%%%%%%%%%%%%%EAT
+
+
+\stitle{SQL queries for CFD$^p$s}.
+Below we first show how the \SQL queries $Q_{i}^c$ and $Q_{i}^v$ are generated for
+validating \pCFDs in $\SCFD^i$, which is an extension of the
+\SQL techniques for \CFDs and \eCFDs discussed in~\cite{CFDs} and ~\cite{icde08}, respectively.
+
+The queries $Q_{i}^c$ and $Q_{i}^v$ for the violations of $\SCFD^i$ are given as follows, which capitalize on the data table \Enc{L}, \Enc{R} and \Enc{\ne} that encode \pCFDs in $\SCFD^i$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% begin duan 2014-11-18
+\begin{footnotesize}\mat{0ex}{
+$Q_{i}^c$: \= \bd{select} \=  $R_i.*$ \bd{from} \= $R_i$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$  \\
+\>  \bd{where} \=  $L.\at{cid}=R.\at{cid}$ \bd{and}  $R_i.X\asymp L$ \bd{and} $R_i.X\asymp N$ \bd{and}\\
+\> \> \bd{not} ($R_i.Y\asymp R$ \bd{and} $R_i.Y\asymp N$)}
+\end{footnotesize}
+
+\begin{footnotesize}\mat{0ex}{
+$Q_{j}^v$: \= \bd{select} \= \bd{distinct } \= $X_{L}$ \\
+\>  \bd{from} (\=\bd{select} \= $L.\at{cid}$ \bd{as} \at{cid}, $X_{L}$, $Y_{R}$ \bd{from} $R_i$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$ \\
+\>\> \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and} $R_i.X\asymp L$ \bd{and} \\
+\>\>\> $R_i.X\asymp N$ \bd{and} $R.Y='\_'$ ) \bd{as} $M$\\
+\>\>\bd{group by} \at{cid}, $X_{L}$ \bd{having count} (\bd{distinct} $Y_{R}$)$>1$}
+\end{footnotesize}
+
+\noindent Here (1) $X = \{\at{A_1,\dots, A_{m1}}\}$ and $Y = \{\at{B_1,\dots, B_{m2}}\}$ are the sets of attributes in \LHS and \RHS of $\SCFD^i$ respectively; (2) $R_i.X\asymp L$ is the conjunction of
+
+\begin{footnotesize}\mat{0ex}{
+$L.A_j$ \= \bd{is null or} $R_i.A_j$ = $L.A_j$ \bd{or} ($L.A_j$ = `\_'\\
+\> \bd{and} ($L.A_{j_{>}}$ \bd{is null or} $R_i.A_j$ $>$ $L.A_{j_{>}}$)\\
+\>  \bd{and} ($L.A_{j_{\ge}}$ \bd{is null or} $R_i.A_j$ $\ge$ $L.A_{j_{\ge}}$)\\
+\> \bd{and} ($L.A_{j_{<}}$ \bd{is null or} $R_i.A_j$ $<$ $L.A_{j_{<}}$)\\
+\> \bd{and} ($L.A_{j_{\le}}$ \bd{is null or} $R_i.A_j$ $\le$ $L.A_{j_{\le}}$))
+}
+\end{footnotesize}
+
+\noindent for each $j\in[1, m_1]$; (3) $R_i.Y\asymp R$ is defined similarly for attributes in $Y$; (4) $R_i.X\asymp N$ is the conjunction of
+
+\begin{footnotesize}\mat{1ex}{
+\bd{not exists}
+(\=\bd{select} $*$ \bd{from} $N$ \\
+\>\bd{where} \= $L.\at{cid}$ = $N.\at{cid}$ \bd{and} $N.\at{pos}$ = `\LHS' \bd{and}\\
+\>\>  $N.\at{att}$ = `$A_j$' \bd{and}
+ $R_i.A_j$ = $N.\at{val}$)
+}
+\end{footnotesize}
+
+\noindent for each $j\in[1, m_1]$; (5) $R_i.Y\asymp N$ is defined similarly, but with $N.\at{pos}='\RHS'$; (6) $X_{L}$ is the set of following attributes
+
+\begin{footnotesize}\mat{3ex}{
+(\bd{case when} $L.A_j$ \bd{is not null then} $R_i.A_j$ \bd{end}) \bd{as} ${A_L}_j$
+}
+\end{footnotesize}
+\noindent for each $j \in [1, m_1]$; (7) Similarly, $Y_{R}$ is the set of
+\begin{footnotesize}\mat{3ex}{
+(\bd{case when} $R.B_k$ \bd{is not null then } $R_i.B_k$ \bd{end}) \bd{as} ${B_R}_k$
+}
+\end{footnotesize}
+\noindent for each $k \in [1, m_2]$; (8) $R.Y$ = `\_' is the disjunction of $R.B_k$ = `\_' for each $k \in [1, m_2]$.
+
+Intuitively, detecting violations of \pCFDs is a two-step process. First, query $Q_{i}^{c}$ detects single-tuple violations, \ie the tuples $t$ in $I_{i}$ that match the \LHS of a \pCFD in $\SCFD^i$, but do not match its \RHS. Second, query $Q_{i}^{v}$ finds multi-tuple violations, \ie the tuples $t$ in $I_{i}$ such that (a) there exists another tuple $t'$ in $I_{i}$, $t$ and $t'$ match and agree on the \LHS of a \pCFD in $\SCFD^i$, but do not agree on the \RHS of the \pCFD.
+
+%For each \CFD, query $Q_{i}^{v}$ uses the \bd{group by} clause to group tuples with the same value on $X$ and it counts the number of distinct $Y$. If there is more than one instantiation, then there is a violation.
+
+\begin{example}\label{exa-cfd-query} Using the coding of Fig.~\ref{fig-pcfd-encoding}, two SQL queries for checking \pCFDs $\varphi_2$, $\varphi_3$ and $\varphi_4$ of Fig.~\ref{fig-pcfd} are given as follows:
+
+\begin{footnotesize}\mat{0ex}{
+$Q_{1}^{c}$: \= \bd{select} \=  $R_1.*$ \= \bd{from}  \at{item} $R_1$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$\\
+ \> \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and} \\
+
+ \> \> ($L.\at{sale}$ \bd{is null or} $R_1.\at{sale}=L.\at{sale}$ \bd{or} $L.\at{sale}='\_'$ ) \bd{and} \\
+ \> \> \bd{not exists} (\bd{select * from} $N$\\
+ \> \> \> \bd{where} $N.\at{cid}=L.\at{cid}$ \bd{and} $N.\at{pos}='\LHS'$ \bd{and} \\
+ \> \> \> $N.\at{att}='sale'$ \bd{and} $R_{1}.\at{sale}=N.\at{val}$ ) \bd{and} \\
+
+ \> \> ($L.\at{price}$ \bd{is null or} $R_1.\at{price}=L.\at{price}$ \bd{or} ( $L.\at{price}='\_'$ \bd{and} \\
+ \> \> ($L.\at{price_>}$ \bd{is null or} $R_1.\at{price}>L.\at{price_>}$ ) \bd{and}\\
+ \> \> ($L.\at{price_\leq}$ \bd{is null or} $R_1.\at{price}\leq L.\at{price_\leq}$ ))) \bd{and} \\
+ \> \> \bd{not exists} ( \bd{select * from} $N$ \\
+ \>\>\> \bd{where} $N.\at{cid}=L.\at{cid}$ \bd{and} $N.\at{pos}='\LHS'$ \bd{and} \\
+ \> \> \> $N.\at{att}='price'$ \bd{and} $R_{1}.\at{price}=N.\at{val}$) \bd{and}\\
+
+ \> \> \bd{not} (( $R.\at{shipping}$ \bd{is null or} $R_1.\at{shipping}=R.\at{shipping}$ \bd{or}\\
+ \> \> $R.\at{shipping}='\_'$ ) \bd{and} \\
+ \> \>  \bd{not exists} ( \bd{select * from} $N$  \\
+ \> \> \> \bd{where} $N.\at{cid}=R.\at{cid}$ \bd{and} $N.\at{pos}='\RHS'$ \bd{and} \\
+ \> \> \> $N.\at{att}='shipping'$ \bd{and} $R_{1}.\at{shipping}=N.\at{val}$) \bd{and} \\
+
+ \> \> ($R.\at{price}$ \bd{is null or} $R_1.\at{price}=R.\at{price}$ \bd{or} ( $R.\at{price}='\_'$ \bd{and}\\
+ \> \> ($R.\at{price_\geq}$ \bd{is null or} $R_1.\at{price}\geq R.\at{price_\geq}$ ) \bd{and}   \\
+ \> \> ($R.\at{price_<}$ \bd{is null or} $R_1.\at{price}<R.\at{price_<}$ ))) \bd{and}   \\
+ \> \> \bd{not exists} ( \bd{select * from} $N$  \\
+ \> \> \> \bd{where} $N.\at{cid}=R.\at{cid}$ \bd{and} $N.\at{pos}='\RHS'$ \bd{and} \\
+ \> \> \> $N.\at{att}='price'$ \bd{and} $R_{1}.\at{price}=N.\at{val}$ )) }
+\end{footnotesize}
+
+\begin{footnotesize}\mat{0ex}{
+$Q_{1}^{v}$: \= \bd{select} \= \bd{distinct} \= \at{sale_L}, \=\at{price_L} \bd{from} ( \\
+ \> \bd{select} $L.\at{cid}$ \bd{as} \at{cid} , \\
+ \> (\bd{case when} $L.\at{sale}$ \bd{is not null then} $R_1.\at{sale}$ \bd{end}) \bd{as} \at{sale_L},\\
+ \> (\bd{case when} $L.\at{price}$ \bd{is not null then} $R_1.\at{price}$ \bd{end}) \bd{as} \at{price_L},\\
+ \> (\bd{case when} $R.\at{shipping}$ \bd{is not null then} $R_1.\at{shipping}$ \bd{end}) \bd{as} \at{shipping_R},  \\
+ \> (\bd{case when} $R.\at{price}$ \bd{is  not null then} $R_1.\at{price}$ \bd{end}) \bd{as} \at{price_R}  \\
+ \> \bd{from} \at{item} $R_1$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$ \\
+ \>\> \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and} \\
+
+ \>\> ($L.\at{sale}$ \bd{is null or} $R_1.\at{sale}=L.\at{sale}$ \bd{or} $L.\at{sale}='\_'$) \bd{and}\\
+ \> \> \bd{not exists} ( \bd{select * from} $N$\\
+ \> \> \>  \bd{where} $N.\at{cid}=L.\at{cid}$ \bd{and} $N.\at{pos}='\LHS'$ \bd{and} \\
+ \> \> \>  $N.\at{att}='sale'$ \bd{and} $R_{1}.\at{sale}=N.\at{val}$) \bd{and} \\
+
+ \>\>  ($L.\at{price}$ \bd{is null or} $R_1.\at{price}=L.\at{price}$ \bd{or} ($L.\at{price}='\_'$ \bd{and} \\
+ \> \> ($L.\at{price_>}$ \bd{is null or} $R_1.\at{price}>L.\at{price_>}$) \bd{and}   \\
+ \> \> ($L.\at{price_\leq}$ \bd{is null or} $R_1.\at{price}\leq L.\at{price_\leq}$))) \bd{and} \\
+ \> \>  \bd{not exists} (\bd{select * from} $N$ \\
+ \>\>\>  \bd{where} $N.\at{cid}=L.\at{cid}$ \bd{and} $N.\at{pos}='\LHS'$ \bd{and} \\
+ \> \> \>  $N.\at{att}='price'$ \bd{and} $R_{1}.\at{price}=N.\at{val}$) \bd{and}\\
+
+ \> \> ($R.\at{shipping}='\_'$\bd{or} $R.\at{price}='\_'$ )) \bd{as} $M$ \\
+ \>  \bd{group by} \at{cid}, $\at{sale_L}, \at{price_L}$ \\
+ \>  \bd{having count} (\bd{distinct} $\at{shipping_R}, \at{price_R}$)$>1$ }
+\end{footnotesize}
+\end{example}
+
+}%%%%%%%%%%%%%%%%EAT
+
+
+\eat{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% end duan 2014-11-18
+
+
+
+\begin{footnotesize}\mat{0ex}{
+$Q^C$ \= \bd{select} \=  $R_i.*$ \bd{from} $R_i$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$ \\
+\>  \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and} $L.\at{cid}=N.\at{cid}$ \bd{and}  $R_i.X\asymp L$ \bd{and} \\
+\> \> $R_i.X\asymp N$  \bd{and not} ($R_i.Y\asymp R$ \bd{and} $R_i.Y\asymp N$)}
+\end{footnotesize}
+
+\begin{footnotesize}\mat{0ex}{
+$Q^V$ \= \bd{select} \= \bd{distinct } \= $X$ \bd{from ( select} $L.\at{cid}$, \\
+\>  (\bd{case when} $L.X_j$ \bd{is null then null} \bd{else} $R_i.X_j$ \bd{end}) \bd{as} $X_j$\bd{...} \\
+\>  (\bd{case when} $R.Y_k$ \bd{is null then null} \bd{else} $R_i.Y_k$ \bd{end}) \bd{as} $Y_k$\bd{...}\\
+\>\> \bd{from} $R_i$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$ \\
+\>\> \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and} $L.\at{cid}=N.\at{cid}$ \bd{and} $R_i.X\asymp L$ \bd{and} \\
+\>\>\> $R_i.X\asymp N$ \bd{and} ($R.Y_1='\_'$ \bd{or} $R.Y_2='\_'$ \bd{or ...} )) $M$\\
+\>\>\> \bd{group by} $X$, \at{cid} \bd{having count} (\bd{distinct} $Y$)$>1$}
+\end{footnotesize}
+
+\noindent Here (1) $X$ and $Y$ are the sets of attributes in \LHS and \RHS of $\SCFD^i$ respectively; (2) $R_i.X\asymp L$ is the conjunction of
+
+\begin{footnotesize}\mat{0ex}{
+$L.A_k$ \= \bd{is null or} $R_i.A_k$ = $L.A_k$ \bd{or} ($L.A_k$ = '\_'\\
+\> \bd{and} ($L.A_{k_{>}}$ \bd{is null or} $R_i.A_k$ $>$ $L.A_{k_{>}}$)\\
+\>  \bd{and} ($L.A_{k_{\ge}}$ \bd{is null or} $R_i.A_k$ $\ge$ $L.A_{k_{\ge}}$)\\
+\> \bd{and} ($L.A_{k_{<}}$ \bd{is null or} $R_i.A_k$ $<$ $L.A_{k_{<}}$)\\
+\> \bd{and} ($L.A_{k_{\le}}$ \bd{is null or} $R_i.A_k$ $\le$ $L.A_{k_{\le}}$))
+}
+\end{footnotesize}
+
+\noindent for each $A_{k} \in X$; (3) $R_i.Y\asymp R$ is defined similarly for attributes in $Y$; (4) $R_i.X\asymp N$ is the conjunction
+
+\begin{footnotesize}\mat{1ex}{
+\bd{not exists}
+(\=\bd{select} $*$ \bd{from} $N$ \\
+\>\bd{where} \= $L.\at{cid}$ = $N.\at{cid}$ \bd{and} $N.\at{pos}$ = `\LHS' \bd{and}\\
+\>\>  $N.\at{att}$ = `$A_k$' \bd{and}
+ $R_i.A_k$ = $N.\at{val}$);
+}
+\end{footnotesize}
+
+\noindent for $A_{k} \in X$; (5) $R_i.Y\asymp N$ is defined similarly, but with $N.\at{pos}='\RHS'$.
+
+Intuitively, detecting violations of \pCFDs in $\SCFD^i$ is a two-step process. Firstly, query $Q^{C}$ detects single-tuple violations, that is the tuples $t$ in $I_{i}$ that match the \LHS patterns of some \pCFDs in $\SCFD^i$, but $t$ does not match the corresponding \RHS patterns of these \pCFDs. Secondly, query $Q^{V}$ finds multi-tuple violations, that is, tuples $t$ in $I_{i}$ for which there exists a tuple $t'$ in $I_{i}$ such that $t[X]=t'[X] \asymp L$, but $t[Y] \neq t'[Y]$. Query $Q^{V}$ uses the \bd{group by} clause to group tuples with the same value on $X$ and it counts the number of distinct $Y$. If there is more than one instantiation, then there is a violation.
+
+\begin{example}\label{exa-cfd-query} Using the coding of Fig.~\ref{fig-pcfd-encoding}, two SQL queries for checking \pCFDs $\varphi_2$, $\varphi_3$ and $\varphi_4$ of Fig.~\ref{fig-pcfd} are given as follows:
+
+\begin{footnotesize}\mat{0ex}{
+$Q^C$ \= \bd{select} \=  $R_1.*$ \= \bd{from}  \at{item} $R_1$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$\\
+ \> \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and} ($L.\at{sale}$ \bd{is null or} $R_1.\at{sale}=L.\at{sale}$\\
+ \> \> \bd{or} $L.\at{sale}='\_'$) \bd{and not exists} ( \bd{select * from} $N$\\
+ \> \> \> \bd{where} $N.\at{cid}=L.\at{cid}$ \bd{and} $N.\at{pos}='\LHS'$ \bd{and} \\
+ \> \> \> $N.\at{att}='sale'$ \bd{and} $R_{1}.\at{sale}=N.\at{val}$) \bd{and} \\
+ \>\> ($L.\at{price}$ \bd{is null or} $R_1.\at{price}=L.\at{price}$ \bd{or} ($L.\at{price}='\_'$  \\
+ \> \> \bd{and} ($L.\at{price_>}$ \bd{is null or} $R_1.\at{price}>L.\at{price_>}$)  \\
+ \> \> \bd{and} ($L.\at{price_\leq}$ \bd{is null or} $R_1.\at{price}\leq L.\at{price_\leq}$))) \\
+ \> \> \bd{and not exists} ( \bd{select * from} $N$ \\
+ \>\>\> \bd{where} $N.\at{cid}=L.\at{cid}$ \bd{and} $N.\at{pos}='\LHS'$ \bd{and} \\
+ \> \> \> $N.\at{att}='price'$ \bd{and} $R_{1}.\at{price}=N.\at{val}$) \bd{and not}\\
+
+ \> \> (($R.\at{shipping}$ \bd{is null or} $R_1.\at{shipping}=R.\at{shipping}$ \bd{or}\\
+ \> \> $R.\at{shipping}='\_'$\bd{) and not exists} ( \bd{select * from} $N$  \\
+ \> \> \> \bd{where} $N.\at{cid}=R.\at{cid}$ \bd{and} $N.\at{pos}='\RHS'$ \bd{and} \\
+ \> \> \> $N.\at{att}='shipping'$ \bd{and} $R_{1}.\at{shipping}=N.\at{val}$) \bd{and} \\
+
+ \> \> ($R.\at{price}$ \bd{is null or} $R_1.\at{price}=R.\at{price}$ \bd{or} ($R.\at{price}='\_'$  \\
+ \> \> \bd{and} ($R.\at{price_\geq}$ \bd{is null or} $R_1.\at{price}\geq R.\at{price_\geq}$)   \\
+ \> \> \bd{and} ($R.\at{price_<}$ \bd{is null or} $R_1.\at{price}<R.\at{price_<}$)))  \\
+ \> \> \bd{and not exists} (\bd{select * from} $N$  \\
+ \> \> \> \bd{where} $N.\at{cid}=R.\at{cid}$ \bd{and} $N.\at{pos}='\RHS'$ \bd{and} \\
+ \> \> \> $N.\at{att}='price'$ \bd{and} $R_{1}.\at{price}=N.\at{val}$) ) }
+\end{footnotesize}
+
+\begin{footnotesize}\mat{0ex}{
+$Q^V$\= \bd{select} \= \bd{distinct} \= \at{sale_x}, \at{price_x} \bd{from} ( \bd{select} $L.\at{cid}$, \\
+ \> (\bd{case when} $L.\at{sale}$ \bd{is null then null else} $R_1.\at{sale}$ \bd{end}) \bd{as} \at{sale_x},\\
+ \> (\bd{case when} $L.\at{price}$ \bd{is null then null else} $R_1.\at{price}$ \bd{end}) \bd{as} \at{price_x},\\
+ \> (\bd{case when} $R.\at{shipping}$ \bd{is null then null else} $R_1.\at{shipping}$ \bd{end})\\
+ \> \bd{as} \at{shipping_y},  \\
+ \> (\bd{case when} $R.\at{price}$ \bd{is null then null else} $R_1.\at{price}$ \bd{end}) \bd{as} \at{price_y}  \\
+ \> \bd{from} \at{item} $R_1$, \Enc{L} $L$, \Enc{R} $R$, \Enc{\ne} $N$ \\
+
+ \> \bd{where} $L.\at{cid}=R.\at{cid}$ \bd{and} ($L.\at{sale}$ \bd{is null or} $R_1.\at{sale}=L.\at{sale}$\\
+ \> \> \bd{or} $L.\at{sale}='\_'$) \bd{and not exists} ( \bd{select * from} $N$\\
+ \> \> \> \bd{where} $N.\at{cid}=L.\at{cid}$ \bd{and} $N.\at{pos}='\LHS'$ \bd{and} \\
+ \> \> \> $N.\at{att}='sale'$ \bd{and} $R_{1}.\at{sale}=N.\at{val}$) \bd{and} \\
+ \>\> ($L.\at{price}$ \bd{is null or} $R_1.\at{price}=L.\at{price}$ \bd{or} ($L.\at{price}='\_'$  \\
+ \> \> \bd{and} ($L.\at{price_>}$ \bd{is null or} $R_1.\at{price}>L.\at{price_>}$)  \\
+ \> \> \bd{and} ($L.\at{price_\leq}$ \bd{is null or} $R_1.\at{price}\leq L.\at{price_\leq}$))) \\
+ \> \> \bd{and not exists} (\bd{select * from} $N$ \\
+ \>\>\> \bd{where} $N.\at{cid}=L.\at{cid}$ \bd{and} $N.\at{pos}='\LHS'$ \bd{and} \\
+ \> \> \> $N.\at{att}='price'$ \bd{and} $R_{1}.\at{price}=N.\at{val}$) \bd{and}\\
+
+ \> \> ($R.\at{shipping}='\_'$\bd{or} $R.\at{price}='\_'$))  $M$ \\
+ \> \> \bd{group by} $\at{sale_x}, \at{price_x}$, \at{cid} \\
+ \> \> \> \bd{having count} (\bd{distinct} $\at{shipping_y}, \at{price_y}$)$>1$ }
+\end{footnotesize}
+\end{example}
+
+
+}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\stitle{SQL queries for CIND$^p$s}. Below we show how the \SQL query $Q_{(i,j)}$ is generated for
+validating \pCINDs in $\SCIND^{(i,j)})$, which has not been studied by previous work.
+For the lack of space, we put the generation of detection queries for \pCFDs in the supplementary material, which is an extension of the
+\SQL techniques for \CFDs and \eCFDs discussed in~\cite{CFDs} and ~\cite{icde08}, respectively.
+
+
+
+The query $Q_{(i,j)}$ for the validation of $\SCIND^{(i,j)}$
+is given as follows, which capitalizes on the data tables
+\Enc{}, \Enc{L}, \Enc{R} and \Enc{\ne} that encode \pCINDs in
+$\SCIND^{(i,j)}$.
+
+
+
+\begin{footnotesize}\mat{3ex}{
+\= \=\bd{select} \=  $R_i.*$ \bd{from} $R_i$, \Enc{L} $L$, \Enc{\ne} $N$ \\
+\>\> \bd{where}  $R_i.X\asymp L$ \bd{and} $R_i.X\asymp N$ \bd{and not exists} (\\
+\>\>\> \bd{select} $R_j.*$ \bd{from} $R_j$, \Enc{} $H$, \Enc{R} $R$, \Enc{\ne} $N$ \\
+\>\>\> \bd{where} \= $R_i.X = R_j.Y$ \bd{and} $L$.\at{cid} =
+$R$.\at{cid}  \bd{and} \\
+\>\>\>\>  $L$.\at{cid} = $H$.\at{cid} \bd{and} $R_j.Y\asymp R$ \bd{and} $R_j.Y\asymp N$) }
+\end{footnotesize}
+
+\noindent Here (1) $X = \{\at{A_1,\dots, A_{m1}}\}$ and $Y$ =
+$\{\at{B_1,\dots, B_{m2}}\}$ are the sets of attributes of $R_i$ and
+ $R_j$ appearing in $\SCIND^{(i,j)}$, respectively;
+(2) $R_i.X\asymp L$ is the conjunction of
+
+
+\begin{footnotesize}\mat{3ex}{
+$L.A_k$\=\ \bd{is null or} $R_i.A_k$ = $L.A_k$ \bd{or} ($L.A_k$ = `\_' \bd{and} \\
+\> ($L.A_{k_{>}}$ \bd{is null or} $R_i.A_k$ $>$ $L.A_{k_{>}}$) \bd{and} \\
+\>  $L.A_{k_{\ge}}$ \bd{is null or} $R_i.A_k$ $\ge$ $L.A_{k_{\ge}}$) \bd{and} \\
+\> ($L.A_{k_{<}}$ \bd{is null or} $R_i.A_k$ $<$ $L.A_{k_{<}}$) \bd{and} \\
+\> ($L.A_{k_{\le}}$ \bd{is null or} $R_i.A_k$ $\le$ $L.A_{k_{\le}}$))
+}
+\end{footnotesize}
+
+\noindent
+for each $k\in[1, m_1]$;
+(3) $R_j.Y\asymp R$ is defined similarly for attributes
+ in $Y$;
+(4) $R_i.X\asymp N$ is a shorthand for the conjunction below,
+for each $k\in[1, m_1]$:
+
+\begin{footnotesize}\mat{3ex}{
+\bd{not exists}
+(\=\bd{select} $*$ \bd{from} $N$ \\
+\>\bd{where} \= $L.\at{cid}$ =
+$N.\at{cid}$ \bd{and} $N.\at{pos}$ = `\LHS' \bd{and}\\
+\>\>  $N.\at{att}$ = `$A_k$' \bd{and}
+ $R_i.A_k$ = $N.\at{val}$);
+}
+\end{footnotesize}
+
+\noindent
+(5) $R_j.Y$ $\asymp N$ is defined similarly,
+but with $N.\at{pos}$ = `\RHS' ; (6) $R_i.X$
+  = $R_j.Y$ represents the following:
+for each $A_k$  ($k\in[1, m_1]$) and each $B_l$ ($l\in[1, m_2]$),
+($H.A_k$ \bd{is null or}
+ $H.B_l$ \bd{is null} \bd{or} $H.B_l \ne H.A_k$  \bd{or} $R_i.A_k
+= R_j.B_l$).
+
+
+
+Intuitively, (1) $R_i.X\asymp L$ \bd{and} $R_i.X\asymp N$ ensure
+that the $R_i$ tuples selected match the \LHS patterns of some
+\pCINDs in  $\SCIND^{(i,j)}$;
+(2) $R_j.Y\asymp R$ \bd{and} $R_j.Y\asymp N$ check the corresponding
+ \RHS patterns of these \pCINDs on
+$R_j$ tuples;
+(3) $R_i.X = R_j.Y$ enforces the
+{\em embedded} \INDs; (4) $L$.\at{cid} = $R$.\at{cid}
+\bd{and} $L$.\at{cid} = $H$.\at{cid} assure that the \LHS and
+\RHS patterns in the same \pCIND are correctly collated; and (5) \bd{not
+exists} in $Q_{(i,j)}$ ensures that the $R_i$ tuples selected violate
+\pCINDs in $\SCIND^{(i,j)}$.
+
+
+
+\begin{example}\label{exa-cind-query}
+Using the coding of Fig.~\ref{fig-pcind-encoding}, an \SQL query $Q$
+for checking \pCINDs $\psi_1$ and $\psi_2$ of Fig.~\ref{fig-pcind}
+is given as follows:
+
+
+\begin{footnotesize}\mat{0ex}{
+\hspace{0ex} \=  \bd{select} $R_1.*$ \bd{from} \at{item} $R_1$, \Enc{L} L, \Enc{\ne} N \\
+\> \bd{where} \= ($L.$\at{type} \bd{is null or}  $R_1.$\at{type} =
+$L.$\at{type} \bd{or} $L.$\at{type} = `\_') \bd{and} \\
+\>\>\bd{not exist} (\=\bd{select * }\bd{from} $N$ \\
+\>\>\>\bd{where} \=$N.\at{cid}$ = $L.\at{cid}$ \bd{and} $N.\at{pos} = $ `\LHS' \bd{and} \\
+\>\>\>\> $N.\at{att} = $ `type' \bd{and} $R_1.\at{type}$ = $N.\at{val}$) \bd{and} \\
+
+\>\> ($L.$\at{state} \bd{is null or}  $R_1.$\at{state} =
+$L.$\at{state} \bd{or} $L.$\at{state} = `\_') \bd{and}\\
+
+\>\> \bd{not exist} (\bd{select * }\bd{from} $N$ \\
+\>\>\>\bd{where} $N.\at{cid}$ = $L.\at{cid}$ \bd{and} $N.\at{pos} = $ `\LHS' \bd{and} \\
+\>\>\>\> $N.\at{att} = $ `state' \bd{and} $R_1.\at{state} = $N.\at{val}) \bd{and}\\
+
+
+\> \>  \bd{not exist} (\bd{select} $R_2.*$ \bd{from} \at{tax} $R_2$, \Enc{} H, \Enc{R} R\\
+\>\>\>  \bd{where}  ($H.\at{state_L}$ \bd{is null or} $H.\at{state_R}$ \bd{is null or} \\
+\>\>\>\> $H.\at{state_L} != H.\at{state_R}$ \bd{or} $R_2.\at{state}$ = $R_1.\at{state}$)\\
+\>\>\>\> \bd{and} $L.\at{cid}$ = $H.\at{cid}$  \bd{and} $L.\at{cid}$ = $R.\at{cid}$ \bd{and}\\
+\>\>\>\>($R.$\at{rate} \bd{is null or}  $R_2.$\at{rate} = $R.$\at{rate} \bd{or} \\
+\>\>\>\> $R.$\at{rate} = `\_')  \bd{and not exist} (\=\bd{select * }\bd{from} $N$ \\
+\>\>\>\>\bd{where} $N.\at{cid}$ = $R.\at{cid}$ \bd{and} $N.\at{pos} =$ `\RHS'\\
+\>\>\>\>  \bd{and} $N.\at{att} = $ `rate' \bd{and} $R_2.\at{rate} = $N.\at{val})) }
+\end{footnotesize}
+
+
+
+The \SQL queries generated  %for error detection
+can be simplified as
+follows. As shown in %Examples~\ref{exa-cfd-query} and \ref{exa-cind-query}
+Example~\ref{exa-cind-query}, when checking
+patterns imposed by \Enc{}, \Enc{L} or \Enc{R}, the queries need not
+consider attributes $A$ if $t[A]$ is \bd{null} for each tuple $t$ in
+the table. Similarly, if an attribute $A$ does not appear in any
+tuple in \Enc{\ne},  the queries need not check $A$ either. From
+this, it follows that we do not even need to generate those
+attributes with only \bd{null} patterns for data tables \Enc{}, \Enc{L}
+or \Enc{R} when encoding \pCINDs or \pCFDs.
+\end{example}
+
+\eat{
+
+\stitle{Optimization}. The \SQL queries generated for error
+detection can be simplified as follows. (1) As shown in
+Example~\ref{exa-cind-query}, when checking patterns imposed by
+\Enc{}, \Enc{L} or \Enc{R}, the queries need not consider attributes
+$A$ if $t[A]$ is `null' for each tuple $t$ in the table. Similarly,
+if an attribute $A$ does not appear in any tuple in \Enc{\ne},  the
+queries need not check $A$ either. (2) One can further partition
+$\SCIND^{(i,j)}$ such that each group has a bounded number of
+attributes. The price that comes with it is that more than one \SQL
+query will be needed. A balance between the number of groups and the
+number of queries can be struck based on the dependencies and
+relational schemas by using \eg~the clustering
+method~\cite{HanK2000}.
+
+\vspace{-1ex}\begin{example} An extreme case of
+partitioning is to generate an \SQL query for each \pCIND.
+For example,
+a query $Q'$ for validating $\psi_1$ of Fig.~\ref{fig-pcind} alone
+is:
+
+\vspace{-1ex}\begin{footnotesize}\mat{2ex}{
+ \=\bd{select}   $R_1.*$ \bd{from} \at{item} $R_1$ \\
+\> \bd{where}  $R_1.$\at{type} $!=$ `art'  \bd{and not exists}
+(\=\bd{select} $R_2.*$ \bd{from} \at{tax} $R_2$ \\
+\>\>  \bd{where} $R_2.$\at{state} $=$ $R_1.$\at{state})
+}\end{footnotesize}\vspace{-1.5ex}
+
+\noindent
+Contrasting $Q'$ with query $Q$ of Example~\ref{exa-cind-query},
+one can see that $Q'$ is significantly simpler than $Q$.
+Note that a single test $R_1.$\at{type} $!=$ `art' is used in
+query $Q'$, instead of using:
+\bd{not exists} (\bd{select} $N.*$
+\bd{from} \Enc{\ne} $N$ \bd{where} $N.\at{cid}$ = 1 \bd{and}
+$N.\at{pos}$ = `\LHS' \bd{and} $N.\at{att}$ =`type' \bd{and}
+$R_1.\at{type}$ = $N.\at{val}$). This is because \Enc{\ne}
+contains a single tuple, and thus the complex test in terms
+of \bd{not exists} is unnecessary. In general, if only
+a small number of negation patterns are present, one
+can use a conjunctions of $!=$ tests instead of
+the \bd{not exists} test.
+\eop
+\end{example}
+} \vspace{-1ex}
