@@ -1,0 +1,672 @@
+\section{Experimental Study}
+\label{sec-expt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}[t!]
+\label{tab-datasets}
+\begin{center}
+\begin{scriptsize}
+\vspace{2ex}
+\begin{tabular}{|c|c|r|r|}
+\hline
+  Name                            &  Regions               & \# of Nodes  &  \# of Edges \\
+\hline\hline
+DBLP14    &   A subgraph of DBLP                 & 141,359  &   246,462 \\ \hline
+DBLP    & DBLP & 317,080 & 1,049,866 \\ \hline
+CO      &  Colorado              & 435,666      &  521,200  \\ \hline
+FL      &  Florida               & 1,070,376    &  1,343,951  \\ \hline
+CA      &  California \& Nevada   & 1,890,815   &  2,315,222  \\ \hline
+E-US    &  Eastern US            & 3,598,623    &  4,354,029 \\ \hline
+W-US    &  Western US            & 6,262,104    &  7,559,642  \\ \hline
+C-US    &  Central US            & 14,081,816   &  16,933,413 \\ \hline
+US      &  Entire US             & 23,947,347   &  28,854,312  \\ \hline
+\end{tabular}
+\end{scriptsize}
+\end{center}
+\vspace{0ex}
+\caption{Real-world graphs}
+\vspace{-6ex}
+\end{table}
+%%%%%%%%%%%%%%%%%%%
+
+We next present an experimental study to show how proxies speed up shortest  path and distance queries.
+Using real-life networks, we conducted three
+sets of experiments to evaluate:
+(1) the performance of proxies,
+(2) the efficiency of (bidirectional) Dijkstra~\cite{LubyR89}, \arcflag \cite{MohringSSWW05}, \tnr \cite{arz2013transit} and their counterparts with proxies (Proxy+Dijkstra, Proxy+\arcflag, Proxy+\tnr) with respect to  graph queries, and (3) the efficiency of these algorithms with respect to graph sizes.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}[t!]
+\label{tab-exp1-proxies-dras}
+\begin{center}
+\begin{scriptsize}
+\vspace{-0ex}
+\begin{tabular}{|c|r|r|r|r|}
+\hline
+                                &  \multicolumn{1}{c|}{Proxies}   &  \multicolumn{1}{c|}{Nodes in \dras}  & \multicolumn{1}{c|}{$\spacec$} & \multicolumn{1}{c|}{$\timec$}\\
+  \raisebox{1.5ex}[0pt]{Graphs} &  \multicolumn{1}{c|}{(\#, \%)}  &  \multicolumn{1}{c|}{(\#, \%)}  & \multicolumn{1}{c|}{(MB)} & \multicolumn{1}{c|}{(Sec.)}\\
+\hline\hline
+DBLP14    &  (14, 090, 9.8)         & (102,085, 72.2)  & 0.83  &  1.5 \\ \hline
+DBLP    & (31,475 , 9.9)             & (105,671 , 33.3) & 0.93   & 5.7 \\ \hline
+CO      &  (56,277, 12.9)         & (156,329, 35.9)  & 1.41  &  3.47  \\ \hline
+FL      &  (140,382, 13.1)        & (378,804, 35.4)  & 3.42  &  9.9 \\ \hline
+CA      &  (273,191, 14.4)        & (623,811, 33.0)  & 5.80  &  21.1 \\ \hline
+E-US    &  (546,481, 15.2)        & (1,228,876, 34.1)& 11.46  &  52.5  \\ \hline
+W-US    &  (869,907, 13.9)        & (2,116,382, 33.8)& 19.46  &  111.9 \\ \hline
+C-US    &  (2,034,358, 14.4)      & (4,583,413, 32.5)& 42.73 &  435.8 \\ \hline
+US      &  (3,452,222, 14.4)      & (7,927,453, 33.1)& 73.65  &  1,925.4 \\ \hline
+\end{tabular}
+\end{scriptsize}
+\end{center}
+\caption{Effectiveness of proxies and \dras}
+\vspace{-4ex}
+\end{table}
+%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+\subsection{Experimental Settings}
+We first introduce the settings of our experimental study.
+
+
+
+
+
+
+
+\etitle{Real-life graphs}.
+We use two types of datasets, and the details of all datasets are reported in Table~1.
+
+
+
+The first type of datasets is {\em co-authorship networks}. We extracted co-authorship graphs from DLBP~\cite{snapnets}, where each node in the graph represents an author and two authors are connected if they have published papers together. The edge weight is computed by a revised Adamic/Adar similarity function: $w(u,v) = \frac{1}{\sum_{z\in {\Gamma(u)\cap \Gamma(v) \cup \{u,v\}}}\frac{1}{\log{|\Gamma(z)|}}}$, where $\Gamma(u)$ and $\Gamma(v)$ are the sets of neighbors of nodes $u$ and $v$, respectively. The weight of the edge $(u,v)$ represents the closeness between $u$ and $v$ and a smaller weight means the two authors are closer. Since the \dblp dataset is very dense and it takes a lot of time for the preprocessing of \tnr (it took more than 1 week to finish), we removed all nodes whose degrees are higher than 14, and picked the largest connected component from the remaining graph to form a new dataset, referred to as \dblpone.
+
+
+The second type of datasets is {\em road networks}. We chose seven road network datasets of various sizes from the Ninth DIMACS
+Implementation Challenge~\cite{dimacs-datasets}. Each road network is released as an undirected graph that represents a part of the road network in the United States, where each edge weight is the distance (integers) required to travel between the two endpoints of the edge.
+
+
+\etitle{Shortest  path and distance queries}. Our queries were generated as follows.
+(1) On each road  or co-authorship network, we first randomly choose a node $u$, and run a Dijikstra algorithm from $u$ to find the node $s$ that is farthest from $u$. Then we run a Dijkstra again from $s$ to find the node $t$ that is farthest from $s$. Let $\ell$ be the distance $\dist(s,t)$ from $s$ to $t$.
+(2) We then randomly chose ten thousand node pairs from
+the road network to compose $Q_i (i \in [1, 8])$, such that the grid
+distance of all node pairs in $Q_i$ is in $[2^{i-9}\cdot\ell, 2^{i-8}\cdot\ell)$.
+For each query set $Q_i$ $(i\in [1, 8])$, we report the average running time of 10,000 queries in the set.
+
+%On each road network, we generated eight sets $Q_1$, $Q_2$, $\dots$ , $Q_{7}$ of
+%queries. (1) We first imposed a $256 \times 256$ grid on the
+%road network and computed the side length $\ell$ of each grid cell.
+%(2) We then randomly chose ten thousand node pairs from
+%the road network to compose $Q_i (i \in [1, 7])$, such that the grid
+%distance of all node pairs in $Q_i$ is in $[2^{i-1}\cdot\ell, 2^i\cdot\ell)$. Note
+%that the grid distance of two nodes $u, v$ in a query set is the distance of the cells into which $u$ and $v$ fall, respectively.
+%Moreover, the grid distance of any node pair in $Q_i$ is
+%larger than the grid distance of all node pairs in $Q_{i-1}$.
+%For each query set $Q_i$ $(i \in [1, 7])$, we report the average running time of 10,000 queries in the set.
+
+\etitle{Algorithms.} We implemented algorithms bidirectional-Dijkstra, \arcflag and \tnr.
+For \arcflag, it needs to partition graphs first to pre-compute information on whether an arc is useful for a shortest path search. Any possible partition methods~\cite{kl70,Karypis98,YangYZK12, delling2011graph} can be used here. Considering that we have both road networks and co-authorship networks, we adopted the latest version 5.0.2 of \metis~\cite{metis}, implemented with ANSI C, because it is open source and performs quite well in practice.
+
+For \tnr, since we do not have coordinates information in the co-authorship network, we implemented the CH-based \tnr~\cite{arz2013transit} that does not require the geometry information.
+
+
+
+\etitle{Implementations.} We implemented all algorithms with Microsoft Visual C++. All experiments were run on a PC with an Intel Xeon(R) X5650 CPU@2.67GHz and 24GB of memory.
+
+
+
+
+
+\subsection{Experimental Results}
+%We next present our findings. In all experiments, we tested the datasets in Table~1, and fixed the constant $c = 2$ for computing proxies on all graphs.
+%The preprocessing of \arcflag was slow, and it spent over four days on C-US. Hence, we did not test the largest dataset US for \arcflag.
+
+We next present our findings. In all experiments, we tested the datasets in Table~1, and fixed the constant $c = 2$ for computing proxies on all graphs.
+The preprocessing of \arcflag was slow, and it spent over 4 days on C-US. Hence, we did not test the largest road network dataset US for \arcflag.
+\tnr invokes Contract Hierarchies (\ch) for preprocessing and \ch is very slow on dense graphs. Unfortunately \dblp is a very dense graph and it took more than 7 days for \ch to finish preprocessing on \dblp. Thus we tested \dblpone, instead of \dblp, for the performance of shortest path and distance queries.
+The CH-based \tnr whose space cost was very high, and consequently, and we could not run either \tnr or Proxy+\tnr on the largest road network dataset US, as both of them ran out of memory. Hence, we did not test the largest graph for \tnr as well. However, on the second largest road network dataset C-US, Proxy+\tnr can while \tnr cannot. We report this to show that proxies serve as a data reduction technique and benefit existing methods in terms of space cost as well.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\etitle{Exp-1: Performance evaluation}. In the first set of experiments, we evaluated (1) the number of non-trivial proxies, (2) the number and percentage of the nodes represented by the proxies (excluding the proxies themselves from \dras), (3) the extra space cost of using proxies, and (4) the efficiency of our algorithm $\compDRAs$ for computing proxies and their \dras. Note that to speed up shortest  path and distance queries, for each node represented by a proxy, we need to store (1) the distance between the node and its proxy, and (2) the shortest path from the node to its proxy. Distances are stored as 4-byte integers and it takes $4 \cdot |V_{\dras}|$ bytes to store all the distances, where $V_{\dras}$ is the set of nodes in all \dras. All the shortest paths between the nodes in a \dra and its proxy form a tree whose root is the proxy. Each node is also represented as a 4-byte integer. So it takes $ 4 \cdot (|V_{proxy}|+ |V_{\dras}|) $ bytes to maintain all the trees, where $V_{proxy}$ is the set of proxies. So the extra space cost of using proxies is $4 \cdot |V_{proxy}| + 8 \cdot |V_{\dras}|$ bytes. The results are reported in Table~2.
+
+In the \dblp graph, about $1/10$ nodes are non-trivial proxies, and about $1/3$ nodes are captured by proxies in the graph, which means basically the reduced graph is only about $2/3$ of the input graph. In the \dblpone graph, about $1/10$ nodes are non-trivial proxies, and about $2/3$ nodes are captured by proxies in the graph, which means basically the reduced graph is only about $1/3$ of the input graph.
+
+
+
+
+
+In all the road graphs,  about $1/7$ nodes are non-trivial proxies, and about $1/3$ nodes are captured by proxies in these graphs, which means basically the reduced graph is only about $2/3$ of the input graph. Moreover, although the size restriction is $\le 2\cdot\lfloor\sqrt{|V|}\rfloor$, \dras are typically small, and each proxy represents 2 or 3 other nodes on average.
+
+
+
+Algorithm $\compDRAs$ also scales well, and it can be done in less than half an hour for the largest graph US with $2.4$ $\times$ $10^7$ nodes and $5.7$ $\times$ $10^7$ edges. Furthermore, the space cost is small, and only less than 100MB extra space is taken for the largest graph US.
+
+
+
+
+These make proxies a light-weight optimization technique, which benefits existing shortest  path and distance algorithms, such as (bidirectional) Dijkstra~\cite{LubyR89}, \arcflag \cite{MohringSSWW05} and \tnr \cite{arz2013transit} (to be seen immediately).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+\begin{figure*}[t!]
+\vspace{-1ex}
+\begin{center}
+\hspace{-4ex}
+\subfigure[{\scriptsize DBLP14}]{\label{fig-dist-dj-varyQ-dblp}
+\includegraphics[scale=0.422]{./exp/query_dblp_dist_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize CO}]{\label{fig-dist-dj-varyQ-CO}
+\includegraphics[scale=0.422]{./exp/query_col_dist_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize FL}]{\label{fig-dist-dj-varyQ-FL}
+\includegraphics[scale=0.422]{./exp/query_fla_dist_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize CA}]{\label{fig-dist-dj-varyQ-CA}
+\includegraphics[scale=0.422]{./exp/query_cal_dist_dj.eps}}
+\hspace{-4ex}\vspace{2.5ex}
+
+\subfigure[{\scriptsize E-US}]{\label{fig-dist-dj-varyQ-E-US}
+\includegraphics[scale=0.422]{./exp/query_eus_dist_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize W-US}]{\label{fig-dist-dj-varyQ-ME-W-US}
+\includegraphics[scale=0.422]{./exp/query_wus_dist_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize C-US}]{\label{fig-dist-dj-varyQ-C-US}
+\includegraphics[scale=0.422]{./exp/query_cus_dist_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize US}]{\label{fig-dist-dj-varyQ-US}
+\includegraphics[scale=0.422]{./exp/query_usa_dist_dj.eps}}
+%\hfill
+%\vspace{-1ex}
+\end{center}
+\vspace{1ex}
+\caption{Varying graph queries (Dijkstra and Proxy+Dijkstra for shortest distances)}
+\label{fig:performance_dist_queries_dj}
+\vspace{-1ex}
+\end{figure*}
+\begin{figure*}[t!]
+%\vspace{-2ex}
+\begin{center}
+\hspace{-4ex}
+\subfigure[{\scriptsize DBLP14}]{\label{fig-dist-af-varyQ-dblp}
+\includegraphics[scale=0.422]{./exp/query_dblp_dist_af.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize CO}]{\label{fig-dist-af-varyQ-CO}
+\includegraphics[scale=0.422]{./exp/query_col_dist_af.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize FL}]{\label{fig-dist-af-varyQ-FL}
+\includegraphics[scale=0.422]{./exp/query_fla_dist_af.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize CA}]{\label{fig-dist-af-varyQ-CA}
+\includegraphics[scale=0.422]{./exp/query_cal_dist_af.eps}}
+\hspace{-4ex}\vspace{2.5ex}
+
+\subfigure[{\scriptsize E-US}]{\label{fig-dist-af-varyQ-E-US}
+\includegraphics[scale=0.422]{./exp/query_eus_dist_af.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize W-US}]{\label{fig-dist-af-varyQ-ME-W-US}
+\includegraphics[scale=0.422]{./exp/query_wus_dist_af.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize C-US}]{\label{fig-dist-af-varyQ-C-US}
+\includegraphics[scale=0.422]{./exp/query_cus_dist_af.eps}}
+%\hspace{-4ex}\vspace{-1.5ex}
+%\subfigure[{\scriptsize US}]{\label{fig-exp4-varyQ-US}
+%\includegraphics[scale=0.422]{./query_usa.eps}}
+%\hfill
+%\vspace{-1ex}
+\end{center}
+\vspace{-0.5ex}
+\caption{Varying graph queries (\arcflag and Proxy+\arcflag for shortest distances)}
+\label{fig:performance_dist_queries_af}
+\vspace{-1ex}
+\end{figure*}
+\begin{figure*}[t!]
+%\vspace{-2ex}
+\begin{center}
+\hspace{-4ex}
+\subfigure[{\scriptsize DBLP14}]{\label{fig-dist-tnr-varyQ-dblp}
+\includegraphics[scale=0.422]{./exp/query_dblp_dist_tnr.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize CO}]{\label{fig-dist-tnr-varyQ-CO}
+\includegraphics[scale=0.422]{./exp/query_col_dist_tnr.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize FL}]{\label{fig-dist-tnr-varyQ-FL}
+\includegraphics[scale=0.422]{./exp/query_fla_dist_tnr.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize CA}]{\label{fig-dist-tnr-varyQ-CA}
+\includegraphics[scale=0.422]{./exp/query_cal_dist_tnr.eps}}
+\hspace{-4ex}\vspace{2.5ex}
+
+\subfigure[{\scriptsize E-US}]{\label{fig-dist-tnr-varyQ-E-US}
+\includegraphics[scale=0.422]{./exp/query_eus_dist_tnr.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize W-US}]{\label{fig-dist-tnr-varyQ-ME-W-US}
+\includegraphics[scale=0.422]{./exp/query_wus_dist_tnr.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize C-US}]{\label{fig-dist-tnr-varyQ-ME-C-US}
+\includegraphics[scale=0.422]{./exp/query_cus_dist_tnr.eps}}
+%\hspace{-4ex}\vspace{-1.5ex}
+%\subfigure[{\scriptsize C-US}]{\label{fig-dist-tnr-varyQ-C-US}
+%\includegraphics[scale=0.422]{./exp/query_cus_dist_tnr.eps}}
+%\hspace{-4ex}\vspace{-1.5ex}
+%\subfigure[{\scriptsize US}]{\label{fig-exp4-varyQ-US}
+%\includegraphics[scale=0.422]{./query_usa.eps}}
+%\hfill
+%\vspace{-1ex}
+\end{center}
+\vspace{-0.5ex}
+\caption{Varying graph queries (\tnr and Proxy+\tnr for shortest distances)}
+\label{fig:performance_dist_queries_tnr}
+\vspace{-1ex}
+\end{figure*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+\begin{figure*}[t!]
+\vspace{-1ex}
+\begin{center}
+\hspace{-4ex}
+\subfigure[{\scriptsize DBLP14}]{\label{fig-path-dj-varyQ-dblp}
+\includegraphics[scale=0.422]{./exp/query_dblp_path_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize CO}]{\label{fig-path-dj-varyQ-CO}
+\includegraphics[scale=0.422]{./exp/query_col_path_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize FL}]{\label{fig-path-dj-varyQ-FL}
+\includegraphics[scale=0.422]{./exp/query_fla_path_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize CA}]{\label{fig-path-dj-varyQ-CA}
+\includegraphics[scale=0.422]{./exp/query_cal_path_dj.eps}}
+\hspace{-4ex}\vspace{2.5ex}
+
+\subfigure[{\scriptsize E-US}]{\label{fig-path-dj-varyQ-E-US}
+\includegraphics[scale=0.422]{./exp/query_eus_path_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize W-US}]{\label{fig-path-dj-varyQ-ME-W-US}
+\includegraphics[scale=0.422]{./exp/query_wus_path_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize C-US}]{\label{fig-path-dj-varyQ-C-US}
+\includegraphics[scale=0.422]{./exp/query_cus_path_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize US}]{\label{fig-path-dj-varyQ-US}
+\includegraphics[scale=0.422]{./exp/query_usa_path_dj.eps}}
+%\hfill
+%\vspace{-1ex}
+\end{center}
+\caption{Varying graph queries (Dijkstra and Proxy+Dijkstra for shortest paths)}
+\label{fig:performance_path_queries_dj}
+\vspace{-1ex}
+\end{figure*}
+\begin{figure*}[t!]
+%\vspace{2ex}
+\begin{center}
+\hspace{-4ex}
+\subfigure[{\scriptsize DBLP14}]{\label{fig-path-af-varyQ-dblp}
+\includegraphics[scale=0.422]{./exp/query_dblp_path_af.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize CO}]{\label{fig-path-af-varyQ-CO}
+\includegraphics[scale=0.422]{./exp/query_col_path_af.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize FL}]{\label{fig-path-af-varyQ-FL}
+\includegraphics[scale=0.422]{./exp/query_fla_path_af.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize CA}]{\label{fig-path-af-varyQ-CA}
+\includegraphics[scale=0.422]{./exp/query_cal_path_af.eps}}
+\hspace{-4ex}\vspace{2.5ex}
+
+\subfigure[{\scriptsize E-US}]{\label{fig-path-af-varyQ-E-US}
+\includegraphics[scale=0.422]{./exp/query_eus_path_af.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize W-US}]{\label{fig-path-af-varyQ-ME-W-US}
+\includegraphics[scale=0.422]{./exp/query_wus_path_af.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize C-US}]{\label{fig-path-af-varyQ-C-US}
+\includegraphics[scale=0.422]{./exp/query_cus_path_af.eps}}
+%\hspace{-4ex}\vspace{-1.5ex}
+%\subfigure[{\scriptsize US}]{\label{fig-exp4-varyQ-US}
+%\includegraphics[scale=0.422]{./query_usa.eps}}
+%\hfill
+%\vspace{-1ex}
+\end{center}
+\vspace{-0.5ex}
+\caption{Varying graph queries (\arcflag and Proxy+\arcflag for shortest paths)}
+\label{fig:performance_path_queries_af}
+\vspace{-1ex}
+\end{figure*}
+\begin{figure*}[t!]
+%\vspace{2ex}
+\begin{center}
+\hspace{-4ex}
+\subfigure[{\scriptsize DBLP14}]{\label{fig-path-tnr-varyQ-dblp}
+\includegraphics[scale=0.422]{./exp/query_dblp_path_tnr.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize CO}]{\label{fig-path-tnr-varyQ-CO}
+\includegraphics[scale=0.422]{./exp/query_col_path_tnr.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize FL}]{\label{fig-path-tnr-varyQ-FL}
+\includegraphics[scale=0.422]{./exp/query_fla_path_tnr.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize CA}]{\label{fig-path-tnr-varyQ-CA}
+\includegraphics[scale=0.422]{./exp/query_cal_path_tnr.eps}}
+\hspace{-4ex}\vspace{2.5ex}
+
+\subfigure[{\scriptsize E-US}]{\label{fig-path-tnr-varyQ-E-US}
+\includegraphics[scale=0.422]{./exp/query_eus_path_tnr.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize W-US}]{\label{fig-path-tnr-varyQ-ME-W-US}
+\includegraphics[scale=0.422]{./exp/query_wus_path_tnr.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize C-US}]{\label{fig-path-tnr-varyQ-ME-C-US}
+\includegraphics[scale=0.422]{./exp/query_cus_path_tnr.eps}}
+%\hspace{-4ex}\vspace{-1.5ex}
+%\subfigure[{\scriptsize C-US}]{\label{fig-dist-tnr-varyQ-C-US}
+%\includegraphics[scale=0.422]{./exp/query_cus_dist_tnr.eps}}
+%\hspace{-4ex}\vspace{-1.5ex}
+%\subfigure[{\scriptsize US}]{\label{fig-exp4-varyQ-US}
+%\includegraphics[scale=0.422]{./query_usa.eps}}
+%\hfill
+%\vspace{-1ex}
+\end{center}
+\vspace{-0.5ex}
+\caption{Varying graph queries (\tnr and Proxy+\tnr for shortest paths)}
+\label{fig:performance_path_queries_tnr}
+\vspace{-1ex}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\etitle{Exp-2: Effectiveness  \wrt graph queries}.
+%In the second set of experiments, we justified that the \gdp problem could be solved well by \metis, originally for traditional graph partitioning problems. Using the shrink graphs generated at Exp-1, we evaluated the effectiveness and  efficiency of \metis. To ensure the query efficiency of \disland, each fragment has at most $c \cdot \lfloor\sqrt{|V|}\rfloor$ number of nodes. We used the multilevel bisection method of \metis with the balance factor fixed to 1.003. The results are reported in Table~4.
+%
+In the second set of experiments, we evaluated the efficiency of shortest path and distance queries with respect to the graph queries. For the \arcflag and Proxy+\arcflag methods, the graph and the reduced graph are partitioned into fragments such that each fragment has at most $2\cdot \lfloor\sqrt{|V|}\rfloor$ nodes in order to add labels to edges. We used \metis  to partition graphs with the balance factor fixed to 1.003. For the \tnr and Proxy+\tnr methods, we always select 10,000 transit nodes, as suggested in \cite{arz2013transit}. Note that \tnr invokes Contract Hierarchies (\ch) to preprocess the graph and \ch runs very slow on \dblp dataset (it takes more than 7 days to run \ch on \dblp). Thus we report the results on \dblpone and all the road networks. The results of distance queries and path queries are reported in Figures~\ref{fig:performance_dist_queries_dj}, ~\ref{fig:performance_dist_queries_af},~\ref{fig:performance_dist_queries_tnr} and Figures~\ref{fig:performance_path_queries_dj},\ref{fig:performance_path_queries_af},~\ref{fig:performance_path_queries_tnr}, respectively.
+
+In the co-authorship network \dblpone, the results tell us that with the help of proxies, Proxy+Dijkstra, Proxy+\arcflag and Proxy+\tnr can all achieve a better performance than their counterparts Dijkstra, \arcflag and \tnr without using proxies. On average, the time cost of Proxy+\arcflag, Proxy+Dijkstra and Proxy+\tnr is about 96\%, 51\% and 51\% of their counterparts without proxies for distance queries, and 98\%, 49\% and 76\% of their counterparts without proxies for shortest path queries, respectively. More specifically, we can see that (1) proxies have a better speed-up effect on bidirectional Dijkstra and \tnr than \arcflag, (2) for \arcflag, proxies have a better speed-up effect when the two query nodes are far from each other, which is different from the observation in road networks. To explain the second observation, we need to notice that about 2/3 nodes are captured by proxies in \dblpone. Thus two close nodes are more likely to fall in the \dras. Since there are no speed-up techniques used inside a \dra, so the search space saved by proxies is less than using \arcflag alone.
+
+
+In the road networks, the results tell us that with the help of proxies, Proxy+Dijkstra and Proxy+\arcflag can achieve a better performance than their counterparts without proxies. On average, the time cost of Proxy+\arcflag and Proxy+Dijkstra is about 80\% and 68\% of their counterparts without proxies for distance queries, and 82\% and 67\% of their counterparts without proxies for shortest path queries, respectively. More specifically, we can see that (1) proxies have a better speed-up effect on bidirectional Dijkstra than \arcflag, (2) for \arcflag, proxies have a better speed-up effect when the two query nodes are close to each other, and (3) different from \arcflag, proxy+Dijkstra has a better performance when the query nodes are far from each other. To explain these observations, we need to think how much search space is saved by proxies. Since \arcflag has already used flags on edges to reduce the search space, the proportion of search space saved by proxies is smaller than bidirectional Dijkstra. That explains why proxies have a better speed-up effect on bidirectional Dijkstra. For \arcflag, two close nodes are more likely to fall into the same partition. In this case, the effect of flags on edges are less useful and the search space saved by proxies takes a large proportion, which explains the second observation. For bidirectional Dijkstra, proxies can save more search space when the query nodes are far from each other.
+
+Proxy+\tnr achieves a comparable performance to its counterparts without proxies. This is because in \tnr, a heuristic method is used to generate the node order, based on the structure of the graph. And the node order can affect the performance of \tnr. Since we reduce the input graph by using proxies, the reduced graph has a different topology structure. Thus a different node order will be generated. So it is hard to guarantee that Proxy+\tnr outperforms \tnr. We should also notice that \tnr cannot run on C-US while Proxy+\tnr can. To explain this, we first recall that in \tnr, we have to store the access nodes and distances for each node. For the original input of C-US, there are too many nodes and it runs out of memory. By using proxies, about 1/3 nodes are captured by proxies and we only need to run \tnr on 2/3 of the input graph, which is more practical.
+
+
+
+ %The approaches are speeded up by reducing the search space. because , especially when the two nodes in the query are close to each other. For example for Q1 in dataset CO, the time cost of \arcflag is 1.4 times of the time cost of Proxy+\arcflag. This is because when two nodes are close, their proxies are more likely to be close to each other and computing the shortest path between the two proxies has a smaller share in the total time cost. %For the \ch and its counterparts with proxies, though the time cost of the two methods are very similar, \ch with proxies is slightly faster than the original \ch.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[tb!]
+\vspace{-1ex}
+\begin{center}
+\hspace{-4ex}
+\subfigure[{\scriptsize $Q_1$}]{\label{fig-dist-dj-varySize-Q1}
+\includegraphics[scale=0.422]{./exp/query_q1_dist_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_2$}]{\label{fig-dist-dj-varySize-Q2}
+\includegraphics[scale=0.422]{./exp/query_q2_dist_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_3$}]{\label{fig-dist-dj-varySize-Q3}
+\includegraphics[scale=0.422]{./exp/query_q3_dist_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_4$}]{\label{fig-dist-dj-varySize-Q4}
+\includegraphics[scale=0.422]{./exp/query_q4_dist_dj.eps}}
+\hspace{-4ex}\vspace{2.5ex}
+
+\subfigure[{\scriptsize $Q_5$}]{\label{fig-dist-dj-varySize-Q5}
+\includegraphics[scale=0.422]{./exp/query_q5_dist_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_6$}]{\label{fig-dist-dj-varySize-Q6}
+\includegraphics[scale=0.422]{./exp/query_q6_dist_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_7$}]{\label{fig-dist-dj-varySize-Q7}
+\includegraphics[scale=0.422]{./exp/query_q7_dist_dj.eps}}
+%\hspace{-4ex}\vspace{-1ex}
+%\subfigure[{\scriptsize $Q_8$}]{\label{fig-exp4-varySize-Q8}
+%\includegraphics[scale=0.422]{./exp/query_q8_dist_dj.eps}}
+%\hfill
+%\vspace{-1ex}
+\end{center}
+\vspace{-0.5ex}
+\caption{Varying graph sizes (Dijkstra and Proxy+Dijkstra for shortest distances)}
+\label{fig:performance_dist_graph_size_dj}
+\vspace{-1ex}
+\end{figure*}
+
+\begin{figure*}[tb!]
+\vspace{-1ex}
+\begin{center}
+\hspace{-4ex}
+\subfigure[{\scriptsize $Q_1$}]{\label{fig-dist-af-varySize-Q1}
+\includegraphics[scale=0.422]{./exp/query_q1_dist_af.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_2$}]{\label{fig-dist-af-varySize-Q2}
+\includegraphics[scale=0.422]{./exp/query_q2_dist_af.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_3$}]{\label{fig-dist-af-varySize-Q3}
+\includegraphics[scale=0.422]{./exp/query_q3_dist_af.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_4$}]{\label{fig-dist-af-varySize-Q4}
+\includegraphics[scale=0.422]{./exp/query_q4_dist_af.eps}}
+\hspace{-4ex}\vspace{2.5ex}
+
+\subfigure[{\scriptsize $Q_5$}]{\label{fig-dist-af-varySize-Q5}
+\includegraphics[scale=0.422]{./exp/query_q5_dist_af.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_6$}]{\label{fig-dist-af-varySize-Q6}
+\includegraphics[scale=0.422]{./exp/query_q6_dist_af.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_7$}]{\label{fig-dist-af-varySize-Q7}
+\includegraphics[scale=0.422]{./exp/query_q7_dist_af.eps}}
+%\hspace{-4ex}\vspace{-1ex}
+%\subfigure[{\scriptsize $Q_8$}]{\label{fig-exp4-varySize-Q8}
+%\includegraphics[scale=0.422]{./exp/query_q8_dist_af.eps}}
+%\hfill
+%\vspace{-1ex}
+\end{center}
+\vspace{-0.5ex}
+\caption{Varying graph sizes (\arcflag and Proxy+\arcflag  for shortest distances)}
+\label{fig:performance_dist_graph_size_af}
+\vspace{-1ex}
+\end{figure*}
+
+
+\begin{figure*}[tb!]
+\vspace{-1ex}
+\begin{center}
+\hspace{-4ex}
+\subfigure[{\scriptsize $Q_1$}]{\label{fig-dist-tnr-varySize-Q1}
+\includegraphics[scale=0.422]{./exp/query_q1_dist_tnr.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_2$}]{\label{fig-dist-tnr-varySize-Q2}
+\includegraphics[scale=0.422]{./exp/query_q2_dist_tnr.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_3$}]{\label{fig-dist-tnr-varySize-Q3}
+\includegraphics[scale=0.422]{./exp/query_q3_dist_tnr.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_4$}]{\label{fig-dist-tnr-varySize-Q4}
+\includegraphics[scale=0.422]{./exp/query_q4_dist_tnr.eps}}
+\hspace{-4ex}\vspace{2.5ex}
+
+
+\subfigure[{\scriptsize $Q_5$}]{\label{fig-dist-tnr-varySize-Q5}
+\includegraphics[scale=0.422]{./exp/query_q5_dist_tnr.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_6$}]{\label{fig-dist-tnr-varySize-Q6}
+\includegraphics[scale=0.422]{./exp/query_q6_dist_tnr.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_7$}]{\label{fig-dist-tnr-varySize-Q7}
+\includegraphics[scale=0.422]{./exp/query_q7_dist_tnr.eps}}
+%\hspace{-4ex}\vspace{-1ex}
+%\subfigure[{\scriptsize $Q_8$}]{\label{fig-exp4-varySize-Q8}
+%\includegraphics[scale=0.422]{./exp/query_q8_dist_dj.eps}}
+%\hfill
+%\vspace{-1ex}
+\end{center}
+\vspace{-0.5ex}
+\caption{Varying graph sizes (\tnr and Proxy+\tnr for shortest distances)}
+\label{fig:performance_dist_graph_size_tnr}
+\vspace{-1ex}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+\begin{figure*}[tb!]
+\vspace{-1ex}
+\begin{center}
+\hspace{-4ex}
+\subfigure[{\scriptsize $Q_1$}]{\label{fig-path-dj-varySize-Q1}
+\includegraphics[scale=0.422]{./exp/query_q1_path_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_2$}]{\label{fig-path-dj-varySize-Q2}
+\includegraphics[scale=0.422]{./exp/query_q2_path_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_3$}]{\label{fig-path-dj-varySize-Q3}
+\includegraphics[scale=0.422]{./exp/query_q3_path_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_4$}]{\label{fig-path-dj-varySize-Q4}
+\includegraphics[scale=0.422]{./exp/query_q4_path_dj.eps}}
+\hspace{-4ex}\vspace{2.5ex}
+
+\subfigure[{\scriptsize $Q_5$}]{\label{fig-path-dj-varySize-Q5}
+\includegraphics[scale=0.422]{./exp/query_q5_path_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_6$}]{\label{fig-path-dj-varySize-Q6}
+\includegraphics[scale=0.422]{./exp/query_q6_path_dj.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_7$}]{\label{fig-path-dj-varySize-Q7}
+\includegraphics[scale=0.422]{./exp/query_q7_path_dj.eps}}
+%\hspace{-4ex}\vspace{-1ex}
+%\subfigure[{\scriptsize $Q_8$}]{\label{fig-exp4-varySize-Q8}
+%\includegraphics[scale=0.422]{./exp/query_q8_path_dj.eps}}
+%\hfill
+%\vspace{-1ex}
+\end{center}
+\vspace{-0.5ex}
+\caption{Varying graph sizes (Dijkstra and Proxy+Dijkstra for shortest paths)}
+\label{fig:performance_path_graph_size_dj}
+\vspace{-1ex}
+\end{figure*}
+
+
+
+\begin{figure*}[tb!]
+\vspace{-1ex}
+\begin{center}
+\hspace{-4ex}
+\subfigure[{\scriptsize $Q_1$}]{\label{fig-path-af-varySize-Q1}
+\includegraphics[scale=0.422]{./exp/query_q1_path_af.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_2$}]{\label{fig-path-af-varySize-Q2}
+\includegraphics[scale=0.422]{./exp/query_q2_path_af.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_3$}]{\label{fig-path-af-varySize-Q3}
+\includegraphics[scale=0.422]{./exp/query_q3_path_af.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_4$}]{\label{fig-path-af-varySize-Q4}
+\includegraphics[scale=0.422]{./exp/query_q4_path_af.eps}}
+\hspace{-4ex}\vspace{2.5ex}
+
+
+\subfigure[{\scriptsize $Q_5$}]{\label{fig-path-af-varySize-Q5}
+\includegraphics[scale=0.422]{./exp/query_q5_path_af.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_6$}]{\label{fig-path-af-varySize-Q6}
+\includegraphics[scale=0.422]{./exp/query_q6_path_af.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_7$}]{\label{fig-path-af-varySize-Q7}
+\includegraphics[scale=0.422]{./exp/query_q7_path_af.eps}}
+%\hspace{-4ex}\vspace{-1ex}
+%\subfigure[{\scriptsize $Q_8$}]{\label{fig-exp4-varySize-Q8}
+%\includegraphics[scale=0.422]{./exp/query_q8_path_af.eps}}
+%\hfill
+%\vspace{-1ex}
+\end{center}
+\vspace{-0.5ex}
+\caption{Varying graph sizes (\arcflag and Proxy+\arcflag for shortest paths)}
+\label{fig:performance_path_graph_size_af}
+\vspace{-1ex}
+\end{figure*}
+
+\begin{figure*}[tb!]
+\vspace{-1ex}
+\begin{center}
+\hspace{-4ex}
+\subfigure[{\scriptsize $Q_1$}]{\label{fig-path-tnr-varySize-Q1}
+\includegraphics[scale=0.422]{./exp/query_q1_path_tnr.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_2$}]{\label{fig-path-tnr-varySize-Q2}
+\includegraphics[scale=0.422]{./exp/query_q2_path_tnr.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_3$}]{\label{fig-path-tnr-varySize-Q3}
+\includegraphics[scale=0.422]{./exp/query_q3_path_tnr.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_4$}]{\label{fig-path-tnr-varySize-Q4}
+\includegraphics[scale=0.422]{./exp/query_q4_path_tnr.eps}}
+\hspace{-4ex}\vspace{2.5ex}
+
+
+\subfigure[{\scriptsize $Q_5$}]{\label{fig-path-tnr-varySize-Q5}
+\includegraphics[scale=0.422]{./exp/query_q5_path_tnr.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_6$}]{\label{fig-path-tnr-varySize-Q6}
+\includegraphics[scale=0.422]{./exp/query_q6_path_tnr.eps}}
+\hspace{-4ex}\vspace{-1.5ex}
+\subfigure[{\scriptsize $Q_7$}]{\label{fig-path-tnr-varySize-Q7}
+\includegraphics[scale=0.422]{./exp/query_q7_path_tnr.eps}}
+%\hspace{-4ex}\vspace{-1ex}
+%\subfigure[{\scriptsize $Q_8$}]{\label{fig-exp4-varySize-Q8}
+%\includegraphics[scale=0.422]{./exp/query_q8_path_dj.eps}}
+%\hfill
+%\vspace{-1ex}
+\end{center}
+\vspace{-0.5ex}
+\caption{Varying graph sizes (\tnr and Proxy+\tnr for shortest paths)}
+\label{fig:performance_path_graph_size_tnr}
+\vspace{-1ex}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\etitle{Exp-3: Effectiveness \wrt graph sizes}.
+
+  Since \dblpone is a single dataset, and hence we only compare the efficiency of a group of shortest path and distance queries $\{Q_1, \ldots, Q_7\}$  on road graphs using the same settings as Exp-2.
+ The results of distance and path queries are reported in Figures~\ref{fig:performance_dist_graph_size_dj},~\ref{fig:performance_dist_graph_size_af},~\ref{fig:performance_dist_graph_size_tnr} and Figures~\ref{fig:performance_path_graph_size_dj},~\ref{fig:performance_path_graph_size_af},~\ref{fig:performance_path_graph_size_tnr}, respectively.
+
+%In the third set of experiments, we evaluated the efficiency of shortest path and distance queries with respect to graph sizes. Using the same settings as Exp-2, for each group of queries, we vary the graph size. The results of distance and path queries are reported in Figures~\ref{fig:performance_dist_graph_size_af} and~\ref{fig:performance_dist_graph_size_dj} and Figures~\ref{fig:performance_path_graph_size_af} and~\ref{fig:performance_path_graph_size_dj}, respectively.
+%In the third set of experiments, using the graph fragments generated at Exp-2, we evaluated (1) the average number of nodes and edges enforced by the hybrid landmarks covers  with or without the cost model, and (2) their average efficiency on a single fragment. The results are reported in Table~5.
+
+The results tell us that (1) all algorithms scale well with respect to graph sizes, (2) for Proxy+Dijkstra, its time cost is 68\% and 67\% of  its counterpart without proxies for shortest path and distance queries on average, respectively, and (3) for Proxy+\arcflag, its time cost is 80\% and 82\% of its counterpart without proxies for shortest  path and distance queries on average, respectively, (4) for Proxy+\tnr, its time cost is comparable to its counterpart without proxies for shortest path and distance queries on average, respectively, (5) for Proxy+\tnr, it is applicable to handle larger dataset C-US while its counterpart \tnr without proxies is not. %For Proxy+\ch, the improvement is not very obvious since \ch is already very fast.
+%, and (2) proxies can be easily combined with existing shortest path algorithms and improve its efficiency
+
+
+%The results tell us that the usage of the cost model both reduces the number of landmarks and enforced edges, moreover, it only incurs little extra time cost.
+
+%We also report the \super graphs in Table~6.
+%The \super graphs $\G$ are quite small, typically have 2--4\% nodes and 10--15\% edges compared with the original graphs $G(V, E)$.
+%Using hybrid landmark covers with the cost model, the \super graphs $\G(\V_c, \E_c)$ further reduce 0.2--0.3\% edges. This justified the effectiveness of proxies and graph partitions, and the introduction of the cost model for hybrid landmark covers.
+
+
+
+\vspace{-0.5ex}
+\stitle{Summary}.
+From these experimental results, we find the following. (1) Proxies are a light-weight preprocessing technique, which can be computed efficiently and take linear space to support shortest path and distance queries.  (2) According to our experiments, in most cases, about 1/3 nodes in the graph are captured by proxies, leaving the reduced graph about 2/3 of the input graph. In some special cases (like \dblpone), about 2/3 nodes in the graph are captured by proxies, leaving the reduced graph about only 1/3 of the input graph. (3) Proxies and their \dras benefit existing shortest path and distance algorithms in terms of time cost and space cost. In terms of time cost, \eg they reduce 20\% and 30\% time for \arcflag and bidirectional Dijkstra in road networks, respectively. They also has comparable time cost to their counterparts without proxies for \tnr in road networks; They reduce 49\%, 4\% and 49\% time for birirectional Dijkstra, \arcflag, and \tnr on co-authorship network \dblpone, respectively. In terms of space cost, since the input graph is reduced by proxies, larger datasets can be handled when existing methods are combined with proxies. \eg \tnr with proxies can handle road network C-US while \tnr cannot.
+
+\eat{\vspace{-0.5ex}
+\stitle{Remark}. We also combined proxies with a notion of {\em revised distance landmarks} to improve the efficiency of \ch~\cite{GeisbergerSSD08} for shortest distance queries in \cite{corrMaFWLH14}. \ch assigns a level to each the node in the graph and adds shortcuts into the graph. It adopts a revised bidirectional Dijkstra search which only utilizes the edges and shortcuts from lower level nodes to higher level nodes. Thus the searching space of \ch is quite small. With the help of proxies, \ch further reduces search space, and improves the efficiency of shortest distance queries \cite{corrMaFWLH14}.
+}
