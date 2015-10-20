@@ -1,0 +1,21 @@
+\section{Related Work}
+\label{sec-related}
+
+%Methods proposed for shortest path and shortest distance queries. Can be combined with our method.
+\smallskip\noindent\textbf{Shortest path and distance queries} A great number of techniques have been proposed for answering shortest path and distance queries on graphs\cite{WuXDCZZ12, Dijkstra59, FredmanT84, LubyR89, GeisbergerSSD08, SankaranarayananSA09, SandersS05, GoldbergH05, , ChengKCC12, MozesS12, ChanL07, SaundersT07, WagnerW07, bast2014route, delling2014robust, arz2013transit, PotamiasBCG09, SarmaGNP10, Wei10, ThorupZ05, SankaranarayananS10}. 
+
+The classic solution for shortest path and distance queries is Dijkstra's algorithm\cite{Dijkstra59}. It visits nodes in ascending order of their distance from the source node and all nodes that are closer to the source node than the target node will be visited. Thus, several techniques are proposed to reduce the search space\cite{LubyR89, GoldbergH05}. Bidirectional Dijkstra search\cite{LubyR89} is proposed to search from both source and target node. ALT\cite{GoldbergH05} selects a set of nodes (reffered to as landmarks) and precomputes the distances from each node to landmarks, and uses the distances to prune unnecessary nodes during the search. An edge labeling method\cite{MohringSSWW05} cuts the graphs into partitions to reduce the search space.Though these studies improve the efficiency for answering shortest path and distance queries, they are innefficient for large scale graphs, which are quite common in real life.
+
+To handle large scale graphs, many techniques have been proposed\cite{ChengKCC12, delling2014robust, PotamiasBCG09, Wei10}. Cheng et al. \cite{ChengKCC12} propose a novel disk-based index for processing single-source shortest path or distance queries. Wei \cite{Wei10} and Delling et al.\cite{delling2014robust} study the problem of computing exact query on large scale graphs. A landmark-based method\cite{PotamiasBCG09} is proposed to estimate distance in large networks. 
+
+Furthermore, numurous work focuses on processing shortest path and distance queries on road networks. Different from general graphs, the shortest paths on road networks are often spatially coherent. Morever, road networks are usually assumed to be planar graphs with non-negetive weights. By utilizing the properties of road networks, many techniques\cite{SandersS05, GeisbergerSSD08, zhu2013shortest} are proposed. For example, Sanders et al. propose a route planning method named Highway Hierarchies (HH)\cite{SandersS05}. They construct a highway hierarchy such that only high level edges need to be considered to compute the path and distance from a source to a far target. Inspired by HH, Geisberger et al.\cite{GeisbergerSSD08} propose a road network index named Contraction Hierarchies (CH), which is a extreme case of HH. Zhu et al. further propose Arterial Hierarchy (AH)\cite{zhu2013shortest} that narrows the gap between theory and practice in answering shortest path and distance queries.
+
+Though these studies pre-compute various of indices to answer shortest path and distance queries, they can be easily combined with our proposed method. Specifically, since the routing proxies can represent their DRAs, we can use our method as a data reduction technique and reduce graph sizes by removing all the nodes in the DRAs. Then, these techniques can be applied on the reduced graph. Thus, these techniques and our work are complementary to each other.
+
+\smallskip\noindent\textbf{1-dominator set} Most close to our work is the study of 1-dominator sets in~\cite{SaundersT07}, which are proposed for shortest path queries on nearly acyclic directed graphs. When an undirected graph is converted to an equivalent directed graph, each undirected edge is replaced by a pair of inverse directed edges. Hence, 1-dominator sets~\cite{SaundersT07} are not applicable for undirected graphs. Indeed, routing proxies and deterministic routing areas proposed in this study  are for undirected graphs,  and  significantly different from 1-dominator sets (from definitions to analyses to algorithms).
+
+
+
+
+
+
