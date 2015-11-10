@@ -83,7 +83,7 @@ We next illustrate these notions with an example below.
 \vspace{-0.5ex}
 \begin{example}
 \label{exm-proxies} First consider graph $G_2(V_2, E_2)$ in Fig.~\ref{fig-proxies}, and let $c\cdot\lfloor\sqrt{|V_2|}\rfloor$ =
-$2\cdot\lfloor\sqrt{|16}\rfloor$ = $8$, where $c = 2$ and $|V_2| = 16$.
+$2\cdot\lfloor\sqrt{16}\rfloor$ = $8$, where $c = 2$ and $|V_2| = 16$.
 \sstab(1) Node $u$ is a proxy, and its \dra is the subgraph in the left hand side of the vertical line across $u$;
 \sstab(2) Node $v$ is a proxy, and its \dra is the subgraph in the left hand side of the vertical line across $v$;
 \sstab(3) Node $w$ is not a proxy since it can not find a \dra with size less or equal than $8$;
@@ -91,7 +91,7 @@ $2\cdot\lfloor\sqrt{|16}\rfloor$ = $8$, where $c = 2$ and $|V_2| = 16$.
 
 
 We then consider graph $G_3(V_3, E_3)$ in Fig.~\ref{fig-proxies}, and let $c\cdot\lfloor\sqrt{|V_3|}\rfloor$ =
-$2\cdot\lfloor\sqrt{5|}\rfloor$ = $4$, where $c = 2$ and $|V_3| = 5$.
+$2\cdot\lfloor\sqrt{5}\rfloor$ = $4$, where $c = 2$ and $|V_3| = 5$.
 \sstab(1) Nodes $u, v$ and $w$ are three maximal proxies, whose \dras are all the entire graph $G_3$, and, hence,
 \sstab(2) $u, v$ and $w$ are three equivalent proxies.
  \end{example}
@@ -208,7 +208,7 @@ By Proposition~\ref{pro-proxy-path}, it is easy to derive the following.
 
 
 \begin{prop}
-\label{pro-proxy-path-global} Given two nodes $v$ and $u$ with two distinct proxies $x$ and $y$, respectively, in graph $G$, the shortest path from $v$ to $u$ is $\path(v, x)$ $+$ $\path(x, y)$  $+$ $\path(y, u)$.
+\label{pro-proxy-path-global} Given two nodes $v$ and $u$ with two distinct proxies $x$ and $y$, respectively, in graph $G$, the shortest path from $v$ to $u$ is $\path(v, x)/\path(x, y)/\path(y, u)$.
 \end{prop}
 
 \begin{proof}
@@ -216,7 +216,7 @@ We consider non-trivial maximal proxies. By its definition, (1) $v\neq x$ and $u
 for any node $w$ not in the \dra $G[A^+_{x}]$ of proxy $x$,  if $w$ is reachable to $v$, then $x$ must be a node in any shortest path from $w$ to $v$,
 and, similarly, (4)  for any node $z$ not in the \dra $G[A^+_{y}]$ of proxy $y$,  if $z$ is reachable to $u$, then $y$ must be a node in any shortest path from $z$ to $y$.
 
-This shows that the shortest path from $v$ to $u$ is exactly $\path(v, x)$ $+$ $\path(x, y)$  $+$ $\path(y, u)$.
+This shows that the shortest path from $v$ to $u$ is exactly $\path(v, x)/\path(x, y)/\path(y, u)$.
 \end{proof}
 
 
@@ -290,7 +290,7 @@ If $s$ and $t$ further fall into the same $A^i_u$ ($i\in[1,h]$), then it invokes
 
 \noindent(2)  When $s$ and $t$ belong to two \dras $G[A^+_{u_s}]$ and $G[A^+_{u_t}]$ with proxies $u_s$ and $u_t$, respectively.
 %
-Observe that $\path(s, t)$ = $\path(s, u_s)$ + $\path(u_s, u_t)$ + $\path(u_t, t)$ and $\dist(s, t)$ = $\dist(s, u_s)$ + $\dist(u_s, u_t)$ + $\dist(u_t, t)$, in which $\path(s, u_s)$, $\path(u_t, t)$, $\dist(s, u_s)$ and $\dist(u_t, t)$ are already known. Hence, it simply invokes an algorithm (\eg bidirectional Dijkstra~\cite{LubyR89}, \arcflag \cite{MohringSSWW05}, \ch~\cite{GeisbergerSSD08}, \tnr~\cite{bast2014route}) for computing $\path(u_s, u_t)$.
+Observe that $\path(s, t)$ = $\path(s, u_s)/\path(u_s, u_t)/\path(u_t, t)$ and $\dist(s, t)$ = $\dist(s, u_s)$ + $\dist(u_s, u_t)$ + $\dist(u_t, t)$, in which $\path(s, u_s)$, $\path(u_t, t)$, $\dist(s, u_s)$ and $\dist(u_t, t)$ are already known. Hence, it simply invokes an algorithm (\eg bidirectional Dijkstra~\cite{LubyR89}, \arcflag \cite{MohringSSWW05}, \ch~\cite{GeisbergerSSD08}, \tnr~\cite{bast2014route}) for computing $\path(u_s, u_t)$.
 Similarly, the shortest distance $\dist(s, t)$ can be computed.
 
  Let $G'$ be the reduced subgraph of $G$ by removing all the nodes in \dras, but keeping their proxies, from graph $G$. It is easy to see that the main computation is reduced from $G$ to $G'$.   As shown in our experimental study (Section~\ref{sec-expt}), on average about 1/3 nodes of a graph are captured by non-trivial proxies and their \dras. That is, graph $G'$ is about 2/3 size of graph $G$, and hence our technique could reduce graph sizes and speed up shortest path and distance computations.
