@@ -1,6 +1,55 @@
 \section{Related Work}
 \label{sec-related}
 
+\stitle{Related work}.
+(1) Algorithms for shortest  paths and distances have been extensively studied since 1950's, and fall into different categories
+ in terms of different criteria:
+
+ \bi
+ \item exact distances~\cite{WuXDCZZ12,Dijkstra59,FredmanT84,LubyR89,GeisbergerSSD08,SankaranarayananSA09,SandersS05,GoldbergH05,MozesS12,ChengKCC12,MozesS12,ChanL07,SaundersT07,WagnerW07,bast2014route,delling2014robust,arz2013transit}
+     and approximate distances~\cite{PotamiasBCG09,SarmaGNP10,ThorupZ05,SankaranarayananS10},
+
+
+ \item memory-based~\cite{PotamiasBCG09,SarmaGNP10,WuXDCZZ12,Dijkstra59,FredmanT84,LubyR89,GeisbergerSSD08,Wei10,SankaranarayananSA09,SandersS05,
+ThorupZ05,MozesS12,SaundersT07,WagnerW07,bast2014route,delling2014robust,arz2013transit,SankaranarayananS10} and disk-based algorithms~\cite{ChengKCC12,ChanL07},
+
+
+ \item for unweighted~\cite{PotamiasBCG09,SarmaGNP10,Wei10,bast2014route,delling2014robust,arz2013transit} and weighted graphs~\cite{WuXDCZZ12,Dijkstra59,FredmanT84,LubyR89,GeisbergerSSD08,SankaranarayananSA09,GoldbergH05,MozesS12,SandersS05,ChengKCC12,ThorupZ05,MozesS12,ChanL07,SaundersT07,WagnerW07,bast2014route,delling2014robust,arz2013transit,SankaranarayananS10},
+     and
+
+
+ \item for directed~\cite{SaundersT07,GoldbergH05,MozesS12,bast2014route,delling2014robust,arz2013transit} and undirected graphs~\cite{PotamiasBCG09,SarmaGNP10,WuXDCZZ12,Dijkstra59,FredmanT84,LubyR89,GeisbergerSSD08,Wei10,SankaranarayananSA09,SandersS05,ChengKCC12,ThorupZ05,MozesS12,ChanL07,WagnerW07,bast2014route,delling2014robust,arz2013transit,SankaranarayananS10}.
+ \ei
+
+
+In this work, we study the memory-based (exact)  shortest path and shortest distance problem on weighted undirected large graphs.
+
+
+\stab(2) There has recently been extensive work on speeding-up techniques for shortest  path and distance queries: bidirectional search \cite{LubyR89},
+hierarchical approaches \cite{GeisbergerSSD08, arz2013transit}, node and edge labeling \cite{MohringSSWW05,SankaranarayananSA09}, shortcuts~\cite{SandersS05} and graph partitioning \cite{kl70,Karypis98,YangYZK12, delling2011graph} (see \cite{WuXDCZZ12,WagnerW07, bast2014route,delling2014robust} for recent surveys). Routing proxies and their \dras can serve as a data reduction technique to reduce graph sizes by removing all the nodes in \dras, and these techniques can then be adopted to compute shortest paths and distances on the reduced graphs. Hence, these techniques and our work are complementary to each other.
+%, and can be incorporated into our approach.
+%We have indeed seamlessly integrated the \ch \cite{GeisbergerSSD08} and \arcflag \cite{MohringSSWW05} techniques with distance landmarks into our framework.
+
+\eat{
+\vspace{-2ex}
+\sstab (3)  Distance landmarks have been recently investigated for {\em approximate} shortest distance queries~\cite{ThorupZ05,PotamiasBCG09,SarmaGNP10,SankaranarayananS10}.  It can also be used to answer shortest path queries. An $n\times n$ {\em triangular matrix} of size $n^2/2$ for all-pair shortest distances can be computed in $O(n^2\log n + $ $mn)$ time, using Dijkstra's algorithm~\cite{FredmanT84}, where $n$ and $m$ are the numbers of nodes and edges, respectively. With the distance matrix, shortest distance queries can be answered in $O(1)$ time.
+This makes it not appropriate for answering exact shortest path queries: (a) the preprocessing time is too long, and (b) even if one is willing to wait that long, the matrix is too large to be stored effectively. For instance, the matrix of a graph with one million nodes needs about $1,862$ GB memory (here the distance entries are stored as $4$-byte integers).
+}%end of eat
+
+
+\stab(3) Path oracles have been proposed for spatial networks~\cite{SankaranarayananSA09}, which take advantage of the fact that shortest paths in road
+networks are often spatially coherent. It has recently been shown the approach incurs significant preprocessing time and space overhead, which renders them inapplicable for large road networks with millions of nodes~\cite{WuXDCZZ12}.
+
+
+
+\stab(4) Close to our work is the study of 1-dominator sets in~\cite{SaundersT07}, which are proposed for shortest path queries on nearly acyclic directed graphs. When an undirected graph is converted to an equivalent directed graph, each undirected edge is replaced by a pair of inverse directed edges. Hence,
+ 1-dominator sets~\cite{SaundersT07} are not applicable for undirected graphs. Indeed, routing proxies and deterministic routing areas proposed in this study  are for undirected graphs,  and  significantly different from 1-dominator sets  (from definitions to analyses to algorithms).
+
+
+
+--------------
+
+
 %Methods proposed for shortest path and shortest distance queries. Can be combined with our method.
 \smallskip\noindent\textbf{Shortest path and distance queries} A great number of techniques have been proposed for answering shortest path and distance queries on graphs\cite{WuXDCZZ12, Dijkstra59, FredmanT84, LubyR89, GeisbergerSSD08, SankaranarayananSA09, SandersS05, GoldbergH05, ChengKCC12, MozesS12, ChanL07, SaundersT07, WagnerW07, bast2014route, delling2014robust, arz2013transit, PotamiasBCG09, SarmaGNP10, Wei10, ThorupZ05, SankaranarayananS10}.
 
