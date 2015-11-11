@@ -15,22 +15,6 @@ Algorithms for computing shortest  paths and distances have been studied since 1
 However, computing shortest  paths and distances remains a challenging problem, in terms of both time and space cost, for large-scale graphs such as Web graphs, social networks and road networks. The Dijkstra's algorithm~\cite{FredmanT84} is not acceptable on large graphs (\eg with tens of millions of nodes and edges) for online applications ~\cite{PotamiasBCG09}. Therefore, a lot of optimization techniques have been recently developed to speed up the computation~\cite{PotamiasBCG09,SarmaGNP10,WuXDCZZ12,LubyR89,GeisbergerSSD08,Wei10,SankaranarayananSA09,SandersS05,ChengKCC12}.
 
 
-\eat{%The story of distance landmarks.
-{\em Distance landmarks} (\aka\ {\em distance oracles}) are data structures that support efficient shortest distance query answering, and have been recently studied in both theory~\cite{ThorupZ05,MozesS12} and practice~\cite{PotamiasBCG09,SarmaGNP10,SankaranarayananS10}. It can also be used to answer shortest path queries. An $n\times n$ {\em triangular matrix} of size $n^2/2$ for all-pair shortest distances can be computed in $O(n^2\log n + $ $mn)$ time, using Dijkstra's algorithm~\cite{FredmanT84}, where $n$ and $m$ are the numbers of nodes and edges, respectively. With the distance matrix, shortest distance queries can be answered in $O(1)$ time.
-%
-This solution, however, is {\em not practical} on large graphs: the preprocessing time is too long, and even if one is willing to wait that long, the matrix is too large to be stored effectively. For instance, the matrix of a graph with one million nodes needs about $1,862$ GB memory (here the distance entries are stored as $4$-byte integers).
-%Hence, it is impractical for large graphs.
-
-Distance landmarks aim at {\em striking a balance} between the efficiency benefits of answering shortest distance queries and the time and space cost of computing and storing them. And distance landmarks have already been adopted for answering {\em approximate} shortest distances~\cite{PotamiasBCG09,SarmaGNP10,ThorupZ05,SankaranarayananS10}, and for answering {\em exact} shortest distances on directed graphs~\cite{GoldbergH05,MozesS12}. However, how to apply distance landmarks for answering exact shortest distances on undirected graphs is mainly limited to pure theoretical analyses~\cite{ThorupZ05}.
-}
-%
-\eat{
-
-In this work, we show, both theoretically and experimentally, that distance landmarks can not be directly use for real-life large graph. Nevertheless, we propose a set of techniques for distance landmarks, which together work well for answering shortest distance queries on large graphs.
-}
-
-
-
 To speed-up shortest  path and distance queries, our approach is to use {\em representatives}, each of which captures a set of nodes in a graph. The task of finding a proper form of representatives is, however, {\em nontrivial}. Intuitively, we expect representatives to have the following properties.
 %
 (1) A small number of representatives can represent a large number of nodes in a graph;
@@ -40,10 +24,7 @@ To speed-up shortest  path and distance queries, our approach is to use {\em rep
 (3) the representatives and the set of nodes being represented can be computed efficiently.
 
 
-\stitle{Contributions \& Roadmap}. In this work, we develop a light-weight data reduction technique to speed-up shortest  path and distance queries on large weighted undirected graphs.
-
-
-%\sstab (1) We develop an approximation algorithm with a constant  factor $2$ to analyze distance landmarks by establishing connections with vertex covers (Section~\ref{sec-analysis}), based on which we show that the {\em direct} application of distance landmarks is not practical for large-scale graphs. We then propose {\em hybrid landmark covers}, a revised notion of traditional landmark covers, to reduce the space cost (Section~\ref{sec-analysis}).
+\stitle{Contributions \& Roadmap}. We develop a light-weight data reduction technique for speeding-up shortest  path and distance queries on large weighted undirected graphs.
 
 \stab (1) We first propose a notion of {\em routing proxies} (or simply proxies), each of which represents a small subgraph, referred to as  {\em deterministic routing areas} (\dras)  (Section~\ref{sec-proxy}). We also give an analysis of routing proxies and \dras, and show that they hold good properties for speeding-up shortest path and distance queries.
 
