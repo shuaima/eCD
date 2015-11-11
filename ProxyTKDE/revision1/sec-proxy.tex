@@ -41,8 +41,11 @@ We finally show how to answer shortest path and distance queries using routing p
 We first present the notions of routing proxies and their deterministic routing areas.
 
 \stitle{Proxies}. Given a node $u$ in graph $G(V, E)$, we say that $u$ is a {\em routing proxy} (or simply {\em proxy}) of a set of nodes, denoted by $A_{u}$, if and only if:
+
 \sstab(1) node $u\in A_{u}$ is reachable to any node of $A_u$ in $G$,
+
 \sstab(2) all neighbors of any node $v\in A_u\setminus \{u\}$ are in $A_u$,  and
+
 \sstab(3) the size $|A_u|$ of $A_u$ is equal to or less than $c\cdot\lfloor\sqrt{|V|}\rfloor$, where $c$ is a small constant number, such as $2$ or $3$.
 
 
@@ -54,13 +57,13 @@ Intuitively, one simply checks the graph by removing $u$ from $G$ and its newly 
 
 
 
-\stitle{Deterministic routing areas}. A node $u$ may be a proxy of multiple sets of nodes $A^1_u, \ldots, A^k_u$, and 
+\stitle{Deterministic routing areas}. A node $u$ may be a proxy of multiple sets of nodes $A^1_u, \ldots, A^k_u$, and
 we denote as $A^{+}_u$ the union of all the sets of nodes whose proxy is $u$ , \ie  $A^{+}_u$ = $A^1_u$ $\cup\ldots\cup$ $A^k_u$.
 
 We refer to the {\em subgraph} $G[A^+_u]$ as a deterministic routing area (\dra) of proxy $u$.
 
 Intuitively, \dra $G[A^+_u]$ is a {\em maximal} connected subgraph, union of a set of \ccs, that connects to the rest of graph $G$ through proxy $u$ only.
-That is, for any node $v$ in $G[A^+_u]$ and any node $v$ in the rest of graph $G$, $u$ must appear on the shortest path $\path(v, v')$.  
+That is, for any node $v$ in $G[A^+_u]$ and any node $v$ in the rest of graph $G$, $u$ must appear on the shortest path $\path(v, v')$.
 
 \stitle{Maximal proxies}.  We say that a proxy $u$ is {\em maximal} if there exist no other proxies $u'$ such that $u'\ne u$ and $A^+_{u} \subset A^+_{u'}$.
 
@@ -206,7 +209,7 @@ Propositions~\ref{pro-proxy-path},~\ref{pro-proxy-path-global} and Corollaries~\
 \end{figure}
 }%%%%%%%%%%%%EAT
 
- Based on the above analyses, we present a framework for speeding-up shortest  path and distance query answering, which consists of two modules: {\em preprocessing} and {\em query answering}. 
+ Based on the above analyses, we present a framework for speeding-up shortest  path and distance query answering, which consists of two modules: {\em preprocessing} and {\em query answering}.
  %The framework for answering queries using proxies and \dras is illustrated in Fig.~\ref{fig-angent-landmarks}, in which each $p_i$ ($i\in[1, h]$) denotes a proxy, and is associated with its \dra.
  We next introduce the details of the framework.
 
@@ -232,4 +235,4 @@ Similarly, the shortest distance $\dist(s, t)$ can be computed.
 \stitle{Remarks}.
 (1) To support shortest distance queries, for each node in a \dra, we store its corresponding proxy and the distance to the proxy. To support shortest path queries, we further keep the shortest paths from each proxy to all nodes in its \dra. Thus, we need $O(d)$ extra space to store the routing information to answer shortest path and distance queries, where $d$ is the total number of nodes in all \dras.
 
-\sstab (2) Let $G'$ be the reduced subgraph of $G$ by removing all the nodes in \dras, but keeping their proxies, from graph $G$. It is easy to see that the main computation cost is reduced from $G$ to $G'$. As shown in the experimental study (Section~\ref{sec-expt}), on average about 1/3 nodes of a graph are captured by non-trivial proxies and their \dras, \ie $d$ is about $|V|/3$. That is, graph $G'$ is about 2/3 size of graph $G$, and hence our data reduction technique could reduce graph sizes and speed up shortest path and distance computations. 
+\sstab (2) Let $G'$ be the reduced subgraph of $G$ by removing all the nodes in \dras, but keeping their proxies, from graph $G$. It is easy to see that the main computation cost is reduced from $G$ to $G'$. As shown in the experimental study (Section~\ref{sec-expt}), on average about 1/3 nodes of a graph are captured by non-trivial proxies and their \dras, \ie $d$ is about $|V|/3$. That is, graph $G'$ is about 2/3 size of graph $G$, and hence our data reduction technique could reduce graph sizes and speed up shortest path and distance computations.
