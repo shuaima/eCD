@@ -59,7 +59,7 @@ we denote as $A^{+}_u$ the union of all the sets of nodes whose proxy is $u$ , \
 
 We refer to the {\em subgraph} $G[A^+_u]$ as a deterministic routing area (\dra) of proxy $u$.
 
-Intuitively, \dra $G[A^+_u]$ is a {\em maximal} connected subgraph connecting to the rest of graph $G$ through proxy $u$ only.
+Intuitively, \dra $G[A^+_u]$ is a {\em maximal} connected subgraph, union of a set of \ccs, that connects to the rest of graph $G$ through proxy $u$ only.
 That is, for any node $v$ in $G[A^+_u]$ and any node $v$ in the rest of graph $G$, $u$ must appear on the shortest path $\path(v, v')$.  
 
 \stitle{Maximal proxies}.  We say that a proxy $u$ is {\em maximal} if there exist no other proxies $u'$ such that $u'\ne u$ and $A^+_{u} \subset A^+_{u'}$.
@@ -105,7 +105,16 @@ $2\cdot\lfloor\sqrt{5}\rfloor$ = $4$, where $c = 2$ and $|V_3| = 5$.
 and multiple equivalent proxies.
 
 
-We next show that proxies and \dras are {\em well defined} notions.
+We next first justify the necessity of introducing the size restriction for proxies.  Otherwise, \dras are simply \ccs, and are mostly useless.
+
+
+\begin{prop}
+\label{prop-proxy-cc} Without the size restriction, any node $u$ in a graph $G$ is a maximal proxy,
+and its \dra $G[A^+_u]$ is exactly the connected component (\cc) to which $u$ belongs.
+\end{prop}
+
+
+We then show that proxies and \dras are {\em well defined}.
 
 
 \begin{prop}
@@ -127,6 +136,7 @@ By Proposition~\ref{thm-proxy-disjoint}, it is easy to have the following, which
 \label{cor-proxy-disjoint} Given any two maximal proxies $u$ and $u'$, then either $A^+_{u} = A^+_{u'}$ or $A^+_{u}\cap A^+_{u'}$ = $\emptyset$ holds.
 \end{cor}
 
+
 \vspace{-1ex}
 \stitle{Remark}. Trivial proxies only represent themselves, and, hence, we are only interested in non-trivial maximal proxies (or simply called proxies) in the sequel.
 
@@ -134,18 +144,12 @@ By Proposition~\ref{thm-proxy-disjoint}, it is easy to have the following, which
 \subsection{Properties of Proxies and DRAs}
 \label{subsec-proxy-properties}
 
-We next give an analysis of proxies and \dras, and show that they hold good properties for shortest path and distance queries.
+We next give an analysis of proxies and \dras, and show that they indeed hold good properties for answering shortest path and distance queries.
 %
-We first justify the necessity of the size restriction for proxies.  Otherwise, \dras are simply \ccs, and are mostly useless.
 
 
-\begin{prop}
-\label{prop-proxy-cc} Without the size restriction, any node $u$ in a graph $G$ is a maximal proxy,
-and its \dra $G[A^+_u]$ is exactly the connected component (\cc) to which $u$ belongs.
-\end{prop}
 
-
-The size restriction also guarantees that the shortest distance computation within a \dra can be evaluated efficiently,
+Indeed, the size restriction guarantees that the shortest distance computation within a \dra can be evaluated efficiently,
 as shown below.
 
 
@@ -170,7 +174,7 @@ By Proposition~\ref{pro-proxy-path}, it is easy to derive the following.
 \end{prop}
 
 
-
+Here $\path(v, x)/\path(x, y)/\path(y, u)$ is a path by concatenating paths $\path(v,x)$, $\path(x,y)$ and $\path(y,u)$.
 By Proposition~\ref{pro-proxy-path-global}, it is easy to derive the following result.
 
 \begin{cor}
@@ -181,21 +185,7 @@ By Proposition~\ref{pro-proxy-path-global}, it is easy to derive the following r
 Propositions~\ref{pro-proxy-path},~\ref{pro-proxy-path-global} and Corollaries~\ref{cor-proxy-distance},~\ref{cor-proxy-distance-global} guarantee that the shortest paths and distances between the nodes in the \dras of two distinct proxies can be answered in a correct and efficient way.
 
 
-\begin{prop}
-\label{prop-proxy-cut} Any proxy in a \cc $H(V_s, E_s)$ of graph $G(V$, $E)$ with $|V_s|>c\cdot\lfloor\sqrt{|V|}\rfloor$ must be a cut-node of graph $G$.
-\end{prop}
 
-
-This motivates us to identify (non-trivial maximal) proxies by utilizing the cut-nodes and \bccs, which will be seen immediately.
-
-
-\begin{prop}
-\label{prop-large-bcc} Any node in a bi-connected component (\bc)  with size larger than $c\cdot\lfloor\sqrt{|V|}\rfloor$ of graph $G(V$, $E)$ is a trivial proxy.
-\end{prop}
-
-
-
-As we are interested in non-trivial proxies only, those large \bccs could be simply ignored without any side effects.
 
 
 
