@@ -15,7 +15,7 @@ The main result here is stated as follows.
 We shall prove this by providing a linear time algorithm that computes \dras and maximal proxies.
 
 
-
+\stitle{1. Connections with cut-nodes}. We first show that there are close connections between proxies and cut-nodes.
 
 
 
@@ -24,21 +24,20 @@ We shall prove this by providing a linear time algorithm that computes \dras and
 \end{prop}
 
 
-This motivates us to identify (non-trivial maximal) proxies by utilizing the cut-nodes and \bccs, which will be seen immediately.
-
 
 \begin{prop}
 \label{prop-large-bcc} Any node in a bi-connected component (\bc)  with size larger than $c\cdot\lfloor\sqrt{|V|}\rfloor$ of graph $G(V$, $E)$ is a trivial proxy.
 \end{prop}
 
 
+This motivates us to identify (non-trivial maximal) proxies by utilizing the cut-nodes and \bccs, which will be seen immediately.
+Further, as we are interested in non-trivial proxies only, those large \bccs could be simply ignored without any side effects.
 
-As we are interested in non-trivial proxies only, those large \bccs could be simply ignored without any side effects.
 
 
+\stitle{2. \bcsketch graphs}. We then present \bcsketch graphs, which are defined in terms of cut-nodes and \bccs, and are a key notion employed by our algorithm.
 
-We first present \bcsketch graphs, a key notion employed by the algorithm.
-\etitle{A \bcsketch graph} $\mathbb{G(V, E}, \omega)$ of a graph $G(V, E)$ is a bipartite graph, in which (1) $\mathbb{V}$ = $\mathbb{V}_{c}\cup \mathbb{V}_{bc}$
+A \bcsketch graph $\mathbb{G(V, E}, \omega)$ of a graph $G(V, E)$ is a bipartite graph, in which (1) $\mathbb{V}$ = $\mathbb{V}_{c}\cup \mathbb{V}_{bc}$
 such that $\mathbb{V}_{c}$ is the set of cut-nodes in $G$, and $\mathbb{V}_{bc}$ is the set of \bccs in $G$;
 (2) for each cut-node $v\in \mathbb{V}_{c}$ and each \bc $y_{b}\in \mathbb{V}_{bc}$, there exists an edge $(v, y_b)\in \mathbb{E}$ iff $v$ is a cut-node of \bc $y_b$;
 and (3) $\omega$ is a weight function such that for each node $y_b\in \mathbb{V}_{bc}$, $\omega(y_b)$ is the number of nodes of $G$ in \bc $y_b$.
@@ -67,27 +66,19 @@ The \bcsketch graph $\mathbb{G}_1(\mathbb{V, E}, \omega)$ of graph $G_1$ is show
 in which $\omega(BC_1)$ = 4, $\omega(BC_2)$ = $\omega(BC_3)$ = $\omega(BC_4)$ = $\omega(BC_6)$ = 2, and $\omega(BC_5)$ = 5.
 \end{example}
 
-One may notice that there are no cycles in the \bcsketch graph $\mathbb{G}_3$. This is not a coincidence, as shown below.
+One may already notice that there are no cycles in the \bcsketch graph $\mathbb{G}_3$ in Fig.~\ref{fig-sketch-graph}. This is not a coincidence, as shown below.
 
 \begin{prop}
 \label{pro-sketch-graph} \bcsketch graphs have no cycles, which implies that they are simply trees.
 \end{prop}
 
-\begin{proof}
-We show this by contradiction. Assume first there is a cycle $B_1, v_1, B_2, v_2, \ldots$, $B_k, v_k, B_1$ in a sketch graph $\mathbb{G}$ of graph $G$,
-where $B_1, \ldots, B_k$ are \bccs and $v_1, \ldots, v_k$ are cut-nodes. That is, the removal of any $v_j$ $j\in[1, k]$ does not increase the number of \ccs in graph $G$.
-%
-However, by the definition of cut-nodes, the removal of any nodes in $v_1, \ldots, v_k$ will increase the number of \ccs in $G$. This is a contradiction.
-
-Putting these together, we conclude that there exist no cycles in sketch graphs.
-\end{proof}
-
-Proposition~\ref{pro-sketch-graph} indicates that we can employ the good properties of trees for computing \dras and maximal proxies.
 
 
+Proposition~\ref{pro-sketch-graph} indicates that the good properties of trees can be employed for computing \dras and maximal proxies.
 
-We are now ready to present algorithm \compDRAs shown in Fig.~\ref{alg-compute-proxies}.
-It takes as input graph $G$ and constant $c$, and outputs the \dras of $G$, each associated with a maximal proxy.
+
+\stitle{3. Algorithms}.
+We are now ready to present algorithm \compDRAs shown in Fig.~\ref{alg-compute-proxies}, which takes as input graph $G$ and constant $c$, and outputs the \dras of $G$, each associated with a maximal proxy.
 
 %%%%%%%%%%%%%%%%%%%%%Baseline Algorithm
 \begin{figure}[tb!]
