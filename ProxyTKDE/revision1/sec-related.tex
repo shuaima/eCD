@@ -1,67 +1,40 @@
 \section{Related Work}
 \label{sec-related}
 
-\stitle{Related work}.
-(1) Algorithms for shortest  paths and distances have been extensively studied since 1950's, and fall into different categories
+\noindent{\bf{Shortest path and distance problem.}} Algorithms for shortest  paths and distances have been extensively studied since 1950's, and fall into different categories
  in terms of different criteria:
 
  \bi
- \item exact distances~\cite{WuXDCZZ12,Dijkstra59,FredmanT84,LubyR89,GeisbergerSSD08,SankaranarayananSA09,SandersS05,GoldbergH05,MozesS12,ChengKCC12,MozesS12,ChanL07,SaundersT07,WagnerW07,bast2014route,delling2014robust,arz2013transit}
+ \item exact distances~\cite{WuXDCZZ12,Dijkstra59,FredmanT84,LubyR89,GeisbergerSSD08,SankaranarayananSA09,SandersS05,GoldbergH05,MozesS12,ChengKCC12,MozesS12,ChanL07,SaundersT07,WagnerW07,bast2014route,delling2014robust,arz2013transit,zhu2013shortest}
      and approximate distances~\cite{PotamiasBCG09,SarmaGNP10,ThorupZ05,SankaranarayananS10},
 
 
  \item memory-based~\cite{PotamiasBCG09,SarmaGNP10,WuXDCZZ12,Dijkstra59,FredmanT84,LubyR89,GeisbergerSSD08,Wei10,SankaranarayananSA09,SandersS05,
-ThorupZ05,MozesS12,SaundersT07,WagnerW07,bast2014route,delling2014robust,arz2013transit,SankaranarayananS10} and disk-based algorithms~\cite{ChengKCC12,ChanL07},
+ThorupZ05,MozesS12,SaundersT07,WagnerW07,bast2014route,delling2014robust,arz2013transit,SankaranarayananS10,zhu2013shortest} and disk-based algorithms~\cite{ChengKCC12,ChanL07},
 
 
- \item for unweighted~\cite{PotamiasBCG09,SarmaGNP10,Wei10,bast2014route,delling2014robust,arz2013transit} and weighted graphs~\cite{WuXDCZZ12,Dijkstra59,FredmanT84,LubyR89,GeisbergerSSD08,SankaranarayananSA09,GoldbergH05,MozesS12,SandersS05,ChengKCC12,ThorupZ05,MozesS12,ChanL07,SaundersT07,WagnerW07,bast2014route,delling2014robust,arz2013transit,SankaranarayananS10},
+ \item for unweighted~\cite{PotamiasBCG09,SarmaGNP10,Wei10,bast2014route,delling2014robust,arz2013transit} and weighted graphs~\cite{WuXDCZZ12,Dijkstra59,FredmanT84,LubyR89,GeisbergerSSD08,SankaranarayananSA09,GoldbergH05,MozesS12,SandersS05,ChengKCC12,ThorupZ05,MozesS12,ChanL07,SaundersT07,WagnerW07,bast2014route,delling2014robust,arz2013transit,SankaranarayananS10,zhu2013shortest},
      and
 
 
- \item for directed~\cite{SaundersT07,GoldbergH05,MozesS12,bast2014route,delling2014robust,arz2013transit} and undirected graphs~\cite{PotamiasBCG09,SarmaGNP10,WuXDCZZ12,Dijkstra59,FredmanT84,LubyR89,GeisbergerSSD08,Wei10,SankaranarayananSA09,SandersS05,ChengKCC12,ThorupZ05,MozesS12,ChanL07,WagnerW07,bast2014route,delling2014robust,arz2013transit,SankaranarayananS10}.
+ \item for directed~\cite{SaundersT07,GoldbergH05,MozesS12,bast2014route,delling2014robust,arz2013transit,zhu2013shortest} and undirected graphs~\cite{PotamiasBCG09,SarmaGNP10,WuXDCZZ12,Dijkstra59,FredmanT84,LubyR89,GeisbergerSSD08,Wei10,SankaranarayananSA09,SandersS05,ChengKCC12,ThorupZ05,MozesS12,ChanL07,WagnerW07,bast2014route,delling2014robust,arz2013transit,SankaranarayananS10}.
  \ei
 
 
-In this work, we study the memory-based (exact)  shortest path and shortest distance problem on weighted undirected large graphs.
+In this work, we study the memory-based (exact)  shortest path and shortest distance problem on weighted undirected large graphs. In the remaining part of this section, we introduce some existing studies, focusing on general graphs and road networks.
+
+\noindent{\bf{Approaches for general graphs}}
+The classic solution for shortest path and distance queries is Dijkstra's algorithm\cite{Dijkstra59}. It visits nodes in ascending order of their distance from the source node and all nodes that are closer to the source node than the target node will be visited. Thus, several techniques are proposed to reduce the search space\cite{LubyR89, GoldbergH05}. Bidirectional Dijkstra search\cite{LubyR89} is proposed to search from both source and target node. ALT\cite{GoldbergH05} selects a set of nodes (reffered to as landmarks) and precomputes the distances from each node to landmarks, and uses the distances to prune unnecessary nodes during the search. An edge labeling method named ArcFlag \cite{MohringSSWW05} cuts the graphs into partitions to reduce the search space. Though these studies improve the efficiency for answering shortest path and distance queries, they are innefficient for large scale graphs, which are quite common in real life. To handle large scale graphs, many techniques have been proposed\cite{ChengKCC12, delling2014robust, PotamiasBCG09, Wei10}. Cheng et al. \cite{ChengKCC12} propose a novel disk-based index for processing single-source shortest path or distance queries. Wei \cite{Wei10} and Delling et al.\cite{delling2014robust} study the problem of computing exact query on large scale graphs. A landmark-based method\cite{PotamiasBCG09} is proposed to estimate distance in large networks.
+
+\noindent{\bf{Approaches for road networks}}
+Numerous work focuses on processing shortest path and distance queries on road networks. Different from general graphs, the shortest paths on road networks are often spatially coherent. Morever, road networks are usually assumed to be planar graphs with non-negetive weights. By utilizing the properties of road networks, many techniques\cite{SandersS05, GeisbergerSSD08, zhu2013shortest} are proposed. For example, Sanders et al. propose a route planning method named Highway Hierarchies (HH)\cite{SandersS05}. They construct a highway hierarchy such that only high level edges need to be considered to compute the path and distance from a source to a far target. Inspired by HH, Geisberger et al.\cite{GeisbergerSSD08} propose a road network index named Contraction Hierarchies (CH), which is a extreme case of HH. Zhu et al. further propose Arterial Hierarchy (AH)\cite{zhu2013shortest} that narrows the gap between theory and practice in answering shortest path and distance queries.
+
+Note that to achieve a better query efficiency, most of the aforementioned approaches incur much preprocessing time and space overhead. Though these methods use different indices for query processing, our proxy can be used as a pre-processing step before these methods are applied. Specifically, since the routing proxies can represent their DRAs, we can use our method as a data reduction technique and reduce graph sizes by removing all the nodes in the DRAs. Then, these techniques can be applied on the reduced graph. These techniques benefit from the reduced graph in terms of both preprocessing and query answering.
 
 
-\stab(2) There has recently been extensive work on speeding-up techniques for shortest  path and distance queries: bidirectional search \cite{LubyR89},
-hierarchical approaches \cite{GeisbergerSSD08, arz2013transit}, node and edge labeling \cite{MohringSSWW05,SankaranarayananSA09}, shortcuts~\cite{SandersS05} and graph partitioning \cite{kl70,Karypis98,YangYZK12, delling2011graph} (see \cite{WuXDCZZ12,WagnerW07, bast2014route,delling2014robust} for recent surveys). Routing proxies and their \dras can serve as a data reduction technique to reduce graph sizes by removing all the nodes in \dras, and these techniques can then be adopted to compute shortest paths and distances on the reduced graphs. Hence, these techniques and our work are complementary to each other.
-%, and can be incorporated into our approach.
-%We have indeed seamlessly integrated the \ch \cite{GeisbergerSSD08} and \arcflag \cite{MohringSSWW05} techniques with distance landmarks into our framework.
-
-\eat{
-\vspace{-2ex}
-\sstab (3)  Distance landmarks have been recently investigated for {\em approximate} shortest distance queries~\cite{ThorupZ05,PotamiasBCG09,SarmaGNP10,SankaranarayananS10}.  It can also be used to answer shortest path queries. An $n\times n$ {\em triangular matrix} of size $n^2/2$ for all-pair shortest distances can be computed in $O(n^2\log n + $ $mn)$ time, using Dijkstra's algorithm~\cite{FredmanT84}, where $n$ and $m$ are the numbers of nodes and edges, respectively. With the distance matrix, shortest distance queries can be answered in $O(1)$ time.
-This makes it not appropriate for answering exact shortest path queries: (a) the preprocessing time is too long, and (b) even if one is willing to wait that long, the matrix is too large to be stored effectively. For instance, the matrix of a graph with one million nodes needs about $1,862$ GB memory (here the distance entries are stored as $4$-byte integers).
-}%end of eat
+\noindent{\bf{1-dominator sets}} Most close to our work is the study of 1-dominator sets in~\cite{SaundersT07}. Different from the aforementioned techniques, it is proposed for shortest path queries on nearly acyclic directed graphs rather than undirected graphs. When an undirected graph is converted to an equivalent directed graph, each undirected edge is replaced by a pair of inverse directed edges. Hence, 1-dominator sets~\cite{SaundersT07} are not applicable for undirected graphs. Indeed, routing proxies and deterministic routing areas proposed in this study  are for undirected graphs,  and  significantly different from 1-dominator sets (from definitions to analyses to algorithms).
 
 
-\stab(3) Path oracles have been proposed for spatial networks~\cite{SankaranarayananSA09}, which take advantage of the fact that shortest paths in road
-networks are often spatially coherent. It has recently been shown the approach incurs significant preprocessing time and space overhead, which renders them inapplicable for large road networks with millions of nodes~\cite{WuXDCZZ12}.
-
-
-
-\stab(4) Close to our work is the study of 1-dominator sets in~\cite{SaundersT07}, which are proposed for shortest path queries on nearly acyclic directed graphs. When an undirected graph is converted to an equivalent directed graph, each undirected edge is replaced by a pair of inverse directed edges. Hence,
- 1-dominator sets~\cite{SaundersT07} are not applicable for undirected graphs. Indeed, routing proxies and deterministic routing areas proposed in this study  are for undirected graphs,  and  significantly different from 1-dominator sets  (from definitions to analyses to algorithms).
-
-
-
---------------
-
-
-%Methods proposed for shortest path and shortest distance queries. Can be combined with our method.
-\smallskip\noindent\textbf{Shortest path and distance queries} A great number of techniques have been proposed for answering shortest path and distance queries on graphs\cite{WuXDCZZ12, Dijkstra59, FredmanT84, LubyR89, GeisbergerSSD08, SankaranarayananSA09, SandersS05, GoldbergH05, ChengKCC12, MozesS12, ChanL07, SaundersT07, WagnerW07, bast2014route, delling2014robust, arz2013transit, PotamiasBCG09, SarmaGNP10, Wei10, ThorupZ05, SankaranarayananS10}.
-
-The classic solution for shortest path and distance queries is Dijkstra's algorithm\cite{Dijkstra59}. It visits nodes in ascending order of their distance from the source node and all nodes that are closer to the source node than the target node will be visited. Thus, several techniques are proposed to reduce the search space\cite{LubyR89, GoldbergH05}. Bidirectional Dijkstra search\cite{LubyR89} is proposed to search from both source and target node. ALT\cite{GoldbergH05} selects a set of nodes (reffered to as landmarks) and precomputes the distances from each node to landmarks, and uses the distances to prune unnecessary nodes during the search. An edge labeling method\cite{MohringSSWW05} cuts the graphs into partitions to reduce the search space.Though these studies improve the efficiency for answering shortest path and distance queries, they are innefficient for large scale graphs, which are quite common in real life.
-
-To handle large scale graphs, many techniques have been proposed\cite{ChengKCC12, delling2014robust, PotamiasBCG09, Wei10}. Cheng et al. \cite{ChengKCC12} propose a novel disk-based index for processing single-source shortest path or distance queries. Wei \cite{Wei10} and Delling et al.\cite{delling2014robust} study the problem of computing exact query on large scale graphs. A landmark-based method\cite{PotamiasBCG09} is proposed to estimate distance in large networks.
-
-Furthermore, numurous work focuses on processing shortest path and distance queries on road networks. Different from general graphs, the shortest paths on road networks are often spatially coherent. Morever, road networks are usually assumed to be planar graphs with non-negetive weights. By utilizing the properties of road networks, many techniques\cite{SandersS05, GeisbergerSSD08, zhu2013shortest} are proposed. For example, Sanders et al. propose a route planning method named Highway Hierarchies (HH)\cite{SandersS05}. They construct a highway hierarchy such that only high level edges need to be considered to compute the path and distance from a source to a far target. Inspired by HH, Geisberger et al.\cite{GeisbergerSSD08} propose a road network index named Contraction Hierarchies (CH), which is a extreme case of HH. Zhu et al. further propose Arterial Hierarchy (AH)\cite{zhu2013shortest} that narrows the gap between theory and practice in answering shortest path and distance queries.
-
-Though these studies pre-compute various of indices to answer shortest path and distance queries, they can be easily combined with our proposed method. Specifically, since the routing proxies can represent their DRAs, we can use our method as a data reduction technique and reduce graph sizes by removing all the nodes in the DRAs. Then, these techniques can be applied on the reduced graph. Thus, these techniques and our work are complementary to each other.
-
-\smallskip\noindent\textbf{1-dominator set} Most close to our work is the study of 1-dominator sets in~\cite{SaundersT07}, which are proposed for shortest path queries on nearly acyclic directed graphs. When an undirected graph is converted to an equivalent directed graph, each undirected edge is replaced by a pair of inverse directed edges. Hence, 1-dominator sets~\cite{SaundersT07} are not applicable for undirected graphs. Indeed, routing proxies and deterministic routing areas proposed in this study  are for undirected graphs,  and  significantly different from 1-dominator sets (from definitions to analyses to algorithms).
 
 
 
