@@ -4,7 +4,7 @@
 
 
 In this section, we first propose {\em routing  proxies} and {\em deterministic routing areas} (\dras) to capture the idea of representatives and the set of
-nodes being represented, respectively. We then give an analysis of the properties of  \dras and their routing proxies, and show that they indeed hold the desired properties of representatives discussed in Section~\ref{sec-intro}.
+nodes being represented, respectively. We then give an analysis of the properties of  \dras and their routing proxies, and show that they indeed hold the desired properties of representatives that we have discussed in Section~\ref{sec-intro}.
 We finally show how to answer shortest path and distance queries using routing proxies.
 
 %We consider a graph $G(V, E, w)$.
@@ -38,7 +38,7 @@ We finally show how to answer shortest path and distance queries using routing p
 \subsection{Routing Proxies and Deterministic Routing Areas}
 \label{subsec-proxy-def}
 
-We first present routing proxies and their deterministic routing areas.
+We first present the notions of routing proxies and their deterministic routing areas.
 
 \stitle{Proxies}. Given a node $u$ in graph $G(V, E)$, we say that $u$ is a {\em routing proxy} (or simply {\em proxy}) of a set of nodes, denoted by $A_{u}$, if and only if:
 \sstab(1) node $u\in A_{u}$ is reachable to any node of $A_u$ in $G$,
@@ -48,17 +48,21 @@ We first present routing proxies and their deterministic routing areas.
 
 Here condition (1) guarantees the connectivity of subgraph $G[A_u]$,  condition (2) implies that not all neighbors of proxy $u$ are necessarily in $A_u$;
 and condition (3), referred to as {\em size restriction}, limits the size of $A_u$ of proxy $u$.
+Intuitively, one simply looks at the graph by removing $u$ from $G$ and the newly
+\ccs created, and a proxy of $u$ is simply a union of such \ccs whose total size is at most $c\cdot\lfloor\sqrt{|V|}\rfloor - 1$.
 
 
 
-Note that a node $u$ may be a proxy of multiple sets of nodes $A^1_u, \ldots, A^k_u$ such that $A^i_u\cap A^j_u$ = $\{u\}$ for any $i\ne j\in[1, k]$.
-And we denote as $A^{+}_u$ the union of all the sets of nodes whose proxy is $u$ , \ie  $A^{+}_u$ = $A^1_u$ $\cup\ldots\cup$ $A^k_u$.
 
-\stitle{Deterministic routing areas} . We refer to the {\em subgraph} $G[A^+_u]$ with nodes $A^+_u$ as a \dra of proxy $u$.
+\stitle{Deterministic routing areas}. A node $u$ may be a proxy of multiple sets of nodes $A^1_u, \ldots, A^k_u$, and 
+we denote as $A^{+}_u$ the union of all the sets of nodes whose proxy is $u$ , \ie  $A^{+}_u$ = $A^1_u$ $\cup\ldots\cup$ $A^k_u$.
+
+We refer to the {\em subgraph} $G[A^+_u]$ as a deterministic routing area (\dra) of proxy $u$.
 
 Intuitively, \dra $G[A^+_u]$ is a {\em maximal} connected subgraph connecting to the rest of graph $G$ through proxy $u$ only.
+That is, for any node $v$ in $G[A^+_u]$ and any node $v$ in the rest of graph $G$, $u$ must appear on the shortest path $\path(v, v')$.  
 
-\stitle{Maximal proxies}.  We say that a proxy $u$ is {\em maximal} if there exist no other proxies $u'$ such that $A^+_{u} \subset A^+_{u'}$.
+\stitle{Maximal proxies}.  We say that a proxy $u$ is {\em maximal} if there exist no other proxies $u'$ such that $u'\ne u$ and $A^+_{u} \subset A^+_{u'}$.
 
 \stitle{Trivial proxies}. We say that a maximal proxy $u$ is {\em trivial} if $A^+_u$ contains itself only, \ie $A^+_{u}$ = $\{u\}$.
 
