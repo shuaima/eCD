@@ -25,17 +25,20 @@ In this section, we show how to answer shortest path and distance queries using 
 
 \sstab (2) It then pre-computes and stores all the shortest paths and distances between any node in a \dra and its proxy.
 
+To support shortest distance queries, for each node in a \dra, we store its proxy $u$, its distance to $u$ and the component of $A^{+}_u$ to which it belongs,
+and, moreover, to support shortest path queries, we further keep the shortest paths from proxy $u$ to all nodes in the \dra.
+
 
 \stitle{2. Query answering}. Given two nodes $s$ and $t$ in graph $G(V, E)$  and the pre-computed information, the query answering module executes the following.
 
 
 \sstab (1) When nodes $s$ and $t$ belong to the same \dra $G[A^+_u]$ with proxy $u$ such that $A^+_u$ = $A^1_u\cup\ldots A^h_u$.
 
-If $s$ and $t$ further fall into the same $A^i_u$ ($i\in[1,h]$), then it invokes the Dijkstra's algorithm on the subgraph $G[A^i_u]$ to compute the shortest path and distance between $s$ and $t$. Otherwise, it simply returns $\path(s, u)/\path(u, t)$ or $\dist(s, u)$ + $\dist(u, t)$ in constant time.
+If $s$ and $t$ further fall into the same component $A^i_u$ ($i\in[1,h]$), it invokes the Dijkstra's algorithm on the subgraph $G[A^i_u]$ to compute the shortest path and distance between $s$ and $t$. Otherwise, it simply returns $\path(s, u)/\path(u, t)$ or $\dist(s, u)$ + $\dist(u, t)$ in constant time.
 
 \sstab (2)  When $s$ and $t$ belong to two \dras $G[A^+_{u_s}]$ and $G[A^+_{u_t}]$ with proxies $u_s$ and $u_t$, respectively.
 
-By the analyses in Section~\ref{subsec-proxy-properties}, we know that $\path(s, t)$ = $\path(s, u_s)/\path(u_s, u_t)/$ $\path(u_t, t)$ , in which $\path(s, u_s)$ and $\path(u_t, t)$ are already known. Hence, it simply invokes an algorithm (\eg bidirectional Dijkstra~\cite{LubyR89}, \arcflag \cite{MohringSSWW05}, \ch~\cite{GeisbergerSSD08}, \tnr~\cite{bast2014route}) for computing $\path(u_s, u_t)$.
+By the analyses in Section~\ref{subsec-proxy-properties}, we know that $\path(s, t)$ = $\path(s, u_s)/\path(u_s, u_t)/$ $\path(u_t, t)$, in which $\path(s, u_s)$ and $\path(u_t, t)$ are already known. Hence, it simply invokes an algorithm (\eg bidirectional Dijkstra~\cite{LubyR89}, \arcflag \cite{MohringSSWW05}, \ch~\cite{GeisbergerSSD08}, \tnr~\cite{bast2014route}) for computing $\path(u_s, u_t)$.
 
 Similarly, the shortest distance $\dist(s, t)$ = $\dist(s, u_s)$ + $\dist(u_s, u_t)$ + $\dist(u_t, t)$ can be computed.
 
@@ -43,11 +46,15 @@ We next illustrate how shortest path and distance queries are performed  with an
 
 \begin{example}
 \label{exm-query}
-Consider graph $G_1$ and its \bccs in Fig.~\ref{fig-cut-nodes}(1), in which the \dras and their maximal proxies are computed by algorithm $\compDRAs$, as explained in Example~\ref{exm-compute-proxies}, \ie\ $\dra_1$ = $\{BC_1, BC_2, BC_3\}$ with its proxy $w$ and $\dra_2$ = $\{BC_5, BC_6\}$ with its proxy $x$.
+Consider graph $G_1$ and its \bccs in Fig.~\ref{fig-cut-nodes}(1), in which the \dras and their maximal proxies are computed by algorithm $\compDRAs$, as explained in Example~\ref{exm-compute-proxies}, \ie\ $\dra_1$ = $\{u, v, BC_1, BC_2, BC_3\}$ with its proxy $w$ and $\dra_2$ = $\{y, BC_5, BC_6\}$ with its proxy $x$.
+Note that here both $A^{+}_w$ and $A^{+}_x$ have single components.  
 
-To support shortest distance queries, for each node in $\dra_1$ (respectively $\dra_2$), we store its distance to $w$ (respectively $x$). 
-To support shortest path queries, we further keep the shortest paths from proxy $w$ (respectively $x$) to all nodes in $\dra_1$ (respectively $\dra_2$). 
+Let $G'_1$ be the graph by removing $\dra_1$  and $\dra_2$, but keeping their proxies $w, x$, from graph $G_1$.
 
+\sstab(1) Consider nodes $s$ in $\dra_1$  and $t$ in $\dra_2$, we first compute $\dist(w, x)$ or $\path(w,x)$ on $G'_1$, and then 
+let $\dist(s, t)$ = $\dist(s, w)$ + $\dist(w, x)$ + $\dist(x, t)$ or $\path(s, t)$ = $\path(s, w)/\path(w, x)/$ $\path(x, t)$.
+
+\sstab(2) If nodes $s$ and $t$ are both in $\dra_1$  or $\dra_2$, we directly compute their shortest path or distance on  $\dra_1$  or $\dra_2$.
 \end{example}
 
 
