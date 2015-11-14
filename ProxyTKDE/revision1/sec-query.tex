@@ -28,6 +28,8 @@ In this section, we show how to answer shortest path and distance queries using 
 To support shortest distance queries, for each node in a \dra, we store its proxy $u$, its distance to $u$ and the component of $A^{+}_u$ to which it belongs,
 and, moreover, to support shortest path queries, we further keep the shortest paths from proxy $u$ to all nodes in the \dra.
 
+\sstab (3) It finally computes the reduced subgraph $G'$ by removing all \dras, but keeping their proxies, from graph $G$. 
+
 
 \stitle{2. Query answering}. Given two nodes $s$ and $t$ in graph $G(V, E)$  and the pre-computed information, the query answering module executes the following.
 
@@ -38,18 +40,30 @@ If $s$ and $t$ further fall into the same component $A^i_u$ ($i\in[1,h]$), it in
 
 \sstab (2)  When $s$ and $t$ belong to two \dras $G[A^+_{u_s}]$ and $G[A^+_{u_t}]$ with proxies $u_s$ and $u_t$, respectively.
 
-By the analyses in Section~\ref{subsec-proxy-properties}, we know that $\path(s, t)$ = $\path(s, u_s)/\path(u_s, u_t)/$ $\path(u_t, t)$, in which $\path(s, u_s)$ and $\path(u_t, t)$ are already known. Hence, it simply invokes an algorithm (\eg bidirectional Dijkstra~\cite{LubyR89}, \arcflag \cite{MohringSSWW05}, \ch~\cite{GeisbergerSSD08}, \tnr~\cite{bast2014route}) for computing $\path(u_s, u_t)$.
+By the analyses in Section~\ref{subsec-proxy-properties}, we know that $\path(s, t)$ = $\path(s, u_s)/\path(u_s, u_t)/$ $\path(u_t, t)$, in which $\path(s, u_s)$ and $\path(u_t, t)$ are already known. Hence, it simply invokes an algorithm (\eg bidirectional Dijkstra~\cite{LubyR89}, \arcflag \cite{MohringSSWW05}, \ch~\cite{GeisbergerSSD08}, \tnr~\cite{bast2014route}) on the reduced graph $G'$ for computing $\path(u_s, u_t)$.
 
 Similarly, the shortest distance $\dist(s, t)$ = $\dist(s, u_s)$ + $\dist(u_s, u_t)$ + $\dist(u_t, t)$ can be computed.
 
 We next illustrate how shortest path and distance queries are performed  with an example below.
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[tb!]
+%\vspace{-1ex}
+\begin{center}
+\includegraphics[scale=0.9]{./Example-framework.eps}
+\end{center}
+\vspace{-2ex}
+\caption{Example query answering}
+  \label{fig-query-answering}\vspace{-3ex}
+\end{figure}
+
 \begin{example}
 \label{exm-query}
-Consider graph $G_1$ and its \bccs in Fig.~\ref{fig-cut-nodes}(1), in which the \dras and their maximal proxies are computed by algorithm $\compDRAs$, as explained in Example~\ref{exm-compute-proxies}, \ie\ $\dra_1$ = $\{u, v, BC_1, BC_2, BC_3\}$ with its proxy $w$ and $\dra_2$ = $\{y, BC_5, BC_6\}$ with its proxy $x$.
-Note that here both $A^{+}_w$ and $A^{+}_x$ have single components.  
+Consider graph $G_1$ and its \bccs in Fig.~\ref{fig-cut-nodes}(1), in which the \dras and their maximal proxies are computed by algorithm $\compDRAs$, as shown in Fig.~\ref{fig-query-answering}, \ie\ $\dra_1$ = $\{u, v, BC_1, BC_2, BC_3\}$ with its proxy $w$ and $\dra_2$ = $\{y, BC_5, BC_6\}$ with its proxy $x$. Note that here both $A^{+}_w$ and $A^{+}_x$ have single components. Moreover, the reduced graph $G'_1$ of $G_1$  is the subgraph with nodes $w$ and $x$ only.
 
-Let $G'_1$ be the graph by removing $\dra_1$  and $\dra_2$, but keeping their proxies $w, x$, from graph $G_1$.
+
+
 
 \sstab(1) Consider nodes $s$ in $\dra_1$  and $t$ in $\dra_2$, we first compute $\dist(w, x)$ or $\path(w,x)$ on $G'_1$, and then 
 let $\dist(s, t)$ = $\dist(s, w)$ + $\dist(w, x)$ + $\dist(x, t)$ or $\path(s, t)$ = $\path(s, w)/\path(w, x)/\path(x, t)$.
@@ -63,4 +77,4 @@ Note that here $\dist(s, w)$, $\dist(x, t)$, $\path(s, w)$ and $\path(x, t)$ hav
 \stitle{Remarks}.
 (1) As shown above, we need $O(d)$ extra space to store the routing information to compute shortest paths and distances, where $d$ is the total number of nodes in all \dras.
 
-\sstab (2) Let $G'$ be the reduced subgraph of $G$ by removing all the nodes in \dras, but keeping their proxies, from graph $G$. It is easy to see that the main computation cost is reduced from $G$ to $G'$. As shown in the experimental study (Section~\ref{sec-expt}), on average about 1/3 nodes of a graph are captured by non-trivial proxies and their \dras, \ie $d$ is about $|V|/3$. That is, graph $G'$ is about 2/3 size of graph $G$, and hence our data reduction technique could reduce graph sizes and speed up shortest path and distance computations. 
+\sstab (2) It is easy to see that the main computation cost is reduced from $G$ to $G'$. As shown in the experimental study (Section~\ref{sec-expt}), on average about 1/3 nodes of a graph are captured by non-trivial proxies and their \dras, \ie $d$ is about $|V|/3$. That is, graph $G'$ is about 2/3 size of graph $G$, and hence our data reduction technique could reduce graph sizes and speed up shortest path and distance computations. 
