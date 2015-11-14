@@ -8,14 +8,14 @@ set border
 set noy2tics
 set nox2tics
 set xr [0:7]
-set yr [31.62:31623]
-set xtics ("Q1" 0, "Q2" 1, "Q3" 2, "Q4" 3, "Q5" 4, "Q6" 5, "Q7" 6, "Q8" 7) 
-set ytics ("10^{2}" 100, "10^{2.5}" 316.23,  "10^{3}" 1000, "10^{3.5}" 3162.3, "10^{4}" 10000)
+set yr [50:950]
+set xtics ("Q1" 0, "Q3" 2, "Q5" 4, "Q7" 6) 
+set ytics ("100" 100, "300" 300, "500" 500, "700" 700)
 set label "(out of memory)" tc rgb "red" at 5, 5000 right
 #set x2tics ("" 2.5, "" 7.5, "" 12.5,"" 17.5) 
 #set xtics scale 0.3
 unset logscale x
-set logscale y
+unset logscale y
 
 #set ylabel "Preprocessing time (micro second)"
 set label "Query time (x10^{-6} s)" at graph 0.3, 1.05

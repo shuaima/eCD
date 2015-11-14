@@ -9,7 +9,7 @@ set noy2tics
 set nox2tics
 set xr [0:7]
 set yr [1:5]
-set xtics ("Q1" 0, "Q2" 1, "Q3" 2, "Q4" 3, "Q5" 4, "Q6" 5, "Q7" 6, "Q8" 7) 
+set xtics ("Q1" 0, "Q3" 2, "Q5" 4, "Q7" 6) 
 set ytics ("1" 1, "2" 2, "3" 3,  "4" 4, "5" 5)
 #set x2tics ("" 2.5, "" 7.5, "" 12.5,"" 17.5) 
 #set xtics scale 0.3

@@ -8,13 +8,13 @@ set border
 set noy2tics
 set nox2tics
 set xr [0:7]
-set yr [0.1:10]
-set xtics ("Q1" 0, "Q2" 1, "Q3" 2, "Q4" 3, "Q5" 4, "Q6" 5, "Q7" 6, "Q8" 7) 
-set ytics ("10^{-1}" 0.1, "10^{-0.5}" 0.316, "10^0" 1,  "10^{0.5}" 3.16)
+set yr [0:4.7]
+set xtics ("Q1" 0, "Q3" 2, "Q5" 4, "Q7" 6) 
+set ytics ("1" 1, "2" 2, "3" 3,  "4" 4)
 #set x2tics ("" 2.5, "" 7.5, "" 12.5,"" 17.5) 
 #set xtics scale 0.3
 unset logscale x
-set logscale y
+unset logscale y
 
 #set ylabel "Preprocessing time (micro second)"
 set label "Query time (x10^{-6} s)" at graph 0.3, 1.05
