@@ -10,7 +10,7 @@
 %sets of experiments to evaluate:
 %(1) the performance of proxies,
 %(2) the efficiency of (bidirectional) Dijkstra~\cite{LubyR89}, \arcflag \cite{MohringSSWW05}, \tnr \cite{arz2013transit} and their counterparts with proxies (Proxy+Dijkstra, Proxy+\arcflag, Proxy+\tnr) with respect to  graph queries, and (3) the efficiency of these algorithms with respect to graph sizes.
- By using real-life road networks and social graphs, we next conduct experiments to evaluate (1) the performance of proxies, (2) how proxies speed up shortest  path and distance queries.
+Using real-life road networks and social graphs, we next conduct an extensive experimental study to evaluate: (1) the performance of computing routing proxies, and (2) how routing proxies speed up shortest  path and distance queries, by comparing the efficiency of (bidirectional) Dijkstra~\cite{LubyR89}, \arcflag \cite{MohringSSWW05}, \tnr \cite{arz2013transit}, \ah \cite{zhu2013shortest} with their counterparts using proxies (Proxy+Dijkstra, Proxy+\arcflag, Proxy+\tnr, Proxy+\ah) with respect to graph queries and graph sizes.
 
 \begin{table}[t!]
 \label{tab-datasets}
@@ -127,7 +127,7 @@ and 24GB of memory.
 %\subsection{Experimental Results}
 %We next present our findings. In all experiments, we tested the datasets in Table~1, and fixed the constant $c = 2$ for computing proxies on all graphs.
 %The preprocessing of \arcflag was slow, and it spent over four days on C-US. Hence, we did not test the largest dataset US for \arcflag.
-\subsection{Performance of Proxies}
+\subsection{Performance of Computing Routing Proxies}
 Firstly, we conduct experiments to evaluate the performance of proxies, i.e. how many nodes can be represented by proxies, how much extra space we need to store the routing information for the proxies, and how much time we need to find all proxies. Specifically, we evaluate (1) the number of non-trivial proxies, (2) the number and percentage of the nodes represented by the proxies (excluding the proxies themselves from \dras), (3) the extra space cost of using proxies, and (4) the efficiency of our algorithm $\compDRAs$ for computing proxies and their \dras. In this set of experiments, we tested the datasets in Table~1. We fixed the constant $c = 2$ for computing proxies on all graphs. The experimental results are reported in Table~\ref{tab-exp1-proxies-dras}.
 
 %Note that to speed up shortest  path and distance queries, for each node represented by a proxy, we need to store (1) the distance between the node and its proxy, and (2) the shortest path from the node to its proxy. Distances are stored as 4-byte integers and it takes $4 \cdot |V_{\dras}|$ bytes to store all the distances, where $V_{\dras}$ is the set of nodes in all \dras. All the shortest paths between the nodes in a \dra and its proxy form a tree whose root is the proxy. Each node is also represented as a 4-byte integer. So it takes $ 4 \cdot (|V_{proxy}|+ |V_{\dras}|) $ bytes to maintain all the trees, where $V_{proxy}$ is the set of proxies. So the extra space cost of using proxies is $4 \cdot |V_{proxy}| + 8 \cdot |V_{\dras}|$ bytes. The results are reported in Table~2.
@@ -148,7 +148,7 @@ Algorithm $\compDRAs$ also scales well, and it can be done in less than half an 
 
 \stitle{Summary} From the observations we can see that proxy is a light-weight optimization technique. It runs efficiently and scales well to large networks. It incurs appropriate space overhead. These properties benefit existing shortest  path and distance algorithms, such as (bidirectional) Dijkstra~\cite{LubyR89}, \arcflag \cite{MohringSSWW05}, \tnr \cite{arz2013transit} and \ah\cite{zhu2013shortest} (to be seen immediately).
 
-\subsection{Benefit of proxies}
+\subsection{Benefits of Using Routing Proxies}
 Our proxies can be used as a preprocessing step before we apply other existing approaches, such as Dijkstra, \arcflag, \tnr or \ah etc. In this subsection, we conduct experiments to show the comparison results of running an existing approach and running the combination of existing approach and proxies.
 
 
