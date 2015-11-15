@@ -12,6 +12,7 @@
 %(2) the efficiency of (bidirectional) Dijkstra~\cite{LubyR89}, \arcflag \cite{MohringSSWW05}, \tnr \cite{arz2013transit} and their counterparts with proxies (Proxy+Dijkstra, Proxy+\arcflag, Proxy+\tnr) with respect to  graph queries, and (3) the efficiency of these algorithms with respect to graph sizes.
 Using real-life road networks and social graphs, we next conduct an extensive experimental study to evaluate: (1) the performance of computing routing proxies, and (2) how routing proxies speed up shortest  path and distance queries, by comparing the efficiency of (bidirectional) Dijkstra~\cite{LubyR89}, \arcflag \cite{MohringSSWW05}, \tnr \cite{arz2013transit}, \ah \cite{zhu2013shortest} with their counterparts using proxies (Proxy+Dijkstra, Proxy+\arcflag, Proxy+\tnr, Proxy+\ah) with respect to graph queries and graph sizes.
 
+\eat{%%%%%%%%%%%%EAT
 \begin{table}[t!]
 \label{tab-datasets}
 \caption{Real-world graphs}
@@ -35,31 +36,33 @@ US      &  Entire US             & 23,947,347   &  28,854,312  \\ \hline
 %\end{small}
 \end{center}
 \end{table}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+}%%%EAT%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{table*}[t!]
 \label{tab-exp1-proxies-dras}
 \begin{center}
-%\begin{small}
+\begin{scriptsize}
 \caption{Effectiveness of proxies and \dras}
 \vspace{-1ex}
-\begin{tabular}{|c|r|r|r|r|r|r|}
+\begin{tabular}{|c||c|c|c||r|r|r|r|r|r|}
 \hline
-                                &  \multicolumn{1}{c|}{Proxies}   &  \multicolumn{1}{c|}{Nodes in \dras}  & \multicolumn{1}{c|}{Extra $\spacec$} & \multicolumn{1}{c|}{Space of $G$} & \multicolumn{1}{c|}{Space of $G'$} & \multicolumn{1}{c|}{$\timec$}\\
-  \raisebox{1.5ex}[0pt]{Graphs} &  \multicolumn{1}{c|}{(\#, \%)}  &  \multicolumn{1}{c|}{(\#, \%)}  & \multicolumn{1}{c|}{(MB)} & \multicolumn{1}{c|}{(MB)} & \multicolumn{1}{c|}{(MB)} & \multicolumn{1}{c|}{(Sec.)}\\
+                          &  &  &  &  \multicolumn{1}{c|}{\bf Proxies}   &  \multicolumn{1}{c|}{\bf Nodes in \dras}  & \multicolumn{1}{c|}{\bf Extra $\spacec$} & \multicolumn{1}{c|}{\bf Space of $G$} & \multicolumn{1}{c|}{\bf Space of $G'$} & \multicolumn{1}{c|}{\bf Time}\\
+                          
+  \raisebox{1.5ex}[0pt]{\bf Graphs} &   \raisebox{1.5ex}[0pt]{\bf Regions} &   \raisebox{1.5ex}[0pt]{\bf \# of Nodes} &   \raisebox{1.5ex}[0pt]{\bf \# of Edges} & \multicolumn{1}{c|}{\bf (\#, \%)}  &  \multicolumn{1}{c|}{\bf (\#, \%)}  & \multicolumn{1}{c|}{\bf (MB)} & \multicolumn{1}{c|}{\bf (MB)} & \multicolumn{1}{c|}{\bf (MB)} & \multicolumn{1}{c|}{\bf (Sec.)}\\
 \hline\hline
-DBLP14    &  (14, 090, 9.8)         & (102,085, 72.2)  & 1.56 & 4.30 & 1.36 &  1.5 \\ \hline
-DBLP    & (31,475 , 9.9)             & (105,671 , 33.3) & 1.61 & 17.22 & 14.29  & 5.7 \\ \hline
-CO      &  (56,277, 12.9)         & (156,329, 35.9)  & 2.38  & 9.61 & 6.64 & 3.47  \\ \hline
-FL      &  (140,382, 13.1)        & (378,804, 35.4)  & 5.78  & 24.59 & 17.12 &  9.9 \\ \hline
-CA      &  (273,191, 14.4)        & (623,811, 33.0)  & 9.52  & 42.55 & 30.66 & 21.1 \\ \hline
-E-US    &  (546,481, 15.2)        & (1,228,876, 34.1)& 18.75  & 80.17 & 56.48 &  52.5  \\ \hline
-W-US    &  (869,907, 13.9)        & (2,116,382, 33.8)& 32.29  & 139.23 & 98.68 &  111.9 \\ \hline
-C-US    &  (2,034,358, 14.4)      & (4,583,413, 32.5)& 69.94 & 312.09 & 225.28 & 435.8 \\ \hline
-US      &  (3,452,222, 14.4)      & (7,927,453, 33.1)& 120.96 & 531.63 & 380.59 &  1,925.4 \\ \hline
+DBLP14      &   Subgraph of DBLP          & 141,359  &   246,462     &  (14, 090, 9.8)         & (102,085, 72.2)  & 1.56 & 4.30 & 1.36 &  1.5 \\ \hline
+DBLP        & DBLP                        & 317,080 & 1,049,866     & (31,475 , 9.9)             & (105,671 , 33.3) & 1.61 & 17.22 & 14.29  & 5.7 \\ \hline
+CO          &  Colorado              & 435,666      &  521,200       &  (56,277, 12.9)         & (156,329, 35.9)  & 2.38  & 9.61 & 6.64 & 3.47  \\ \hline
+FL          &  Florida               & 1,070,376    &  1,343,951      &  (140,382, 13.1)        & (378,804, 35.4)  & 5.78  & 24.59 & 17.12 &  9.9 \\ \hline
+CA          &  California \& Nevada   & 1,890,815   &  2,315,222      &  (273,191, 14.4)        & (623,811, 33.0)  & 9.52  & 42.55 & 30.66 & 21.1 \\ \hline
+E-US        &  Eastern US            & 3,598,623    &  4,354,029    &  (546,481, 15.2)        & (1,228,876, 34.1)& 18.75  & 80.17 & 56.48 &  52.5  \\ \hline
+W-US        &  Western US            & 6,262,104    &  7,559,642      &  (869,907, 13.9)        & (2,116,382, 33.8)& 32.29  & 139.23 & 98.68 &  111.9 \\ \hline
+C-US        &  Central US            & 14,081,816   &  16,933,413    &  (2,034,358, 14.4)      & (4,583,413, 32.5)& 69.94 & 312.09 & 225.28 & 435.8 \\ \hline
+US          &  Entire US             & 23,947,347   &  28,854,312      &  (3,452,222, 14.4)      & (7,927,453, 33.1)& 120.96 & 531.63 & 380.59 &  1,925.4 \\ \hline
 \end{tabular}
-%\end{small}
+\end{scriptsize}
 \end{center}
+\vspace{-2ex}
 \end{table*}
 %%%%%%%%%%%%%%%%%%%
 
