@@ -76,19 +76,19 @@ We first introduce the settings of our experimental study.
 
 
 
-\etitle{Real-life graphs}.
+\stitle{Real-life graphs}.
 We use two types of datasets, and the details of all datasets are reported in Table~1.
 
 
 
-The first type of datasets is {\em co-authorship networks}. We extracted co-authorship graphs from DLBP~\cite{snapnets}, where each node in the graph represents an author and two authors are connected if they have published papers together. The edge weight is computed by a revised Adamic/Adar similarity function: $w(u,v) = \frac{1}{\sum_{z\in {\Gamma(u)\cap \Gamma(v) \cup \{u,v\}}}\frac{1}{\log{|\Gamma(z)|}}}$, where $\Gamma(u)$ and $\Gamma(v)$ are the sets of neighbors of nodes $u$ and $v$, respectively. The weight of the edge $(u,v)$ represents the closeness between $u$ and $v$ and a smaller weight means the two authors are closer. \tnr is designed for road networks and it is very inefficient for \tnr to preprocess dense graphs such as DBLP (it took more than 1 week to finish the preprocessing). To guarantee that we can evaluate the improvement of \tnr with proxies on general graphs, we remove all nodes whose degrees are higher than 14, and pick the largest connected component from the remaining graph to form a new dataset, referred to as \dblpone.
+\sstab (1) The first type of datasets is {\em co-authorship networks}. We extracted co-authorship graphs from DLBP~\cite{snapnets}, where each node in the graph represents an author and two authors are connected if they have published papers together. The edge weight is computed by a revised Adamic/Adar similarity function: $w(u,v) = \frac{1}{\sum_{z\in {\Gamma(u)\cap \Gamma(v) \cup \{u,v\}}}\frac{1}{\log{|\Gamma(z)|}}}$, where $\Gamma(u)$ and $\Gamma(v)$ are the sets of neighbors of nodes $u$ and $v$, respectively. The weight of the edge $(u,v)$ represents the closeness between $u$ and $v$ and a smaller weight means the two authors are closer. \tnr is designed for road networks and it is very inefficient for \tnr to preprocess dense graphs such as DBLP (it took more than 1 week to finish the preprocessing). To guarantee that we can evaluate the improvement of \tnr with proxies on general graphs, we remove all nodes whose degrees are higher than 14, and pick the largest connected component from the remaining graph to form a new dataset, referred to as \dblpone.
 
 
-The second type of datasets is {\em road networks}. We chose seven standard road network datasets of various sizes from the Ninth DIMACS
-Implementation Challenge~\cite{dimacs-datasets}\footnote{\url{http://www.dis.uniroma1.it/challenge9/download.shtml}}. Each road network is released as an undirected graph that represents a part of the road network in the United States, where each edge weight is the distance (integers) required to travel between the two endpoints of the edge.
+\sstab (2) The second type of datasets is {\em road networks}. We chose seven standard road network datasets of various sizes from the Ninth DIMACS
+Implementation Challenge~\cite{dimacs-datasets} (available at {\url{http://www.dis.uniroma1.it/challenge9/download.shtml}}). Each road network is released as an undirected graph that represents a part of the entire road network in the United States, where each edge weight is the distance (an integer) required to travel between the two endpoints of the edge.
 
 
-\etitle{Shortest  path and distance queries}. Our queries were generated as follows.
+\stitle{Shortest  path and distance queries}. Our queries were generated as follows.
 (1) On each road  or co-authorship network, we first randomly choose a node $u$, and run a Dijikstra algorithm from $u$ to find the node $s$ that is farthest from $u$. Then we run a Dijkstra again from $s$ to find the node $t$ that is farthest from $s$. Let $\ell$ be the distance $\dist(s,t)$ from $s$ to $t$.
 (2) We then randomly chose ten thousand node pairs from
 the road network to compose $Q_i (i \in \{1,3,5,7\})$, such that the grid
