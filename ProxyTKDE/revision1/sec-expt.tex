@@ -138,29 +138,28 @@ Using the datasets in Table~1, we first conduct experiments to evaluate the perf
 
 %Note that to speed up shortest  path and distance queries, for each node represented by a proxy, we need to store (1) the distance between the node and its proxy, and (2) the shortest path from the node to its proxy. Distances are stored as 4-byte integers and it takes $4 \cdot |V_{\dras}|$ bytes to store all the distances, where $V_{\dras}$ is the set of nodes in all \dras. All the shortest paths between the nodes in a \dra and its proxy form a tree whose root is the proxy. Each node is also represented as a 4-byte integer. So it takes $ 4 \cdot (|V_{proxy}|+ |V_{\dras}|) $ bytes to maintain all the trees, where $V_{proxy}$ is the set of proxies. So the extra space cost of using proxies is $4 \cdot |V_{proxy}| + 8 \cdot |V_{\dras}|$ bytes. The results are reported in Table~2.
 \stitle{1. Effectiveness evaluation}.
-In the \dblp graph, about $1/10$ nodes are non-trivial proxies, and about $1/3$ nodes are captured by proxies in the graph, which means basically the reduced graph is only about $2/3$ of the input graph. In the \dblpone graph, about $1/10$ nodes are non-trivial proxies, and about $2/3$ nodes are captured by proxies in the graph, which means basically the reduced graph is only about $1/3$ of the input graph.
+In the \dblp graph, about $1/10$ nodes are non-trivial proxies, and about $1/3$ nodes are captured by proxies in the graph, which means basically the reduced graph is only about $2/3$ of the input graph. In the \dblpone graph, about $1/10$ nodes are non-trivial proxies, and about $2/3$ nodes are captured by the \dras of proxies in the graph, which means basically the reduced graph is only about $1/3$ of the original input graph.
 
-
-
-
-In all the road graphs,  about $1/7$ nodes are non-trivial proxies, and about $1/3$ nodes are captured by proxies in these graphs, which means basically the reduced graph is only about $2/3$ of the input graph. Moreover, although the size restriction is $\le 2\cdot\lfloor\sqrt{|V|}\rfloor$, \dras are typically small, and each proxy represents 2 or 3 other nodes on average.
+In all the road graphs,  about $1/7$ nodes are non-trivial proxies, and about $1/3$ nodes are captured by the \dras of these proxies, which means basically the reduced graph is only about $2/3$ of the original input graph.
+ 
+ Moreover, although the size restriction is $\le 2\cdot\lfloor\sqrt{|V|}\rfloor$, \dras are typically small, and each proxy typically represents 2 or 3 other nodes on average.
 
 
 \stitle{2. Efficiency evaluation}.
-In the \dblp graph, proxies can be found in about 6 seconds. In the \dblpone graph, it only takes 1.5 seconds to find all proxies.
+In the \dblp graph, proxies can be found in about 6 seconds. In the \dblpone graph, it only takes 1.5 seconds to find all \dras with their proxies.
 
 In all road networks, proxies can be found efficiently. Algorithm $\compDRAs$ also scales well, and it can be done in less than half an hour for the largest graph US with $2.4$ $\times$ $10^7$ nodes and $5.7$ $\times$ $10^7$ edges.
 
 \stitle{3. Space evaluation}.
 To support shortest distance queries, for each node in a \dra, we store its proxy $u$, its distance to $u$ and the component of $A^{+}_u$ to which it belongs, and, moreover, to support shortest path queries, we further keep the shortest paths from proxy $u$ to all nodes in the \dra. Assume that distances are stored as a 4-byte integer. Each node is represented as a 4-byte integer. Then the extra space that we need for shortest path and distance queries is $16\cdot |V_{dra}|$, where $V_{dra}$ is the set of nodes in all \dras.
 
-In \dblp and \dblpone graphs, it only takes about 1.6 MB extra space to store the routing information for all proxies, since there are similar number of nodes in the \dras of both datasets. We can also observe that by using proxies to represent all nodes in \dras, the reduced graph $G'$ has a smaller size than the original graph $G$, especially for the \dblpone graph. In \dblpone graph, 72.2\% of the nodes in the graph are captured by proxies, leading to a much smaller reduced graph.
+In the \dblp and \dblpone graphs, it only takes about 1.6 MB extra space to store the routing information for all proxies, since there are similar number of nodes in the \dras of both datasets. Observe that by using proxies to represent all nodes in \dras, the reduced graph  has a smaller size than the original graph, especially for the \dblpone graph. In \dblpone graph, 72.2\% of its nodes are captured by proxies, which leads to a much smaller reduced graph.
 
-In all road networks, it incurs small space overhead to store the routing information for proxies. Only about 100 MB extra space is taken for the largest graph US. The use of proxies also results a smaller reduced graph. We can observe that the size of the reduced graph is about 70\% of that of the original graph on average.
+In all road networks, it incurs small space overhead to store the routing information for proxies. Only about 100 MB extra space is taken for the largest graph US. The use of proxies also results in a smaller reduced graph. We can see that the size of the reduced graph is about 70\% of the original graph on average.
 
 
 \stitle{Summary.}
-From the observations we can see that proxy is a light-weight optimization technique. It runs efficiently and scales well to large networks. It incurs appropriate space overhead. These properties benefit existing shortest  path and distance algorithms, such as (bidirectional) Dijkstra, \arcflag , \tnr and \ah (to be seen immediately).
+From these test, we can find that using proxies is a light-weight optimization technique. It runs efficiently and scales well to large networks. It incurs appropriate space overhead. These properties benefit existing shortest  path and distance algorithms, such as (bidirectional) Dijkstra, \arcflag , \tnr and \ah, to be seen immediately.
 
 \subsection{Benefits of Using Routing Proxies}
 Our proxies can be used as a preprocessing step before we apply other existing approaches, such as Dijkstra, \arcflag, \tnr or \ah etc. In this subsection, we conduct experiments to show the comparison results of running an existing approach and running the combination of existing approach and proxies.
