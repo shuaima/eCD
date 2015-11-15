@@ -37,30 +37,30 @@ US      &  Entire US             & 23,947,347   &  28,854,312  \\ \hline
 \end{table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{table}[t!]
+\begin{table*}[t!]
 \label{tab-exp1-proxies-dras}
 \begin{center}
 %\begin{small}
 \caption{Effectiveness of proxies and \dras}
 \vspace{-1ex}
-\begin{tabular}{|c|r|r|r|r|}
+\begin{tabular}{|c|r|r|r|r|r|r|}
 \hline
-                                &  \multicolumn{1}{c|}{Proxies}   &  \multicolumn{1}{c|}{Nodes in \dras}  & \multicolumn{1}{c|}{$\spacec$} & \multicolumn{1}{c|}{$\timec$}\\
-  \raisebox{1.5ex}[0pt]{Graphs} &  \multicolumn{1}{c|}{(\#, \%)}  &  \multicolumn{1}{c|}{(\#, \%)}  & \multicolumn{1}{c|}{(MB)} & \multicolumn{1}{c|}{(Sec.)}\\
+                                &  \multicolumn{1}{c|}{Proxies}   &  \multicolumn{1}{c|}{Nodes in \dras}  & \multicolumn{1}{c|}{Extra $\spacec$} & \multicolumn{1}{c|}{Space of $G$} & \multicolumn{1}{c|}{Space of $G'$} & \multicolumn{1}{c|}{$\timec$}\\
+  \raisebox{1.5ex}[0pt]{Graphs} &  \multicolumn{1}{c|}{(\#, \%)}  &  \multicolumn{1}{c|}{(\#, \%)}  & \multicolumn{1}{c|}{(MB)} & \multicolumn{1}{c|}{(MB)} & \multicolumn{1}{c|}{(MB)} & \multicolumn{1}{c|}{(Sec.)}\\
 \hline\hline
-DBLP14    &  (14, 090, 9.8)         & (102,085, 72.2)  & 1.56  &  1.5 \\ \hline
-DBLP    & (31,475 , 9.9)             & (105,671 , 33.3) & 1.61   & 5.7 \\ \hline
-CO      &  (56,277, 12.9)         & (156,329, 35.9)  & 2.38  &  3.47  \\ \hline
-FL      &  (140,382, 13.1)        & (378,804, 35.4)  & 5.78  &  9.9 \\ \hline
-CA      &  (273,191, 14.4)        & (623,811, 33.0)  & 9.52  &  21.1 \\ \hline
-E-US    &  (546,481, 15.2)        & (1,228,876, 34.1)& 18.75  &  52.5  \\ \hline
-W-US    &  (869,907, 13.9)        & (2,116,382, 33.8)& 32.29  &  111.9 \\ \hline
-C-US    &  (2,034,358, 14.4)      & (4,583,413, 32.5)& 69.94 &  435.8 \\ \hline
-US      &  (3,452,222, 14.4)      & (7,927,453, 33.1)& 120.96  &  1,925.4 \\ \hline
+DBLP14    &  (14, 090, 9.8)         & (102,085, 72.2)  & 1.56 & 4.30 & 1.36 &  1.5 \\ \hline
+DBLP    & (31,475 , 9.9)             & (105,671 , 33.3) & 1.61 & 17.22 & 14.29  & 5.7 \\ \hline
+CO      &  (56,277, 12.9)         & (156,329, 35.9)  & 2.38  & 9.61 & 6.64 & 3.47  \\ \hline
+FL      &  (140,382, 13.1)        & (378,804, 35.4)  & 5.78  & 24.59 & 17.12 &  9.9 \\ \hline
+CA      &  (273,191, 14.4)        & (623,811, 33.0)  & 9.52  & 42.55 & 30.66 & 21.1 \\ \hline
+E-US    &  (546,481, 15.2)        & (1,228,876, 34.1)& 18.75  & 80.17 & 56.48 &  52.5  \\ \hline
+W-US    &  (869,907, 13.9)        & (2,116,382, 33.8)& 32.29  & 139.23 & 98.68 &  111.9 \\ \hline
+C-US    &  (2,034,358, 14.4)      & (4,583,413, 32.5)& 69.94 & 312.09 & 225.28 & 435.8 \\ \hline
+US      &  (3,452,222, 14.4)      & (7,927,453, 33.1)& 120.96 & 531.63 & 380.59 &  1,925.4 \\ \hline
 \end{tabular}
 %\end{small}
 \end{center}
-\end{table}
+\end{table*}
 %%%%%%%%%%%%%%%%%%%
 
 
@@ -106,7 +106,7 @@ For each query set $Q_i$ $(i\in \{1,3,5,7\})$, we report the average running tim
 %larger than the grid distance of all node pairs in $Q_{i-1}$.
 %For each query set $Q_i$ $(i \in [1, 7])$, we report the average running time of 10,000 queries in the set.
 
-\etitle{Algorithms.} We implemented algorithms bidirectional-Dijkstra, \arcflag, \tnr and \ah.
+\etitle{Algorithms.} We implemented algorithms bidirectional-Dijkstra~\cite{LubyR89}, \arcflag~\cite{MohringSSWW05}, \tnr~\cite{arz2013transit} and \ah \cite{zhu2013shortest}.
 For \arcflag, it needs to partition graphs first to pre-compute information on whether an arc is useful for a shortest path search. Any possible partition methods~\cite{kl70,Karypis98,YangYZK12, delling2011graph} can be used here. Considering that we have both road networks and co-authorship networks, we adopted the latest version 5.0.2 of \metis~\cite{metis}, implemented with ANSI C, because it is open source and performs quite well in practice.
 
 For \tnr, since we do not have coordinates information in the co-authorship network, we implemented the CH-based \tnr~\cite{arz2013transit} that does not require the geometry information.
@@ -128,10 +128,10 @@ and 24GB of memory.
 %We next present our findings. In all experiments, we tested the datasets in Table~1, and fixed the constant $c = 2$ for computing proxies on all graphs.
 %The preprocessing of \arcflag was slow, and it spent over four days on C-US. Hence, we did not test the largest dataset US for \arcflag.
 \subsection{Performance of Computing Routing Proxies}
-Firstly, we conduct experiments to evaluate the performance of proxies, i.e. how many nodes can be represented by proxies, how much extra space we need to store the routing information for the proxies, and how much time we need to find all proxies. Specifically, we evaluate (1) the number of non-trivial proxies, (2) the number and percentage of the nodes represented by the proxies (excluding the proxies themselves from \dras), (3) the extra space cost of using proxies, and (4) the efficiency of our algorithm $\compDRAs$ for computing proxies and their \dras. In this set of experiments, we tested the datasets in Table~1. We fixed the constant $c = 2$ for computing proxies on all graphs. The experimental results are reported in Table~\ref{tab-exp1-proxies-dras}.
+Firstly, we conduct experiments to evaluate the performance of proxies, i.e. how many nodes can be represented by proxies, how much extra space we need to store the routing information for the proxies, and how much time we need to find all proxies. Specifically, we evaluate (1) the number of non-trivial proxies, (2) the number and percentage of the nodes represented by the proxies (excluding the proxies themselves from \dras), (3) the extra space cost of using proxies, (4) the space overhead of storing the original graph $G$, (5) the space overhead of storing the reduced graph $G'$, and (6) the efficiency of our algorithm $\compDRAs$ for computing proxies and their \dras. In this set of experiments, we tested the datasets in Table~1. We fixed the constant $c = 2$ for computing proxies on all graphs. When computing the space overhead for the original graph and the reduced graph, we assume that the graph is stored as adjacency list. The experimental results are reported in Table~\ref{tab-exp1-proxies-dras}.
 
 %Note that to speed up shortest  path and distance queries, for each node represented by a proxy, we need to store (1) the distance between the node and its proxy, and (2) the shortest path from the node to its proxy. Distances are stored as 4-byte integers and it takes $4 \cdot |V_{\dras}|$ bytes to store all the distances, where $V_{\dras}$ is the set of nodes in all \dras. All the shortest paths between the nodes in a \dra and its proxy form a tree whose root is the proxy. Each node is also represented as a 4-byte integer. So it takes $ 4 \cdot (|V_{proxy}|+ |V_{\dras}|) $ bytes to maintain all the trees, where $V_{proxy}$ is the set of proxies. So the extra space cost of using proxies is $4 \cdot |V_{proxy}| + 8 \cdot |V_{\dras}|$ bytes. The results are reported in Table~2.
-\stitle{Effectiveness}
+\stitle{Effectiveness.}
 In the \dblp graph, about $1/10$ nodes are non-trivial proxies, and about $1/3$ nodes are captured by proxies in the graph, which means basically the reduced graph is only about $2/3$ of the input graph. In the \dblpone graph, about $1/10$ nodes are non-trivial proxies, and about $2/3$ nodes are captured by proxies in the graph, which means basically the reduced graph is only about $1/3$ of the input graph.
 
 
@@ -140,13 +140,21 @@ In the \dblp graph, about $1/10$ nodes are non-trivial proxies, and about $1/3$ 
 In all the road graphs,  about $1/7$ nodes are non-trivial proxies, and about $1/3$ nodes are captured by proxies in these graphs, which means basically the reduced graph is only about $2/3$ of the input graph. Moreover, although the size restriction is $\le 2\cdot\lfloor\sqrt{|V|}\rfloor$, \dras are typically small, and each proxy represents 2 or 3 other nodes on average.
 
 
-\stitle{Efficiency}
-Algorithm $\compDRAs$ also scales well, and it can be done in less than half an hour for the largest graph US with $2.4$ $\times$ $10^7$ nodes and $5.7$ $\times$ $10^7$ edges.
+\stitle{Efficiency.}
+In the \dblp graph, proxies can be found in about 6 seconds. In the \dblpone graph, it only takes 1.5 seconds to find all proxies.
 
-\stitle{Space Cost.}To support shortest distance queries, for each node in a \dra, we store its proxy $u$, its distance to $u$ and the component of $A^{+}_u$ to which it belongs, and, moreover, to support shortest path queries, we further keep the shortest paths from proxy $u$ to all nodes in the \dra. Assume that distances are stored as a 4-byte integer. Each node is represented as a 4-byte integer. Then the extra space that we need for shortest path and distance queries is $16\cdot |V_{dra}|$, where $V_{dra}$ is the set of nodes in all \dras. We can see that space cost of proxies is small. Only about 100 MB extra space is taken for the largest graph US.
+In all road networks, proxies can be found efficiently. Algorithm $\compDRAs$ also scales well, and it can be done in less than half an hour for the largest graph US with $2.4$ $\times$ $10^7$ nodes and $5.7$ $\times$ $10^7$ edges.
+
+\stitle{Space Cost.}
+To support shortest distance queries, for each node in a \dra, we store its proxy $u$, its distance to $u$ and the component of $A^{+}_u$ to which it belongs, and, moreover, to support shortest path queries, we further keep the shortest paths from proxy $u$ to all nodes in the \dra. Assume that distances are stored as a 4-byte integer. Each node is represented as a 4-byte integer. Then the extra space that we need for shortest path and distance queries is $16\cdot |V_{dra}|$, where $V_{dra}$ is the set of nodes in all \dras.
+
+In \dblp and \dblpone graphs, it only takes about 1.6 MB extra space to store the routing information for all proxies, since there are similar number of nodes in the \dras of both datasets. We can also observe that by using proxies to represent all nodes in \dras, the reduced graph $G'$ has a smaller size than the original graph $G$, especially for the \dblpone graph. In \dblpone graph, 72.2\% of the nodes in the graph are captured by proxies, leading to a much smaller reduced graph.
+
+In all road networks, it incurs small space overhead to store the routing information for proxies. Only about 100 MB extra space is taken for the largest graph US. The use of proxies also results a smaller reduced graph. We can observe that the size of the reduced graph is about 70\% of that of the original graph on average.
 
 
-\stitle{Summary} From the observations we can see that proxy is a light-weight optimization technique. It runs efficiently and scales well to large networks. It incurs appropriate space overhead. These properties benefit existing shortest  path and distance algorithms, such as (bidirectional) Dijkstra~\cite{LubyR89}, \arcflag \cite{MohringSSWW05}, \tnr \cite{arz2013transit} and \ah\cite{zhu2013shortest} (to be seen immediately).
+\stitle{Summary.}
+From the observations we can see that proxy is a light-weight optimization technique. It runs efficiently and scales well to large networks. It incurs appropriate space overhead. These properties benefit existing shortest  path and distance algorithms, such as (bidirectional) Dijkstra, \arcflag , \tnr and \ah (to be seen immediately).
 
 \subsection{Benefits of Using Routing Proxies}
 Our proxies can be used as a preprocessing step before we apply other existing approaches, such as Dijkstra, \arcflag, \tnr or \ah etc. In this subsection, we conduct experiments to show the comparison results of running an existing approach and running the combination of existing approach and proxies.
