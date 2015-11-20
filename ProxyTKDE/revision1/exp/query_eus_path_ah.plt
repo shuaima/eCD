@@ -7,7 +7,7 @@ set grid noxtics back linewidth 0.1
 set border
 set noy2tics
 set nox2tics
-set xr [0:7]
+set xr [0:6]
 set yr [0:500]
 set xtics ("Q1" 0, "Q2" 1, "Q3" 2, "Q4" 3, "Q5" 4, "Q6" 5, "Q7" 6, "Q8" 7) 
 set ytics ("100" 100, "200" 200, "300" 300, "400" 400, "500" 500)
