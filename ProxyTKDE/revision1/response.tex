@@ -155,7 +155,7 @@ Below please find our responses to the comments by the referees.
 It would be helpful to measure the proposed approach to a well known baseline for road network (as the major part of dataset includes data from road network).}
 \svs
 
-We have added Arterial Hierarchy (\ah) to show the benefits of using proxies in the experimental study. Thanks for your suggestion! 
+We have added Arterial Hierarchy (\ah) to show the benefits of using proxies in the experimental study.  From the experiment, we can see that though \ah has a small search space and is very efficient, it still benefits from proxies in terms of efficiency (about 1\% faster). Meanwhile, the space cost of Proxy+\ah is smaller than \ah (about 18\% smaller). Thanks for your suggestion!
 
 
 \noindent
@@ -164,25 +164,26 @@ We have added Arterial Hierarchy (\ah) to show the benefits of using proxies in 
 is similar. But the preprocessing takes 435 seconds. So, for 10000 queries (considering the fact that presented time is an average of 10000 queries), the time taken by PROXY+Arcflag and preprocessing exceeds actual Arcflag algorithm by a huge margin.}
 \svs
 
-Yes, speeding up the queries is one of the major reason to preprocess the graph. As a data reduction technique, proxies can preprocess the graph and represent the nodes in the DRA, thus generates a smaller graph. Then, we can apply any existing algorithm designed for shortest path and distance queries on the smaller graph. The preprocessing yields two benefits: (1) We only need to apply the existing algorithms on the smaller graph, which typically requires less time and space cost. (2) Given a shortest path or distance query, we decompose the original query into two parts, inside a DRA and cross DRAs, which usually yields a better efficiency to answer the query. In our revised version of our submission, we have further conducted an experiment to compare the space overhead of \arcflag, \tnr and \ah compared with their counterparts with proxies. The experimental results show that existing approaches benefit from proxies in terms of space overhead as well. The detailed results can be found in Table 2 in Section 6.3.
+Yes, speeding up the queries is one of the major reason to preprocess the graph. As a data reduction technique, proxies can preprocess the graph and represent the nodes in the DRA, thus generates a smaller graph. Then, we can apply any existing algorithm designed for shortest path and distance queries on the smaller graph. The preprocessing yields two benefits: (1) We only need to apply the existing algorithms on the smaller graph, which typically requires less time and space cost. (2) Given a shortest path or distance query, we decompose the original query into two parts, inside a DRA and cross DRAs, which usually yields a better efficiency to answer the query. In the revised version of our submission, we have further conducted an experiment to compare the space overhead of \arcflag, \tnr and \ah compared with their counterparts with proxies. The experimental results show that existing approaches benefit from proxies in terms of space overhead as well. The detailed results can be found in Table 2 in Section 6.3.
 
-Meanwhile, preprocessing is a one time thing, and shortest path and distance queries are very common in our daily life and numerous users will consistently issue queries in an system. 
+Meanwhile, preprocessing is a one time thing, and shortest path and distance queries are very common in our daily life and numerous users may consistently issue queries in an system.
 
 
 \noindent{\em{\bf[R1C3]} As it is evaluated with TNR, one would expect that the proposed approach produces better results. It would be also nicer to explain that how this reduction of graph can be improved
 to guarantee better results  by Proxy+TNR than TNR.}
 
 \svs
-Thanks. The key operation in TNR is to select Transit Nodes from the network, which has a significant impact on the performance. Different transit nodes may get a different query efficiency. In CH-based TNR, the selection of transit nodes highly relies on the graph structure. Since we use proxies to represent the nodes in DRAs and apply TNR on the reduced graph with a different graph structure, it is hard to guarantee that the transit nodes selected from the reduced graph have a better performance. This also explains that why Proxy+TNR outperforms TNR in some cases and not in others.
+The key operation in TNR is to select Transit Nodes from the network, which has a significant impact on the performance. Different transit nodes may result in a different query efficiency. In CH-based TNR, the selection of transit nodes highly relies on the graph structure. Since we use proxies to represent the nodes in DRAs and apply TNR on the reduced graph with a different graph structure, it is hard to guarantee that the transit nodes selected from the reduced graph have a better performance. This also explains that why Proxy+TNR outperforms TNR in some cases and not in others. 
 
-In our amended version, we have added Arterial Hierarchy(\ah) as one of our baselines. From the experiment, we can see that though \ah has a small search space and is very efficient, it still benefits from proxies in terms of efficiency (about 1\% faster). Meanwhile, the space cost of Proxy+\ah is smaller than \ah (about 18\% smaller).
+However, for Proxy+\tnr, it is applicable to handle larger dataset C-US while its counterpart \tnr without proxies is not. We have also explained this in the last paragraph of Section 6.2
+
 
 
 \noindent{\em{\bf[R1C4]} I would suggest to reorganize the experiment section. The plots are little hard to understand as they are missing labels in X and Y axis. Also the explanations are presented really far from the figures.}
 
 \svs
 
-Thanks. We have reorganized the experiment section. In Section 6.1, we introduce the settings of our experiments. In Section 6.2, we evaluate the performance of proxies. Specifically, we evaluate the performance of proxies from 3 aspects: effectiveness, efficiency and space overhead. In Section 6.3, we combine proxies with Dijkstra, \arcflag, \tnr and \ah and present the comparison between these approaches with and without proxies, in terms of both efficiency and space overhead.
+Yes, we have reorganized the experiment section. In Section 6.1, we introduce the settings of our experiments. In Section 6.2, we evaluate the performance of proxies. Specifically, we evaluate the performance of proxies from 3 aspects: effectiveness, efficiency and space overhead. In Section 6.3, we combine proxies with Dijkstra, \arcflag, \tnr and \ah, and present the comparison between these approaches with their counterparts using proxies, in terms of both efficiency and space overhead.  Due to the space limitation, we sometimes only reports the results on DBLP14, CA, E-US, and C-US. This reduces the total number of figures, which also results in a better presentation for the  experiment section.
 
 
 \noindent{\em{\bf[R1C5]} Page 3, second column, (4)- The number 5 has an extra $\mid$ beside it.}
