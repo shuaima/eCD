@@ -126,7 +126,7 @@ Attached please find a revised version of our submission to IEEE Transactions on
 
 The paper has been substantially revised according to the referees' comments. In particular,
 %
-(1) we have reorganized our paper, by adding a separate section for query answering with routing proxies (Section 5), a separate section for related work (Section 7) and an appendix section for proofs, and by reorganizing the section on the properties of proxies and DRAs (Section 3.2) and the experimental study section (Section 6),
+(1) we have reorganized our paper, by adding a separate section for query answering with routing proxies (Section 5), a separate section for related work (Section 7) and an appendix section for proofs, and by adjusting the section on the properties of proxies and DRAs (Section 3.2) and the experimental study section (Section 6),
 %
 (2) we have shown the benefits of using proxies for a new approach Arterial Hierarchy(\ah) [38] and added the space overhead evaluation (Table 2) in the experimental study,
 %
@@ -155,7 +155,7 @@ Below please find our responses to the comments by the referees.
 It would be helpful to measure the proposed approach to a well known baseline for road network (as the major part of dataset includes data from road network).}
 \svs
 
-We have added Arterial Hierarchy (\ah) [38] to show the benefits of using proxies in the experimental study.  From the experiment, we can see that though \ah has a small search space and is very efficient, it still benefits from proxies in terms of efficiency (about 1\% faster). Meanwhile, the space cost of Proxy+\ah is smaller than \ah (about 18\% smaller). Thanks for your suggestion!
+We have added Arterial Hierarchy (\ah) [38] to show the benefits of using proxies in the experimental study.  From the experimental results, we can see that though \ah has a small search space and is very efficient, it still benefits from proxies in terms of efficiency (about 1\% faster). Meanwhile, the space cost of Proxy+\ah is smaller than \ah (about 18\% smaller). Thanks for your suggestion!
 
 
 \noindent
@@ -164,7 +164,7 @@ We have added Arterial Hierarchy (\ah) [38] to show the benefits of using proxie
 is similar. But the preprocessing takes 435 seconds. So, for 10000 queries (considering the fact that presented time is an average of 10000 queries), the time taken by PROXY+Arcflag and preprocessing exceeds actual Arcflag algorithm by a huge margin.}
 \svs
 
-Yes, speeding up the queries is one of the major reasons to preprocess the graph. As a data reduction technique, proxies can preprocess the graph and represent the nodes in the DRA, thus generates a smaller graph. Then, we can apply any existing algorithm designed for shortest path and distance queries on the smaller graph. The preprocessing yields two benefits: (1) We only need to apply the existing algorithms on the smaller graph, which typically requires less time and space cost. (2) Given a shortest path or distance query, we decompose the original query into two parts, inside a DRA and cross DRAs, which usually yields a better efficiency to answer the query. In the revised version of our submission, we have further conducted an experiment to compare the space overhead of \arcflag, \tnr and \ah compared with their counterparts using proxies. The experimental results show that existing approaches benefit from proxies in terms of space overhead as well. The detailed results can be found in Table 2 in Section 6.3.
+Yes, speeding up the queries is one of the major reasons to preprocess the graph. As a data reduction technique, proxies can preprocess the graph and represent the nodes in the DRAs, thus generates a smaller graph. Then, we can apply any existing algorithm designed for shortest path and distance queries on the smaller graph. The preprocessing yields two benefits: (1) We only need to apply the existing algorithms on the smaller graph, which typically requires less time and space cost. (2) Given a shortest path or distance query, we decompose the original query into two parts, inside a DRA and cross DRAs, which usually yields a better efficiency to answer the query. In the revised version of our submission, we have further conducted an experiment to compare the space overhead of \arcflag, \tnr and \ah compared with their counterparts using proxies. The experimental results show that existing approaches benefit from proxies in terms of space overhead as well. The detailed results can be found in Table 2 in Section 6.3.
 
 Meanwhile, preprocessing is a one time thing, and shortest path and distance queries are very common and numerous users may consistently issue such queries in an system.
 
@@ -263,7 +263,7 @@ We indeed mean all the set $A_u^i$ of nodes for proxy $u$. We have removed the c
 %
 That is, we use ``Note that a node $u$ may be a proxy of multiple sets of nodes $A^1_u, \ldots, A^k_u$'' now.
 
-Note that this has no effects on the definition of DRAs, even if we only use the maximal collection satisfying the property, as this would not change the union of these sets. Thanks for spotting this out!
+Note that this has no effects on the definition of DRAs, even if we only use the maximal collection satisfying the property, as this would not change the result of the union of these sets. Thanks for spotting this out!
 
 \vs
 \noindent
@@ -294,7 +294,7 @@ We agree that this is a more intuitive way of introducing proxies.  We have now 
 {\em{\bf[R2C7]} Why is Proposition 4 required?}
 \svs
 
-We have moved Proposition 4 (Proposition 1 in the revision) to Section 3.1. Thanks!
+We have moved Proposition 4 to Section 3.1 (currently Proposition 1 in the revision). Thanks!
 
 \vs
 \noindent
@@ -308,7 +308,7 @@ in such general properties without the correct motivation?
 }
 
 \svs
-Yes, we have moved Propositions 9\&10 to Section 4. Thanks for the suggestion!
+Yes, we have moved Propositions 9\&10 to Section 4 (currently Propositions 10\&11 in the revision). Thanks for the suggestion!
 
 \vs
 \noindent
@@ -354,7 +354,7 @@ We have refined the correctness proof of algorithm computeDRA.
 {\em{\bf[R2C14]} All the experiments - how much space usage increased due to storage of extra information. Where is that presented?}
 
 \svs
-We indeed presented the space usage in Table 2 in our original version (now Table 1 in our revised revision). To support shortest distance queries, for each node in a \dra, we store its proxy $u$, its distance to $u$ and the component of $A^{+}_u$ to which it belongs, and, moreover, to support shortest path queries, we further keep the shortest paths from proxy $u$ to all nodes in the \dra. Assume that distances are stored as a 4-byte integer. Each node is represented as a 4-byte integer. Then the extra space that we need for shortest path and distance queries is $16\cdot |V_{dra}|$, where $V_{dra}$ is the set of nodes in all \dras. In the revised version of our submission, we have reorganized Section 6 and given the explanation in Section 6.2.
+We indeed already presented the space usage in Table 2 in our original version (now Table 1 in our revised revision). To support shortest distance queries, for each node in a \dra, we store its proxy $u$, its distance to $u$ and the component of $A^{+}_u$ to which it belongs, and, moreover, to support shortest path queries, we further keep the shortest paths from proxy $u$ to all nodes in its \dra. Assume that distances are stored as a 4-byte integer. Each node is represented as a 4-byte integer. Then the extra space that we need for shortest path and distance queries is $16\cdot |V_{dra}|$, where $V_{dra}$ is the set of nodes in all \dras. In the revised version of our submission, we have reorganized Section 6 and given the explanation in Section 6.2.
 
 In addition, we also show how much space can be saved if proxies are used in Table 2 in Section 6.3. From the result, we can see that though some extra space is required to store the routing information, much more space can be saved when applying an existing approach (i.e., \arcflag, \tnr or \ah) on the reduced graph.
 
