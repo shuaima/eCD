@@ -380,6 +380,18 @@ Since \dblpone is a single dataset, we only compare the efficiency of a group of
 The results of distance and path queries are reported in
 Figures~\ref{fig:performance_dist_graph_size_dj} and~\ref{fig:performance_path_graph_size_dj} (comparison between Dijkstra and Proxy+Dijkstra), Figures~\ref{fig:performance_dist_graph_size_af} and~\ref{fig:performance_path_queries_af} (comparison between \arcflag and Proxy+\arcflag), Figures~\ref{fig:performance_dist_graph_size_tnr} and~\ref{fig:performance_path_graph_size_tnr} (comparison between \tnr and Proxy+\tnr), and Figures~\ref{fig:performance_dist_graph_size_ah} and~\ref{fig:performance_path_graph_size_ah} (comparison between \ah and Proxy+\ah), respectively.
 
+
+
+
+
+
+
+%In the third set of experiments, we evaluated the efficiency of shortest path and distance queries with respect to graph sizes. Using the same settings as Exp-2, for each group of queries, we vary the graph size. The results of distance and path queries are reported in Figures~\ref{fig:performance_dist_graph_size_af} and~\ref{fig:performance_dist_graph_size_dj} and Figures~\ref{fig:performance_path_graph_size_af} and~\ref{fig:performance_path_graph_size_dj}, respectively.
+%In the third set of experiments, using the graph fragments generated at Exp-2, we evaluated (1) the average number of nodes and edges enforced by the hybrid landmarks covers  with or without the cost model, and (2) their average efficiency on a single fragment. The results are reported in Table~5.
+
+The results tell us that (1) all algorithms scale well with respect to graph sizes, (2) for Proxy+Dijkstra, its time cost is 68\% and 67\% of  its counterpart without proxies for shortest path and distance queries on average, respectively, and (3) for Proxy+\arcflag, its time cost is 80\% and 82\% of its counterpart without proxies for shortest  path and distance queries on average, respectively, (4) for Proxy+\tnr, its time cost is comparable to \tnr for shortest path and distance queries on average, respectively, (5) for Proxy+\tnr, it is applicable to handle the larger dataset C-US while \tnr cannot, and (6) for Proxy+\ah, its time cost is 98\% and 99\% of \ah for shortest path and distance queries on average, respectively. (7) As the size of graphs increases, the running time of Dijkstra, \arcflag and \ah increases in the same way as their counterparts with proxies. (8) For \tnr, the selection of transit nodes is based on the graph structure and has a significantly effect on the efficiency. By using proxies, the reduced graph has a different set of transit nodes and it is hard to guarantee that which set of transit nodes can get a better query efficiency. Thus, Proxy+\tnr does not outperform \tnr constantly as the other 3 approaches do.   %For Proxy+\ch, the improvement is not very obvious since \ch is already very fast.
+%, and (2) proxies can be easily combined with existing shortest path algorithms and improve its efficiency
+
 \begin{figure*}[tb!]
 %\vspace{-1ex}
 \begin{center}
@@ -473,25 +485,39 @@ Figures~\ref{fig:performance_dist_graph_size_dj} and~\ref{fig:performance_path_g
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 
 
-
-
-
-%In the third set of experiments, we evaluated the efficiency of shortest path and distance queries with respect to graph sizes. Using the same settings as Exp-2, for each group of queries, we vary the graph size. The results of distance and path queries are reported in Figures~\ref{fig:performance_dist_graph_size_af} and~\ref{fig:performance_dist_graph_size_dj} and Figures~\ref{fig:performance_path_graph_size_af} and~\ref{fig:performance_path_graph_size_dj}, respectively.
-%In the third set of experiments, using the graph fragments generated at Exp-2, we evaluated (1) the average number of nodes and edges enforced by the hybrid landmarks covers  with or without the cost model, and (2) their average efficiency on a single fragment. The results are reported in Table~5.
-
-The results tell us that (1) all algorithms scale well with respect to graph sizes, (2) for Proxy+Dijkstra, its time cost is 68\% and 67\% of  its counterpart without proxies for shortest path and distance queries on average, respectively, and (3) for Proxy+\arcflag, its time cost is 80\% and 82\% of its counterpart without proxies for shortest  path and distance queries on average, respectively, (4) for Proxy+\tnr, its time cost is comparable to \tnr for shortest path and distance queries on average, respectively, (5) for Proxy+\tnr, it is applicable to handle the larger dataset C-US while \tnr cannot, and (6) for Proxy+\ah, its time cost is 98\% and 99\% of \ah for shortest path and distance queries on average, respectively. (7) As the size of graphs increases, the running time of Dijkstra, \arcflag and \ah increases in the same way as their counterparts with proxies. (8) For \tnr, the selection of transit nodes is based on the graph structure and has a significantly effect on the efficiency. By using proxies, the reduced graph has a different set of transit nodes and it is hard to guarantee that which set of transit nodes can get a better query efficiency. Thus, Proxy+\tnr does not outperform \tnr constantly as the other 3 approaches do.   %For Proxy+\ch, the improvement is not very obvious since \ch is already very fast.
-%, and (2) proxies can be easily combined with existing shortest path algorithms and improve its efficiency
-
-
-%The results tell us that the usage of the cost model both reduces the number of landmarks and enforced edges, moreover, it only incurs little extra time cost.
-
-%We also report the \super graphs in Table~6.
-%The \super graphs $\G$ are quite small, typically have 2--4\% nodes and 10--15\% edges compared with the original graphs $G(V, E)$.
-%Using hybrid landmark covers with the cost model, the \super graphs $\G(\V_c, \E_c)$ further reduce 0.2--0.3\% edges. This justified the effectiveness of proxies and graph partitions, and the introduction of the cost model for hybrid landmark covers.
-
-
 \stitle{3. Space overhead}.
 In the last set of experiments, we evaluate the space overhead of \arcflag, \tnr and \ah compared with their counterparts with proxies, since all of them require preprocessing for query answering. We report (1) the size of the index generated by \arcflag, \tnr and \ah on the original input graphs, and (2) the sum of the size of the index generated by \ah on the reduced graph and the extra space it takes to store routing information for proxies. Note that for \tnr and Proxy+\tnr, no compression techniques are used. The results are reported in Table~2.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}[t!]
+\label{tab-spacecost}
+\caption{Comparison \wrt space overhead}
+\vspace{-3ex}
+\begin{center}
+\begin{scriptsize}
+%\hspace{-2ex}
+\begin{tabular}{|c||c|c|c|}
+\hline
+& \multicolumn{1}{c|}{\bf \arcflag (MB)}  & \multicolumn{1}{c|}{\bf \tnr (MB)} & \multicolumn{1}{c|}{\bf \ah (MB)} \\
+\cline{2-4}
+{\bf Graphs}  & {\bf with vs. no proxies} & {\bf with vs. no proxies} & {\bf with vs. no proxies}   \\
+\hline\hline
+DBLP14  &(4.9, 4.3)         &(386.5, 389.2)     &(NA, NA) \\ \hline
+DBLP    &(16.1, 35.2)       &(NA, NA)           &(NA, NA) \\ \hline
+CO      & (9.3, 13.6)       &(417.1, 430.18)    & (58.1, 72.2)  \\ \hline
+FL      & (29.7, 52.8)      &(491.9, 530.5)     & (150.9, 187.3)  \\ \hline
+CA      & (55.1, 108.8)     &(701.9, 806.4)     & (277.9, 338.1)  \\ \hline
+E-US    &(134.9, 287.8)     &(1842.9, 2382.7)   & (525.5, 642.0)  \\ \hline
+W-US    &(277.3, 643.9)     &(2996.4, 4154.1)   & (889.6, 1092.3)  \\ \hline
+C-US    &(838.8, 2153.1)    &(13894.5, N.A)     & (2082.3, 2512.3) \\ \hline
+US      &(NA, NA)           &(NA, NA)           & (3512.7, 4266.9)  \\ \hline
+\end{tabular}
+\end{scriptsize}
+\end{center}
+\vspace{-5ex}
+\end{table}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 \begin{figure*}[tb!]
@@ -603,37 +629,6 @@ From the above experimental results, we can see that the existing solution benef
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-\begin{table}[t!]
-\label{tab-spacecost}
-\caption{Comparison \wrt space overhead}
-\vspace{-3ex}
-\begin{center}
-\begin{scriptsize}
-%\hspace{-2ex}
-\begin{tabular}{|c||c|c|c|}
-\hline
-& \multicolumn{1}{c|}{\bf \arcflag (MB)}  & \multicolumn{1}{c|}{\bf \tnr (MB)} & \multicolumn{1}{c|}{\bf \ah (MB)} \\
-\cline{2-4}
-{\bf Graphs}  & {\bf with vs. no proxies} & {\bf with vs. no proxies} & {\bf with vs. no proxies}   \\
-\hline\hline
-DBLP14  &(4.9, 4.3)         &(386.5, 389.2)     &(NA, NA) \\ \hline
-DBLP    &(16.1, 35.2)       &(NA, NA)           &(NA, NA) \\ \hline
-CO      & (9.3, 13.6)       &(417.1, 430.18)    & (58.1, 72.2)  \\ \hline
-FL      & (29.7, 52.8)      &(491.9, 530.5)     & (150.9, 187.3)  \\ \hline
-CA      & (55.1, 108.8)     &(701.9, 806.4)     & (277.9, 338.1)  \\ \hline
-E-US    &(134.9, 287.8)     &(1842.9, 2382.7)   & (525.5, 642.0)  \\ \hline
-W-US    &(277.3, 643.9)     &(2996.4, 4154.1)   & (889.6, 1092.3)  \\ \hline
-C-US    &(838.8, 2153.1)    &(13894.5, N.A)     & (2082.3, 2512.3) \\ \hline
-US      &(NA, NA)           &(NA, NA)           & (3512.7, 4266.9)  \\ \hline
-\end{tabular}
-\end{scriptsize}
-\end{center}
-\vspace{-5ex}
-\end{table}
 
 
 
