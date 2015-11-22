@@ -143,6 +143,23 @@ For all the road graphs,  about $1/7$ nodes are non-trivial proxies, and about $
  Moreover, although the size restriction is $\le 2\cdot\lfloor\sqrt{|V|}\rfloor$, \dras are typically small such that each proxy represents 2 or 3 other nodes on average.
 
 
+
+
+
+
+
+\stitle{2. Efficiency evaluation}.
+In the \dblp graph, proxies can be found in about 6 seconds. In the \dblpone graph, it only takes 1.5 seconds to find all \dras with their proxies.
+
+In all road networks, proxies can be found efficiently. Algorithm $\compDRAs$ also scales well, and it can be done in less than half an hour for the largest graph US with $2.4$ $\times$ $10^7$ nodes and $5.7$ $\times$ $10^7$ edges.
+
+\stitle{3. Space evaluation}.
+To support shortest distance queries, for each node in a \dra, we store its proxy $u$, its distance to $u$ and the component of $A^{+}_u$ to which it belongs, and, moreover, to support shortest path queries, we further keep the shortest paths from proxy $u$ to all nodes in the \dra. Assume that distances are stored as a 4-byte integer. Each node is represented as a 4-byte integer. Then the extra space that we need for shortest path and distance queries is $16\cdot |V_{dra}|$, where $V_{dra}$ is the set of nodes in all \dras.
+
+In the \dblp and \dblpone graphs, it only takes about 1.6 MB extra space to store the routing information for all proxies, since there are similar number of nodes in the \dras of both datasets. Observe that by using proxies to represent all nodes in \dras, the reduced graph  has a smaller size than the original graph, especially for the \dblpone graph. In the \dblpone graph, 72.2\% of its nodes are captured by proxies, which leads to a much smaller reduced graph.
+
+In all road networks, it incurs small extra space overhead to store the routing information for proxies. Only about 100 MB extra space is taken for the largest graph US. The use of proxies also results in a smaller reduced graph. As shown in Table~1, the size of the reduced graph is about 70\% of the original graph on average.
+
 \begin{figure*}[t!]
 %\vspace{-1ex}
 \begin{center}
@@ -164,7 +181,6 @@ For all the road graphs,  about $1/7$ nodes are non-trivial proxies, and about $
 \label{fig:performance_dist_queries_dj}
 \vspace{-1ex}
 \end{figure*}
-
 \begin{figure*}[t!]
 %\vspace{-2ex}
 \begin{center}
@@ -186,8 +202,6 @@ For all the road graphs,  about $1/7$ nodes are non-trivial proxies, and about $
 \label{fig:performance_dist_queries_af}
 \vspace{-1ex}
 \end{figure*}
-
-
 \begin{figure*}[t!]
 %\vspace{-2ex}
 \begin{center}
@@ -209,7 +223,6 @@ For all the road graphs,  about $1/7$ nodes are non-trivial proxies, and about $
 \label{fig:performance_dist_queries_tnr}
 \vspace{-1ex}
 \end{figure*}
-
 \begin{figure*}[t!]
 %\vspace{-2ex}
 \begin{center}
@@ -229,22 +242,6 @@ For all the road graphs,  about $1/7$ nodes are non-trivial proxies, and about $
 \label{fig:performance_dist_queries_ah}
 \vspace{-2ex}
 \end{figure*}
-
-
-
-
-\stitle{2. Efficiency evaluation}.
-In the \dblp graph, proxies can be found in about 6 seconds. In the \dblpone graph, it only takes 1.5 seconds to find all \dras with their proxies.
-
-In all road networks, proxies can be found efficiently. Algorithm $\compDRAs$ also scales well, and it can be done in less than half an hour for the largest graph US with $2.4$ $\times$ $10^7$ nodes and $5.7$ $\times$ $10^7$ edges.
-
-\stitle{3. Space evaluation}.
-To support shortest distance queries, for each node in a \dra, we store its proxy $u$, its distance to $u$ and the component of $A^{+}_u$ to which it belongs, and, moreover, to support shortest path queries, we further keep the shortest paths from proxy $u$ to all nodes in the \dra. Assume that distances are stored as a 4-byte integer. Each node is represented as a 4-byte integer. Then the extra space that we need for shortest path and distance queries is $16\cdot |V_{dra}|$, where $V_{dra}$ is the set of nodes in all \dras.
-
-In the \dblp and \dblpone graphs, it only takes about 1.6 MB extra space to store the routing information for all proxies, since there are similar number of nodes in the \dras of both datasets. Observe that by using proxies to represent all nodes in \dras, the reduced graph  has a smaller size than the original graph, especially for the \dblpone graph. In the \dblpone graph, 72.2\% of its nodes are captured by proxies, which leads to a much smaller reduced graph.
-
-In all road networks, it incurs small extra space overhead to store the routing information for proxies. Only about 100 MB extra space is taken for the largest graph US. The use of proxies also results in a smaller reduced graph. As shown in Table~1, the size of the reduced graph is about 70\% of the original graph on average.
-
 
 
 From these tests, we can find that using proxies is a light-weight optimization technique, which scales well to large networks, and incurs appropriate space overhead. %These properties benefit existing shortest  path and distance algorithms, such as (bidirectional) Dijkstra, \arcflag , \tnr and \ah, to be seen immediately.
