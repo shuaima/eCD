@@ -21,4 +21,4 @@ set label "Query time (x10^{-6} s)" at graph 0.3, 1.05
 set key at graph 0.68, 0.98
 #set key 1,2300
 plot "query_q6_path_ah.tab" using ($1):($2) title 'Proxy+AH' with linespoints linetype 4 pointtype 8 lc 0,\
-"query_q6_path_ah.tab" using ($1):($3) title 'AH' with linespoints linetype 5 pointtype 6 lc 0
+"query_q6_path_ah.tab" using ($1):($3) title 'AH' with linespoints linetype 1 pointtype 6 lc 0

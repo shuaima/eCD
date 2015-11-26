@@ -21,4 +21,4 @@ set label "Query time (x10^{-6} s)" at graph 0.3, 1.05
 #set key top left
 set key at graph 0.68, 0.98
 plot "query_q5_path.tab" using ($1):($6) title 'Proxy+Dijkstra' with linespoints linetype 4 pointtype 8 lc 0,\
-"query_q5_path.tab" using ($1):($7) title 'Dijkstra' with linespoints linetype 5 pointtype 6 lc 0
+"query_q5_path.tab" using ($1):($7) title 'Dijkstra' with linespoints linetype 1 pointtype 6 lc 0

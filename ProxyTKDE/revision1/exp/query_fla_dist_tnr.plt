@@ -20,4 +20,4 @@ unset logscale x
 set label "Query time (x10^{-6} s)" at graph 0.3, 1.05
 set key at graph 0.68, 0.98
 plot "query_fla_dist_tnr.txt" using ($1):($3) title 'Proxy+TNR' with linespoints linetype 4 pointtype 8 lc 0,\
-"query_fla_dist_tnr.txt" using ($1):($2) title 'TNR' with linespoints linetype 5 pointtype 6 lc 0
+"query_fla_dist_tnr.txt" using ($1):($2) title 'TNR' with linespoints linetype 1 pointtype 6 lc 0
