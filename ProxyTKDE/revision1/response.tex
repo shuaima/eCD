@@ -155,7 +155,7 @@ Below please find our responses to the comments by the referees.
 It would be helpful to measure the proposed approach to a well known baseline for road network (as the major part of dataset includes data from road network).}
 \svs
 
-We have added Arterial Hierarchy (\ah) [38] to show the benefits of using proxies in the experimental study.  From the experimental results, we can see that though \ah has a small search space and is very efficient, it still benefits from proxies in terms of efficiency (about 1\% faster). Meanwhile, the space cost of Proxy+\ah is smaller than \ah (about 18\% smaller). Thanks for your suggestion!
+We have added Arterial Hierarchy (\ah) [38] to show the benefits of using proxies in the experimental study.  From the experimental results, we can see that though \ah has a small search space and is very efficient, it still benefits from proxies in terms of efficiency (about 1\% faster). Meanwhile, the space overhead of Proxy+\ah is smaller than \ah (about 18\% smaller). Thanks for your suggestion!
 
 
 \noindent
@@ -164,7 +164,7 @@ We have added Arterial Hierarchy (\ah) [38] to show the benefits of using proxie
 is similar. But the preprocessing takes 435 seconds. So, for 10000 queries (considering the fact that presented time is an average of 10000 queries), the time taken by PROXY+Arcflag and preprocessing exceeds actual Arcflag algorithm by a huge margin.}
 \svs
 
-Yes, speeding up the queries is one of the major reasons to preprocess the graph. As a data reduction technique, proxies can preprocess the graph and represent the nodes in the DRAs, thus generates a smaller graph. Then, we can apply any existing algorithm designed for shortest path and distance queries on the smaller graph. The preprocessing yields two benefits: (1) We only need to apply the existing algorithms on the smaller graph, which typically requires less time and space cost. (2) Given a shortest path or distance query, we decompose the original query into two parts, inside a DRA and cross DRAs, which usually yields a better efficiency to answer the query. In the revised version of our submission, we have further conducted an experiment to compare the space overhead of \arcflag, \tnr and \ah compared with their counterparts using proxies. The experimental results show that existing approaches benefit from proxies in terms of space overhead as well. The detailed results can be found in Table 2 in Section 6.3.
+Yes, speeding up the queries is one of the major reasons to preprocess the graph. As a data reduction technique, our approach can preprocess the graph and use proxies to represent the nodes in the DRAs, thus generates a smaller graph. Then, we can apply any existing algorithm designed for shortest path and distance queries on the smaller graph. The preprocessing yields two benefits: (1) We only need to apply the existing algorithms on the smaller graph, which typically requires less time and space cost. (2) Given a shortest path or distance query, we decompose the original query into two parts, inside single DRAs and inside the reduced graph, which usually yields a better efficiency to answer the query. In the revised version of our submission, we have further conducted an experiment to compare the space overhead of \arcflag, \tnr and \ah with their counterparts using proxies. The experimental results show that existing approaches benefit from proxies in terms of space overhead as well. The detailed results can be found in Table 2 in Section 6.3.
 
 Meanwhile, preprocessing is a one time thing, and shortest path and distance queries are very common and numerous users may consistently issue such queries in an system.
 
@@ -208,7 +208,7 @@ Thanks!
 \noindent{\em{\bf[R1C8]} DBLP data reduction (removal of nodes with degree more than 14) needs an explanation.}
 
 \svs
-CH [12] is designed for the road network, which is a sparse graph and the average degree is quite low. It is indeed very inefficient for dense graphs. The DBLP dataset is a dense co-authorship network, and in our experiment, it took more than 1 week for the preprocessing of CH-based TNR [1]. Thus, we removed all nodes with degrees higher than 14, and picked the largest connected component from the remaining graph to form a new dataset DBLP14. We have also explained this when we introduce the DBLP dataset in Section 6.1.
+CH [12] is designed for the road network, which is a sparse graph and the average node degree is quite low. It is indeed very inefficient for dense graphs. The DBLP dataset is a dense co-authorship network, and in our experiment, it took more than 1 week for the preprocessing of CH-based TNR [1]. Thus, we removed all nodes with degrees higher than 14, and picked the largest connected component from the remaining graph to form a new dataset DBLP14, which makes the evaluation of TNR possible. We have also explained this when we introduce the DBLP dataset in Section 6.1.
 
 
 
@@ -419,7 +419,7 @@ As we stated in Section 7, except for (bidirectional) Dijikstra, most if not all
 
 We would like to clarify that by saying ``complementary methods'', we mean that our proxies can be combined with these existing methods to achieve a better performance. Sorry that we did not present the idea of combining proxies with existing methods clearly. We have now discussed the idea in Section 5 in the revised version of our submission. We have also pointed out the difference between existing approaches and our proxies in the related work (Section 7, the paragraph started with ``These techniques...'' at page 12).
 
-To elaborate further, our method is a data reduction method: by using proxies to represent all nodes in the DRAs, we can remove all nodes in the DRAs and get a reduced graph. Then, any existing approaches can be applied on this reduced graph. Given a query, we decompose it into two parts: inside the reduced graph and inside single DRAs. By using the existing approaches to answer the decomposed queries on the reduced graph separately, we can combine the result to produce the final result.
+To elaborate further, our method is a data reduction method: by using proxies to represent all nodes in the DRAs, we can remove all nodes in the DRAs and get a reduced graph. Then, any existing approaches can be applied on this reduced graph. Given a query, we decompose it into two parts: inside the reduced graph and inside single DRAs. By using the existing approaches to answer the decomposed queries on the reduced graph and single DRAs separately, we can combine the result to produce the final result.
 
 In the revised version, we show the comparison between existing solutions and their counterparts with proxies in Section 6.3. We understand that it may be confusing that \tnr and Proxy+\tnr have similar performance. This is because in \tnr, a heuristic method is used to select the transit nodes, and the method is based on the structure of the graph. And the selection of transit nodes can significantly affect the performance of \tnr. Since we reduce the input graph by using proxies, the reduced graph has a different topology structure. Please also refer to our response to [R1C3].
 
@@ -434,7 +434,7 @@ Indeed, we have already tested the dataset suggested above in the original versi
 
 In our revised version, we have added a new baseline algorithm namely Arterial Hierarchy (\ah).
 
-In Section 6.2, we evaluate the performance of computing DRAs and their proxies. From the experimental results, we can see that proxies are a light-weight optimization technique with the following properties. (1) It runs efficiently and scales well to large networks. (2) It incurs a small space cost to support shortest path or distance queries. And (4) it can effectively reduce the size of the original input graph.
+In Section 6.2, we evaluate the performance of computing DRAs and their proxies. From the experimental results, we can see that proxies are a light-weight optimization technique with the following properties. (1) It runs efficiently and scales well to large networks. (2) It incurs a small space cost to support shortest path or distance queries. And (3) it can effectively reduce the size of the original input graph.
 
 In Section 6.3, we compare existing approaches with their counterparts with proxies, and the experimental results show that existing approaches benefit from proxies in terms of query efficiency and/or space cost.  All these have been highlighted in the summary in the experimental study (Section 6).
 
