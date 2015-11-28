@@ -21,14 +21,14 @@ In this section, we show how to answer shortest path and distance queries using 
 
 \stitle{1. Preprocessing}. Given graph $G(V, E)$, the preprocessing module executes the following.
 
-\sstab (1) It first computes all \dras and their maximal proxies with algorithm $\compDRAs$ (to be seen shortly in Section~\ref{sec-proxy-algorithms}).
+\sstab (1) It first computes all \dras and their maximal proxies with algorithm $\compDRAs$ (as discussed in Section~\ref{sec-proxy-algorithms}).
 
 \sstab (2) It then pre-computes and stores all the shortest paths and distances between any node in a \dra and its proxy.
 
 To support shortest distance queries, for each node in a \dra, we store its proxy $u$, its distance to $u$ and the component of $A^{+}_u$ to which it belongs,
 and, moreover, to support shortest path queries, we further keep the shortest paths from proxy $u$ to all nodes in the \dra.
 
-\sstab (3) It finally computes the reduced subgraph $G'$ by removing all \dras, but keeping their proxies, from graph $G$. 
+\sstab (3) It finally computes the reduced subgraph $G'$ by removing all \dras, but keeping their proxies, from graph $G$.
 
 
 \stitle{2. Query answering}. Given two nodes $s$ and $t$ in graph $G(V, E)$  and the pre-computed information, the query answering module executes the following.
@@ -44,7 +44,7 @@ By the analyses in Section~\ref{subsec-proxy-properties}, we know that $\path(s,
 
 Similarly, the shortest distance $\dist(s, t)$ = $\dist(s, u_s)$ + $\dist(u_s, u_t)$ + $\dist(u_t, t)$ can be computed.
 
-We next illustrate how shortest path and distance queries are performed  with an example below.
+We next illustrate how shortest path and distance queries are processed with an example below.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -65,7 +65,7 @@ Consider graph $G_1$ and its \bccs in Fig.~\ref{fig-cut-nodes}(1), in which the 
 
 
 
-\sstab(1) Consider nodes $s$ in $\dra_1$  and $t$ in $\dra_2$, we first compute $\dist(w, x)$ or $\path(w,x)$ on $G'_1$, and then 
+\sstab(1) Consider nodes $s$ in $\dra_1$  and $t$ in $\dra_2$, we first compute $\dist(w, x)$ or $\path(w,x)$ on $G'_1$, and then
 let $\dist(s, t)$ = $\dist(s, w)$ + $\dist(w, x)$ + $\dist(x, t)$ or $\path(s, t)$ = $\path(s, w)/\path(w, x)/\path(x, t)$.
 Note that here $\dist(s, w)$, $\dist(x, t)$, $\path(s, w)$ and $\path(x, t)$ have all been computed in the precessing stage.
 
@@ -78,4 +78,4 @@ as they have single components.
 \stitle{Remarks}.
 (1) As shown above, we need $O(d)$ extra space to store the routing information to compute shortest paths and distances, where $d$ is the total number of nodes in all \dras.
 
-\sstab (2) It is easy to see that the main computation cost is reduced from graph $G$ to its reduced graph $G'$. As shown in the experimental study (Section~\ref{sec-expt}), on average about 1/3 nodes of a graph are captured by non-trivial proxies and their \dras, \ie $d$ is about $|V|/3$. That is, the reduced graph $G'$ is about 2/3 size of the original graph $G$, and hence our data reduction technique could reduce graph sizes and speed up shortest path and distance computations. 
+\sstab (2) It is easy to see that the main computation cost is reduced from graph $G$ to its reduced graph $G'$. As shown in the experimental study (Section~\ref{sec-expt}), on average about 1/3 nodes of a graph are captured by non-trivial proxies and their \dras, \ie $d$ is about $|V|/3$. That is, the reduced graph $G'$ is about 2/3 size of the original graph $G$, and hence our data reduction technique could reduce graph sizes and speed up shortest path and distance computations.

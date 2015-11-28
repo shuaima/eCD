@@ -1,40 +1,6 @@
 \section{Experimental Study}
 \label{sec-expt}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%We next present an experimental study to show how proxies speed up shortest  path and distance queries.
-%Using real-life networks, we conducted three
-%sets of experiments to evaluate:
-%(1) the performance of proxies,
-%(2) the efficiency of (bidirectional) Dijkstra~\cite{LubyR89}, \arcflag \cite{MohringSSWW05}, \tnr \cite{arz2013transit} and their counterparts with proxies (Proxy+Dijkstra, Proxy+\arcflag, Proxy+\tnr) with respect to  graph queries, and (3) the efficiency of these algorithms with respect to graph sizes.
-Using real-life road networks and social graphs, we next conduct an extensive experimental study to evaluate: (1) the performance of computing routing proxies, and (2) how routing proxies speed up shortest  path and distance queries, by comparing the efficiency of (bidirectional) Dijkstra~\cite{LubyR89}, \arcflag \cite{MohringSSWW05}, \tnr \cite{arz2013transit}, \ah \cite{zhu2013shortest} with their counterparts using proxies (Proxy+Dijkstra, Proxy+\arcflag, Proxy+\tnr, Proxy+\ah) with respect to graph queries and graph sizes.
-
-\eat{%%%%%%%%%%%%EAT
-\begin{table}[t!]
-\label{tab-datasets}
-\caption{Real-world graphs}
-\vspace{-1ex}
-\begin{center}
-%\begin{small}
-\begin{tabular}{|c|c|r|r|}
-\hline
-Name                            &  Regions               & \# of Nodes  &  \# of Edges \\
-\hline\hline
-DBLP14    &   A subgraph of DBLP                 & 141,359  &   246,462 \\ \hline
-DBLP    & DBLP & 317,080 & 1,049,866 \\ \hline
-CO      &  Colorado              & 435,666      &  521,200  \\ \hline
-FL      &  Florida               & 1,070,376    &  1,343,951  \\ \hline
-CA      &  California \& Nevada   & 1,890,815   &  2,315,222  \\ \hline
-E-US    &  Eastern US            & 3,598,623    &  4,354,029 \\ \hline
-W-US    &  Western US            & 6,262,104    &  7,559,642  \\ \hline
-C-US    &  Central US            & 14,081,816   &  16,933,413 \\ \hline
-US      &  Entire US             & 23,947,347   &  28,854,312  \\ \hline
-\end{tabular}
-%\end{small}
-\end{center}
-\end{table}
-}%%%EAT%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{table*}[t!]
 \label{tab-exp1-proxies-dras}
@@ -67,6 +33,46 @@ US          &  Entire US             & 23,947,347   &  28,854,312      &  (3,452
 %%%%%%%%%%%%%%%%%%%
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%We next present an experimental study to show how proxies speed up shortest  path and distance queries.
+%Using real-life networks, we conducted three
+%sets of experiments to evaluate:
+%(1) the performance of proxies,
+%(2) the efficiency of (bidirectional) Dijkstra~\cite{LubyR89}, \arcflag \cite{MohringSSWW05}, \tnr \cite{arz2013transit} and their counterparts with proxies (Proxy+Dijkstra, Proxy+\arcflag, Proxy+\tnr) with respect to  graph queries, and (3) the efficiency of these algorithms with respect to graph sizes.
+Using real-life road networks and social graphs, we next conduct an extensive experimental study to evaluate: (1) the performance of computing routing proxies, and (2) how routing proxies speed up shortest  path and distance queries, by comparing the efficiency and/or space overhead of (bidirectional) Dijkstra~\cite{LubyR89}, \arcflag \cite{MohringSSWW05}, \tnr \cite{arz2013transit} and \ah \cite{zhu2013shortest} with their counterparts using proxies (Proxy+Dijkstra, Proxy+\arcflag, Proxy+\tnr and Proxy+\ah) with respect to graph queries and graph sizes.
+
+\eat{%%%%%%%%%%%%EAT
+\begin{table}[t!]
+\label{tab-datasets}
+\caption{Real-world graphs}
+\vspace{-1ex}
+\begin{center}
+%\begin{small}
+\begin{tabular}{|c|c|r|r|}
+\hline
+Name                            &  Regions               & \# of Nodes  &  \# of Edges \\
+\hline\hline
+DBLP14    &   A subgraph of DBLP                 & 141,359  &   246,462 \\ \hline
+DBLP    & DBLP & 317,080 & 1,049,866 \\ \hline
+CO      &  Colorado              & 435,666      &  521,200  \\ \hline
+FL      &  Florida               & 1,070,376    &  1,343,951  \\ \hline
+CA      &  California \& Nevada   & 1,890,815   &  2,315,222  \\ \hline
+E-US    &  Eastern US            & 3,598,623    &  4,354,029 \\ \hline
+W-US    &  Western US            & 6,262,104    &  7,559,642  \\ \hline
+C-US    &  Central US            & 14,081,816   &  16,933,413 \\ \hline
+US      &  Entire US             & 23,947,347   &  28,854,312  \\ \hline
+\end{tabular}
+%\end{small}
+\end{center}
+\end{table}
+}%%%EAT%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
 
 
 
@@ -84,7 +90,7 @@ We use two types of datasets, and the details of all datasets are reported in Ta
 
 
 
-\sstab (1) The first type of datasets is {\em co-authorship networks}. We extracted co-authorship graphs from DLBP~\cite{snapnets}, where each node in the graph represents an author and two authors are connected if they have published papers together. The edge weight is computed by a revised Adamic/Adar similarity function: $w(u,v) = \frac{1}{\sum_{z\in {\Gamma(u)\cap \Gamma(v) \cup \{u,v\}}}\frac{1}{\log{|\Gamma(z)|}}}$, where $\Gamma(u)$ and $\Gamma(v)$ are the sets of neighbors of nodes $u$ and $v$, respectively. The weight of the edge $(u,v)$ represents the closeness between $u$ and $v$ and a smaller weight means the two authors are closer. \tnr is designed for road networks and it is very inefficient for \tnr to preprocess dense graphs such as DBLP (it took more than 1 week to finish the preprocessing). To guarantee that we can evaluate the improvement of \tnr with proxies on general graphs, we remove all nodes whose degrees are higher than 14, and choose the largest connected component in the remaining graph, referred to as \dblpone.
+\sstab (1) The first type of datasets is {\em co-authorship networks}. We extracted a co-authorship graph from \dblp~\cite{snapnets}, where each node in the graph represents an author and two authors are connected if they have published papers together. The edge weight is computed by a revised Adamic/Adar similarity function: $w(u,v) = \frac{1}{\sum_{z\in {\Gamma(u)\cap \Gamma(v) \cup \{u,v\}}}\frac{1}{\log{|\Gamma(z)|}}}$, where $\Gamma(u)$ and $\Gamma(v)$ are the sets of neighbors of nodes $u$ and $v$, respectively. The weight of the edge $(u,v)$ represents the closeness between $u$ and $v$ and a smaller weight means the two authors are closer. \tnr is designed for road networks and it is very inefficient for \tnr to preprocess dense graphs such as DBLP (it took more than 1 week to finish the preprocessing). To guarantee that we can evaluate the improvement of \tnr with proxies on general graphs, we remove all nodes whose degrees are higher than 14, and choose the largest connected component in the remaining graph, referred to as \dblpone.
 
 
 \sstab (2) The second type of datasets is {\em road networks}. We chose seven standard road network datasets of various sizes from the Ninth DIMACS
@@ -92,10 +98,10 @@ Implementation Challenge~\cite{dimacs-datasets} (available at {\url{http://www.d
 
 
 \stitle{Shortest  path and distance queries}. Our queries were generated as follows.
-(1) On each road  or co-authorship network, we first randomly choose a node $u$, and run a Dijikstra algorithm from $u$ to find the node $s$ that is farthest from $u$. Then we run a Dijkstra again from $s$ to find the node $t$ that is farthest from $s$. Let $\ell$ be the distance $\dist(s,t)$ from $s$ to $t$.
+(1) On each road  or co-authorship network, we first randomly choose a node $u$, and run Dijikstra's algorithm from $u$ to find the node $s$ that is farthest from $u$. Then we run Dijkstra's algorithm again from $s$ to find the node $t$ that is farthest from $s$. Let $\ell$ be the distance $\dist(s,t)$ from $s$ to $t$.
 (2) We then randomly chose ten thousand node pairs from
-the road network to compose $Q_i (i \in [1,7])$, such that the grid
-distance of all node pairs in $Q_i$ is in $[2^{i-9}\cdot\ell, 2^{i-8}\cdot\ell)$.
+the road network to compose $Q_i (i \in [1,7])$, such that the 
+distances of all node pairs in $Q_i$ are in $[2^{i-9}\cdot\ell, 2^{i-8}\cdot\ell)$.
 For each query set $Q_i$ $(i\in [1,7])$, we report the average running time of 10,000 queries in the set.
 
 %On each road network, we generated eight sets $Q_1$, $Q_2$, $\dots$ , $Q_{7}$ of
@@ -111,7 +117,7 @@ For each query set $Q_i$ $(i\in [1,7])$, we report the average running time of 1
 
 \stitle{Algorithms.} We implemented algorithms bidirectional-Dijkstra~\cite{LubyR89}, \arcflag~\cite{MohringSSWW05}, \tnr~\cite{arz2013transit} and \ah \cite{zhu2013shortest}.
 
-For \arcflag, it first needs to partition graphs to pre-compute information on whether an arc is useful for a shortest path search. Any possible partition methods~\cite{kl70,Karypis98,YangYZK12, delling2011graph} can be used here. Since we have both road networks and co-authorship networks, we adopted the latest version 5.0.2 of \metis~\cite{metis}, implemented with ANSI C, because it is open source and performs quite well in practice.
+For \arcflag, it first needs to partition graphs to pre-compute information on whether an edge is useful for a shortest path search. Any possible partition methods~\cite{kl70,Karypis98,YangYZK12, delling2011graph} can be used here. Since we have both road networks and co-authorship networks, we adopted the latest version 5.0.2 of \metis~\cite{metis}, implemented with ANSI C, because it is open source and performs quite well in practice.
 
 For \tnr, since we do not have coordinates information in the co-authorship network, we implemented the CH-based \tnr~\cite{arz2013transit} that does not require the geometry information.
 
@@ -140,7 +146,7 @@ For the \dblp graph, about $1/10$ nodes are non-trivial proxies, and about $1/3$
 
 For all the road graphs,  about $1/7$ nodes are non-trivial proxies, and about $1/3$ nodes are captured by the \dras of these proxies, which means basically the reduced graph is only about $2/3$ of the original input graph.
 
- Moreover, although the size restriction is $\le 2\cdot\lfloor\sqrt{|V|}\rfloor$, \dras are typically small such that each proxy represents 2 or 3 other nodes on average.
+ Moreover, although the sizes of \dras are restricted within $2\cdot\lfloor\sqrt{|V|}\rfloor$, \dras are typically small such that each proxy represents 2 or 3 other nodes on average.
 
 
 
@@ -219,7 +225,7 @@ In all road networks, it incurs small extra space overhead to store the routing 
 \includegraphics[scale=0.45]{./exp/query_cus_dist_tnr.eps}}
 \end{center}
 \vspace{1ex}
-\caption{Varying graph queries  for shortest distances: \tnr and Proxy+\tnr}
+\caption{Varying graph queries  for shortest distances: \tnr vs. Proxy+\tnr}
 \label{fig:performance_dist_queries_tnr}
 \vspace{-1ex}
 \end{figure*}
@@ -254,7 +260,7 @@ We next conduct experiments to show the comparison results of an existing approa
 
 Due to the space limitation, we sometimes only report the results on \dblpone, CA, E-US, and C-US.
 %A more detailed results can be found in the supplementary document.
-We fixed the constant $c = 2$ for computing proxies on all graphs. Note that \ah requires the coordinate information to answer shortest path or distance queries, which is not available in \dblp and \dblpone. Thus, we only report results on CA, E-US, and C-US for \ah and its counterpart.
+We fixed the constant $c = 2$ for computing proxies on all graphs. Note that \ah requires the coordinate information to answer shortest path or distance queries, which is not available in \dblp and \dblpone. Thus, we only report results on CA, E-US, and C-US for \ah and its counterpart with proxies.
 %The preprocessing of \arcflag was slow, and it spent over 4 days on C-US. Hence, we did not test the largest road network dataset US for \arcflag.
 %\tnr invokes Contract Hierarchies (\ch) for preprocessing and \ch is very inefficient on dense graphs. Unfortunately \dblp is a very dense graph and it took more than 7 days for \ch to finish preprocessing on \dblp. Thus we tested \dblpone, instead of \dblp, for the performance of shortest path and distance queries. The CH-based \tnr whose space cost was very high, and consequently, and we could not run either \tnr or Proxy+\tnr on the largest road network dataset US, as both of them ran out of memory. Hence, we did not test the largest graph for \tnr as well. However, on the second largest road network dataset C-US, Proxy+\tnr can while \tnr cannot. We report this to show that proxies serve as a data reduction technique and benefit existing methods in terms of space cost as well.
 
@@ -272,12 +278,12 @@ For the \tnr and Proxy+\tnr methods, we always select 10,000 transit nodes, as s
 
 The results of distance queries and path queries are reported in Figures~\ref{fig:performance_dist_queries_dj} and \ref{fig:performance_path_queries_dj} (comparison between Dijkstra and Proxy+Dijkstra), Figures~\ref{fig:performance_dist_queries_af} and~\ref{fig:performance_path_queries_af} (comparison between \arcflag and Proxy+\arcflag), Figures~\ref{fig:performance_dist_queries_tnr} and~\ref{fig:performance_path_queries_tnr} (comparison between \tnr and Proxy+\tnr), and Figures~\ref{fig:performance_dist_queries_ah} and~\ref{fig:performance_path_queries_ah} (comparison between \ah and Proxy+\ah), respectively.
 
-In the co-authorship network \dblpone, the results show that with the help of proxies, Proxy+Dijkstra, Proxy+\arcflag and Proxy+\tnr all achieve a better performance than their counterparts Dijkstra, \arcflag and \tnr without proxies, respectively. On average, the time cost of Proxy+\arcflag, Proxy+Dijkstra and Proxy+\tnr is about 96\%, 51\% and 51\% of their counterparts without proxies for distance queries, and 98\%, 49\% and 76\% of their counterparts without proxies for shortest path queries, respectively. More specifically, we can see that (1) proxies have a better speed-up effect on bidirectional Dijkstra and \tnr than \arcflag, (2) for \arcflag, proxies have a better speed-up effect when the two query nodes are far from each other, which is different from the observation on road networks. To explain the second observation, we need to notice that about 2/3 nodes are captured by proxies in \dblpone. Thus two close nodes are more likely to fall into the same \dras. Since there are no speed-up techniques used inside single \dras, the search space saved by proxies is less than using \arcflag alone.
+In the co-authorship network \dblpone, the results show that with the help of proxies, Proxy+Dijkstra, Proxy+\arcflag and Proxy+\tnr all achieve a better performance than their counterparts without proxies, respectively. On average, the time cost of Proxy+\arcflag, Proxy+Dijkstra and Proxy+\tnr is about 96\%, 51\% and 51\% of their counterparts without proxies for distance queries, and 98\%, 49\% and 76\% of their counterparts without proxies for shortest path queries, respectively. More specifically, we can see that (1) proxies have a better speed-up effect on bidirectional Dijkstra and \tnr than \arcflag, and (2) for \arcflag, proxies have a better speed-up effect when the two query nodes are far from each other, which is different from the observation on road networks. To explain the second observation, we need to notice that about 2/3 nodes are captured by proxies in \dblpone. Thus two close nodes are more likely to fall into the same \dras. Since there are no speed-up techniques used inside single \dras, the search space saved by proxies is less than using \arcflag alone.
 
-In the road networks, the results show that with the help of proxies, Proxy+Dijkstra and Proxy+\arcflag can achieve a better performance than their counterparts without proxies, respectively. On average, the time cost of Proxy+\arcflag, Proxy+Dijkstra and Proxy+\ah is about 80\%, 68\% and 99\% of their counterparts without proxies for distance queries, and 82\%, 67\% and 99\% of their counterparts without proxies for shortest path queries, respectively. More specifically, we can see that (1) proxies have a better speed-up effect on bidirectional Dijkstra than \arcflag, (2) for \arcflag, proxies have a better speed-up effect when the two query nodes are close to each other, (3) different from \arcflag, proxy+Dijkstra has a better performance when the query nodes are far from each other, and (4) though \ah is one of the state-of-art method for shortest path and distance queries, proxies still improves the its efficiency about 1\%. To explain these observations, we need to think how much search space is saved by proxies. Since \arcflag has already used flags on edges to reduce the search space, the proportion of search space saved by proxies is smaller than bidirectional Dijkstra. That explains why proxies have a better speed-up effect on bidirectional Dijkstra. For \arcflag, two close nodes are more likely to fall into the same partition. In this case, the effect of flags on edges is less useful and the search space saved by proxies takes a large proportion, which explains the second observation. For bidirectional Dijkstra, proxies can save more search space when the query nodes are far from each other. As a state-of-art approach for shortest path and distance queries, the search space of \ah is much smaller than Dijkstra and \arcflag. However, the search space of \ah is still reduced, and \ah still benefits from proxies in terms of efficiency.
+In the road networks, the results show that with the help of proxies, Proxy+Dijkstra, Proxy+\arcflag  and Proxy+\ah can achieve a better performance than their counterparts without proxies, respectively. On average, the time cost of Proxy+\arcflag, Proxy+Dijkstra and Proxy+\ah is about 80\%, 68\% and 99\% of their counterparts without proxies for distance queries, and 82\%, 67\% and 99\% of their counterparts without proxies for shortest path queries, respectively. More specifically, we can see that (1) proxies have a better speed-up effect on bidirectional Dijkstra than \arcflag, (2) for \arcflag, proxies have a better speed-up effect when the two query nodes are close to each other, (3) different from \arcflag, proxy+Dijkstra has a better performance when the query nodes are far from each other, and (4) though \ah is one of the state-of-art method for shortest path and distance queries, proxies still improve its efficiency about 1\%. To explain these observations, we need to think how much search space is saved by proxies. Since \arcflag has already used flags on edges to reduce the search space, the proportion of search space saved by proxies is smaller than bidirectional Dijkstra. That explains why proxies have a better speed-up effect on bidirectional Dijkstra. For \arcflag, two close nodes are more likely to fall into the same partition. In this case, the effect of flags on edges is less useful and the search space saved by proxies takes a large proportion, which explains the second observation. For bidirectional Dijkstra, proxies can save more search space when the query nodes are far from each other. As a state-of-art approach for shortest path and distance queries, the search space of \ah is much smaller than Dijkstra and \arcflag. However, the search space of \ah is still reduced, and \ah still benefits from proxies in terms of efficiency. This explains the fourth observation.
 
-Proxy+\tnr achieves a comparable performance to its counterpart without proxies. This is because for \tnr, a heuristic method is used to generate the node order, based on the structure of the graph. And the node order can affect the performance of \tnr. Since we reduce the input graph by using proxies, the reduced graph has a different topology structure. Thus a different node order will be generated. So it is hard to guarantee that Proxy+\tnr outperforms \tnr. We should also notice that \tnr cannot run on C-US while Proxy+\tnr can. To explain this, we first recall that for \tnr, we have to store the access nodes and distances for each node. For the original input of C-US, there are too many nodes and it runs out of memory. By using proxies, about 1/3 nodes are captured by proxies and we only need to run \tnr on 2/3 of the input graph, which is more practical.
-
+Proxy+\tnr achieves a comparable performance to its counterpart without proxies. This is because for \tnr, a heuristic method is used to select transit nodes, based on the structure of the graph. And selection of transit nodes has a significant effect on the performance of \tnr. Since we reduce the input graph by using proxies, the reduced graph has a different topology structure. Thus a different set of transit nodes will be selected. So it is hard to guarantee that Proxy+\tnr outperforms \tnr. We should also notice that \tnr cannot run on C-US while Proxy+\tnr can. To explain this, we first recall that for \tnr, we have to store the access nodes and distances for each node. For the original input of C-US, there are too many nodes and it runs out of memory. By using proxies, about 1/3 nodes are captured by proxies and we only need to run \tnr on 2/3 of the input graph, which is more practical.
+We will evaluate the space overhead saved by proxies in detail, to be seen shortly.
 
 \begin{figure*}[t!]
 %\vspace{-1ex}
@@ -319,7 +325,7 @@ Proxy+\tnr achieves a comparable performance to its counterpart without proxies.
 \includegraphics[scale=0.45]{./exp/query_cus_path_af.eps}}
 \end{center}
 \vspace{1ex}
-\caption{Varying graph queries for shortest paths: \arcflag and Proxy+\arcflag}
+\caption{Varying graph queries for shortest paths: \arcflag vs. Proxy+\arcflag}
 \label{fig:performance_path_queries_af}
 \vspace{-1ex}
 \end{figure*}
@@ -340,7 +346,7 @@ Proxy+\tnr achieves a comparable performance to its counterpart without proxies.
 \includegraphics[scale=0.45]{./exp/query_cus_path_tnr.eps}}
 \end{center}
 \vspace{1ex}
-\caption{Varying graph queries  for shortest paths: \tnr and Proxy+\tnr}
+\caption{Varying graph queries  for shortest paths: \tnr vs. Proxy+\tnr}
 \label{fig:performance_path_queries_tnr}
 \vspace{-1ex}
 \end{figure*}
@@ -358,7 +364,7 @@ Proxy+\tnr achieves a comparable performance to its counterpart without proxies.
 \includegraphics[scale=0.45]{./exp/query_cus_path_ah.eps}}
 \end{center}
 %\vspace{1ex}
-\caption{Varying graph queries for shortest paths: \ah and Proxy+\ah}
+\caption{Varying graph queries for shortest paths: \ah vs. Proxy+\ah}
 \label{fig:performance_path_queries_ah}
 \hrule
 \vspace{-2ex}
@@ -375,7 +381,7 @@ Proxy+\tnr achieves a comparable performance to its counterpart without proxies.
 %
 Since \dblpone is a single dataset, we only compare the efficiency of a group of shortest path and distance queries $\{Q_1, Q_3, Q_5, Q_7\}$  on road graphs using the same settings.
 The results of distance and path queries are reported in
-Figures~\ref{fig:performance_dist_graph_size_dj} and~\ref{fig:performance_path_graph_size_dj} (comparison between Dijkstra and Proxy+Dijkstra), Figures~\ref{fig:performance_dist_graph_size_af} and~\ref{fig:performance_path_queries_af} (comparison between \arcflag and Proxy+\arcflag), Figures~\ref{fig:performance_dist_graph_size_tnr} and~\ref{fig:performance_path_graph_size_tnr} (comparison between \tnr and Proxy+\tnr), and Figures~\ref{fig:performance_dist_graph_size_ah} and~\ref{fig:performance_path_graph_size_ah} (comparison between \ah and Proxy+\ah), respectively.
+Figures~\ref{fig:performance_dist_graph_size_dj} and~\ref{fig:performance_path_graph_size_dj} (Dijkstra vs. Proxy+Dijkstra), Figures~\ref{fig:performance_dist_graph_size_af} and~\ref{fig:performance_path_queries_af} (\arcflag vs. Proxy+\arcflag), Figures~\ref{fig:performance_dist_graph_size_tnr} and~\ref{fig:performance_path_graph_size_tnr} (\tnr vs. Proxy+\tnr), and Figures~\ref{fig:performance_dist_graph_size_ah} and~\ref{fig:performance_path_graph_size_ah} (\ah vs. Proxy+\ah), respectively.
 
 
 
@@ -386,7 +392,7 @@ Figures~\ref{fig:performance_dist_graph_size_dj} and~\ref{fig:performance_path_g
 %In the third set of experiments, we evaluated the efficiency of shortest path and distance queries with respect to graph sizes. Using the same settings as Exp-2, for each group of queries, we vary the graph size. The results of distance and path queries are reported in Figures~\ref{fig:performance_dist_graph_size_af} and~\ref{fig:performance_dist_graph_size_dj} and Figures~\ref{fig:performance_path_graph_size_af} and~\ref{fig:performance_path_graph_size_dj}, respectively.
 %In the third set of experiments, using the graph fragments generated at Exp-2, we evaluated (1) the average number of nodes and edges enforced by the hybrid landmarks covers  with or without the cost model, and (2) their average efficiency on a single fragment. The results are reported in Table~5.
 
-The results tell us that (1) all algorithms scale well with respect to graph sizes, (2) for Proxy+Dijkstra, its time cost is 68\% and 67\% of  its counterpart without proxies for shortest path and distance queries on average, respectively, and (3) for Proxy+\arcflag, its time cost is 80\% and 82\% of its counterpart without proxies for shortest  path and distance queries on average, respectively, (4) for Proxy+\tnr, its time cost is comparable to \tnr for shortest path and distance queries on average, respectively, (5) for Proxy+\tnr, it is applicable to handle the larger dataset C-US while \tnr cannot, and (6) for Proxy+\ah, its time cost is 98\% and 99\% of \ah for shortest path and distance queries on average, respectively. (7) As the size of graphs increases, the running time of Dijkstra, \arcflag and \ah increases in the same way as their counterparts with proxies. (8) For \tnr, the selection of transit nodes is based on the graph structure and has a significantly effect on the efficiency. By using proxies, the reduced graph has a different set of transit nodes and it is hard to guarantee that which set of transit nodes can get a better query efficiency. Thus, Proxy+\tnr does not outperform \tnr constantly as the other 3 approaches do.   %For Proxy+\ch, the improvement is not very obvious since \ch is already very fast.
+The results tell us that (1) all algorithms scale well with respect to graph sizes, (2) for Proxy+Dijkstra, its time cost is 68\% and 67\% of  its counterpart without proxies for shortest path and distance queries on average, respectively, (3) for Proxy+\arcflag, its time cost is 80\% and 82\% of its counterpart without proxies for shortest  path and distance queries on average, respectively, (4) for Proxy+\tnr, its time cost is comparable to \tnr for shortest path and distance queries on average, respectively, (5) for Proxy+\tnr, it is applicable to handle the larger dataset C-US while \tnr cannot, and (6) for Proxy+\ah, its time cost is 98\% and 99\% of \ah for shortest path and distance queries on average, respectively. Further, (7) as the size of graphs increases, the running time of Dijkstra, \arcflag and \ah increases in the same way as their counterparts with proxies. Finally, (8) for \tnr, the selection of transit nodes is based on the graph structure and has a significant effect on the efficiency. By using proxies, the reduced graph has a different set of transit nodes and it is hard to guarantee that which set of transit nodes can get a better query efficiency. Thus, Proxy+\tnr does not outperform \tnr constantly as the other 3 approaches do.   %For Proxy+\ch, the improvement is not very obvious since \ch is already very fast.
 %, and (2) proxies can be easily combined with existing shortest path algorithms and improve its efficiency
 
 \begin{figure*}[tb!]
@@ -483,7 +489,7 @@ The results tell us that (1) all algorithms scale well with respect to graph siz
 
 
 \stitle{3. Space overhead}.
-In the last set of experiments, we evaluate the space overhead of \arcflag, \tnr and \ah compared with their counterparts with proxies, since all of them require preprocessing for query answering. We report (1) the size of the index generated by \arcflag, \tnr and \ah on the original input graphs, and (2) the sum of the size of the index generated by \ah on the reduced graph and the extra space it takes to store routing information for proxies. Note that for \tnr and Proxy+\tnr, no compression techniques are used. The results are reported in Table~2.
+In the last set of experiments, we evaluate the space overhead of \arcflag, \tnr and \ah compared with their counterparts with proxies, since all of them require preprocessing for query answering. We report (1) the size of the index generated by \arcflag, \tnr and \ah on the original input graphs, and (2) the sum of the size of the index generated by each of those methods on the reduced graph and the extra space it takes to store routing information for proxies. Note that for \tnr and Proxy+\tnr, no compression techniques are used. The results are reported in Table~2.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{table}[t!]
@@ -555,7 +561,7 @@ US      &(NA, NA)           &(NA, NA)           & (3512.7, 4266.9)  \\ \hline
 \includegraphics[scale=0.45]{./exp/query_q7_path_af.eps}}
 \end{center}
 \vspace{1ex}
-\caption{Varying graph sizes  for shortest paths: \arcflag and Proxy+\arcflag}
+\caption{Varying graph sizes  for shortest paths: \arcflag vs. Proxy+\arcflag}
 \label{fig:performance_path_graph_size_af}
 \vspace{-1ex}
 \end{figure*}
@@ -604,11 +610,14 @@ US      &(NA, NA)           &(NA, NA)           & (3512.7, 4266.9)  \\ \hline
 \end{figure*}
 
 
-In the co-authorship network \dblpone, different from our expectation, \arcflag requires less space overhead than Proxy+\arcflag. This is because that the graph is relatively small and has small number of partitions. Thus, for each edge we only need to maintain a 8-byte label in \arcflag. However, when using proxy, we need to maintain 12-byte routing information for each node. As we have shown before, about 70\% of the nodes in \dblpone fall into the \dras, thus, \arcflag requires less space overhead than Proxy+\arcflag. However, in \dblp, since the graph is larger (we need to maintain a 17-byte label for each edge), Proxy+\arcflag requires only about 14\% of the space overhead of \arcflag. We can also observe that the space overhead of Proxy+\tnr is about 98\% of \tnr.
+In the co-authorship network \dblpone, different from our expectation, \arcflag requires less space overhead than Proxy+\arcflag. This is because that the graph is relatively small and has small number of partitions. Thus, for each edge we only need to maintain a 8-byte flag in \arcflag. However, when using proxy, we need to maintain 12-byte routing information for each node. As we have shown before, about 70\% of the nodes in \dblpone fall into the \dras, thus, \arcflag requires less space overhead than Proxy+\arcflag. However, in \dblp, since the graph is larger (we need to maintain a 17-byte flag for each edge), Proxy+\arcflag requires only about 14\% of the space overhead of \arcflag. We can also observe that the space overhead of Proxy+\tnr is about 98\% of \tnr.
 
-In the road networks, we can make the following observations: (1) Proxy+\arcflag incurs less space overhead than \arcflag (from 38\% to 68\%), especially for large graphs (about 38\% for CUS). This is because we need more bytes to maintain edge labels for large graphs. Thus the reduction has a better performance on large graphs. (2) Proxy+\tnr incurs less space overhead than \tnr (from 72\% to 92\%). Recall that for \tnr, we need to maintain a list of access nodes and a list of filter nodes for each node in the graph. A larger graph usually incurs a larger size of filter nodes. Thus, by using proxies to represent nodes in \dras, we can save more space for larger graphs. (3) Proxy+\ah is about 82\% of its counterpart without proxies.
+In the road networks, we can make the following observations: (1) Proxy+\arcflag incurs less space overhead than \arcflag (from 38\% to 68\%), especially for large graphs (about 38\% for CUS). (2) Proxy+\tnr incurs less space overhead than \tnr (from 72\% to 92\%). Recall that for \tnr, we need to maintain a list of access nodes and a list of filter nodes for each node in the graph. A larger graph usually incurs a larger size of filter nodes. Thus, by using proxies to represent nodes in \dras, we can save more space for larger graphs. (3) Proxy+\ah is about 82\% of its counterpart without proxies.
 
-From the above experimental results, we can see that the existing solution benefit from proxies in terms of space overhead in the query answering stage.
+
+%The reason for the first observation is that we need more bytes to maintain edge flags for large graphs. Thus the reduction has a better performance on large graphs. To explain the second observation, recall that we need to maintain a list of access nodes and a list of filter nodes for each node in the graphs. A larger graph usually incurs a larger size of filter nodes. Thus, by using proxies to represent nodes in \dras, we can save more space for larger graphs.
+
+From the experimental results above, we can find that the existing solutions also benefit from using proxies in terms of space overhead.
 
 
 
@@ -631,7 +640,7 @@ From the above experimental results, we can see that the existing solution benef
 
 \vspace{-0.5ex}
 \stitle{Summary}.
-From these experimental results, we find the following. (1) Proxies are a light-weight preprocessing technique, which can be computed efficiently and take linear space to support shortest path and distance queries.  (2) According to our experiments, in most cases, about 1/3 nodes in the graph are captured by proxies, leaving the reduced graph about 2/3 of the input graph. In some special cases (like \dblpone), about 2/3 nodes in the graph are captured by proxies, leaving the reduced graph about only 1/3 of the input graph. (3) Proxies and their \dras benefit existing shortest path and distance algorithms in terms of time cost. They reduce 20\%, 30\% and 1\% time for \arcflag, bidirectional Dijkstra and \ah on road networks, respectively. They also has comparable time cost for \tnr on road networks; They reduce 49\%, 4\% and 49\% time for bidirectional Dijkstra, \arcflag, and \tnr on the co-authorship network \dblpone, respectively. (4) Existing approaches also benefit from proxies in terms of space overhead. Since the original input graph is reduced by proxies, larger datasets may be handled when existing methods are combined with proxies.  Proxy+\tnr can handle the road network C-US while \tnr cannot. Moreover, Proxy+\arcflag incurs less space overhead than \arcflag (from 38\% to 68\%), Proxy+\tnr is about from 72\% to 92\% of its counterpart without proxies, and Proxy+\ah is about 82\% of its counterpart without proxies.
+From these experimental results, we find the following. (1) Proxies are a light-weight preprocessing technique, which can be computed efficiently and takes linear space to support shortest path and distance queries.  (2) According to our experiments, in most cases, about 1/3 nodes in the graph are captured by proxies, leaving the reduced graph about 2/3 of the input graph. In some special cases (like \dblpone), about 2/3 nodes in the graph are captured by proxies, leaving the reduced graph about only 1/3 of the input graph. (3) Proxies and their \dras benefit existing shortest path and distance algorithms in terms of time cost. They reduce 20\%, 30\% and 1\% time for \arcflag, bidirectional Dijkstra and \ah on road networks, respectively. They also have comparable time cost for \tnr on road networks; They reduce 49\%, 4\% and 49\% time for bidirectional Dijkstra, \arcflag, and \tnr on the co-authorship network \dblpone, respectively. (4) Existing shortest path and distance algorithms also benefit from using proxies in terms of space overhead. Since the original input graph is reduced by proxies, larger datasets may be handled when existing methods are combined with proxies.  Proxy+\tnr can handle the road network C-US while \tnr cannot. Moreover, Proxy+\arcflag incurs less space overhead than \arcflag (from 38\% to 68\%), Proxy+\tnr is about from 72\% to 92\% of its counterpart without proxies, and Proxy+\ah is about 82\% of its counterpart without proxies.
 
 \eat{\vspace{-0.5ex}
 \stitle{Remark}. We also combined proxies with a notion of {\em revised distance landmarks} to improve the efficiency of \ch~\cite{GeisbergerSSD08} for shortest distance queries in \cite{corrMaFWLH14}. \ch assigns a level to each the node in the graph and adds shortcuts into the graph. It adopts a revised bidirectional Dijkstra search which only utilizes the edges and shortcuts from lower level nodes to higher level nodes. Thus the searching space of \ch is quite small. With the help of proxies, \ch further reduces search space, and improves the efficiency of shortest distance queries \cite{corrMaFWLH14}.
