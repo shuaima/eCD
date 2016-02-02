@@ -166,11 +166,11 @@ In all road networks, it incurs small extra space overhead to store the routing 
 
 
 \stitle{4. Effectiveness \wrt graph density}.
-In this set of experiments, we study the effectiveness \wrt graph density. We adopted the graph-tool library to produce random graphs. It is controlled by two parameters: the number $n$ of nodes, and a sample function that decides the degree of each node. We generate graphs with $6\times 10^{6}$, $8\times 10^{6}$, $10\times 10^{6}$ and $12\times 10^{6}$ nodes respectively. For a given number of nodes, we generate graph with average degree 8, 12, 16, and 20. The results are reported in Table~\ref{tab:density}. As we can see, when the density of the graph increases, less nodes can be captured by \dras. This is because: (1) There are less cut-nodes in graphs with higher density, thus less proxies can be found. (2) For a proxy $u$, the set of nodes $A_u^i$ that presented by $u$ is more likely to exceed the size constraint. Therefore, there are less nodes in its \dra. These together explain the results.
+In this set of experiments, we study the effectiveness \wrt graph density. We adopted the graph-tool library~\cite{peixoto_graph-tool_2014} to produce random graphs. It is controlled by two parameters: the number $n$ of nodes, and a sample function that decides the degree distribution of the graph. Without loss of generality, we fix $n=6\times 10^6$. To generate graphs with average degree 2, 3, 4, 5 and 6, we adopt three degree distributions: (1) uniform distribution, (2) normal distribution, which is observed to characterize many real road networks\cite{progulova2008modeling}, and (3) scale-free distribution[?]. The results are shown in Table~\ref{tab:density}. We can observe that (1) Our algorithm performs well in sparse graphs (with average degree no larger than 4). Specifically, about 30\% of the nodes in the graph are captured by \dras. (2) When the density of the graph increases, less nodes can be captured by \dras. This is because: (1) There are less cut-nodes in graphs with higher density, thus less proxies can be found. (2) For a proxy $u$, the set of nodes $A_u^i$ that presented by $u$ is more likely to exceed the size constraint. Therefore, there are less nodes in its \dra. These together explain the results.
 
 \begin{table*}[t!]
 \caption{Effectiveness \wrt graph density}\label{tab:density}
-\vspace{-1ex}
+\vspace{-2ex}
 \begin{center}
 %\begin{small}
 %\begin{tabular}{|c|c|r|r|r|r|r|r|r|}
@@ -182,12 +182,14 @@ In this set of experiments, we study the effectiveness \wrt graph density. We ad
   &   & \multicolumn{5}{c|}{\bf Average Degree} \\
 \cline{3-7}
 
-\raisebox{1.5ex}[0pt]{\bf \# of nodes} &  & {\bf 2} & {\bf 3} & {\bf 4} & {\bf 5} & {\bf 6} \\ \hline \hline
+\raisebox{1.5ex}[0pt]{\bf Distribution} &\raisebox{1.5ex}[0pt]{\bf Properties}  & {\bf 2} & {\bf 3} & {\bf 4} & {\bf 5} & {\bf 6} \\ \hline \hline
 
- \multirow{2}{*}{Uniform-Distribution} & Proxies (\#: \%) & (88649: 14.7) & (97202: 16.2) & (75822: 12.6) & (60937: 10.1) &  (50829: 8.5)  \\ \cline{2-7}
-                       & Nodes in \dras (\#: \%)    & (267015: 44.5) & (129301: 21.5) & (89253: 14.9) & (68232: 11.4) &  (55314: 9.2)   \\ \hline
-  \multirow{2}{*}{Normal-Distribution} & Proxies (\#: \%) &  & (110305: 18.4) & (90276: 15.0) & (73778: 12.3) &  (62751: 10.5)  \\ \cline{2-7}
-                       & Nodes in \dras (\#: \%)    &  & (159745: 26.6) & (113193: 18.9) & (86208: 14.4) &  (70720: 11.8)   \\ \hline
+ \multirow{2}{*}{Uniform} & Proxies (\#: \%) & (88,649: 14.7) & (97,202: 16.2) & (75,822: 12.6) & (60,937: 10.1) &  (50,829: 8.5)  \\ \cline{2-7}
+                       & Nodes in \dras (\#: \%)    & (267,015: 44.5) & (129,301: 21.5) & (89,253: 14.9) & (68,232: 11.4) &  (55,314: 9.2)   \\ \hline
+  \multirow{2}{*}{Normal} & Proxies (\#: \%)   & (75,409: 12.6) & (117,328: 19.5) & (98,110: 16.4) &  (81,689: 13.6)& (69,357:11.6)  \\ \cline{2-7}
+                       & Nodes in \dras (\#: \%)      & (280,243: 46.7) & (182,402: 30.4) & (127,303: 21.2) &  (98,152: 16.3) & (79,671: 13.2)  \\ \hline
+  \multirow{2}{*}{Scale-free} & Proxies (\#: \%)   & () & () & () &  ()& ()  \\ \cline{2-7}
+                       & Nodes in \dras (\#: \%)      & () & () & () &  () & ()  \\ \hline
 
 \end{tabular}
 %\end{small}
@@ -256,7 +258,7 @@ In this set of experiments, we study the effectiveness \wrt graph density. We ad
 
 \begin{table*}[t!]
 \caption{Varying graph queries  for shortest distances: \arcflag   vs. Proxy+\arcflag}\label{tab:performance_dist_queries_af}
-\vspace{-1ex}
+\vspace{-2ex}
 \begin{center}
 %\begin{small}
 %\begin{tabular}{|c|c|r|r|r|r|r|r|r|}
@@ -316,7 +318,7 @@ In this set of experiments, we study the effectiveness \wrt graph density. We ad
 
 \begin{table*}[t!]
 \caption{Varying graph queries  for shortest distances: \tnr vs. Proxy+\tnr}\label{tab:performance_dist_queries_tnr}
-\vspace{-1ex}
+\vspace{-2ex}
 \begin{center}
 %\begin{small}
 %\begin{tabular}{|c|c|r|r|r|r|r|r|r|}
@@ -375,7 +377,7 @@ In this set of experiments, we study the effectiveness \wrt graph density. We ad
 
 \begin{table*}[t!]
 \caption{Varying graph queries  for shortest distances: \ah vs. Proxy+\ah}\label{tab:performance_dist_queries_ah}
-\vspace{-1ex}
+\vspace{-2ex}
 \begin{center}
 %\begin{small}
 %\begin{tabular}{|c|c|r|r|r|r|r|r|r|}
@@ -467,7 +469,7 @@ We will evaluate the space overhead saved by proxies in detail, to be seen short
 
 \begin{table*}[t!]
 \caption{Varying graph queries for shortest paths: Dijkstra  vs. Proxy+Dijkstra}\label{tab:performance_path_queries_dj}
-\vspace{-1ex}
+\vspace{-2ex}
 \begin{center}
 %\begin{small}
 %\begin{tabular}{|c|c|r|r|r|r|r|r|r|}
@@ -529,7 +531,7 @@ We will evaluate the space overhead saved by proxies in detail, to be seen short
 
 \begin{table*}[t!]
 \caption{Varying graph queries for shortest paths: \arcflag  vs. Proxy+\arcflag}\label{tab:performance_path_queries_af}
-\vspace{-1ex}
+\vspace{-2ex}
 \begin{center}
 %\begin{small}
 %\begin{tabular}{|c|c|r|r|r|r|r|r|r|}
@@ -587,7 +589,7 @@ We will evaluate the space overhead saved by proxies in detail, to be seen short
 
 \begin{table*}[t!]
 \caption{Varying graph queries for shortest paths: \tnr vs. Proxy+\tnr}\label{tab:performance_path_queries_tnr}
-\vspace{-1ex}
+\vspace{-2ex}
 \begin{center}
 %\begin{small}
 %\begin{tabular}{|c|c|r|r|r|r|r|r|r|}
@@ -963,7 +965,7 @@ From the experimental results above, we can find that the existing solutions als
 
 \vspace{-0.5ex}
 \stitle{Summary}.
-From these experimental results, we find the following. (1) Proxies are a light-weight preprocessing technique, which can be computed efficiently and takes linear space to support shortest path and distance queries.  (2) According to our experiments, in most cases, about 1/3 nodes in the graph are captured by proxies, leaving the reduced graph about 2/3 of the input graph. In some special cases (like \dblpone), about 2/3 nodes in the graph are captured by proxies, leaving the reduced graph about only 1/3 of the input graph. (3) As the graph density increases, less nodes can be captured by proxies. (4) Proxies and their \dras benefit existing shortest path and distance algorithms in terms of time cost. They reduce 20\%, 30\% and 1\% time for \arcflag, bidirectional Dijkstra and \ah on road networks, respectively. They also have comparable time cost for \tnr on road networks; They reduce 49\%, 4\% and 49\% time for bidirectional Dijkstra, \arcflag, and \tnr on the co-authorship network \dblpone, respectively. (5) Existing shortest path and distance algorithms also benefit from using proxies in terms of space overhead. Since the original input graph is reduced by proxies, larger datasets may be handled when existing methods are combined with proxies.  Proxy+\tnr can handle the road network C-US while \tnr cannot. Moreover, Proxy+\arcflag incurs less space overhead than \arcflag (from 38\% to 68\%), Proxy+\tnr is about from 72\% to 92\% of its counterpart without proxies, and Proxy+\ah is about 82\% of its counterpart without proxies.
+From these experimental results, we find the following. (1) Proxies are a light-weight preprocessing technique, which can be computed efficiently and takes linear space to support shortest path and distance queries.  (2) According to our experiments, in sparse graphs whose average degree is no larger than 4, about 1/3 nodes in the graph are captured by proxies, leaving the reduced graph about 2/3 of the input graph. In some special cases (like \dblpone), about 2/3 nodes in the graph are captured by proxies, leaving the reduced graph about only 1/3 of the input graph. (3) The performance of our algorithm is highly related to the density of the graphs. As the graph density increases, less nodes can be captured by proxies. (4) Proxies and their \dras benefit existing shortest path and distance algorithms in terms of time cost. They reduce 20\%, 30\% and 1\% time for \arcflag, bidirectional Dijkstra and \ah on road networks, respectively. They also have comparable time cost for \tnr on road networks; They reduce 49\%, 4\% and 49\% time for bidirectional Dijkstra, \arcflag, and \tnr on the co-authorship network \dblpone, respectively. (5) Existing shortest path and distance algorithms also benefit from using proxies in terms of space overhead. Since the original input graph is reduced by proxies, larger datasets may be handled when existing methods are combined with proxies.  Proxy+\tnr can handle the road network C-US while \tnr cannot. Moreover, Proxy+\arcflag incurs less space overhead than \arcflag (from 38\% to 68\%), Proxy+\tnr is about from 72\% to 92\% of its counterpart without proxies, and Proxy+\ah is about 82\% of its counterpart without proxies.
 
 \eat{\vspace{-0.5ex}
 \stitle{Remark}. We also combined proxies with a notion of {\em revised distance landmarks} to improve the efficiency of \ch~\cite{GeisbergerSSD08} for shortest distance queries in \cite{corrMaFWLH14}. \ch assigns a level to each the node in the graph and adds shortcuts into the graph. It adopts a revised bidirectional Dijkstra search which only utilizes the edges and shortcuts from lower level nodes to higher level nodes. Thus the searching space of \ch is quite small. With the help of proxies, \ch further reduces search space, and improves the efficiency of shortest distance queries \cite{corrMaFWLH14}.
