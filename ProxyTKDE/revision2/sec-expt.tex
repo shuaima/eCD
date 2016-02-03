@@ -4,7 +4,7 @@
 
 \begin{table}[t!]
 \begin{center}
-%\begin{scriptsize}
+\begin{scriptsize}
 \caption{Real-life Datasets}\label{tab-datasets}
 \vspace{-2ex}
 \begin{tabular}{|c||c|c|c|}%|r|r|r|r|r|r|}
@@ -26,7 +26,7 @@ W-US        &  Western US            & 6,262,104    &  7,559,642      \\ \hline%
 C-US        &  Central US            & 14,081,816   &  16,933,413    \\ \hline% &  (2,034,358 : 14.4)      & (4,583,413 : 32.5)& 69.94 & 312.09 & 225.28 & 435.8 \\ \hline
 US          &  Entire US             & 23,947,347   &  28,854,312     \\ \hline%  &  (3,452,222 : 14.4)      & (7,927,453 : 33.1)& 120.96 & 531.63 & 380.59 &  1,925.4 \\ \hline
 \end{tabular}
-%\end{scriptsize}
+\end{scriptsize}
 \end{center}
 \vspace{-3ex}
 \end{table}
@@ -37,7 +37,7 @@ US          &  Entire US             & 23,947,347   &  28,854,312     \\ \hline%
 
 \begin{table*}[t!]
 \begin{center}
-%\begin{scriptsize}
+\begin{scriptsize}
 \caption{Effectiveness of proxies and \dras}\label{tab-exp1-proxies-dras}
 \vspace{-2ex}
 \begin{tabular}{|c||r|r|r|r|r|r|}
@@ -58,7 +58,7 @@ W-US        &    (869,907 : 13.9)        & (2,116,382 : 33.8)& 32.29  & 139.23 &
 C-US        &    (2,034,358 : 14.4)      & (4,583,413 : 32.5)& 69.94 & 312.09 & 225.28 & 435.8 \\ \hline
 US          &    (3,452,222 : 14.4)      & (7,927,453 : 33.1)& 120.96 & 531.63 & 380.59 &  1,925.4 \\ \hline
 \end{tabular}
-%\end{scriptsize}
+\end{scriptsize}
 \end{center}
 \vspace{-2ex}
 \end{table*}
@@ -68,7 +68,7 @@ US          &    (3,452,222 : 14.4)      & (7,927,453 : 33.1)& 120.96 & 531.63 &
 \caption{Effectiveness \wrt graph density}\label{tab:density}
 \vspace{-2ex}
 \begin{center}
-%\begin{small}
+\begin{scriptsize}
 %\begin{tabular}{|c|c|r|r|r|r|r|r|r|}
 %\hline
 
@@ -95,9 +95,9 @@ US          &    (3,452,222 : 14.4)      & (7,927,453 : 33.1)& 120.96 & 531.63 &
                        & Nodes in \dras (\#: \%)      & (480,356: 48.0) & (436,919: 43.7) & (415,272: 41.5) &  (391,605: 39.2) & (375,196: 37.5)  \\ \hline
 
 \end{tabular}
-%\end{small}
+\end{scriptsize}
 \end{center}
-\vspace{-3ex}
+\vspace{-2ex}
 \end{table*}
 
 
@@ -236,14 +236,16 @@ In all road networks, it incurs small extra space overhead to store the routing 
 
 
 \stitle{4. Effectiveness \wrt graph density}.
-In this set of experiments, we study the effectiveness \wrt graph density. We adopted the graph-tool library~\cite{peixoto_graph-tool_2014} to produce random graphs. It is controlled by two parameters: the number $n$ of nodes, and a sample function that decides the degree distribution of the graph. Without loss of generality, we fix $n=1\times 10^6$. To generate graphs with average degree 2, 3, 4, 5 and 6, we adopt two degree distributions: (1) uniform distribution, and (2) power law distribution, which the degree distribution of scale free networks follows. When we use uniform distribution, to generate a random graph with average degree $d$, we randomly assign an integer from range $[1, 2\cdot d-1]$ to the degree of a node. When we use power law distribution (the fraction $P(k)$ of nodes in the network with degree $k$ goes for large values of $k$, i.e. $P(k)\sim k^\delta$), we set the maximum degree of the graph as $5000$, which is also the limit of friends in Facebook\url{www.facebook.com}. Then we vary $\delta$ to generate a graph with expected average degree. The results are shown in Table~\ref{tab:density}. We can observe that (1) Our algorithm performs well in sparse graphs (with average degree no larger than 3) generated with uniform distribution. Specifically, about 30\% of the nodes in the graph are captured by \dras. (2) Our algorithm performs well in graphs generated with power law distribution. We can observe that more than 30\% of the nodes are captured by \dras even when the average degree is 60. (3) The performance of our algorithm is related to the density of the graph and the degree distribution. (4) Given a degree distribution, \dras tend to capture less nodes when the average degree is high. This is because: (1) There are less cut-nodes in graphs with higher density, thus less proxies can be found. (2) For a proxy $u$, the set of nodes $A_u^i$ that presented by $u$ is more likely to exceed the size constraint. Therefore, there are less nodes in its \dra. These together explain the results.
+In this set of experiments, we study the effectiveness \wrt graph density. We adopted the graph-tool library~\cite{peixoto_graph-tool_2014} to produce random graphs. It is controlled by two parameters: the number $n$ of nodes, and a sample function that decides the degree distribution of the graph. Without loss of generality, we fix $n=10^6$. To generate graphs with average degree 2, 3, 4, 5 and 6, we adopt two degree distributions: (1) uniform distribution, and (2) power law distribution, which the degree distribution of scale free networks follows. When we use uniform distribution, to generate a random graph with average degree $d$, we randomly assign an integer from range $[1, 2\cdot d-1]$ to the degree of a node. When we use power law distribution (the fraction $P(k)$ of nodes in the network with degree $k$ goes for large values of $k$, i.e. $P(k)\sim k^\delta$), we set the maximum degree of the graph as $5000$, which is also the limit of friends in Facebook (\url{www.facebook.com}). Then we vary $\delta$ to generate a graph with expected average degree. The results are shown in Table~\ref{tab:density}. 
+
+We can find the following. (1) Our algorithm performs well in sparse graphs (with average degree no larger than 3) generated with uniform distribution. Specifically, about 30\% of the nodes in the graph are captured by \dras. (2) Our algorithm performs well in graphs generated with power law distribution. We can observe that more than 30\% of the nodes are captured by \dras even when the average degree is 60. (3) The performance of our algorithm is related to the density of the graph and the degree distribution. (4) Given a degree distribution, \dras tend to capture less nodes when the average degree is high. This is because: (1) There are less cut-nodes in graphs with higher density, thus less proxies can be found. (2) For a proxy $u$, the set of nodes $A_u^i$ that presented by $u$ is more likely to exceed the size constraint. Therefore, there are less nodes in its \dra. These together explain the results.
 
 
 \begin{table*}[t!]
 \caption{Varying graph queries  for shortest distances: Dijkstra  vs. Proxy+Dijkstra}\label{tab:performance_dist_queries_dj}
 \vspace{-2ex}
 \begin{center}
-%\begin{small}
+\begin{scriptsize}
 %\begin{tabular}{|c|c|r|r|r|r|r|r|r|}
 %\hline
 
@@ -270,7 +272,7 @@ In this set of experiments, we study the effectiveness \wrt graph density. We ad
  \multirow{2}{*}{C-US}& \multirow{2}{*}{14,081,816}   & Dijkstra & 2,419 & 8,119 & 28,468 & 102,945 & 408,656 & 1,639,260 & 5,868,220 \\ \cline{3-10}
                       &  & Proxy+Dijkstra & {1,508} & {4,876} & {16,649} & {59,777} & {244,552} & {978,000} & {3,553,810} \\ \hline
 \end{tabular}
-%\end{small}
+\end{scriptsize}
 \end{center}
 \vspace{-2ex}
 \end{table*}
@@ -304,7 +306,7 @@ In this set of experiments, we study the effectiveness \wrt graph density. We ad
 \caption{Varying graph queries  for shortest distances: \arcflag   vs. Proxy+\arcflag}\label{tab:performance_dist_queries_af}
 \vspace{-2ex}
 \begin{center}
-%\begin{small}
+\begin{scriptsize}
 %\begin{tabular}{|c|c|r|r|r|r|r|r|r|}
 %\hline
 
@@ -332,7 +334,7 @@ In this set of experiments, we study the effectiveness \wrt graph density. We ad
 \multirow{2}{*}{C-US} & \multirow{2}{*}{14,081,816}  & \arcflag & 1,474 & 2,943 & 5,006 & 7,905 & 12,439 & 19,316 & 28,959 \\ \cline{3-10}
                      &  & Proxy+\arcflag& {983} & {2,065} & {3,740} & {6,283} & {10,402} & {16,495} & {26,074} \\ \hline
 \end{tabular}
-%\end{small}
+\end{scriptsize}
 \end{center}
 \vspace{-2ex}
 \end{table*}
@@ -365,7 +367,7 @@ In this set of experiments, we study the effectiveness \wrt graph density. We ad
 \caption{Varying graph queries  for shortest distances: \tnr vs. Proxy+\tnr}\label{tab:performance_dist_queries_tnr}
 \vspace{-2ex}
 \begin{center}
-%\begin{small}
+\begin{scriptsize}
 %\begin{tabular}{|c|c|r|r|r|r|r|r|r|}
 %\hline
 
@@ -392,7 +394,7 @@ In this set of experiments, we study the effectiveness \wrt graph density. We ad
 \multirow{2}{*}{C-US} &\multirow{2}{*}{14,081,816}  & \tnr & {\color{red}NA} & {\color{red}NA} & {\color{red}NA} & {\color{red}NA} & {\color{red}NA} & {\color{red}NA} & {\color{red}NA} \\ \cline{3-10}
                       &  & Proxy+\tnr& 67 & 137.5 & 300 & 600 & 667 & 280 & 135 \\ \hline
 \end{tabular}
-%\end{small}
+\end{scriptsize}
 \end{center}
 \vspace{-2ex}
 \end{table*}
@@ -425,7 +427,7 @@ In this set of experiments, we study the effectiveness \wrt graph density. We ad
 \caption{Varying graph queries  for shortest distances: \ah vs. Proxy+\ah}\label{tab:performance_dist_queries_ah}
 \vspace{-2ex}
 \begin{center}
-%\begin{small}
+\begin{scriptsize}
 %\begin{tabular}{|c|c|r|r|r|r|r|r|r|}
 %\hline
 
@@ -451,10 +453,17 @@ In this set of experiments, we study the effectiveness \wrt graph density. We ad
 \multirow{2}{*}{C-US}&\multirow{2}{*}{14,081,816}&\ah& 39 & {70.2} & 135.7 & 244.9 & 402.5 & 603.7 & {762} \\ \cline{3-10}
                   & & Proxy+\ah& {37.3} & {70.2} & {129.5} & {235.5} & {385.3} & {580.3} & 769.1 \\ \hline
 \end{tabular}
-%\end{small}
+\end{scriptsize}
 \end{center}
 \vspace{-2ex}
 \end{table*}
+
+From these tests, we can find that using proxies is a light-weight optimization technique, which scales well to large networks, and incurs appropriate space overhead. %These properties benefit existing shortest  path and distance algorithms, such as (bidirectional) Dijkstra, \arcflag , \tnr and \ah, to be seen immediately.
+
+\subsection{Benefits of Using Routing Proxies}
+Our proxies can be used as a preprocessing step before we apply other existing approaches.
+We next conduct experiments to show the comparison results of an existing approach (\ie \ Dijkstra, \arcflag, \tnr and \ah) with its counterpart using proxies, using the datasets in Table~1.
+
 
 \eat{
 \begin{figure*}[t!]
@@ -478,11 +487,6 @@ In this set of experiments, we study the effectiveness \wrt graph density. We ad
 \end{figure*}
 }
 
-From these tests, we can find that using proxies is a light-weight optimization technique, which scales well to large networks, and incurs appropriate space overhead. %These properties benefit existing shortest  path and distance algorithms, such as (bidirectional) Dijkstra, \arcflag , \tnr and \ah, to be seen immediately.
-
-\subsection{Benefits of Using Routing Proxies}
-Our proxies can be used as a preprocessing step before we apply other existing approaches.
-We next conduct experiments to show the comparison results of an existing approach (\ie \ Dijkstra, \arcflag, \tnr and \ah) with its counterpart using proxies, using the datasets in Table~1.
 
 
 
@@ -518,7 +522,7 @@ We will evaluate the space overhead saved by proxies in detail, to be seen short
 \caption{Varying graph queries for shortest paths: Dijkstra  vs. Proxy+Dijkstra}\label{tab:performance_path_queries_dj}
 \vspace{-2ex}
 \begin{center}
-%\begin{small}
+\begin{scriptsize}
 %\begin{tabular}{|c|c|r|r|r|r|r|r|r|}
 %\hline
 
@@ -546,7 +550,7 @@ We will evaluate the space overhead saved by proxies in detail, to be seen short
 \multirow{2}{*}{C-US}&\multirow{2}{*}{14,081,816} & Dijkstra & 2,419 & 8,014 & 28,083 & 101,077 & 402,928 & 1,580,830 & 5,868,220 \\ \cline{3-10}
                   & & Proxy+Dijkstra & 1,508 & 5,004 & 17,039 & 61,512 & 247,490 & 988,994 & 3,553,810 \\ \hline
 \end{tabular}
-%\end{small}
+\end{scriptsize}
 \end{center}
 \vspace{-2ex}
 \end{table*}
@@ -581,7 +585,7 @@ We will evaluate the space overhead saved by proxies in detail, to be seen short
 \caption{Varying graph queries for shortest paths: \arcflag  vs. Proxy+\arcflag}\label{tab:performance_path_queries_af}
 \vspace{-2ex}
 \begin{center}
-%\begin{small}
+\begin{scriptsize}
 %\begin{tabular}{|c|c|r|r|r|r|r|r|r|}
 %\hline
 %Dataset & Method & Q1 & Q2 & Q3 & Q4 & Q5 & Q6 &Q7  \\ \hline \hline
@@ -607,7 +611,7 @@ We will evaluate the space overhead saved by proxies in detail, to be seen short
 \multirow{2}{*}{C-US}& \multirow{2}{*}{14,081,816} &\arcflag & 1,486 & 2,958 & 5,006 & 7,992 & 12,439 & 19,517 & 28,670 \\ \cline{3-10}
                  & & Proxy+\arcflag & {1,006} & {2,098} & {3,740} & {6,463} & {10,402} & {16,974} & {25,104} \\ \hline
 \end{tabular}
-%\end{small}
+\end{scriptsize}
 \end{center}
 \vspace{-2ex}
 \end{table*}
@@ -640,7 +644,7 @@ We will evaluate the space overhead saved by proxies in detail, to be seen short
 \caption{Varying graph queries for shortest paths: \tnr vs. Proxy+\tnr}\label{tab:performance_path_queries_tnr}
 \vspace{-2ex}
 \begin{center}
-%\begin{small}
+\begin{scriptsize}
 %\begin{tabular}{|c|c|r|r|r|r|r|r|r|}
 %\hline
 %Dataset & Method & Q1 & Q2 & Q3 & Q4 & Q5 & Q6 &Q7  \\ \hline \hline
@@ -666,7 +670,7 @@ We will evaluate the space overhead saved by proxies in detail, to be seen short
 \multirow{2}{*}{C-US}&\multirow{2}{*}{14,081,816} & \tnr & {\color{red}NA} & {\color{red}NA} & {\color{red}NA} & {\color{red}NA} & {\color{red}NA} & {\color{red}NA} & {\color{red}NA} \\ \cline{3-10}
                     & &Proxy+\tnr & 90.5 & 175 & 378 & 775 & 1,230 & 1,760 & 2,645 \\ \hline
 \end{tabular}
-%\end{small}
+\end{scriptsize}
 \end{center}
 \vspace{-2ex}
 \end{table*}
@@ -699,7 +703,7 @@ We will evaluate the space overhead saved by proxies in detail, to be seen short
 \caption{Varying graph queries for shortest paths: \ah vs. Proxy+\ah}\label{tab:performance_path_queries_ah}
 \vspace{-2ex}
 \begin{center}
-%\begin{scriptsize}
+\begin{scriptsize}
 \begin{tabular}{|c|c|c||r|r|r|r|r|r|r|}
 \hline
   & &  & \multicolumn{7}{c|}{\bf Query time ($\times 10^{-6}$ sec.)} \\
@@ -719,7 +723,7 @@ We will evaluate the space overhead saved by proxies in detail, to be seen short
 \multirow{2}{*}{C-US}&\multirow{2}{*}{14,081,816} & \ah & 56.1 & 99.8 & 188.8 & 347.9 & 591.2 & 926.7 & 1,324.4 \\ \cline{3-10}
                    & & Proxy+\ah & {53} & {95.2} & {179.4} & {333.9} & {567.9} & {892.3} & {1,310.4} \\ \hline
 \end{tabular}
-%\end{scriptsize}
+\end{scriptsize}
 \end{center}
 \vspace{-2ex}
 \end{table*}
@@ -730,7 +734,7 @@ We will evaluate the space overhead saved by proxies in detail, to be seen short
 \caption{Comparison \wrt space overhead}\label{tab-spacecost}
 \vspace{-2ex}
 \begin{center}
-%\begin{scriptsize}
+\begin{scriptsize}
 %\hspace{-2ex}
 \begin{tabular}{|c||c|c|c|c|c|c|}
 \hline
@@ -748,7 +752,7 @@ W-US    & 277.3&  643.9      & 2,996.4& 4,154.1  &  889.6&   1092.3   \\ \hline
 C-US    & 838.8&  2,153.1    & 13,894.5& N.A     &  2082.3&   2512.3  \\ \hline
 US      & NA&  NA            & NA& NA            &  3512.7&   4266.9   \\ \hline
 \end{tabular}
-%\end{scriptsize}
+\end{scriptsize}
 \end{center}
 \vspace{-3ex}
 \end{table*}
