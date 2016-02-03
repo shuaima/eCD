@@ -93,7 +93,30 @@ US          &    (3,452,222 : 14.4)      & (7,927,453 : 33.1)& 120.96 & 531.63 &
 \vspace{-3ex}
 \end{table*}
 
+\begin{table*}[t!]
+\caption{Effectiveness \wrt higher graph density }\label{tab:higherdensity}
+\vspace{-2ex}
+\begin{center}
+%\begin{small}
+%\begin{tabular}{|c|c|r|r|r|r|r|r|r|}
+%\hline
 
+%Dataset & Method & Q1 & Q2 & Q3 & Q4 & Q5 & Q6 &Q7  \\ \hline \hline
+\begin{tabular}{|c|c|r|r|r|r|r|}
+\hline
+  &   & \multicolumn{5}{c|}{\bf Average degrees} \\
+\cline{3-7}
+
+\raisebox{1.5ex}[0pt]{\bf Distribution} &\raisebox{1.5ex}[0pt]{\bf Properties}  & {\bf 20} & {\bf 30} & {\bf 40} & {\bf 50} & {\bf 60} \\ \hline \hline
+
+  \multirow{2}{*}{Power Law} & Proxies (\#: \%)   & (102,019: 10.2) & (96,300: 9.6) & (95,823: 9.6) &  (95,283: 9.5)& (95,735: 9.6)  \\ \cline{2-7}
+                       & Nodes in \dras (\#: \%)      & (480,356: 48.0) & (436,919: 43.7) & (415,272: 41.5) &  (391,605: 39.2) & (375,196: 37.5)  \\ \hline
+
+\end{tabular}
+%\end{small}
+\end{center}
+\vspace{-2ex}
+\end{table*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -229,7 +252,7 @@ In all road networks, it incurs small extra space overhead to store the routing 
 
 
 \stitle{4. Effectiveness \wrt graph density}.
-In this set of experiments, we study the effectiveness \wrt graph density. We adopted the graph-tool library~\cite{peixoto_graph-tool_2014} to produce random graphs. It is controlled by two parameters: the number $n$ of nodes, and a sample function that decides the degree distribution of the graph. Without loss of generality, we fix $n=1\times 10^6$. To generate graphs with average degree 2, 3, 4, 5 and 6, we adopt two degree distributions: (1) uniform distribution, and (2) power law distribution, which the degree distribution of scale free networks follows. When we use uniform distribution, to generate a random graph with average degree $d$, we randomly assign an integer from range $[1, 2\cdot d-1]$ to the degree of a node. When we use power law distribution (the fraction $P(k)$ of nodes in the network with degree $k$ goes for large values of $k$, i.e. $P(k)\sim k^\delta$), we set the maximum degree of the graph as $5000$, which is also the limit of friends in Facebook\url{www.facebook.com}. Then we vary $\delta$ to generate a graph with expected average degree. The results are shown in Table~\ref{tab:density}. We can observe that (1) Our algorithm performs well in sparse graphs (with average degree no larger than 3) generated with uniform distribution. Specifically, about 30\% of the nodes in the graph are captured by \dras. (2) Our algorithm performs well in graphs generated with power law distribution. (3) The performance of our algorithm is related to the density of the graph and the degree distribution. (4) Given a degree distribution, \dras tend to capture less nodes when the average degree is high. This is because: (1) There are less cut-nodes in graphs with higher density, thus less proxies can be found. (2) For a proxy $u$, the set of nodes $A_u^i$ that presented by $u$ is more likely to exceed the size constraint. Therefore, there are less nodes in its \dra. These together explain the results.
+In this set of experiments, we study the effectiveness \wrt graph density. We adopted the graph-tool library~\cite{peixoto_graph-tool_2014} to produce random graphs. It is controlled by two parameters: the number $n$ of nodes, and a sample function that decides the degree distribution of the graph. Without loss of generality, we fix $n=1\times 10^6$. To generate graphs with average degree 2, 3, 4, 5 and 6, we adopt two degree distributions: (1) uniform distribution, and (2) power law distribution, which the degree distribution of scale free networks follows. When we use uniform distribution, to generate a random graph with average degree $d$, we randomly assign an integer from range $[1, 2\cdot d-1]$ to the degree of a node. When we use power law distribution (the fraction $P(k)$ of nodes in the network with degree $k$ goes for large values of $k$, i.e. $P(k)\sim k^\delta$), we set the maximum degree of the graph as $5000$, which is also the limit of friends in Facebook\url{www.facebook.com}. Then we vary $\delta$ to generate a graph with expected average degree. The results are shown in Table~\ref{tab:density}(uniform and power law distribution with average degree in range $[2,6]$) and Table~\ref{tab:higherdensity}(power law distribution with higher average degree). We can observe that (1) Our algorithm performs well in sparse graphs (with average degree no larger than 3) generated with uniform distribution. Specifically, about 30\% of the nodes in the graph are captured by \dras. (2) Our algorithm performs well in graphs generated with power law distribution. We can observe that more than 30\% of the nodes are captured by \dras even when the average degree is 60. (3) The performance of our algorithm is related to the density of the graph and the degree distribution. (4) Given a degree distribution, \dras tend to capture less nodes when the average degree is high. This is because: (1) There are less cut-nodes in graphs with higher density, thus less proxies can be found. (2) For a proxy $u$, the set of nodes $A_u^i$ that presented by $u$ is more likely to exceed the size constraint. Therefore, there are less nodes in its \dra. These together explain the results.
 
 
 \begin{table*}[t!]
@@ -241,27 +264,27 @@ In this set of experiments, we study the effectiveness \wrt graph density. We ad
 %\hline
 
 %Dataset & Method & Q1 & Q2 & Q3 & Q4 & Q5 & Q6 &Q7  \\ \hline \hline
-\begin{tabular}{|c|c||r|r|r|r|r|r|r|}
+\begin{tabular}{|c|c|c||r|r|r|r|r|r|r|}
 \hline
-  &   & \multicolumn{7}{c|}{\bf Query time ($\times 10^{-6}$ sec.)} \\
-\cline{3-9}
+  & &  & \multicolumn{7}{c|}{\bf Query time ($\times 10^{-6}$ sec.)} \\
+\cline{4-10}
 
-\raisebox{1.5ex}[0pt]{\bf Graphs} & \raisebox{1.5ex}[0pt]{\bf Methods} & {\bf Q1} & {\bf Q2} & {\bf Q3} & {\bf Q4} & {\bf Q5} & {\bf Q6} & {\bf Q7}  \\ \hline \hline
+\raisebox{1.5ex}[0pt]{\bf Graphs}&\raisebox{1.5ex}[0pt]{\bf \# of nodes}  & \raisebox{1.5ex}[0pt]{\bf Methods} & {\bf Q1} & {\bf Q2} & {\bf Q3} & {\bf Q4} & {\bf Q5} & {\bf Q6} & {\bf Q7}  \\ \hline \hline
 
- \multirow{2}{*}{DBLP14} & Dijkstra & 2.1          & 3   & 4.6 & 10.5 & 34 & 287 & 13,935 \\ \cline{2-9}
-                       & Proxy+Dijkstra & {1.8} & {2.5} & {3.5} & {5.5} & {12} & {84} & {3,332} \\ \hline
- \multirow{2}{*}{CO}     & Dijkstra & 113 & 395 & 1,427 & 4,669 & 10,963 & 26,289 & 62,194 \\ \cline{2-9}
-                       & Proxy+Dijkstra & {105} & {368} & {1,296} & {4,240} & {10,274} & {24,962} & {59,816} \\ \hline
- \multirow{2}{*}{FL}     & Dijkstra & 444 & 1,648 & 5,701 & 16,684 & 45,184 & 137,532 & 360,603 \\ \cline{2-9}
-                       & Proxy+Dijkstra & {323} & {1,173} & {3,800} & {10,719} & {28,915} & {86,020}  & {226,303} \\ \hline
- \multirow{2}{*}{CA}     & Dijkstra & 873 & 3,066 & 10,422 & 32,365 & 89,983 & 237,625 & 543,870 \\ \cline{2-9}
-                       & Proxy+Dijkstra & {640} & {2,226} & {7,439}  & {22,699} & {61,405} & {159,870} & {359,532} \\ \hline
- \multirow{2}{*}{E-US}   & Dijkstra & 869 & 3,283 & 12,080 & 44,275 & 155,196 & 519,541 & 1,681,470 \\ \cline{2-9}
-                       & Proxy+Dijkstra & {672} & {2,503} & {9,051}  & {31,749} & {107,962} & {354,352} & {956,205} \\ \hline
- \multirow{2}{*}{W-US}   & Dijkstra & 2,219 & 9,255 & 20,829 & 57,122 & 163,115 & 473,679 & 1,514,990 \\ \cline{2-9}
-                       & Proxy+Dijkstra & {1,587} & {5,059} & {14,104} & {37,537} & {105,377} & {305,627} & {961,300} \\ \hline
- \multirow{2}{*}{C-US}   & Dijkstra & 2,419 & 8,119 & 28,468 & 102,945 & 408,656 & 1,639,260 & 5,868,220 \\ \cline{2-9}
-                       & Proxy+Dijkstra & {1,508} & {4,876} & {16,649} & {59,777} & {244,552} & {978,000} & {3,553,810} \\ \hline
+ \multirow{2}{*}{DBLP14}&  \multirow{2}{*}{141,359} & Dijkstra & 2.1          & 3   & 4.6 & 10.5 & 34 & 287 & 13,935 \\ \cline{3-10}
+                       & & Proxy+Dijkstra & {1.8} & {2.5} & {3.5} & {5.5} & {12} & {84} & {3,332} \\ \hline \hline
+ \multirow{2}{*}{CO}&  \multirow{2}{*}{435,666}     & Dijkstra & 113 & 395 & 1,427 & 4,669 & 10,963 & 26,289 & 62,194 \\ \cline{3-10}
+                      &  & Proxy+Dijkstra & {105} & {368} & {1,296} & {4,240} & {10,274} & {24,962} & {59,816} \\ \hline
+ \multirow{2}{*}{FL}  &  \multirow{2}{*}{1,070,376}   & Dijkstra & 444 & 1,648 & 5,701 & 16,684 & 45,184 & 137,532 & 360,603 \\ \cline{3-10}
+                    &   & Proxy+Dijkstra & {323} & {1,173} & {3,800} & {10,719} & {28,915} & {86,020}  & {226,303} \\ \hline
+ \multirow{2}{*}{CA} &  \multirow{2}{*}{1,890,815}   & Dijkstra & 873 & 3,066 & 10,422 & 32,365 & 89,983 & 237,625 & 543,870 \\ \cline{3-10}
+                      &  & Proxy+Dijkstra & {640} & {2,226} & {7,439}  & {22,699} & {61,405} & {159,870} & {359,532} \\ \hline
+ \multirow{2}{*}{E-US}&  \multirow{2}{*}{3,598,623}   & Dijkstra & 869 & 3,283 & 12,080 & 44,275 & 155,196 & 519,541 & 1,681,470 \\ \cline{3-10}
+                      &  & Proxy+Dijkstra & {672} & {2,503} & {9,051}  & {31,749} & {107,962} & {354,352} & {956,205} \\ \hline
+ \multirow{2}{*}{W-US} & \multirow{2}{*}{6,262,104}   & Dijkstra & 2,219 & 9,255 & 20,829 & 57,122 & 163,115 & 473,679 & 1,514,990 \\ \cline{3-10}
+                     &  & Proxy+Dijkstra & {1,587} & {5,059} & {14,104} & {37,537} & {105,377} & {305,627} & {961,300} \\ \hline
+ \multirow{2}{*}{C-US}& \multirow{2}{*}{14,081,816}   & Dijkstra & 2,419 & 8,119 & 28,468 & 102,945 & 408,656 & 1,639,260 & 5,868,220 \\ \cline{3-10}
+                      &  & Proxy+Dijkstra & {1,508} & {4,876} & {16,649} & {59,777} & {244,552} & {978,000} & {3,553,810} \\ \hline
 \end{tabular}
 %\end{small}
 \end{center}
@@ -302,28 +325,28 @@ In this set of experiments, we study the effectiveness \wrt graph density. We ad
 %\hline
 
 %Dataset & Method & Q1 & Q2 & Q3 & Q4 & Q5 & Q6 &Q7  \\ \hline \hline
-\begin{tabular}{|c|c||r|r|r|r|r|r|r|}
+\begin{tabular}{|c|c|c||r|r|r|r|r|r|r|}
 \hline
-  &   & \multicolumn{7}{c|}{\bf Query time ($\times 10^{-6}$ sec.)} \\
-\cline{3-9}
+  & &  & \multicolumn{7}{c|}{\bf Query time ($\times 10^{-6}$ sec.)} \\
+\cline{4-10}
 
-\raisebox{1.5ex}[0pt]{\bf Graphs} & \raisebox{1.5ex}[0pt]{\bf Methods} & {\bf Q1} & {\bf Q2} & {\bf Q3} & {\bf Q4} & {\bf Q5} & {\bf Q6} & {\bf Q7}  \\ \hline \hline
+\raisebox{1.5ex}[0pt]{\bf Graphs} & \raisebox{1.5ex}[0pt]{\bf \# of nodes} & \raisebox{1.5ex}[0pt]{\bf Methods} & {\bf Q1} & {\bf Q2} & {\bf Q3} & {\bf Q4} & {\bf Q5} & {\bf Q6} & {\bf Q7}  \\ \hline \hline
 
 
-\multirow{2}{*}{DBLP14} & \arcflag & 70.4 & {71.5} & {72.9} & 75.1 & 79.5 & 88.9 & 134.1 \\ \cline{2-9}
-                       & Proxy+\arcflag& {70.1} & 74 & 74.7 & {73.4} & {74.9} & {79.6} & {123.4} \\ \hline
-\multirow{2}{*}{CO}     & \arcflag & 120 & 246 & 437 & 772 & 1,158 & 1,600 & 2,274 \\ \cline{2-9}
-                       & Proxy+\arcflag& {84} & {168} & {317} & {582} & {943} & {1,475} & {2,008} \\ \hline
-\multirow{2}{*}{FL}     & \arcflag & 339 & 692 & 1,170 & 1,739 & 2,431 & 3,132 & 4,028 \\ \cline{2-9}
-                       & Proxy+\arcflag& {233} & {491} & {890} & {1,413} & {2,076} & {2,599} & {3,360} \\ \hline
-\multirow{2}{*}{CA}     & \arcflag & 540 & 960 & 1,566 & 2,394 & 3,400 & 4,840 & 6,391 \\ \cline{2-9}
-                       & Proxy+\arcflag& {386} & {737} & {1,268} & {1,955} & {2,855} & {4,332} & {5,566} \\ \hline
-\multirow{2}{*}{E-US}   & \arcflag & 613 & 1,258 & 2,212 & 3,485 & 5,383 & 7,970 & 11,007 \\ \cline{2-9}
-                       & Proxy+\arcflag& {429} & {923} & {1,699} & {2,796} & {4,468} & {6,968} & {10,090} \\ \hline
-\multirow{2}{*}{W-US}   & \arcflag & 1,036 & 1,906 & 3,089 & 4,435 & 6,478 & 8,722 & 11,602 \\ \cline{2-9}
-                       & Proxy+\arcflag& {737} & {1,380} & {2,373} & {3,612} & {5,539} & {7,663} & {10,651} \\ \hline
-\multirow{2}{*}{C-US}   & \arcflag & 1,474 & 2,943 & 5,006 & 7,905 & 12,439 & 19,316 & 28,959 \\ \cline{2-9}
-                       & Proxy+\arcflag& {983} & {2,065} & {3,740} & {6,283} & {10,402} & {16,495} & {26,074} \\ \hline
+\multirow{2}{*}{DBLP14}& \multirow{2}{*}{141,359} & \arcflag & 70.4 & {71.5} & {72.9} & 75.1 & 79.5 & 88.9 & 134.1 \\ \cline{3-10}
+                      & & Proxy+\arcflag& {70.1} & 74 & 74.7 & {73.4} & {74.9} & {79.6} & {123.4} \\ \hline\hline
+\multirow{2}{*}{CO}  & \multirow{2}{*}{317,080}   & \arcflag & 120 & 246 & 437 & 772 & 1,158 & 1,600 & 2,274 \\ \cline{3-10}
+                     &  & Proxy+\arcflag& {84} & {168} & {317} & {582} & {943} & {1,475} & {2,008} \\ \hline
+\multirow{2}{*}{FL}  & \multirow{2}{*}{435,666}   & \arcflag & 339 & 692 & 1,170 & 1,739 & 2,431 & 3,132 & 4,028 \\ \cline{3-10}
+                     &  & Proxy+\arcflag& {233} & {491} & {890} & {1,413} & {2,076} & {2,599} & {3,360} \\ \hline
+\multirow{2}{*}{CA}  & \multirow{2}{*}{1,070,376}   & \arcflag & 540 & 960 & 1,566 & 2,394 & 3,400 & 4,840 & 6,391 \\ \cline{3-10}
+                     &  & Proxy+\arcflag& {386} & {737} & {1,268} & {1,955} & {2,855} & {4,332} & {5,566} \\ \hline
+\multirow{2}{*}{E-US} & \multirow{2}{*}{1,890,815}   & \arcflag & 613 & 1,258 & 2,212 & 3,485 & 5,383 & 7,970 & 11,007 \\ \cline{3-10}
+                     &  & Proxy+\arcflag& {429} & {923} & {1,699} & {2,796} & {4,468} & {6,968} & {10,090} \\ \hline
+\multirow{2}{*}{W-US}& \multirow{2}{*}{6,262,104}   & \arcflag & 1,036 & 1,906 & 3,089 & 4,435 & 6,478 & 8,722 & 11,602 \\ \cline{3-10}
+                      & & Proxy+\arcflag& {737} & {1,380} & {2,373} & {3,612} & {5,539} & {7,663} & {10,651} \\ \hline
+\multirow{2}{*}{C-US} & \multirow{2}{*}{14,081,816}  & \arcflag & 1,474 & 2,943 & 5,006 & 7,905 & 12,439 & 19,316 & 28,959 \\ \cline{3-10}
+                     &  & Proxy+\arcflag& {983} & {2,065} & {3,740} & {6,283} & {10,402} & {16,495} & {26,074} \\ \hline
 \end{tabular}
 %\end{small}
 \end{center}
@@ -363,27 +386,27 @@ In this set of experiments, we study the effectiveness \wrt graph density. We ad
 %\hline
 
 %Dataset & Method & Q1 & Q2 & Q3 & Q4 & Q5 & Q6 &Q7  \\ \hline \hline
-\begin{tabular}{|c|c||r|r|r|r|r|r|r|}
+\begin{tabular}{|c|c|c||r|r|r|r|r|r|r|}
 \hline
-  &   & \multicolumn{7}{c|}{\bf Query time ($\times 10^{-6}$ sec.)} \\
-\cline{3-9}
+  & &   & \multicolumn{7}{c|}{\bf Query time ($\times 10^{-6}$ sec.)} \\
+\cline{4-10}
 
-\raisebox{1.5ex}[0pt]{\bf Graphs} & \raisebox{1.5ex}[0pt]{\bf Methods} & {\bf Q1} & {\bf Q2} & {\bf Q3} & {\bf Q4} & {\bf Q5} & {\bf Q6} & {\bf Q7}  \\ \hline \hline
+\raisebox{1.5ex}[0pt]{\bf Graphs} &\raisebox{1.5ex}[0pt]{\bf \# of nodes} & \raisebox{1.5ex}[0pt]{\bf Methods} & {\bf Q1} & {\bf Q2} & {\bf Q3} & {\bf Q4} & {\bf Q5} & {\bf Q6} & {\bf Q7}  \\ \hline \hline
 
-\multirow{2}{*}{DBLP14} & \tnr & 2.1 & 2.4 & 3.5 & 4 & 3.6 & 2.2 & 0.7 \\ \cline{2-9}
-                        & Proxy+\tnr & {1.3} & {1.4} & {1.3} & {1.3} & {1.1} & {0.6} & {0.4} \\ \hline
-\multirow{2}{*}{CO}     & \tnr & 4.5 & {3.7} & {2.9} & {2} & {1.4} & {1.3} & {1.2} \\ \cline{2-9}
-                       & Proxy+\tnr& {4.2} & 3.8 & 3.4 & 2.7 & 1.9 & 1.5 & 1.5 \\ \hline
-\multirow{2}{*}{FL}     & \tnr & 23.8 & 38.7 & 58.2 & {88.9} & {124.8} & {167} & {235} \\ \cline{2-9}
-                       & Proxy+\tnr& {22.9} & {36.3} & {57} & 91.2 & 150.8 & 195.3 & 251.5 \\ \hline
-\multirow{2}{*}{CA}     & \tnr & {38} & {66.4} & 116.1 & 172.1 & 227 & 340.7 & {421.6} \\ \cline{2-9}
-                       & Proxy+\tnr& 39.5 & 67.5 & {107.4} & {159.7} & {221} & {286.2} & 828.8 \\ \hline
-\multirow{2}{*}{E-US}   & \tnr & 36.1 & {50.1} & {70.1} & {75.3} & {42.6} & {27.5} & {25.5} \\ \cline{2-9}
-                       & Proxy+\tnr& {35.7} & 52.4 & 72.8 & 80.3 & 57.8 & 32.2 & 29.8 \\ \hline
-\multirow{2}{*}{W-US}   & \tnr & 49.5 & 63.5 & 77.3 & {86.1} & {63} & {28.9} & {25.2} \\ \cline{2-9}
-                       & Proxy+\tnr& {47.7} & {57.7} & {74} & 89.5 & 77.2 & 30.6 & 26.5 \\ \hline
-\multirow{2}{*}{C-US}   & \tnr & NA & NA & NA & NA & NA & NA & NA \\ \cline{2-9}
-                       & Proxy+\tnr& 67 & 137.5 & 300 & 600 & 667 & 280 & 135 \\ \hline
+\multirow{2}{*}{DBLP14} &\multirow{2}{*}{141,359} & \tnr & 2.1 & 2.4 & 3.5 & 4 & 3.6 & 2.2 & 0.7 \\ \cline{3-10}
+                        & & Proxy+\tnr & {1.3} & {1.4} & {1.3} & {1.3} & {1.1} & {0.6} & {0.4} \\ \hline\hline
+\multirow{2}{*}{CO}&\multirow{2}{*}{435,666}     & \tnr & 4.5 & {3.7} & {2.9} & {2} & {1.4} & {1.3} & {1.2} \\ \cline{3-10}
+                    &   & Proxy+\tnr& {4.2} & 3.8 & 3.4 & 2.7 & 1.9 & 1.5 & 1.5 \\ \hline
+\multirow{2}{*}{FL} &\multirow{2}{*}{1,070,376}    & \tnr & 23.8 & 38.7 & 58.2 & {88.9} & {124.8} & {167} & {235} \\ \cline{3-10}
+                     &  & Proxy+\tnr& {22.9} & {36.3} & {57} & 91.2 & 150.8 & 195.3 & 251.5 \\ \hline
+\multirow{2}{*}{CA} &\multirow{2}{*}{1,890,815}    & \tnr & {38} & {66.4} & 116.1 & 172.1 & 227 & 340.7 & {421.6} \\ \cline{3-10}
+                     &  & Proxy+\tnr& 39.5 & 67.5 & {107.4} & {159.7} & {221} & {286.2} & 828.8 \\ \hline
+\multirow{2}{*}{E-US}&\multirow{2}{*}{3,598,623}   & \tnr & 36.1 & {50.1} & {70.1} & {75.3} & {42.6} & {27.5} & {25.5} \\ \cline{3-10}
+                     &  & Proxy+\tnr& {35.7} & 52.4 & 72.8 & 80.3 & 57.8 & 32.2 & 29.8 \\ \hline
+\multirow{2}{*}{W-US} &\multirow{2}{*}{6,262,104}  & \tnr & 49.5 & 63.5 & 77.3 & {86.1} & {63} & {28.9} & {25.2} \\ \cline{3-10}
+                      &  & Proxy+\tnr& {47.7} & {57.7} & {74} & 89.5 & 77.2 & 30.6 & 26.5 \\ \hline
+\multirow{2}{*}{C-US} &\multirow{2}{*}{14,081,816}  & \tnr & {\color{red}NA} & {\color{red}NA} & {\color{red}NA} & {\color{red}NA} & {\color{red}NA} & {\color{red}NA} & {\color{red}NA} \\ \cline{3-10}
+                      &  & Proxy+\tnr& 67 & 137.5 & 300 & 600 & 667 & 280 & 135 \\ \hline
 \end{tabular}
 %\end{small}
 \end{center}
@@ -424,25 +447,25 @@ In this set of experiments, we study the effectiveness \wrt graph density. We ad
 
 %Dataset & Method & Q1 & Q2 & Q3 & Q4 & Q5 & Q6 &Q7  \\ \hline \hline
 
-\begin{tabular}{|c|c||r|r|r|r|r|r|r|}
+\begin{tabular}{|c|c|c||r|r|r|r|r|r|r|}
 \hline
-  &   & \multicolumn{7}{c|}{\bf Query time ($\times 10^{-6}$ sec.)} \\
-\cline{3-9}
+  & &  & \multicolumn{7}{c|}{\bf Query time ($\times 10^{-6}$ sec.)} \\
+\cline{4-10}
 
-\raisebox{1.5ex}[0pt]{\bf Graphs} & \raisebox{1.5ex}[0pt]{\bf Methods} & {\bf Q1} & {\bf Q2} & {\bf Q3} & {\bf Q4} & {\bf Q5} & {\bf Q6} & {\bf Q7}  \\ \hline \hline
-\multirow{2}{*}{CO}& \ah & {7.8} & {9.3} & {17.2} & {26.5} & {37.4} & {51.5} & 67.1 \\ \cline{2-9}
-                  &Proxy+\ah & {7.8} & 10.9 & {17.2} & 28.1 & 37.5 & 53 & {59.3} \\ \hline
-\multirow{2}{*}{FL} &\ah & {10.9} & {15.6} & {23.4} & {29.7} & {40.5} & 56.2 & 59.3 \\ \cline{2-9}
-                  & Proxy+\ah& 12.4 & 17.2 & 23.5 & {29.7} & {40.5} & {54.6} & {57.7} \\ \hline
-\multirow{2}{*}{CA} &\ah & {18.7} & {28} & {42.1} & 56.2 & 68.6 & 88.9 & 101.4 \\ \cline{2-9}
-                  & Proxy+\ah& {18.7} & 28.1 & {42.1} & {54.6} & {67.1} & {85.8} & {99.8} \\ \hline
-\multirow{2}{*}{E-US}&\ah& {20.3} & {34.3} & 57.7 & 96.7 & 159.1 & 235.5 & {257.4} \\ \cline{2-9}
-                  & Proxy+\ah& 21.9 & {34.3} & {56.2} & {93.6} & {152.8} & {232.4} & 258.9 \\ \hline
-\multirow{2}{*}{W-US}&\ah& {24.9} & 39 & 56.2 & 74.9 & 107.6 & 149.8 & 188.7 \\ \cline{2-9}
-                  & Proxy+\ah& 26.6 & {37.5} & {53} & {73.3} & {104.5} & {146.6} & {185.6} \\ \hline
+\raisebox{1.5ex}[0pt]{\bf Graphs}&\raisebox{1.5ex}[0pt]{\bf \# of nodes} & \raisebox{1.5ex}[0pt]{\bf Methods} & {\bf Q1} & {\bf Q2} & {\bf Q3} & {\bf Q4} & {\bf Q5} & {\bf Q6} & {\bf Q7}  \\ \hline \hline
+\multirow{2}{*}{CO}& \multirow{2}{*}{435,666}& \ah & {7.8} & {9.3} & {17.2} & {26.5} & {37.4} & {51.5} & 67.1 \\ \cline{3-10}
+                 & &Proxy+\ah & {7.8} & 10.9 & {17.2} & 28.1 & 37.5 & 53 & {59.3} \\ \hline
+\multirow{2}{*}{FL}&\multirow{2}{*}{1,070,376} &\ah & {10.9} & {15.6} & {23.4} & {29.7} & {40.5} & 56.2 & 59.3 \\ \cline{3-10}
+                  & & Proxy+\ah& 12.4 & 17.2 & 23.5 & {29.7} & {40.5} & {54.6} & {57.7} \\ \hline
+\multirow{2}{*}{CA}&\multirow{2}{*}{1,890,815} &\ah & {18.7} & {28} & {42.1} & 56.2 & 68.6 & 88.9 & 101.4 \\ \cline{3-10}
+                  & & Proxy+\ah& {18.7} & 28.1 & {42.1} & {54.6} & {67.1} & {85.8} & {99.8} \\ \hline
+\multirow{2}{*}{E-US}& \multirow{2}{*}{3,598,623} &\ah& {20.3} & {34.3} & 57.7 & 96.7 & 159.1 & 235.5 & {257.4} \\ \cline{3-10}
+                  & & Proxy+\ah& 21.9 & {34.3} & {56.2} & {93.6} & {152.8} & {232.4} & 258.9 \\ \hline
+\multirow{2}{*}{W-US}&\multirow{2}{*}{6,262,104}&\ah& {24.9} & 39 & 56.2 & 74.9 & 107.6 & 149.8 & 188.7 \\ \cline{3-10}
+                 & & Proxy+\ah& 26.6 & {37.5} & {53} & {73.3} & {104.5} & {146.6} & {185.6} \\ \hline
 
-\multirow{2}{*}{C-US}&\ah& 39 & {70.2} & 135.7 & 244.9 & 402.5 & 603.7 & {762} \\ \cline{2-9}
-                  & Proxy+\ah& {37.3} & {70.2} & {129.5} & {235.5} & {385.3} & {580.3} & 769.1 \\ \hline
+\multirow{2}{*}{C-US}&\multirow{2}{*}{14,081,816}&\ah& 39 & {70.2} & 135.7 & 244.9 & 402.5 & 603.7 & {762} \\ \cline{3-10}
+                  & & Proxy+\ah& {37.3} & {70.2} & {129.5} & {235.5} & {385.3} & {580.3} & 769.1 \\ \hline
 \end{tabular}
 %\end{small}
 \end{center}
@@ -517,27 +540,27 @@ We will evaluate the space overhead saved by proxies in detail, to be seen short
 
 %Dataset & Method & Q1 & Q2 & Q3 & Q4 & Q5 & Q6 &Q7  \\ \hline \hline
 
-\begin{tabular}{|c|c||r|r|r|r|r|r|r|}
+\begin{tabular}{|c|c|c||r|r|r|r|r|r|r|}
 \hline
-  &   & \multicolumn{7}{c|}{\bf Query time ($\times 10^{-6}$ sec.)} \\
-\cline{3-9}
+  & &   & \multicolumn{7}{c|}{\bf Query time ($\times 10^{-6}$ sec.)} \\
+\cline{4-10}
 
-\raisebox{1.5ex}[0pt]{\bf Graphs} & \raisebox{1.5ex}[0pt]{\bf Methods} & {\bf Q1} & {\bf Q2} & {\bf Q3} & {\bf Q4} & {\bf Q5} & {\bf Q6} & {\bf Q7}  \\ \hline \hline
+\raisebox{1.5ex}[0pt]{\bf Graphs}&\raisebox{1.5ex}[0pt]{\bf \# of nodes} & \raisebox{1.5ex}[0pt]{\bf Methods} & {\bf Q1} & {\bf Q2} & {\bf Q3} & {\bf Q4} & {\bf Q5} & {\bf Q6} & {\bf Q7}  \\ \hline \hline
 
-\multirow{2}{*}{DBLP14} & Dijkstra & 2.1 & 3 & 4.67 & 52.1 & 34.1 & 287 & 13,935 \\ \cline{2-9}
-                      & Proxy+Dijkstra & 1.9 & 2.7 & 3.8 & 5.7 & 13.2 & 94 & 3,732 \\ \hline
-\multirow{2}{*}{CO}  & Dijkstra & 153 & 545 & 1,963 & 6,557 & 16,138 & 40,279 & 99,073 \\ \cline{2-9}
-                  & Proxy+Dijkstra  & 122 & 424 & 1,553 & 5,040 & 11,918 & 28,084 & 65,802 \\ \hline
-\multirow{2}{*}{FL}  & Dijkstra & 473 & 1,748 & 6,094 & 17,436 & 46,977 & 140,428 & 368,370 \\ \cline{2-9}
-                   & Proxy+Dijkstra & 332 & 1,185 & 3,832 & 10,837 & 29,155 & 87,459 & 228,535 \\ \hline
-\multirow{2}{*}{CA}  & Dijkstra & 886 & 3,141 & 10,657 & 33,377 & 92,742 & 257,752 & 550,480 \\ \cline{2-9}
-                   & Proxy+Dijkstra & 654 & 2,244 & 7,478 & 22,764 & 62,670 & 163,236 & 365,321 \\ \hline
-\multirow{2}{*}{E-US} & Dijkstra&912 & 3,455 & 13,033 & 47,028 & 163,397 & 542,802 & 1,681,470 \\ \cline{2-9}
-                   & Proxy+Dijkstra & 706 & 2,647 & 9,507 & 33,229 & 113,114 & 379,599 & 956,205 \\ \hline
-\multirow{2}{*}{W-US} & Dijkstra & 886 & 3,141 & 10,657 & 33,377 & 92,742 & 257,752 & 550,480 \\ \cline{2-9}
-                   & Proxy+Dijkstra & 654 & 2,244 & 7,748 & 22,764 & 62,670 & 163,236 & 365,321 \\ \hline
-\multirow{2}{*}{C-US} & Dijkstra & 2,419 & 8,014 & 28,083 & 101,077 & 402,928 & 1,580,830 & 5,868,220 \\ \cline{2-9}
-                   & Proxy+Dijkstra & 1,508 & 5,004 & 17,039 & 61,512 & 247,490 & 988,994 & 3,553,810 \\ \hline
+\multirow{2}{*}{DBLP14}& \multirow{2}{*}{141,359} & Dijkstra & 2.1 & 3 & 4.67 & 52.1 & 34.1 & 287 & 13,935 \\ \cline{3-10}
+                   &   & Proxy+Dijkstra & 1.9 & 2.7 & 3.8 & 5.7 & 13.2 & 94 & 3,732 \\ \hline\hline
+\multirow{2}{*}{CO}&\multirow{2}{*}{435,666}  & Dijkstra & 153 & 545 & 1,963 & 6,557 & 16,138 & 40,279 & 99,073 \\ \cline{3-10}
+                  & & Proxy+Dijkstra  & 122 & 424 & 1,553 & 5,040 & 11,918 & 28,084 & 65,802 \\ \hline
+\multirow{2}{*}{FL}&\multirow{2}{*}{1,070,376}  & Dijkstra & 473 & 1,748 & 6,094 & 17,436 & 46,977 & 140,428 & 368,370 \\ \cline{3-10}
+                   & & Proxy+Dijkstra & 332 & 1,185 & 3,832 & 10,837 & 29,155 & 87,459 & 228,535 \\ \hline
+\multirow{2}{*}{CA}&\multirow{2}{*}{1,890,815}  & Dijkstra & 886 & 3,141 & 10,657 & 33,377 & 92,742 & 257,752 & 550,480 \\ \cline{3-10}
+                   &  & Proxy+Dijkstra & 654 & 2,244 & 7,478 & 22,764 & 62,670 & 163,236 & 365,321 \\ \hline
+\multirow{2}{*}{E-US}&\multirow{2}{*}{3,598,623} & Dijkstra&912 & 3,455 & 13,033 & 47,028 & 163,397 & 542,802 & 1,681,470 \\ \cline{3-10}
+                   & & Proxy+Dijkstra & 706 & 2,647 & 9,507 & 33,229 & 113,114 & 379,599 & 956,205 \\ \hline
+\multirow{2}{*}{W-US}&\multirow{2}{*}{6,262,104} & Dijkstra & 886 & 3,141 & 10,657 & 33,377 & 92,742 & 257,752 & 550,480 \\ \cline{3-10}
+                   & & Proxy+Dijkstra & 654 & 2,244 & 7,748 & 22,764 & 62,670 & 163,236 & 365,321 \\ \hline
+\multirow{2}{*}{C-US}&\multirow{2}{*}{14,081,816} & Dijkstra & 2,419 & 8,014 & 28,083 & 101,077 & 402,928 & 1,580,830 & 5,868,220 \\ \cline{3-10}
+                  & & Proxy+Dijkstra & 1,508 & 5,004 & 17,039 & 61,512 & 247,490 & 988,994 & 3,553,810 \\ \hline
 \end{tabular}
 %\end{small}
 \end{center}
@@ -578,27 +601,27 @@ We will evaluate the space overhead saved by proxies in detail, to be seen short
 %\begin{tabular}{|c|c|r|r|r|r|r|r|r|}
 %\hline
 %Dataset & Method & Q1 & Q2 & Q3 & Q4 & Q5 & Q6 &Q7  \\ \hline \hline
-\begin{tabular}{|c|c||r|r|r|r|r|r|r|}
+\begin{tabular}{|c|c|c||r|r|r|r|r|r|r|}
 \hline
-  &   & \multicolumn{7}{c|}{\bf Query time ($\times 10^{-6}$ sec.)} \\
-\cline{3-9}
+  & &  & \multicolumn{7}{c|}{\bf Query time ($\times 10^{-6}$ sec.)} \\
+\cline{4-10}
 
-\raisebox{1.5ex}[0pt]{\bf Graphs} & \raisebox{1.5ex}[0pt]{\bf Methods} & {\bf Q1} & {\bf Q2} & {\bf Q3} & {\bf Q4} & {\bf Q5} & {\bf Q6} & {\bf Q7}  \\ \hline \hline
+\raisebox{1.5ex}[0pt]{\bf Graphs}&\raisebox{1.5ex}[0pt]{\bf \# of nodes} & \raisebox{1.5ex}[0pt]{\bf Methods} & {\bf Q1} & {\bf Q2} & {\bf Q3} & {\bf Q4} & {\bf Q5} & {\bf Q6} & {\bf Q7}  \\ \hline \hline
 
-\multirow{2}{*}{DBLP14} & \arcflag & {63.7} & {64.2} & 74.9 & 75.1 & 79.5 & 87.4 & 134 \\ \cline{2-9}
-                       & Proxy+\arcflag& 70.1 & 71.5 & {70.9} & {74.1} & {74.8} & {79.6} & {123} \\ \hline
-\multirow{2}{*}{CO} & \arcflag & 120 & 245 & 438 & 775 & 1,148 & 1,597 & 4,031 \\ \cline{2-9}
-                  & Proxy+\arcflag & {90} & {177} & {330} & {604} & {976} & {1,535} & {3,534} \\ \hline
-\multirow{2}{*}{FL} & \arcflag & 336 & 689 & 1,166 & 1,738 & 2,425 & 3,146 & 4,028 \\ \cline{2-9}
-                  & Proxy+\arcflag & {241} & {502} & {908} & {1,444} & {2,138} & {2,751} & {3,360} \\ \hline
-\multirow{2}{*}{CA} & \arcflag & 539 & 965 & 1,566 & 2,387 & 3,400 & 4,833 & 6,391 \\ \cline{2-9}
-                  & Proxy+\arcflag & {393} & {742} & {1,268} & {1,985} & {2,855} & {4,420} & {5,566} \\ \hline
-\multirow{2}{*}{E-US}&\arcflag & 619 & 1,266 & 2,212 & 3,487 & 5,383 & 7,959 & 11,007 \\ \cline{2-9}
-                  & Proxy+\arcflag & {442} & {946} & {1,742} & {2,873} & {4,468} & {7,173} & {10,090} \\ \hline
-\multirow{2}{*}{W-US}&\arcflag & 1,043 & 1,903 & 3,086 & 4,441 & 6,457 & 8,718 & 11,634 \\ \cline{2-9}
-                  & Proxy+\arcflag & {757} & {1,411} & {2,423} & {3,708} & {5,699} & {7,932} & {11,169} \\ \hline
-\multirow{2}{*}{C-US}&\arcflag & 1,486 & 2,958 & 5,006 & 7,992 & 12,439 & 19,517 & 28,670 \\ \cline{2-9}
-                  & Proxy+\arcflag & {1,006} & {2,098} & {3,740} & {6,463} & {10,402} & {16,974} & {25,104} \\ \hline
+\multirow{2}{*}{DBLP14}&\multirow{2}{*}{141,462} & \arcflag & {63.7} & {64.2} & 74.9 & 75.1 & 79.5 & 87.4 & 134 \\ \cline{3-10}
+                      & & Proxy+\arcflag& 70.1 & 71.5 & {70.9} & {74.1} & {74.8} & {79.6} & {123} \\ \hline\hline
+\multirow{2}{*}{CO}&\multirow{2}{*}{435,666} & \arcflag & 120 & 245 & 438 & 775 & 1,148 & 1,597 & 4,031 \\ \cline{3-10}
+                  & & Proxy+\arcflag & {90} & {177} & {330} & {604} & {976} & {1,535} & {3,534} \\ \hline
+\multirow{2}{*}{FL}&\multirow{2}{*}{1,070,376} & \arcflag & 336 & 689 & 1,166 & 1,738 & 2,425 & 3,146 & 4,028 \\ \cline{3-10}
+                  & & Proxy+\arcflag & {241} & {502} & {908} & {1,444} & {2,138} & {2,751} & {3,360} \\ \hline
+\multirow{2}{*}{CA}&\multirow{2}{*}{1,890,815} & \arcflag & 539 & 965 & 1,566 & 2,387 & 3,400 & 4,833 & 6,391 \\ \cline{3-10}
+                 & & Proxy+\arcflag & {393} & {742} & {1,268} & {1,985} & {2,855} & {4,420} & {5,566} \\ \hline
+\multirow{2}{*}{E-US}&\multirow{2}{*}{3,598,623}&\arcflag & 619 & 1,266 & 2,212 & 3,487 & 5,383 & 7,959 & 11,007 \\ \cline{3-10}
+                 & & Proxy+\arcflag & {442} & {946} & {1,742} & {2,873} & {4,468} & {7,173} & {10,090} \\ \hline
+\multirow{2}{*}{W-US}& \multirow{2}{*}{6,262,104} &\arcflag & 1,043 & 1,903 & 3,086 & 4,441 & 6,457 & 8,718 & 11,634 \\ \cline{3-10}
+                  & & Proxy+\arcflag & {757} & {1,411} & {2,423} & {3,708} & {5,699} & {7,932} & {11,169} \\ \hline
+\multirow{2}{*}{C-US}& \multirow{2}{*}{14,081,816} &\arcflag & 1,486 & 2,958 & 5,006 & 7,992 & 12,439 & 19,517 & 28,670 \\ \cline{3-10}
+                 & & Proxy+\arcflag & {1,006} & {2,098} & {3,740} & {6,463} & {10,402} & {16,974} & {25,104} \\ \hline
 \end{tabular}
 %\end{small}
 \end{center}
@@ -637,27 +660,27 @@ We will evaluate the space overhead saved by proxies in detail, to be seen short
 %\begin{tabular}{|c|c|r|r|r|r|r|r|r|}
 %\hline
 %Dataset & Method & Q1 & Q2 & Q3 & Q4 & Q5 & Q6 &Q7  \\ \hline \hline
-\begin{tabular}{|c|c||r|r|r|r|r|r|r|}
+\begin{tabular}{|c|c|c||r|r|r|r|r|r|r|}
 \hline
-  &   & \multicolumn{7}{c|}{\bf Query time ($\times 10^{-6}$ sec.)} \\
-\cline{3-9}
+  & &  & \multicolumn{7}{c|}{\bf Query time ($\times 10^{-6}$ sec.)} \\
+\cline{4-10}
 
-\raisebox{1.5ex}[0pt]{\bf Graphs} & \raisebox{1.5ex}[0pt]{\bf Methods} & {\bf Q1} & {\bf Q2} & {\bf Q3} & {\bf Q4} & {\bf Q5} & {\bf Q6} & {\bf Q7}  \\ \hline \hline
+\raisebox{1.5ex}[0pt]{\bf Graphs}&\raisebox{1.5ex}[0pt]{\bf \# of nodes} & \raisebox{1.5ex}[0pt]{\bf Methods} & {\bf Q1} & {\bf Q2} & {\bf Q3} & {\bf Q4} & {\bf Q5} & {\bf Q6} & {\bf Q7}  \\ \hline \hline
 
-\multirow{2}{*}{DBLP14} & \tnr & 7.9 & 13.1 & 19.8 & 34.7 & 61.4 & 143.6 & 683.9 \\ \cline{2-9}
-                      & Proxy+\tnr & 5.2 & 10.7 & 14.1 & 21.8 & 43.4 & 111.7 & 660.2 \\ \hline
-\multirow{2}{*}{CO} & \tnr & 23.3 & 35.3 & 57.4 & 91.8 & 139.7 & 202.6 & 276 \\ \cline{2-9}
-                   &Proxy+\tnr & 21 & 33 & 52.4 & 84 & 124 & 184.2 & 379.2 \\ \hline
-\multirow{2}{*}{FL} & \tnr & 33.7 & 54.4 & 85.6 & 132.9 & 194.1 & 277.2 & 412.1 \\ \cline{2-9}
-                   &Proxy+\tnr & 31.4 & 53.6 & 84.1 & 135.4 & 220.1 & 309.3 & 440.5 \\ \hline
-\multirow{2}{*}{CA} & \tnr & 50.9 & 86.7 & 147.4 & 227.4 & 315.8 & 495.8 & 667.7 \\ \cline{2-9}
-                   &Proxy+\tnr & 51.5 & 89.5 & 142.3 & 219.3 & 317.4 & 452.8 & 1,091.6 \\ \hline
-\multirow{2}{*}{E-US} & \tnr & 53.4 & 88.5 & 154 & 252.5 & 394.7 & 654.1 & 1,024.2 \\ \cline{2-9}
-                    &Proxy+\tnr  & 54.5 & 89.4 & 154.8 & 253.6 & 423.7 & 2,569.1 & 4,640.1 \\ \hline
-\multirow{2}{*}{W-US} & \tnr & 68.9 & 106.3 & 168.9 & 267 & 470 & 766.4 & 1,492 \\ \cline{2-9}
-                     &Proxy+\tnr & 73.5 & 110.7 & 171.3 & 269.9 & 698.7 & 1,110 & 1,924.8 \\ \hline
-\multirow{2}{*}{C-US} & \tnr & NA & NA & NA & NA & NA & NA & NA \\ \cline{2-9}
-                     &Proxy+\tnr & 90.5 & 175 & 378 & 775 & 1,230 & 1,760 & 2,645 \\ \hline
+\multirow{2}{*}{DBLP14}&\multirow{2}{*}{141,359} & \tnr & 7.9 & 13.1 & 19.8 & 34.7 & 61.4 & 143.6 & 683.9 \\ \cline{3-10}
+                    &  & Proxy+\tnr & 5.2 & 10.7 & 14.1 & 21.8 & 43.4 & 111.7 & 660.2 \\ \hline\hline
+\multirow{2}{*}{CO}&\multirow{2}{*}{435,666} & \tnr & 23.3 & 35.3 & 57.4 & 91.8 & 139.7 & 202.6 & 276 \\ \cline{3-10}
+                   & &Proxy+\tnr & 21 & 33 & 52.4 & 84 & 124 & 184.2 & 379.2 \\ \hline
+\multirow{2}{*}{FL}&\multirow{2}{*}{1,070,376} & \tnr & 33.7 & 54.4 & 85.6 & 132.9 & 194.1 & 277.2 & 412.1 \\ \cline{3-10}
+                  & &Proxy+\tnr & 31.4 & 53.6 & 84.1 & 135.4 & 220.1 & 309.3 & 440.5 \\ \hline
+\multirow{2}{*}{CA}&\multirow{2}{*}{1,890,815} & \tnr & 50.9 & 86.7 & 147.4 & 227.4 & 315.8 & 495.8 & 667.7 \\ \cline{3-10}
+                   & &Proxy+\tnr & 51.5 & 89.5 & 142.3 & 219.3 & 317.4 & 452.8 & 1,091.6 \\ \hline
+\multirow{2}{*}{E-US}&\multirow{2}{*}{3,598,623} & \tnr & 53.4 & 88.5 & 154 & 252.5 & 394.7 & 654.1 & 1,024.2 \\ \cline{3-10}
+                    & &Proxy+\tnr  & 54.5 & 89.4 & 154.8 & 253.6 & 423.7 & 2,569.1 & 4,640.1 \\ \hline
+\multirow{2}{*}{W-US}&\multirow{2}{*}{6,262,104} & \tnr & 68.9 & 106.3 & 168.9 & 267 & 470 & 766.4 & 1,492 \\ \cline{3-10}
+                    &  &Proxy+\tnr & 73.5 & 110.7 & 171.3 & 269.9 & 698.7 & 1,110 & 1,924.8 \\ \hline
+\multirow{2}{*}{C-US}&\multirow{2}{*}{14,081,816} & \tnr & {\color{red}NA} & {\color{red}NA} & {\color{red}NA} & {\color{red}NA} & {\color{red}NA} & {\color{red}NA} & {\color{red}NA} \\ \cline{3-10}
+                    & &Proxy+\tnr & 90.5 & 175 & 378 & 775 & 1,230 & 1,760 & 2,645 \\ \hline
 \end{tabular}
 %\end{small}
 \end{center}
@@ -693,24 +716,24 @@ We will evaluate the space overhead saved by proxies in detail, to be seen short
 \vspace{-2ex}
 \begin{center}
 %\begin{scriptsize}
-\begin{tabular}{|c|c||r|r|r|r|r|r|r|}
+\begin{tabular}{|c|c|c||r|r|r|r|r|r|r|}
 \hline
-  &   & \multicolumn{7}{c|}{\bf Query time ($\times 10^{-6}$ sec.)} \\
-\cline{3-9}
+  & &  & \multicolumn{7}{c|}{\bf Query time ($\times 10^{-6}$ sec.)} \\
+\cline{4-10}
 
-\raisebox{1.5ex}[0pt]{\bf Graphs} & \raisebox{1.5ex}[0pt]{\bf Methods} & {\bf Q1} & {\bf Q2} & {\bf Q3} & {\bf Q4} & {\bf Q5} & {\bf Q6} & {\bf Q7}  \\ \hline \hline
-\multirow{2}{*}{CO} & \ah & {7.8} & {14} & {20.3} & 34.4 & {48.4} & {68.6} & 87.4 \\ \cline{2-9}
-                  & Proxy+\ah & {7.8} & 14.1 & 21.8 & {32.7} & {48.4} & {68.6} & {84.3} \\ \hline
-\multirow{2}{*}{FL} & \ah & {15.6} & 23.4 & 34.3 & {48.4} &{65.5} & 90.5 & 110.8 \\ \cline{2-9}
-                  & Proxy+\ah & {15.6} & {21.8} & {32.8} & 53 & 71.7 & {87.4} & {107.6} \\ \hline
-\multirow{2}{*}{CA} & \ah & {23.4} & 39 & 59.3 & 81.1 & 104.5 & 145 & 181 \\ \cline{2-9}
-                  & Proxy+\ah & {23.4} & {37.4} & {57.7} & {78} & {99.8} & {140.4} & {176.3} \\ \hline
-\multirow{2}{*}{E-US} & \ah & {28.1} & 48.4 & 82.7 & 142 & 229.3 & 357.2 & {443.1} \\ \cline{2-9}
-                    & Proxy+\ah & {28.1} & {46.8} & {79.6} & {134.2} & {221.5} & {347.8} & 433.6 \\ \hline
-\multirow{2}{*}{W-US} & \ah & {35.8} & 56.3 & 82.7 & 124.8 & 187.2 & 276.1 & 394.7 \\ \cline{2-9}
-                    & Proxy+\ah & 35.9 & {54.6} & {81.1} & {121.7} & {182.5} & {269.9} & {386.9} \\ \hline
-\multirow{2}{*}{C-US} & \ah & 56.1 & 99.8 & 188.8 & 347.9 & 591.2 & 926.7 & 1,324.4 \\ \cline{2-9}
-                    & Proxy+\ah & {53} & {95.2} & {179.4} & {333.9} & {567.9} & {892.3} & {1,310.4} \\ \hline
+\raisebox{1.5ex}[0pt]{\bf Graphs}&\raisebox{1.5ex}[0pt]{\bf \# of nodes} & \raisebox{1.5ex}[0pt]{\bf Methods} & {\bf Q1} & {\bf Q2} & {\bf Q3} & {\bf Q4} & {\bf Q5} & {\bf Q6} & {\bf Q7}  \\ \hline \hline
+\multirow{2}{*}{CO}&\multirow{2}{*}{435,666}  & \ah & {7.8} & {14} & {20.3} & 34.4 & {48.4} & {68.6} & 87.4 \\ \cline{3-10}
+                  & & Proxy+\ah & {7.8} & 14.1 & 21.8 & {32.7} & {48.4} & {68.6} & {84.3} \\ \hline
+\multirow{2}{*}{FL}& \multirow{2}{*}{1,070,376} & \ah & {15.6} & 23.4 & 34.3 & {48.4} &{65.5} & 90.5 & 110.8 \\ \cline{3-10}
+                  & & Proxy+\ah & {15.6} & {21.8} & {32.8} & 53 & 71.7 & {87.4} & {107.6} \\ \hline
+\multirow{2}{*}{CA}&\multirow{2}{*}{1,890,815} & \ah & {23.4} & 39 & 59.3 & 81.1 & 104.5 & 145 & 181 \\ \cline{3-10}
+                  & & Proxy+\ah & {23.4} & {37.4} & {57.7} & {78} & {99.8} & {140.4} & {176.3} \\ \hline
+\multirow{2}{*}{E-US}&\multirow{2}{*}{3,598,623} & \ah & {28.1} & 48.4 & 82.7 & 142 & 229.3 & 357.2 & {443.1} \\ \cline{3-10}
+                    & & Proxy+\ah & {28.1} & {46.8} & {79.6} & {134.2} & {221.5} & {347.8} & 433.6 \\ \hline
+\multirow{2}{*}{W-US}&\multirow{2}{*}{6,262,104} & \ah & {35.8} & 56.3 & 82.7 & 124.8 & 187.2 & 276.1 & 394.7 \\ \cline{3-10}
+                    & & Proxy+\ah & 35.9 & {54.6} & {81.1} & {121.7} & {182.5} & {269.9} & {386.9} \\ \hline
+\multirow{2}{*}{C-US}&\multirow{2}{*}{14,081,816} & \ah & 56.1 & 99.8 & 188.8 & 347.9 & 591.2 & 926.7 & 1,324.4 \\ \cline{3-10}
+                   & & Proxy+\ah & {53} & {95.2} & {179.4} & {333.9} & {567.9} & {892.3} & {1,310.4} \\ \hline
 \end{tabular}
 %\end{scriptsize}
 \end{center}
@@ -778,9 +801,8 @@ US      & NA&  NA            & NA& NA            &  3512.7&   4266.9   \\ \hline
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \stitle{2. Effectiveness \wrt graph sizes}.
 %
-Since \dblpone is a single dataset, we only compare the efficiency of a group of shortest path and distance queries $\{Q_1, Q_3, Q_5, Q_7\}$  on road graphs using the same settings.
-We observe the results in
-Tables~\ref{tab:performance_dist_queries_dj} and \ref{tab:performance_path_queries_dj} (comparison between Dijkstra and Proxy+Dijkstra), Tables~\ref{tab:performance_dist_queries_af} and~\ref{tab:performance_path_queries_af} (comparison between \arcflag and Proxy+\arcflag), Tables~\ref{tab:performance_dist_queries_tnr} and~\ref{tab:performance_path_queries_tnr} (comparison between \tnr and Proxy+\tnr), and Tables~\ref{tab:performance_dist_queries_ah} and~\ref{tab:performance_path_queries_ah} (comparison between \ah and Proxy+\ah), respectively.
+Since \dblpone is a single dataset, we only compare the efficiency of shortest path and distance queries on road graphs using the same settings. We vary the number of nodes from 435,666 to 14,081,816. We observe the results in
+Tables~\ref{tab:performance_dist_queries_dj} and \ref{tab:performance_path_queries_dj} (comparison between Dijkstra and Proxy+Dijkstra), Tables~\ref{tab:performance_dist_queries_af} and~\ref{tab:performance_path_queries_af} (comparison between \arcflag and Proxy+\arcflag), Tables~\ref{tab:performance_dist_queries_tnr} and~\ref{tab:performance_path_queries_tnr} (comparison between \tnr and Proxy+\tnr), and Tables~\ref{tab:performance_dist_queries_ah} and~\ref{tab:performance_path_queries_ah} (comparison between \ah and Proxy+\ah) for shortest distance and shortest path queries, respectively. For a given query, we can observe its corresponding row to see how the efficiency is affected by graph sizes.
 
 
 
