@@ -85,26 +85,8 @@ US          &    (3,452,222 : 14.4)      & (7,927,453 : 33.1)& 120.96 & 531.63 &
 %  \multirow{2}{*}{Normal} & Proxies (\#: \%)   & (75,409: 12.6) & (117,328: 19.5) & (98,110: 16.4) &  (81,689: 13.6)& (69,357:11.6)  \\ \cline{2-7}
 %                       & Nodes in \dras (\#: \%)      & (280,243: 46.7) & (182,402: 30.4) & (127,303: 21.2) &  (98,152: 16.3) & (79,671: 13.2)  \\ \hline
   \multirow{2}{*}{Power Law} & Proxies (\#: \%)   & (90,245: 9.0) & (124,247: 12.4) & (128,126: 12.8) &  (128,020: 12.8)& (126,836: 12.7)  \\ \cline{2-7}
-                       & Nodes in \dras (\#: \%)      & (504,401: 50.4) & (575,202: 57.5) & (580,392: 58.0) &  (576,610: 57.7) & (569,697: 57.0)  \\ \hline
-
-\end{tabular}
-%\end{small}
-\end{center}
-\vspace{-3ex}
-\end{table*}
-
-\begin{table*}[t!]
-\caption{Effectiveness \wrt higher graph density }\label{tab:higherdensity}
-\vspace{-2ex}
-\begin{center}
-%\begin{small}
-%\begin{tabular}{|c|c|r|r|r|r|r|r|r|}
-%\hline
-
-%Dataset & Method & Q1 & Q2 & Q3 & Q4 & Q5 & Q6 &Q7  \\ \hline \hline
-\begin{tabular}{|c|c|r|r|r|r|r|}
-\hline
-  &   & \multicolumn{5}{c|}{\bf Average degrees} \\
+                       & Nodes in \dras (\#: \%)      & (504,401: 50.4) & (575,202: 57.5) & (580,392: 58.0) &  (576,610: 57.7) & (569,697: 57.0)  \\ \hline\hline
+                       &   & \multicolumn{5}{c|}{\bf Average degrees} \\
 \cline{3-7}
 
 \raisebox{1.5ex}[0pt]{\bf Distribution} &\raisebox{1.5ex}[0pt]{\bf Properties}  & {\bf 20} & {\bf 30} & {\bf 40} & {\bf 50} & {\bf 60} \\ \hline \hline
@@ -115,8 +97,10 @@ US          &    (3,452,222 : 14.4)      & (7,927,453 : 33.1)& 120.96 & 531.63 &
 \end{tabular}
 %\end{small}
 \end{center}
-\vspace{-2ex}
+\vspace{-3ex}
 \end{table*}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -252,7 +236,7 @@ In all road networks, it incurs small extra space overhead to store the routing 
 
 
 \stitle{4. Effectiveness \wrt graph density}.
-In this set of experiments, we study the effectiveness \wrt graph density. We adopted the graph-tool library~\cite{peixoto_graph-tool_2014} to produce random graphs. It is controlled by two parameters: the number $n$ of nodes, and a sample function that decides the degree distribution of the graph. Without loss of generality, we fix $n=1\times 10^6$. To generate graphs with average degree 2, 3, 4, 5 and 6, we adopt two degree distributions: (1) uniform distribution, and (2) power law distribution, which the degree distribution of scale free networks follows. When we use uniform distribution, to generate a random graph with average degree $d$, we randomly assign an integer from range $[1, 2\cdot d-1]$ to the degree of a node. When we use power law distribution (the fraction $P(k)$ of nodes in the network with degree $k$ goes for large values of $k$, i.e. $P(k)\sim k^\delta$), we set the maximum degree of the graph as $5000$, which is also the limit of friends in Facebook\url{www.facebook.com}. Then we vary $\delta$ to generate a graph with expected average degree. The results are shown in Table~\ref{tab:density}(uniform and power law distribution with average degree in range $[2,6]$) and Table~\ref{tab:higherdensity}(power law distribution with higher average degree). We can observe that (1) Our algorithm performs well in sparse graphs (with average degree no larger than 3) generated with uniform distribution. Specifically, about 30\% of the nodes in the graph are captured by \dras. (2) Our algorithm performs well in graphs generated with power law distribution. We can observe that more than 30\% of the nodes are captured by \dras even when the average degree is 60. (3) The performance of our algorithm is related to the density of the graph and the degree distribution. (4) Given a degree distribution, \dras tend to capture less nodes when the average degree is high. This is because: (1) There are less cut-nodes in graphs with higher density, thus less proxies can be found. (2) For a proxy $u$, the set of nodes $A_u^i$ that presented by $u$ is more likely to exceed the size constraint. Therefore, there are less nodes in its \dra. These together explain the results.
+In this set of experiments, we study the effectiveness \wrt graph density. We adopted the graph-tool library~\cite{peixoto_graph-tool_2014} to produce random graphs. It is controlled by two parameters: the number $n$ of nodes, and a sample function that decides the degree distribution of the graph. Without loss of generality, we fix $n=1\times 10^6$. To generate graphs with average degree 2, 3, 4, 5 and 6, we adopt two degree distributions: (1) uniform distribution, and (2) power law distribution, which the degree distribution of scale free networks follows. When we use uniform distribution, to generate a random graph with average degree $d$, we randomly assign an integer from range $[1, 2\cdot d-1]$ to the degree of a node. When we use power law distribution (the fraction $P(k)$ of nodes in the network with degree $k$ goes for large values of $k$, i.e. $P(k)\sim k^\delta$), we set the maximum degree of the graph as $5000$, which is also the limit of friends in Facebook\url{www.facebook.com}. Then we vary $\delta$ to generate a graph with expected average degree. The results are shown in Table~\ref{tab:density}. We can observe that (1) Our algorithm performs well in sparse graphs (with average degree no larger than 3) generated with uniform distribution. Specifically, about 30\% of the nodes in the graph are captured by \dras. (2) Our algorithm performs well in graphs generated with power law distribution. We can observe that more than 30\% of the nodes are captured by \dras even when the average degree is 60. (3) The performance of our algorithm is related to the density of the graph and the degree distribution. (4) Given a degree distribution, \dras tend to capture less nodes when the average degree is high. This is because: (1) There are less cut-nodes in graphs with higher density, thus less proxies can be found. (2) For a proxy $u$, the set of nodes $A_u^i$ that presented by $u$ is more likely to exceed the size constraint. Therefore, there are less nodes in its \dra. These together explain the results.
 
 
 \begin{table*}[t!]
