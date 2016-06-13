@@ -1,0 +1,44 @@
+\section{Query Answering with Routing Proxies}
+\label{sec-proxy-query}
+
+
+
+\eat{%%%%%%%%
+\begin{figure}[tb!]
+%\vspace{-1ex}
+\begin{center}
+\includegraphics[scale=0.6]{./Proxy-framework.eps}
+\end{center}
+\vspace{-2ex}
+\caption{Framework of using proxies}
+\label{fig-angent-landmarks} \vspace{-2ex}
+\end{figure}
+}%%%%%%%%%%%%EAT
+
+ Based on the above analyses, we present a framework for speeding-up shortest  path and distance query answering, which consists of two modules: {\em preprocessing} and {\em query answering}.
+ %The framework for answering queries using proxies and \dras is illustrated in Fig.~\ref{fig-angent-landmarks}, in which each $p_i$ ($i\in[1, h]$) denotes a proxy, and is associated with its \dra.
+ We next introduce the details of the framework.
+
+\stitle{1. Preprocessing}. Given graph $G(V, E)$, the preprocessing module executes the following.
+
+\sstab (1) It first computes all \dras and their maximal proxies with algorithm $\compDRAs$ (to be seen shortly in Section~\ref{sec-proxy-algorithms}).
+
+\sstab (2) It then pre-computes and stores all the shortest paths and distances between any node in a \dra and its proxy.
+
+
+\stitle{2. Query answering}. Given two nodes $s$ and $t$ in graph $G(V, E)$  and the pre-computed information, the query answering module executes the following.
+
+
+\sstab (1) When nodes $s$ and $t$ belong to the same \dra $G[A^+_u]$ with proxy $u$ such that $A^+_u$ = $A^1_u\cup\ldots A^h_u$.
+
+If $s$ and $t$ further fall into the same $A^i_u$ ($i\in[1,h]$), then it invokes the Dijkstra's algorithm on the subgraph $G[A^i_u]$ to compute the shortest path and distance between $s$ and $t$. Otherwise, it simply returns $\path(s, u)/\path(u, t)$ or $\dist(s, u)$ + $\dist(u, t)$, in constant time.
+
+\sstab (2)  When $s$ and $t$ belong to two \dras $G[A^+_{u_s}]$ and $G[A^+_{u_t}]$ with proxies $u_s$ and $u_t$, respectively.
+
+Observe that $\path(s, t)$ = $\path(s, u_s)/\path(u_s, u_t)/$ $\path(u_t, t)$ and $\dist(s, t)$ = $\dist(s, u_s)$ + $\dist(u_s, u_t)$ + $\dist(u_t, t)$, in which $\path(s, u_s)$, $\path(u_t, t)$, $\dist(s, u_s)$ and $\dist(u_t, t)$ are already known. Hence, it simply invokes an algorithm (\eg bidirectional Dijkstra~\cite{LubyR89}, \arcflag \cite{MohringSSWW05}, \ch~\cite{GeisbergerSSD08}, \tnr~\cite{bast2014route}) for computing $\path(u_s, u_t)$.
+Similarly, the shortest distance $\dist(s, t)$ can be computed.
+
+\stitle{Remarks}.
+(1) To support shortest distance queries, for each node in a \dra, we store its corresponding proxy and the distance to the proxy. To support shortest path queries, we further keep the shortest paths from each proxy to all nodes in its \dra. Thus, we need $O(d)$ extra space to store the routing information to answer shortest path and distance queries, where $d$ is the total number of nodes in all \dras.
+
+\sstab (2) Let $G'$ be the reduced subgraph of $G$ by removing all the nodes in \dras, but keeping their proxies, from graph $G$. It is easy to see that the main computation cost is reduced from $G$ to $G'$. As shown in the experimental study (Section~\ref{sec-expt}), on average about 1/3 nodes of a graph are captured by non-trivial proxies and their \dras, \ie $d$ is about $|V|/3$. That is, graph $G'$ is about 2/3 size of graph $G$, and hence our data reduction technique could reduce graph sizes and speed up shortest path and distance computations. 

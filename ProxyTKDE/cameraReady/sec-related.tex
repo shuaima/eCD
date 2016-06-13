@@ -1,0 +1,54 @@
+\section{Related Work}
+\label{sec-related}
+
+Algorithms for shortest  paths and distances have been extensively studied since 1950's, and fall into different categories in terms of different criteria:
+
+ \bi
+ \item exact distances~\cite{WuXDCZZ12,Dijkstra59,FredmanT84,LubyR89,GeisbergerSSD08,SankaranarayananSA09,SandersS05,GoldbergH05,MozesS12,ChengKCC12,MozesS12,ChanL07,SaundersT07,WagnerW07,bast2014route,delling2014robust,arz2013transit,zhu2013shortest,klein2010shortest,fakcharoenphol2006planar,gupta2004roads}
+     and approximate distances~\cite{PotamiasBCG09,SarmaGNP10,ThorupZ05,SankaranarayananS10},
+
+
+ \item memory-based~\cite{PotamiasBCG09,SarmaGNP10,WuXDCZZ12,Dijkstra59,FredmanT84,LubyR89,GeisbergerSSD08,Wei10,SankaranarayananSA09,SandersS05,
+ThorupZ05,MozesS12,SaundersT07,WagnerW07,bast2014route,delling2014robust,arz2013transit,SankaranarayananS10,zhu2013shortest,klein2010shortest,gupta2004roads} and disk-based algorithms~\cite{ChengKCC12,ChanL07},
+
+
+ \item for unweighted~\cite{PotamiasBCG09,SarmaGNP10,Wei10,bast2014route,delling2014robust,arz2013transit} and weighted graphs~\cite{WuXDCZZ12,Dijkstra59,FredmanT84,LubyR89,GeisbergerSSD08,SankaranarayananSA09,GoldbergH05,MozesS12,SandersS05,ChengKCC12,ThorupZ05,MozesS12,ChanL07,SaundersT07,WagnerW07,bast2014route,delling2014robust,arz2013transit,SankaranarayananS10,zhu2013shortest,klein2010shortest,fakcharoenphol2006planar,gupta2004roads},
+     and
+
+
+ \item for directed~\cite{SaundersT07,GoldbergH05,MozesS12,bast2014route,delling2014robust,arz2013transit,zhu2013shortest,klein2010shortest,fakcharoenphol2006planar} and undirected graphs~\cite{PotamiasBCG09,SarmaGNP10,WuXDCZZ12,Dijkstra59,FredmanT84,LubyR89,GeisbergerSSD08,Wei10,SankaranarayananSA09,SandersS05,ChengKCC12,ThorupZ05,MozesS12,ChanL07,WagnerW07,bast2014route,delling2014robust,arz2013transit,SankaranarayananS10,gupta2004roads}.
+ \ei
+
+
+In this work, we study the memory-based (exact) shortest path and shortest distance problem on weighted undirected large graphs.
+%
+We next introduce those methods that fall into this category from two aspects: on general graphs and on road networks.
+
+\stitle{Approaches for general graphs}.
+The classic solution for shortest path and distance queries is Dijkstra's algorithm \cite{Dijkstra59}. It visits nodes in an ascending order of their distances from the source node, and all the nodes that are closer to the source node than the target node are visited. Thus, many techniques are proposed to reduce the search space. Among these, (1) bidirectional Dijkstra search \cite{LubyR89} was proposed to search from both source and target nodes; (2) \alt \cite{GoldbergH05} selects a set of nodes (reffered to as landmarks), and pre-computes the distances from each node to landmarks, which are used to prune unnecessary nodes during the search process; (3) An edge labeling method named \arcflag \cite{MohringSSWW05} cuts graphs into partitions to reduce the search space;
+(4) An indexing and query processing scheme named \tedi \cite{Wei10} decomposes a graph into a tree, and uses the tree index to process shortest path queries; And (5) a 2-hop labeling based exact algorithm was proposed in \cite{delling2014robust} to deal with large networks.
+
+
+
+\eat{
+Though these studies improve the efficiency for answering shortest path and distance queries, they are inefficient for large scale graphs. Hence, many techniques have been proposed \cite{ChengKCC12, delling2014robust, PotamiasBCG09, Wei10}. Cheng et al. \cite{ChengKCC12} propose a novel disk-based index for processing single-source shortest path or distance queries. Wei \cite{Wei10} and Delling et al.\cite{delling2014robust} study the problem of computing exact query on large scale graphs.
+}
+
+
+\stitle{Approaches for road networks}.
+ A lot of work focuses on processing shortest path and distance queries on road networks. (1) Different from general graphs, the shortest paths on road networks are often spatially coherent. Path oracles have been proposed for spatial networks~\cite{SankaranarayananSA09}. Transit Node Routing (\tnr) \cite{arz2013transit} is a fast and exact distance oracle for road networks. Both of them utilize the property of spatial coherence, \ie spatial positions of both source and destination nodes and the shortest paths between them that facilitate the aggregation of source and destination nodes into groups sharing common nodes or edges on the shortest paths between them. (2) Road networks are also often assumed to be planar graphs with non-negetive weights, and the properties of planar graphs are further utilized to simplify the search process \cite{fakcharoenphol2006planar,gupta2004roads,klein2010shortest,MozesS12}. Moreover, (3) a (spatial) hierarchical index structure is used by several techniques \cite{SandersS05, GeisbergerSSD08, zhu2013shortest}. For example, Sanders et al. \cite{SandersS05} proposed a route planning method named Highway Hierarchies (\hh) such that only high level edges were considered to compute the path and distance from a source to a far target. Inspired by \hh, Geisberger et al. \cite{GeisbergerSSD08} proposed a road network index named Contraction Hierarchies (\ch), which is indeed an extreme case of \hh. Further, Zhu et al. \cite{zhu2013shortest} proposed Arterial Hierarchy (\ah) that narrowed the gap between theory and practice in answering shortest path and distance queries.
+
+To achieve high efficiency, except for (bidirectional) Dijkstra, all aforementioned approaches require a preprocessing stage to answer a shortest path or distance query. The query answering stage is highly dependent on the preprocessing stage. Thus, the techniques for preprocessing and for query answering are tightly coupled with each other.
+
+These techniques are different from ours in two aspects. (1) These techniques make use of different methodologies. As a result, applying one technique precludes applying another one. However, our routing proxies are a general technique that can be easily combined with other techniques. That is, routing proxies can be used as a pre-processing step before any other technique is applied.  Then, any of these technique can be adopted on the reduce graphs, which are typically much smaller than the original graphs, as we have discussed in Section~\ref{sec-query}. (2)  To achieve high efficiency, these techniques usually incur high preprocessing time and space overhead. In contrast, routing proxies are a light-weight technique that scales well to large networks.
+
+
+Most close to our work is the study of 1-dominator sets in~\cite{SaundersT07}. Different from the aforementioned techniques, it is proposed for shortest path queries on nearly acyclic directed graphs rather than undirected graphs. When an undirected graph is converted to an equivalent directed graph, each undirected edge is replaced by a pair of inverse directed edges. Hence, 1-dominator sets~\cite{SaundersT07} are not applicable for undirected graphs. However, routing proxies and deterministic routing areas proposed in this study  are for undirected graphs,  and  significantly different from 1-dominator sets (from definitions to analyses to algorithms).
+
+
+
+
+
+
+
+
