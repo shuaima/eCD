@@ -1,0 +1,1415 @@
+
+%% bare_jrnl_compsoc.tex
+%% V1.4b
+%% 2015/08/26
+%% by Michael Shell
+%% See:
+%% http://www.michaelshell.org/
+%% for current contact information.
+%%
+%% This is a skeleton file demonstrating the use of IEEEtran.cls
+%% (requires IEEEtran.cls version 1.8b or later) with an IEEE
+%% Computer Society journal paper.
+%%
+%% Support sites:
+%% http://www.michaelshell.org/tex/ieeetran/
+%% http://www.ctan.org/pkg/ieeetran
+%% and
+%% http://www.ieee.org/
+
+%%*************************************************************************
+%% Legal Notice:
+%% This code is offered as-is without any warranty either expressed or
+%% implied; without even the implied warranty of MERCHANTABILITY or
+%% FITNESS FOR A PARTICULAR PURPOSE!
+%% User assumes all risk.
+%% In no event shall the IEEE or any contributor to this code be liable for
+%% any damages or losses, including, but not limited to, incidental,
+%% consequential, or any other damages, resulting from the use or misuse
+%% of any information contained here.
+%%
+%% All comments are the opinions of their respective authors and are not
+%% necessarily endorsed by the IEEE.
+%%
+%% This work is distributed under the LaTeX Project Public License (LPPL)
+%% ( http://www.latex-project.org/ ) version 1.3, and may be freely used,
+%% distributed and modified. A copy of the LPPL, version 1.3, is included
+%% in the base LaTeX documentation of all distributions of LaTeX released
+%% 2003/12/01 or later.
+%% Retain all contribution notices and credits.
+%% ** Modified files should be clearly indicated as such, including  **
+%% ** renaming them and changing author support contact information. **
+%%*************************************************************************
+
+
+% *** Authors should verify (and, if needed, correct) their LaTeX system  ***
+% *** with the testflow diagnostic prior to trusting their LaTeX platform ***
+% *** with production work. The IEEE's font choices and paper sizes can   ***
+% *** trigger bugs that do not appear when using other class files.       ***                          ***
+% The testflow support page is at:
+% http://www.michaelshell.org/tex/testflow/
+
+
+\documentclass[10pt,journal,compsoc]{IEEEtran}
+%
+% If IEEEtran.cls has not been installed into the LaTeX system files,
+% manually specify the path to it like:
+% \documentclass[10pt,journal,compsoc]{../sty/IEEEtran}
+
+
+
+
+
+% Some very useful LaTeX packages include:
+% (uncomment the ones you want to load)
+
+
+% *** MISC UTILITY PACKAGES ***
+%
+%\usepackage{ifpdf}
+% Heiko Oberdiek's ifpdf.sty is very useful if you need conditional
+% compilation based on whether the output is pdf or dvi.
+% usage:
+% \ifpdf
+%   % pdf code
+% \else
+%   % dvi code
+% \fi
+% The latest version of ifpdf.sty can be obtained from:
+% http://www.ctan.org/pkg/ifpdf
+% Also, note that IEEEtran.cls V1.7 and later provides a builtin
+% \ifCLASSINFOpdf conditional that works the same way.
+% When switching from latex to pdflatex and vice-versa, the compiler may
+% have to be run twice to clear warning/error messages.
+
+
+
+
+
+
+% *** CITATION PACKAGES ***
+%
+\ifCLASSOPTIONcompsoc
+  % IEEE Computer Society needs nocompress option
+  % requires cite.sty v4.0 or later (November 2003)
+  \usepackage[nocompress]{cite}
+\else
+  % normal IEEE
+  \usepackage{cite}
+\fi
+% cite.sty was written by Donald Arseneau
+% V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
+% \cite{} output to follow that of the IEEE. Loading the cite package will
+% result in citation numbers being automatically sorted and properly
+% "compressed/ranged". e.g., [1], [9], [2], [7], [5], [6] without using
+% cite.sty will become [1], [2], [5]--[7], [9] using cite.sty. cite.sty's
+% \cite will automatically add leading space, if needed. Use cite.sty's
+% noadjust option (cite.sty V3.8 and later) if you want to turn this off
+% such as if a citation ever needs to be enclosed in parenthesis.
+% cite.sty is already installed on most LaTeX systems. Be sure and use
+% version 5.0 (2009-03-20) and later if using hyperref.sty.
+% The latest version can be obtained at:
+% http://www.ctan.org/pkg/cite
+% The documentation is contained in the cite.sty file itself.
+%
+% Note that some packages require special options to format as the Computer
+% Society requires. In particular, Computer Society  papers do not use
+% compressed citation ranges as is done in typical IEEE papers
+% (e.g., [1]-[4]). Instead, they list every citation separately in order
+% (e.g., [1], [2], [3], [4]). To get the latter we need to load the cite
+% package with the nocompress option which is supported by cite.sty v4.0
+% and later. Note also the use of a CLASSOPTION conditional provided by
+% IEEEtran.cls V1.7 and later.
+
+
+
+
+
+% *** GRAPHICS RELATED PACKAGES ***
+%
+\ifCLASSINFOpdf
+  % \usepackage[pdftex]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../pdf/}{../jpeg/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
+  % will default to the driver specified in the system graphics.cfg if no
+  % driver is specified.
+  % \usepackage[dvips]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../eps/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.eps}
+\fi
+% graphicx was written by David Carlisle and Sebastian Rahtz. It is
+% required if you want graphics, photos, etc. graphicx.sty is already
+% installed on most LaTeX systems. The latest version and documentation
+% can be obtained at:
+% http://www.ctan.org/pkg/graphicx
+% Another good source of documentation is "Using Imported Graphics in
+% LaTeX2e" by Keith Reckdahl which can be found at:
+% http://www.ctan.org/pkg/epslatex
+%
+% latex, and pdflatex in dvi mode, support graphics in encapsulated
+% postscript (.eps) format. pdflatex in pdf mode supports graphics
+% in .pdf, .jpeg, .png and .mps (metapost) formats. Users should ensure
+% that all non-photo figures use a vector format (.eps, .pdf, .mps) and
+% not a bitmapped formats (.jpeg, .png). The IEEE frowns on bitmapped formats
+% which can result in "jaggedy"/blurry rendering of lines and letters as
+% well as large increases in file sizes.
+%
+% You can find documentation about the pdfTeX application at:
+% http://www.tug.org/applications/pdftex
+
+
+
+
+
+
+% *** MATH PACKAGES ***
+%
+%\usepackage{amsmath}
+% A popular package from the American Mathematical Society that provides
+% many useful and powerful commands for dealing with mathematics.
+%
+% Note that the amsmath package sets \interdisplaylinepenalty to 10000
+% thus preventing page breaks from occurring within multiline equations. Use:
+%\interdisplaylinepenalty=2500
+% after loading amsmath to restore such page breaks as IEEEtran.cls normally
+% does. amsmath.sty is already installed on most LaTeX systems. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/pkg/amsmath
+
+
+
+
+
+% *** SPECIALIZED LIST PACKAGES ***
+%
+%\usepackage{algorithmic}
+% algorithmic.sty was written by Peter Williams and Rogerio Brito.
+% This package provides an algorithmic environment fo describing algorithms.
+% You can use the algorithmic environment in-text or within a figure
+% environment to provide for a floating algorithm. Do NOT use the algorithm
+% floating environment provided by algorithm.sty (by the same authors) or
+% algorithm2e.sty (by Christophe Fiorio) as the IEEE does not use dedicated
+% algorithm float types and packages that provide these will not provide
+% correct IEEE style captions. The latest version and documentation of
+% algorithmic.sty can be obtained at:
+% http://www.ctan.org/pkg/algorithms
+% Also of interest may be the (relatively newer and more customizable)
+% algorithmicx.sty package by Szasz Janos:
+% http://www.ctan.org/pkg/algorithmicx
+
+
+
+
+% *** ALIGNMENT PACKAGES ***
+%
+%\usepackage{array}
+% Frank Mittelbach's and David Carlisle's array.sty patches and improves
+% the standard LaTeX2e array and tabular environments to provide better
+% appearance and additional user controls. As the default LaTeX2e table
+% generation code is lacking to the point of almost being broken with
+% respect to the quality of the end results, all users are strongly
+% advised to use an enhanced (at the very least that provided by array.sty)
+% set of table tools. array.sty is already installed on most systems. The
+% latest version and documentation can be obtained at:
+% http://www.ctan.org/pkg/array
+
+
+% IEEEtran contains the IEEEeqnarray family of commands that can be used to
+% generate multiline equations as well as matrices, tables, etc., of high
+% quality.
+
+
+
+
+% *** SUBFIGURE PACKAGES ***
+%\ifCLASSOPTIONcompsoc
+%  \usepackage[caption=false,font=footnotesize,labelfont=sf,textfont=sf]{subfig}
+%\else
+%  \usepackage[caption=false,font=footnotesize]{subfig}
+%\fi
+% subfig.sty, written by Steven Douglas Cochran, is the modern replacement
+% for subfigure.sty, the latter of which is no longer maintained and is
+% incompatible with some LaTeX packages including fixltx2e. However,
+% subfig.sty requires and automatically loads Axel Sommerfeldt's caption.sty
+% which will override IEEEtran.cls' handling of captions and this will result
+% in non-IEEE style figure/table captions. To prevent this problem, be sure
+% and invoke subfig.sty's "caption=false" package option (available since
+% subfig.sty version 1.3, 2005/06/28) as this is will preserve IEEEtran.cls
+% handling of captions.
+% Note that the Computer Society format requires a sans serif font rather
+% than the serif font used in traditional IEEE formatting and thus the need
+% to invoke different subfig.sty package options depending on whether
+% compsoc mode has been enabled.
+%
+% The latest version and documentation of subfig.sty can be obtained at:
+% http://www.ctan.org/pkg/subfig
+
+
+
+
+% *** FLOAT PACKAGES ***
+%
+%\usepackage{fixltx2e}
+% fixltx2e, the successor to the earlier fix2col.sty, was written by
+% Frank Mittelbach and David Carlisle. This package corrects a few problems
+% in the LaTeX2e kernel, the most notable of which is that in current
+% LaTeX2e releases, the ordering of single and double column floats is not
+% guaranteed to be preserved. Thus, an unpatched LaTeX2e can allow a
+% single column figure to be placed prior to an earlier double column
+% figure.
+% Be aware that LaTeX2e kernels dated 2015 and later have fixltx2e.sty's
+% corrections already built into the system in which case a warning will
+% be issued if an attempt is made to load fixltx2e.sty as it is no longer
+% needed.
+% The latest version and documentation can be found at:
+% http://www.ctan.org/pkg/fixltx2e
+
+
+%\usepackage{stfloats}
+% stfloats.sty was written by Sigitas Tolusis. This package gives LaTeX2e
+% the ability to do double column floats at the bottom of the page as well
+% as the top. (e.g., "\begin{figure*}[!b]" is not normally possible in
+% LaTeX2e). It also provides a command:
+%\fnbelowfloat
+% to enable the placement of footnotes below bottom floats (the standard
+% LaTeX2e kernel puts them above bottom floats). This is an invasive package
+% which rewrites many portions of the LaTeX2e float routines. It may not work
+% with other packages that modify the LaTeX2e float routines. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/pkg/stfloats
+% Do not use the stfloats baselinefloat ability as the IEEE does not allow
+% \baselineskip to stretch. Authors submitting work to the IEEE should note
+% that the IEEE rarely uses double column equations and that authors should try
+% to avoid such use. Do not be tempted to use the cuted.sty or midfloat.sty
+% packages (also by Sigitas Tolusis) as the IEEE does not format its papers in
+% such ways.
+% Do not attempt to use stfloats with fixltx2e as they are incompatible.
+% Instead, use Morten Hogholm'a dblfloatfix which combines the features
+% of both fixltx2e and stfloats:
+%
+% \usepackage{dblfloatfix}
+% The latest version can be found at:
+% http://www.ctan.org/pkg/dblfloatfix
+
+
+
+
+%\ifCLASSOPTIONcaptionsoff
+%  \usepackage[nomarkers]{endfloat}
+% \let\MYoriglatexcaption\caption
+% \renewcommand{\caption}[2][\relax]{\MYoriglatexcaption[#2]{#2}}
+%\fi
+% endfloat.sty was written by James Darrell McCauley, Jeff Goldberg and
+% Axel Sommerfeldt. This package may be useful when used in conjunction with
+% IEEEtran.cls'  captionsoff option. Some IEEE journals/societies require that
+% submissions have lists of figures/tables at the end of the paper and that
+% figures/tables without any captions are placed on a page by themselves at
+% the end of the document. If needed, the draftcls IEEEtran class option or
+% \CLASSINPUTbaselinestretch interface can be used to increase the line
+% spacing as well. Be sure and use the nomarkers option of endfloat to
+% prevent endfloat from "marking" where the figures would have been placed
+% in the text. The two hack lines of code above are a slight modification of
+% that suggested by in the endfloat docs (section 8.4.1) to ensure that
+% the full captions always appear in the list of figures/tables - even if
+% the user used the short optional argument of \caption[]{}.
+% IEEE papers do not typically make use of \caption[]'s optional argument,
+% so this should not be an issue. A similar trick can be used to disable
+% captions of packages such as subfig.sty that lack options to turn off
+% the subcaptions:
+% For subfig.sty:
+% \let\MYorigsubfloat\subfloat
+% \renewcommand{\subfloat}[2][\relax]{\MYorigsubfloat[]{#2}}
+% However, the above trick will not work if both optional arguments of
+% the \subfloat command are used. Furthermore, there needs to be a
+% description of each subfigure *somewhere* and endfloat does not add
+% subfigure captions to its list of figures. Thus, the best approach is to
+% avoid the use of subfigure captions (many IEEE journals avoid them anyway)
+% and instead reference/explain all the subfigures within the main caption.
+% The latest version of endfloat.sty and its documentation can obtained at:
+% http://www.ctan.org/pkg/endfloat
+%
+% The IEEEtran \ifCLASSOPTIONcaptionsoff conditional can also be used
+% later in the document, say, to conditionally put the References on a
+% page by themselves.
+
+
+
+
+% *** PDF, URL AND HYPERLINK PACKAGES ***
+%
+%\usepackage{url}
+% url.sty was written by Donald Arseneau. It provides better support for
+% handling and breaking URLs. url.sty is already installed on most LaTeX
+% systems. The latest version and documentation can be obtained at:
+% http://www.ctan.org/pkg/url
+% Basically, \url{my_url_here}.
+
+
+
+
+
+% *** Do not adjust lengths that control margins, column widths, etc. ***
+% *** Do not use packages that alter fonts (such as pslatex).         ***
+% There should be no need to do such things with IEEEtran.cls V1.6 and later.
+% (Unless specifically asked to do so by the journal or conference you plan
+% to submit to, of course. )
+
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\usepackage{graphicx} % This is used to load the crest in the title page
+\usepackage{subfigure}
+%%%\usepackage{subfig}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{url}
+\usepackage{times}
+\usepackage{subfigure}
+\usepackage{graphicx,epstopdf}
+%\usepackage{latexsym}
+%\usepackage{amsthm,amssymb}
+%\usepackage{showkeys}
+\usepackage{xcolor}
+\usepackage{balance}
+\usepackage{cite}
+\usepackage[english]{babel}
+
+% duan
+\usepackage{xspace}
+
+\newcommand{\spara}[1]{\smallskip\noindent{\bf #1}}
+\newcommand{\eat}[1]{}
+\newcommand{\squishlist}{
+ \begin{list}{$\bullet$}
+  {  \setlength{\itemsep}{0pt}
+     \setlength{\parsep}{3pt}
+     \setlength{\topsep}{3pt}
+     \setlength{\partopsep}{0pt}
+     \setlength{\leftmargin}{2em}
+     \setlength{\labelwidth}{1.5em}
+     \setlength{\labelsep}{0.5em}
+} }
+\newcommand{\squishlisttight}{
+ \begin{list}{$\bullet$}
+  { \setlength{\itemsep}{0pt}
+    \setlength{\parsep}{0pt}
+    \setlength{\topsep}{0pt}
+    \setlength{\partopsep}{0pt}
+    \setlength{\leftmargin}{2em}
+    \setlength{\labelwidth}{1.5em}
+    \setlength{\labelsep}{0.5em}
+} }
+
+\newcommand{\squishdesc}{
+ \begin{list}{}
+  {  \setlength{\itemsep}{0pt}
+     \setlength{\parsep}{3pt}
+     \setlength{\topsep}{3pt}
+     \setlength{\partopsep}{0pt}
+     \setlength{\leftmargin}{1em}
+     \setlength{\labelwidth}{1.5em}
+     \setlength{\labelsep}{0.5em}
+} }
+
+\newcommand{\squishend}{
+  \end{list}
+}
+\newcommand{\sttab}{\rule{0pt}{8pt}\\[-3ex]}
+\newcounter{ccc}
+\newcommand{\bcc}{\setcounter{ccc}{1}\theccc.}
+\newcommand{\icc}{\addtocounter{ccc}{1}\theccc.}
+\newcommand{\myhrule}{\rule[.5pt]{\hsize}{.5pt}}
+\newcommand{\mat}[2]{{\begin{tabbing}\hspace{#1}\=\+\kill #2\end{tabbing}}}
+\newcommand{\stitle}[1]{\vspace{0.5ex}\noindent{\bf #1}}
+\newcommand{\etitle}[1]{\vspace{0.5ex}\noindent{\em \underline{#1}}}
+\newcommand{\marked}[1]{\textcolor{red}{#1}}
+\newcommand{\markedb}[1]{\textcolor{blue}{#1}}
+
+%%%%%%%%%% symbols of methods and datasets  by duan 2015-07-13
+\newcommand{\DBLP}{{\sf DBLP}\xspace}
+\newcommand{\SVD}{{\sf SVD}\xspace}
+\newcommand{\NMF}{{\sf NMF}\xspace }
+\newcommand{\Node}{{\sf NMF(Node)}\xspace}
+\newcommand{\Edge}{{\sf NMF(Edge)}\xspace}
+\newcommand{\Biased}{{\sf NMF(Biased)}\xspace}
+\newcommand{\Aa}{{\sf AA}\xspace }
+\newcommand{\Adamic}{{\sf Adamic/Adar (AA)}\xspace}
+\newcommand{\Katz}{{\sf Katz}\xspace}
+\newcommand{\BIGCLAM}{{\sf BIGCLAM}\xspace}
+\newcommand{\CAMBN}{{\sf Cluster Affiliation Model for Big Networks (BIGCLAM)}\xspace}
+\newcommand{\YouTube}{{\sf YouTube}\xspace}
+\newcommand{\Flickr}{{\sf Flickr}\xspace}
+\newcommand{\Wikipedia}{{\sf Wikipedia}\xspace}
+\newcommand{\Twitter}{{\sf Twitter}\xspace}
+\newcommand{\Friendster}{{\sf Friendster}\xspace}
+
+
+
+
+\newtheorem{definition}{Definition}
+
+\newtheorem{observation}{Observation}
+\newtheorem{lemma}{Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{problem}{Problem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{property}{Property}
+\newcommand{\lemmachar}{{\unskip\nobreak\hfil\penalty50\hskip1em\hbox{}%
+\nobreak\hfil\rule{1.2ex}{1.4ex}\hfil%
+\parfillskip=0pt \finalhyphendemerits=0 \par}}
+
+
+
+%\newenvironment{proof}{{\bf Proof:}}{\lemmachar\par}
+
+
+\newfont{\mycrnotice}{ptmr8t at 7pt}
+\newfont{\myconfname}{ptmri8t at 7pt}
+\let\crnotice\mycrnotice%
+\let\confname\myconfname%
+
+
+
+
+\begin{document}
+%
+% paper title
+% Titles are generally capitalized except for words such as a, an, and, as,
+% at, but, by, for, in, nor, of, on, or, the, to and up, which are usually
+% not capitalized unless they are the first or last word of the title.
+% Linebreaks \\ can be used within to get better formatting as desired.
+% Do not put math or special symbols in the title.
+\title{Scaling up Link Prediction with Ensembles}
+%
+%
+% author names and IEEE memberships
+% note positions of commas and nonbreaking spaces ( ~ ) LaTeX will not break
+% a structure at a ~ so this keeps an author's name from being broken across
+% two lines.
+% use \thanks{} to gain access to the first footnote area
+% a separate \thanks must be used for each paragraph as LaTeX2e's \thanks
+% was not built to handle multiple paragraphs
+%
+%
+%\IEEEcompsocitemizethanks is a special \thanks that produces the bulleted
+% lists the Computer Society journals use for "first footnote" author
+% affiliations. Use \IEEEcompsocthanksitem which works much like \item
+% for each affiliation group. When not in compsoc mode,
+% \IEEEcompsocitemizethanks becomes like \thanks and
+% \IEEEcompsocthanksitem becomes a line break with idention. This
+% facilitates dual compilation, although admittedly the differences in the
+% desired content of \author between the different types of papers makes a
+% one-size-fits-all approach a daunting prospect. For instance, compsoc
+% journal papers have the author affiliations above the "Manuscript
+% received ..."  text while in non-compsoc journals this is reversed. Sigh.
+
+\author{Liang~Duan,
+        Charu~Aggarwal,
+        Shuai~Ma,
+        Renjun~Hu,
+        and~Jinpeng~Huai
+\IEEEcompsocitemizethanks{\IEEEcompsocthanksitem L. Duan, S. Ma, R. Hu and J. Huai are
+with the SKLSDE lab, School of Computer Science and Engineering, Beihang University, China.\hfil\break
+% note need leading \protect in front of \\ to get a newline within \thanks as
+% \\ is fragile and will error, could use \hfil\break instead.
+E-mail: \{duanliang, mashuai, hurenjun, huaijp\}@buaa.edu.cn
+\IEEEcompsocthanksitem C. Aggarwal is with the IBM T. J. Watson Research Center, USA.\hfil\break
+E-mail: charu@us.ibm.com}% <-this % stops an unwanted space
+\thanks{Manuscript received x xx, xxxx; revised x xx, xxxx.}}
+
+% note the % following the last \IEEEmembership and also \thanks -
+% these prevent an unwanted space from occurring between the last author name
+% and the end of the author line. i.e., if you had this:
+%
+% \author{....lastname \thanks{...} \thanks{...} }
+%                     ^------------^------------^----Do not want these spaces!
+%
+% a space would be appended to the last name and could cause every name on that
+% line to be shifted left slightly. This is one of those "LaTeX things". For
+% instance, "\textbf{A} \textbf{B}" will typeset as "A B" not "AB". To get
+% "AB" then you have to do: "\textbf{A}\textbf{B}"
+% \thanks is no different in this regard, so shield the last } of each \thanks
+% that ends a line with a % and do not let a space in before the next \thanks.
+% Spaces after \IEEEmembership other than the last one are OK (and needed) as
+% you are supposed to have spaces between the names. For what it is worth,
+% this is a minor point as most people would not even notice if the said evil
+% space somehow managed to creep in.
+
+
+
+% The paper headers
+\markboth{IEEE Transactions on Knowledge and Data Engineering,~Vol.~X, No.~X, May~2016}%
+{Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for Computer Society Journals}
+% The only time the second header will appear is for the odd numbered pages
+% after the title page when using the twoside option.
+%
+% *** Note that you probably will NOT want to include the author's ***
+% *** name in the headers of peer review papers.                   ***
+% You can use \ifCLASSOPTIONpeerreview for conditional compilation here if
+% you desire.
+
+
+
+% The publisher's ID mark at the bottom of the page is less important with
+% Computer Society journal papers as those publications place the marks
+% outside of the main text columns and, therefore, unlike regular IEEE
+% journals, the available text space is not reduced by their presence.
+% If you want to put a publisher's ID mark on the page you can do it like
+% this:
+%\IEEEpubid{0000--0000/00\$00.00~\copyright~2015 IEEE}
+% or like this to get the Computer Society new two part style.
+%\IEEEpubid{\makebox[\columnwidth]{\hfill 0000--0000/00/\$00.00~\copyright~2015 IEEE}%
+%\hspace{\columnsep}\makebox[\columnwidth]{Published by the IEEE Computer Society\hfill}}
+% Remember, if you use this you must call \IEEEpubidadjcol in the second
+% column for its text to clear the IEEEpubid mark (Computer Society jorunal
+% papers don't need this extra clearance.)
+
+
+
+% use for special paper notices
+%\IEEEspecialpapernotice{(Invited Paper)}
+
+
+
+% for Computer Society papers, we must declare the abstract and index terms
+% PRIOR to the title within the \IEEEtitleabstractindextext IEEEtran
+% command as these need to go into the title area created by \maketitle.
+% As a general rule, do not put math, special symbols or citations
+% in the abstract or keywords.
+\IEEEtitleabstractindextext{%
+\begin{abstract}
+A network with $n$ nodes contains $O(n^2)$ possible links.
+Even for networks of modest size, it is often difficult to evaluate
+all pairwise possibilities for links in a meaningful way.
+Furthermore, even though link prediction is closely related to
+missing value estimation problems, such as collaborative filtering,
+it is often difficult to use sophisticated models such as latent
+factor methods because of their computational complexity over
+very large networks. Due to this computational complexity, most
+known link prediction methods are designed for {\em evaluating} the
+link propensity over a {\em specified} subset of links, rather than
+for performing a global search over the entire networks. In
+practice,  however, it is essential to perform an exhaustive search over the
+entire networks.  In this paper, we propose an ensemble enabled approach to scaling up link prediction,
+which is able to decompose traditional link prediction problems into
+subproblems of smaller size. These subproblems are each solved with
+the use of latent factor models, which can be effectively
+implemented over networks of modest size. Furthermore, the
+ensemble enabled approach has several advantages in terms of
+performance.  We show the advantage of using ensemble-based latent
+factor models  with experiments on very large networks.
+Experimental results demonstrate the effectiveness and scalability of our approach.
+\end{abstract}
+
+% Note that keywords are not normally used for peerreview papers.
+\begin{IEEEkeywords}
+Link Prediction, ensembles, networks, Big Data.
+\end{IEEEkeywords}}
+
+
+% make the title area
+\maketitle
+
+
+% To allow for easy dual compilation without having to reenter the
+% abstract/keywords data, the \IEEEtitleabstractindextext text will
+% not be used in maketitle, but will appear (i.e., to be "transported")
+% here as \IEEEdisplaynontitleabstractindextext when the compsoc
+% or transmag modes are not selected <OR> if conference mode is selected
+% - because all conference papers position the abstract like regular
+% papers do.
+\IEEEdisplaynontitleabstractindextext
+% \IEEEdisplaynontitleabstractindextext has no effect when using
+% compsoc or transmag under a non-conference mode.
+
+
+
+% For peer review papers, you can put extra information on the cover
+% page as needed:
+% \ifCLASSOPTIONpeerreview
+% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
+% \fi
+%
+% For peerreview papers, this IEEEtran command inserts a page break and
+% creates the second title. It will be ignored for other modes.
+\IEEEpeerreviewmaketitle
+
+
+
+\IEEEraisesectionheading{\section{Introduction}\label{sec:introduction}}
+% Computer Society journal (but not conference!) papers do something unusual
+% with the very first section heading (almost always called "Introduction").
+% They place it ABOVE the main text! IEEEtran.cls does not automatically do
+% this for you, but you can achieve this effect with the provided
+% \IEEEraisesectionheading{} command. Note the need to keep any \label that
+% is to refer to the section immediately after \section in the above as
+% \IEEEraisesectionheading puts \section within a raised box.
+The problem of {\em link prediction} or {\em link inference} is that
+of predicting the formation of future links in a dynamic and
+evolving network (see \cite{chancc,linyuan-2011,Hasan-2011} for surveys). The link prediction problem has numerous
+applications, such as the recommendation of friends in a social
+network, the recommendation of images in a multimedia network, or
+the recommendation of collaborators in a scientific network, and, therefore, link
+prediction methods have been studied extensively because of their numerous applications in various network-centered domains.
+
+Link prediction methods are often applied to very large networks,
+which are also sparse.  The massive sizes of such networks can
+create challenges for the prediction process in spite of their
+sparsity. This is because the {\em search space} for the link
+prediction problem is of the size $O(n^2)$, where $n$ is the number
+of nodes. Quadratic scalability can rapidly become untenable for
+larger networks. In fact, an often overlooked fact is that most {\em
+current link prediction algorithms evaluate the link
+propensities only over a subset of possibilities rather than
+exhaustively search for link propensities over the entire network, e.g.,
+\cite{dwang,lee}}.
+%
+\eat{%%%%%%%%EAT
+{\bf Charu Note: We do need to check this by looking at as many link
+prediction papers as possible. At least the ones that I saw seemed
+to have this property.}
+}%%%%%%%%EAT
+%
+In order to understand why this is the case,
+consider a network with $10^6$ nodes. Note that a size such as
+$10^6$ is not large at all by modern standards, and even common
+bibliographic networks such as \DBLP now exceed this size. Even
+for this modest network, the number of {\em possibilities} for links
+is of the order of $10^{12}$. Therefore, a 1GHz processor would
+require at least $10^3$ seconds just to allocate one {\em machine cycle} to
+every pair of nodes. This implies that in order to determine the
+top-ranked link predictions over the {\em entire network}, the
+running time will be much larger than $10^3$ seconds.  It is
+instructive, therefore, to examine how this (lower bound on) running
+time scales with increasing network size. Table~\ref{time} shows the
+time requirements for allocating a single machine cycle to each
+pair-wise possibility. The running times in this table represent
+very optimistic lower bounds on the required times because link
+prediction algorithms are complex and require far more than a single
+machine cycle for processing a node-pair. Note that for larger
+networks, even the presented lower bounds on the running times are
+impractical.
+\begin{table}
+\caption{The $O(n^2)$ problem in link prediction: Time required to
+allocate a {\em single machine cycle} to every node-pair possibility
+in networks of varying sizes and processors of various speeds.}
+\label{time}
+\vspace{-2ex}
+\centering
+\begin{tabular}{cccc}
+\hline \hline Network Sizes & 1 GHz &  3 GHz & 10 GHz \\
+\hline \hline $10^6$ nodes & 1000 sec. & 333 sec. & 100 sec.\\
+\hline $10^7$ nodes & 27.8 hrs &  9.3 hrs &  2.78 hrs\\
+\hline $10^8$ nodes & $>100$ days &  $>35$ days & $> 10$ days\\
+\hline $10^9$ nodes & $>10000$ days & $>3500$ days & $> 1000$ days\\
+\hline \hline
+\end{tabular}
+\end{table}
+
+
+%\begin{table}
+%\vspace{4ex}
+%{\small
+%\begin{tabular}{cccc}
+%\hline \hline Network Sizes & 1 GHz &  3 GHz & 10 GHz \\
+%\hline \hline $10^6$ nodes & 1000 sec. & 333 sec. & 100 sec.\\
+%\hline $10^7$ nodes & 27.8 hrs &  9.3 hrs &  2.78 hrs\\
+%\hline $10^8$ nodes & $>100$ days &  $>35$ days & $> 10$ days\\
+%\hline $10^9$ nodes & $>10000$ days & $>3500$ days & $> 1000$ days\\
+%\hline \hline
+%\end{tabular}}
+%\vspace{-1ex}
+%\caption{}
+%\label{}
+%\vspace{-3ex}
+%\end{table}
+
+
+
+It is noteworthy that most link prediction algorithms in the
+literature are not designed to search over the entire space of
+$O(n^2)$ possibilities. A closer examination of the relevant
+publications shows that even for networks of modest size, these
+algorithms perform benchmarking  only by evaluating over a {\em
+sample of the possibilities} for links. This is only to be expected
+in light of the lower bounds shown in Table~\ref{time}.  In other
+words, the {\em complete ranking problem} for link prediction in
+very large networks remains largely unsolved at least from a
+computational point of view. It is evident from the presented lower
+bounds in Table~\ref{time} that any ranking-based link prediction
+algorithm {\em must integrate search space pruning} within the
+prediction algorithm in order to even  have any  hope of exploring
+the $O(n^2)$ search space in a reasonable amount of time. The
+algorithmic design of most link prediction algorithms largely
+overlooks this basic requirement~\cite{chancc,propflow}.
+
+The link prediction algorithms are classified into unsupervised and
+supervised methods. Unsupervised methods~\cite{kleinberg} typically
+use neighborhood measures such as the Adamic-Adar~\cite{adamic}, and
+the Jaccard coefficient. Supervised methods~\cite{propflow} treat
+link prediction as a classification problem in which each node pair
+is treated as a test instance. Supervised methods are the
+state-of-the-art and generally provide more accurate results than
+unsupervised methods~\cite{propflow}. It is also noteworthy that
+most supervised methods evaluate link prediction algorithms by using
+only {\em a sample} of test links because of computational
+consideration.  In real-world applications, it is often desirable to
+determine the {\em top-$k$} most relevant links for prediction {\em
+over all possibilities for test links}. This problem remains largely
+unsolved even for networks of any reasonable size.
+
+The link prediction problem is also closely related to the missing value
+estimation problem, which is commonly used in collaborative
+filtering~\cite{adom}.  Just as collaborative filtering attempts to
+predict missing entries in a matrix of users and items, the link
+prediction problem attempts to predict missing entries in a
+node-node adjacency matrix. In fact, the missing value estimation
+framework seems to be a more compact and relevant model for the link
+prediction problem, as compared with the vanilla classification
+problem.  Many of the modern methods for collaborative filtering use
+latent factor models~\cite{conceptualr,web} such as \SVD and
+\NMF for predicting missing entries. These methods have been
+shown to be wildly successful at least within the domain of
+collaborative filtering~\cite{web}. In spite of the obvious
+similarity between link prediction and collaborative filtering and
+the obvious effectiveness of latent factor models, there are only a
+few methods~\cite{menon} which attempt to use these models.
+
+One of the reasons that latent factor models are rarely used in the
+link prediction domain is simply because of their complexity. In
+collaborative filtering applications, the item dimension is of the
+order of a few hundred thousand, whereas even the smallest networks
+in real-world settings contain more than a million nodes.
+Furthermore, collaborative filtering methods  often perform the
+recommendation on a per-user basis rather than try to determine
+the top-$k$ user-item pairs.  The latter is particularly important
+in the context of link prediction. The factorization of a matrix of
+size $O(n^2)$ is not only computationally expensive, but also
+memory-intensive.  As we will see later in this paper, one advantage
+of  latent-factor models is that they are able to  transform the
+adjacency matrix to a multidimensional space which can be searched
+efficiently {\em by pruning} large portions of the $O(n^2)$ search
+space in order to recommend the top-$k$ possibilities. This is
+essential in such settings.
+
+\stitle{Contributions}. In this paper, we explore an {\em ensemble-enabled approach} to
+achieving the aforementioned goals.
+
+We show how to make latent factor models
+practical for link prediction by decomposing the search space into a
+ set of smaller matrices. As a result, large parts of the $O(n^2)$
+search space can be pruned without even having to evaluate the
+relevant node pairs. This provides an efficient approach for the
+top-$k$ problem in link prediction.  Furthermore, our problem
+decomposition method is an ensemble approach enabled with three structural bagging methods with performance guarantees, which has obvious {\em
+effectiveness} advantages. Note that the same bias-variance
+tradeoffs apply to the link-prediction problem, as they apply to the
+standard classification problem. Therefore, the use of an ensemble
+approach has obvious effectiveness advantages as well.
+
+Using real-life datasets, we show that our ensemble-enabled approach for link prediction is both effective and efficient.
+For instance, (1) on \Friendster with $15$ million nodes and $1$ billion edges, our approach could finish in an
+hour, while direct \NMF, \Aa \cite{adamic} and \BIGCLAM \cite{yang-wsdm2013} could not finish in a day, and
+(2) our approach improves the accuracy by $(18\%, 39\%, 33\%)$ (resp. $(4\%, 10\%, 18\%)$ and $(16\%, 11\%, 38\%)$ )
+over direct \NMF, \Aa and \BIGCLAM on \YouTube, \Flickr and \Wikipedia, respectively.
+
+
+\stitle{Organization}. This paper is organized as follows. In the next section, we  provide
+the basic framework for the approach and describe the efficient use
+of  latent factor models for link prediction. Section~3 discusses
+how latent factor models can be augmented with ensembles to provide
+more effective and efficient results. Section~4 presents and discusses the
+experimental results, followed by related work in Section~5 and conclusions in Section~6.
+
+
+
+\section{Latent Factor Model for Scalable Link Prediction}
+\label{sec-NMF}
+
+We assume that $G=(N, A)$ is an undirected network containing node set $N$ and
+edge set $A$. The node set $N$ contains $n$ nodes and the edge set
+$A$ contains $m$ edges. Furthermore, the $n \times n$ weight matrix
+$W= [w_{ij}]_{n\times n}$ contains the weights of the edges in $A$.
+The weight matrix is useful in representing the strengths of network
+connections in  many real-world settings such as the number of
+publications between a pair of co-authors in a bibliographic
+network.  The matrix is sparse, and many its entries are 0, which could be
+interpreted either as absence of links or as missing entries. While
+we assume that an undirected network is available, the approach can
+also be generalized to directed networks. The ranking problem for
+link prediction is formally stated as follows:
+\begin{definition}
+Given a network $G=(N, A)$ with node set $N$ and edge set $A$, the ranking problem for link
+prediction is to determine the top-$k$ node-pair recommendations such that these node pairs are not included in $A$.
+\end{definition}
+Note that this problem definition requires us to consider the entire
+search space of $O(n^2)$ possibilities, rather than a sample of the
+node pairs in the network.
+
+Latent factor models work by associating a low dimensional factor
+with each row and column of the network. However, since link
+prediction is (predominantly) studied only for undirected networks,
+which have symmetric weight matrices, it suffices to associate an
+$r$-dimensional latent factor $\overline{F_i}$ with the $i$th node
+in the network. The value of $r$ is the {\em rank} of the
+factorization. This is an issue, which we will discuss slightly
+later.  The weight of a link between nodes $i$ and $j$ is defined by
+the use of the dot product between the factors of nodes $i$ and $j$.
+In other words, for the weight matrix $W= [w_{ij}]_{n\times n}$, we
+would like to achieve the following:
+\begin{equation}
+w_{ij} \approx \overline{F_i} \cdot \overline{F_j}, \ \ \forall i, j
+\in \{ 1, \ldots, n \} \label{factor}.
+\end{equation}
+This condition can be directly written in matrix form. Let $F$ be an
+$n \times r$ matrix, in which the $i$th row is the row vector
+$\overline{F_i}$. Then, the aforementioned condition of
+Equation~(\ref{factor}) can be written as follows:
+\begin{equation}
+W \approx F F^T.
+\end{equation}
+
+
+%Note that the diagonal entries of $W$ are 0, whereas any reasonable
+%factorization $F F^T$ will always have non-zero diagonal entries
+%with magnitudes  dependent on the node degrees.  To make the
+%factorization more robust, we set each diagonal entry $w_{ii}$ to
+%the sum of the weights of the edges  incident on it.
+%\begin{equation}
+%w_{ii}= \sum_{j \not=i} w_{ij}
+%\end{equation}
+%%The resulting matrix can  also be shown to be  positive
+%%semi-definite, which ensures that an {\em exact} rank-$n$
+%%factorization of $W$ into the form $F F^T$ always exists.
+%The resulting matrix can also be shown to be nonnegative
+%diagonally dominant symmetric, which ensures that an {\em exact}
+%rank-$n$ factorization of $W$ into the form $F F^T$ always exists \cite{berman}.
+%Of course, we are only interested in a rank-$r$ factorization ($r << n$),
+%corresponding to dominant latent components,  because such a
+%factorization helps in discovering {\em latent} edges.
+
+
+An important question arises as to whether entries in the matrix $W$
+corresponding to the absence of links should be treated as incomplete
+entries or whether they should be treated as zero, with the possibility
+of being incorrect. When latent factor models are used in
+collaborative filtering, such entries are typically treated as
+missing entries. However, unlike the absence of a rating, the
+absence of a link is indeed useful information {\em in the
+aggregate}, even though some node pairs have the propensity to form
+links {\em in the future}. Therefore, we argue that, unlike
+collaborative filtering, $W$ should be treated as a completely
+specified matrix, but with noisy entries. Therefore, in the link
+prediction problem, latent factor models should be viewed as a way
+of {\em correcting} noisy entries with zero values, rather than
+strictly as a missing value estimation problem.  Such assumptions
+also simplify the algorithmic development of latent factor models
+for link prediction. The idea here is that when we approximately
+factorize $W$ into the form  $F F^T$, the positive values of entries in
+$F F^T$ can be viewed as the {\em predictions} of  noisy 0-entries in
+$W$.
+
+A second important question arises as to the choice of the latent
+factor model that must be used for prediction. There are many
+choices available for factorizing an adjacency matrix, especially
+when it is symmetric. Even a
+straightforward diagonalization of the matrix provides a reasonable
+factorization. We  choose {\em non-negative} matrix factorization
+not only because of its interpretability advantages but also because
+it facilitates the  $O(n^2)$ search phase of the prediction by
+providing a non-negative and sparse representation for each node.
+
+We would like to determine the matrix $F$ such that the Frobenius
+norm of $( W - F F^T)$ is minimized.  This problem is referred to as
+symmetric \NMF, and an efficient solution is proposed in
+\cite{long}, where $F$ can be determined by starting with random
+nonnegative entries in $(0, 1)$, and using the following
+multiplicative update rule:
+% {\bf Charu Note: Please check that this update works during implementation. NMF is sometimes unpredictable.}
+%\begin{equation}
+%F_{ij} \leftarrow  F_{ij} \frac{(W F)_{ij} }{(F F^T F)_{ij}}
+%\end{equation}
+\begin{equation}
+\label{equation-update}
+F_{ij} \leftarrow F_{ij} ( 1 - \beta + \beta \frac{(W F)_{ij} }{(F F^T F)_{ij}} ),
+\end{equation}
+in which $\beta$ is a constant in $( 0, 1]$ \cite{ding}.
+
+\stitle{Discussions}. Let us examine the computational complexity of
+the update Equation~(\ref{equation-update}).
+The matrix $F F^T F$  can be fully materialized  with
+$O(r^2 \cdot n)$ matrix multiplications, and the matrix $W F$ can be
+computed in $O(m \cdot r)$ multiplications  by observing that the
+sparse matrix $W$ has only $2m$ non-zero entries corresponding to the
+number of edges. Therefore, each update takes $O(n
+\cdot r^2 +m\cdot r )$ time.
+
+This remains quite high for large networks, which motivates us to develop fast searching techniques to speed up the process.
+
+
+\subsection{Efficient Top-$K$ Prediction Searching}
+\label{sec-NMF-topk}
+
+An advantage of the nonnegative factorization approach is that it
+enables an efficient search phase, which is generally not possible
+with most other link prediction methods. The value of
+$\overline{F_i} \cdot \overline{F_j}$ in Equation~(\ref{factor}) provides a prediction value
+for the links. The goal of the search phase is to return the top-$k$
+links with the largest prediction values. In real-world settings, the matrix $F$ is
+often nonnegative and sparse. This non-negativity and sparsity are
+particularly useful in enabling an efficient approach. In order to
+speed up the search, we define the notion of $\epsilon$-approximate
+top-$k$ predictions, denoted as top-$(\epsilon, k)$ predictions.
+
+\begin{definition}[top-$(\epsilon, k)$ predictions]
+%A set $S$ of predicted links is a top-$(\epsilon, k)$ prediction, if
+%the cardinality of $S$ is $k$, and the  $k$th best  value of
+%$\overline{F_i} \cdot \overline{F_j}$ for a  link $(i, j) \in S$ is
+%at most $\epsilon$ less than the   $k$th best value of
+%$\overline{F_k} \cdot \overline{F_k}$ over any edge $(k , l)$ in the
+%network.
+A set $L$ of predicted links is a top-$(\epsilon, k)$ prediction, if
+the cardinality of $L$ is $k$, and the $k$-th best  value of
+$\overline{F_i} \cdot \overline{F_j}$ for a link $(i, j) \in L$ is
+at most $\epsilon$ less than the $k$-th best value of
+$\overline{F_h} \cdot \overline{F_l}$ over any link $(h , l)$ in the
+network.
+\end{definition}
+Intuitively, this definition allows a qualitative  tolerance of
+$\epsilon$ in the top-$k$ returned links. Allowing such a tolerance
+significantly helps in speeding up the search process by pruning
+large portions of the search space, which is particularly important
+in an $O(n^2)$ search space of link predictions.
+
+The first step is to create a new $n \times r$ matrix $S$, which is
+obtained by sorting the columns of $F$ in a descending order. An inverted list is
+associated with each of the $r$ latent variables containing the node
+identifiers  of $F$ arranged according to the sorted order of $S$. The
+$r$ inverted lists can also be represented as an $n \times r$ matrix
+$R$. Let the number of rows in the $p$-th column of $S$ ($p\in[1, r]$), for which
+the value of $S_{ip}$ is greater than $\sqrt{\epsilon/r}$ be $f_p$, and for which the value of $S_{ip}$ is greater than 0 be $f'_p$, respectively.
+
+Then the following nested loop is executed for each (say $p$-th) column of $S$:
+
+\vspace{-1ex}
+\begin{tabbing}\hspace{5ex}\=
+{\bf for} \= each $i=1$ to $f_p$ {\bf do}\\
+\>\>{\bf for} \= each $j=i+1$ to $f'_p$ {\bf do}\\
+\>\>\>{\bf if}\ \= $S_{ip} \cdot S_{jp} < \epsilon/r$ {\bf then}\\
+\>\>\>\>break inner loop; \\
+\>\>\> {\bf else} increase the score of node-pair $(R_{ip}, R_{jp})$
+by \\
+\>\>\> \ \ \ \ \ \ an amount of $S_{ip} \cdot S_{jp}$\\
+\>\> {\bf endfor}\\
+\>{\bf endfor}
+\end{tabbing}
+\vspace{-1ex}
+
+This nested loop is designed to track the relevant subset of node
+pairs from which one can determine the top-$(\epsilon, k)$
+predictions.  The nested loop typically requires much less time than
+$O(n^2)$ time because large portions of the search space are pruned.
+First, depending on the value of $\epsilon$, the value of $f_p$ is
+much less than $n$.  This is particularly true if many entries of
+the factorized matrix $F$ are close to 0.  Furthermore, the inner
+loop is often terminated early. The value of $\epsilon$ therefore
+provides the user a way to set the tradeoff between accuracy and
+efficiency. A hash-table is maintained which tracks all the pairs
+$(R_{ip}, R_{jp})$ encountered so far in the nested loop. Because of
+the pruning, the hash table usually needs to track a miniscule set
+of the $O(n^2)$ node-pairs in order to determine the ones that truly satisfy the top-$(\epsilon, k)$ requirement. In the process, we exclude
+the links which have already been represented with non-zero entries in $W$
+because such links are always likely to have the largest prediction values,
+which further reduces the searching space.
+
+\eat{%%%%%%EAT
+\begin{lemma}
+For a $n \times r$ matrix $F$, the complexity of the top-$(\epsilon, k)$
+prediction is $O(nn')$, where $n'$ is the number of entries of $F$
+which are greater than $\sqrt{ \epsilon / r}$.
+\end{lemma}
+\begin{IEEEproof}
+For the $p$th column of $F$, the {\bf if} statement in the nested loop
+is executed $f_p ( 2n_p - f_p -1) / 2$ times. There are $r$ columns in $F$,
+hence, the {\bf if} statement will be executed
+$\sum_{p = 1}^{r} f_p ( 2n_p - f_p -1) / 2 $ times.
+$\sum_{p = 1}^{r} f_p ( 2n_p - f_p -1) / 2 \leq n\sum_{p = 1}^{r}f_{p}$, and
+$\sum_{p = 1}^{r} f_p$ is equal to the number $n'$. Therefore, the complexity of
+top-$(\epsilon, k)$ prediction is $O(nn')$.
+\end{IEEEproof} }
+
+ It remains to show that this procedure truly does find a valid set of  top-$(\epsilon,
+k)$ link predictions. The reason that the procedure works correctly
+and efficiently  is because of nonnegativity and sparsity.
+
+\begin{prop}
+The nested loop method finds a valid set of top-$(\epsilon, k)$
+predictions.
+\end{prop}
+\begin{IEEEproof}
+The main part of the proof is to show that any dot product is
+underestimated by at most  $\epsilon$. The aforementioned pseudo-code
+containing the  nested loop is executed $r$ times, once for each
+latent component. Therefore, it suffices to show that the
+contribution of each nested loop is underestimated by at most
+$\epsilon/r$. There are two sources of underestimation:
+\begin{enumerate}
+\item  The outer loop does not consider rows $i$ for which $S_{ip} <
+\sqrt{\epsilon/r}$. This effectively prunes the products between
+pairs $(i, j)$ for which both $S_{ip}$ and $S_{jp}$ are less
+than $\sqrt{\epsilon/r}$. Therefore, the underestimation because of
+the ignoring of this pair is at most $\sqrt{\epsilon/r} \times
+\sqrt{\epsilon/r} = \epsilon/r$.
+\item The second case is when the inner loop is terminated early.
+The early termination condition in this case is that the product is
+at most $\epsilon/r$.
+\end{enumerate}
+Therefore, in both these mutually exclusive cases, the
+underestimation is at most $\epsilon/r$. Therefore, over all latent
+components the aggregate underestimation is at most
+$(\epsilon/r)\times r= \epsilon$.
+
+This completes the proof.
+\end{IEEEproof}
+
+\vspace{-2ex}
+\stitle{Discussions}. While the basic matrix factorization method is able to allow us to provide
+efficiency and pruning to the search process, it is still not quite
+as fast as one may need for large networks. The main problem
+arises as a result of the factorization process itself, which can
+require as much as $O(r \cdot (m + n\cdot r))$.  Typically, the
+number $r$ of latent factors varies from the orders of a few ten to a few hundred~\cite{NMF-nature99, NMF-www2010}. For
+sparse networks, in which the node degree is less than $r$, the $O(n
+r^2)$ term might be the bottleneck.  The required  number of latent
+components $r$ is often expected to increase with network size. In
+order to handle this computational problem, we propose the method of
+{\em ensemble decomposition}, which provides both efficiency {\em
+and} effectiveness advantages.
+
+
+\input{sec-bagging}
+
+%Experimental study
+\input{sec-exp}
+
+
+\input{sec-related}
+
+\section{Conclusions and Future Work}
+We have proposed an ensemble-enabled approach for top-$k$ link prediction, which scales up link prediction on very large social
+networks. By decomposing a large network into smaller pieces, the bagging methods are more scalable to large networks with over 15 million nodes and 1 billion edges. We develop three bagging methods that are designed in particular for link prediction, and our bagging methods also provide better accuracy and scalability. Finally, we have experimentally verified that our ensemble-enabled approach is much more accurate and scalable than existing methods \Aa \cite{adamic} and \BIGCLAM \cite{yang-wsdm2013}.
+
+A couple of topics need further investigation. First, we are to develop distributed approaches scalable on networks with billions of nodes, in a way similar to \cite{NMF-www2010}.   Second, we are to study personalized recommendations using our link prediction approach.
+
+
+
+\vspace{0.5ex}
+\stitle{Acknowledgments}.
+This work is supported in part by  973 program ({\small No. 2014CB340300}), NSFC ({\small No. 61322207}) and Special Funds of Beijing Municipal Science \& Technology Commission.
+For any correspondence, please refer to Shuai Ma.
+
+
+
+
+
+
+
+% if have a single appendix:
+%\appendix[Proof of the Zonklar Equations]
+% or
+%\appendix  % for no appendix heading
+% do not use \section anymore after \appendix, only \section*
+% is possibly needed
+
+% use appendices with more than one appendix
+% then use \section to start each appendix
+% you must declare a \section before using any
+% \subsection or using \label (\appendices by itself
+% starts a section numbered zero.)
+
+
+
+% use section* for acknowledgment
+\ifCLASSOPTIONcompsoc
+  % The Computer Society usually uses the plural form
+  \section*{Acknowledgments}
+This work is supported in part by  973 program ({\small No. 2014CB340300}), NSFC ({\small No. 61322207}) and Special Funds of Beijing Municipal Science \& Technology Commission.
+For any correspondence, please refer to Shuai Ma.
+
+\else
+  % regular IEEE prefers the singular form
+  \section*{Acknowledgment}
+\fi
+
+
+
+
+
+
+
+% trigger a \newpage just before the given reference
+% number - used to balance the columns on the last page
+% adjust value as needed - may need to be readjusted if
+% the document is modified later
+%\IEEEtriggeratref{8}
+% The "triggered" command can be changed if desired:
+%\IEEEtriggercmd{\enlargethispage{-5in}}
+
+% references section
+
+% can use a bibliography generated by BibTeX as a .bbl file
+% BibTeX documentation can be easily obtained at:
+% http://mirror.ctan.org/biblio/bibtex/contrib/doc/
+% The IEEEtran BibTeX style support page is at:
+% http://www.michaelshell.org/tex/ieeetran/bibtex/
+%\bibliographystyle{IEEEtran}
+% argument is your BibTeX string definitions and bibliography database(s)
+%\bibliography{IEEEabrv,../bib/paper}
+%
+% <OR> manually copy in the resultant .bbl file
+% set second argument of \begin to the number of references
+% (used to reserve space for the reference number labels box)
+\begin{thebibliography}{1}
+
+\bibitem{adamic}
+L.~Adamic and E.~Adar. Friends and neighbors on the web. {\em
+Social Networks}, 25, pp. 211--230, 2001.
+
+\bibitem{conceptualr} C. Aggarwal and S. Parthasarathy. Mining
+massively incomplete data sets by conceptual reconstruction. {\em
+KDD}, 2001.
+
+\bibitem{adom} G. Adomavicius, and A. Tuzhilin.
+Toward the next generation of recommender systems: A survey of the
+state-of-the-art
+ and possible extensions. {\em IEEE Transactions on Knowledge and Data Engineering (TKDE)},
+ 17(6), pp. 734--749, 2005.
+
+\bibitem{adafre}
+S. F. Adafre and M.  Rijke. Discovering missing links in Wikipedia.
+{\em KDD Workshop on Link Discovery}, 2005.
+
+
+\bibitem{back} L. Backstrom, and J. Leskovec.
+ Supervised random walks: predicting and recommending
+ links in social networks. {\em WSDM}, 2011.
+
+  \bibitem{bilgic}
+M. Bilgic,  G. Namata and L. Getoor.  Combining collective
+classification and link prediction. {\em ICDM Workshop on Mining
+Graphs and Complex Structures}, 2007.
+
+
+\bibitem{chancc}
+L.~Getoor and C.~Diehl. Link mining: A survey.
+{\em SIGKDD Exploration}, pp. 3--12, 2005.
+
+
+\bibitem{Link09}
+J.~R. Doppa, J.~Yu, P.~Tadepalli and L.~Getoor.
+\newblock  Chance constrained programs for link prediction.
+\newblock {\em NIPS Workshop on Analyzing Networks and Learning with Graphs},
+2009.
+
+\bibitem{menon} A. K. Menon, and C. Elkan.
+Link prediction via matrix factorization. {\em Machine Learning and
+Knowledge Discovery in Databases}, pp. 437--452, 2011.
+
+\bibitem{Getoor01}
+L.~Getoor, N.~Friedman, D.~Koller and B.~Taskar.
+\newblock  Learning probabilistic models of relational
+structure.
+\newblock {\em ICML}, 2001.
+
+\bibitem{Getoor02}
+L.~Getoor, N.~Friedman, D.~Koller and B.~Taskar.
+\newblock  Learning probabilistic models of link structure.
+\newblock {\em Journal of Machine Learning Research}, 3, pp. 679--707, 2002.
+
+
+
+%\bibitem{hopcroft} J. Hopcroft, T. Lou, and  J. Tang.
+% Who will follow you back?: reciprocal relationship prediction.
+%{\em  CIKM}, 2011.
+
+
+
+\bibitem{kunegis}
+J. Kunegis and A. Lommatzsch.  Learning Spectral Graph
+Transformations for Link Prediction. {\em ICML}, 2009.
+
+
+
+\bibitem{kleinberg}
+D.~Liben-Nowell and J.~Kleinberg.
+\newblock The link prediction problem for social networks.
+\newblock {\em  Journal of the American society for information science and technology},
+58(7), pp. 1019--1031, 2007.
+
+\bibitem{long} B. Long, Z.  Zhang, and P. Yu. Co-clustering by block value decomposition.
+{\em KDD}, 2005.
+
+
+\bibitem{propflow} R. Lichtenwalter, J. Lussier, and N. Chawla. New perspectives and
+methods in link prediction. {\em  KDD},  2010.
+
+
+%\bibitem{lichen2} R.  Lichtenwalter and N.  Chawla.  Lpmade: Link
+%prediction made easy. {\em Journal of Machine Learning Research},
+%12: pp. 2489--2492, 2011.
+
+\bibitem{lichen3} R. Lichenwater and N.  Chawla.
+Vertex Collocation Profiles: Subgraph Counting for Link Analysis and
+Prediction. {\em WWW}, 2012.
+
+\bibitem{web} B. Liu. Web Data Mining. {\em Springer}, 2010.
+
+\bibitem{qi} G.  Qi, C. Aggarwal, and T. Huang. Link Prediction
+across Networks by Cross-Network Biased Sampling. {\em ICDE}, 2013.
+
+
+
+\bibitem{sun11} Y. Sun, R. Barber, M. Gupta,  C. Aggarwal, J.
+Han.  Co-author Relationship Prediction in Heterogeneous
+Bibliographic Networks.  {\em ASONAM}, 2011.
+
+\bibitem{sun12} Y. Sun, J. Han, C. Aggarwal, N. Chawla.  When will it
+happen -- Relationship Prediction in Heterogeneous Information
+Networks.  {\em WSDM}, 2012.
+
+
+\bibitem{tang}   J. Tang, T. Lou,  and J. Kleinberg.
+ Inferring social ties across heterogenous networks. {\em  WSDM}, 2012.
+
+
+\bibitem{Taskar03}
+B.~Taskar, M.~F. Wong, P.~Abbeel and D.~Koller.
+\newblock  Link prediction in relational data.
+\newblock {\em NIPS}, 2003.
+
+
+
+\bibitem{dwang} D. Wang, D. Pedreschi, C. Song, F. Giannotti, and A.-L.
+Barabasi.   Human mobility, social ties, and link prediction. {\em
+KDD}, 2011.
+
+
+\bibitem{yang} Y. Yang, N. Chawla, Y.  Sun, and J. Han. Predicting Links in
+Multi-Relational and Heterogeneous Networks. {\em ICDM}, 2012.
+
+\bibitem{Yang09}
+T.~Yang, R.~Jin, Y.~Chi, and S.~Zhu.
+  Combining link and content for community detection: a discriminative
+  approach.
+ {\em KDD}, 2009.
+
+\bibitem{yu}
+K. Yu, W. Chu,  S. Yu,  V.  Tresp and Z. Xu. Stochastic
+relational models for discriminative link prediction. {\em NIPS}, 2006.
+
+
+
+\bibitem{zhu}
+J. Zhu, J. Hong and G. Hughes.  Using Markov models for web site
+link prediction. {\em  HyperText}, 2002.
+
+
+\bibitem{ding}
+C. Ding, X. He and H. D. Simon. On the Equivalence of Nonnegative
+Matrix Factorization and Spectral Clustering. {\em SDM}, 2005.
+
+%\bibitem{berman}
+%A. Berman, Complete Positivity, {\em Linear Algorithm and Its
+%Applications}, 107:57---63, 1998.
+
+\bibitem{lee}
+C. Lee, M. Pham, N. Kim, M. K. Jeong, D. K. J. Lin and W. Art. A
+Novel Link Prediction Approach for Scale-free Networks. {\em WWW}, 2014.
+
+\bibitem{NMF-nature99}
+Lee, Daniel D. and Seung, H. Sebastian. Learning the parts of objects by non-negative matrix factorization. {\em Nature},  401, pp. 788--791, 1999.
+
+\bibitem{NMF-www2010}
+Chao Liu, Hung-chih Yang, Jinliang Fan, Li-Wei He and Yi-Min Wang.
+{Distributed Nonnegative Matrix Factorization for Web-Scale Dyadic Data Analysis on MapReduce}.
+{\em WWW}, 2010.
+
+
+\bibitem{ahmed2014tkdd}
+Ahmed, Nesreen K. and Neville, Jennifer and Kompella, Ramana. Network Sampling: From Static to Streaming Graphs. {\em Transactions on Knowledge Discovery from Data (TKDD)}, 8(2), pp. 7:1--7:56 2014.
+
+\bibitem{yang-wsdm2013}
+Jaewon Yang and Jure Leskovec. Overlapping Community Detection at Scale: A Nonnegative Matrix
+Factorization Approach. {\em WSDM}, 2013.
+
+\bibitem{katz-1953}
+L. Katz. A New Status Index Derived from Sociometric Analysis. {\em Psychometrika}, 18(1), pp. 39--43, 1953.
+
+\bibitem{linyuan-2011}
+Linyuan Lu and Tao Zhou. Link Prediction in Complex Networks: A Survey.
+{\em Physica A}, pp. 1150--1170, 2011.
+
+\bibitem{Hasan-2011}
+Mohammad Al Hasan and Mohammed J. Zaki.
+\newblock A survey of link prediction in social networks.
+\newblock {\em Social Network Data Analytics}, 2011.
+
+\bibitem{leskovec-2008}
+J. Leskovec, L. Backstrom, R. Kumar and A. Tomkins. Microscopic Evolution of Social Networks.
+{\em KDD}, 2008.
+
+\bibitem{Breiman96b-1996}
+Leo Breiman. Bagging Predictors. {\em Machine Learning},
+24(2), pp. 123--140, 1996.
+
+\bibitem{barbieri2014}
+N. Barbieri, F. Bonchi and G. Manco. Who to Follow and Why: Link Prediction with Explanations.
+{\em KDD}, 2014.
+
+\bibitem{tang2015}
+J. Tang, S. Chang, C. Aggarwal and H. Liu. Negative Link Prediction in Social Media.
+{\em WSDM}, 2015.
+
+\bibitem{west2015}
+R. West, A. Paranjape and J. Leskovec. Mining Missing Hyperlinks from Human Navigation Traces:
+A Case Study of Wikipedia. {\em WWW}, 2015.
+
+\bibitem{liang2016}
+L. Duan, C. Aggarwal, S. Ma, R. Hu and J. Huai. Scaling up Link Prediction with Ensembles.
+{\em WSDM}, 2016.
+
+
+
+
+
+\end{thebibliography}
+
+% biography section
+%
+% If you have an EPS/PDF photo (graphicx package needed) extra braces are
+% needed around the contents of the optional argument to biography to prevent
+% the LaTeX parser from getting confused when it sees the complicated
+% \includegraphics command within an optional argument. (You could create
+% your own custom macro containing the \includegraphics command to make things
+% simpler here.)
+%\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{mshell}}]{Michael Shell}
+% or if you just want to reserve a space for a photo:
+
+\input{sec-biography}
+
+
+
+% that's all folks
+\end{document}
+
+
