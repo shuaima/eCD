@@ -1,0 +1,262 @@
+\section{Latent Factor Model for Scalable Link Prediction}
+\label{sec-NMF}
+
+We assume that $G=(N, A)$ is an undirected network containing node set $N$ and
+edge set $A$. The node set $N$ contains $n$ nodes and the edge set
+$A$ contains $m$ edges. Furthermore, the $n \times n$ weight matrix
+$W= [w_{ij}]_{n\times n}$ contains the weights of the edges in $A$.
+The weight matrix is useful in representing the strengths of network
+connections in  many real-world settings such as the number of
+publications between a pair of co-authors in a bibliographic
+network.  The matrix is sparse, and many its entries are 0, which could be
+interpreted either as absence of links or as missing entries. While
+we assume that an undirected network is available, the approach can
+also be generalized to directed networks. The ranking problem for
+link prediction is formally stated as follows:
+\begin{definition}
+Given a network $G=(N, A)$ with node set $N$ and edge set $A$, the ranking problem for link
+prediction is to determine the top-$k$ node-pair recommendations such that these node pairs are not included in $A$.
+\end{definition}
+Note that this problem definition requires us to consider the entire
+search space of $O(n^2)$ possibilities, rather than a sample of the
+node pairs in the network.
+
+Latent factor models work by associating a low dimensional factor
+with each row and column of the network. However, since link
+prediction is (predominantly) studied only for undirected networks,
+which have symmetric weight matrices, it suffices to associate an
+$r$-dimensional latent factor $\overline{F_i}$ with the $i$th node
+in the network. The value of $r$ is the {\em rank} of the
+factorization. This is an issue, which we will discuss slightly
+later.  The weight of a link between nodes $i$ and $j$ is defined by
+the use of the dot product between the factors of nodes $i$ and $j$.
+In other words, for the weight matrix $W= [w_{ij}]_{n\times n}$, we
+would like to achieve the following:
+\begin{equation}
+w_{ij} \approx \overline{F_i} \cdot \overline{F_j}, \ \ \forall i, j
+\in \{ 1, \ldots, n \} \label{factor}.
+\end{equation}
+This condition can be directly written in matrix form. Let $F$ be an
+$n \times r$ matrix, in which the $i$th row is the row vector
+$\overline{F_i}$. Then, the aforementioned condition of
+Equation~(\ref{factor}) can be written as follows:
+\begin{equation}
+W \approx F F^T.
+\end{equation}
+
+
+%Note that the diagonal entries of $W$ are 0, whereas any reasonable
+%factorization $F F^T$ will always have non-zero diagonal entries
+%with magnitudes  dependent on the node degrees.  To make the
+%factorization more robust, we set each diagonal entry $w_{ii}$ to
+%the sum of the weights of the edges  incident on it.
+%\begin{equation}
+%w_{ii}= \sum_{j \not=i} w_{ij}
+%\end{equation}
+%%The resulting matrix can  also be shown to be  positive
+%%semi-definite, which ensures that an {\em exact} rank-$n$
+%%factorization of $W$ into the form $F F^T$ always exists.
+%The resulting matrix can also be shown to be nonnegative
+%diagonally dominant symmetric, which ensures that an {\em exact}
+%rank-$n$ factorization of $W$ into the form $F F^T$ always exists \cite{berman}.
+%Of course, we are only interested in a rank-$r$ factorization ($r << n$),
+%corresponding to dominant latent components,  because such a
+%factorization helps in discovering {\em latent} edges.
+
+
+An important question arises as to whether entries in the matrix $W$
+corresponding to the absence of links should be treated as incomplete
+entries or whether they should be treated as zero, with the possibility
+of being incorrect. When latent factor models are used in
+collaborative filtering, such entries are typically treated as
+missing entries. However, unlike the absence of a rating, the
+absence of a link is indeed useful information {\em in the
+aggregate}, even though some node pairs have the propensity to form
+links {\em in the future}. Therefore, we argue that, unlike
+collaborative filtering, $W$ should be treated as a completely
+specified matrix, but with noisy entries. Therefore, in the link
+prediction problem, latent factor models should be viewed as a way
+of {\em correcting} noisy entries with zero values, rather than
+strictly as a missing value estimation problem.  Such assumptions
+also simplify the algorithmic development of latent factor models
+for link prediction. The idea here is that when we approximately
+factorize $W$ into the form  $F F^T$, the positive values of entries in
+$F F^T$ can be viewed as the {\em predictions} of  noisy 0-entries in
+$W$.
+
+A second important question arises as to the choice of the latent
+factor model that must be used for prediction. There are many
+choices available for factorizing an adjacency matrix, especially
+when it is symmetric. Even a
+straightforward diagonalization of the matrix provides a reasonable
+factorization. We  choose {\em non-negative} matrix factorization
+not only because of its interpretability advantages but also because
+it facilitates the  $O(n^2)$ search phase of the prediction by
+providing a non-negative and sparse representation for each node.
+
+We would like to determine the matrix $F$ such that the Frobenius
+norm of $( W - F F^T)$ is minimized.  This problem is referred to as
+symmetric \NMF, and an efficient solution is proposed in
+\cite{long}, where $F$ can be determined by starting with random
+nonnegative entries in $(0, 1)$, and using the following
+multiplicative update rule:
+% {\bf Charu Note: Please check that this update works during implementation. NMF is sometimes unpredictable.}
+%\begin{equation}
+%F_{ij} \leftarrow  F_{ij} \frac{(W F)_{ij} }{(F F^T F)_{ij}}
+%\end{equation}
+\begin{equation}
+\label{equation-update}
+F_{ij} \leftarrow F_{ij} ( 1 - \beta + \beta \frac{(W F)_{ij} }{(F F^T F)_{ij}} ),
+\end{equation}
+in which $\beta$ is a constant in $( 0, 1]$ \cite{ding}.
+
+\stitle{Discussions}. Let us examine the computational complexity of
+the update Equation~(\ref{equation-update}).
+The matrix $F F^T F$  can be fully materialized  with
+$O(r^2 \cdot n)$ matrix multiplications, and the matrix $W F$ can be
+computed in $O(m \cdot r)$ multiplications  by observing that the
+sparse matrix $W$ has only $2m$ non-zero entries corresponding to the
+number of edges. Therefore, each update takes $O(n
+\cdot r^2 +m\cdot r )$ time.
+
+This remains quite high for large networks, which motivates us to develop fast searching techniques to speed up the process.
+
+
+\subsection{Efficient Top-$K$ Prediction Searching}
+\label{sec-NMF-topk}
+
+An advantage of the nonnegative factorization approach is that it
+enables an efficient search phase, which is generally not possible
+with most other link prediction methods. The value of
+$\overline{F_i} \cdot \overline{F_j}$ in Equation~(\ref{factor}) provides a prediction value
+for the links. The goal of the search phase is to return the top-$k$
+links with the largest prediction values. In real-world settings, the matrix $F$ is
+often nonnegative and sparse. This non-negativity and sparsity are
+particularly useful in enabling an efficient approach. In order to
+speed up the search, we define the notion of $\epsilon$-approximate
+top-$k$ predictions, denoted as top-$(\epsilon, k)$ predictions.
+
+\begin{definition}[top-$(\epsilon, k)$ predictions]
+%A set $S$ of predicted links is a top-$(\epsilon, k)$ prediction, if
+%the cardinality of $S$ is $k$, and the  $k$th best  value of
+%$\overline{F_i} \cdot \overline{F_j}$ for a  link $(i, j) \in S$ is
+%at most $\epsilon$ less than the   $k$th best value of
+%$\overline{F_k} \cdot \overline{F_k}$ over any edge $(k , l)$ in the
+%network.
+A set $L$ of predicted links is a top-$(\epsilon, k)$ prediction, if
+the cardinality of $L$ is $k$, and the $k$-th best  value of
+$\overline{F_i} \cdot \overline{F_j}$ for a link $(i, j) \in L$ is
+at most $\epsilon$ less than the $k$-th best value of
+$\overline{F_h} \cdot \overline{F_l}$ over any link $(h , l)$ in the
+network.
+\end{definition}
+Intuitively, this definition allows a qualitative  tolerance of
+$\epsilon$ in the top-$k$ returned links. Allowing such a tolerance
+significantly helps in speeding up the search process by pruning
+large portions of the search space, which is particularly important
+in an $O(n^2)$ search space of link predictions.
+
+The first step is to create a new $n \times r$ matrix $S$, which is
+obtained by sorting the columns of $F$ in a descending order. An inverted list is
+associated with each of the $r$ latent variables containing the node
+identifiers  of $F$ arranged according to the sorted order of $S$. The
+$r$ inverted lists can also be represented as an $n \times r$ matrix
+$R$. Let the number of rows in the $p$-th column of $S$ ($p\in[1, r]$), for which
+the value of $S_{ip}$ is greater than $\sqrt{\epsilon/r}$ be $f_p$, and for which the value of $S_{ip}$ is greater than 0 be $f'_p$, respectively.
+
+Then the following nested loop is executed for each (say $p$-th) column of $S$:
+
+\vspace{-1ex}
+\begin{tabbing}\hspace{5ex}\=
+{\bf for} \= each $i=1$ to $f_p$ {\bf do}\\
+\>\>{\bf for} \= each $j=i+1$ to $f'_p$ {\bf do}\\
+\>\>\>{\bf if}\ \= $S_{ip} \cdot S_{jp} < \epsilon/r$ {\bf then}\\
+\>\>\>\>break inner loop; \\
+\>\>\> {\bf else} increase the score of node-pair $(R_{ip}, R_{jp})$
+by \\
+\>\>\> \ \ \ \ \ \ an amount of $S_{ip} \cdot S_{jp}$\\
+\>\> {\bf endfor}\\
+\>{\bf endfor}
+\end{tabbing}
+\vspace{-1ex}
+
+This nested loop is designed to track the relevant subset of node
+pairs from which one can determine the top-$(\epsilon, k)$
+predictions.  The nested loop typically requires much less time than
+$O(n^2)$ time because large portions of the search space are pruned.
+First, depending on the value of $\epsilon$, the value of $f_p$ is
+much less than $n$.  This is particularly true if many entries of
+the factorized matrix $F$ are close to 0.  Furthermore, the inner
+loop is often terminated early. The value of $\epsilon$ therefore
+provides the user a way to set the tradeoff between accuracy and
+efficiency. A hash-table is maintained which tracks all the pairs
+$(R_{ip}, R_{jp})$ encountered so far in the nested loop. Because of
+the pruning, the hash table usually needs to track a miniscule set
+of the $O(n^2)$ node-pairs in order to determine the ones that truly satisfy the top-$(\epsilon, k)$ requirement. In the process, we exclude
+the links which have already been represented with non-zero entries in $W$
+because such links are always likely to have the largest prediction values,
+which further reduces the searching space.
+
+\eat{%%%%%%EAT
+\begin{lemma}
+For a $n \times r$ matrix $F$, the complexity of the top-$(\epsilon, k)$
+prediction is $O(nn')$, where $n'$ is the number of entries of $F$
+which are greater than $\sqrt{ \epsilon / r}$.
+\end{lemma}
+\begin{IEEEproof}
+For the $p$th column of $F$, the {\bf if} statement in the nested loop
+is executed $f_p ( 2n_p - f_p -1) / 2$ times. There are $r$ columns in $F$,
+hence, the {\bf if} statement will be executed
+$\sum_{p = 1}^{r} f_p ( 2n_p - f_p -1) / 2 $ times.
+$\sum_{p = 1}^{r} f_p ( 2n_p - f_p -1) / 2 \leq n\sum_{p = 1}^{r}f_{p}$, and
+$\sum_{p = 1}^{r} f_p$ is equal to the number $n'$. Therefore, the complexity of
+top-$(\epsilon, k)$ prediction is $O(nn')$.
+\end{IEEEproof} }
+
+ It remains to show that this procedure truly does find a valid set of  top-$(\epsilon,
+k)$ link predictions. The reason that the procedure works correctly
+and efficiently  is because of nonnegativity and sparsity.
+
+\begin{prop}
+The nested loop method finds a valid set of top-$(\epsilon, k)$
+predictions.
+\end{prop}
+\begin{IEEEproof}
+The main part of the proof is to show that any dot product is
+underestimated by at most  $\epsilon$. The aforementioned pseudo-code
+containing the  nested loop is executed $r$ times, once for each
+latent component. Therefore, it suffices to show that the
+contribution of each nested loop is underestimated by at most
+$\epsilon/r$. There are two sources of underestimation:
+\begin{enumerate}
+\item  The outer loop does not consider rows $i$ for which $S_{ip} <
+\sqrt{\epsilon/r}$. This effectively prunes the products between
+pairs $(i, j)$ for which both $S_{ip}$ and $S_{jp}$ are less
+than $\sqrt{\epsilon/r}$. Therefore, the underestimation because of
+the ignoring of this pair is at most $\sqrt{\epsilon/r} \times
+\sqrt{\epsilon/r} = \epsilon/r$.
+\item The second case is when the inner loop is terminated early.
+The early termination condition in this case is that the product is
+at most $\epsilon/r$.
+\end{enumerate}
+Therefore, in both these mutually exclusive cases, the
+underestimation is at most $\epsilon/r$. Therefore, over all latent
+components the aggregate underestimation is at most
+$(\epsilon/r)\times r= \epsilon$.
+
+This completes the proof.
+\end{IEEEproof}
+
+\vspace{-2ex}
+\stitle{Discussions}. While the basic matrix factorization method is able to allow us to provide
+efficiency and pruning to the search process, it is still not quite
+as fast as one may need for large networks. The main problem
+arises as a result of the factorization process itself, which can
+require as much as $O(r \cdot (m + n\cdot r))$.  Typically, the
+number $r$ of latent factors varies from the orders of a few ten to a few hundred~\cite{NMF-nature99, NMF-www2010}. For
+sparse networks, in which the node degree is less than $r$, the $O(n
+r^2)$ term might be the bottleneck.  The required  number of latent
+components $r$ is often expected to increase with network size. In
+order to handle this computational problem, we propose the method of
+{\em ensemble decomposition}, which provides both efficiency {\em
+and} effectiveness advantages.
