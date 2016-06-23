@@ -11,7 +11,6 @@ Furthermore, the aggregated results from multiple models often
 provide a robustness to the decomposition process  \cite{Breiman96b-1996}. In the
 following, we introduce three different ways for the bagging decomposition.
 
-
 \subsection{Random Node Bagging}
 
 Random node bagging is the simplest form of structural bagging. The basic
@@ -146,7 +145,7 @@ process.
 
 
 \subsection{Using Link Prediction Characteristics}
-
+\eat{
 Different from existing sampling methods \cite{ahmed2014tkdd}, our bagging methods should be designed in particular for link prediction.
 Motivated by the observation that most of all new links in social networks span within very short distances, typically closing triangles,
 which has been justified in \cite{leskovec-2008}, we develop three structural bagging approaches such that {\em a node is always sampled together
@@ -164,6 +163,35 @@ For edge and biased edge bagging, when a node adjacent to $N_s$ is
  selected and added to $N_s$, all of its neighbors are put into the node set $N_s$ together.
 \end{enumerate}
 \vspace{-1ex}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 2016-06-21 duan  begin
+\marked{
+Different from existing graph sampling methods \cite{ahmed2014tkdd, leskovec2006}, our bagging methods should be designed
+in particular for link prediction. We develop a special graph sampling method consisting of two steps: node sampling and edge sampling.}
+
+\marked{\stitle{Node sampling}. Motivated by the observation that most of all new links in social networks span within very short distances, typically closing triangles, which has been justified in \cite{leskovec-2008}, we develop three structural bagging approaches such that {\em a node is always sampled together
+with all its neighbors, which guarantees the possibility of forming triangles}. To achieve this, we revise the previous bagging methods as follows.
+\vspace{-1ex}
+\begin{enumerate}
+%\vspace{-0.5ex}
+\item[(1)]
+For random node bagging, when a node is selected uniformly at random from the network $G$, the node together with all of
+its neighbors are put into the node set $N_s$.
+%\vspace{-0.5ex}
+\item[(2)]
+For edge and biased edge bagging, when a node adjacent to $N_s$ is
+ selected and added to $N_s$, all of its neighbors are put into the node set $N_s$ together.
+\end{enumerate}
+\vspace{-1ex}}
+
+\marked{\stitle{Edge sampling}. Inspired by graph sparsification \cite{chen2015, satuluri2011} which has been applied on clustering without sacrificing quality, we consider two edge sampling strategies for selecting edges from the subgraph
+induced on $N_s$ of $G$. \\
+(1) dx + dy. in order to reduce the loss of common neighbors. \\
+(2) min(dx, dy). PA }
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 2016-06-21 duan  end
 
 \subsection{Bound of Node Bagging Ensembles}
 
