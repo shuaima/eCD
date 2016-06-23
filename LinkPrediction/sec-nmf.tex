@@ -136,6 +136,7 @@ particularly useful in enabling an efficient approach. In order to
 speed up the search, we define the notion of $\epsilon$-approximate
 top-$k$ predictions, denoted as top-$(\epsilon, k)$ predictions.
 
+
 \begin{definition}[top-$(\epsilon, k)$ predictions]
 %A set $S$ of predicted links is a top-$(\epsilon, k)$ prediction, if
 %the cardinality of $S$ is $k$, and the  $k$th best  value of
@@ -246,6 +247,35 @@ $(\epsilon/r)\times r= \epsilon$.
 
 This completes the proof.
 \end{IEEEproof}
+
+%%%%%%%%%%%%%%%%%%%%%%   2016-06-20 duan begin
+\marked{\begin{definition}[top-$(\epsilon, \theta, k)$ predictions]
+Given a threshold $\theta$, a set $L_1$ of predicted links is a top-$(\epsilon, \theta, k)$ prediction, if 
+$L_1 = \{(i, j) | (i, j) \in L_2, \overline{F_i} \cdot \overline{F_j} > \theta \} $, 
+where $L_2$ is a top-$(\epsilon, k)$ prediction.
+\end{definition}
+\begin{equation}
+\label{equation-length}
+\overline{F_i} \cdot \overline{F_j} = \|\overline{F_i} \| \cdot \| \overline{F_j} \| \cdot
+cos(\overline{F_i}, \overline{F_j}) \leq \|\overline{F_i} \| \cdot \| \overline{F_j} \|,
+\end{equation}
+\begin{tabbing}\hspace{5ex}\=
+{\bf for} \= each $i=1$ to $n$ {\bf do}\\
+\>\> $L[i] \leftarrow \|\overline{F_i} \|$; \\
+\> {\bf end for} \\
+\> {\bf for} \= each $i=1$ to $f_p$ {\bf do}\\
+\>\>{\bf for} \= each $j=i+1$ to $f'_p$ {\bf do}\\
+\>\>\>{\bf if} $L[R_{ip}] \cdot L[R_{jp}] \leq \theta$ {\bf continue}; \\
+\>\>\>{\bf if}\ \= $S_{ip} \cdot S_{jp} < \epsilon/r$ {\bf then}\\
+\>\>\>\>break inner loop; \\
+\>\>\> {\bf else} increase the score of node-pair $(R_{ip}, R_{jp})$
+by \\
+\>\>\> \ \ \ \ \ \ an amount of $S_{ip} \cdot S_{jp}$; \\
+\>\> {\bf end for}\\
+\>{\bf end for}
+\end{tabbing}}
+%%%%%%%%%%%%%%%%%%%%%%   2016-06-20 duan end
+
 
 %\vspace{-2ex}
 \stitle{Discussions}. While the basic matrix factorization method is able to allow us to provide
