@@ -169,7 +169,7 @@ For edge and biased edge bagging, when a node adjacent to $N_s$ is
 Different from existing graph sampling methods \cite{ahmed2014tkdd, leskovec2006}, our bagging methods should be designed
 in particular for link prediction. We develop a special graph sampling method consisting of two steps: node sampling and edge sampling.}
 
-\marked{\stitle{Node sampling}. Motivated by the observation that most of all new links in social networks span within very short distances, typically closing triangles, which has been justified in \cite{leskovec-2008}, we develop three structural bagging approaches such that {\em a node is always sampled together
+\stitle{Node sampling}. Motivated by the observation that most of all new links in social networks span within very short distances, typically closing triangles, which has been justified in \cite{leskovec-2008}, we develop three structural bagging approaches such that {\em a node is always sampled together
 with all its neighbors, which guarantees the possibility of forming triangles}. To achieve this, we revise the previous bagging methods as follows.
 \vspace{-1ex}
 \begin{enumerate}
@@ -182,12 +182,30 @@ its neighbors are put into the node set $N_s$.
 For edge and biased edge bagging, when a node adjacent to $N_s$ is
  selected and added to $N_s$, all of its neighbors are put into the node set $N_s$ together.
 \end{enumerate}
-\vspace{-1ex}}
+\vspace{-1ex}
 
-\marked{\stitle{Edge sampling}. Inspired by graph sparsification \cite{chen2015, satuluri2011} which has been applied on clustering without sacrificing quality, we consider two edge sampling strategies for selecting edges from the subgraph
-induced on $N_s$ of $G$. \\
-(1) dx + dy. in order to reduce the loss of common neighbors. \\
-(2) min(dx, dy). PA }
+\marked{\stitle{Edge sampling}. Inspired by previous research on graph sparsification \cite{chen2015, satuluri2011}
+which has been successfully applied on clustering without sacrificing quality, 
+we consider an edge sampling strategy for
+selecting a portion of edges rather than all of edges from the subgraph induced on $N_s$ of $G$. With less edges,
+each ensemble can be calculated faster, which is useful for improving the scalability of the bagging methods.
+The challenge here is how to select edges as less as possible while maintaining high prediction accuracy. 
+To overcome this challenge, we sample edges from the induced subgraph incorporating with the following link 
+prediction characteristics.
+\\
+\\
+Preferential attachment (PA) \cite{albert1999,leskovec-2008} is one of the well-known link prediction characteristics, which postulates the probability that a new link is connected to the node $i$ is
+proportional to the degree of $i$. It means that the smaller degree nodes would have fewer
+links in the future. Therefore, we would like to select the edges with two larger degree nodes.
+Assume that $d_i$ and $d_j$ are the degree of nodes in the edge $(i, j)$. Given a sampling ratio $s$,
+we sort edges in the induced subgraph by $min(d_i, d_j)$ in a descending order and then select top $s$ edges.
+\\
+\\
+Common neighbor (CN) \cite{kleinberg,linyuan-2011} is another significant characteristic for link prediction,
+which assumes that two nodes $i$ and $j$ are more likely to have a link in the future if they
+have many common neighbors. Ignoring the edge $(i, j)$ may cause as many as $d_i + d_j - 2$ nodes to lose
+their common neighbors. \cite{chen2015} provided a method for sampling edge in order to minimize the
+loss of common neighbors. We adopt this method in our experiments by sorting edges by $d_i + d_j$ in a descending order.}
 
 
 
@@ -309,9 +327,11 @@ We now explain the complete framework for top-$k$ predictions enabled with ensem
 
 
 To ensure that a node pair appears in the ensemble components at least $\mu$ expected times,  $\mu / f^{2}$ ensemble components are considered in total.
-For each time, an ensemble component $N_s$ is sampled by one of the above node, edge and biased edge bagging methods,
- the symmetric \NMF method in Section \ref{sec-NMF} is used
-to the reduced matrix $W_s$, and the aforementioned  pruning search process in Section \ref{sec-NMF-topk} is used to determine the predictions of all pairs of nodes. If a node pair appears in multiple ensemble components and has multiple predicted values, the maximum predicted value is considered.
+For each time, an ensemble component $N_s$ is sampled by one of the above 
+node, edge and biased edge bagging methods,
+ \marked{the symmetric \NMF method in Section \ref{sec-NMF} is used to the matrix $W_s$ obtained 
+ by sampling edges from the reduced matrix, }and the aforementioned  pruning search process in Section \ref{sec-NMF-topk} is used to determine the predictions of all pairs of nodes. If a node pair appears in multiple ensemble components and has multiple predicted values, the maximum predicted value is considered, \marked{which means that we can use the
+minimum value in the previous predicted links to speed up the top-$k$ predictions.} 
 And, hence, only the top-$k$ predicted links are maintained for each ensemble component.
 At the end of the process, the top-$k$ predictions in all $\mu / f^{2}$ ensemble components are returned.
 
