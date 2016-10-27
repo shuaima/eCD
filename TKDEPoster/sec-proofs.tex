@@ -1,0 +1,90 @@
+\section*{Appendix: Proofs}
+\label{sec-proofs}
+\stitle{Proof of Proposition~\ref{prop-proxy-cc}}:
+Without loss of generality, we only consider those \ccs with at least two nodes.
+Given any node $u$ in a graph $G$, by conditions (2) and (3) in the definition of proxy, there exists at least one neighbor $v$ of $u$ in $A^+_u$, and $A^+_u$ is not maximal, otherwise. By condition (2), all nodes reachable to $v$ are in $A^+_u$. It is known that all nodes in a \cc is reachable to any node in the \cc.
+Hence, all nodes in a \cc belong to $A^+_u$. By these, we have the conclusion.
+\eop
+
+
+\stitle{Proof of Proposition~\ref{prop-proxy-unique-dra}}:
+We show this by contradiction. Assume first that there exists a proxy $u$ such that it has two distinct \dras: $G[A^+_{u,1}]$ and $G[A^+_{u,2}]$.
+Then by the definition of \dra, it is trivial to verify the following:
+%
+(1) $A^+_{u,1}\not\subset A^+_{u,2}$,
+(2) $A^+_{u,2}\not\subset A^+_{u,1}$, and
+(3) $A^+_{u,1}\cap A^+_{u,2}$ has at least 2 nodes, and one must be $u$.
+%
+By the definition of proxy, $u$ is a proxy of all the set of nodes in $A^+_{u,1}\cup A^+_{u,2}$, and the \dra of $u$ should be $G[A^+_{u,1}\cup A^+_{u,2}]$. That is, neither $A^+_{u,1}$ nor $A^+_{u,2}$ is maximal. Hence, both $G[A^+_{u,1}]$ and $G[A^+_{u,2}]$ are not \dras of node $u$.
+This contradicts the assumption.
+\eop
+
+
+\stitle{Proof of Proposition~\ref{thm-proxy-disjoint}}:
+Consider two distinct proxies $u$ and $u'$ in graph $G$.
+
+
+\noindent(1) We first show that if $u\in A^+_{u'}$, then $A^+_{u}\subseteq A^+_{u'}$.
+
+We show this by contradiction. Assume first that $A^+_{u}\not\subseteq A^+_{u'}$ and $u\in A^+_{u'}$.
+Then there must exist a node $w\in A^+_{u}$, but $w\not\in A^+_{u'}$.
+%
+Since $w\in A^+_{u}$, by the definition of proxies, $w$ is reachable to $u$.
+Moreover, since $u\in A^+_{u'}$, by the definition of proxies, all nodes reachable to $u$ belong to  $A^+_{u'}$
+Hence, $w\in A^+_{u'}$, which contradicts our previous assumption.
+
+\noindent(2) Similarly to (1), we can show that $A^+_{u'}\subseteq A^+_{u}$  if $u'\in A^+_{u}$.
+
+\noindent(3) For the case when $u\not\in A^+_{u'}$ and $u'\not\in A^+_{u}$, it is easy based on the analyses of (1) and (2).
+\eop
+
+\stitle{Proof of Proposition~\ref{pro-proxy-path}}:
+Consider a proxy $u$ in a graph, and two nodes $v$ and $v'$ in the \dra $G[A^+_u]$.
+%
+Let $G_s$ be the subgraph by removing $u$ from $G[A^+_u]$, and let $\cc_{1}$, $\ldots$, $\cc_{h}$ be the \ccs of $G_s$.
+Observe that (a)  $G[A^+_{u}]$ is simply the union of all \ccs $\cc_{1}$, $\ldots$, $\cc_{h}$ and node $u$, and (b)
+all \ccs have a size equal to or less than $c\cdot\lfloor\sqrt{|V|}\rfloor$ - $1$.
+
+There are two cases to consider.
+
+\noindent(1) Both nodes $v$ and $v'$ are in a single \cc $\cc_{j}$ ($1\le j\le h$).
+Since \cc $\cc_{j}$ has no more than $c\cdot\lfloor\sqrt{|V|}\rfloor - 1$ nodes, it takes a standard Dijkstra algorithm at most $O(|V|)$ time to compute the shortest path between $v$ and $v'$.
+
+\noindent(2) Nodes $v$ and $v'$ are in two distinct \ccs $\cc_{i}$ and $\cc_{j}$ ($1\le i\ne j\le h$).
+As $u$ is the only node that $\cc_{i}$ and $\cc_{j}$ have in common, $\path(v,v')$ between $v$ and $v'$ is exactly $\path(v,u)$ + $\path(u,v')$, which can be computed in $O(|V|)$  time.
+
+Putting these together, we have the conclusion.
+\eop
+
+\stitle{Proof of Proposition~\ref{pro-proxy-path-global}}:
+We consider non-trivial maximal proxies. By its definition, (1) $v\neq x$ and $u\neq y$, (2) $v$ and $u$ are not neighboring nodes, (3)
+for any node $w$ not in the \dra $G[A^+_{x}]$ of proxy $x$,  if $w$ is reachable to $v$, then $x$ must be a node in any shortest path from $w$ to $v$,
+and, similarly, (4)  for any node $z$ not in the \dra $G[A^+_{y}]$ of proxy $y$,  if $z$ is reachable to $u$, then $y$ must be a node in any shortest path from $z$ to $y$.
+%
+This shows that the shortest path from $v$ to $u$ is exactly $\path(v, x)/\path(x, y)/\path(y, u)$, \ie the concatenation of the three paths.
+\eop
+
+
+\stitle{Proof of Proposition~\ref{prop-proxy-cut}}:
+We show this by contradiction. We first assume that a proxy $u$ in a \cc $H(V_s, E_s)$ of graph $G(V$, $E)$ is not a cut-node.  Then we show that $u$ is not a proxy, a contradiction to the assumption.
+
+Let $G\setminus\{u\}$ be the subgraph of $G$ by removing node $u$ from $G$.  Note that $G\setminus\{u\}$ remains connected since $u$ is not a cut node of graph $G$. By the definition of (non-trivial maximal) proxies, at least one neighbor $v$ of $u$ must belong to $A_{u}$.  As all nodes in $H\setminus\{u\}$ are reachable to $v$, it is easy to know that $A_{u}$ contains all the nodes $V_s$.  Since $|V_s| > c\cdot\lfloor\sqrt{|V|}\rfloor$, which violates the size condition of proxies. Hence, $u$ is not a proxy of $G$, which contradicts the assumption.
+\eop
+
+
+\stitle{Proof of Proposition~\ref{prop-large-bcc}}: We show this by contradiction.
+
+Assume first that there exists a non-trivial proxy $u$ in a bi-connected component with size larger than $c \cdot\lfloor\sqrt{|V|}\rfloor$ of graph $G(V, E)$.
+Then we show that $u$ is not a proxy. Let $G_s$ be the subgraph of the bi-connected component with the removal of $u$. Since the removal of any node in a \bc doesn't increase the number of \ccs, $G_s$ remains a \cc. By the definition of proxies, $A_u$ contains all the  the set of nodes in $G_s$ together with node $u$. That is, $A_u$ has more than $c \cdot\lfloor\sqrt{|V|}\rfloor$ nodes, and, therefore, $u$ is not a proxy. This contradicts the assumption.
+\eop
+
+
+\stitle{Proof of Proposition~\ref{pro-sketch-graph}}: We show this by contradiction.
+
+Assume first there is a cycle $B_1, v_1, B_2, v_2, \ldots$, $B_k, v_k, B_1$ in a sketch graph $\mathbb{G}$ of graph $G$, where $B_1, \ldots, B_k$ are \bccs and $v_1, \ldots, v_k$ are cut-nodes of $G$.
+%
+Then, it follows that the removal of any cut-node $v_i$ ($i\in[1, k]$) increases the number of \ccs in $G$, by the definition of cut-nodes.  However, the removal of any $v_i$ ($i\in[1, k]$) from $G$ does not increase the number of \ccs in graph $G$ because of the cycle.
+This contradicts the assumption.
+
+Note that a similar proposition without a detailed proof is also provided for block graphs in \cite{Diestel05}.
+\eop
