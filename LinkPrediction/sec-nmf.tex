@@ -168,16 +168,15 @@ the value of $S_{ip}$ is greater than $\sqrt{\epsilon/r}$ be $f_p$, and for whic
 Then the following nested loop is executed for each (say $p$-th) column of $S$:
 
 \vspace{-1ex}
-\begin{tabbing}\hspace{5ex}\=
+\begin{tabbing}1: \hspace{5ex}\=
 {\bf for} \= each $i=1$ to $f_p$ {\bf do}\\
-\>\>{\bf for} \= each $j=i+1$ to $f'_p$ {\bf do}\\
-\>\>\>{\bf if}\ \= $S_{ip} \cdot S_{jp} < \epsilon/r$ {\bf then}\\
-\>\>\>\>break inner loop; \\
-\>\>\> {\bf else} increase the score of node-pair $(R_{ip}, R_{jp})$
-by \\
-\>\>\> \ \ \ \ \ \ an amount of $S_{ip} \cdot S_{jp}$\\
-\>\> {\bf endfor}\\
-\>{\bf endfor}
+2: \>\>{\bf for} \= each $j=i+1$ to $f'_p$ {\bf do}\\
+3: \>\>\>{\bf if}\ \= $S_{ip} \cdot S_{jp} < \epsilon/r$ {\bf then}\\
+4: \>\>\>\>break inner loop; \\
+5: \>\>\> {\bf else} increase the score of node-pair $(R_{ip}, R_{jp})$ by \\
+   \>\>\> \ \ \ \ \ \ an amount of $S_{ip} \cdot S_{jp}$\\
+6: \>\> {\bf endfor}\\
+7: \>{\bf endfor}
 \end{tabbing}
 \vspace{-1ex}
 
@@ -249,11 +248,11 @@ This completes the proof.
 \end{IEEEproof}
 
 %%%%%%%%%%%%%%%%%%%%%%   2016-06-20 duan begin
-\marked{\stitle{Speeding up top-$(\epsilon, k)$ predictions.} In real-life applications, 
-a common scenario is to find a set of top-$(\epsilon, k)$ predictions with prediction 
-values are greater than a given threshold $\theta$ \cite{ballard2015, lemp}. In this case, 
+\marked{\stitle{Speeding up top-$(\epsilon, k)$ predictions.} In real-life applications,
+a common scenario is to find a set of top-$(\epsilon, k)$ predictions with prediction
+values are greater than a given threshold $\theta$ \cite{ballard2015, lemp}. In this case,
 the top-$(\epsilon, k)$ prediction could be sped up by pruning a portion of the search space
-which consists of node pairs whose prediction values are less and equal than $\theta$. 
+which consists of node pairs whose prediction values are less and equal than $\theta$.
 The simple strategy here is that
 the prediction value of a node pair $(i, j)$ is
 \begin{equation}
@@ -269,43 +268,31 @@ From Equation \ref{equation-length}, we obtain
 The prediction value is less and equal than $\theta$ if the product of length is less and equal than $\theta$.
 Since our goal is to find the node pairs whose prediction values are greater than $\theta$, we can ignore
 the node pairs whose length product are less and equal than $\theta$ in the search process. \\
-After obtained the matrix $S$ and $R$, an additional step is required to calculate the length of each row 
-vector $\overline{F_i}$ and store them in an array $M$. Then execute the following modified nested loop 
-procedure: 
+After obtained the matrix $S$ and $R$, an additional step is required to calculate the length of each row
+vector $\overline{F_i}$ and store them in an array $M$. Then insert the following if-clause: 
 \vspace{-1ex}
 \begin{tabbing}\hspace{5ex}\=
-{\bf for} \= each $i = 1$ to $n$ {\bf do} \\
-\>\> $M[i] \leftarrow \|\overline{F_i} \|$; \\
-\> {\bf end for} \\
-\> {\bf for} \= each $p = 1$ to $r$ {\bf do} \\
-\>\> {\bf for} \= each $i = 1$ to $f_p$ {\bf do} \\
-\>\>\> {\bf for} \= each $j = i + 1$ to $f'_p$ {\bf do}\\
-\>\>\>\> {\bf if} $M[R_{ip}] \cdot M[R_{jp}] \leq \theta$ {\bf then} continue; \\
-\>\>\>\> {\bf if} \= $S_{ip} \cdot S_{jp} < \epsilon/r$ {\bf then} break inner loop; \\
-\>\>\>\> {\bf else} increase the score of node-pair $(R_{ip}, R_{jp})$ \\
-\>\>\>\>\> by an amount of $S_{ip} \cdot S_{jp}$; \\
-\>\>\> {\bf end for}\\
-\>\> {\bf end for} \\
-\> {\bf end for} \\
-\> {\bf remove} node pairs whose score $\leq \theta$ 
+{\bf if} $M[R_{ip}] \cdot M[R_{jp}] \leq \theta$ {\bf then} continue; 
 \end{tabbing}
 \vspace{-1ex}
+ into the line 3
+in the nested loop to pruning the node pairs whose prediction values are less and equal to $\theta$. 
 It is intuitive that this procedure correctly finds a valid set of top-$(\epsilon, k)$
-predictions with prediction values are greater than $\theta$. Since the node pairs whose 
-length products are less and equal than $\theta$ have been ignored in the nested loop, 
-this procedure speeds up the nested loop method.   
+predictions with prediction values are greater than $\theta$. Since the node pairs whose
+length products are less and equal than $\theta$ have been ignored in the nested loop,
+this procedure speeds up the nested loop method.
 \begin{prop}
 The modified nested loop method finds a valid set of top-$(\epsilon, k)$
 predictions with prediction values $> \theta$.
 \end{prop}
-\begin{IEEEproof} 
-According to the Proposition 1, the nested loop method finds a valid set of 
-top-$(\epsilon, k)$ predictions. The difference between the nested loop method 
-and the modified nested loop method is that the above procedure does not consider 
-the node pairs $(i, j)$ when $\|\overline{F_i} \| \cdot \| \overline{F_j} \| \leq \theta$. 
-Note that the prediction values of those node pairs are also $\leq \theta$. At the end of 
-the execution, the above pesudocode removes the node pairs with prediction values $\leq \theta$. 
-Therefore, the modified nested loop finds a valid set of top-$(\epsilon, k)$ predictions with 
+\begin{IEEEproof}
+According to the Proposition 1, the nested loop method finds a valid set of
+top-$(\epsilon, k)$ predictions. The difference between the nested loop method
+and the modified nested loop method is that the above procedure does not consider
+the node pairs $(i, j)$ when $\|\overline{F_i} \| \cdot \| \overline{F_j} \| \leq \theta$.
+Note that the prediction values of those node pairs are also $\leq \theta$. At the end of
+the execution, the above pesudocode removes the node pairs with prediction values $\leq \theta$.
+Therefore, the modified nested loop finds a valid set of top-$(\epsilon, k)$ predictions with
 prediction values $> \theta$.
 \\
 This completes the proof.
