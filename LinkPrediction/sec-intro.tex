@@ -7,32 +7,20 @@
 % \IEEEraisesectionheading{} command. Note the need to keep any \label that
 % is to refer to the section immediately after \section in the above as
 % \IEEEraisesectionheading puts \section within a raised box.
-The problem of {\em link prediction} or {\em link inference} is that
-of predicting the formation of future links in a dynamic and
+The problem of {\em link prediction} or {\em link inference} is that of predicting the formation of future links in a dynamic and
 evolving network (see \cite{chancc,linyuan-2011,Hasan-2011} for surveys). The link prediction problem has numerous
 applications, such as the recommendation of friends in a social
-network, the recommendation of images in a multimedia network, or
-the recommendation of collaborators in a scientific network, and, therefore, link
-prediction methods have been studied extensively because of their numerous applications in various network-centered domains.
+network \cite{barbieri2014,back,tang2015}, the recommendation of images in a multimedia network \cite{adom}, or
+the recommendation of collaborators in a scientific network \cite{kunegis,kleinberg}, and, therefore, link
+prediction methods have been extensively studied  because of their numerous applications in various network-centered domains.
 
-Link prediction methods are often applied to very large networks,
-which are also sparse.  The massive sizes of such networks can
-create challenges for the prediction process in spite of their
-sparsity. This is because the {\em search space} for the link
-prediction problem is of the size $O(n^2)$, where $n$ is the number
-of nodes. Quadratic scalability can rapidly become untenable for
-larger networks. In fact, an often overlooked fact is that most {\em
-current link prediction algorithms evaluate the link
-propensities only over a subset of possibilities rather than
-exhaustively search for link propensities over the entire network, e.g.,
-\cite{dwang,lee}}.
-%
-\eat{%%%%%%%%EAT
-{\bf Charu Note: We do need to check this by looking at as many link
-prediction papers as possible. At least the ones that I saw seemed
-to have this property.}
-}%%%%%%%%EAT
-%
+Link prediction methods are often applied to very large networks, which are also sparse.  The massive sizes of such networks can
+create challenges for the prediction process in spite of their sparsity. This is because the {\em search space} for the link
+prediction problem is of the size $O(n^2)$, where $n$ is the number of nodes. Quadratic scalability can rapidly become untenable for
+larger networks. In fact, an often overlooked fact is that most {\em current link prediction algorithms evaluate the link
+propensities only over a subset of possibilities rather than exhaustively search for link propensities over the entire network}, \eg \cite{dwang,lee,zhao2016,zhu2016}.
+
+
 In order to understand why this is the case,
 consider a network with $10^6$ nodes. Note that a size such as
 $10^6$ is not large at all by modern standards, and even common
@@ -57,7 +45,7 @@ impractical.
 allocate a {\em single machine cycle} to every node-pair possibility
 in networks of varying sizes and processors of various speeds.}
 \label{time}
-\vspace{-2ex}
+\vspace{-1ex}
 \centering
 \begin{tabular}{cccc}
 \hline \hline Network Sizes & 1 GHz &  3 GHz & 10 GHz \\
@@ -67,6 +55,7 @@ in networks of varying sizes and processors of various speeds.}
 \hline $10^9$ nodes & $>10000$ days & $>3500$ days & $> 1000$ days\\
 \hline \hline
 \end{tabular}
+\vspace{-2ex}
 \end{table}
 
 
@@ -108,9 +97,9 @@ overlooks this basic requirement~\cite{chancc,propflow}.
 
 The link prediction algorithms are classified into unsupervised and
 supervised methods. Unsupervised methods~\cite{kleinberg} typically
-use neighborhood measures such as the Adamic-Adar~\cite{adamic}, and
-the Jaccard coefficient. Supervised methods~\cite{propflow} treat
-link prediction as a classification problem in which each node pair
+use neighborhood measures such as the Adamic-Adar~\cite{adamic} and
+the Jaccard coefficient \cite{kleinberg}. Supervised methods~\cite{propflow} treat the
+link prediction problem as a classification problem in which each node pair
 is treated as a test instance. Supervised methods are the
 state-of-the-art and generally provide more accurate results than
 unsupervised methods~\cite{propflow}. It is also noteworthy that
@@ -148,42 +137,40 @@ recommendation on a per-user basis rather than try to determine
 the top-$k$ user-item pairs.  The latter is particularly important
 in the context of link prediction. The factorization of a matrix of
 size $O(n^2)$ is not only computationally expensive, but also
-memory-intensive.  As we will see later in this paper, one advantage
+memory-intensive.  As will be seen later in this paper, one advantage
 of  latent-factor models is that they are able to  transform the
 adjacency matrix to a multidimensional space which can be searched
 efficiently {\em by pruning} large portions of the $O(n^2)$ search
 space in order to recommend the top-$k$ possibilities.
-\marked{Furthermore, more portions of the search space could be
-pruned when finding the top-$k$ possibilities that take values
-above some application-defined threshold \cite{ballard2015, lemp}. }
-This is essential in such settings.
+%\marked{Furthermore, more portions of the search space could be pruned when finding the top-$k$ possibilities that take values above some application-defined threshold \cite{ballard2015, lemp}. }
+This is essential in such a top-$k$ setting.
 
-\stitle{Contributions}. In this paper, we explore an {\em ensemble-enabled approach} to
+\stitle{Contributions}. To this end, we explore an {\em ensemble approach} to
 achieving the aforementioned goals.
 
 We show how to make latent factor models
 practical for link prediction by decomposing the search space into a
  set of smaller matrices. As a result, large parts of the $O(n^2)$
 search space can be pruned without even having to evaluate the
-relevant node pairs. \marked{An optimizing method is provided for
-speeding up the search process when a threshold is available.}
+relevant node pairs. An optimizing method is also provided for
+speeding up the search process when a threshold is available.
 This provides an efficient approach for the
-top-$k$ problem in link prediction.  Furthermore, our problem
+top-$k$ problem in link prediction.  
+
+Furthermore, our problem
 decomposition method is an ensemble approach enabled with three
 structural bagging methods with performance guarantees, which has obvious {\em
-effectiveness} advantages. \marked{Incorporating with some link prediction
-characteristics, the bagging methods maintain high prediction
-accuracy while reducing the network size via graph sampling techniques. }
+effectiveness} advantages. By incorporating with the characteristics of  link prediction, the bagging methods maintain high prediction
+accuracy while reducing the network size via graph sampling techniques. 
 Note that the same bias-variance
 tradeoffs apply to the link-prediction problem, as they apply to the
 standard classification problem. Therefore, the use of an ensemble
 approach has obvious effectiveness advantages as well.
 
-Using real-life datasets, we show that our ensemble-enabled approach for link prediction is both effective and efficient.
-For instance, (1) on \Friendster with $15$ million nodes and $1$ billion edges, our approach could finish in
-\marked{two hours, while direct \NMF, \Aa \cite{adamic} and \BIGCLAM \cite{yang-wsdm2013} could not finish in a day, and
-(2) our approach improves the accuracy by $(2.8\%, 41.4\%, 34.1\%)$ (resp. $(7.5\%, 45.2\%, 46.2\%)$ and $(12.7\%, 7.9\%, 26.9\%)$)}
-over direct \NMF, \Aa and \BIGCLAM on \Digg, \YouTube and \Wikipedia, respectively.
+Using real-life datasets, we finally conduct an extensive experimental study, and show that our ensemble approach for link prediction is both effective and efficient. Indeed, (1) on \Friendster with $15$ million nodes and $1$ billion edges, our approach could finish in
+two hours, while existing methods direct \NMF, \Aa \cite{adamic} and \BIGCLAM \cite{yang-wsdm2013} could not finish in a day, and
+(2) our approach improves the accuracy by $(2.8\%, 41.4\%, 34.1\%)$, $(7.5\%, 45.2\%, 46.2\%)$ and $(12.7\%, 7.9\%, 26.9\%)$ on (\Digg, \YouTube, \Wikipedia)
+compared with existing methods  direct \NMF \Aa and \BIGCLAM, respectively.
 
 
 \stitle{Organization}. This paper is organized as follows. In the next section, we  provide
