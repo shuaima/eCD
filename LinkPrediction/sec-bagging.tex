@@ -10,12 +10,13 @@ independently.
 Furthermore, the aggregated results from multiple models often
 provide a robustness to the decomposition process  \cite{Breiman96b-1996}. In the
 following, we introduce three different ways for the bagging decomposition.
+We consider a network $G(V, A)$.
+
 
 \subsection{Random Node Bagging}
 
-Random node bagging is the simplest form of structural bagging. The basic
-idea of random node bagging is to iteratively apply the following
-three steps:
+Random node bagging is the simplest form of structural bagging, and its basic
+idea is to iteratively apply the following three steps:
 
 \vspace{-1ex}
 \begin{enumerate}
@@ -27,17 +28,16 @@ three steps:
 %and columns of $W$.
 
 %\vspace{-0.5ex}
-\item[(1)] Select a random set of nodes $N_r$ from the graph $G$ corresponding to
+\item[(1)] Select a random set of nodes $N_r$ in the netwrok $G$ corresponding to
 a fraction $f$ of the nodes in the network. Determine the node set
 $N_s \supseteq N_r$, corresponding to all nodes adjacent to $N_r$.
-%\vspace{-0.5ex}
-\item[(2)]  Construct a reduced
-adjacency matrix $W_s$ from the node set $N_s$ by using the subgraph
-induced on $N_s$ of $G$, referred to as an ensemble component or simply an ensemble, to select the relevant $|N_s|$ rows and columns of $W$.
-%\vspace{-0.5ex}
-\item[(3)]  Apply the symmetric \NMF method in Section \ref{sec-NMF}
-to the reduced matrix $W_s$.  Use the  pruning search
-process in Section \ref{sec-NMF-topk} to determine the predictions of all pairs of nodes of $N_s$.
+
+
+\item[(2)]  Construct a reduced adjacency matrix $W_s$ from the node set $N_s$, by using the subgraph
+induced on $N_s$ of $G$ (referred to as an ensemble component or simply an ensemble) to select the relevant $|N_s|$ rows and columns of the matrix $W$.
+
+\item[(3)]  Apply the symmetric \NMF method in Section \ref{sec-NMF} to the reduced matrix $W_s$, and use the  pruning search
+process in Section \ref{sec-NMF-topk-optimization} to determine the predictions of all pairs of nodes of $N_s$.
 \end{enumerate}
 \vspace{-1ex}
 
@@ -71,7 +71,6 @@ The edge bagging approach proceeds as follows:
 
 \vspace{-1ex}
 \begin{enumerate}
-
 %\item  Let $N_s$ be a node set containing a single randomly chosen
 %node. Nodes which are adjacent to $N_s$ are randomly selected and
 %added to $N_s$. In the event that no node is adjacent to $N_s$, a
@@ -80,22 +79,19 @@ The edge bagging approach proceeds as follows:
 %fraction $f$ of the total number of nodes. Construct a reduced
 %adjacency matrix $W_s$ from the node set $N_s$ by using the subgraph
 %induced on $N_s$ to select the relevant rows and columns of $W$.
-
-%\vspace{-0.5ex}
-\item[(1)]  Let $N_s$ be a node set containing a single randomly chosen
+\item[(1)]Let $N_s$ be a node set containing a single randomly chosen
 node. Nodes which are adjacent to $N_s$ are randomly selected and
 added to $N_s$. In the event that no node is adjacent to $N_s$, a
 randomly chosen node from a different connected component is added
 to $N_s$. The procedure is repeated until $N_s$ contains at least a
 fraction $f$ of the total number of nodes.
-%\vspace{-0.5ex}
+ 
 \item[(2)]  Construct a reduced
 adjacency matrix $W_s$ from the node set $N_s$ by using the subgraph
-induced on $N_s$ of $G$, i.e., an ensemble, to select the relevant $|N_s|$ rows and columns of $W$.
-%\vspace{-0.5ex}
+induced on $N_s$ of $G$, i.e., an ensemble, to select the relevant $|N_s|$ rows and columns of the matrix $W$.
+ 
 \item[(3)] Apply the symmetric \NMF method in Section \ref{sec-NMF}
-to the reduced matrix $W_s$.  Use the pruning search
-process in Section \ref{sec-NMF-topk} to determine the predictions of all pairs of nodes.
+to the reduced matrix $W_s$, and use the pruning search process in Section \ref{sec-NMF-topk-optimization} to determine the predictions of all pairs of nodes  of $N_s$.
 %, except those that are less than $\epsilon$.
 \end{enumerate}
 \vspace{-1ex}
@@ -104,9 +100,9 @@ process in Section \ref{sec-NMF-topk} to determine the predictions of all pairs 
 This method of growing the sampled node set with edge sampling is
 likely to select dense components from the network. Such dense
 components are more likely to contain random node pairs. Unlike the
-previous case where every node pair is considered with high
+previous case where each node pair is considered with a high
 probability, many node pairs will not be considered at all. However,
-such node pairs will typically not be present in the same dense
+such node pairs are typically not present in the same dense
 component. Therefore, such node pairs are likely to be irrelevant,
 and in this way the approach already prunes unimportant node pairs
 during the process of ensemble construction.
@@ -125,7 +121,7 @@ difficult to make robust predictions between low-degree nodes.
 In biased edge bagging, exactly the same procedure is used as the case
 of edge bagging.  The only difference is that when the node set
 $N_s$ is grown, a random adjacent node is not selected. Rather, an
-adjacent node, which was selected the least number of times
+adjacent node with the least number of selected times
 in previous ensemble components, is used. Ties are broken randomly.
 
 This approach ensures  that each node is selected with an approximately
