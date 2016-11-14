@@ -264,27 +264,29 @@ The simple yet effective strategy is that the prediction value of a node pair $(
 \overline{F_i} \cdot \overline{F_j} = \|\overline{F_i} \| \cdot \| \overline{F_j} \| \cdot
 cos(\overline{F_i}, \overline{F_j}) \leq \|\overline{F_i} \| \cdot \| \overline{F_j} \|,
 \end{equation} in which $\|\cdot\|$ is the length of a vector. 
-By Equation \ref{equation-length}, we obtain
+
+By Equation \ref{equation-length}, we obtain the following:
 \begin{equation}
 \label{equation-length-pruning}
 \|\overline{F_i} \| \cdot \| \overline{F_j} \| \leq \theta \Longrightarrow \overline{F_i} \cdot \overline{F_j} \leq \theta
 \end{equation}
-The prediction value is less and equal than $\theta$ if the product of length is less and equal than $\theta$.
-Since our goal is to find the node pairs whose prediction values are greater than $\theta$, we can ignore
-the node pairs whose length product are less and equal than $\theta$ in the search process. \\
-After obtained the matrix $S$ and $R$, an additional step is required to calculate the length of each row
-vector $\overline{F_i}$ and store them in an array $M$. Then insert the following if-clause:
-\vspace{-1ex}
+The prediction value is no larger than $\theta$ if the product of the vector lengths  is no larger than $\theta$.
+As we are to find the node pairs whose prediction values are greater than $\theta$, we can ignore
+the node pairs whose length product are no larger than $\theta$ in the search process. 
+
+After  the matrixes $S$ and $R$ are obtained, an additional step is required to calculate the length of each row
+vector $\overline{F_i}$ and store them in an array $M$. Then the following if-clause is inserted  into line 3
+in the above nested loop to prune the node pairs whose prediction values are less and equal to $\theta$.
 \begin{tabbing}\hspace{5ex}\=
 {\bf if} $M[R_{ip}] \cdot M[R_{jp}] \leq \theta$ {\bf then} continue;
 \end{tabbing}
-\vspace{-1ex}
- into the line 3
-in the nested loop to prune the node pairs whose prediction values are less and equal to $\theta$.
-It is intuitive that this procedure correctly finds a valid set of top-$(\epsilon, k)$
-predictions with prediction values are greater than $\theta$. Since the node pairs whose
-length products are less and equal than $\theta$ have been ignored in the nested loop,
-this procedure speeds up the nested loop method.
+
+
+%It is intuitive that this procedure correctly finds a valid set of top-$(\epsilon, k)$
+%predictions with prediction values are greater than $\theta$. Since the node pairs whose
+%length products are less and equal than $\theta$ have been ignored in the nested loop,
+%this procedure speeds up the nested loop method.
+
 \begin{prop}
 The top-$(\epsilon, k)$ prediction with speeding up technique finds a valid set of top-$(\epsilon, k)$
 predictions with prediction values are greater than $\theta$.
@@ -292,16 +294,12 @@ predictions with prediction values are greater than $\theta$.
 \begin{IEEEproof}
 By Proposition~\ref{prop-valid-topk}, the nested loop finds a valid set of
 top-$(\epsilon, k)$ predictions. The difference between the nested loop
-and the augmented nested loop (i.e., the top-$(\epsilon, k)$ prediction with speeding up technique)
+and the optimized nested loop (\ie the top-$(\epsilon, k)$ prediction with speeding up technique)
 is that the later does not consider the node pairs $(i, j)$
 when $\|\overline{F_i} \| \cdot \| \overline{F_j} \| \leq \theta$.
-Note that the prediction values of those node pairs
-are also less and equal than $\theta$. At the end of
-the execution, the augmented nested loop removes the node
-pairs with prediction values are less and equal than $\theta$.
-Therefore, the augmented nested loop finds a valid set of top-$(\epsilon, k)$ predictions with
-prediction values are greater than $\theta$.
-//
+By Equation~(\ref{equation-length-pruning}), the prediction values of those node pairs
+are also less and equal than $\theta$. 
+
 This completes the proof.
 \end{IEEEproof} 
 %%%%%%%%%%%%%%%%%%%%%%   2016-06-20 duan end
