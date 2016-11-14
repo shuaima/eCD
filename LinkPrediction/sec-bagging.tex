@@ -166,12 +166,12 @@ For edge and biased edge bagging, when a node adjacent to $N_s$ is
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 2016-06-21 duan  begin
 \marked{
-Different from existing graph sampling methods \cite{ahmed2014tkdd, leskovec2006}, 
-our bagging methods should be designed in particular for link prediction. 
-We develop a special graph sampling method consisting of two steps: 
-node selection and edge filtration, which takes positive and negative strategies 
-into consideration. The positive strategy here is to select the nodes that are more 
-likely to form new links as much as possible and the negative strategy is to 
+Different from existing graph sampling methods \cite{ahmed2014tkdd, leskovec2006},
+our bagging methods should be designed in particular for link prediction.
+We develop a special graph sampling method consisting of two steps:
+node selection and edge filtration, which takes positive and negative strategies
+into consideration. The positive strategy here is to select the nodes that are more
+likely to form new links as much as possible and the negative strategy is to
 filter out some edges which do not affect the prediction accuracy. }
 
 \stitle{Node selection}. Motivated by the observation that most of all new links in social networks span within very short distances, typically closing triangles, which has been justified in \cite{leskovec-2008}, we develop three structural bagging approaches such that {\em a node is always sampled together
@@ -198,20 +198,20 @@ The challenge here is how to remove edges as much as possible while maintaining 
 To overcome this challenge, we filter out edges from the induced subgraph incorporating with the following link
 prediction characteristics.
 \\
-Preferential attachment (PA) \cite{albert1999,leskovec-2008} is one of the well-known 
-link prediction characteristics, which postulates the probability 
-that a new link is connected to the node $i$ is proportional to the degree of $i$. 
-It means that the smaller degree nodes would have fewer links in the future. 
+Preferential attachment (PA) \cite{albert1999,leskovec-2008} is one of the well-known
+link prediction characteristics, which postulates the probability
+that a new link is connected to the node $i$ is proportional to the degree of $i$.
+It means that the smaller degree nodes would have fewer links in the future.
 Therefore, we would like to remove the edges containing at least one smaller degree node.
 Assume that $d_i$ and $d_j$ are the degree of nodes in the edge $(i, j)$. Given a sampling ratio $s$,
-we sort edges in the induced subgraph by $min(d_i, d_j)$ in a 
+we sort edges in the induced subgraph by $min(d_i, d_j)$ in a
 descending order and only select the top $ms$ edges, where $m$ is the number of edges in the input graph.
 \\
 Common neighbor (CN) \cite{kleinberg,linyuan-2011} is another significant characteristic for link prediction,
 which assumes that two nodes $i$ and $j$ are more likely to have a link in the future if they
 have many common neighbors. Ignoring the edge $(i, j)$ may cause as many as $d_i + d_j - 2$ nodes to lose
 their common neighbors. \cite{chen2015} provided a method for filtering out edges in order to minimize the
-loss of common neighbors. This method could be adopted in our bagging methods by sorting edges by $d_i + d_j$ 
+loss of common neighbors. This method could be adopted in our bagging methods by sorting edges by $d_i + d_j$
 in a descending order and then select the top $ms$ edges.}
 
 
@@ -336,11 +336,11 @@ We now explain the complete framework for top-$k$ predictions enabled with ensem
 To ensure that a node pair appears in the ensemble components at least $\mu$ expected times,  $\mu / f^{2}$ ensemble components are considered in total.
 For each time, an ensemble component $N_s$ is sampled by one of the above
 node, edge and biased edge bagging methods,
-\marked{the symmetric \NMF method in Section \ref{sec-NMF} is used to the matrix $W_s$ obtained 
-by filtering edges on the reduced matrix, }and the aforementioned  
-pruning search process in Section \ref{sec-NMF-topk} is used to determine the predictions of 
-all pairs of nodes. If a node pair appears in multiple ensemble components and has multiple 
-predicted values, the maximum predicted value is considered, \marked{which means that we can use the
+\marked{the symmetric \NMF method in Section \ref{sec-NMF} is used to the matrix $W_s$ obtained
+by filtering edges on the reduced matrix, }and the aforementioned
+pruning search process in Section \ref{sec-NMF-topk} is used to determine the predictions of
+all pairs of nodes. If a node pair appears in multiple ensemble components and has multiple
+prediction values, the maximum prediction value is considered, \marked{which means that we can use the
 minimum value in the previous predicted links to speed up the top-$k$ predictions.}
 And, hence, only the top-$k$ predicted links are maintained for each ensemble component.
 At the end of the process, the top-$k$ predictions in all $\mu / f^{2}$ ensemble components are returned.

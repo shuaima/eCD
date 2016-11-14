@@ -36,9 +36,9 @@ would like to achieve the following:
 w_{ij} \approx \overline{F_i} \cdot \overline{F_j}, \ \ \forall i, j
 \in \{ 1, \ldots, n \} \label{factor}.
 \end{equation}
-This condition can be directly written in matrix form. Let $F$ be an
+This condition can be directly written in the matrix form. Let $F$ be an
 $n \times r$ matrix, in which the $i$th row is the row vector
-$\overline{F_i}$. Then, the aforementioned condition of
+$\overline{F_i}$. Then, the above condition of
 Equation~(\ref{factor}) can be written as follows:
 \begin{equation}
 W \approx F F^T.
@@ -110,7 +110,7 @@ F_{ij} \leftarrow F_{ij} ( 1 - \beta + \beta \frac{(W F)_{ij} }{(F F^T F)_{ij}} 
 \end{equation}
 in which $\beta$ is a constant in $( 0, 1]$ \cite{ding}.
 
-\stitle{Discussions}. Let us examine the computational complexity of
+\stitle{Discussions of computational complexity}. Let us examine the computational complexity of
 the update Equation~(\ref{equation-update}).
 The matrix $F F^T F$  can be fully materialized  with
 $O(r^2 \cdot n)$ matrix multiplications, and the matrix $W F$ can be
@@ -144,7 +144,7 @@ top-$k$ predictions, denoted as top-$(\epsilon, k)$ predictions.
 %at most $\epsilon$ less than the   $k$th best value of
 %$\overline{F_k} \cdot \overline{F_k}$ over any edge $(k , l)$ in the
 %network.
-A set $L$ of predicted links is a top-$(\epsilon, k)$ prediction, if
+A set $L$ of predicted links in a network is a top-$(\epsilon, k)$ prediction, if
 the cardinality of $L$ is $k$, and the $k$-th best  value of
 $\overline{F_i} \cdot \overline{F_j}$ for a link $(i, j) \in L$ is
 at most $\epsilon$ less than the $k$-th best value of
@@ -157,7 +157,7 @@ significantly helps in speeding up the search process by pruning
 large portions of the search space, which is particularly important
 in an $O(n^2)$ search space of link predictions.
 
-The first step is to create a new $n \times r$ matrix $S$, which is
+The first step is to create a new $n \times r$ matrix $S$, 
 obtained by sorting the columns of $F$ in a descending order. An inverted list is
 associated with each of the $r$ latent variables containing the node
 identifiers  of $F$ arranged according to the sorted order of $S$. The
@@ -168,15 +168,15 @@ the value of $S_{ip}$ is greater than $\sqrt{\epsilon/r}$ be $f_p$, and for whic
 Then the following nested loop is executed for each (say $p$-th) column of $S$:
 
 \vspace{-1ex}
-\begin{tabbing}1: \hspace{5ex}\=
+\begin{tabbing}1. \hspace{5ex}\=
 {\bf for} \= each $i=1$ to $f_p$ {\bf do}\\
-2: \>\>{\bf for} \= each $j=i+1$ to $f'_p$ {\bf do}\\
-3: \>\>\>{\bf if}\ \= $S_{ip} \cdot S_{jp} < \epsilon/r$ {\bf then}\\
-4: \>\>\>\>break inner loop; \\
-5: \>\>\> {\bf else} increase the score of node-pair $(R_{ip}, R_{jp})$ by \\
+2. \>\>{\bf for} \= each $j=i+1$ to $f'_p$ {\bf do}\\
+3. \>\>\>{\bf if}\ \= $S_{ip} \cdot S_{jp} < \epsilon/r$ {\bf then}\\
+4. \>\>\>\>break inner loop; \\
+5. \>\>\> {\bf else} increase the score of node-pair $(R_{ip}, R_{jp})$ by \\
    \>\>\> \ \ \ \ \ \ an amount of $S_{ip} \cdot S_{jp}$\\
-6: \>\> {\bf endfor}\\
-7: \>{\bf endfor}
+6. \>\> {\bf endfor}\\
+7. \>{\bf endfor}
 \end{tabbing}
 \vspace{-1ex}
 
@@ -213,11 +213,12 @@ $\sum_{p = 1}^{r} f_p$ is equal to the number $n'$. Therefore, the complexity of
 top-$(\epsilon, k)$ prediction is $O(nn')$.
 \end{IEEEproof} }
 
- It remains to show that this procedure truly does find a valid set of  top-$(\epsilon,
+ It remains to show that this procedure  does find a valid set of  top-$(\epsilon,
 k)$ link predictions. The reason that the procedure works correctly
 and efficiently  is because of nonnegativity and sparsity.
 
 \begin{prop}
+\label{prop-valid-topk}
 The nested loop method finds a valid set of top-$(\epsilon, k)$
 predictions.
 \end{prop}
@@ -247,20 +248,23 @@ $(\epsilon/r)\times r= \epsilon$.
 This completes the proof.
 \end{IEEEproof}
 
-%%%%%%%%%%%%%%%%%%%%%%   2016-06-20 duan begin
-\marked{\stitle{Speeding up top-$(\epsilon, k)$ predictions.} In real-life applications,
-a common scenario is to find a set of top-$(\epsilon, k)$ predictions with prediction
-values are greater than a given threshold $\theta$ \cite{ballard2015, lemp}. In this case,
-the top-$(\epsilon, k)$ prediction could be sped up by pruning a portion of the search space
-which consists of node pairs whose prediction values are less and equal than $\theta$.
-The simple strategy here is that
-the prediction value of a node pair $(i, j)$ is
+\subsection{Speeding up Top-$(\epsilon, k)$ Predictions}
+\label{sec-NMF-topk-optimization}
+
+%We next propose an optimization for speeding up top-$(\epsilon, k)$ predictions.
+
+ In real-life applications,
+a common scenario is to find a set of top-$(\epsilon, k)$ predictions with such that the prediction
+values are required to be greater than a given threshold $\theta$ \cite{ballard2015, lemp}. In this case,
+the top-$(\epsilon, k)$ prediction could be speeded up by pruning the node pairs whose prediction values are less and equal than $\theta$.
+
+The simple yet effective strategy is that the prediction value of a node pair $(i, j)$ satisfies:
 \begin{equation}
 \label{equation-length}
 \overline{F_i} \cdot \overline{F_j} = \|\overline{F_i} \| \cdot \| \overline{F_j} \| \cdot
 cos(\overline{F_i}, \overline{F_j}) \leq \|\overline{F_i} \| \cdot \| \overline{F_j} \|,
-\end{equation}, where $\|\overline{F_i} \|$ is the length of the row vector $\overline{F_i}$.
-From Equation \ref{equation-length}, we obtain
+\end{equation} in which $\|\cdot\|$ is the length of a vector. 
+By Equation \ref{equation-length}, we obtain
 \begin{equation}
 \label{equation-length-pruning}
 \|\overline{F_i} \| \cdot \| \overline{F_j} \| \leq \theta \Longrightarrow \overline{F_i} \cdot \overline{F_j} \leq \theta
@@ -269,14 +273,14 @@ The prediction value is less and equal than $\theta$ if the product of length is
 Since our goal is to find the node pairs whose prediction values are greater than $\theta$, we can ignore
 the node pairs whose length product are less and equal than $\theta$ in the search process. \\
 After obtained the matrix $S$ and $R$, an additional step is required to calculate the length of each row
-vector $\overline{F_i}$ and store them in an array $M$. Then insert the following if-clause: 
+vector $\overline{F_i}$ and store them in an array $M$. Then insert the following if-clause:
 \vspace{-1ex}
 \begin{tabbing}\hspace{5ex}\=
-{\bf if} $M[R_{ip}] \cdot M[R_{jp}] \leq \theta$ {\bf then} continue; 
+{\bf if} $M[R_{ip}] \cdot M[R_{jp}] \leq \theta$ {\bf then} continue;
 \end{tabbing}
 \vspace{-1ex}
  into the line 3
-in the nested loop to prune the node pairs whose prediction values are less and equal to $\theta$. 
+in the nested loop to prune the node pairs whose prediction values are less and equal to $\theta$.
 It is intuitive that this procedure correctly finds a valid set of top-$(\epsilon, k)$
 predictions with prediction values are greater than $\theta$. Since the node pairs whose
 length products are less and equal than $\theta$ have been ignored in the nested loop,
@@ -286,20 +290,20 @@ The top-$(\epsilon, k)$ prediction with speeding up technique finds a valid set 
 predictions with prediction values are greater than $\theta$.
 \end{prop}
 \begin{IEEEproof}
-According to the Proposition 1, the nested loop finds a valid set of
-top-$(\epsilon, k)$ predictions. The difference between the nested loop 
-and the augmented nested loop (i.e., the top-$(\epsilon, k)$ prediction with speeding up technique) 
-is that the later does not consider the node pairs $(i, j)$ 
+By Proposition~\ref{prop-valid-topk}, the nested loop finds a valid set of
+top-$(\epsilon, k)$ predictions. The difference between the nested loop
+and the augmented nested loop (i.e., the top-$(\epsilon, k)$ prediction with speeding up technique)
+is that the later does not consider the node pairs $(i, j)$
 when $\|\overline{F_i} \| \cdot \| \overline{F_j} \| \leq \theta$.
-Note that the prediction values of those node pairs 
+Note that the prediction values of those node pairs
 are also less and equal than $\theta$. At the end of
-the execution, the augmented nested loop removes the node 
+the execution, the augmented nested loop removes the node
 pairs with prediction values are less and equal than $\theta$.
 Therefore, the augmented nested loop finds a valid set of top-$(\epsilon, k)$ predictions with
 prediction values are greater than $\theta$.
-\\
+//
 This completes the proof.
-\end{IEEEproof} }
+\end{IEEEproof} 
 %%%%%%%%%%%%%%%%%%%%%%   2016-06-20 duan end
 
 
