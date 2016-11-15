@@ -140,7 +140,7 @@ process.
 
 
 
-\subsection{Using Link Prediction Characteristics}
+\subsection{Incorporating Link Prediction Characteristics}
 \eat{
 Different from existing sampling methods \cite{ahmed2014tkdd}, our bagging methods should be designed in particular for link prediction.
 Motivated by the observation that most of all new links in social networks span within very short distances, typically closing triangles,
@@ -161,17 +161,17 @@ For edge and biased edge bagging, when a node adjacent to $N_s$ is
 \vspace{-1ex}
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 2016-06-21 duan  begin
-\marked{
-Different from existing graph sampling methods \cite{ahmed2014tkdd, leskovec2006},
-our bagging methods should be designed in particular for link prediction.
-We develop a special graph sampling method consisting of two steps:
-node selection and edge filtration, which takes positive and negative strategies
-into consideration. The positive strategy here is to select the nodes that are more
-likely to form new links as much as possible and the negative strategy is to
-filter out some edges which do not affect the prediction accuracy. }
 
-\stitle{Node selection}. Motivated by the observation that most of all new links in social networks span within very short distances, typically closing triangles, which has been justified in \cite{leskovec-2008}, we develop three structural bagging approaches such that {\em a node is always sampled together
+
+Different from existing graph sampling methods \cite{ahmed2014tkdd, leskovec2006},
+we employ the characteristics of link prediction, as our bagging methods are designed in particular for link prediction.
+We develop a novel graph sampling method accompanied with positive and positive strategies:  
+(1) node uptake, to choose those nodes with a high possibility of forming links  and (2) edge filter, to eliminate edges without affecting the prediction accuracy.
+
+
+\stitle{Node uptake}. Motivated by the observation that most of all new links in social networks span within very short distances, typically closing triangles, which has been justified in \cite{leskovec-2008}.  Inspired by this, we develop a node uptake strategy such that {\em a node is always sampled together
 with all its neighbors, which guarantees the possibility of forming triangles}. To achieve this, we revise the previous bagging methods as follows.
+
 \vspace{-1ex}
 \begin{enumerate}
 %\vspace{-0.5ex}
@@ -185,32 +185,46 @@ For edge and biased edge bagging, when a node adjacent to $N_s$ is
 \end{enumerate}
 \vspace{-1ex}
 
-\marked{\stitle{Edge filtration}. Inspired by previous research on graph sparsification \cite{chen2015, satuluri2011}
-which has been successfully applied on clustering without sacrificing quality,
-we adopt an edge filtration strategy for
-selecting a portion of edges rather than all of edges from the subgraph induced on $N_s$ of $G$. With less edges,
-each ensemble can be processed faster, which is significant for improving the efficiency of the bagging methods.
-The challenge here is how to remove edges as much as possible while maintaining high prediction accuracy.
-To overcome this challenge, we filter out edges from the induced subgraph incorporating with the following link
-prediction characteristics.
-\\
+
+\stitle{Edge filter}. Inspired by graph sparsification \cite{chen2015, satuluri2011}
+which has been successfully applied to clustering without sacrificing the quality,
+we develop an edge filter strategy to choose a portion of edges only, rather than all the edges of the subgraph induced on $N_s$ of $G$,
+which significantly improves the efficiency of the bagging methods.
+The challenge here is how to remove edges as many as possible while maintaining the high prediction accuracy.
+To do this, we make use of the following link prediction characteristic.
+
+
 Preferential attachment (PA) \cite{albert1999,leskovec-2008} is one of the well-known
-link prediction characteristics, which postulates the probability
-that a new link is connected to the node $i$ is proportional to the degree of $i$.
-It means that the smaller degree nodes would have fewer links in the future.
-Therefore, we would like to remove the edges containing at least one smaller degree node.
-Assume that $d_i$ and $d_j$ are the degree of nodes in the edge $(i, j)$. Given a sampling ratio $s$,
-we sort edges in the induced subgraph by $min(d_i, d_j)$ in a
-descending order and only select the top $ms$ edges, where $m$ is the number of edges in the input graph.
-\\
-Common neighbor (CN) \cite{kleinberg,linyuan-2011} is another significant characteristic for link prediction,
-which assumes that two nodes $i$ and $j$ are more likely to have a link in the future if they
-have many common neighbors. Ignoring the edge $(i, j)$ may cause as many as $d_i + d_j - 2$ nodes to lose
-their common neighbors. \cite{chen2015} provided a method for filtering out edges in order to minimize the
-loss of common neighbors. This method could be adopted in our bagging methods by sorting edges by $d_i + d_j$
-in a descending order and then select the top $ms$ edges.}
+link prediction characteristics, which says that {\em the probability
+that a new link is connected to a node $i$ is proportional to its degree}.
+In other words, nodes with small degree tend to have fewer links in the future.
+Therefore, we remove those edges that has at least one endpoint  with a smaller degree.
+Let $d_i$ and $d_j$ be the degrees of the endpoints $i$  and $j$ of edge $(i, j)$, respectively. Given a sampling ratio $\rho$,
+we sort edges in the induced subgraph by $\min(d_i, d_j)$ in a
+descending order and only select the top $m\rho$ edges, where $m$ is the total number of edges.
+%
+To achieve this, we further revise the previous bagging methods as follows.
+
+\eat{Common neighbor (CN) \cite{kleinberg,linyuan-2011} is another significant characteristic for link prediction,
+which says that {\em two nodes $i$ and $j$ are more likely to have a link in the future if they
+have many common neighbors}. Ignoring the edge $(i, j)$ may cause as many as $d_i + d_j - 2$ nodes to lose
+their common neighbors. We adopt the method for filtering out edges in order to minimize the
+loss of common neighbors  \cite{chen2015}, which sorts edges by $d_i + d_j$ in a descending order, and keeps the top $ms$ edges, where $m$ is the total number of edges.}
 
 
+
+\vspace{-1ex}
+\begin{enumerate}
+%\vspace{-0.5ex}
+\item[(1)]
+For random node bagging, when a node is selected uniformly at random from the network $G$, the node together with all of
+its neighbors are put into the node set $N_s$.
+%\vspace{-0.5ex}
+\item[(2)]
+For edge and biased edge bagging, when a node adjacent to $N_s$ is
+ selected and added to $N_s$, all of its neighbors are put into the node set $N_s$ together.
+\end{enumerate}
+\vspace{-1ex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 2016-06-21 duan  end
 
