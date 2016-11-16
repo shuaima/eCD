@@ -165,7 +165,7 @@ For edge and biased edge bagging, when a node adjacent to $N_s$ is
 
 Different from existing graph sampling methods \cite{ahmed2014tkdd, leskovec2006},
 we employ the characteristics of link prediction, as our bagging methods are designed in particular for link prediction.
-We develop a novel graph sampling method accompanied with positive and positive strategies:
+We develop a novel graph sampling method accompanied with two strategies:
 (1) node uptake, to choose those nodes with a high possibility of forming links  and (2) edge filter, to eliminate edges without affecting the prediction accuracy.
 
 
@@ -217,9 +217,9 @@ loss of common neighbors  \cite{chen2015}, which sorts edges by $d_i + d_j$ in a
 \begin{enumerate}
 %\vspace{-0.5ex}
 \item[(1)]
-For the second step of the three bagging methods, construct a reduced adjacency matrix $W_s$ 
-from the reduced subgraph obtained by applying the edge filter 
-on the subgraph induced on the node set $N_s$ of the network $G$. 
+At the second step of the three bagging methods, construct a reduced adjacency matrix $W_s$
+from the reduced subgraph obtained by applying the edge filter
+on the subgraph induced on the node set $N_s$ of the network $G$.
 
 %\item[(1)]
 %For random node bagging, when a node is selected uniformly at random from the network $G$, the node together with all of
@@ -350,13 +350,12 @@ We now explain the complete framework for top-$k$ predictions enabled with ensem
 
 To ensure that a node pair appears in the ensemble components at least $\mu$ expected times,  $\mu / f^{2}$ ensemble components are considered in total.
 For each time, an ensemble component $N_s$ is sampled by one of the above
-node, edge and biased edge bagging methods,
-\marked{the symmetric \NMF method in Section \ref{sec-NMF} is used to the matrix $W_s$ obtained
-by filtering edges on the reduced matrix, }and the aforementioned
-pruning search process in Section \ref{sec-NMF-topk} is used to determine the predictions of
+node, edge and biased edge bagging methods, the symmetric \NMF method in Section \ref{sec-NMF} is used on the matrix $W_s$ obtained
+by filtering edges on the reduced matrix, and the aforementioned
+pruning search process in Section \ref{sec-NMF-topk-optimization} is used to determine the predictions of
 all pairs of nodes. If a node pair appears in multiple ensemble components and has multiple
-prediction values, the maximum prediction value is considered, \marked{which means that we can use the
-minimum value in the previous predicted links to speed up the top-$k$ predictions.}
+prediction values, the maximum prediction value is considered, which means that we can use the
+minimum value in the previous predicted links to speed up the top-$k$ predictions.
 And, hence, only the top-$k$ predicted links are maintained for each ensemble component.
 At the end of the process, the top-$k$ predictions in all $\mu / f^{2}$ ensemble components are returned.
 
