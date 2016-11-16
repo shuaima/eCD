@@ -85,11 +85,11 @@ added to $N_s$. In the event that no node is adjacent to $N_s$, a
 randomly chosen node from a different connected component is added
 to $N_s$. The procedure is repeated until $N_s$ contains at least a
 fraction $f$ of the total number of nodes.
- 
+
 \item[(2)]  Construct a reduced
 adjacency matrix $W_s$ from the node set $N_s$ by using the subgraph
 induced on $N_s$ of $G$, i.e., an ensemble, to select the relevant $|N_s|$ rows and columns of the matrix $W$.
- 
+
 \item[(3)] Apply the symmetric \NMF method in Section \ref{sec-NMF}
 to the reduced matrix $W_s$, and use the pruning search process in Section \ref{sec-NMF-topk-optimization} to determine the predictions of all pairs of nodes  of $N_s$.
 %, except those that are less than $\epsilon$.
@@ -165,7 +165,7 @@ For edge and biased edge bagging, when a node adjacent to $N_s$ is
 
 Different from existing graph sampling methods \cite{ahmed2014tkdd, leskovec2006},
 we employ the characteristics of link prediction, as our bagging methods are designed in particular for link prediction.
-We develop a novel graph sampling method accompanied with positive and positive strategies:  
+We develop a novel graph sampling method accompanied with positive and positive strategies:
 (1) node uptake, to choose those nodes with a high possibility of forming links  and (2) edge filter, to eliminate edges without affecting the prediction accuracy.
 
 
@@ -217,12 +217,17 @@ loss of common neighbors  \cite{chen2015}, which sorts edges by $d_i + d_j$ in a
 \begin{enumerate}
 %\vspace{-0.5ex}
 \item[(1)]
-For random node bagging, when a node is selected uniformly at random from the network $G$, the node together with all of
-its neighbors are put into the node set $N_s$.
-%\vspace{-0.5ex}
-\item[(2)]
-For edge and biased edge bagging, when a node adjacent to $N_s$ is
- selected and added to $N_s$, all of its neighbors are put into the node set $N_s$ together.
+For the second step of the three bagging methods, construct a reduced adjacency matrix $W_s$ 
+from the reduced subgraph obtained by applying the edge filter 
+on the subgraph induced on the node set $N_s$ of the network $G$. 
+
+%\item[(1)]
+%For random node bagging, when a node is selected uniformly at random from the network $G$, the node together with all of
+%its neighbors are put into the node set $N_s$.
+%%\vspace{-0.5ex}
+%\item[(2)]
+%For edge and biased edge bagging, when a node adjacent to $N_s$ is
+% selected and added to $N_s$, all of its neighbors are put into the node set $N_s$ together.
 \end{enumerate}
 \vspace{-1ex}
 
@@ -330,15 +335,15 @@ Indeed, we could do much better in practice. For instance, the setting of $\mu =
 We now explain the complete framework for top-$k$ predictions enabled with ensembles, shown as follows.
 
 \vspace{-1ex}
-\begin{tabbing}\hspace{2ex}\=
+\begin{tabbing}1.\hspace{1ex}\=
  {\bf given} network $G(N, A)$ and parameters $\mu$ and $f$.\\
-\> {\bf let} $\Gamma$ be empty;\\
-\> {\bf repeat} $\mu/f^2$  times {\bf do} \\
-\>\hspace{2ex}\= {\bf let} $N_s$ be a sampled ensemble of $G$ with at least $f\cdot n$ nodes; \\
-\>\>Compute $W_s \approx F_s\cdot F_s^T$ using \NMF; \\
-\>\> {\bf let} $\Gamma'$ be top-$k$ largest value node pairs $(i,j)$ in $\{\overline{F_{s,i}} \cdot \overline{F_{s,j}}\}$;\\
-\>\> {\bf let} $\Gamma$ be top-$k$ largest value node pairs $(i,j)$ in $\Gamma'\cup\Gamma$;\\
-\> {\bf return} the top-$k$ node pairs $\Gamma$ not included in $A$.
+2.\> {\bf let} $\Gamma$ be empty;\\
+3.\> {\bf repeat} $\mu/f^2$  times {\bf do} \\
+4.\>\hspace{2ex}\= {\bf let} $N_s$ be a sampled ensemble of $G$ with at least $f\cdot n$ nodes; \\
+5.\>\>Compute $W_s \approx F_s\cdot F_s^T$ using \NMF; \\
+6.\>\> {\bf let} $\Gamma'$ be top-$k$ largest value node pairs $(i,j)$ in $\{\overline{F_{s,i}} \cdot \overline{F_{s,j}}\}$;\\
+7.\>\> {\bf let} $\Gamma$ be top-$k$ largest value node pairs $(i,j)$ in $\Gamma'\cup\Gamma$;\\
+8.\> {\bf return} the top-$k$ node pairs $\Gamma$ not included in $A$.
 \end{tabbing}
 \vspace{-1ex}
 

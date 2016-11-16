@@ -4,8 +4,8 @@
 \marked{We next present an extensive experimental study of our ensemble-enabled approach for link prediction.
 Using real-life datasets, we conducted four sets of experiments to evaluate:
 (1) the effectiveness and efficiency of bagging methods with the top-$(\epsilon, k)$ speeding up,
-node selection and edge filtration techniques (denoted as bagging+ methods)
-vs. their counterparts bagging methods with only node selection technique \cite{liang2016},
+node uptake and edge filter techniques (denoted as bagging+ methods)
+vs. their counterparts bagging methods with only node uptake technique \cite{liang2016},
 (2) the effectiveness and efficiency of our approach vs. conventional methods \Aa \cite{adamic} and \BIGCLAM \cite{yang-wsdm2013},
 (3) the impacts of various factors and (4) the improvements of bagging+ methods.}
 
@@ -101,7 +101,7 @@ $\mu$ & \tabincell{l}{Expected appearing times of each \\
 node pair in ensemble components} & 0.1 \\
 $f$   & \tabincell{l}{Fraction of the number of nodes to be\\
  selected for an ensemble component} & 0.1 \\
-$s$   & \marked{\tabincell{l}{Fraction of the number of edges to be\\
+$\rho$   & \marked{\tabincell{l}{Fraction of the number of edges to be\\
  selected for an ensemble component}} & 0.75 \\
 \hline
 $n$ & Number of nodes & See Table \ref{tab_dataset}\\
@@ -195,13 +195,13 @@ The complexity of  \BIGCLAM is $O(nd(r + d) )$, where $d$ is the average degree 
 
 
 \stitle{Implementation}.
-We implemented all algorithms including \Aa, \BIGCLAM, 
+We implemented all algorithms including \Aa, \BIGCLAM,
 link prediction method in Section 2 (\NMF),
 \NMF with random node bagging (\Node), \NMF with  edge bagging (\Edge),
 \NMF with biased edge bagging (\Biased),
-\marked{ \Node with top-$(\epsilon, k)$ speeding up and edge filtration (\Nodep),
-\Edge with top-$(\epsilon, k)$ speeding up and edge filtration (\Edgep) and
-\Biased with top-$(\epsilon, k)$ speeding up and edge filtration (\Biasedp)}
+\marked{ \Node with top-$(\epsilon, k)$ speeding up and edge filter (\Nodep),
+\Edge with top-$(\epsilon, k)$ speeding up and edge filter (\Edgep) and
+\Biased with top-$(\epsilon, k)$ speeding up and edge filter (\Biasedp)}
 using C/C++ with no parallelization.
 
 
@@ -218,7 +218,7 @@ We next present our findings. In all the experiments, we fixed $r$ to
 $(50, 50, 50)$ (resp. $(10, 40, 50)$) for \NMF (resp. \BIGCLAM) on
 \Digg, \YouTube, and \Wikipedia, respectively. For the bagging+ and bagging
 methods, we fixed $r = 30$ on \Digg and $r = 10$ on other datasets by default
-(See Exp-3.4 for more details about the setting of $r$). 
+(See Exp-3.4 for more details about the setting of $r$).
 The other parameters with their descriptions and default values
 are presented in Table \ref{tab_parameter}.
 
@@ -248,7 +248,7 @@ and Figure \ref{fig_exp_1_1_k_time_digg}, \ref{fig_exp_1_1_k_time_youtube} and
 
 The accuracy results tell us that
 (a) \Biased and \Biasedp are the best methods on all datasets,
-(b) the accuracy of the bagging+ methods are very close to that 
+(b) the accuracy of the bagging+ methods are very close to that
 of their counterparts bagging methods, and (c) the accuracy of all
 methods decreases with the increase of $k$. It is means that the
 bagging+ methods maintain the accuracy while some of the
@@ -281,7 +281,7 @@ its default values. Hence, on these two datasets, we fixed $r = 50$ for \NMF
 (resp. $r = 33$ for \BIGCLAM and $r = 17$ for the bagging methods). The results
 of accuracy and running time are reported in Figure \ref{fig_exp_1_2_size_acc_digg},
 \ref{fig_exp_1_2_size_acc_youtube} and \ref{fig_exp_1_2_size_acc_wikipedia}
-and Figure \ref{fig_exp_1_2_size_time_twitter}, \ref{fig_exp_1_2_size_time_digg}, 
+and Figure \ref{fig_exp_1_2_size_time_twitter}, \ref{fig_exp_1_2_size_time_digg},
 \ref{fig_exp_1_2_size_time_youtube}, \ref{fig_exp_1_2_size_time_wikipedia} and
 \ref{fig_exp_1_2_size_time_friendster}, respectively.
 
@@ -406,7 +406,7 @@ when the degree is increased.
 evaluated the impacts of network sizes. The results of accuracy and running time
 are reported in Figure \ref{fig_exp_2_2_size_acc_digg}, \ref{fig_exp_2_2_size_acc_youtube} and
 \ref{fig_exp_2_2_size_acc_wikipedia}
-and Figure \ref{fig_exp_2_2_size_time_twitter}, \ref{fig_exp_2_2_size_time_digg}, 
+and Figure \ref{fig_exp_2_2_size_time_twitter}, \ref{fig_exp_2_2_size_time_digg},
 \ref{fig_exp_2_2_size_time_youtube}, \ref{fig_exp_2_2_size_time_wikipedia} and
 \ref{fig_exp_2_2_size_time_friendster}, respectively.
 Note that there are {\em some missing plots} for \NMF, \Aa and
@@ -440,7 +440,7 @@ the increase of the degree of networks, which is consistent with the complexity 
 In the third set of tests, we evaluated the impacts of parameters on
 the accuracy and running time of bagging+, bagging, \NMF
 and \BIGCLAM. We first tested the impacts of $\mu$ and $f$ in bagging+ and bagging methods.
-We then tested the impacts of $s$ in bagging+ methods. We finally
+We then tested the impacts of $\rho$ in bagging+ methods. We finally
 tested the impacts of $r$ and $\epsilon$.
 
 
@@ -510,18 +510,18 @@ Therefore, we fixed $\mu = 0.1$ by default.
   \centering
   \vspace{1ex}
   % Requires \usepackage{graphicx}
-  \subfigure[Digg]{\label{fig_exp_3_s_acc_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-3-a.eps} }
+  \subfigure[Digg]{\label{fig_exp_3_rho_acc_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-3-a.eps} }
   \quad\quad
-  \subfigure[YouTube]{\label{fig_exp_3_s_acc_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-3-b.eps} }
+  \subfigure[YouTube]{\label{fig_exp_3_rho_acc_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-3-b.eps} }
   \quad\quad
-  \subfigure[Wikipedia]{\label{fig_exp_3_s_acc_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-3-c.eps} }
-  \subfigure[Digg]{\label{fig_exp_3_s_time_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-3-e.eps} }
+  \subfigure[Wikipedia]{\label{fig_exp_3_rho_acc_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-3-c.eps} }
+  \subfigure[Digg]{\label{fig_exp_3_rho_time_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-3-e.eps} }
   \quad\quad
-  \subfigure[YouTube]{\label{fig_exp_3_s_time_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-3-f.eps} }
+  \subfigure[YouTube]{\label{fig_exp_3_rho_time_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-3-f.eps} }
   \quad\quad
-  \subfigure[Wikipedia]{\label{fig_exp_3_s_time_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-3-g.eps}}
+  \subfigure[Wikipedia]{\label{fig_exp_3_rho_time_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-3-g.eps}}
   \vspace{-2ex}
-  \caption{Accuracy and efficiency comparison: with respect to the fraction $s$}\label{fig_exp_3_s}
+  \caption{Accuracy and efficiency comparison: with respect to the fraction $\rho$}\label{fig_exp_3_rho}
   \vspace{-3ex}
 \end{figure*}
 
@@ -578,7 +578,7 @@ Figure \ref{fig_exp_3_f_acc_digg}, \ref{fig_exp_3_f_acc_youtube} and
 
 The results tell us that (a) bagging+ and bagging methods have higher accuracy
 than \NMF when $f = 0.1$, (b) the accuracy of bagging methods decreases
-with the increase of $f$ when $f$ is greater than 0.1 on \Digg and \Wikipedia, 
+with the increase of $f$ when $f$ is greater than 0.1 on \Digg and \Wikipedia,
 and (c) the running time of bagging methods increases
 nearly linearly with the decrease of $f$. Note that the complexity of bagging methods is
 $O((n_{1}r^2 + n_{1}d_{1}r)*\mu /f^2)$, where $n_1 = nf$ and $d_1$ is the average degree of
@@ -590,26 +590,26 @@ methods better than that of \NMF, we fixed $f = 0.1$ by default to achieve a bet
 
 
 
-\stitle{Exp-3.3: Impacts of $s$}. To evaluate the impacts of $s$ for
-the bagging+ methods, we varied $s$ from $0.55$ to $0.95$ and
+\stitle{Exp-3.3: Impacts of $\rho$}. To evaluate the impacts of $\rho$ for
+the bagging+ methods, we varied $\rho$ from $0.55$ to $0.95$ and
 fixed other parameters to their default values. The accuracy and
 running time results are reported in
-Figure \ref{fig_exp_3_s_acc_digg}, \ref{fig_exp_3_s_acc_youtube} and
-\ref{fig_exp_3_s_acc_wikipedia} and Figure \ref{fig_exp_3_s_time_digg},
-\ref{fig_exp_3_s_time_youtube} and \ref{fig_exp_3_s_time_wikipedia}, respectively.
+Figure \ref{fig_exp_3_rho_acc_digg}, \ref{fig_exp_3_rho_acc_youtube} and
+\ref{fig_exp_3_rho_acc_wikipedia} and Figure \ref{fig_exp_3_rho_time_digg},
+\ref{fig_exp_3_rho_time_youtube} and \ref{fig_exp_3_rho_time_wikipedia}, respectively.
 We also plotted the accuracy and running time of their counterparts
 bagging methods for comparison.
 
 The results tell us that (a) the three bagging+ methods perform
 as well as their counterparts bagging methods in accuracy when
-$s$ is greater than 0.75, (b) the accuracy of the bagging+ methods
-increases with the increase of $s$, (c) the bagging+ methods are faster
-than their counterparts bagging methods when $s$ is less than 0.95,
+$\rho$ is greater than 0.75, (b) the accuracy of the bagging+ methods
+increases with the increase of $\rho$, (c) the bagging+ methods are faster
+than their counterparts bagging methods when $\rho$ is less than 0.95,
 and (d) the running time of the bagging+ methods increases linearly
-with the increase of $s$, which is consistent with
+with the increase of $\rho$, which is consistent with
 the complexity that is proportional to the number of edges in the
-ensemble component. Keeping the accuracy of the bagging+ methods is close to
-that of the bagging methods, we fixed $s = 0.75$ by default to achieve a better efficiency.
+ensemble component. Keeping the accuracy of the bagging+ methods is very close to
+that of the bagging methods, we fixed $\rho = 0.75$ by default to achieve a better efficiency.
 
 
 
@@ -660,14 +660,12 @@ fixed $\epsilon = 1$ by default to achieve a better efficiency.
 
 \subsubsection{Improvements}
 In the fourth set of tests, we evaluate the improvements of our bagging+ methods.
-Compared with their counterparts bagging methods, the bagging+ methods have two modifications. 
+Compared with their counterparts bagging methods, the bagging+ methods have two modifications.
 One is the top-$(\epsilon, k)$ speeding up technique (denoted as top-$(\epsilon, k)$+)
-and the other is the edge filtration technique.
+and the other is the edge filter technique.
 Both of these techniques speed up link prediction process without sacrificing accuracy.
-Therefore, we focus on the efficiency improvements of these techniques. 
-For the limitation of space, we only report the results of the bagging+ methods with the edge
-filtration incorporating with PA characteristic since the CN characteristic has the similar 
-trends as the PA characteristic.
+Therefore, we focus on the efficiency improvements of these techniques.
+
 
 \stitle{Exp-4: Improvements of bagging+ methods}. To evaluate the
 efficiency improvements of these techniques, we generated different combinations
@@ -676,20 +674,20 @@ The results of running time are reported in Table \ref{tab_improvements}.
 
 The results tell us that (a) Top-$(\epsilon, k)$+ indeed improves
 the efficiency of Top-$k$ on all datasets,
-(b) the edge filtration technique also speeds up the bagging methods,
+(b) the edge filter technique also speeds up the bagging methods,
 and (c) the maximum speedup is obtained by taking the
 two techniques together. Therefore, we adopt these two techniques
 in our bagging+ methods to achieve the maximum speedup.
-Note that the running time of \Biasedp and \Nodep on \YouTube and \Wikipedia 
-are very close because \Biasedp spends more time on sampling the nodes 
-from the input graph than \Nodep while \Nodep spends more time on processing 
+Note that the running time of \Biasedp and \Nodep on \YouTube and \Wikipedia
+are very close because \Biasedp spends more time on sampling the nodes
+from the input graph than \Nodep while \Nodep spends more time on processing
 its ensembles. Furthermore, the improvement of Top-$(\epsilon, k)$+ on \Wikipedia is not
 distinct since the $\epsilon = 1$ is very suitable for this dataset.
 
 \begin{table}
 \caption{Running time of different combinations of the modifications. Node+
 (resp. Edge+ and Biased+) is the Random Node Bagging (resp. Edge Bagging
-and Biased Edge Bagging) with edge filtration.}
+and Biased Edge Bagging) with edge filter.}
 \label{tab_improvements}
 \vspace{-2ex}
 \centering
@@ -733,7 +731,7 @@ for users to apply our bagging methods in practice.
   \hspace{-2ex}
   \subfigure[]{\label{fig_exp_2_k_acc_flickr}\includegraphics[width= 1.7in, height=1.2in]{eps-script/2-1-d.eps} }
   \vspace{-2ex}
-  \caption{Accuracy comparison on \Flickr: (a) with respect to the number $r$ of latent factors, 
+  \caption{Accuracy comparison on \Flickr: (a) with respect to the number $r$ of latent factors,
   (b) with respect to the number $k$ of predicted links.}\label{fig_exp_5}
   \vspace{-3ex}
 \end{figure}
@@ -751,7 +749,7 @@ the reasons to avoid this situation.
 It is well known that the principle in ensemble methods is to make each ensemble as
 unique as possible and this is also called as diversity \cite{zhzhou}. Diversity can
 be achieved by using different ensemble components or different settings of parameters for the ensemble base
-algorithms. Since the base algorithm and its parameters were fixed in our experiments, we examined  
+algorithms. Since the base algorithm and its parameters were fixed in our experiments, we examined
 the diversity of ensembles generated by our bagging methods. We adopted the pairwise
 overlapping of predicted links and nodes (i.e., $N_s$ in each ensemble component)
 among ensemble components to measure the diversity. The value of pairwise overlapping is between
@@ -805,7 +803,7 @@ that \BIGCLAM is sensitive to the degree of networks. (2) However, the running t
 for large networks. By decomposing the link prediction problem into smaller pieces
 and solving them independently, our bagging methods are more efficient and
 scale well with the size and density of large networks, especially for the bagging+
-methods with the top-$(\epsilon, k)$ speeding up and edge filtration techniques,
+methods with the top-$(\epsilon, k)$ speeding up and edge filter techniques,
 e.g., \Biasedp finished in two hours on \Friendster with $1.5\times 10^7$ nodes and
 $1.0\times 10^9$ edges, while \NMF, \Aa  and \BIGCLAM could not finish in a day.
 Further, \Biasedp speeds up \Biased, \NMF, \Aa and \BIGCLAM
