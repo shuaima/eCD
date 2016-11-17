@@ -21,12 +21,12 @@ from the Koblenz Network Collection ({\small http://konect.uni-koblenz.de/}).
 \begin{enumerate}
 
 \item[(1)] \Digg is a 5 year friendship graph of Digg users with
-$279,630$ nodes and $1,731,653$ directed edges. 
+$279,630$ nodes and $1,731,653$ directed edges.
 
 \item[(2)] \YouTube is a 7 month  friendship graph of YouTube users
 with $3,223,589$ nodes and $9,375,374$ undirected edges.
 
-\item[(3)]  \Wikipedia is a 6 year English Wikipedia hyperlink graph 
+\item[(3)]  \Wikipedia is a 6 year English Wikipedia hyperlink graph
 with $1,870,709$ nodes and $39,953,145$ directed edges.
 
 \item[(4)]  \Flickr is a 6 month friendship connections of Flickr users
@@ -59,7 +59,7 @@ undirected graphs, we ignored the direction of edges in the directed graphs.
 
 
 
-\begin{table}
+\begin{table}[tb!]
 \caption{Training and ground truth data. The data in the first time slot is the training data and
 the remaining is the ground truth data.}
 \label{tab_dataset}
@@ -83,23 +83,23 @@ the remaining is the ground truth data.}
 \end{tabular}
 \end{table}
 
-\begin{table}
+\begin{table}[tb!]
 \caption{Parameters used in the experiments.
-Note that we set $k = 1\times 10^5$ for \Digg and \YouTube and $k =1\times 10^6$ for
-other datasets.}
+Note that we set $k =  10^5$ for \Digg and \YouTube and $k = 10^6$ for
+other datasets, respectively.}
 \label{tab_parameter}
 \vspace{0ex}
 \centering
 \newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
 \begin{tabular}{c l c}
-\hline \hline Parameters & Descriptions & Default Values  \\
+\hline \hline Parameters & Descriptions & Default  \\
 \hline \hline
  $\beta$  & Coefficient in \NMF update rule & 0.5\\
  $iter$   & Number of iterations for \NMF   & 50 \\
  $r$      & Number of latent factors       & 10 / 30 \\
 \hline
 $\epsilon$ & Tolerance of top-($\epsilon$, $k$) prediction & 1 \\
-$k$        & \tabincell{l}{Number of links returned by \\ top-($\epsilon$, $k$) prediction} & $1\times 10^5 $ / $1\times 10^6$   \\
+$k$        & \tabincell{l}{Number of links returned by \\ top-($\epsilon$, $k$) prediction} & $10^5 $ / $10^6$   \\
 \hline
 $\mu$ & \tabincell{l}{Expected appearing times of each \\
 node pair in ensemble components} & 0.1 \\
@@ -131,7 +131,7 @@ $n$ & Number of nodes & see Table \ref{tab_dataset}\\
   \subfigure[Wikipedia]{\label{fig_exp_1_1_k_time_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/1-1-g.eps}}
   \vspace{-2ex}
   \caption{Accuracy and efficiency comparison: with respect to the number $k$ of predicted links.}\label{fig_exp_1_1}
-  \vspace{-2ex}
+  \vspace{-1ex}
 \end{figure*}
 
 \begin{figure*}[tb!]
@@ -152,9 +152,9 @@ $n$ & Number of nodes & see Table \ref{tab_dataset}\\
   \subfigure[Wikipedia]{\label{fig_exp_1_2_size_time_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/1-2-g.eps}}
   \hspace{-2ex}
   \subfigure[Friendster]{\label{fig_exp_1_2_size_time_friendster}\includegraphics[width= 1.8in, height=1.2in]{eps-script/1-2-j.eps}}
-  \vspace{-2ex}
+  \vspace{-1ex}
   \caption{Accuracy and efficiency comparison: with respect to the network sizes.}\label{fig_exp_1_2}
-  \vspace{-3ex}
+  \vspace{-2ex}
 \end{figure*}
 
 
@@ -164,21 +164,21 @@ $n$ & Number of nodes & see Table \ref{tab_dataset}\\
 to compare with our ensemble-enabled approach.
 
 
-  \noindent (1) \Adamic \cite{adamic}: Algorithm \Aa is a popular neighborhood based method that
+\sstab (1) \Adamic \cite{adamic}: Algorithm \Aa is a popular neighborhood based method that
   produces a score for each link $(u, v)$, defined as below:
   \[ score(u, v) = \sum_{z \in N(u)\cap N(v)}\frac{1}{log|N(z)|}, \]
   where $N(u)$ is the set of neighbors of node $u$. Lu \cite{linyuan-2011} showed that
   \Aa performs well on a range of networks because it only concerns 2-hop neighbors and
   reduces much of search space. Therefore, we implemented a top-$k$ link prediction
   method by searching the $k$ largest \Aa score links. The complexity of this method is
-  $O(nd^2log(k))$, where $d$ is the average degree of networks. Another popular link
-  prediction method is \Katz \cite{katz-1953}, which is based on the ensemble of all paths. However, its
+  $O(nd^2log(k))$, where $d$ is the average degree of networks. Indeed, there is also another popular link
+  prediction method \Katz based on the ensemble of all paths \cite{katz-1953}. However, its
   complexity is $O(n^3)$, and does not work on large networks with millions
   of nodes. Thus, we did not choose \Katz for comparison in the experiments.
 
 
 
-  \noindent (2) \CAMBN \cite{yang-wsdm2013}:
+\sstab  (2) \CAMBN \cite{yang-wsdm2013}:
   Yang and Leskovec developed this probabilistic generative model for networks
   based on community affiliations. An ingredient of \BIGCLAM is based on the fact that,
   when people share multiple community affiliations, the links between them stem for
@@ -188,8 +188,7 @@ to compare with our ensemble-enabled approach.
   the community $c$. Give $F$, the \BIGCLAM generates a graph $G(N, A)$ by creating edge
   $(u, v)$ between a pair of nodes $u, v \in N$ with the probability
     \[ p(u, v) = 1 - exp(-F_u\cdot F_v), \]
-
-\noindent  where $F_u$ is a weight vector for node $u$. Viewing the probability $p(u, v)$ as
+where $F_u$ is a weight vector for node $u$. Viewing the probability $p(u, v)$ as
   a score for the link $(u, v)$, it is reasonable to predict links based on \BIGCLAM.
 The complexity of  \BIGCLAM is $O(nd(r + d) )$, where $d$ is the average degree of networks.
   In addition, this model is not designed to search the entire space of $O( n^2 )$,
@@ -197,21 +196,21 @@ The complexity of  \BIGCLAM is $O(nd(r + d) )$, where $d$ is the average degree 
 
 
 \stitle{Implementation}.
-We implemented all algorithms including \Aa, \BIGCLAM,
+We implemented all algorithms including (a) \Aa, \BIGCLAM,
 link prediction method in Section 2 (\NMF),
-\NMF with random node bagging (\Node), \NMF with  edge bagging (\Edge),
-\NMF with biased edge bagging (\Biased),
-\marked{ \Node with top-$(\epsilon, k)$ speeding up and edge filter (\Nodep),
-\Edge with top-$(\epsilon, k)$ speeding up and edge filter (\Edgep) and
-\Biased with top-$(\epsilon, k)$ speeding up and edge filter (\Biasedp)}
-using C/C++ with no parallelization.
+(b) \NMF with random node bagging (\Node), \NMF with  edge bagging (\Edge),
+\NMF with biased edge bagging (\Biased), developed in \cite{liang2016}, and (c) their counterparts \Nodep, \Edgep and \Biasedp with the top-$(\epsilon, k)$ speeding up technique in Section~\ref{sec-NMF-topk-optimization} and the edge filter technique in Section~\ref{subsec-lp-char}, using C/C++ with no parallelization.
+
+% \Node with top-$(\epsilon, k)$ speeding up and edge filter (\Nodep),
+%\Edge with top-$(\epsilon, k)$ speeding up and edge filter (\Edgep) and
+%\Biased with top-$(\epsilon, k)$ speeding up and edge filter (\Biasedp)
+
 
 
 All experiments were conducted on a machine with 2 Intel Xeon
 E5--2630 2.4GHz CPUs and 64 GB of Memory, running 64 bit
 Windows 7 professional system. Each experiment was repeated 5 times,
 and the average is reported here.
-
 
 \subsection{Experimental Results}
 
@@ -224,7 +223,24 @@ methods, we fixed $r = 30$ on \Digg and $r = 10$ on other datasets by default
 The other parameters with their descriptions and default values
 are presented in Table \ref{tab_parameter}.
 
-
+\begin{figure*}[tb!]
+  \centering
+  %\vspace{-2ex}
+  % Requires \usepackage{graphicx}
+  \subfigure[Digg]{\label{fig_exp_2_1_k_acc_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-a.eps} }
+  \quad\quad
+  \subfigure[YouTube]{\label{fig_exp_2_1_k_acc_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-b.eps} }
+  \quad\quad
+  \subfigure[Wikipedia]{\label{fig_exp_2_1_k_acc_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-c.eps} }
+  \subfigure[Digg]{\label{fig_exp_2_1_k_time_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-e.eps} }
+  \quad\quad
+  \subfigure[YouTube]{\label{fig_exp_2_1_k_time_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-f.eps} }
+  \quad\quad
+  \subfigure[Wikipedia]{\label{fig_exp_2_1_k_time_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-g.eps}}
+  \vspace{-2ex}
+  \caption{Accuracy and efficiency comparison: with respect to the number $k$ of predicted links.}\label{fig_exp_2_1}
+  \vspace{-2ex}
+\end{figure*}
 
 
 
@@ -238,14 +254,14 @@ accuracy(x) = \frac{\# \textrm{ of correctly predicted links}}{\textrm{the numbe
 \end{equation}
 
 
+
+
 \stitle{Exp-1.1: Impacts of $k$}. To evaluate the impacts of the number $k$ of
 predicted links, we varied $k$ from $1\times 10^4$ to $1\times 10^5$ on \Digg
 and \YouTube (resp. from $1\times 10^5$ to $1\times 10^6$ on \Wikipedia)
 and fixed other parameters to their default values.
-The results of accuracy and running time are reported in Figure \ref{fig_exp_1_1_k_acc_digg},
-\ref{fig_exp_1_1_k_acc_youtube} and \ref{fig_exp_1_1_k_acc_wikipedia}
-and Figure \ref{fig_exp_1_1_k_time_digg}, \ref{fig_exp_1_1_k_time_youtube} and
-\ref{fig_exp_1_1_k_time_wikipedia}, respectively.
+The results of accuracy and running time are reported in Figures \ref{fig_exp_1_1_k_acc_digg}--\ref{fig_exp_1_1_k_acc_wikipedia}
+and Figures \ref{fig_exp_1_1_k_time_digg}--\ref{fig_exp_1_1_k_time_wikipedia}, respectively.
 
 
 The accuracy results tell us that
@@ -281,11 +297,8 @@ Since \Twitter and \Friendster do not contain ground truth for choosing the valu
 we fixed $r$ on these datasets to the average value of
 its default values. Hence, on these two datasets, we fixed $r = 50$ for \NMF
 (resp. $r = 33$ for \BIGCLAM and $r = 17$ for the bagging methods). The results
-of accuracy and running time are reported in Figure \ref{fig_exp_1_2_size_acc_digg},
-\ref{fig_exp_1_2_size_acc_youtube} and \ref{fig_exp_1_2_size_acc_wikipedia}
-and Figure \ref{fig_exp_1_2_size_time_twitter}, \ref{fig_exp_1_2_size_time_digg},
-\ref{fig_exp_1_2_size_time_youtube}, \ref{fig_exp_1_2_size_time_wikipedia} and
-\ref{fig_exp_1_2_size_time_friendster}, respectively.
+of accuracy and running time are reported in Figures \ref{fig_exp_1_2_size_acc_digg}--\ref{fig_exp_1_2_size_acc_wikipedia}
+and Figures \ref{fig_exp_1_2_size_time_twitter}--\ref{fig_exp_1_2_size_time_friendster}, respectively.
 
 
 
@@ -303,24 +316,7 @@ making our bagging+ methods scaling better than their counterparts to large netw
 
 
 
-\begin{figure*}[tb!]
-  \centering
-  %\vspace{-2ex}
-  % Requires \usepackage{graphicx}
-  \subfigure[Digg]{\label{fig_exp_2_1_k_acc_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-a.eps} }
-  \quad\quad
-  \subfigure[YouTube]{\label{fig_exp_2_1_k_acc_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-b.eps} }
-  \quad\quad
-  \subfigure[Wikipedia]{\label{fig_exp_2_1_k_acc_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-c.eps} }
-  \subfigure[Digg]{\label{fig_exp_2_1_k_time_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-e.eps} }
-  \quad\quad
-  \subfigure[YouTube]{\label{fig_exp_2_1_k_time_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-f.eps} }
-  \quad\quad
-  \subfigure[Wikipedia]{\label{fig_exp_2_1_k_time_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-g.eps}}
-  \vspace{-2ex}
-  \caption{Accuracy and efficiency comparison: with respect to the number $k$ of predicted links.}\label{fig_exp_2_1}
-  \vspace{-2ex}
-\end{figure*}
+
 
 \begin{figure*}[tb!]
   \centering
@@ -342,7 +338,26 @@ making our bagging+ methods scaling better than their counterparts to large netw
   \subfigure[Friendster]{\label{fig_exp_2_2_size_time_friendster}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-2-j.eps}}
   \vspace{-2ex}
   \caption{Accuracy and efficiency comparison: with respect to the network sizes.}\label{fig_exp_2_2}
-  \vspace{-3ex}
+  \vspace{-1ex}
+\end{figure*}
+
+\begin{figure*}[tb!]
+  \centering
+  %\vspace{-2ex}
+  % Requires \usepackage{graphicx}
+  \subfigure[Digg]{\label{fig_exp_3_mu_acc_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-1-a.eps}}
+  \quad\quad
+  \subfigure[YouTube]{\label{fig_exp_3_mu_acc_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-1-b.eps}}
+  \quad\quad
+  \subfigure[Wikipedia]{\label{fig_exp_3_mu_acc_wikipedia}\includegraphics[width=1.8in, height=1.2in]{eps-script/3-1-c.eps}}
+  \subfigure[Digg]{\label{fig_exp_3_mu_time_digg}\includegraphics[width=1.8in, height=1.2in]{eps-script/3-1-e.eps}}
+  \quad\quad
+  \subfigure[YouTube]{\label{fig_exp_3_mu_time_youtube}\includegraphics[width=1.8in, height=1.2in]{eps-script/3-1-f.eps}}
+  \quad\quad
+  \subfigure[Wikipedia]{\label{fig_exp_3_mu_time_wikipedia}\includegraphics[width=1.8in, height=1.2in]{eps-script/3-1-g.eps}}
+  \vspace{-1ex}
+  \caption{Accuracy and efficiency comparison: with respect to the expected appearing times $\mu$.}\label{fig_exp_3_mu}
+  \vspace{-2ex}
 \end{figure*}
 
 
@@ -355,10 +370,8 @@ chose them for the comparison in this set of tests.
 
 \stitle{Exp-2.1: Impacts of $k$}. Using the same setting as Exp-1.1, we evaluated
 the impacts of the number $k$ of predicted links.
-The results of accuracy and running time are reported in Figure \ref{fig_exp_2_1_k_acc_digg},
-\ref{fig_exp_2_1_k_acc_youtube} and \ref{fig_exp_2_1_k_acc_wikipedia}
-and Figure \ref{fig_exp_2_1_k_time_digg},  \ref{fig_exp_2_1_k_time_youtube} and
-\ref{fig_exp_2_1_k_time_wikipedia}, respectively.
+The results of accuracy and running time are reported in Figures \ref{fig_exp_2_1_k_acc_digg}--\ref{fig_exp_2_1_k_acc_wikipedia}
+and Figures \ref{fig_exp_2_1_k_time_digg}--\ref{fig_exp_2_1_k_time_wikipedia}, respectively.
 
 
 The accuracy results tell us that (a) \Biased outperforms other methods on all datasets,
@@ -382,19 +395,19 @@ times faster than \NMF, \Aa and \BIGCLAM on
 This verifies the efficiency of our bagging methods.
 
 
-Note that the accuracy of all methods is not high, even the best
+Note that the accuracy of all methods is not very high, even the best
 accuracy (\Biasedp on \Digg when $k = 1\times 10^4$) is less than $10\%$. The reason is that
 there are more than $1\times 10^{10}$ possible links in the search space of each dataset,
 but less than $1\times 10^6$ links in the ground truth.
 In addition, \NMF is slower than \Aa on four datasets because $r$ is fixed to $50$,
 which is consistent to the $O(nr^2)$ complexity of \NMF.
 The running time of \Aa is about 50 seconds on \YouTube,
-while more than 2500 seconds on \Wikipedia.
-This is because that the average degree of these datasets are 5 and 33,
-and \Aa takes more time with the increase of the degree of networks.
+while more than 2,500 seconds on \Wikipedia.
+This is because that the average degrees of these datasets are 5 and 33,
+and \Aa takes more time with the increase of the network degree.
 The running time of \BIGCLAM is also sensitive to the degree of networks because its complexity is $O(nd(r + d))$.
 As a result, it runs faster than
-\NMF on \YouTube when the degree is 5, while it takes more time on \Wikipedia
+\NMF on \YouTube when the degree is 5, but takes more time on \Wikipedia
 when the degree is increased.
 
 
@@ -406,15 +419,11 @@ when the degree is increased.
 
 \stitle{Exp-2.2: Impacts of network sizes}. Using the same setting as Exp-1.2, we
 evaluated the impacts of network sizes. The results of accuracy and running time
-are reported in Figure \ref{fig_exp_2_2_size_acc_digg}, \ref{fig_exp_2_2_size_acc_youtube} and
-\ref{fig_exp_2_2_size_acc_wikipedia}
-and Figure \ref{fig_exp_2_2_size_time_twitter}, \ref{fig_exp_2_2_size_time_digg},
-\ref{fig_exp_2_2_size_time_youtube}, \ref{fig_exp_2_2_size_time_wikipedia} and
-\ref{fig_exp_2_2_size_time_friendster}, respectively.
+are reported in Figures \ref{fig_exp_2_2_size_acc_digg}--\ref{fig_exp_2_2_size_acc_wikipedia}
+and Figures \ref{fig_exp_2_2_size_time_twitter}--\ref{fig_exp_2_2_size_time_friendster}, respectively.
 Note that there are {\em some missing plots} for \NMF, \Aa and
-\BIGCLAM in the Figure \ref{fig_exp_2_2_size_time_twitter} and
-\ref{fig_exp_2_2_size_time_friendster} because their running time
-is beyond 24 hours.
+\BIGCLAM in the Figures \ref{fig_exp_2_2_size_time_twitter} and
+\ref{fig_exp_2_2_size_time_friendster} as they could not finished in 24 hours.
 
 
 
@@ -435,59 +444,6 @@ the increase of the degree of networks, which is consistent with the complexity 
 
 
 
-
-
-
-\subsubsection{Impacts of Various Parameters}
-In the third set of tests, we evaluated the impacts of parameters on
-the accuracy and running time of bagging+, bagging, \NMF
-and \BIGCLAM. We first tested the impacts of $\mu$ and $f$ in bagging+ and bagging methods.
-We then tested the impacts of $\rho$ in bagging+ methods. We finally
-tested the impacts of $r$ and $\epsilon$.
-
-
-\stitle{Exp-3.1: Impacts of $\mu$}. To evaluate the impacts of $\mu$, we
-varied $\mu$ from $0.01$ to $0.25$ and fixed other parameters to their
-default values. The accuracy and running time results are reported in
-Figure \ref{fig_exp_3_mu_acc_digg}, \ref{fig_exp_3_mu_acc_youtube} and
-\ref{fig_exp_3_mu_acc_wikipedia} and Figure \ref{fig_exp_3_mu_time_digg},
-\ref{fig_exp_3_mu_time_youtube} and \ref{fig_exp_3_mu_time_wikipedia},
-respectively. We also plotted the accuracy and running time of \NMF for comparison.
-
-
-
-The results tell us that (a) bagging+ and bagging methods are more accurate than
-\NMF when $\mu$ is large enough, (b) the accuracy of bagging+ and bagging methods
-increases with the increase of $\mu$ and becomes stable when $\mu$ is greater
-than $0.1$. This means that the accuracy of bagging+ and bagging methods would
-increase and become stable with the increase of the number of ensemble components.
-Furthermore, (c) the running time of bagging+ and bagging methods increases linearly
-with the increase of $\mu$ since $\mu / f^2$ ensemble components had been generated in each bagging
-method. Note that, when $\mu = 0.1$, the accuracy of bagging+ and bagging methods
-is becoming stable and the running time of them is less than \NMF.
-Therefore, we fixed $\mu = 0.1$ by default.
-
-
-\begin{figure*}[tb!]
-  \centering
-  %\vspace{-2ex}
-  % Requires \usepackage{graphicx}
-  \subfigure[Digg]{\label{fig_exp_3_mu_acc_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-1-a.eps}}
-  \quad\quad
-  \subfigure[YouTube]{\label{fig_exp_3_mu_acc_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-1-b.eps}}
-  \quad\quad
-  \subfigure[Wikipedia]{\label{fig_exp_3_mu_acc_wikipedia}\includegraphics[width=1.8in, height=1.2in]{eps-script/3-1-c.eps}}
-  \subfigure[Digg]{\label{fig_exp_3_mu_time_digg}\includegraphics[width=1.8in, height=1.2in]{eps-script/3-1-e.eps}}
-  \quad\quad
-  \subfigure[YouTube]{\label{fig_exp_3_mu_time_youtube}\includegraphics[width=1.8in, height=1.2in]{eps-script/3-1-f.eps}}
-  \quad\quad
-  \subfigure[Wikipedia]{\label{fig_exp_3_mu_time_wikipedia}\includegraphics[width=1.8in, height=1.2in]{eps-script/3-1-g.eps}}
-  \vspace{-2ex}
-  \caption{Accuracy and efficiency comparison: with respect to the expected appearing times $\mu$.}\label{fig_exp_3_mu}
-  \vspace{-2ex}
-\end{figure*}
-
-
 \begin{figure*}[tb!]
   \centering
   \vspace{1ex}
@@ -504,7 +460,7 @@ Therefore, we fixed $\mu = 0.1$ by default.
   \subfigure[Wikipedia]{\label{fig_exp_3_f_time_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-2-g.eps}}
   \vspace{-2ex}
   \caption{Accuracy and efficiency comparison: with respect to the fraction $f$}\label{fig_exp_3_f}
-  \vspace{-3ex}
+  \vspace{-1ex}
 \end{figure*}
 
 
@@ -522,10 +478,43 @@ Therefore, we fixed $\mu = 0.1$ by default.
   \subfigure[YouTube]{\label{fig_exp_3_rho_time_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-3-f.eps} }
   \quad\quad
   \subfigure[Wikipedia]{\label{fig_exp_3_rho_time_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-3-g.eps}}
-  \vspace{-2ex}
+  \vspace{-1ex}
   \caption{Accuracy and efficiency comparison: with respect to the fraction $\rho$}\label{fig_exp_3_rho}
-  \vspace{-3ex}
+  \vspace{-2ex}
 \end{figure*}
+
+
+
+\subsubsection{Impacts of Various Parameters}
+In the third set of tests, we evaluated the impacts of parameters on
+the accuracy and running time of bagging+, bagging, \NMF
+and \BIGCLAM. We first tested the impacts of $\mu$ and $f$ in bagging+ and bagging methods.
+We then tested the impacts of $\rho$ in bagging+ methods. We finally
+tested the impacts of $r$ and $\epsilon$.
+
+
+\stitle{Exp-3.1: Impacts of $\mu$}. To evaluate the impacts of $\mu$, we
+varied $\mu$ from $0.01$ to $0.25$ and fixed other parameters to their
+default values. The accuracy and running time results are reported in
+Figure \ref{fig_exp_3_mu_acc_digg}--\ref{fig_exp_3_mu_acc_wikipedia} and Figure \ref{fig_exp_3_mu_time_digg}--\ref{fig_exp_3_mu_time_wikipedia},
+respectively. We also plotted the accuracy and running time of \NMF for comparison.
+
+
+
+The results tell us that (a) bagging+ and bagging methods are more accurate than
+\NMF when $\mu$ is large enough, (b) the accuracy of bagging+ and bagging methods
+increases with the increase of $\mu$ and becomes stable when $\mu$ is greater
+than $0.1$. This means that the accuracy of bagging+ and bagging methods would
+increase and become stable with the increase of the number of ensemble components.
+Furthermore, (c) the running time of bagging+ and bagging methods increases linearly
+with the increase of $\mu$ since $\mu / f^2$ ensemble components had been generated in each bagging
+method. Note that, when $\mu = 0.1$, the accuracy of bagging+ and bagging methods
+is becoming stable and the running time of them is less than \NMF.
+Therefore, we fixed $\mu = 0.1$ by default.
+
+
+
+
 
 
 \begin{figure*}[tb!]
@@ -544,10 +533,8 @@ Therefore, we fixed $\mu = 0.1$ by default.
   \subfigure[Wikipedia]{\label{fig_exp_3_r_time_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-4-g.eps}}
   \vspace{-2ex}
   \caption{Accuracy and efficiency comparison: with respect to the number $r$ of latent factors.}\label{fig_exp_3_r}
-  \vspace{-3ex}
+  \vspace{-1ex}
 \end{figure*}
-
-
 \begin{figure*}[tb!]
   \centering
   \vspace{1ex}
@@ -562,9 +549,9 @@ Therefore, we fixed $\mu = 0.1$ by default.
   \subfigure[YouTube]{\label{fig_exp_3_e_time_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-5-f.eps} }
   \quad\quad
   \subfigure[Wikipedia]{\label{fig_exp_3_e_time_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-5-g.eps}}
-  \vspace{-2ex}
+  \vspace{-1ex}
   \caption{Accuracy and efficiency comparison: with respect to the tolerant $\epsilon$ of top-($\epsilon, k$) prediction.}\label{fig_exp_3_e}
-  \vspace{-3ex}
+  \vspace{-2ex}
 \end{figure*}
 
 
@@ -572,9 +559,8 @@ Therefore, we fixed $\mu = 0.1$ by default.
 \stitle{Exp-3.2: Impacts of $f$}. To evaluate the impacts of $f$, we
 varied $f$ from $0.02$ to $0.5$ and fixed other parameters to their
 default values. The accuracy and running time results are reported in
-Figure \ref{fig_exp_3_f_acc_digg}, \ref{fig_exp_3_f_acc_youtube} and
-\ref{fig_exp_3_f_acc_wikipedia} and Figure \ref{fig_exp_3_f_time_digg},
-\ref{fig_exp_3_f_time_youtube} and \ref{fig_exp_3_f_time_wikipedia}, respectively.
+Figures \ref{fig_exp_3_f_acc_digg}--\ref{fig_exp_3_f_acc_wikipedia} and 
+Figures \ref{fig_exp_3_f_time_digg}--\ref{fig_exp_3_f_time_wikipedia}, respectively.
 
 
 
@@ -596,9 +582,8 @@ methods better than that of \NMF, we fixed $f = 0.1$ by default to achieve a bet
 the bagging+ methods, we varied $\rho$ from $0.55$ to $0.95$ and
 fixed other parameters to their default values. The accuracy and
 running time results are reported in
-Figure \ref{fig_exp_3_rho_acc_digg}, \ref{fig_exp_3_rho_acc_youtube} and
-\ref{fig_exp_3_rho_acc_wikipedia} and Figure \ref{fig_exp_3_rho_time_digg},
-\ref{fig_exp_3_rho_time_youtube} and \ref{fig_exp_3_rho_time_wikipedia}, respectively.
+Figures \ref{fig_exp_3_rho_acc_digg}--\ref{fig_exp_3_rho_acc_wikipedia} and 
+Figures \ref{fig_exp_3_rho_time_digg}--\ref{fig_exp_3_rho_time_wikipedia}, respectively.
 We also plotted the accuracy and running time of their counterparts
 bagging methods for comparison.
 
@@ -618,13 +603,12 @@ that of the bagging methods, we fixed $\rho = 0.75$ by default to achieve a bett
 \stitle{Exp-3.4: Impacts of $r$}. To evaluate the impacts of $r$, we
 varied $r$ from $10$ to $50$ and fixed other parameters to their
 default values. The accuracy and running time results are reported in
-Figure \ref{fig_exp_3_r_acc_digg}, \ref{fig_exp_3_r_acc_youtube} and
-\ref{fig_exp_3_r_acc_wikipedia} and Figure \ref{fig_exp_3_r_time_digg},
-\ref{fig_exp_3_r_time_youtube} and \ref{fig_exp_3_r_time_wikipedia}, respectively.
+Figures \ref{fig_exp_3_r_acc_digg}--\ref{fig_exp_3_r_acc_wikipedia} and 
+Figures \ref{fig_exp_3_r_time_digg}--\ref{fig_exp_3_r_time_wikipedia}, respectively.
 
 
 The results tell us that (a) \Biasedp and \Biased obtain the best accuracy
-compared with other methods,(b) bagging+ and bagging methods have higher accuracy
+compared with other methods, (b) bagging+ and bagging methods have a higher accuracy
 than \BIGCLAM, (c) the accuracy of \NMF increases slightly with the increase of $r$ and is always
 greater than that of \BIGCLAM, and (d) the running time of \NMF is increased
 quadratically with the increase of $r$ since its complexity is $O(nr^2)$.
@@ -643,9 +627,8 @@ fixed $r = 30$ on \Digg and $r = 10$ on other datasets by default for bagging+ a
 \stitle{Exp-3.5: Impacts of $\epsilon$}. To evaluate the impacts of $\epsilon$, we
 varied $\epsilon$ from $0.5$ to $1.0$ and fixed other parameters to their
 default values. The accuracy and running time results are reported in
-Figure \ref{fig_exp_3_e_acc_digg}, \ref{fig_exp_3_e_acc_youtube} and
-\ref{fig_exp_3_e_acc_wikipedia} and Figure \ref{fig_exp_3_e_time_digg},
-\ref{fig_exp_3_e_time_youtube} and \ref{fig_exp_3_e_time_wikipedia}, respectively.
+Figures \ref{fig_exp_3_e_acc_digg}--\ref{fig_exp_3_e_acc_wikipedia} and 
+Figures \ref{fig_exp_3_e_time_digg}--\ref{fig_exp_3_e_time_wikipedia}, respectively.
 
 
 
@@ -691,7 +674,7 @@ distinct since the $\epsilon = 1$ is very suitable for this dataset.
 (resp. Edge+ and Biased+) is the Random Node Bagging (resp. Edge Bagging
 and Biased Edge Bagging) with edge filter.}
 \label{tab_improvements}
-\vspace{-2ex}
+\vspace{0ex}
 \centering
 \newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
 \begin{tabular}{l|l|c|c|c}
@@ -713,6 +696,7 @@ Biased+ & Top-$(\epsilon, k)$      & 58.97    & 39.61 & 119.44  \\
 Biased+ & Top-$(\epsilon, k)$+  & \textbf{55.32}    & \textbf{38.15} & \textbf{117.25}  \\
 \hline \hline
 \end{tabular}
+\vspace{-2ex}
 \end{table}
 
 
@@ -735,11 +719,11 @@ for users to apply our bagging methods in practice.
   \vspace{-2ex}
   \caption{Accuracy comparison on \Flickr: (a) with respect to the number $r$ of latent factors,
   (b) with respect to the number $k$ of predicted links.}\label{fig_exp_5}
-  \vspace{-3ex}
+  \vspace{-1ex}
 \end{figure}
 
 For the limitation of space, we only report the results on the impact of $r$ and $k$
-in Figure \ref{fig_exp_3_r_acc_flickr} and \ref{fig_exp_2_k_acc_flickr}.
+in Figures \ref{fig_exp_3_r_acc_flickr} and \ref{fig_exp_2_k_acc_flickr}.
 We varied $r$ from 10 to 50 (resp. $k$ from $1\times 10^5$ to $1\times 10^6$)
 and fixed other parameters to their default values. The results tell us that
 the accuracy of our bagging methods is slightly lower than that of \NMF.
@@ -774,7 +758,7 @@ is necessary to make each ensemble as unique as possible.
 \begin{table}
 \caption{Pairwise overlapping of predicted links and nodes of ensemble components.}
 \label{tab_limitations}
-\vspace{-2ex}
+\vspace{0ex}
 \centering
 \newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
 \begin{tabular}{c|l|c|c|c|c}
@@ -789,6 +773,7 @@ is necessary to make each ensemble as unique as possible.
 \raisebox{2.5ex}[0pt]{ $N_s$ } & Biased & 0.21 & 0.11 & \textbf{0.29} & 0.21 \\
 \hline \hline
 \end{tabular}
+\vspace{-2ex}
 \end{table}
 
 
