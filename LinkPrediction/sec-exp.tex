@@ -302,8 +302,8 @@ and Figures \ref{fig_exp_1_2_size_time_twitter}--\ref{fig_exp_1_2_size_time_frie
 
 
 
-The accuracy results tell us that (a) \Biased obtains the highest accuracy on all
-datasets, (b) the three bagging+ methods perform as well as their counterparts
+The accuracy results tell us that (a) \Biased has the highest accuracy on all
+datasets among the three bagging methods, (b) the three bagging+ methods perform as well as their counterparts
 bagging methods. This means that the bagging+ methods are also accurate and
 robust with the increase of network sizes.
 
@@ -485,7 +485,7 @@ the increase of the network degree, which is consistent with the complexity anal
 
 
 
-\subsubsection{Impacts of Various Parameters}
+\subsubsection{Impacts of Parameters}
 In the third set of tests, we evaluated the impacts of parameters on
 the accuracy and running time of bagging+, bagging, \NMF
 and \BIGCLAM. We first tested the impacts of $\mu$ and $f$ in bagging+ and bagging methods.
@@ -643,7 +643,7 @@ fixed $\epsilon = 1$ by default to achieve a better efficiency.
 
 
 
-\subsubsection{Improvements}
+\subsubsection{Performance Improvements of Bagging+ Methods}
 In the fourth set of tests, we evaluate the improvements of our bagging+ methods.
 Compared with their counterparts bagging methods~\cite{liang2016}, the bagging+ methods have two modifications:
 the top-$(\epsilon, k)$ speeding up technique (denoted as top-$(\epsilon, k)$+) and the edge filter technique.
@@ -695,18 +695,14 @@ Biased+ & Top-$(\epsilon, k)$      & 58.97    & 39.61 & 119.44  \\
 Biased+ & Top-$(\epsilon, k)$+  & \textbf{55.32}    & \textbf{38.15} & \textbf{117.25}  \\
 \hline \hline
 \end{tabular}
-\vspace{-2ex}
+\vspace{-0ex}
 \end{table}
 
 
 
-\subsubsection{Limitations}
-In the last set of tests, we analysis the accuracy limitations of our bagging methods
-compared with \NMF. We show that the bagging methods might be less accurate
-than \NMF in some situations. We first report the accuracy results on \Flickr
-which show that our bagging methods obtain lower accuracy than \NMF.
-We then explain the reasons which could be useful
-for users to apply our bagging methods in practice.
+\subsubsection{Analysis of Limitations}
+In the last set of tests, we discuss the accuracy limitations of our bagging methods
+compared with \NMF.  Our bagging methods might not as good as \NMF in certain situations. We first report the accuracy results of our bagging methods  and  \NMF on \Flickr. We then explain the reasons, which could be useful when users are to apply our bagging methods in practice.
 
 \begin{figure}[tb!]
   \centering
@@ -721,17 +717,14 @@ for users to apply our bagging methods in practice.
   \vspace{-1ex}
 \end{figure}
 
-For the limitation of space, we only report the results on the impact of $r$ and $k$
+We first report the results on the impact of parameters $r$ and $k$
 in Figures \ref{fig_exp_3_r_acc_flickr} and \ref{fig_exp_2_k_acc_flickr}.
-We varied $r$ from 10 to 50 (resp. $k$ from $1\times 10^5$ to $1\times 10^6$)
+We varied $r$ from 10 to 50 (resp. $k$ from $10^5$ to $10^6$)
 and fixed other parameters to their default values. The results tell us that
 the accuracy of our bagging methods is slightly lower than that of \NMF.
 Indeed, \Biased decreases the accuracy by $4\%$ on \Flickr compared with \NMF.
-This is a limitation for our bagging methods and we have to find
-the reasons to avoid this situation.
 
-
-It is well known that the principle in ensemble methods is to make each ensemble as
+We next explain the reasons. It is well known that the principle in ensemble methods is to make each ensemble as
 unique as possible and this is also called as diversity \cite{zhzhou}. Diversity can
 be achieved by using different ensemble components or different settings of parameters for the ensemble base
 algorithms. Since the base algorithm and its parameters were fixed in our experiments, we examined
@@ -743,12 +736,15 @@ The results are shown in Table \ref{tab_limitations}.
 
 The results tell us that (a) the pairwise overlapping of predicted links on \Flickr is
 obviously higher than that on other datasets, which means that the diversity on \Flickr is the
-worst and leads to lower accuracy than \NMF, (b) the pairwise overlapping of nodes for
-\Node and \Edge methods on \Flickr is also higher than that on other datasets, which might be
-one of reasons that decreasing the diversity of these methods. Note that \Edge has the highest
+worst one, (b) the pairwise overlapping of nodes for
+\Node and \Edge methods on \Flickr is also higher than that on other datasets, which may be
+one of reasons decreasing the diversity of these methods. These impair the effectiveness of ensemble methods,
+which leads to a lower accuracy for our bagging methods on \Flickr than \NMF
+
+Moreover, observer that \Edge has the highest
 pairwise overlapping of predicted links and nodes since this method inclines to select high-degree
 nodes repeatedly. Moreover, \Biased overcomes the drawback of \Edge and obtains the lowest pairwise
-overlapping, which guarantees its higher accuracy. In order to gain accuracy from bagging methods, it
+overlapping, which guarantees its higher accuracy. That is, to gain a high accuracy with the bagging methods, it
 is necessary to make each ensemble as unique as possible.
 
 
@@ -779,13 +775,17 @@ is necessary to make each ensemble as unique as possible.
 
 
 \stitle{Summary}. From these experimental results on real-life social network datasets,
-we find the following. (1) \NMF is able to predict links and can be sped up
-by the top-($\epsilon$, $k$) process to explore the $O(n^2)$ search space. It is
+we find the following. 
+
+\sstab (1) \NMF is able to predict links and can be sped up
+by the top-($\epsilon$, $k$) process to explore the $O(n^2)$ search space. \NMF is
 more accurate than \Aa and \BIGCLAM, which verifies the effectiveness
 of \NMF. Moreover, \NMF runs faster than \BIGCLAM on dense networks,
 e.g., \Wikipedia, \Twitter and \Friendster, which is consistent with the complexity analysis
-that \BIGCLAM is sensitive to the degree of networks. (2) However, the running time of
-\NMF is increased quadratically with the increase of $r$. This might be a bottleneck
+that \BIGCLAM is sensitive to the degree of networks. 
+
+\sstab (2) The running time of
+\NMF, however, is increased quadratically with the increase of $r$. This might be a bottleneck
 for large networks. By decomposing the link prediction problem into smaller pieces
 and solving them independently, our bagging methods are more efficient and
 scale well with the size and density of large networks, especially for the bagging+
@@ -794,7 +794,8 @@ e.g., \Biasedp finished in two hours on \Friendster with $1.5\times 10^7$ nodes 
 $1.0\times 10^9$ edges, while \NMF, \Aa  and \BIGCLAM could not finish in a day.
 Further, \Biasedp speeds up \Biased, \NMF, \Aa and \BIGCLAM
 for around $(1.3, 12, 135, 53)$ (resp. $(1.4, 15, 8, 65)$) times on \Twitter (resp. \Friendster).
-(3) Combining link prediction characteristics, our
+
+\sstab (3) Incorporated into link prediction characteristics, our
 bagging methods also provide the accuracy advantages for link prediction,
 e.g., \Biased improves the accuracy by
 $(2.8\%, 41.4\%, 34.1\%)$ (resp. $(7.5\%, 45.2\%, 46.2\%)$ and $(12.7\%, 7.9\%, 26.9\%)$)
