@@ -3,13 +3,11 @@
 
 
 
-In this section, we first propose {\em routing  proxies} and {\em deterministic routing areas} (\dras) to capture the idea of representatives and the set of
-nodes being represented, respectively. We then give an analysis of the properties of  \dras and their routing proxies, and show that they indeed hold the desired properties of representatives discussed in Section~\ref{sec-intro}. 
+We first propose {\em routing  proxies} and {\em deterministic routing areas} (\dras) to capture the idea of representatives and the set of
+nodes being represented, respectively. 
 
-%\subsection{Routing Proxies and Deterministic Routing Areas}
-%\label{subsec-proxy-def}
 
-We first present the notions of routing proxies and their deterministic routing areas.
+
 
 \stitle{Proxies}. Given a node $u$ in graph $G(V, E)$, we say that $u$ is a {\em routing proxy} (or simply {\em proxy}) of a set of nodes, denoted by $A_{u}$, if and only if:
 
@@ -33,7 +31,7 @@ We denote as $A^{+}_u$ the union of all the sets of nodes whose proxy is $u$ , \
 and $A^i_u$ ($i\in[1,k]$) is said a component of $A^{+}_u$.
 
 We refer to the {\em subgraph} $G[A^+_u]$ as a deterministic routing area (\dra) of proxy $u$.
-
+%
 Intuitively, \dra $G[A^+_u]$ is a {\em maximal} connected subgraph, union of a set of \ccs, that connects to the rest of graph $G$ through proxy $u$ only.
 That is, for any node $v$ in $G[A^+_u]$ and any node $v$ in the rest of graph $G$, $u$ must appear on the shortest path $\path(v, v')$.
 
@@ -45,74 +43,10 @@ That is, for any node $v$ in $G[A^+_u]$ and any node $v$ in the rest of graph $G
 \stitle{Equivalent proxies}. We say that two proxies $u$ and $u'$ are {\em equivalent}, denoted by $u\equiv u'$, if $A^+_{u} = A^+_{u'}$.
 
 
-\eat{
+ Trivial proxies only represent themselves. Hence, we are only focus on non-trivial maximal proxies (or simply proxies).
 
-We next illustrate these notions with an example below.
+We then give an analysis of the properties of  \dras and their routing proxies, and show that they indeed hold the desired properties of representatives discussed in Introduction.
 
-\begin{figure}
-\begin{center}
- \includegraphics[scale=0.8]{./extended-proxies.eps}
-\end{center}
- \vspace{-1.5ex}
- \caption{Example proxies and \dras}
-  \label{fig-proxies}
-\vspace{-2ex}
-\end{figure}
-
-
-\vspace{-0.5ex}
-\begin{example}
-\label{exm-proxies} First consider graph $G_2(V_2, E_2)$ in Fig.~\ref{fig-proxies}, and let $c\cdot\lfloor\sqrt{|V_2|}\rfloor$ =
-$2\cdot\lfloor\sqrt{16}\rfloor$ = $8$, where $c = 2$ and $|V_2| = 16$.
-\sstab(1) Node $u$ is a proxy, and its \dra is the subgraph in the left hand side of the vertical line across $u$;
-\sstab(2) Node $v$ is a proxy, and its \dra is the subgraph in the left hand side of the vertical line across $v$;
-\sstab(3) Node $w$ is not a proxy since it can not find a \dra with size less or equal than $8$;
-\sstab(4)  Node $v$ is a maximal proxy, while node $u$ is not a maximal proxy since $A^+_u\subset A^+_v$.
-
-
-We then consider graph $G_3(V_3, E_3)$ in Fig.~\ref{fig-proxies}, and let $c\cdot\lfloor\sqrt{|V_3|}\rfloor$ =
-$2\cdot\lfloor\sqrt{5}\rfloor$ = $4$, where $c = 2$ and $|V_3| = 5$.
-\sstab(1) Nodes $u, v$ and $w$ are three maximal proxies, whose \dras are all the entire graph $G_3$, and, hence,
-\sstab(2) $u, v$ and $w$ are three equivalent proxies.
- \end{example}
-
-\vspace{-1ex}
-\stitle{Remark}. As illustrated by the above examples,  a \dra of graph $G(V, E)$ may have a size larger than $c\cdot\lfloor\sqrt{|V|}\rfloor$,
-and multiple equivalent proxies.
-}
-
-\eat{
-
-We then show that proxies and their represented subgraphs (\dras) have a strong relationship, which justifies that  proxies and \dras are {\em well defined}.
-
-
-\begin{prop}
-\label{prop-proxy-unique-dra} Any proxy in a graph has a unique \dra.
-\end{prop}
-
-
-\begin{prop}
-\label{thm-proxy-disjoint} Given any two distinct proxies $u$ and $u'$, \\
-(1) if $u\in A^+_{u'}$, then $A^+_{u}\subseteq A^+_{u'}$, \\
-(2) if $u'\in A^+_{u}$, then $A^+_{u'}\subseteq A^+_{u}$,  and \\
-(3) $A^+_{u}\cap A^+_{u'}$ = $\emptyset$, otherwise.
-\end{prop}
-
-By Proposition~\ref{thm-proxy-disjoint}, it is easy to have the following, which says when maximal proxies are concerned, there exists a unique set of non-overlapping \dras.
-
-\begin{cor}
-\label{cor-proxy-disjoint} Given any two maximal proxies $u$ and $u'$, then either $A^+_{u} = A^+_{u'}$ or $A^+_{u}\cap A^+_{u'}$ = $\emptyset$ holds.
-\end{cor}
-
-
-\vspace{-1ex}
-\stitle{Remark}. Trivial proxies only represent themselves, and, hence, we are only interested in non-trivial maximal proxies (or simply called proxies) in the sequel.
-}
-
-%\subsection{Good Properties of Proxies and DRAs}
-%\label{subsec-proxy-properties}
-
-We then show that  proxies and \dras indeed hold good properties for answering shortest path and distance queries.
 
 
 
