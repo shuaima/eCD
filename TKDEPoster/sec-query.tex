@@ -1,7 +1,7 @@
 \section{Query Answering with Routing Proxies}
 \label{sec-query}
 
-In this section, we show how to answer shortest path and distance queries using routing proxies.
+%In this section, we show how to answer shortest path and distance queries using routing proxies.
 
 \eat{%%%%%%%%
 \begin{figure}[tb!]
@@ -17,11 +17,11 @@ In this section, we show how to answer shortest path and distance queries using 
 
  Based on the previous analyses, we present a framework for speeding-up shortest  path and distance query answering, which consists of two modules: {\em preprocessing} and {\em query answering}.
  %The framework for answering queries using proxies and \dras is illustrated in Fig.~\ref{fig-angent-landmarks}, in which each $p_i$ ($i\in[1, h]$) denotes a proxy, and is associated with its \dra.
- We next introduce the details of the framework.
+ %We next introduce the details of the framework.
 
 \stitle{1. Preprocessing}. Given graph $G(V, E)$, the preprocessing module executes the following.
 
-\sstab (1) It first computes all \dras and their maximal proxies with algorithm $\compDRAs$ (as discussed in Section~\ref{sec-proxy-algorithms}).
+\sstab (1) It first computes all \dras and their maximal proxies with a linear algorithm, referred to as  $\compDRAs$ \cite{journal-version2016}.
 
 \sstab (2) It then pre-computes and stores all the shortest paths and distances between any node in a \dra and its proxy.
 
@@ -40,11 +40,12 @@ If $s$ and $t$ further fall into the same component $A^i_u$ ($i\in[1,h]$), it in
 
 \sstab (2)  When $s$ and $t$ belong to two \dras $G[A^+_{u_s}]$ and $G[A^+_{u_t}]$ with proxies $u_s$ and $u_t$, respectively.
 
-By the analyses in Section~\ref{subsec-proxy-properties}, we know that $\path(s, t)$ = $\path(s, u_s)/\path(u_s, u_t)/$ $\path(u_t, t)$, in which $\path(s, u_s)$ and $\path(u_t, t)$ are already known. Hence, it simply invokes an algorithm (\eg bidirectional Dijkstra~\cite{LubyR89}, \arcflag \cite{MohringSSWW05}, \ch~\cite{GeisbergerSSD08}, \tnr~\cite{bast2014route}, \ah~\cite{zhu2013shortest}) on the reduced graph $G'$ for computing $\path(u_s, u_t)$.
+By the analyses in Section~\ref{sec-proxy}, we know that $\path(s, t)$ = $\path(s, u_s)/\path(u_s, u_t)/$ $\path(u_t, t)$, in which $\path(s, u_s)$ and $\path(u_t, t)$ are already known. Hence, it simply invokes an algorithm (\eg~\arcflag \cite{MohringSSWW05}, \tnr~\cite{bast2014route}, \ah~\cite{zhu2013shortest}) on the reduced graph $G'$ for computing $\path(u_s, u_t)$.
 
 Similarly, the shortest distance $\dist(s, t)$ = $\dist(s, u_s)$ + $\dist(u_s, u_t)$ + $\dist(u_t, t)$ can be computed.
 
-We next illustrate how shortest path and distance queries are processed with an example below.
+
+\eat{We next illustrate how shortest path and distance queries are processed with an example below.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -79,3 +80,4 @@ as they have single components.
 (1) As shown above, we need $O(d)$ extra space to store the routing information to compute shortest paths and distances, where $d$ is the total number of nodes in all \dras.
 
 \sstab (2) It is easy to see that the main computation cost is reduced from graph $G$ to its reduced graph $G'$. As shown in the experimental study (Section~\ref{sec-expt}), on average about 1/3 nodes of sparse graphs  are captured by non-trivial proxies and their \dras, \ie $d$ is about $|V|/3$. That is, the reduced graph $G'$ is about 2/3 size of the original graph $G$, and hence our data reduction technique could reduce graph sizes and speed up shortest path and distance computations.
+}
