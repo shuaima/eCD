@@ -10,7 +10,7 @@ independently.
 Furthermore, the aggregated results from multiple models often
 provide a robustness to the decomposition process  \cite{Breiman96b-1996}. In the
 following, we introduce three different ways for the bagging decomposition.
-We consider a network $G(V, A)$.
+We consider a network $G(N, A)$.
 
 
 \subsection{Random Node Bagging}
@@ -28,7 +28,7 @@ idea is to iteratively apply the following three steps:
 %and columns of $W$.
 
 %\vspace{-0.5ex}
-\item[(1)] Select a random set of nodes $N_r$ in the netwrok $G$ corresponding to
+\item[(1)] Select a random set of nodes $N_r$ in the network $G$ corresponding to
 a fraction $f$ of the nodes in the network. Determine the node set
 $N_s \supseteq N_r$, corresponding to all nodes adjacent to $N_r$.
 
@@ -88,7 +88,7 @@ fraction $f$ of the total number of nodes.
 
 \item[(2)]  Construct a reduced
 adjacency matrix $W_s$ from the node set $N_s$ by using the subgraph
-induced on $N_s$ of $G$, i.e., an ensemble, to select the relevant $|N_s|$ rows and columns of the matrix $W$.
+induced on $N_s$ of $G$, \ie an ensemble, to select the relevant $|N_s|$ rows and columns of the matrix $W$.
 
 \item[(3)] Apply the symmetric \NMF method in Section \ref{sec-NMF}
 to the reduced matrix $W_s$, and use the pruning search process in Section \ref{sec-NMF-topk-optimization} to determine the predictions of all pairs of nodes  of $N_s$.
@@ -200,7 +200,7 @@ Preferential attachment (PA) \cite{albert1999,leskovec-2008} is one of the well-
 link prediction characteristics, which says that {\em the probability
 that a new link is connected to a node $i$ is proportional to its degree}.
 In other words, nodes with small degree tend to have fewer links in the future.
-Therefore, we remove those edges that has at least one endpoint  with a smaller degree.
+Therefore, we remove those edges that have at least one endpoint  with a smaller degree.
 Let $d_i$ and $d_j$ be the degrees of the endpoints $i$  and $j$ of edge $(i, j)$, respectively. Given a sampling ratio $\rho$,
 we sort edges in the induced subgraph by $\min(d_i, d_j)$ in a
 descending order and only select the top $m\rho$ edges, where $m$ is the total number of edges.
@@ -338,7 +338,7 @@ We now explain the complete framework for top-$k$ predictions enabled with ensem
 
 %\vspace{-1ex}
 \begin{tabbing}1.\hspace{1ex}\=
- {\bf given} network $G(N, A)$ and parameters $\mu$ and $f$.\\
+ {\bf given} a network $G(N, A)$ and parameters $\mu$ and $f$.\\
 2.\> {\bf let} $\Gamma$ be empty;\\
 3.\> {\bf repeat} $\mu/f^2$  times {\bf do} \\
 4.\>\hspace{2ex}\= {\bf let} $N_s$ be a sampled ensemble of $G$ with at least $f\cdot n$ nodes; \\

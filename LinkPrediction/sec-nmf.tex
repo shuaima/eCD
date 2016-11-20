@@ -91,7 +91,7 @@ factor model that must be used for prediction. There are many
 choices available for factorizing an adjacency matrix, especially
 when it is symmetric. Even a
 straightforward diagonalization of the matrix provides a reasonable
-factorization. We  choose {\em non-negative} matrix factorization
+factorization. We  choose {\em non-negative} matrix factorization (\NMF)
 not only because of its interpretability advantages but also because
 it facilitates the  $O(n^2)$ search phase of the prediction by
 providing a non-negative and sparse representation for each node.
@@ -258,7 +258,7 @@ This completes the proof.
  In real-life applications,
 a common scenario is to find a set of top-$(\epsilon, k)$ predictions with such that the prediction
 values are required to be greater than a given threshold $\theta$ \cite{ballard2015, lemp}. In this case,
-the top-$(\epsilon, k)$ prediction could be speeded up by pruning the node pairs whose prediction values are less and equal than $\theta$.
+the top-$(\epsilon, k)$ prediction could be speeded up by pruning the node pairs whose prediction values are equal to or less than $\theta$.
 
 The simple yet effective strategy is that the prediction value of a node pair $(i, j)$ satisfies:
 \begin{equation}
@@ -274,11 +274,11 @@ By Equation \ref{equation-length}, we obtain the following:
 \end{equation}
 The prediction value is no larger than $\theta$ if the product of the vector lengths  is no larger than $\theta$.
 As we are to find the node pairs whose prediction values are greater than $\theta$, we can ignore
-the node pairs whose length product are no larger than $\theta$ in the search process.
+the node pairs whose length products are no larger than $\theta$ in the search process.
 
 After  the matrixes $S$ and $R$ are obtained, an additional step is required to calculate the length of each row
 vector $\overline{F_i}$ and store them in an array $M$. Then the following if-clause is inserted  into line 3
-in the above nested loop to prune the node pairs whose prediction values are less and equal to $\theta$.
+in the above nested loop to prune the node pairs whose prediction values are equal to or less than $\theta$.
 \begin{tabbing}\hspace{5ex}\=
 {\bf if} $M[R_{ip}] \cdot M[R_{jp}] \leq \theta$ {\bf then} continue;
 \end{tabbing}
@@ -297,10 +297,10 @@ predictions with prediction values are greater than $\theta$.
 By Proposition~\ref{prop-valid-topk}, the nested loop finds a valid set of
 top-$(\epsilon, k)$ predictions. The difference between the nested loop
 and the optimized nested loop (\ie the top-$(\epsilon, k)$ prediction with speeding up technique)
-is that the later does not consider the node pairs $(i, j)$
+is that the latter does not consider the node pairs $(i, j)$
 when $\|\overline{F_i} \| \cdot \| \overline{F_j} \| \leq \theta$.
 By Equation~(\ref{equation-length-pruning}), the prediction values of those node pairs
-are also less and equal than $\theta$.
+are also  equal to or less than $\theta$.
 
 This completes the proof.
 \end{IEEEproof}
@@ -314,9 +314,9 @@ as fast as one may need for large networks. The main problem
 arises as a result of the factorization process itself, which can
 require as much as $O(r \cdot (m + n\cdot r))$.  Typically, the
 number $r$ of latent factors varies from the orders of a few ten to a few hundred~\cite{NMF-nature99, NMF-www2010}. For
-sparse networks, in which the node degree is less than $r$, the $O(n
+sparse networks, whose node degrees are less than $r$, the $O(n
 r^2)$ term might be the bottleneck.  The required  number of latent
-components $r$ is often expected to increase with network size. In
+components $r$ is often expected to increase with the network size. In
 order to handle this computational problem, we propose the method of
-{\em ensemble decomposition}, which provides both efficiency {\em
+{\em ensemble decomposition} that provides both efficiency {\em
 and} effectiveness advantages.
