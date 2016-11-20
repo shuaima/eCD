@@ -15,7 +15,7 @@
 \end{figure}
 }%%%%%%%%%%%%EAT
 
- Based on the previous analyses, we present a framework for speeding-up shortest  path and distance query answering, which consists of two modules: {\em preprocessing} and {\em query answering}.
+ Based on the previous analyses, we present a framework for speeding-up shortest  path and distance query answering, consisting of two modules: {\em preprocessing} and {\em query answering}.
  %The framework for answering queries using proxies and \dras is illustrated in Fig.~\ref{fig-angent-landmarks}, in which each $p_i$ ($i\in[1, h]$) denotes a proxy, and is associated with its \dra.
  %We next introduce the details of the framework.
 
@@ -24,14 +24,14 @@
 \sstab (1) It first computes all \dras and their maximal proxies with a linear algorithm, referred to as  $\compDRAs$ \cite{journal-version2016}.
 
 \sstab (2) It then pre-computes and stores all the shortest paths and distances between any node in a \dra and its proxy.
-
+%
 To support shortest distance queries, for each node in a \dra, we store its proxy $u$, its distance to $u$ and the component of $A^{+}_u$ to which it belongs,
-and, moreover, to support shortest path queries, we further keep the shortest paths from proxy $u$ to all nodes in the \dra.
+and to support shortest path queries, we further keep the shortest paths from proxy $u$ to all nodes in the \dra.
 
 \sstab (3) It finally computes the reduced subgraph $G'$ by removing all \dras, but keeping their proxies, from graph $G$.
 
 
-\stitle{2. Query answering}. Given two nodes $s$ and $t$ in graph $G(V, E)$  and the pre-computed information, the query answering module executes the following.
+\stitle{2. Query answering}. Given two nodes $s$ and $t$ in graph $G(V$, $E)$  and the pre-computed information, the query answering module executes the following.
 
 
 \sstab (1) When nodes $s$ and $t$ belong to the same \dra $G[A^+_u]$ with proxy $u$ such that $A^+_u$ = $A^1_u\cup\ldots A^h_u$.
@@ -40,9 +40,9 @@ If $s$ and $t$ further fall into the same component $A^i_u$ ($i\in[1,h]$), it in
 
 \sstab (2)  When $s$ and $t$ belong to two \dras $G[A^+_{u_s}]$ and $G[A^+_{u_t}]$ with proxies $u_s$ and $u_t$, respectively.
 
-By the analyses in Section~\ref{sec-proxy}, we know that $\path(s, t)$ = $\path(s, u_s)/\path(u_s, u_t)/$ $\path(u_t, t)$, in which $\path(s, u_s)$ and $\path(u_t, t)$ are already known. Hence, it simply invokes an algorithm (\eg~\arcflag \cite{MohringSSWW05}, \tnr~\cite{bast2014route}, \ah~\cite{zhu2013shortest}) on the reduced graph $G'$ for computing $\path(u_s, u_t)$.
-
-Similarly, the shortest distance $\dist(s, t)$ = $\dist(s, u_s)$ + $\dist(u_s, u_t)$ + $\dist(u_t, t)$ can be computed.
+ As shown in Section~\ref{sec-proxy}, we know that $\path(s, t)$ = $\path(s, u_s)/$ $\path(u_s, u_t)/$ $\path(u_t, t)$, in which $\path(s, u_s)$ and $\path(u_t, t)$ are already known. Hence, it simply invokes an algorithm (\eg~\arcflag \cite{MohringSSWW05}, \tnr~\cite{bast2014route}, \ah~\cite{zhu2013shortest}) on the reduced graph $G'$ for computing $\path(u_s, u_t)$.
+%
+Similarly, it computes $\dist(s, t)$ = $\dist(s, u_s)$ + $\dist(u_s, u_t)$ + $\dist(u_t, t)$.
 
 
 \eat{We next illustrate how shortest path and distance queries are processed with an example below.
