@@ -20,26 +20,31 @@ Nevertheless, we speed-up  TWPageRank computation by exploiting the {\em tempora
 
 The main result here is stated as follows.
 
-\begin{theorem}
+\begin{fact}
 \label{thm-prestige}
 %TWPageRank can be computed in linear time in practice on scholarly data obeying a temporal order.
 A block-wise PageRank computation method is a good choice for computing TWPageRank on scholarly data.
-\end{theorem}
+\end{fact}
 
-We next prove Theorem~\ref{thm-prestige} by introducing the block-wise PageRank computation method and analyzing its performance. 
+We next prove Fact~\ref{thm-prestige} by introducing such computation method and analyzing its efficiency. The main idea of the method is to treat each block as a strongly connected component (SCC) of the original graph and process one block at a time following the topological order of the converted graph of the original graph where each node represents a block~\cite{Berkhin05}.
 
-achieves the desired property by using characteristics of scholarly data obeying the temporal order, such that each block equals to an SCC of the original graph and the directed and acyclic structure of the converted graph can improve the efficiency of PageRank computation~\cite{Berkhin05}.
+%the directed and acyclic structure of the  can improve the efficiency of PageRank computation~\cite{Berkhin05,ObjectRank04}.
 
-To do that, the edges of citation graph or venue graph $G(V, E)$ is first partitioned into two disjoint sets $E_w$ and $E_b$ with $E=E_w \cup E_b$, where $E_w$ and $E_b$ are sets of edges inside and across SCCs, respectively. Further, the update rule is revised by treating $E_b$ and $E_w$ differently as follows.
+To process an SCC instead of the entire graph, the edges of citation graph or venue graph $G(V, E)$ is partitioned into two disjoint sets $E_i$ and $E_a$ with $E=E_i \cup E_a$, where $E_i$ and $E_a$ are sets of edges inside and across SCCs, respectively. Further, the update rule is revised by treating $E_i$ and $E_a$ differently as follows.
 \begin{small}
 \begin{equation}\label{eq-prscc}
-PR(v) =  d \sum_{(u,v)\in E_w} M_{u,v} PR(u)
-  + d \sum_{(u,v)\in E_b} M_{u,v} PR(u) +  \frac{1-d}{n}.
+PR(v) =  d \sum_{(u,v)\in E_i} M_{u,v} PR(u)
+  + d \sum_{(u,v)\in E_a} M_{u,v} PR(u) +  \frac{1-d}{n}.
 \end{equation}
 \end{small}
 
+\stitle{Algorithm~\twprscc}.
+The block-wise algorithm takes a citation or venue graph $G$ and an iteration threshold $\epsilon$ as input, and outputs the TWPageRank vector of $G$.
+
+It first computes the converted graph $G'$ by treating SCCs in $G$ as single nodes, and then derives a topological order $O$ of $G'$. It then process each SCC in the topological order of $G'$ using  Eq.~(\ref{eq-prscc}) and finally returns the TWPageRank vector. When processing an SCC, it iteratively updates the TWPageRank scores of nodes in the SCC, and the iteration continues until the sum of TWPageRank score changes is less than $|scc|\cdot\epsilon/|V|$ where $|scc|$ is the number of nodes in the SCC. Note that there must exist at least one topological order of $G'$ since $G'$ is a directed acyclic graph (DAG).
 
 
+\eat{
 %%% algorithm details
 %%%%%%%%%%%%%%%%%%%%%Algorithm
 \begin{figure}[tb!]
@@ -69,29 +74,24 @@ PR(v) =  d \sum_{(u,v)\in E_w} M_{u,v} PR(u)
 \end{figure}
 
 %%%%%%%%%%%%Algorithm
+}
 
-
-
-
-
-\stitle{Algorithm~\twprscc}.
-The block-wise algorithm to compute the TWPageRank vector for citation or venue graph $G$ is shown in Fig.~\ref{alg-TWPageRank-venue}.
-
-It first computes the converted graph $G'$  by treating SCCs in $G$ as single nodes (line 1), and then derives a topological order $O$ of $G'$ (line 2). It then iteratively updates the TWPageRank scores of nodes in each SCC in the topological order of $G'$ using  Eq.~(\ref{eq-prscc}) (lines 3--6), and finally returns the TWPageRank vector (line 7). More specifically, the iteration continues until the sum of TWPageRank score changes is less than $|scc|\cdot\epsilon/|V|$ (lines 5--6). Note that there must exist at least one topological order of $G'$ since $G'$ is a DAG.
-
-
+%\stitle{Algorithm~\twprscc}.
+%The block-wise algorithm to compute the TWPageRank vector for citation or venue graph $G$ is shown in Fig.~\ref{alg-TWPageRank-venue}.
+%
+%It first computes the converted graph $G'$  by treating SCCs in $G$ as single nodes (line 1), and then derives a topological order $O$ of $G'$ (line 2). It then iteratively updates the TWPageRank scores of nodes in each SCC in the topological order of $G'$ using  Eq.~(\ref{eq-prscc}) (lines 3--6), and finally returns the TWPageRank vector (line 7). More specifically, the iteration continues until the sum of TWPageRank score changes is less than $|scc|\cdot\epsilon/|V|$ (lines 5--6). Note that there must exist at least one topological order of $G'$ since $G'$ is a DAG.
 
 
 
 \begin{lemma} \label{prop-prscc}
-The vector $PR$ returned by~\twprscc converges such that $||PR-PR^*||_1 < \epsilon$ given the convergent TWPageRank vector $PR^*$.
+The vector $PR$ returned by~\twprscc converges such that $||PR-PR^*||_1 < \epsilon$ given the convergent vector $PR^*$~\cite{Berkhin05}.
 \end{lemma}
 
+\eat{
 \begin{proofSketch}
-%We first prove that $||PR^+-PR||_1 < \epsilon$ where $PR^+=d\cdot M^T\cdot PR + \frac{1-d}{n}\cdot e$.
-%We then prove that $||PR^*-PR||_1 < ||PR^+-PR||_1$.
 We first prove that the sum of changes after another iteration from $PR$, \ie $||d M^T PR + \frac{1-d}{n} e-PR||_1$, is smaller than $\epsilon$, and then prove that $||PR^*-PR||_1$ is smaller than the sum of changes (see~\cite {ERank-full} for details). % since $\epsilon > ||PR^+-PR||_1 = ||d\cdot M^T \cdot (PR-PR^*)||_1 + ||PR-PR^*||_1$.
 \end{proofSketch}
+}
 
 %%% detailed proof sketch
 \eat{
@@ -103,33 +103,41 @@ We first prove that the sum of changes after another iteration from $PR$, \ie $|
 
 \begin{lemma}
 \label{prop-venue-time-complexity}
-Given a citation graph or venue graph $G(V, E)$, algorithm \twprscc runs in  $O(|V|+|E_b|+t|E_w|)$ time, where $t$ is  the maximum number of iterations among all SCCs.
+Given a citation graph or venue graph $G(V, E)$, algorithm \twprscc runs in  $O(|V|+|E_a|+t|E_i|)$ time, where $t$ is  the maximum number of iterations among all SCCs.
 \end{lemma}
 
 \begin{proof}
-Observe the following. (1) The converted graph $G'$ and topological order $O$ can be computed in $O(|V|+|E|)$~\cite{CormenLRS01} (lines 1,2), and (2) updating the TWPageRank scores takes $O(|V|+|E_b|+t |E_w|)$ where edges in $|E_b|$ are only scanned once (lines 3--6).
+Observe the following. (1) The converted graph $G'$ and topological order $O$ can be computed in $O(|V|+|E|)$~\cite{CormenLRS01}, and (2) updating the TWPageRank scores takes $O(|V|+|E_a|+t|E_i|)$ where edges in $|E_a|$ are only scanned once.
 \end{proof}
 
-Note that $O(|V|+|E_b|+t |E_w|)$ remains linear to $|E|$ in practice since $|E_w|$ is typically much smaller than $|E|$ (\eg 0.92\%) for scholarly data obeying a temporal order.
-By Lemmas \ref{prop-prscc} \& \ref{prop-venue-time-complexity}, we have shown Theorem~\ref{thm-prestige}.
 
-
-\stitle{Temporal order}. Scholarly data follows temporal order in the sense that an article can only cite the articles published earlier, and, moreover, it is pretty rare that two articles published in the same time mutually cite each other.
-Hence, both the citation graph and the venue graph can be treated as a almost directed acyclic graph (DAG)~\cite{ObjectRank04}. Indeed, they become DAGs by replacing their strongly connected components (SCCs) with single nodes~\cite{CormenLRS01}.
-
-More specifically, the citation graph and the venue graph have the following two characteristics:
-a) the size of the largest SCC is much less than the one of the entire graph,
-and, as the result of that, b) the number of edges inside SCCs is much less than the total number of edges.
+\stitle{Efficiency analysis}. Considering that $t$ is likely to be in the tens to hundreds~\cite{Brin98:PageRank}, the efficiency of algorithm \twprscc is mainly influenced by $|E_i|$, which becomes better with $|E_i|$ being smaller.
 %
-Indeed, the number of nodes in the largest SCC is (20, 23, 351) on (\aan, \aminer, \magdata), respectively, which is less than 0.12\% of the total number of nodes, and the edges inside SCCs is less than 0.92\% of the total number of edges.
-%according to the statistics of three scholarly datasets,
+In the Web graph with the ``bow tie" strucutre~\cite{BroderKMRRSTW00}, the nodes in the largest SCC amount to 51\% of the entire graph in 2014~\cite{MeuselVLB14}, and $|E_i|$ is already 25\% of $|E|$ when edges are randomly generated.
+%
+However, the situation is completely different on scholarly data obeying temporal order in the sense that an article can only cite the ones published earlier. Moreover, it is pretty rare that two articles published in the same time mutually cite each other. Hence, both the citation graph and the venue graph can be treated as almost-DAGs~\cite{ObjectRank04}.
+%
+Indeed, on (\aan, \aminer, \magdata), the nodes in the largest SCC amount to (0.11\%, 0.00073\%, 0.00028\%) of the entire citation graph, and $|E_i|$ is (0.92\%, 0.14\%, 0.063\%) of $|E|$, respectively. %Here we present statistics of citation graphs since citation graphs are typically much larger than corresponding venue graphs and occupy most computation.
 
+Based on the above analysis, algorithm \twprscc performs much better on scholarly data than the Web graph. Taking $t=100$ for example, the complexity is $O(|V|+2|E|)$ and $O(|V|+25|E|)$ on scholarly data and the Web graph, respectively.
+%
+By Lemmas \ref{prop-prscc} \& \ref{prop-venue-time-complexity}, we have shown Fact~\ref{thm-prestige}.
+
+%Note that $O(|V|+|E_b|+t |E_w|)$ remains linear to $|E|$ in practice since $|E_w|$ is typically much smaller than $|E|$ (\eg 0.92\%) for scholarly data obeying a temporal order.
+
+
+
+%\stitle{Temporal order}. Scholarly data follows temporal order in the sense that an article can only cite the articles published earlier, and, moreover, it is pretty rare that two articles published in the same time mutually cite each other. Hence, both the citation graph and the venue graph can be treated as a almost directed acyclic graph (DAG)~\cite{ObjectRank04}. Indeed, they become DAGs by replacing their strongly connected components (SCCs) with single nodes~\cite{CormenLRS01}.
+
+%More specifically, the citation graph and the venue graph have the following two characteristics:
+%a) the size of the largest SCC is much less than the one of the entire graph,
+%and, as the result of that, b) the number of edges inside SCCs is much less than the total number of edges.
 
 
 
 \subsubsection{Prestige of authors}
 \label{subsubsec-prs-A}
-The prestige of authors is defined as the average prestige of their published articles, it suffices to scan through all author-article  relationships for computing the prestige of authors.
+The prestige of authors is defined as the average prestige of their published articles, it suffices to scan through all author-article  relationships for computing the prestige.
 
 
 \subsection{Popularity Computation}
@@ -145,7 +153,7 @@ The popularity of venues in a specific year or authors is computed by averaging 
 \subsection{The Complete Batch Algorithm}
 \label{subsec-bat-alg}
 
-We finally present the complete batch algorithm \batensemble, which combines the importance computed by the citation, author and venue components with Eq. (\ref{eq-ensemble}). It takes as input academic graph data $D$ and an iteration threshold $\epsilon$ and returns the scholarly article ranking of $D$. It first constructs the citation and venue graphs $G^c(V^c,E^c)$ and $G^v(V^v,E^v)$. Then it computes the prestige and popularity of citation, venue and author components.
+We finally present the complete batch algorithm \batensemble, which combines the importance scores computed by the citation, author and venue components with Eq. (\ref{eq-ensemble}). It takes as input academic graph data $D$ and an iteration threshold $\epsilon$ and returns the scholarly article ranking of $D$. It first constructs the citation and venue graphs $G^c(V^c,E^c)$ and $G^v(V^v,E^v)$. Then it computes the prestige and popularity of citation, venue and author components.
 Finally, it combines the importance, \ie prestige and popularity, of three components to produce the final ranking.
 
 \stitle{Time \& space complexity analyses}. By the analyses above and Lemma~\ref{prop-venue-time-complexity}, it is easy to verify that algorithm \batensemble runs in $O(|V^c|+|E^c_b|+t|E^c_w|+|V^v|+|E^v_b|+t|E^v_w|+|PA|)$, where $|PA|$ is the total number of author-article relationships.
