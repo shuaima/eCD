@@ -10,35 +10,25 @@ Hence, the key of the computation of our approach  is a good solution for TWPage
 \subsection{Prestige Computation}
 \label{subsec-prestige}
 
-We first present the details of prestige computation.
-%
-The prestige of articles and venues is computed with TWPageRank on citation graphs and venue graphs, which occupies most computation cost of importance computation.
-%
-While the prestige of authors is defined as the average prestige of their published articles, it suffices to scan through all author-article  relationships for computing the prestige of authors.
-%
+We first present the details of prestige computation. The prestige of articles and venues in a specific year and the one of authors are computed differently due to their definitions.
+
+\subsubsection{Prestige of articles and venues in a specific year}
+\label{subsubsec-prs-CV}
+
+The prestige of articles and venues in a specific year is computed with TWPageRank on citation graphs and venue graphs, which occupies most computation cost of importance computation.
 Nevertheless, we speed-up  TWPageRank computation by exploiting the {\em temporal order} of scholarly data.
 
 The main result here is stated as follows.
 
 \begin{theorem}
 \label{thm-prestige}
-TWPageRank can be computed in linear time in practice on scholarly data obeying a temporal order.
+%TWPageRank can be computed in linear time in practice on scholarly data obeying a temporal order.
+A block-wise PageRank computation method is a good choice for computing TWPageRank on scholarly data.
 \end{theorem}
 
-%by a block-based PageRank computation method
+We next prove Theorem~\ref{thm-prestige} by introducing the block-wise PageRank computation method and analyzing its performance. 
 
-
-\stitle{Temporal order}. Scholarly data follows temporal order in the sense that an article can only cite the articles published earlier, and, moreover, it is pretty rare that two articles published in the same time mutually cite each other.
-Hence, both the citation graph and the venue graph can be treated as a almost directed acyclic graph (DAG)~\cite{ObjectRank04}. Indeed, they become DAGs by replacing their strongly connected components (SCCs) with single nodes~\cite{CormenLRS01}.
-
-More specifically, the citation graph and the venue graph have the following two characteristics:
-a) the size of the largest SCC is much less than the one of the entire graph,
-and, as the result of that, b) the number of edges inside SCCs is much less than the total number of edges.
-%
-Indeed, the number of nodes in the largest SCC is (20, 23, 351) on (\aan, \aminer, \magdata), respectively, which is less than 0.12\% of the total number of nodes, and the edges inside SCCs is less than 0.92\% of the total number of edges.
-%according to the statistics of three scholarly datasets,
-
-We next prove Theorem~\ref{thm-prestige} by showing that a block-wise PageRank computation method achieves the desired property by using characteristics of scholarly data obeying the temporal order, such that each block equals to an SCC of the original graph and the directed and acyclic structure of the converted graph can improve the efficiency of PageRank computation~\cite{Berkhin05}.
+achieves the desired property by using characteristics of scholarly data obeying the temporal order, such that each block equals to an SCC of the original graph and the directed and acyclic structure of the converted graph can improve the efficiency of PageRank computation~\cite{Berkhin05}.
 
 To do that, the edges of citation graph or venue graph $G(V, E)$ is first partitioned into two disjoint sets $E_w$ and $E_b$ with $E=E_w \cup E_b$, where $E_w$ and $E_b$ are sets of edges inside and across SCCs, respectively. Further, the update rule is revised by treating $E_b$ and $E_w$ differently as follows.
 \begin{small}
@@ -122,6 +112,24 @@ Observe the following. (1) The converted graph $G'$ and topological order $O$ ca
 
 Note that $O(|V|+|E_b|+t |E_w|)$ remains linear to $|E|$ in practice since $|E_w|$ is typically much smaller than $|E|$ (\eg 0.92\%) for scholarly data obeying a temporal order.
 By Lemmas \ref{prop-prscc} \& \ref{prop-venue-time-complexity}, we have shown Theorem~\ref{thm-prestige}.
+
+
+\stitle{Temporal order}. Scholarly data follows temporal order in the sense that an article can only cite the articles published earlier, and, moreover, it is pretty rare that two articles published in the same time mutually cite each other.
+Hence, both the citation graph and the venue graph can be treated as a almost directed acyclic graph (DAG)~\cite{ObjectRank04}. Indeed, they become DAGs by replacing their strongly connected components (SCCs) with single nodes~\cite{CormenLRS01}.
+
+More specifically, the citation graph and the venue graph have the following two characteristics:
+a) the size of the largest SCC is much less than the one of the entire graph,
+and, as the result of that, b) the number of edges inside SCCs is much less than the total number of edges.
+%
+Indeed, the number of nodes in the largest SCC is (20, 23, 351) on (\aan, \aminer, \magdata), respectively, which is less than 0.12\% of the total number of nodes, and the edges inside SCCs is less than 0.92\% of the total number of edges.
+%according to the statistics of three scholarly datasets,
+
+
+
+
+\subsubsection{Prestige of authors}
+\label{subsubsec-prs-A}
+The prestige of authors is defined as the average prestige of their published articles, it suffices to scan through all author-article  relationships for computing the prestige of authors.
 
 
 \subsection{Popularity Computation}

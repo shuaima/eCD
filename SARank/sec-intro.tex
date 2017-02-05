@@ -30,16 +30,16 @@ are heterogeneous, evolving and dynamic~\cite{AggarwalS14-survey,fcs-biggraph}.
 
 First, even if we are only to rank one type of entities (\eg scholarly articles), other types of entities (\eg venues and authors) are closely involved, and, moreover, different types of entities may have different impacts on the ranking of scholarly articles.
 %
-Second, entities are evolving, and the importance of an article varies with time~\cite{Li08TSRanking}. Newly published articles are very likely to have increasing impacts in the next few years, and those published many years ago tend to have decreasing impacts, as researchers potentially have more interests in recent reported  results.
-%As indicated by the statistics of the Microsoft Academic Graph (\magdata)~\cite{Sinha15:MAG} in Fig.~\ref{fig-citation}, the citations of articles indeed increase in the first two years after their publication, and then decrease accordingly.
-\marked{As indicated by the statistics of three scholarly datasets (\aan, \aminer and \magdata) in Fig.~\ref{fig-citation}, the citation numbers of articles indeed reach the peak in the first 0--2 years after their publication, and then decrease accordingly.}
+%Second, entities are evolving, and the importance of an article varies with time~\cite{Li08TSRanking}. Newly published articles are very likely to have increasing impacts in the next few years, and those published many years ago tend to have decreasing impacts, as researchers potentially have more interests in recent reported  results. As indicated by the statistics of the Microsoft Academic Graph (\magdata)~\cite{Sinha15:MAG} in Fig.~\ref{fig-citation}, the citations of articles indeed increase in the first two years after their publication, and then decrease accordingly.
+%
+\marked{Second, entities are evolving, and the importance of an article varies with time~\cite{WangSB13}. Newly published articles are very likely to have increasing impacts in the next few years, and those published many years ago tend to have decreasing impacts, as researchers potentially have more interests in recently reported results. As indicated by the statistics of three scholarly datasets (\aan, \aminer and \magdata) in Fig.~\ref{fig-citation}, the citation numbers of articles indeed reach the peak in the first 1--2 years after their publication, and then decrease accordingly. The only exception is the number of same-year citations on \aminer, which is due to xxx. Note that~\cite{WangSB13} uses a complex log-normal probability to describe the above citation pattern.}
 %
 Finally, academic data is dynamic and continuously growing. Indeed, the number of articles in \magdata has exceeded 126 million, and keeps increasing at around 5.7 million per year~\cite{Sinha15:MAG}.
 
 
 
 %Managing scholarly data with such volume in  highly dynamic scenarios is a non-trivial task. However, existing methods rarely consider the efficiency issue. Moreover, incremental algorithms are necessary to manage scholarly data in highly dynamic scenarios, which are still in the early stage in the literature.
-Query independent ranking of scholarly articles is challenging~\cite{wsdmcup}, although there exists quite a few work on scholarly article ranking, \eg~\cite{Garfield471,ChenXMR07,Zhou07-CoRank,ShenAAAI16,Liang16AAAI,Jiang12-MRank,Waltman2014}.
+Query independent ranking of scholarly articles is challenging~\cite{wsdmcup}, although there exists quite a bit of work on scholarly article ranking, \eg~\cite{Garfield471,ChenXMR07,Zhou07-CoRank,ShenAAAI16,Liang16AAAI,Jiang12-MRank,Waltman2014}.
 Further, to our knowledge, little concern has been paid to dynamic scholarly article ranking except \cite{GhoshKHLL11} with a strong and impractical assumption that there are no citations between papers published in the same year.
 
 
@@ -85,11 +85,10 @@ The popularity of an article is the sum of all its citations' freshness (how clo
 Observe that (a), intuitively, prestige favors articles with many citations soon after their publication, and popularity favors those with recent citations, and (b) both prestige and popularity capture the evolving nature of entities.
 
 
-\sstab(2) \marked{We then show a block-wise PageRank computation method is a good choice for computing Time-Weighted PageRank on scholarly data
-due to its {\em temporal order}, \ie articles only cite existing ones (Section \ref{sec-alg}).}
-The key of our approach \ensemblerank is a good solution for Time-Weighted PageRank, whose time complexity is significantly reduced with the usage of the temporal order.
+\sstab(2) \marked{We then propose an incremental algorithm that speeds up scholarly article ranking in a dynamic environment (Section~\ref{sec-incAlg}). The incremental algorithm is based on the division of original graphs into {\em affected and unaffected areas}, and different updating strategies are designed for nodes in affected and unaffected areas.
 %
-We also propose an incremental algorithm that further speeds up scholarly article ranking in a dynamic environment (Section~\ref{sec-incAlg}). The incremental algorithm is based on the division of original graphs into {\em affected and unaffected areas}, and different updating strategies are designed for nodes in affected and unaffected areas.
+The key of our approach \ensemblerank is a good solution for Time-Weighted PageRank. As a starting point, we show a block-wise PageRank computation method is a good choice on scholarly data obeying the {\em temporal order}, \ie articles only cite existing ones (Section \ref{sec-alg}).
+}
 
 \eat{
 \sstab(2) We then propose an efficient batch algorithm, which exploits the {\em temporal order} of scholarly data,
@@ -100,22 +99,17 @@ The key of our ensemble approach \ensemblerank is a good solution for Time-Weigh
 \sstab(3) We also propose an incremental algorithm that further speeds up scholarly article ranking in a dynamic environment (Section~\ref{sec-incAlg}). The incremental algorithm is based on the division of original graphs into {\em affected and unaffected areas}, and different updating strategies are designed for nodes in affected and unaffected areas.
 }
 
-\sstab(3) Using three real-life scholarly datasets (\aan, \aminer and \magdata), we conduct an extensive experimental study (Section~\ref{sec-exp}). We find that our approach \ensemblerank is both effective and efficient, compared with \pagerank~\cite{Brin98:PageRank}, \futurerank~\cite{sayyadi09} and \hhgrank~\cite{Liang16AAAI}.
+\sstab(3) Using three real-life scholarly datasets (\aan, \aminer and \magdata), we conduct an extensive experimental study (Section~\ref{sec-exp}). We find that our approach \ensemblerank is both effective and efficient.
+%, compared with \pagerank~\cite{Brin98:PageRank}, \futurerank~\cite{sayyadi09} and \hhgrank~\cite{Liang16AAAI}.
 %
-(a) Using benchmarks \recom and \fcita, \ensemblerank improves the pairwise accuracy~\cite{Richardson06:BPR} over (\pagerank, \futurerank, \hhgrank) by (11.5\%, 6.5\%, 4.3\%) and (14.5\%, 2.5\%, 3.8\%) on \aan, (6.1\%, 1.2\%, 0.7\%) and (9.1\%, 5.2\%, 3.6\%) on \aminer, and (6.3\%, 2.1\%, 1.8\%) and (7.0\%, 4.2\%, 1.5\%) on \magdata, on average, respectively.
+(a) Using ground-truths \recom and \fcita, \ensemblerank improves the pairwise accuracy~\cite{Richardson06:BPR} over (\pagerank~\cite{Brin98:PageRank}, \futurerank~\cite{sayyadi09}, \hhgrank~\cite{Liang16AAAI}) by (11.5\%, 6.5\%, 4.3\%) and (14.5\%, 2.5\%, 3.8\%) on \aan, (6.1\%, 1.2\%, 0.7\%) and (9.1\%, 5.2\%, 3.6\%) on \aminer, and (6.3\%, 2.1\%, 1.8\%) and (7.0\%, 4.2\%, 1.5\%) on \magdata, on average, respectively.
 %
+(b) Our incremental algorithm \incensemble is on average (x, 1.3, 2.5, 348) times faster than (\batensemble, \powensemble, \futurerank, \hhgrank)  on the large dataset \magdata.
+
+\eat{
 (b) Our batch algorithm \batensemble is on average (1.3, 2.5, 348) times faster than (\powensemble, \futurerank, \hhgrank)  on the large dataset \magdata.
 %
 (c) Our incremental algorithm \incensemble is consistently faster than its batch counterpart \batensemble, \eg on average 22\% faster on \magdata.
-
-
-
-
-
-\eat{
-Using both real-life data (\dblp and \amazon) and synthetic
-data (\synthetic), we conduct an extensive experimental study.
-We find that our embedding approach to network anomaly detection is both effective and efficient. (a) The modularity \cite{newman1} was increased about 2.9\% and 2.4\% for \amazon, 4.9\% and 4.2\% for \dblp and 6.3\% and 4.2\% for \synthetic, with our approach and \oddball~\cite{akoglu14}, respectively; (b) The $F_1$ measure was about $88\%$ and $70\%$ for \synthetic with our approach and \oddball, respectively; And (c) the running time of our embedding approach increases reasonably with the increase of graph sizes, even with large number of communities, while traditional  multidimensional scaling approach~\cite{mds} ran out of memory.
 }
 
 %discusses how to deal with missing data using external sources
