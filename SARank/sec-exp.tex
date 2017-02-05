@@ -1,0 +1,529 @@
+\section{Experimental Study}
+\label{sec-exp}
+
+In this section, we present an extensive experimental study of our importance assembling approach \ensemblerank.
+Using three real-life scholarly datasets (\aan, \aminer and \magdata) and two benchmarks (\recom and \fcita), we conducted four sets of experiments to evaluate: (1) the effectiveness of \ensemblerank,
+%two sets of benchmark article pairs (\recom and \fcita) ranked by numbers of recommendations and future citations,
+(2) the efficiency of our batch algorithm \batensemble and incremental algorithm \incensemble, and (3) the impacts of time decaying factor $\sigma$, importance weighting factor $\lambda$ and aggregating parameters $\alpha$ and $\beta$.
+
+%baseline methods \pagerank~\cite{Brin98:PageRank}, \futurerank~\cite{sayyadi09} and \hhgrank~\cite{Liang16AAAI}
+
+\eat{
+In this section, we use the Microsoft Academic Graph~\cite{Sinha15:MAG} to evaluate the effectiveness of our ranking model \ewpr in terms of four aspects: (1) Time-Weighted PageRank {\em vs.} PageRank, (2) single ensembles {\em vs.} multiple ensembles, (3) ensemble models {\em vs.} mixed models and (4) ensemble models with affiliations.
+}
+
+\subsection{Experimental Settings}
+
+We first present the settings of our experimental study.
+
+\eat{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}[t!]
+%\vspace{-2ex}
+\label{tab-statistics}
+\begin{center}
+\begin{scriptsize}
+\vspace{1ex}
+\begin{tabular}{|c|c|c|}
+\hline
+{\bf Entity / Relation}       &  {\bf Quantity in Phase~1}     & {\bf Quantity in Phase~2} \\
+\hline\hline
+Paper      &  $122,675,085$       &  $120,887,833$ \\ \hline
+Author      &  $123,017,488$       &  $119,892,201$ \\ \hline
+Venue      &  $24,841$       &  $24,843$ \\ \hline
+Affiliation      &  $2,716,493$       &  $19,849$ \\ \hline
+Fields of study     &  $53,834$       &  $53,830$ \\ \hline
+Reference      &  $757,462,733$       &  $952,364,264$ \\ \hline
+P-A      &  $324,948,062$       &  $312,034,259$ \\ \hline
+P-V      &  $45,783,880$       &  $45,290,168$ \\ \hline
+\end{tabular}
+\vspace{-5ex}
+\end{scriptsize}
+\end{center}
+\caption{Statistics of MAG}
+\vspace{-3ex}
+\end{table}
+%%%%%%%%%%%%%%%%%%%
+}
+
+\stitle{Datasets}. We chose three datasets to test our approach.
+
+\noindent
+(1) \aan records the collection of computational linguistics articles published by ACL from 1965 to 2011~\cite{Liang16AAAI}.
+It contains 18,041 articles, 14,386 authors, 273 venues and 69,928 citations.
+
+\noindent
+(2) \aminer records publications in the computer science domain from 1936 to 2016~\cite{Tang:08KDD}.
+It contains around 3.14 million articles, 1.74 million authors, 11,619 venues and 6.38 million citations.
+
+\noindent
+(3) \magdata records publications of various disciplines from 1800 to 2016~\cite{Sinha15:MAG}.
+It contains around 127 million articles, 115 million authors, 24,024 venues and 526 million citations.
+%Please refer to~\cite{Sinha15:MAG} for more details about \magdata.
+
+These datasets were further cleaned by deleting self citations and citations with error time information, which accounted for (x\%, y\%, z\%) of the total citations on (\aan, \aminer, \magdata).
+%from old articles to more recent ones
+%These datasets were further cleaned by detecting citation cycles and removing those edges violating the temporal order if any.
+
+%The original datasets does not strictly follow the temporal order due to the data quality problem. We hence dealt with the issue by repeatedly detecting cycles in citation graphs and removing edges that break temporal order, if existing, or all edges in cycles.
+
+
+%Actually, the citation networks of scholarly article in the three datasets are not DAG, since there are some mistaken citaions which can't be found in the references of articles. In order to delete these edges to make sure the citation network is a DAG, we do the followings:
+%(1) Detect possible loops in the network by depth-first-search
+%(2) Delete the edges with time error in loops found in (1) which are edges from earlier articles to later, only if all the edges in the loop haven't be deleted
+%(3) Delete all the edges in loops found in (1) only if all the edges in the loop haven't be deleted
+%(4) Repeat (1)-(3) until there is no loop in the network.
+
+
+
+%The original datasets does not strictly follow the temporal order due to the data quality problem. We hence dealt with the issue by repeatedly detecting cycles in citation graphs and removing edges that break temporal order, if existing, or all edges in cycles.
+
+
+%Actually, the citation networks of scholarly article in the three datasets are not DAG, since there are some mistaken citaions which can't be found in the references of articles. In order to delete these edges to make sure the citation network is a DAG, we do the followings:
+%(1) Detect possible loops in the network by depth-first-search
+%(2) Delete the edges with time error in loops found in (1) which are edges from earlier articles to later, only if all the edges in the loop haven't be deleted
+%(3) Delete all the edges in loops found in (1) only if all the edges in the loop haven't be deleted
+%(4) Repeat (1)-(3) until there is no loop in the network.
+
+\stitle{Accuracy metric}.
+We adopted {\em pairwise accuracy} introduced by Microsoft~\cite{Richardson06:BPR} to evaluate the ranking quality, which is the fraction of times that a ranking agrees with the correct importance orders of scholarly article pairs.
+\eat{
+\vspace{-1ex}
+
+\begin{small}
+\begin{equation}
+\label{eq-metric}
+\PairAcc=\frac{\#\mbox{ of agreed pairs}}{\# \mbox{ of all pairs}}.
+%\PairAcc=(\#\mbox{ of agreed pairs}) / (\# \mbox{ of all pairs}).
+\end{equation}
+\end{small}
+
+\vspace{-1ex}
+}
+
+\stitle{Benchmarks}.
+%The ground truth is generated by human experts, who are asked to give the orders of importance of article pairs ({\footnotesize https://wsdmcupchall-enge.azurewebsites.net/Home/Rules}).
+%For more details about the metric, please refer to~\cite{Richardson06:BPR}.
+%We have two kinds of ground truth due to the different evaluate standard, recommendation based and future citation based.
+We constructed two benchmarks (\recom and \fcita) of scholarly article pairs to test the pairwise accuracy.
+
+\noindent
+(1) \recom assumes scholarly articles with more recommendations are of higher importance.
+%evaluates the importance of scholarly articles by the numbers of recommendations (from textbooks and/or university course reading lists).
+We used the numbers of recommendations of 93 articles in \aan~\cite{Liang16AAAI}, %which are recommended by 2 to 10 times,
+and then matched articles in \aminer and \magdata with titles. %Based on the numbers of recommendations,
+Finally, we generated (2133, 966, 1972) pairs on (\aan, \aminer, \magdata), respectively.
+%These articles were further matched into \aminer and \magdata through titles, which generated 966 and 1,972 article pairs for \aminer and \magdata, respectively.
+
+%To generate the pairs base on recommendation, we have selected two articles from gold standard set GoldP which consists of 93 scholarly articles that are recommended by the course reading lists or textbooks of 15 famous universities at least twice, and evaluate the article which has been recommended more frequency more importance than the other. In that case, we have generate 2,133, 1,972 and 966 pairs as recommendation based ground truth on \aan, \magdata and \aminer, respectively. Note that all the scholarly articles from recommendation based ground truth is published before or in 2011.
+
+\noindent
+(2) \fcita assumes scholarly articles with more future citations are of higher importance~\cite{Wang13AAAI,Wang16TIST,Li08TSRanking}.
+We first divided each dataset into ranking and future data by a splitting year such that ranking (future) data consisted of articles published before (in or after) that year. We then generated article pairs from ranking data, whose importance was evaluated by the numbers of citations from articles in future data.
+%To make sure the numbers of future citations reflect the importance of scholarly articles,
+Articles in the same pairs were required to be in similar research fields, by utilizing the Fields-Of-Study information of \magdata~\cite{Sinha15:MAG}, and published in the same years, similar to~\cite{Wang16TIST}.
+%The default splitting year was selected such that future data has around 20\% of all articles, which was 2008 on \aan and 2013 on both \aminer and \magdata.
+We used all pairs (around 25,000) for \aan, and randomly selected 300,000 pairs for both \aminer and \magdata, respectively.
+%Finally, we generated  26,987 article pairs for \aan, and randomly selected 300,000 article pairs for both \aminer and \magdata.
+
+
+%It is obviously that the significant article will be cited more than those papers which are less important in the future. Due to the fact, we choose a year to divide the dataset into two parts, the query data and the future data. The query data includes articles which is published before the year, and the future data contains all papers published in or after the year. To evaluate the importance of scholarly articles, we can use the frequency of papers' citation in the future. Furthermore, to generate the orders of importance of article pairs, we need to make sure that the two articles in one pair are comparable and it is reasonable to evaluate their importance with future citation count. For this purpose, we have chosen two scholarly articles which belong to the same fields of study and published in the same year, and evaluate the article which has more future citation more importance than the other. In that case, we have generate and pick up 300,000 pairs randomly as future citation based ground truth for each datasets, respectively. Note that the boundary year is set to 2008 on \aan and 2013 on both \aminer and \magdata as default, and the evaluate period is set to all remaining data as default, since it will make 20\% data on each dataset be the future period.
+
+
+
+\stitle{Algorithms}.
+We compared our approach \ensemblerank with three baseline methods: \pagerank~\cite{Brin98:PageRank}, \futurerank~\cite{sayyadi09} and \hhgrank~\cite{Liang16AAAI}.
+
+\noindent
+(1) \pagerank (PageRank) is a classic method that uses only citation information to generate the scholarly article ranking.
+%and articles are ranked according to PageRank scores computed on the citation graph.
+
+
+\noindent
+(2) \futurerank (FutureRank) combines citation, temporal and other heterogeneous information to rank scholarly articles.
+%by predicting their future PageRank.
+%is a \pagerank based ranking methods which is able to evaluate the importance of articles by predicting their future ranking. In order to do that, it uses both citation network and other available information such as the authorship network and the publication time of the articles.
+
+\noindent
+(3) \hhgrank (HHGBiRank) is a very recent methods using both citation and other heterogeneous information, such that heterogeneous entities are mutually reinforced based on hypernetworks.
+%It uses hypernetworks to propagate importance/authority between entities.
+%a scientific literature ranking algorithm based on the heterogeneous academic hypernetwork. An ingredient of \hhgrank is based on the fact that, the importance of scholarly articles not only depends on the frequency it has been cited and the quality of citation but also depends on the importance of authors and researchers of the paper.
+
+
+\stitle{Implementation}.
+All algorithms were implemented with Microsoft Visual C++.
+%Parameters.
+For all algorithms, (a) the damping parameter $d$ and the iteration threshold $\epsilon$ were fixed to 0.85 and $10^{-8}$,
+(b) the default splitting year was selected such that future data had around 20\% of all articles, which was 2008 on \aan and 2013 on both \aminer and \magdata, and,
+(c) for the sake of fairness, all aggregating parameters, \eg $\alpha$, and $\beta$ in \ensemblerank, were tuned at the granularity of 0.1 and the best results were reported.
+%
+Moreover, $\rho$ was set to -0.2 for \futurerank following~\cite{sayyadi09}, and time decaying factor $\sigma$ and importance weighting factor $\lambda$ was set to -1 and 0.5  by default for \ensemblerank.
+
+All experiments were conduceted on a PC with 2 Intel Xeon E5--2630 2.4GHz CPUs and 64 GB of memory, running 64 bit Windows 7 professional system. %The usage of virtual memory was forbidden in all of our tests.
+When quantity measures are evaluated, the test was repeated over 5 times and the average is reported.
+
+
+\eat{
+2.\futurerank: With the recommendation based ground truth, the best correlation is obtained by $\alpha=0.1$, $\beta=0.2$ and $\gamma=0.2$. With the future citation based ground truth, the best correlation is obtained by $\alpha=0.7$, $\beta=0.1$ and $\gamma=0.2$. The time decaying factor is set as $\rho=-0.2$ for both ground truth.
+
+3.\hhgrank: With the recommendation based ground truth, the best correlation is obtained by $a_{11}=a_{21}=a_{31}=0.6$, $a_{12}=a_{22}=a_{32}=0.2$, and $a_{13}=a_{23}=a_{33}=0.2$. With the future citation based ground truth, the best correlation is obtained by $a_{11}=a_{21}=a_{31}=0.3$, $a_{12}=a_{22}=a_{32}=0.6$, and $a_{13}=a_{23}=a_{33}=0.1$.
+
+4.\ensemblerank: With the recommendation based ground truth, the best correlation is obtained by $\alpha=0.1$, $\beta=0.8$ and $\gamma=0.1$. With the future citation based ground truth, the best correlation is obtained by $\alpha=0.8$, $\beta=0.1$ and $\gamma=0.1$. The time decaying factor is set as $\sigma=-1.0$ for both ground truth.
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}[t!]
+%\vspace{-2ex}
+\label{tab-result}
+\begin{center}
+\begin{scriptsize}
+\vspace{1ex}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+{\bf Methods}   &  \hspace{3ex}\pagerank\hspace{3ex}     & \hspace{3ex}\futurerank\hspace{3ex}  &  \hspace{3ex}\hhgrank\hspace{3ex}  &   \hspace{3ex}\ensemblerank\hspace{3ex}    \\
+\hline \hline
+\aan  & $0.687$   & $0.737$   & $0.759$     & {\bf 0.802}      \\  \hline
+\aminer  & $0.732$   & $0.782$   & $0.786$     & {\bf 0.793}      \\ \hline
+\magdata  & $0.613$   & $0.655$   & $0.658$     & {\bf 0.676}      \\ \hline
+\end{tabular}
+\vspace{-0ex}
+\end{scriptsize}
+\end{center}
+\caption{\small Accuracy tests on \recom}
+\vspace{-5ex}
+\end{table}
+%%%%%%%%%%%%%%%%%%%
+
+
+%% 5 column * 3 row
+\eat{
+\begin{figure*}[tb!]
+%\vspace{-2ex}
+\begin{center}
+%\hspace{10ex}
+\subfigure[{\scriptsize \PairAcc 1}]{\label{fig-aan-futureyear}
+\includegraphics[scale=0.42]{./exp/AAN_PairAcc1.eps}}
+%\quad\quad
+\hspace{-3ex}
+\subfigure[{\scriptsize \PairAcc 2}]{\label{fig-aan-rankingyear}
+\includegraphics[scale=0.42]{./exp/AAN_PairAcc2.eps}}
+%\quad\quad
+\hspace{-3ex}
+\subfigure[{\scriptsize \PairAcc 3}]{\label{fig-aan-fcdiff}
+\includegraphics[scale=0.42]{./exp/AAN_PairAcc3.eps}}
+%\quad\quad
+\hspace{-3ex}
+\subfigure[{\scriptsize $\sigma$}]{\label{fig-aan-sigma}
+\includegraphics[scale=0.42]{./exp/AAN_sigma.eps}}
+\end{center}
+\vspace{-5ex}
+\caption{Results of \PairAcc on \aan}
+\label{fig-future-period}
+\vspace{-2ex}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[tb!]
+%\vspace{-2ex}
+\begin{center}
+%\hspace{10ex}
+\subfigure[{\scriptsize \PairAcc 1}]{\label{fig-aminer-futureyear}
+\includegraphics[scale=0.42]{./exp/AMiner_PairAcc1.eps}}
+%\quad\quad
+\hspace{-3ex}
+\subfigure[{\scriptsize \PairAcc 2}]{\label{fig-aminer-rankingyear}
+\includegraphics[scale=0.42]{./exp/AMiner_PairAcc2.eps}}
+%\quad\quad
+\hspace{-3ex}
+\subfigure[{\scriptsize \PairAcc 3}]{\label{fig-aminer-fcdiff}
+\includegraphics[scale=0.42]{./exp/AMiner_PairAcc3.eps}}
+%\quad\quad
+\hspace{-3ex}
+\subfigure[{\scriptsize $\sigma$}]{\label{fig-aminer-sigma}
+\includegraphics[scale=0.42]{./exp/AMiner_sigma.eps}}
+\end{center}
+\vspace{-5ex}
+\caption{Results of \PairAcc on \aminer}
+\label{fig-future-period}
+\vspace{-2ex}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[tb!]
+%\vspace{-2ex}
+\begin{center}
+%\hspace{10ex}
+\subfigure[{\scriptsize \PairAcc 1}]{\label{fig-mag-futureyear}
+\includegraphics[scale=0.42]{./exp/MAG_PairAcc1.eps}}
+%\quad\quad
+\hspace{-3ex}
+\subfigure[{\scriptsize \PairAcc 2}]{\label{fig-mag-rankingyear}
+\includegraphics[scale=0.42]{./exp/MAG_PairAcc2.eps}}
+%\quad\quad
+\hspace{-3ex}
+\subfigure[{\scriptsize \PairAcc 3}]{\label{fig-mag-fcdiff}
+\includegraphics[scale=0.42]{./exp/MAG_PairAcc3.eps}}
+%\quad\quad
+\hspace{-3ex}
+\subfigure[{\scriptsize $\sigma$}]{\label{fig-mag-sigma}
+\includegraphics[scale=0.42]{./exp/MAG_sigma.eps}}
+\end{center}
+\vspace{-5ex}
+\caption{Results of \PairAcc on \magdata}
+\label{fig-future-period}
+\vspace{-2ex}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+}
+
+
+\newcommand{\graphscale}{0.351} %0.38
+\newcommand{\graphmargin}{-3.5ex}
+%%% all in 1 Figure
+\begin{figure*}[tb!]
+%\vspace{-2ex}
+\begin{center}
+%\hspace{10ex}
+\subfigure[{\scriptsize \aan}]{\label{fig-aan-futureyear}
+\includegraphics[scale=\graphscale]{./exp/AAN_PairAcc1.eps}}
+%\quad\quad
+\hspace{\graphmargin}
+\subfigure[{\scriptsize \aan}]{\label{fig-aan-t}
+\includegraphics[scale=\graphscale]{./exp/AAN_PairAcc2.eps}}
+%\quad\quad
+\hspace{\graphmargin}
+\subfigure[{\scriptsize \aan}]{\label{fig-aan-fcdiff}
+\includegraphics[scale=\graphscale]{./exp/AAN_PairAcc3.eps}}
+%\quad\quad
+\hspace{\graphmargin}
+\subfigure[{\scriptsize \aan}]{\label{fig-aan-sigma}
+\includegraphics[scale=\graphscale]{./exp/AAN_sigma2.eps}}
+%\quad\quad
+\hspace{\graphmargin}
+\subfigure[{\scriptsize \aan}]{\label{fig-aan-sigma}
+\includegraphics[scale=\graphscale]{./exp/AAN_lambda.eps}}
+\\ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{-2.5ex}
+\subfigure[{\scriptsize \aminer}]{\label{fig-aminer-futureyear}
+\includegraphics[scale=\graphscale]{./exp/AMiner_PairAcc1.eps}}
+%\quad\quad
+\hspace{\graphmargin}
+\subfigure[{\scriptsize \aminer}]{\label{fig-aminer-t}
+\includegraphics[scale=\graphscale]{./exp/AMiner_PairAcc2.eps}}
+%\quad\quad
+\hspace{\graphmargin}
+\subfigure[{\scriptsize \aminer}]{\label{fig-aminer-fcdiff}
+\includegraphics[scale=\graphscale]{./exp/AMiner_PairAcc3.eps}}
+%\quad\quad
+\hspace{\graphmargin}
+\subfigure[{\scriptsize \aminer}]{\label{fig-aminer-sigma}
+\includegraphics[scale=\graphscale]{./exp/AMiner_sigma2.eps}}
+%\quad\quad
+\hspace{\graphmargin}
+\subfigure[{\scriptsize \aminer}]{\label{fig-aminer-sigma}
+\includegraphics[scale=\graphscale]{./exp/AMiner_lambda.eps}}
+\\%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{-2.5ex}
+\subfigure[{\scriptsize \magdata}]{\label{fig-mag-futureyear}
+\includegraphics[scale=\graphscale]{./exp/MAG_PairAcc1.eps}}
+%\quad\quad
+\hspace{\graphmargin}
+\subfigure[{\scriptsize \magdata}]{\label{fig-mag-t}
+\includegraphics[scale=\graphscale]{./exp/MAG_PairAcc2.eps}}
+%\quad\quad
+\hspace{\graphmargin}
+\subfigure[{\scriptsize \magdata}]{\label{fig-mag-fcdiff}
+\includegraphics[scale=\graphscale]{./exp/MAG_PairAcc3.eps}}
+%\quad\quad
+\hspace{\graphmargin}
+\subfigure[{\scriptsize \magdata}]{\label{fig-mag-sigma}
+\includegraphics[scale=\graphscale]{./exp/MAG_sigma2.eps}}
+%\quad\quad
+\hspace{\graphmargin}
+\subfigure[{\scriptsize \magdata}]{\label{fig-mag-sigma}
+\includegraphics[scale=\graphscale]{./exp/MAG_lambda.eps}}
+\end{center}
+\vspace{-5ex}
+\caption{\small Accuracy tests on \fcita (all) and \recom ((d), (h) and (l) only)}
+\label{fig-pairacc}
+\vspace{-3ex}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\subsection{Experimental Results}
+\label{subsec-expres}
+
+We next present our findings.
+
+\stitle{Exp-1: Effectiveness on \recom}.
+In the first set of our tests, we used benchmark \recom to evaluate the effectiveness of our approach.
+All algorithms only used articles published before 2012, since \recom is based on this portion of articles.
+Aggregating parameters were selected as follows: $(\alpha,\beta,\gamma)$ = $(0.1, 0.2, 0.2)$ for \futurerank, $(a_{i1},a_{i2},a_{i3})$ = $(0.6, 0.2, 0.2)$ for \hhgrank ($i\in[1,3]$), and $(\alpha,\beta)$ = $(0.1, 0.8)$ for \ensemblerank.
+%The venue ensemble contributed most in \ensemblerank, indicating that venue information plays a key role when people recommend scholarly articles.
+The results are reported in Table~1.
+
+The \PairAcc of \pagerank is much lower than other algorithms, which indicates that citation information alone is insufficient for scholarly article ranking, and other information helps to refine the results. Moreover, \ensemblerank consistently ranks better than all baselines. Indeed, \ensemblerank improves the \PairAcc over (\pagerank, \futurerank, \hhgrank) by (11.5\%, 6.5\%, 4.3\%) on \aan, (6.1\%, 1.2\%, 0.7\%) on \aminer, and (6.3\%, 2.1\%, 1.8\%) on \magdata, respectively.
+
+%The pair accuracy results tell us that \ensemblerank always have higher accuracy than other baseline methods on all three datasets. Indeed, \ensemblerank improves the pair accuracy over \pagerank, \futurerank and \hhgrank by $(11.5\%,6.5\%,4.3\%)$ on \aan, $(6.1\%,1.1\%,0.7\%)$ on \aminer and $(6.2\%,2.0\%,1.7\%)$ on \magdata, respectively. This verifies the effectiveness of our \ensemblerank methods with recommendation based ground truth.
+
+\stitle{Exp-2: Effectiveness on \fcita}.
+In the second set of tests, we used benchmark \fcita to evaluate the effectiveness.
+All algorithms produced results based on articles in ranking data.
+Aggregating parameters were selected as follows: $(\alpha, \beta, \gamma)$ = $(0.7, 0.1,$ $0.2)$ for \futurerank, $(a_{i1}, a_{i2}, a_{i3})$ = $(0.3, 0.6, 0.1)$ for \hhgrank ($i\in[1, 3]$), and $(\alpha, \beta)$ = $(0.8, 0.1)$ for \ensemblerank.
+Here the citation component contributed most in \ensemblerank, since \fcita is based on citation information.
+We tested the impacts of three factors: the splitting year $Y_s$, the largest number $b$ of existing years of articles in \fcita, and the least difference $dif$ of future citation counts.
+
+
+
+\etitle{Exp-2.1}. %varying number of years as future period
+To evaluate the impacts of the splitting year $Y_s$, we varied $Y_s$ from 2005 to 2010 on \aan and from 2010 to 2015 on both \aminer and \magdata.
+%We did not use the latest year since the complete articles have not been included yet.
+For each $Y_s$ we generated benchmark pairs as described earlier, and tested \PairAcc using all pairs, \ie $b$ = $+\infty$, $dif$ = $1$. The results are reported in Figs.~\ref{fig-aan-futureyear}, \ref{fig-aminer-futureyear} and \ref{fig-mag-futureyear}, where red markers \marked{$\Box$} in dashed line mean \hhgrank ran out of memory.
+
+
+When varying $Y_s$, the \PairAcc of all algorithms increases with the increment of $Y_s$ on both \aminer and \magdata, since it is easier to assess short-term importance (larger $Y_s$) than long-term (lower $Y_s$). While the results on \aan do not follow this trend, possibly because \aan does not record the complete articles of 2007 and 2009.
+Moreover, \ensemblerank consistently ranks better than all baselines, regardless of assessing long-term or short-term importance.
+Indeed, \ensemblerank improves the \PairAcc over (\pagerank, \futurerank, \hhgrank) by (19.5\%, 4.2\%, 5.2\%) on \aan, (19.3\%, 7.8\%, 6.0\%) on \aminer, and  (11.9\%, 4.6\%, 1.8\%) on \magdata, on average, respectively.
+
+%The pair accuracy results tell us that (a) \ensemblerank outperforms other methods on all datasets regardless the change of number of years as future period and obtains the highest accuracy when the future period only uses 2 years of data, (b) the accuracy of all methods decreases with the increment of future period duration on all datasets except \aan, since data of \aan dataset in year 2009 and 2011 might be uncomplete because the number of articles in those two years is less than it in 2008 and 2012, and (c) \ensemblerank decrease much more slower than \futurerank and \pagerank. This means it is easier to evaluate the importance of scholarly article in a short term than in a long term for all the methods. However, our ensemble enabled method \ensemblerank can handle the long term importance evaluation better since we have improve the pair accuracy over \pagerank, \futurerank and \hhgrank by $(17.2\%, 4.5\%, 5.0\%)$ on \aan, $(29.9\%, 10.3\%, 8.3\%)$ on \aminer and $(17.9\%, 5.6\%, 2.1\%)$ on \magdata when we use 7 years of data as future peirod, respectively.
+
+
+
+\etitle{Exp-2.2}. %varying number of years as evaluate period.
+To evaluate the impacts of %the largest number $b$ of existing years of benchmark articles,
+number $b$, we varied $b$ from 1 to $+\infty$, while fixed $Y_s$ to default values and $dif=1$. The results are reported in Figs.~\ref{fig-aan-t}, \ref{fig-aminer-t} and \ref{fig-mag-t}.
+
+
+When varying $b$, the \PairAcc of all algorithms increases with the increment of $b$, since old articles (larger $b$) are easy to rank based on adequate information, while new articles (lower $b$) are hard to rank with only little information available. Moreover, \ensemblerank consistently ranks better than all baselines, especially when $b\le3$, \ie ranking newly published articles. Indeed, \ensemblerank improves the \PairAcc over (\pagerank, \futurerank, \hhgrank) by (24.6\%, 2.7\%, 5.2\%) on \aan, (26.9\%, 10.9\%, 8.6\%) on \aminer, and (18.6\%, 6.7\%, 2.6\%) on \magdata, on average, respectively.
+%The improvement of \Pairacc by \ensemblerank is   when $b=1$, \ie ranking newly published articles, which was \marked{$(52.4\%, 1.0\%, 7.7\%)$ on \aan, $(57.4\%, 20.4\%, 17.0\%)$ on \aminer, and $(43.5\%, 12.3\%, 4.6\%)$ on \magdata}, respectively.
+
+%The pair accuracy results tell us that (a) \ensemblerank outperforms other methods on all datasets with all different number of years as evaluate period and obtains the highest accuracy by using all the remaining data as evaluate period, and (b) the accuracy of all method increases with the increment of evaluate period years on all three datasets. This means it is difficult to evaluate the scholarly articles which have just published and is in lack of citation information. Thus, the pair accuracy of \pagerank which only uses citation network is lower than 35\%, but our approach \ensemblerank improves the pair accuracyover \pagerank, \futurerank and \hhgrank by $(52.4\%, 1.0\%, 7.7\%)$ on \aan, $(57.4\%, 20.4\%, 17.0\%)$ on \aminer, and $(43.5\%, 12.3\%, 4.6\%)$ on \magdata when only use one year as evaluate period, since we also use the importance of venue which paper is published in besides of the importance of authors.
+
+
+%and (c) our method \ensemblerank has achieved a high accuracy even when evaluate the scholarly article just have published one year
+\etitle{Exp-2.3}. %varying difference of future citation count in benchmark
+To evaluate the impacts of %the least difference $dif$ of future citation count,
+difference $dif$, we varied $dif$ from 1 to 7, while fixed $Y_s$ to default values and $b=+\infty$. The results are reported in Figs.~\ref{fig-aan-fcdiff}, \ref{fig-aminer-fcdiff} and \ref{fig-mag-fcdiff}.
+
+
+When varying $dif$, the \PairAcc of all algorithms increases with the increment of $dif$, since pairs with larger difference of future citation counts are easier to rank. Moreover, \ensemblerank consistently ranks better than all baselines, regardless of larger or lower difference. Indeed, \ensemblerank improves the \PairAcc over (\pagerank, \futurerank, \hhgrank) by (14.5\%, 2.5\%, 3.8\%) on \aan, (9.1\%, 5.2\%, 3.9\%) on \aminer, and (7.0\%, 4.2\%, 1.5\%) on \magdata, on average, respectively.
+
+%The pair accuracy results tell us that (a) \ensemblerank outperforms other methods on all datasets with all difference of future citation count and obtains the highest accuracy when the difference is greater than 6, and (b) the accuracy of all method increases with the addition of difference of future citation count which means it is easier for all methods to evaluate the importance of two scholarly articles in one pair when there is a obvious different between them. Our algorithm \ensemblerank improves the pair accuracy over \pagerank, \futurerank and \hhgrank by $(15.7\%, 2.8\%, 3.9\%)$ on \aan, $(17.3\%, 7.6\%, 5.8\%)$ on \aminer, and $(10.3\%, 4.4\%, 1.6\%)$ on \magdata, when evaluate all the pairs which have difference of future citation count greater than 0, which means \ensemblerank can evaluate and distinguish the articles only have small difference better.
+
+
+
+\stitle{Exp-3: Efficiency}.
+In the third set of tests, we evaluated the efficiency of our batch and incremental algorithms.
+We compared our algorithms with \powensemble (\powtwprdag, \powtwprscc), which was exactly the same to \batensemble (\twprdag, \twprscc) except using power method for TWPageRank computation, and baselines \futurerank and \hhgrank. Here \pagerank was omitted due to its effectiveness.
+We varied the splitting year $Y_s$ from 2009 to 2016 and tested the running time based on articles published before $Y_s$ on both \magdata and \aminer. %Note that the other two factors have no impacts on efficiency.
+For incremental algorithms, base and update data consisted of articles published before 2008 and within $[2008, Y_s)$, respectively.
+%And the incremental ratio evaluated by the size of data was 0.12, 0.25, 0.39, 0.55, 0.73, 0.93, 1.14 and 1.29 for each $Y_s$. %$Y_s\in[2009,2016]$.
+The results on the largest \magdata are reported in Fig.~\ref{fig-time}, where red markers $\Box$ in dashed line mean \hhgrank ran out of memory, and the results on \aminer are left in~\cite{ERank-full}.
+
+When varying $Y_s$, the running time of all algorithms increases with the increment of $Y_s$, and the incremental algorithms
+consistently run faster than other counterparts.
+For TWPageRank, algorithms \twprdag and \twprscc
+%, which compute TWPageRank on citation and venue graphs,
+are 2.1 and 1.7 times faster than \powtwprdag and \powtwprscc on average, respectively. And algorithms \inctwprdag and \inctwprscc further improve the efficiency  by 23\% and 38\% on average, compared with \twprdag and \twprscc, respectively.
+%By these, we have also experimentally shown that the efficiency improvement of \inctwprscc, even it does not change the time complexity.
+%
+For scholarly article ranking, algorithm \batensemble is on average (1.3, 2.5, 348) times faster than (\powensemble, \futurerank, \hhgrank), respectively.
+And algorithm \incensemble further improves the efficiency by 22\% on average, compared with \batensemble.
+%When varying $Y_s$, the running time for TWPageRank computation on the citation and venue ensemble increase with the increment of $Y_s$.
+
+
+%compare batch/incremental TWPageRank of citation and venue ensemble.
+
+%The running time results tell us that (a) all three ensemble methods are much faster than \futurerank and \hhgrank, (b) the running time of all methods increase with the increment of year, (c) our batch method \batensemble speeds up power method for around 2.2 times, and (d) the incremental method \incensemble is always faster than batch method about 30\% regardless of the scale of data changed. In addition, the proportion of these five methods is about $Inc:Bat:Pow:\futurerank:\hhgrank=1:1.3:2.8:3.8:357.3$. This verifies the efficiency of our ensemble methods and the improvement of our batch method \batensemble and the incremental algorithm \incensemble on running time.
+
+\begin{figure}[tb!]
+%\vspace{-2ex}
+\begin{center}
+%\hspace{10ex}
+\subfigure[{\scriptsize TWPageRank (batch vs. inc.)}]{\label{fig-mag-time2}
+\includegraphics[scale=0.38]{./exp/MAG_time_twpr.eps}}
+\hspace{-.5ex}
+\subfigure[{\scriptsize Comparison of ranking algorithms}]{\label{fig-mag-time1}
+\includegraphics[scale=0.38]{./exp/MAG_time.eps}}
+\end{center}
+\vspace{-5ex}
+\caption{\small Efficiency tests on \magdata}
+\label{fig-time}
+\vspace{-3ex}
+\end{figure}
+
+\eat{
+\begin{figure}[tb!]
+\centering
+\includegraphics[scale=0.40]{./exp/MAG_time.eps}
+\vspace{-1ex}
+\caption{\small Running Time on \magdata}
+\label{fig-time}
+\vspace{-3ex}
+\end{figure}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\stitle{Exp-4: Impacts of parameters}.
+In the last set of tests, we evaluated the impacts of time decaying factor $\sigma$, importance weighting factor $\lambda$ and parameters $\alpha$, $\beta$.
+
+We present main results only and more details are available in~\cite{ERank-full}.
+
+
+
+
+\etitle{Exp-4.1}. To evaluate the impacts of the time decaying factor $\sigma$, we varied $\sigma$ from -1.6 to -0.4, while fixed $Y_s$ to default values, $b=+\infty$ and $dif=1$. We tested the \PairAcc on both benchmarks. The results of \PairAcc are reported in Figs.~\ref{fig-aan-sigma}, \ref{fig-aminer-sigma} and \ref{fig-mag-sigma}.
+
+
+
+When varying $\sigma$, the \PairAcc of \ensemblerank is almost stable on all datasets using both \fcita and \recom. Indeed, the \PairAcc using (\fcita, \recom) only varies (0.73\%, 0.80\%) on \aan, (0.34\%, 1.1\%) on \aminer, and (0.65\%, 0.46\%) on \magdata, respectively.
+%We omitted the detailed results of running time due to space constraint.
+
+The running time indeed varies (2.1\%,1.0\%) on average only on (\magdata, \aminer), respectively.
+%Both of these show the robustness of \ensemblerank to the time decaying factor $\sigma$.
+
+%As we can see from the figure, our method \ensemblerank is almost stable with the reduction of $\sigma$, since there is only a small fluctuation and the accuracy of our methods is always higher than the best baseline result in all datasets regardless of the change of $\sigma$. This means \ensemblerank is insensitive with $\sigma$.
+
+%\subsection*{1. Exp-5: Impacts of the importance weighting scheme on effectiveness}
+\etitle{Exp-4.2}. 
+To evaluate the impacts of importance weighting factor $\lambda$, we varied $\lambda$ from 0 to 1, while fixed $Y_s$ to default values, $b=+\infty$, $dif=1$ and $\sigma=-1.0$. The results of the \PairAcc on both benchmarks are reported in Figs.~\ref{fig-aan-sigma}, \ref{fig-aminer-sigma} and \ref{fig-mag-sigma}. Note that parameter $\lambda$ has no impacts on efficiency.
+
+When varying $\lambda$, the \PairAcc of \ensemblerank first increases and then decreases on all datasets using both benchmarks. This result indicated that our importance model combining both prestige and popularity is better than using either of prestige and popularity alone. The selection of $\lambda$ is influenced by benchmarks, such that the best $\lambda$ falls into $[xx,xx]$ and $[yy,yy]$ on \fcita and \recom, respectively. Moreover, equally weighting, \ie $\lambda=0.5$, is a good default setting when no query information is available in advance.
+Indeed, the best obtained \PairAcc using (\fcita, \recom) is only (0.10\%, 0.38\%), (0.04\%, 2.59\%) and (0.06\%, 0.91\%)  higher than the \PairAcc of equally weighting on \aan, \aminer and \magdata, respectively.
+
+
+\etitle{Exp-4.3}.
+To evaluate the impacts of parameters $\alpha$ and $\beta$ on effectiveness, we varied $\alpha$ and $\beta$ at the granularity of 0.01, while fixed $Y_s$ to default values, $b=+\infty$, $dif=1$ and $\sigma=-1.0$. Note that parameters $\alpha$ and $\beta$ have no impacts on efficiency.
+
+%When varying $\alpha$ and $\beta$, the \PairAcc of \ensemblerank keeps at a high level around selected $\alpha$ and $\beta$. For instance, consider a square of length 0.3, which covers 8.5\% of all parameter combinations. The fraction of parameters such that the \PairAcc is no worse than 1\% of the corresponding \PairAcc reported earlier is (73\%, 94\%) on \aan, (96\%, 87\%) on \aminer and (83\%, 95\%) on \magdata, using (\recom, \fcita), respectively.
+
+Indeed \ensemblerank is very robust to parameters $\alpha$ and $\beta$.
+(a) When varying $\alpha$ and $\beta$, the \PairAcc of \ensemblerank changes gently. (b) \PairAcc also keeps at a high level within a certain ($\alpha$, $\beta$)  combination space. Finally, (c) the optimal parameters on the same benchmarks are very similar for (\aan, \aminer and \magdata). That is, it is quite flexible for choosing proper values
+of  parameters $\alpha$ and $\beta$.
+
+
+
+
+\stitle{Summary}.
+From these tests we find the followings.
+
+
+\noindent(1) Our approach \ensemblerank is effective for ranking scholarly articles. %based on query independent importance.
+The \PairAcc of \ensemblerank is consistently better than the compared methods in all tests. Indeed, using \recom and \fcita, \ensemblerank improves \PairAcc over (\pagerank, \futurerank, \hhgrank) by (11.5\%, 6.5\%, 4.3\%) and (14.5\%, 2.5\%, 3.8\%) on \aan, (6.1\%, 1.2\%, 0.7\%) and (9.1\%, 5.2\%, 3.6\%) on \aminer, and (6.3\%, 2.1\%, 1.8\%) and (7.0\%, 4.2\%, 1.5\%) on \magdata, on average, respectively.
+%, and it has a great advantage in evaluating the importance in a long term. Furthermore, it is more accurate evaluating articles which have just published and is in lack of citations, since it uses both venue network and author information besides of citation network. Indeed, it improves the accuracy by $(7.9\%, 3.2\%, 2.3\%)$ and $(14.4\%, 5.0\%, 3.8\%)$ over \pagerank, \futurerank and \hhgrank on average of three datasets with recommendation based ground truth and future citation ground truth, respectively.
+
+
+\noindent(2) Our approach \ensemblerank is also very efficient.
+%
+The batch algorithm \batensemble is on average (1.3, 2.5, 348) times faster than (\powensemble, \futurerank, \hhgrank)  on the largest \magdata, respectively.
+%
+
+\noindent (3) Our incremental algorithms are much faster than their batch counterparts in practice, even their time complexity is very close. Indeed, algorithms \inctwprdag, \inctwprscc and \incensemble further improve the efficiency of (\twprdag, \twprscc, \batensemble) by (23\%, 38\%, 22\%) on average, respectively.
+%Our incremental algorithm \inctwprscc for TWPageRank computation on venue graphs runs faster than the batch algorithm in practice by 38\%, even it does not change the time complexity.
+
+
+\noindent(4) Our ranking model \ensemblerank introduces the time decaying factor $\sigma$ and parameters $\alpha$ and $\beta$ for the sake of practicability and flexibility of real-life applications. We have experimentally shown that \ensemblerank is very robust to these parameters.
+
+
