@@ -9,8 +9,9 @@ Scholarly article data is dynamic and continuously growing, and, hence, it is im
 
 We first present the incremental  prestige computation. Again, it differs for the prestige of articles and venues in a specific year and the one of authors.
 
-\subsubsection{Prestige of articles and venues in a specific year}
-\label{subsubsec-incprs-CV}
+%\subsubsection{Prestige of articles and venues in a specific year}
+%\label{subsubsec-incprs-CV}
+\subsubtitle{Prestige of articles and venues in a specific year}.
 Consider an update $\Delta$ = $\Delta V\cup\Delta E$ added to citation graph or venue graph $G(V, E)$,
 and the resulting graph is $G^+(V\cup\Delta V, E\cup\Delta E)$, where
 $\Delta V$ is a set of nodes with $\Delta V\cap V = \emptyset$, and $\Delta E$ is a set of directed edges on $\Delta V$ and from $\Delta V$ to $V$ only, by the temporal order of citations.
@@ -77,7 +78,7 @@ $O^+$ is indeed a valid topological order of $G^+{'}$.
 \end{lemma}
 
 \begin{proof}
-Let $E'_c$ denote the set of cross edges from $V'_\Delta$ to $V'$. 
+Let $E'_c$ denote the set of cross edges from $V'_\Delta$ to $V'$.
 It suffices to show that for each $(u,v)\in E'\cup E'_\Delta \cup E'_c$, $u$ comes before $v$ in $O^+$,
 which obviously holds (1) for  $E'\cup E'_\Delta$ as $O$ and $\Delta O$ are topological orders of $G'$ and $G'_\Delta$, respectively, and (2) for $E_{c}'$ as nodes in $G'_\Delta$ come before nodes in $G'$.
 \end{proof}
@@ -109,15 +110,15 @@ In this way, the updated graph $G^+$ is partitioned into (a) subgraphs $\{G_A$, 
 \stitle{Algorithm \inctwprscc}. We now present our algorithm for incremental TWPageRank  computation, shown in Fig.~\ref{alg-inctwprscc}.
 
 
-It takes as input an update $\Delta$ and the previous results on the original graph $G(V,E)$, and returns the TWPageRank vector of the updated graph $G^+$. It first incrementally computes the topological order $O^+$ 
-%by concatenating the topological orders of $G_C'$ and $G'$ 
+It takes as input an update $\Delta$ and the previous results on the original graph $G(V,E)$, and returns the TWPageRank vector of the updated graph $G^+$. It first incrementally computes the topological order $O^+$
+%by concatenating the topological orders of $G_C'$ and $G'$
 (lines 1--2). Note that $G_C'$ is the same to $G'_\Delta$.
 %
 After that, it labels the newly added SCCs with $C$ and existing SCCs with $A$ or $B$, depending on whether the existing SCCs have incoming edges with weight changes (line 3).
 %
 It then updates the TWPageRank scores of nodes in each SCC following $O^+$ (lines 4--12) and finally returns the TWPageRank vector (line 13).
 %
-%More specifically, the scores of nodes in SCCs labeled as $C$ and $B$ are updated the same to Algorithm~\twprscc, while the scores of nodes in SCCs labeled as $A$ are simply scaled. 
+%More specifically, the scores of nodes in SCCs labeled as $C$ and $B$ are updated the same to Algorithm~\twprscc, while the scores of nodes in SCCs labeled as $A$ are simply scaled.
 %
 %It is also easy to verify that nodes in SCCs labeled as $A$, $B$ and $V$ corresponding to $V_A$, $V_B$ and $V_C$.
 
@@ -178,8 +179,9 @@ By Proposition~\ref{prop-converg}, Corollary~\ref{prop-prscc}, and Lemmas \ref{l
 %
 Note that  a) algorithm \inctwprscc only costs $|V_A|$ time to update the scores of nodes in $G_A$, b) it derives the topological order based  on $\Delta$ only, instead of $G^{+}$, and c) the number $t^+$ is very likely smaller than the number $t$ of \twprscc when updating scores of nodes in $V_B$. As shown by the experimental study, \inctwprscc is faster than \twprscc, even though they have very similar time complexity.
 
-\subsubsection{Prestige of authors}
-\label{subsubsec-incprs-A}
+%\subsubsection{Prestige of authors}
+%\label{subsubsec-incprs-A}
+\subsubtitle{Prestige of authors}.
 While the incremental prestige computation for authors is exactly the same as \batensemble, due to the way that the prestige of authors is defined and the prestige of each article is potentially changed.
 
 
@@ -286,7 +288,7 @@ The TWPageRank vector of the original citation graph $G^{c}$ is mainly affected 
 Then $V^c_B=V^c_{B,1}\cup V^c_{B,2}\cup V^c_{B,3}$ is obviously the set of nodes in $G^{c}$ affected by the update $\Delta^c$.
 
 
-\sstab(2) Let $V^c_A = V^c\setminus V^c_B$. As the TWPageRank scores on $V^c_A$ can be simply adjusted by scaling in terms of  Lemma~\ref{lemma-subgraphA} (to be seen shortly), $V^c_A$ is essentially not affected by the update $\Delta^c$. 
+\sstab(2) Let $V^c_A = V^c\setminus V^c_B$. As the TWPageRank scores on $V^c_A$ can be simply adjusted by scaling in terms of  Lemma~\ref{lemma-subgraphA} (to be seen shortly), $V^c_A$ is essentially not affected by the update $\Delta^c$.
 
 Let $G^c_A=(V^c_A,E^c_A)$, $G^c_B=(V^c_B,E^c_B)$ and $G^c_C=(V^c_C,E^c_C)$, respectively;
 Let $E^c_{AB}$ be the set of edges from $G^c_A$ to $G^c_B$, and $E^c_{CB}$ be the set of edges from $G^c_C$ to $G^c_B$.
