@@ -121,21 +121,34 @@ It then updates the TWPageRank scores of nodes in each SCC following $O^+$ (line
 %
 %It is also easy to verify that nodes in SCCs labeled as $A$, $B$ and $V$ corresponding to $V_A$, $V_B$ and $V_C$.
 
-
+\eat{
 \begin{figure}[tb!]
 \centering
 \includegraphics[scale=0.6]{fig/General_framework_peak_ABC.eps}
-\vspace{-2ex}
+\vspace{-3ex}
 \caption{\small An example of affected and unaffected areas}
 \label{fig-inc-division}
 \vspace{-3ex}
 \end{figure}
+}
 
+\begin{figure}[tb!]
+\centering
+\includegraphics[scale=0.6]{fig/General_framework_peak.eps}
+\vspace{-3ex}
+\caption{\small An example of incremental TWPageRank computation}
+\label{fig-inc-division}
+\vspace{-3ex}
+\end{figure}
 
+\eat{
 \begin{example} \label{eg-layer-dag}
 Figure~\ref{fig-inc-division} illustrates an example of affected and unaffected areas, in which subgraphs $G_A$, $G_B$ and $G_C$ are associated with node sets $V_A$, $V_B$ and $\Delta V$, respectively. Here the citation peak time of node $x$ is changed, which leads to the changes of the normalized weights of edges $(w,x)$, $(w,y)$ and $(w,z)$.
 \end{example}
-
+}
+\begin{example} \label{eg-layer-dag}
+Figure~\ref{fig-inc-division} illustrates an example of incremental TWPageRank computation. Consider an update $\Delta$ on the original graph $G$. It is obvious that the update $\Delta$ has on impacts on the SCCs of $G$, and $O^+$ defined earlier is a valid topological order of $G^+{'}$. The original graph $G$ is then divided into affected and unaffected areas, in which subgraphs $G_A$, $G_B$ and $G_C$ are associated with node sets $V_A$, $V_B$ and $\Delta V$, respectively. Here the citation peak time of node $x$ is changed, which leads to the changes of the normalized weights of edges $(w,x)$, $(w,y)$ and $(w,z)$. When updating the TWPageRank scores, following $O^+$, scores of nodes in $G_C$, $G_B$ and $G_A$ are computed by iterations from scratch, by iterations using existing TWPageRank vector and by scaling, respectively.
+\end{example}
 
 \begin{lemma} \label{lemma-subgraphA}
 The TWPageRank vector $PR^+$ returned by~\inctwprscc converges such that $||PR^+-PR^{*}||_1 < \epsilon$, where $PR^{*}$ is the convergent TWPageRank vector.
