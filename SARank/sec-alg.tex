@@ -2,8 +2,8 @@
 \label{sec-alg}
 
 As described in Section~\ref{sec-model}, each component needs to compute the prestige and popularity of its corresponding entities.
-The popularity can be computed by scanning through all citations once. While the prestige of entities is based on TWPageRank, which is usually computed in an iterative manner\cite{Brin98:PageRank}. %with the time complexity being $O(t\cdot (|E|+|V|))$ on graph $G=(V,E)$ for $t$ iterations.
-Hence, the key of the computation of our approach  is a good solution for TWPageRank.
+%The popularity can be computed by scanning through all citations once. While the prestige of entities is based on TWPageRank, which is usually computed in an iterative manner\cite{Brin98:PageRank}.
+%Hence, the key of the computation of our approach  is a good solution for TWPageRank.
 
 %While graphs derived from scholarly data is a special class of graphs in the sense that edges strictly follow {\em temporal order}, \eg an article can only cite others that are published earlier. In this section, we exploit this temporal order of scholarly data in ensemble computation, which significantly speeds up the efficiency.
 
@@ -20,13 +20,13 @@ Nevertheless, we speed-up  TWPageRank computation by exploiting the {\em tempora
 
 The main result here is stated as follows.
 
-\begin{fact}
+\begin{theorem}
 \label{thm-prestige}
 %TWPageRank can be computed in linear time in practice on scholarly data obeying a temporal order.
 A block-wise PageRank computation method is a good choice for computing TWPageRank on scholarly data.
-\end{fact}
+\end{theorem}
 
-We next prove Fact~\ref{thm-prestige} by introducing such computation method and analyzing its efficiency. The main idea of the method is to treat each block as a strongly connected component (SCC) of the original graph and process one block at a time following the topological order of the converted graph of the original graph where each node represents a block~\cite{Berkhin05}.
+We next prove Theorem~\ref{thm-prestige} by introducing such computation method and analyzing its efficiency. The main idea of the method is to treat each block as a strongly connected component (SCC) of the original graph and process one block at a time following the topological order of the converted graph of the original graph where each node represents a block~\cite{Berkhin05}.
 
 %the directed and acyclic structure of the  can improve the efficiency of PageRank computation~\cite{Berkhin05,ObjectRank04}.
 
@@ -83,9 +83,9 @@ It first computes the converted graph $G'$ by treating SCCs in $G$ as single nod
 
 
 
-\begin{lemma} \label{prop-prscc}
+\begin{cor} \label{prop-prscc}
 The vector $PR$ returned by~\twprscc converges such that $||PR-PR^*||_1 < \epsilon$ given the convergent vector $PR^*$~\cite{Berkhin05}.
-\end{lemma}
+\end{cor}
 
 \eat{
 \begin{proofSketch}
@@ -119,9 +119,9 @@ However, the situation is completely different on scholarly data obeying tempora
 %
 Indeed, on (\aan, \aminer, \magdata), the nodes in the largest SCC amount to (0.11\%, 0.00073\%, 0.00028\%) of the entire citation graph, and $|E_i|$ is (0.92\%, 0.14\%, 0.063\%) of $|E|$, respectively. %Here we present statistics of citation graphs since citation graphs are typically much larger than corresponding venue graphs and occupy most computation.
 
-Based on the above analysis, algorithm \twprscc performs much better on scholarly data than the Web graph. Taking $t=100$ for example, the complexity is $O(|V|+2|E|)$ and $O(|V|+25|E|)$ on scholarly data and the Web graph, respectively.
+Based on the above analysis, algorithm \twprscc performs much better on scholarly data than the Web graph. Taking $t=100$ for example, algorithm \twprscc needs to scan through approximately $2|E|$ edges on scholarly data while $25|E|$ edges on the Web graph.
 %
-By Lemmas \ref{prop-prscc} \& \ref{prop-venue-time-complexity}, we have shown Fact~\ref{thm-prestige}.
+By Corollary \ref{prop-prscc} and Lemma \ref{prop-venue-time-complexity}, we have shown Theorem~\ref{thm-prestige}.
 
 %Note that $O(|V|+|E_b|+t |E_w|)$ remains linear to $|E|$ in practice since $|E_w|$ is typically much smaller than $|E|$ (\eg 0.92\%) for scholarly data obeying a temporal order.
 
@@ -156,10 +156,10 @@ The popularity of venues in a specific year or authors is computed by averaging 
 We finally present the complete batch algorithm \batensemble, which combines the importance scores computed by the citation, author and venue components with Eq. (\ref{eq-ensemble}). It takes as input academic graph data $D$ and an iteration threshold $\epsilon$ and returns the scholarly article ranking of $D$. It first constructs the citation and venue graphs $G^c(V^c,E^c)$ and $G^v(V^v,E^v)$. Then it computes the prestige and popularity of citation, venue and author components.
 Finally, it combines the importance, \ie prestige and popularity, of three components to produce the final ranking.
 
-\stitle{Time \& space complexity analyses}. By the analyses above and Lemma~\ref{prop-venue-time-complexity}, it is easy to verify that algorithm \batensemble runs in $O(|V^c|+|E^c_b|+t|E^c_w|+|V^v|+|E^v_b|+t|E^v_w|+|PA|)$, where $|PA|$ is the total number of author-article relationships.
+\stitle{Time \& space complexity analyses}. By the analyses above and Lemma~\ref{prop-venue-time-complexity}, it is easy to verify that algorithm \batensemble runs in $O(|V^c|+|E^c_a|+t|E^c_i|+|V^v|+|E^v_a|+t|E^v_i|+|PA|)$, where $|PA|$ is the total number of author-article relationships.
 
 
-Compared with the traditional power method, algorithm \batensemble uses $(2|V^c{'}|+|E^c{'}|)$ and $(2|V^v{'}|+|E^v{'}|)$ extra space to store the converted graph $G^c{'}(V^c{'},E^c{'})$ of $G^c$ and $G^v{'}(V^v{'},E^v{'})$ of $G^v$, and their topological orders (lines 1--2, Fig.~\ref{alg-TWPageRank-venue}). To conclude, algorithm \batensemble only uses limited extra space to speed-up computation.
+Compared with the traditional power method, algorithm \batensemble uses $(2|V^c{'}|+|E^c{'}|)$ and $(2|V^v{'}|+|E^v{'}|)$ extra space to store the converted graph $G^c{'}(V^c{'},E^c{'})$ of $G^c$ and $G^v{'}(V^v{'},E^v{'})$ of $G^v$, and their topological orders. To conclude, algorithm \batensemble only uses limited extra space to speed-up computation.
 
 
 
