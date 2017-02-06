@@ -112,13 +112,42 @@ Observe the following. (1) The converted graph $G'$ and topological order $O$ ca
 \end{proof}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}[t!]
+%\vspace{-2ex}
+\label{tab-batch}
+\begin{center}
+\begin{small}
+\vspace{1ex}
+\begin{tabular}{|c|r|r|r|r|}
+\hline
+{\bf Dataset}   &  \multicolumn{1}{c|}{$|V|$}    & \multicolumn{1}{c|}{\hspace{1.5ex}$|V^*|$\ \ \ \ }  & \multicolumn{1}{c|}{\hspace{1ex}$|V^*|/|V|$\ \ \ }   & \multicolumn{1}{c|}{\hspace{1.5ex}$|E_i|/|E|$\ \ \ \ }    \\
+\hline \hline
+\aan  & 18,041  &  20   & 0.11\% & 0.92\%       \\  %\hline
+\aminer  & 3,140,081   & 23 & 0.00073\% & 0.14\%      \\ %\hline
+\magdata  & 126,909,021   & 351 & 0.00028\% & 0.063\%     \\ %\hline
+Web graph~\cite{MeuselVLB14}  & 3,563 M  & 1,828 M & 51.28\% & $>$25\%     \\  \hline
+\end{tabular}
+\vspace{-.5ex}
+\end{small}
+\end{center}
+\caption{\small Statistics of citation graphs and Web graph, where $|V^*|$ is the number of nodes in the largest SCC.}
+\vspace{-6ex}
+\end{table}
+%%%%%%%%%%%%%%%%%%%
+
+
 \stitle{Efficiency analysis}. Considering that $t$ is likely to be in the tens to hundreds~\cite{Brin98:PageRank}, the efficiency of algorithm \twprscc is mainly influenced by $|E_i|$, which becomes better with $|E_i|$ being smaller.
 %
+As indicated by Table~1, $|E_i|$ is relatively small compared with $|E|$ on scholarly data obeying temporal order in the sense that an article can only cite ones published earlier, and, moreover, it is pretty rare that two articles published in the same time mutually cite each other. While on the Web graph with the ``bow tie" strucutre~\cite{BroderKMRRSTW00}, the existence of a giant SCC makes $|E_i|$ higher than 25\% of $|E|$ even when edges are randomly generated.
+
+\eat{
 In the Web graph with the ``bow tie" strucutre~\cite{BroderKMRRSTW00}, the nodes in the largest SCC amount to 51\% of the entire graph in 2014~\cite{MeuselVLB14}, and $|E_i|$ is already 25\% of $|E|$ even when edges are randomly generated.
 %
 However, the situation is completely different on scholarly data obeying temporal order in the sense that an article can only cite the ones published earlier. Moreover, it is pretty rare that two articles published in the same time mutually cite each other. Hence, both the citation graph and the venue graph can be treated as almost-DAGs~\cite{ObjectRank04}.
 %
 Indeed, on (\aan, \aminer, \magdata), the nodes in the largest SCC amount to (0.11\%, 0.00073\%, 0.00028\%) of the entire citation graph, and $|E_i|$ is (0.92\%, 0.14\%, 0.063\%) of $|E|$, respectively. %Here we present statistics of citation graphs since citation graphs are typically much larger than corresponding venue graphs and occupy most computation.
+}
 
 Based on the above analysis, algorithm \twprscc performs much better on scholarly data than the Web graph. Taking $t=100$ for example, algorithm \twprscc needs to scan through approximately $2|E|$ edges on scholarly data while $25|E|$ edges on the Web graph.
 %
