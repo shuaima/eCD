@@ -1,5 +1,5 @@
 #set term postscript portrait enhanced color "Times-Roman" 12
-set terminal postscript portrait enhanced color "Times-Roman" 14
+set terminal postscript portrait enhanced color "Times-Roman" 16
 set output "MAG_PairAcc3.eps"
 set size 0.6, 0.3
 set grid
@@ -15,13 +15,13 @@ set xtics ("1" 0, "2" 1, "3" 2, "4" 3, "5" 4, "6" 5, "7" 6)
 #set ytics scale 0.05
 #set logscale x
 #set logscale y
-set ylabel "PairAcc" offset 1
-set xlabel "least difference of future citation counts"
+set ylabel "PairAcc" offset 1.5
+set xlabel "difference of future citation counts" offset 0, 0.5
 
-set key horizontal samplen 2.0 spacing 1.2 at graph 0.97, 0.3
+set key horizontal samplen 1.7 spacing 1.2 at graph 1, 0.3
 #set key horizontal font ",13" 
-plot "MAG_PairAcc3.tab" using ($1):($5) title 'ERank' with linespoints linetype 1 pointtype 6 lc 7 lw 3,\
-"MAG_PairAcc3.tab" using ($1):($4) title 'HRank' with linespoints linetype 1 pointtype 4 lc rgb "blue" lw 3,\
+plot "MAG_PairAcc3.tab" using ($1):($4) title 'HRank' with linespoints linetype 1 pointtype 4 lc rgb "blue" lw 3,\
 "MAG_PairAcc3.tab" using ($1):($3) title 'FRank' with linespoints linetype 1 pointtype 2 lc rgb "green" lw 3,\
-"MAG_PairAcc3.tab" using ($1):($2) title 'PRank' with linespoints linetype 1 pointtype 1 lc 1 lw 3
+"MAG_PairAcc3.tab" using ($1):($2) title 'PRank' with linespoints linetype 1 pointtype 1 lc 1 lw 3,\
+"MAG_PairAcc3.tab" using ($1):($5) title 'SARank' with linespoints linetype 1 pointtype 6 lc 7 lw 3,\
 
