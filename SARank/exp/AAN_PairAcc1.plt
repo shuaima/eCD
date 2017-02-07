@@ -15,8 +15,8 @@ set xtics ("2005" 2005, "2006" 2006, "2007" 2007, "2008" 2008, "2009" 2009, "201
 #set ytics scale 0.05
 #set logscale x
 #set logscale y
-set ylabel "PairAcc" offset 1
-set xlabel "splitting year"
+set ylabel "PairAcc" offset 1.5
+set xlabel "splitting year" offset 0,0.5
 
 set key horizontal samplen 1.4 spacing 1.0 at graph 0.97, 0.3
 #set key horizontal font ",13" 
