@@ -4,10 +4,47 @@
 Scholarly article data is dynamic and continuously growing, and, hence, it is impractical to recompute the ranking from scratch for each update. In this section, we propose an incremental algorithm for our ranking model \ensemblerank to deal with  the dynamic scenario.
 
 
-\subsection{Incremental Prestige Computation}
-\label{subsec-inc-citation}
+\subsection{Incremental Algorithm Framework}
+\label{subsec-inc-alg}
 
-We first present the incremental  prestige computation. Again, it differs for the prestige of articles and venues in a specific year and the one of authors.
+We finally present the complete incremental algorithm \incensemble, which is similar to the batch algorithm \batensemble, except that (1) it uses algorithm \inctwprscc to incrementally compute the prestige of articles and venues, and (2) it incrementally computes the popularity of articles based on Eq.~(\ref{eq-inc-pop}).
+
+
+
+
+
+\stitle{Incremental prestige computation}. We first present the incremental  prestige computation. Again, it differs for the prestige of articles and venues in a specific year and the one of authors.
+
+The incremental prestige computation for authors is exactly the same as \batensemble, due to the way that the prestige of authors is defined and the prestige of each article is potentially changed.
+
+
+\stitle{Incremental popularity computation}.
+As the popularity of articles is defined as the sum of all their citations' freshness, it is very convenient to incrementally maintain. Again, we denote the popularity of node $v$ on citation graphs $G^c$ and $G^{c,+}$ as $pop_c(v)$ and $pop_c^+(v)$, respectively.
+
+Given an update $\Delta^c$ = $\Delta V^c\cup\Delta E^c$, the updated popularity $pop_{c}^+(v)$ can be easily computed as:
+\begin{small}
+\begin{equation}\label{eq-inc-pop}
+pop_c^+(v) = pop_c(v) {e^{\sigma (T^+_0-T_0)}} + \sum_{(u,v)\in \Delta E^c} {e^{\sigma (T^+_0-T_u)}}.
+\end{equation}
+\end{small}
+
+\vspace{-1ex}
+\noindent
+Here $T_0$ and $T^+_0$ are the current time in $G^c$ and $G^{c,+}$.
+
+%\begin{lemma} \label{lemma-inc-pop-comp}
+%Obviously, the time complexity of incrementally updating popularity is $O($ $|V^c_+|+|\Delta E^c|)$.
+%\end{lemma}
+%, compared with $O(|V^+|+|E^+|)$ for batch algorithm.
+
+It is easy to see that the time complexity of incrementally updating popularity is $O($ $|V^c|+|\Delta V^c|+|\Delta E^c|)$.
+%This further shows that Eq.~(\ref{eq-inc-pop}) is a desired solution for popularity maintenance.
+
+Moreover, the popularity computation for venues and authors is exactly the same as \batensemble, due to the way that the  popularity of venues in a specific year and authors is defined, and the popularity of every article is potentially changed.
+
+
+\subsection{Incremental TWPageRank Computation}
+\label{subsec-incTWPageRank-computation}
 
 %\subsubsection{Prestige of articles and venues in a specific year}
 %\label{subsubsec-incprs-CV}
@@ -151,7 +188,8 @@ Figure~\ref{fig-inc-division} illustrates an example of affected and unaffected 
 Figure~\ref{fig-inc-division} illustrates an example of incremental TWPageRank computation. Consider an update $\Delta$ on the original graph $G$. It is obvious that the update $\Delta$ has on impacts on the SCCs of $G$, and $O^+$ defined earlier is a valid topological order of $G^+{'}$. The original graph $G$ is then divided into affected and unaffected areas, in which subgraphs $G_A$, $G_B$ and $G_C$ are associated with node sets $V_A$, $V_B$ and $\Delta V$, respectively. Here the citation peak time of node $x$ is changed, which leads to the changes of the normalized weights of edges $(w,x)$, $(w,y)$ and $(w,z)$. When updating the TWPageRank scores, following $O^+$, scores of nodes in $G_C$, $G_B$ and $G_A$ are computed by iterations from scratch, by iterations using existing TWPageRank vector and by scaling, respectively.
 \end{example}
 
-\begin{lemma} \label{lemma-subgraphA}
+\begin{lemma} 
+\label{lemma-subgraphA}
 The TWPageRank vector $PR^+$ returned by~\inctwprscc converges such that $||PR^+-PR^{*}||_1 < \epsilon$, where $PR^{*}$ is the convergent TWPageRank vector.
 \end{lemma}
 
@@ -179,43 +217,12 @@ By Proposition~\ref{prop-converg}, Corollary~\ref{prop-prscc}, and Lemmas \ref{l
 %
 Note that  a) algorithm \inctwprscc only costs $|V_A|$ time to update the scores of nodes in $G_A$, b) it derives the topological order based  on $\Delta$ only, instead of $G^{+}$, and c) the number $t^+$ is very likely smaller than the number $t$ of \twprscc when updating scores of nodes in $V_B$. As shown by the experimental study, \inctwprscc is faster than \twprscc, even though they have very similar time complexity.
 
-%\subsubsection{Prestige of authors}
-%\label{subsubsec-incprs-A}
-\subsubtitle{Prestige of authors}.
-The incremental prestige computation for authors is exactly the same as \batensemble, due to the way that the prestige of authors is defined and the prestige of each article is potentially changed.
 
 
-\subsection{Incremental Popularity Computation}
-\label{subsec-incpop}
-
-As the popularity of articles is defined as the sum of all their citations' freshness, it is very convenient to incrementally maintain. Again, we denote the popularity of node $v$ on citation graphs $G^c$ and $G^{c,+}$ as $pop_c(v)$ and $pop_c^+(v)$, respectively.
-
-Given an update $\Delta^c$ = $\Delta V^c\cup\Delta E^c$, the updated popularity $pop_{c}^+(v)$ can be easily computed as:
-\begin{small}
-\begin{equation}\label{eq-inc-pop}
-pop_c^+(v) = pop_c(v) {e^{\sigma (T^+_0-T_0)}} + \sum_{(u,v)\in \Delta E^c} {e^{\sigma (T^+_0-T_u)}}.
-\end{equation}
-\end{small}
-
-\vspace{-1ex}
-\noindent
-Here $T_0$ and $T^+_0$ are the current time in $G^c$ and $G^{c,+}$.
-
-%\begin{lemma} \label{lemma-inc-pop-comp}
-%Obviously, the time complexity of incrementally updating popularity is $O($ $|V^c_+|+|\Delta E^c|)$.
-%\end{lemma}
-%, compared with $O(|V^+|+|E^+|)$ for batch algorithm.
-
-It is easy to see that the time complexity of incrementally updating popularity is $O($ $|V^c|+|\Delta V^c|+|\Delta E^c|)$.
-%This further shows that Eq.~(\ref{eq-inc-pop}) is a desired solution for popularity maintenance.
-
-Moreover, the popularity computation for venues and authors is exactly the same as \batensemble, due to the way that the  popularity of venues in a specific year and authors is defined, and the popularity of every article is potentially changed.
 
 
-\subsection{The Complete Incremental Algorithm}
-\label{subsec-inc-alg}
 
-We finally present the complete incremental algorithm \incensemble, which is similar to the batch algorithm \batensemble, except that (1) it uses algorithm \inctwprscc to incrementally compute the prestige of articles and venues, and (2) it incrementally computes the popularity of articles based on Eq.~(\ref{eq-inc-pop}).
+
 
 
 
