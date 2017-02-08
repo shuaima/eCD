@@ -24,7 +24,7 @@ Semantic Scholar proposes to use the citation velocity feature, which is a weigh
 
 Scholarly articles are involved with multiple entities such as authors, venues, dates and references. Hence, scholarly article ranking is essentially a problem of assessing the importance of nodes in a heterogeneous network.
 However, effective and efficient ranking of nodes in such a large complex network is a challenging task since entities
-are heterogeneous, temporal and dynamic~\cite{AggarwalS14-survey,fcs-biggraph}.
+are heterogeneous, evolving and dynamic~\cite{AggarwalS14-survey,fcs-biggraph}.
 
 
 
@@ -70,7 +70,7 @@ Another concern of scholarly article ranking is to model the importance of artic
 \vspace{-3ex}
 \caption{\small Citation statistics of scholarly articles}
 \label{fig-citation}
-\vspace{-4.5ex}
+\vspace{-6ex}
 \end{figure}
 
 
@@ -99,22 +99,29 @@ $Y_p$  & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9  \\
 %%%%%%%%%%%%%%%%%%%
 }
 
-\stitle{Contributions \& Organization}.
-To this end, we propose an effective and efficient importance assembling approach for query independent scholarly article ranking in a dynamic environment.
+\stitle{Contributions \& Roadmap}.
+To this end, we propose an effective and efficient approach for query independent scholarly article ranking in a dynamic environment.
 
-\sstab(1) We first develop an importance assembling \underline{S}cholarly \underline{A}rticle \underline{Rank}ing method, referred to as \ensemblerank, to combine the importance of three entities (articles, venues and authors) for scholarly article ranking, such that the importance is defined as a combination of {\em prestige} and {\em popularity} (Section \ref{sec-model}).
-
-The prestige of articles and venues is computed by introducing a novel {\em Time-Weighted PageRank} with a time decaying factor (based on citation statistics), while the one of authors is the average prestige of their published articles.
+\sstab(1) We first develop a \underline{S}cholarly \underline{A}rticle \underline{Rank}ing model, referred to as \ensemblerank, by assembling the importance of three entities (articles, venues and authors) for scholarly article ranking (Section \ref{sec-model}).
+%
+The importance is defined as a combination of {\em prestige} and {\em popularity} to capture the evolving nature of entities.
+%
+To compute the prestige of articles and venues, we propose a novel {\em Time-Weighted PageRank} with a time decaying factor (based on citation statistics), and the one of authors is the average prestige of their published articles.
 %
 The popularity of an article is the sum of all its citations' freshness (how close to the current year), while the one of venues and authors is the average popularity of their associated articles.
 %
-Observe that (a), intuitively, prestige favors articles with many citations soon after their publication, and popularity favors those with recent citations, and (b) both prestige and popularity capture the evolving nature of entities.
+%Observe that (a), intuitively, prestige favors articles with many citations soon after their publication, and popularity favors those with recent citations, and (b) both prestige and popularity capture the evolving nature of entities.
 
 
-\sstab(2) \marked{We then propose an incremental algorithm that speeds up scholarly article ranking in a dynamic environment (Section~\ref{sec-incAlg}). The incremental algorithm is based on the division of original graphs into {\em affected and unaffected areas}, and different updating strategies are designed for nodes in affected and unaffected areas.
+\sstab(2)  We then propose a batch algorithm for scholarly article ranking (Section \ref{sec-alg}), in which we propose to employ a block-wise method for the Time-Weighted PageRank computation in terms of an analysis of the citation characteristics of scholarly article.
 %
-The key of our approach \ensemblerank is a good solution for Time-Weighted PageRank. As a starting point, we show a block-wise PageRank computation method is a good choice on scholarly data obeying the {\em temporal order}, \ie articles only cite existing ones (Section \ref{sec-alg}).
-}
+We further propose an incremental algorithm for dynamic scholarly article ranking (Section~\ref{sec-incAlg}), which partitions the original graphs into  {\em affected and unaffected areas}, and employs different updating strategies for nodes in affected and unaffected areas.
+
+%The key of our approach \ensemblerank is a good solution for Time-Weighted PageRank. As a starting point, we show a block-wise PageRank computation method is a good choice on scholarly data obeying the {\em temporal order}, \ie articles only cite existing ones .
+
+%
+
+
 
 \eat{
 \sstab(2) We then propose an efficient batch algorithm, which exploits the {\em temporal order} of scholarly data,
@@ -125,7 +132,7 @@ The key of our ensemble approach \ensemblerank is a good solution for Time-Weigh
 \sstab(3) We also propose an incremental algorithm that further speeds up scholarly article ranking in a dynamic environment (Section~\ref{sec-incAlg}). The incremental algorithm is based on the division of original graphs into {\em affected and unaffected areas}, and different updating strategies are designed for nodes in affected and unaffected areas.
 }
 
-\sstab(3) Using three real-life scholarly datasets (\aan, \aminer and \magdata), we conduct an extensive experimental study (Section~\ref{sec-exp}). We find that our approach \ensemblerank is both effective and efficient.
+\sstab(3) Using three real-life scholarly datasets (\aan, \aminer and \magdata), we finally conduct an extensive experimental study (Section~\ref{sec-exp}). We  find that our model \ensemblerank is effective.
 %, compared with \pagerank~\cite{Brin98:PageRank}, \futurerank~\cite{sayyadi09} and \hhgrank~\cite{Liang16AAAI}.
 %
 (a) Using ground-truth \recom and \fcita, \ensemblerank improves the pairwise accuracy~\cite{Richardson06:BPR} over (\pagerank~\cite{Brin98:PageRank}, \futurerank~\cite{sayyadi09}, \hhgrank~\cite{Liang16AAAI}) by
@@ -133,7 +140,7 @@ The key of our ensemble approach \ensemblerank is a good solution for Time-Weigh
 (6.4\%, 1.3\%, 0.8\%) and (19.4\%, 7.7\%, 6.0\%) on \aminer, and
 (6.2\%, 2.2\%, 1.9\%) and (11.7\%, 4.4\%, 1.6\%) on \magdata, on average, respectively.
 %
-(b) Our incremental algorithm \incensemble is on average (1.8, 2.8, 3.9, 203) times faster than (\batensemble, \powensemble, \futurerank, \hhgrank)  on the large dataset \magdata.
+(b) Our batch algorithm \batensemble and incremental algorithm \incensemble are efficient, and  \incensemble is on average (1.8, 2.8, 3.9, 203) times faster than (\batensemble, \powensemble, \futurerank, \hhgrank)  on the large dataset \magdata.
 
 \eat{
 (b) Our batch algorithm \batensemble is on average (1.3, 2.5, 348) times faster than (\powensemble, \futurerank, \hhgrank)  on the large dataset \magdata.
