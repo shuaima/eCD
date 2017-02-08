@@ -12,7 +12,7 @@ Finally, it combines the  prestige and popularity three components to produce th
 
 
 \stitle{Popularity computation}. It is easy to see that (1) the popularity of articles can be computed by scanning all citations once and adding the freshness of citations to their corresponding articles, by Eq. (\ref{eq-pop}), and (2) the popularity of venues in a specific year or authors is computed by averaging the popularity of the articles published in the venues or by the authors, respectively.
-That is, the popularity computation can be done by scanning through all citations once. 
+That is, the popularity computation can be done by scanning through all citations once.
 
 
 \stitle{Prestige computation}. As the prestige of authors is defined as the average prestige of their published articles, it suffices to scan through all author-article  relationships for computing the prestige. The prestige of  articles and venues in a specific year is computed with TWPageRank on citation graphs and venue graphs, which is usually computed in an iterative manner~\cite{Brin98:PageRank} and is the most expensive computation for ranking. Hence, the key of the computation of our approach is a good solution for TWPageRank.
@@ -129,12 +129,14 @@ We first prove that the sum of changes after another iteration from $PR$, \ie $|
 \aan  & 18,041  &  20   & 0.92\%       \\  %\hline
 \aminer  & 3,140,081   & 23 & 0.14\%      \\ %\hline
 \magdata  & 126,909,021   & 351 & 0.063\%     \\ %\hline
+web-BS  & 685,230  & 334,857 & 59.51\%     \\  %\hline
+web-G  & 875,713  & 434,818 & 66.98\%     \\  %\hline
 Web graph  & 3,563 M  & 1,828 M & $>$25\%     \\  \hline
 \end{tabular}
 \vspace{-.5ex}
 \end{small}
 \end{center}
-\caption{\small Statistics of citation graphs and Web graphs~\cite{MeuselVLB14}.}
+\caption{\small Statistics of citation graphs and Web graphs~\cite{MeuselVLB14,LeskovecLDM09}.}
 \label{tab-batch}
 \vspace{-8ex}
 \end{table}
@@ -150,20 +152,20 @@ Given a citation graph or venue graph $G(V, E)$, block-wise algorithm \twprscc r
 \end{lemma}
 
 % move this to the full version
-%\begin{proof} 
+%\begin{proof}
 %Observe that (1) the block-wise graph and its topological order can be done in $O(|V|+|E|)$ time~\cite{CormenLRS01}, and (2) updating the TWPageRank scores takes $O(|V|+|E_a|+t|E_i|)$ time as the edges in $|E_a|$ are only scanned once.
 %\end{proof}
 
 
  Recall that (1)  $t$ is very likely to be in the tens to hundreds~\cite{Brin98:PageRank}, and (2) $O(|V|+|E_a|+t|E_i|)$ is essentially $O(|V|+|E|+(t-1)|E_i|)$ as $|E_i|$ + $|E_a|$  = $|E|$. Hence, the efficiency of block-wise algorithm \twprscc is mainly affected by $|E_i|$.
-That is, the smaller $|E_i|$ is, the faster the block-wise algorithm is. 
+That is, the smaller $|E_i|$ is, the faster the block-wise algorithm is.
 
 
 
-It is well-known that article citations obey a natural temporal order, \ie an article only cites those published earlier, and it is really rare for the mutual citation of two articles published in the same time. That is, $|E_i|$ is essentially small for the citation graphs of scholarly articles. 
+It is well-known that article citations obey a natural temporal order, \ie an article only cites those published earlier, and it is really rare for the mutual citation of two articles published in the same time. That is, $|E_i|$ is essentially small for the citation graphs of scholarly articles.
 %
-We also collect the statistics of citation graphs and Web graphs, shown in Table~\ref{tab-batch}, to verify our observation. 
-Due to the existence of the ``bow tie'' structure and the giant \scc in Web graphs~\cite{BroderKMRRSTW00}, the edge ratio $|E_i|/|E|$ could be greater than 25\% of $|E|$ even if edges were randomly generated. In contrast, $|E_i|/|E|$ is less than 1\% for all tested scholarly articles. 
+We also collect the statistics of citation graphs and Web graphs, shown in Table~\ref{tab-batch}, to verify our observation.
+Due to the existence of the ``bow tie'' structure and the giant \scc in Web graphs~\cite{BroderKMRRSTW00}, the edge ratio $|E_i|/|E|$ could be greater than 25\% of $|E|$ even if edges were randomly generated. In contrast, $|E_i|/|E|$ is less than 1\% for all tested scholarly articles.
 %
 Taking $t=100$ for example, algorithm \twprscc needs to scan only about $2|E|$ edges on citation graphs, while $26|E|$ edges on Web graphs.
 
