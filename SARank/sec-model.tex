@@ -1,7 +1,7 @@
 \section{Ranking Model}
 \label{sec-model}
 
-In this section, we first present Time-Weighted PageRank for evaluating  the importance of scholarly articles, and then introduce our ranking  
+In this section, we first present Time-Weighted PageRank for evaluating  the importance of scholarly articles, and then introduce our ranking
 model, referred to as \ensemblerank, that assembles the importance of articles, venues and authors involved in scholarly articles.
 
 %It further assembles the importance of heterogeneous entities involved to rank scholarly articles.
@@ -31,7 +31,7 @@ while PageRank does not consider temporal information at all.
 
 
 \stitle{Time-Weighted PageRank (TWPageRank)}. Most previous work simply exploits temporal information in the form of exponential decay~\cite{Li08TSRanking,Wang13AAAI,sayyadi09,WalkerXKM07}. We rethink the usage of time information in terms of the impacts of scholarly articles. Recall that Fig.~\ref{fig-citation} shows that the impact of an article is time-dependent, but not simply in the form of exponential decay.  In general, the impact of an article tends to decay with the time after the citation peak only. %Otherwise, its impact is fixed as a constant number. %, since we argue that the increment of its citations during this period is mainly due to the increase of its popularity.
-Note that {\em each individual article has its own peak time} as articles may reach their citation peaks in different time.  
+Note that {\em each individual article has its own peak time} as articles may reach their citation peaks in different time.
 %using the peak year in Fig.~\ref{fig-citation} is not appropriate for all articles. On the contrary, we compute a peak year for each article.
 
 
@@ -111,9 +111,9 @@ We then have $\rho(d\cdot M^T) \le ||d\cdot M^T||_1 \le d < 1$, as the spectral 
 \centering
 %\includegraphics[scale=0.15]{fig/framework.eps}
 \includegraphics[scale=0.15]{fig/framework-lite-2.eps}
-\vspace{-3ex}
+\vspace{-2.5ex}
 \caption{\small Ranking model \ensemblerank} \label{fig-rankmodel}
-\vspace{-3ex}
+\vspace{-3.5ex}
 \end{figure}
 
 
@@ -122,7 +122,7 @@ We then have $\rho(d\cdot M^T) \le ||d\cdot M^T||_1 \le d < 1$, as the spectral 
 
 %Observe that: (a) the importance of articles is typically evaluated according to many factors, and (b) using single factors fails to give a reasonable rank in some situation. Hence,
 
-Our ranking model \ensemblerank assembles the importance of articles, venues and authors for scholarly article ranking, computed by the citation, venue and author components, respectively, as shown in Fig.~\ref{fig-rankmodel}. 
+Our ranking model \ensemblerank assembles the importance of articles, venues and authors for scholarly article ranking, computed by the citation, venue and author components, respectively, as shown in Fig.~\ref{fig-rankmodel}.
 %
 We next introduce the details of each component.
 
@@ -252,6 +252,10 @@ R(v) =  \alpha R_c(v) + \beta R_v(v) + (1 - \alpha - \beta) R_a(v).
 Traditional PageRank equally distributes the prestige of nodes, and PageRank based models suffer from the problem that older articles are preferred since they have accumulated a large number of citations~\cite{Li08TSRanking}, and TWPageRank based models alleviate the problem to a certain degree by lowering the impact weights of articles when they are cited after their peak time, \ie $T_u\geq Peak_v$. We further propose the venue and author ensembles to improve the ranking accuracy.
 }
 
+
+
+%\stitle{Remarks}.
+%Recall that articles in our data are also associated with affiliation information. Following the way of the venue or author ensemble, we can derive another ensemble, \ie affiliation ensemble. However, we argue that the use of affiliation ensemble may have negative effects since the correlation between the importance of an article and the average authority of its affiliation(s) is not as strong as others such like authors and venues. As shown by the experimental study in Section~\ref{sec-exp},  the incorporation of the affiliation ensemble impairs the ranking accuracy. Hence, we choose not to use the affiliation ensemble in our model.
 
 
 %our method used for author ensemble is both lightweight and effective, as will be shown in the experimental study.
