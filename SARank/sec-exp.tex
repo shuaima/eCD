@@ -2,7 +2,7 @@
 \label{sec-exp}
 
 In this section, we present an extensive experimental study of our importance assembling approach \ensemblerank.
-Using three real-life scholarly datasets (\aan, \aminer and \magdata) and two benchmarks (\recom and \fcita), we conducted four sets of experiments to evaluate: (1) the effectiveness of \ensemblerank,
+Using three real-life scholarly datasets (\aan, \aminer and \magdata) and two sets of ground-truth (\recom and \fcita), we conducted four sets of experiments to evaluate: (1) the effectiveness of \ensemblerank,
 %two sets of benchmark article pairs (\recom and \fcita) ranked by numbers of recommendations and future citations,
 (2) the efficiency of our batch algorithm \batensemble and incremental algorithm \incensemble, and (3) the impacts of time decaying factor $\sigma$, importance weighting factor $\lambda$ and aggregating parameters $\alpha$ and $\beta$.
 
@@ -148,7 +148,7 @@ We compared our approach \ensemblerank with three existing methods: \pagerank~\c
 All algorithms were implemented with Microsoft Visual C++.
 %Parameters.
 For all algorithms, (a) the damping parameter $d$ and the iteration threshold $\epsilon$ were fixed to 0.85 and $10^{-8}$,
-(b) the default splitting year was selected such that future data had around 20\% of all articles, which was 2008 on \aan and 2013 on both \aminer and \magdata, and,
+(b) the default splitting year was selected such evaluation data accounted for around 20\%, which was 2008 on \aan and 2013 on both \aminer and \magdata, and,
 (c) for the sake of fairness, all aggregating parameters, \eg $\alpha$, and $\beta$ in \ensemblerank, were tuned at the granularity of 0.1 and the best results were reported.
 %
 Moreover, $\rho$ was set to -0.2 for \futurerank following~\cite{sayyadi09}, and time decaying factor $\sigma$ and importance weighting factor $\lambda$ was set to -1 and 0.5  by default for \ensemblerank.
@@ -362,7 +362,7 @@ The \PairAcc of \pagerank is much lower than other algorithms, which indicates t
 
 \stitle{Exp-2: Effectiveness with \fcita}.
 %\subsubsection{Exp-2: Effectiveness with \fcita}
-In the second set of tests, we used benchmark \fcita to evaluate the effectiveness.
+In the second set of tests, we used ground-truth \fcita to evaluate the effectiveness.
 %All algorithms produced results based on articles in ranking data.
 Aggregating parameters were selected as follows: $(\alpha, \beta, \gamma)$ = $(0.7, 0.1,$ $0.2)$ for \futurerank, $(a_{i1}, a_{i2}, a_{i3})$ = $(0.3, 0.6, 0.1)$ for \hhgrank ($i\in[1, 3]$), and $(\alpha, \beta)$ = $(0.8, 0.1)$ for \ensemblerank.
 Here the citation component contributed most in \ensemblerank, since \fcita is based on citation information.
@@ -432,7 +432,7 @@ For TWPageRank computation, algorithm \inctwprscc is on average 2.1 and 3.5 time
 %
 For scholarly article ranking, algorithm \incensemble is on average (1.8, 2.8, 3.9, 203) times faster than (\batensemble, \powensemble, \futurerank, \hhgrank), respectively.
 
-%\stitle{Remarks}. 
+%\stitle{Remarks}.
 In our experiments we adopted a yearly-update scenario given the time information in our data. And it is worth pointing out that our algorithms may have additional efficiency benefits since scholarly article ranking is usually updated much more frequently in practice and the unaffected area is very likely to become larger.
 
 %algorithm \batensemble is on average (1.3, 2.5, 348) times faster than (\powensemble, \futurerank, \hhgrank), respectively. And algorithm \incensemble further improves the efficiency by 22\% on average, compared with \batensemble.
@@ -470,7 +470,7 @@ In our experiments we adopted a yearly-update scenario given the time informatio
 
 \stitle{Exp-4: Impacts of parameters}.
 %\subsubsection{Exp-4: Impacts of parameters}.
-In the last set of tests, we evaluated the impacts of time decaying factor $\sigma$, importance weighting factor $\lambda$ and parameters $\alpha$, $\beta$.
+In the last set of tests, we evaluated the impacts of time decaying factor $\sigma$, importance weighting factor $\lambda$ and parameters $\alpha$, $\beta$. 
 
 %We present main results only and more details are available in~\cite{ERank-full}.
 
@@ -479,7 +479,8 @@ In the last set of tests, we evaluated the impacts of time decaying factor $\sig
 
 \etitle{Exp-4.1}.
 %\stitle{Exp-4.1}.
-To evaluate the impacts of the time decaying factor $\sigma$, we varied $\sigma$ from -1.6 to -0.4, while fixed $Y_s$ to default values, $T_i=+\infty$, $dif=1$ and $\lambda=0.5$. We tested the \PairAcc with both benchmarks. The results of \PairAcc are reported in Figs.~\ref{fig-aan-sigma}, \ref{fig-aminer-sigma} and \ref{fig-mag-sigma}.
+To evaluate the impacts of the time decaying factor $\sigma$, we varied $\sigma$ from -1.6 to -0.4, while 
+fixed $Y_s$ to default values, $T_i=+\infty$, $dif=1$ and $\lambda=0.5$. We tested the \PairAcc with both sets of ground-truth. The results are reported in Figs.~\ref{fig-aan-sigma}, \ref{fig-aminer-sigma} and \ref{fig-mag-sigma}.
 
 
 
@@ -494,10 +495,14 @@ The running time indeed varies (1.0\%, 2.1\%) on average only on (\aminer, \magd
 
 \etitle{Exp-4.2}.
 %\stitle{Exp-4.2}.
-To evaluate the impacts of importance weighting factor $\lambda$, we varied $\lambda$ from 0 to 1, while fixed $Y_s$ to default values, $T_i=+\infty$, $dif=1$ and $\sigma=-1.0$. The results of the \PairAcc with both benchmarks are reported in Figs.~\ref{fig-aan-lambda}, \ref{fig-aminer-lambda} and \ref{fig-mag-lambda}. Note that parameter $\lambda$ has no impacts on efficiency.
+To evaluate the impacts of importance weighting factor $\lambda$, we varied $\lambda$ from 0 to 1, while fixed $Y_s$ to default values, $T_i=+\infty$, $dif=1$ and $\sigma=-1.0$. The results of the \PairAcc with both sets of ground-truth are reported in Figs.~\ref{fig-aan-lambda}, \ref{fig-aminer-lambda} and \ref{fig-mag-lambda}. Note that parameter $\lambda$ has no impacts on efficiency.
 
-When varying $\lambda$, the \PairAcc of \ensemblerank first increases and then decreases on all datasets using both benchmarks. This result indicated that our importance model combining both prestige and popularity is better than using either of prestige and popularity alone. The selection of $\lambda$ is influenced by benchmarks, such that the best $\lambda$ falls into $[xx,xx]$ and $[yy,yy]$ on \fcita and \recom, respectively. Moreover, equally weighting, \ie $\lambda=0.5$, is a good default setting when no query information is available in advance.
-Indeed, the best obtained \PairAcc using (\fcita, \recom) is only (0.10\%, 0.38\%), (0.04\%, 2.59\%) and (0.06\%, 0.91\%)  higher than the \PairAcc of equally weighting on \aan, \aminer and \magdata, respectively.
+When varying $\lambda$, the \PairAcc of \ensemblerank first increases and then decreases on all datasets using both \fcita and \recom, except on \aminer using \recom. This result indicated that our importance model combining prestige and popularity is generally better than using either of prestige and popularity alone.
+Indeed, the \PairAcc obtained by combining prestige and popularity using (\recom, \fcita) was (10.8\%, 3.5\%), (13.3\%, 9.7\%), (6.4\%, 7.7\%) higher than using prestige alone, and was (0.94\%, 0.31\%), (-0.72\%, 0.45\%), (0.96\%, 0.06\%) higher than using popularity alone on \aan, \aminer and  \magdata, respectively.
+
+
+%The selection of $\lambda$ is influenced by ground-truth, such that the best $\lambda$ falls into $[xx,xx]$ and $[yy,yy]$ on \fcita and \recom, respectively. Moreover, equally weighting, \ie $\lambda=0.5$, is a good default setting when no query information is available in advance.
+%Indeed, the best obtained \PairAcc using (\fcita, \recom) is only (0.10\%, 0.38\%), (0.04\%, 2.59\%) and (0.06\%, 0.91\%)  higher than the \PairAcc of equally weighting on \aan, \aminer and \magdata, respectively.
 
 
 \etitle{Exp-4.3}.
@@ -507,7 +512,7 @@ To evaluate the impacts of parameters $\alpha$ and $\beta$ on effectiveness, we 
 %When varying $\alpha$ and $\beta$, the \PairAcc of \ensemblerank keeps at a high level around selected $\alpha$ and $\beta$. For instance, consider a square of length 0.3, which covers 8.5\% of all parameter combinations. The fraction of parameters such that the \PairAcc is no worse than 1\% of the corresponding \PairAcc reported earlier is (73\%, 94\%) on \aan, (96\%, 87\%) on \aminer and (83\%, 95\%) on \magdata, using (\recom, \fcita), respectively.
 
 Indeed \ensemblerank is very robust to parameters $\alpha$ and $\beta$.
-(a) When varying $\alpha$ and $\beta$, the \PairAcc of \ensemblerank changes gently. (b) \PairAcc also keeps at a high level within a certain ($\alpha$, $\beta$)  combination space. Finally, (c) the optimal parameters on the same benchmarks are very similar for (\aan, \aminer and \magdata). That is, it is quite flexible for choosing proper values
+(a) When varying $\alpha$ and $\beta$, the \PairAcc of \ensemblerank changes gently. (b) \PairAcc also keeps at a high level within a certain ($\alpha$, $\beta$)  combination space. Finally, (c) the optimal parameters on the same set of ground-truth are very similar for (\aan, \aminer and \magdata). That is, it is quite flexible for choosing proper values
 of  parameters $\alpha$ and $\beta$.
 
 
