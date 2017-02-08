@@ -29,9 +29,9 @@ Note that in the following notations without/with superscript `$+$' are defined 
 \mat{0ex}{
 %%%%%%%%%%%%%%%%%%%
 {\sl Input:\/} \= An update $\Delta$ = $\Delta V\cup\Delta E$, TWPageRank vector $PR$ of $G$,  and the   \\
-\hspace{6ex} topological order $O$ of the converted graph $G'(V',E')$.\\
+\hspace{6ex} topological order $O$ of the block-wise graph $G'(V',E')$.\\
 {\sl Output:\/} TWPageRank vector $PR^+$ of the updated graph $G^+$. \\
-\bcc \hspace{1.5ex}\=  $G_C'$ := the converted graph of $G_C$; \\
+\bcc \hspace{1.5ex}\=  $G_C'$ := the block-wise graph of $G_C$; \\
 %\ \  $E_{CB}'$ := edges from $G_C'$ to $G'$\\
 \icc\> $\Delta O$ := topological order of $G_C'$; \ \ $O^+$ := $\Delta O/O$; \\
 \icc\> label all SCCs of $G$ with incoming edges having weight changes as $B$, \\ \hspace{2.5ex} all remailing SCCs of $G$ as $A$ and all SCCs of $G_C$ as $C$;\\
@@ -61,7 +61,7 @@ Note that in the following notations without/with superscript `$+$' are defined 
 
 The incremental prestige computation for article and venues in a specific year is to compute the TWPageRank vector on the updated graph $G^+$, given an update $\Delta$ = $\Delta V\cup\Delta E$ and the results on the original graph $G$.
 %
-Algorithm~\twprscc computes SCCs of citation and venue graphs $G$ as well as the an topological order of the converted graph $G'$ as auxiliary data structures.
+Algorithm~\twprscc computes SCCs of citation and venue graphs $G$ as well as the an topological order of the block-wise graph $G'$ as auxiliary data structures.
 Observing that the update $\Delta$ has no impacts on either of the two data structures, the idea is to divide $G$ into affected and unaffected areas such that TWPageRank scores of nodes in affected and unaffected areas are updated accordingly.
 
 
@@ -70,7 +70,7 @@ Observing that the update $\Delta$ has no impacts on either of the two data stru
 
 \sstab(1) The set of SCCs on the updated graph $G^+$ consists of existing SCCs on $G$ and SCCs on the induced subgraph $G^+[\Delta V]$, based on the fact that there only exist edges from $\Delta V$  to $V$.
 
-\sstab(2) Let $\Delta O$ be a topological order of the converted graph $G'_\Delta(V'_\Delta,E'_\Delta)$ of $G^+[\Delta V]$; further let $O^+$ be $\Delta O/O$. We then have the follows.
+\sstab(2) Let $\Delta O$ be a topological order of the block-wise graph $G'_\Delta(V'_\Delta,E'_\Delta)$ of $G^+[\Delta V]$; further let $O^+$ be $\Delta O/O$. We then have the follows.
 
 
 \begin{lemma} \label{lemma-inc-topo}

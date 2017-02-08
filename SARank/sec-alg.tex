@@ -131,7 +131,7 @@ We first prove that the sum of changes after another iteration from $PR$, \ie $|
 \magdata  & 126,909,021   & 351 & 0.063\%     \\ \hline
 web-BS  & 685,230  & 334,857 & 59.51\%     \\  %\hline
 web-G  & 875,713  & 434,818 & 66.98\%     \\  %\hline
-%Web graph  & 3,563 M  & 1,828 M & $>$25\%     \\  
+%Web graph  & 3,563 M  & 1,828 M & $>$25\%     \\
 \hline
 \end{tabular}
 \vspace{-.5ex}
@@ -212,10 +212,19 @@ Indeed, on (\aan, \aminer, \magdata), the nodes in the largest SCC amount to (0.
 
 \stitle{Time \& space complexity analyses of the complete algorithm}.
 %
-By Lemma~\ref{prop-venue-time-complexity} and the analyses in Section~\ref{subsec-bat-alg}, one can verify that algorithm \batensemble takes $O(|V^c|+|V^v|+|E^c_a|+|E^v_a|+t|E^c_i|+t|E^v_i|+|PA|)$ time, where $|PA|$ is the total number of author-article relationships, and takes $O()$ space.
+By Lemma~\ref{prop-venue-time-complexity} and the analyses in Section~\ref{subsec-bat-alg}, one can verify that algorithm \batensemble takes $O(|V^c|+|V^v|+|E^c_a|+|E^v_a|+t|E^c_i|+t|E^v_i|+|PA|)$ time, where $|PA|$ is the total number of author-article relationships, and takes $O(7|V^c|+4|V^v|+2|V^c{'}|+2|V^v{'}|+|E^c|+|E^c{'}|+|E^v|+|E^v{'}|+2|A|+|D|)$ space, where $|A|$ is the number of authors and $|D|$ is the size of academic graph data $D$.
+% TWPageRank on V^c: 3|V^c| + |E^c| + 2|V^c{'}| + |E^c{'}|
+% TWPageRank on V^v: 3|V^v| + |E^v| + 2|V^v{'}| + |E^v{'}|
+% Prestige of authors: |A|
+% popularity: |V^c| + |V^v| + |A|
+% Importance scores: 3|V^c| 
+% D: academic graph data, i.e., |PA|, |PV|, paper years, ect
+% total: 7|V^c| + |E^c| + 2|V^c{'}| + |E^c{'}| + 4|V^v| + |E^v| + 2|V^v{'}| + |E^v{'}| + 2|A| + |D|
 
+The key of algorithm \batensemble is to compute TWPageRank with algorithm \twprscc.
+Compared with the traditional power method~\cite{Brin98:PageRank}, our block-wise algorithm \twprscc uses $(2|V^c{'}|+|E^c{'}|)$ and $(2|V^v{'}|+|E^v{'}|)$ extra space to store the block-wise graphs $G^c{'}(V^c{'},E^c{'})$ of $G^c$ and $G^v{'}(V^v{'},E^v{'})$ of $G^v$ and their topological orders, while speeds up computation by $O((t-1)(|E^c_a|+|E^v_a|))$.
 
-Compared with the traditional power method~\cite{Brin98:PageRank}, our block-wise algorithm \batensemble uses $(2|V^c{'}|+|E^c{'}|)$ and $(2|V^v{'}|+|E^v{'}|)$ extra space to store the block-wise graphs $G^c{'}(V^c{'},E^c{'})$ of $G^c$ and $G^v{'}(V^v{'},E^v{'})$ of $G^v$ and their topological orders, respectively. That is, \batensemble speeds up computation with a reasonable extra space.
+%. That is, \batensemble speeds up computation with a reasonable extra space.
 
 
 
