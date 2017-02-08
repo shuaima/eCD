@@ -26,11 +26,11 @@ That is, the popularity computation can be done by scanning through all citation
 The main result here is to speed-up the TWPageRank computation by exploiting the {\em temporal order} of scholarly articles as follows.
 
 
-\begin{prop}
+\begin{claim}
 \label{thm-prestige}
 %TWPageRank can be computed in linear time in practice on scholarly data obeying a temporal order.
 A block-wise PageRank computation method~\cite{Berkhin05} is a good choice for computing TWPageRank on scholarly articles.
-\end{prop}
+\end{claim}
 
 The main idea of block-wise PageRank computation is that each strongly connected component (\scc) of the original graph is treated as a block, and one block is processed at a time following the {\em topological order} of the block-wise graph, \ie each node represents a block of the original graph~\cite{Berkhin05}.
 We next show Proposition~\ref{thm-prestige} by introducing and analyzing such a block-wise computation method.
@@ -109,56 +109,77 @@ We first prove that the sum of changes after another iteration from $PR$, \ie $|
 (4) We finally build the connection between $PR_k-PR_k^-$ and $PR_k^+-PR_k$ such that  $PR_k^+-PR_k=d\cdot M_{kk}^T\cdot(PR_k-PR_k^-)$, where $M_{kk}$ is the transition submatrix of nodes in the $k$-th SCC.
 } %%%% eat
 
-\begin{lemma}
-\label{prop-venue-time-complexity}
-Given a citation graph or venue graph $G(V, E)$, algorithm \twprscc runs in  $O(|V|+|E_a|+t|E_i|)$ time, where $t$ is  the maximum number of iterations among all SCCs.
-\end{lemma}
 
-\begin{proof}
-Observe that (1) the block-wise graph and its topological order can be done in $O(|V|+|E|)$ time~\cite{CormenLRS01}, and (2) updating the TWPageRank scores takes $O(|V|+|E_a|+t|E_i|)$ time as the edges in $|E_a|$ are only scanned once.
-\end{proof}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{table}[t!]
 %\vspace{-2ex}
-\label{tab-batch}
 \begin{center}
 \begin{small}
 \vspace{1ex}
 \begin{tabular}{|c|r|r|r|r|}
 \hline
-{\bf Datasets}   &  \multicolumn{1}{c|}{\bf nodes}    & \multicolumn{1}{c|}{\bf \scc nodes}  & \multicolumn{1}{c|}{\bf Ratio (nodes)}   & \multicolumn{1}{c|}{\bf Ratio (edges)}    \\
+{\bf Datasets}   &  \multicolumn{1}{c|}{\bf Nodes}    & \multicolumn{1}{c|}{\bf Largest \scc nodes}   & \multicolumn{1}{c|}{\bf \scc edge ratio}    \\
 \hline \hline
-\aan  & 18,041  &  20   & 0.11\% & 0.92\%       \\  %\hline
-\aminer  & 3,140,081   & 23 & 0.00073\% & 0.14\%      \\ %\hline
-\magdata  & 126,909,021   & 351 & 0.00028\% & 0.063\%     \\ %\hline
-Web graph  & 3,563 M  & 1,828 M & 51.28\% & $>$25\%     \\  \hline
+%\aan  & 18,041  &  20   & 0.11\% & 0.92\%       \\  %\hline
+%\aminer  & 3,140,081   & 23 & 0.00073\% & 0.14\%      \\ %\hline
+%\magdata  & 126,909,021   & 351 & 0.00028\% & 0.063\%     \\ %\hline
+%Web graph  & 3,563 M  & 1,828 M & 51.28\% & $>$25\%     \\  \hline
+\aan  & 18,041  &  20   & 0.92\%       \\  %\hline
+\aminer  & 3,140,081   & 23 & 0.14\%      \\ %\hline
+\magdata  & 126,909,021   & 351 & 0.063\%     \\ %\hline
+Web graph  & 3,563 M  & 1,828 M & $>$25\%     \\  \hline
 \end{tabular}
 \vspace{-.5ex}
 \end{small}
 \end{center}
-\caption{\small Statistics of citation graphs and Web graph~\cite{MeuselVLB14}.}
+\caption{\small Statistics of citation graphs and Web graphs~\cite{MeuselVLB14}.}
+\label{tab-batch}
 \vspace{-8ex}
 \end{table}
 %%%%%%%%%%%%%%%%%%%
 
 
-\stitle{Efficiency analysis}. Considering that $t$ is likely to be in the tens to hundreds~\cite{Brin98:PageRank}, the efficiency of algorithm \twprscc is mainly influenced by $|E_i|$, which becomes better with $|E_i|$ being smaller.
+\stitle{Analysis of block-wise algorithm}. While similar block-wise algorithms were originally proposed for Web graphs~\cite{Berkhin05}, we next show that they are even better for the TWPageRank computation associated with scholarly articles.
+
+
+\begin{lemma}
+\label{prop-venue-time-complexity}
+Given a citation graph or venue graph $G(V, E)$, block-wise algorithm \twprscc runs in  $O(|V|+|E_a|+t|E_i|)$ time, where $t$ is  the maximum number of iterations among all \sccs.
+\end{lemma}
+
+% move this to the full version
+%\begin{proof} 
+%Observe that (1) the block-wise graph and its topological order can be done in $O(|V|+|E|)$ time~\cite{CormenLRS01}, and (2) updating the TWPageRank scores takes $O(|V|+|E_a|+t|E_i|)$ time as the edges in $|E_a|$ are only scanned once.
+%\end{proof}
+
+
+ Recall that (1)  $t$ is very likely to be in the tens to hundreds~\cite{Brin98:PageRank}, and (2) $O(|V|+|E_a|+t|E_i|)$ is essentially $O(|V|+|E|+(t-1)|E_i|)$ as $|E_i|$ + $|E_a|$  = $|E|$. Hence, the efficiency of block-wise algorithm \twprscc is mainly affected by $|E_i|$.
+That is, the smaller $|E_i|$ is, the faster the block-wise algorithm is. 
+
+
+
+It is well-known that article citations obey a natural temporal order, \ie an article only cites those published earlier, and it is really rare for the mutual citation of two articles published in the same time. That is, $|E_i|$ is essentially small for the citation graphs of scholarly articles. 
 %
-As indicated by Table~1, $|E_i|$ is relatively small compared with $|E|$ on scholarly data obeying temporal order in the sense that an article can only cite ones published earlier, and, moreover, it is pretty rare that two articles published in the same time mutually cite each other. While on the Web graph with the ``bow tie" strucutre~\cite{BroderKMRRSTW00}, the existence of a giant SCC makes $|E_i|$ higher than 25\% of $|E|$ even when edges are randomly generated.
+We also collect the statistics of citation graphs and Web graphs, shown in Table~\ref{tab-batch}, to verify our observation. 
+Due to the existence of the ``bow tie'' structure and the giant \scc in Web graphs~\cite{BroderKMRRSTW00}, the edge ratio $|E_i|/|E|$ could be greater than 25\% of $|E|$ even if edges were randomly generated. In contrast, $|E_i|/|E|$ is less than 1\% for all tested scholarly articles. 
+%
+Taking $t=100$ for example, algorithm \twprscc needs to scan only about $2|E|$ edges on citation graphs, while $26|E|$ edges on Web graphs.
+
+
+By Corollary \ref{prop-prscc}, Lemma \ref{prop-venue-time-complexity} and the  above analysis of our block-wise algorithm, we have informally established Claim~\ref{thm-prestige}.
+
 
 \eat{
-In the Web graph with the ``bow tie" strucutre~\cite{BroderKMRRSTW00}, the nodes in the largest SCC amount to 51\% of the entire graph in 2014~\cite{MeuselVLB14}, and $|E_i|$ is already 25\% of $|E|$ even when edges are randomly generated.
+In the Web graph with the ``bow tie" structure~\cite{BroderKMRRSTW00}, the nodes in the largest SCC amount to 51\% of the entire graph in 2014~\cite{MeuselVLB14}, and $|E_i|$ is already 25\% of $|E|$ even when edges are randomly generated.
 %
 However, the situation is completely different on scholarly data obeying temporal order in the sense that an article can only cite the ones published earlier. Moreover, it is pretty rare that two articles published in the same time mutually cite each other. Hence, both the citation graph and the venue graph can be treated as almost-DAGs~\cite{ObjectRank04}.
 %
 Indeed, on (\aan, \aminer, \magdata), the nodes in the largest SCC amount to (0.11\%, 0.00073\%, 0.00028\%) of the entire citation graph, and $|E_i|$ is (0.92\%, 0.14\%, 0.063\%) of $|E|$, respectively. %Here we present statistics of citation graphs since citation graphs are typically much larger than corresponding venue graphs and occupy most computation.
 }
 
-Based on the above analysis, algorithm \twprscc performs much better on scholarly data than the Web graph. Taking $t=100$ for example, algorithm \twprscc needs to scan through approximately $2|E|$ edges on scholarly data while $25|E|$ edges on the Web graph.
-%
-By Corollary \ref{prop-prscc} and Lemma \ref{prop-venue-time-complexity}, we have shown Theorem~\ref{thm-prestige}.
+
 
 %Note that $O(|V|+|E_b|+t |E_w|)$ remains linear to $|E|$ in practice since $|E_w|$ is typically much smaller than $|E|$ (\eg 0.92\%) for scholarly data obeying a temporal order.
 
