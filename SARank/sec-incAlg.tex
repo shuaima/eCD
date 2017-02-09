@@ -17,37 +17,34 @@ $\Delta V\cap V = \emptyset$ is a set of nodes, and $\Delta E$ is a set of direc
 
 
 \stitle{Incremental popularity computation}.
-As the popularity of articles is defined as the freshness sum of all their citations, it is convenient to maintain. Again, we denote the popularity of node $v$ on citation graphs $G^c$ and $G^{c,+}$ as $pop_c(v)$ and $pop_c^+(v)$, respectively.
+The popularity of venues and authors is computed along the same lines as their batch counterparts of algorithm \batensemble,
+as almost all venues and authors are affected  by the definitions of the popularity of venues and authors.
 
-Given an update $\Delta^c$ = $\Delta V^c\cup\Delta E^c$, the updated popularity $pop_{c}^+(v)$ can be easily computed as:
+
+As the popularity of articles is defined as the freshness sum of all their citations, it is convenient to maintain. Consider an updated citation graph $G^{c,+}(V^c\cup\Delta V^c, E\cup\Delta E^c)$ of $G^c(V^c, E^c)$,  the updated popularity $pop_{c}^+(v)$ can be easily computed as:
 \begin{small}
 \begin{equation}\label{eq-inc-pop}
 pop_c^+(v) = pop_c(v) {e^{\sigma (T^+_0-T_0)}} + \sum_{(u,v)\in \Delta E^c} {e^{\sigma (T^+_0-T_u)}}.
 \end{equation}
 \end{small}
-
-\vspace{-1ex}
 \noindent
-Here $T_0$ and $T^+_0$ are the current time in $G^c$ and $G^{c,+}$.
-
-%\begin{lemma} \label{lemma-inc-pop-comp}
-%Obviously, the time complexity of incrementally updating popularity is $O($ $|V^c_+|+|\Delta E^c|)$.
-%\end{lemma}
-%, compared with $O(|V^+|+|E^+|)$ for batch algorithm.
-
-It is easy to see that the time complexity of incrementally updating popularity is $O($ $|V^c|+|\Delta V^c|+|\Delta E^c|)$.
+Where $pop_c(v)$ (resp. $pop_c^+(v)$) is the popularity of node $v$ on $G^c$ (resp. $G^{c,+}$), and 
+ $T_0$ (resp. $T^+_0$) is the current time in $G^c$ (resp. $G^{c,+}$). 
+%
+By Eq.~(\ref{eq-inc-pop}), it is easy to see that it takes $O($ $|V^c|+|\Delta V^c|+|\Delta E^c|)$ time to update the popularity of articles.
 %This further shows that Eq.~(\ref{eq-inc-pop}) is a desired solution for popularity maintenance.
 
-Moreover, the popularity computation for venues and authors is exactly the same as \batensemble, similar to the incremental prestige computation for authors.
-%due to the way that the  popularity of venues in a specific year and authors is defined, and the popularity of every article is potentially changed.
 
 
-\stitle{Incremental prestige computation}.  We first present the incremental  prestige computation. Again, it differs for the prestige of articles and venues in a specific year and the one of authors.
+\stitle{Incremental prestige computation}.  
+The prestige of authors is computed along the same lines as their batch counterparts of algorithm \batensemble,
+as almost all authors are affected  by the definition of the prestige of authors.
+%
+For the prestige of articles and venues, we propose an incremental algorithm to maintain their prestige.
 
-The incremental prestige computation for authors is exactly the same as \batensemble, due to the way that the prestige of authors is defined and the prestige of each article is potentially changed. Indeed, it is meaningless to develop incremental algorithm for that due to the large number of affected authors.
-
-
-We finally present the complete incremental algorithm \incensemble, which is similar to the batch algorithm \batensemble, except that (1) it uses algorithm \inctwprscc to incrementally compute the prestige of articles and venues, and (2) it incrementally computes the popularity of articles based on Eq.~(\ref{eq-inc-pop}).
+ 
+ 
+%We first present the incremental  prestige computation. Again, it differs for the prestige of articles and venues in a specific year and the one of authors. We finally present the complete incremental algorithm \incensemble, which is similar to the batch algorithm \batensemble, except that (1) it uses algorithm \inctwprscc to incrementally compute the prestige of articles and venues, and (2) it incrementally computes the popularity of articles based on Eq.~(\ref{eq-inc-pop}).
 
 
 
