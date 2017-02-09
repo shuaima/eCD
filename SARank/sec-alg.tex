@@ -134,30 +134,34 @@ That is, the smaller $|E_i|$ is, the faster the block-wise algorithm is.
 \begin{center}
 \begin{small}
 \vspace{1ex}
-\begin{tabular}{|c|r|r|r|r|}
+\begin{tabular}{|c|c|c|r|r|r|r|}
 \hline
-                  &               &                                      & \multicolumn{1}{c|}{\bf Largest }   & \multicolumn{1}{c|}{\bf \scc }    \\
-\raisebox{1.5ex}[0pt]{\bf Datasets}      &  \multicolumn{1}{c|}{\raisebox{1.5ex}[0pt]{\bf Nodes}} & \multicolumn{1}{c|}{\raisebox{1.5ex}[0pt]{\bf Edges}}  & {\bf \scc nodes} &  {\bf edge ratio}    \\
+                  &       \multicolumn{2}{c|}{\bf Nodes / Edges}                         & \multicolumn{2}{c|}{\bf Largest }   & \multicolumn{2}{c|}{\bf \scc }    \\ \cline{2-3}
+\raisebox{1.5ex}[0pt]{\bf Graphs}      & \multicolumn{1}{c|}{\bf citation} & \multicolumn{1}{c|}{\bf venue} & 
+%\multicolumn{1}{c|}{\raisebox{1.5ex}[0pt]{\bf Edges}} &
+\multicolumn{2}{c|}{\bf \scc nodes} &  \multicolumn{2}{c|}{\bf edge ratio}    \\
 
 \hline \hline
 %\aan  & 18,041  &  20   & 0.11\% & 0.92\%       \\  %\hline
 %\aminer  & 3,140,081   & 23 & 0.00073\% & 0.14\%      \\ %\hline
 %\magdata  & 126,909,021   & 351 & 0.00028\% & 0.063\%     \\ %\hline
 %Web graph  & 3,563 M  & 1,828 M & 51.28\% & $>$25\%     \\  \hline
-\aan  & 18,041  & 82,860 &  20   & 0.92\%       \\  %\hline
-\aminer  & 3,140,081 & 6,270,317   & 23 & 0.14\%      \\ %\hline
-\magdata  & 126,909,021 &526,498,920  & 351 & 0.063\%     \\ \hline
-\aan VV & 565   & 22,527 & 18   & 2.78\%    \\
-\aminer VV  & 56,370    & 2,768,823 & 530   & 1.78\%    \\
-\magdata VV & 584,298   & 162,225,201   & 10,473    & 1.84\%    \\ \hline
-web-BS  & 685,230 & 7,600,595 & 334,857 & 59.51\%     \\  %\hline
-web-G  & 875,713 & 5,105,039 & 434,818 & 66.98\%     \\  %\hline
+\aan  & 18,041/82,860 & 565/22,527 &  20 & 18  & 0.92\% & 2.78\%      \\  %\hline
+\aminer  & 3.14 M/6.27M & 56 K/2.77 M   & 23 & 530 &  0.14\% & 1.78\%     \\ %\hline
+\magdata  & 127 M/526 M & 584 K/162 M & 351 & 10 K & 0.06\% & 1.84\%    \\ \hline
+%\aminer  & 3,140,081/6,270,317   & 23 & 0.14\%      \\ %\hline
+%\magdata  & 126,909,021/526,498,920  & 351 & 0.063\%     \\ \hline
+%\aan VV & 565   & 22,527 & 18   & 2.78\%    \\
+%\aminer VV  & 56,370    & 2,768,823 & 530   & 1.78\%    \\
+%\magdata VV & 584,298   & 162,225,201   & 10,473    & 1.84\%    \\ \hline
+web-BS  & \multicolumn{2}{c|}{685,230/7,600,595} & \multicolumn{2}{c|}{334,857} & \multicolumn{2}{c|}{59.51\%}\\  %\hline
+web-G  & \multicolumn{2}{c|}{875,713/5,105,039} & \multicolumn{2}{c|}{434,818} & \multicolumn{2}{c|}{66.98\%} \\  %\hline
 %Web graph  & 3,563 M  & 1,828 M & $>$25\%     \\
 \hline
 \end{tabular}
 \end{small}
 \end{center}
-\caption{\small Statistics of citation graphs and Web graphs extracted from berkely.edu and stanford.edu domains in 2002 and from the Google programming contest in 2002, respectively~\cite{LeskovecLDM09}.}
+\caption{\small Statistics of citation graphs, venue graphs and Web graphs extracted from berkely.edu and stanford.edu domains in 2002 and from the Google programming contest in 2002, respectively~\cite{LeskovecLDM09}.}
 \label{tab-batch}
 \vspace{-6ex}
 \end{table}
@@ -165,10 +169,10 @@ web-G  & 875,713 & 5,105,039 & 434,818 & 66.98\%     \\  %\hline
 
 It is well-known that article citations obey a natural temporal order, \ie an article only cites those published earlier, and it is really rare for the mutual citation of two articles published in the same time. That is, $|E_i|$ is essentially small for the citation graphs of scholarly articles.
 %
-We also collect the statistics of citation graphs and Web graphs, shown in Table~\ref{tab-batch}, to verify our observation.
-Due to the existence of the ``bow tie'' structure and the giant \scc in Web graphs~\cite{BroderKMRRSTW00}, the edge ratios $|E_i|/|E|$ are greater than 50\% of $|E|$ for all Web graphs~\cite{LeskovecLDM09}. In contrast, $|E_i|/|E|$ is less than 1\% for all tested citation graphs of scholarly articles.
+We also collect the statistics of citation graphs, venue graphs and Web graphs, shown in Table~\ref{tab-batch}, to verify our observation.
+Due to the existence of the ``bow tie'' structure and the giant \scc in Web graphs~\cite{BroderKMRRSTW00}, the edge ratios $|E_i|/|E|$ are greater than 50\% of $|E|$ for all Web graphs~\cite{LeskovecLDM09}. In contrast, $|E_i|/|E|$ is less than 3\% for all tested citation graphs and venue graphs of scholarly data.
 %
-Taking $t=100$ for example, algorithm \twprscc needs to scan about $2|E|$ edges on citation graphs, while over $50|E|$ edges are needed on Web graphs.
+Taking $t=100$ for example, algorithm \twprscc needs to scan about $2|E|$ edges on citation graphs, and $4|E|$ edges on venue graphs, while over $50|E|$ edges are needed on Web graphs.
 
 
 By Corollary \ref{prop-prscc}, Lemma \ref{prop-venue-time-complexity} and the  above analysis of our block-wise algorithm, we have informally established Claim~\ref{thm-prestige}.
