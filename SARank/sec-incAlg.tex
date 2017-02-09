@@ -98,32 +98,34 @@ For the prestige of articles and venues, we propose an incremental algorithm to 
 \end{figure}
 %%%%%%%%%%%%Algorithm
 
-The incremental prestige computation for article and venues in a specific year is to compute the TWPageRank vector on the updated graph $G^+$, given an update $\Delta$ = $\Delta V\cup\Delta E$ and the results on the original graph $G$.
+Consider a citation or venue graph $G(V, E)$, its TWPageRank vector $PR$ and the topological order $O$ of its block-wise graph. Given an update $\Delta$ = $\Delta V\cup\Delta E$ to $G$, the incremental prestige computation for article and venues in a specific year is to compute the TWPageRank vector $PR^+$ on the updated graph $G^+(V\cup\Delta V, E\cup\Delta E)$.
+
+
+\stitle{Auxiliary data structure maintenance}. 
+Two auxiliary data structures in the batch algorithm~\twprscc need to be maintained : (a) the block-wise graph,  a mapping that, given a node of graph $G$, returns the index of the \scc to which it belongs, and (b) the topological order of the nodes in the block-wise graph.
 %
-Algorithm~\twprscc maintains two auxiliary data structures for computing TWPageRank: a) a mapping $Map$ that, given a node of the citation graph or venue graph $G$, returns the index of the SCC it belongs to,
-and b) a sequence $Seq$ of a valid topological order of the block-wise graph $G'$.
-Observing that both of $Map$ and $Seq$ can be easily maintained given the update $\Delta$, the idea is to divide $G$ into affected and unaffected areas such that TWPageRank scores of nodes in affected and unaffected areas are updated accordingly.
+Observing that these auxiliary data structures can be easily maintained as follows.
+
+%the idea is to divide $G$ into affected and unaffected areas such that TWPageRank scores of nodes in affected and unaffected areas are updated accordingly.
 
 
-%% DS maintain
-\stitle{Auxiliary data structure maintain}. The two auxiliary data structures are dynamically maintained as follows.
+\noindent(1) The block-wise graph of $G^+$ needs to be computed, whose \sccs consists of the \sccs in $G$ and \sccs in the induced subgraph $G^+[\Delta V]$, as  the edges $\Delta E$ are  on $\Delta V$ and from $\Delta V$  to $V$ only. Hence, only those new \sccs in $G^+[\Delta V]$ need to be computed.
 
-\sstab(1) We extend $Map$ with nodes of $\Delta V$ as well as their corresponding SCC indexes computed on the induced subgraph $G^+[\Delta V]$, based on the fact that there only exist edges from $\Delta V$  to $V$.
-%The set of SCCs on the updated graph $G^+$ consists of existing SCCs on $G$ and SCCs on the induced subgraph $G^+[\Delta V]$, based on the fact that there only exist edges from $\Delta V$  to $V$.
-
-\sstab(2) We extend $Seq$ such that $O^+=\Delta O/O$, where $\Delta O$ is a topological order of the block-wise graph $G'_\Delta(V'_\Delta,E'_\Delta)$ of $G^+[\Delta V]$. And we have:
-%Let $\Delta O$ be a topological order of the block-wise graph $G'_\Delta(V'_\Delta,E'_\Delta)$ of $G^+[\Delta V]$; further let $O^+$ be $\Delta O/O$. We then have the follows.
+\noindent(2) The the topological order $O^+=\Delta O/O$, where $\Delta O$ is the topological order of the block-wise graph of $G^+[\Delta V]$. Hence, only $\Delta O$ needs to be computed. One can easily verify the following.
 
 
 \begin{lemma} \label{lemma-inc-topo}
 $O^+$ is indeed a valid topological order of $G^+{'}$.
 \end{lemma}
 
+\eat{
 \begin{proof}
 Let $E'_c$ denote the set of cross edges from $V'_\Delta$ to $V'$.
 It suffices to show that for each $(u,v)\in E'\cup E'_\Delta \cup E'_c$, $u$ comes before $v$ in $O^+$,
 which obviously holds (1) for  $E'\cup E'_\Delta$ as $O$ and $\Delta O$ are topological orders of $G'$ and $G'_\Delta$, respectively, and (2) for $E_{c}'$ as nodes in $G'_\Delta$ come before nodes in $G'$.
 \end{proof}
+}
+
 
 %%% affected/unaffected division
 \stitle{Affected and unaffected areas}.
