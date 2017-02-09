@@ -1,25 +1,23 @@
 \section{Dynamic Ranking Computation}
 \label{sec-incAlg}
 
-Scholarly article data is dynamic and continuously growing, and, hence, it is impractical to recompute the ranking from scratch for each update. In this section, we propose an incremental algorithm for our ranking model \ensemblerank to deal with  the dynamic scenario.
+Scholarly articles are dynamic, and it is impractical to recompute ranking from scratch once they get updated. In this section, we present an incremental algorithm for our ranking model \ensemblerank.
 
 
 \subsection{Incremental Algorithm Framework}
 \label{subsec-inc-alg}
 
-We finally present the complete incremental algorithm \incensemble, which is similar to the batch algorithm \batensemble, except that (1) it uses algorithm \inctwprscc to incrementally compute the prestige of articles and venues, and (2) it incrementally computes the popularity of articles based on Eq.~(\ref{eq-inc-pop}).
 
 
 
-
-
-\stitle{Incremental prestige computation}. We first present the incremental  prestige computation. Again, it differs for the prestige of articles and venues in a specific year and the one of authors.
-
-The incremental prestige computation for authors is exactly the same as \batensemble, due to the way that the prestige of authors is defined and the prestige of each article is potentially changed.
+Our incremental algorithm \incensemble incrementally computes the popularity and prestige of scholarly articles.
+We consider an update $\Delta$ = $\Delta V\cup\Delta E$ is added to a   (citation or venue) graph $G(V, E)$,
+and the resulting graph is denoted as $G^+(V\cup\Delta V, E\cup\Delta E)$, where
+$\Delta V\cap V = \emptyset$ is a set of nodes, and $\Delta E$ is a set of directed edges on $\Delta V$ and from $\Delta V$ to $V$ only, as article citations obey a natural temporal order, \ie an article only cites those published earlier, and it is really rare for the mutual citation of two articles published in the same time.
 
 
 \stitle{Incremental popularity computation}.
-As the popularity of articles is defined as the sum of all their citations' freshness, it is very convenient to incrementally maintain. Again, we denote the popularity of node $v$ on citation graphs $G^c$ and $G^{c,+}$ as $pop_c(v)$ and $pop_c^+(v)$, respectively.
+As the popularity of articles is defined as the freshness sum of all their citations, it is convenient to maintain. Again, we denote the popularity of node $v$ on citation graphs $G^c$ and $G^{c,+}$ as $pop_c(v)$ and $pop_c^+(v)$, respectively.
 
 Given an update $\Delta^c$ = $\Delta V^c\cup\Delta E^c$, the updated popularity $pop_{c}^+(v)$ can be easily computed as:
 \begin{small}
@@ -40,7 +38,18 @@ Here $T_0$ and $T^+_0$ are the current time in $G^c$ and $G^{c,+}$.
 It is easy to see that the time complexity of incrementally updating popularity is $O($ $|V^c|+|\Delta V^c|+|\Delta E^c|)$.
 %This further shows that Eq.~(\ref{eq-inc-pop}) is a desired solution for popularity maintenance.
 
-Moreover, the popularity computation for venues and authors is exactly the same as \batensemble, due to the way that the  popularity of venues in a specific year and authors is defined, and the popularity of every article is potentially changed.
+Moreover, the popularity computation for venues and authors is exactly the same as \batensemble, similar to the incremental prestige computation for authors.
+%due to the way that the  popularity of venues in a specific year and authors is defined, and the popularity of every article is potentially changed.
+
+
+\stitle{Incremental prestige computation}.  We first present the incremental  prestige computation. Again, it differs for the prestige of articles and venues in a specific year and the one of authors.
+
+The incremental prestige computation for authors is exactly the same as \batensemble, due to the way that the prestige of authors is defined and the prestige of each article is potentially changed. Indeed, it is meaningless to develop incremental algorithm for that due to the large number of affected authors.
+
+
+We finally present the complete incremental algorithm \incensemble, which is similar to the batch algorithm \batensemble, except that (1) it uses algorithm \inctwprscc to incrementally compute the prestige of articles and venues, and (2) it incrementally computes the popularity of articles based on Eq.~(\ref{eq-inc-pop}).
+
+
 
 
 \subsection{Incremental TWPageRank Computation}
@@ -48,11 +57,7 @@ Moreover, the popularity computation for venues and authors is exactly the same 
 
 %\subsubsection{Prestige of articles and venues in a specific year}
 %\label{subsubsec-incprs-CV}
-\subsubtitle{Prestige of articles and venues in a specific year}.
-Consider an update $\Delta$ = $\Delta V\cup\Delta E$ added to citation graph or venue graph $G(V, E)$,
-and the resulting graph is $G^+(V\cup\Delta V, E\cup\Delta E)$, where
-$\Delta V$ is a set of nodes with $\Delta V\cap V = \emptyset$, and $\Delta E$ is a set of directed edges on $\Delta V$ and from $\Delta V$ to $V$ only, by the temporal order of citations.
-Note that in the following notations without/with superscript `$+$' are defined on $G$ and $G^+$, respectively.
+%\subsubtitle{Prestige of articles and venues in a specific year}.
 %We expand $M$ and $PR$ to the same sizes as $M^+$ and $PR^+$, respectively, by filling zeros, and let $\Delta M=M^+ - M$ and $\Delta PR = PR^+ - PR$.
 
 
@@ -98,16 +103,19 @@ Note that in the following notations without/with superscript `$+$' are defined 
 
 The incremental prestige computation for article and venues in a specific year is to compute the TWPageRank vector on the updated graph $G^+$, given an update $\Delta$ = $\Delta V\cup\Delta E$ and the results on the original graph $G$.
 %
-Algorithm~\twprscc computes SCCs of citation and venue graphs $G$ as well as the an topological order of the block-wise graph $G'$ as auxiliary data structures.
-Observing that the update $\Delta$ has no impacts on either of the two data structures, the idea is to divide $G$ into affected and unaffected areas such that TWPageRank scores of nodes in affected and unaffected areas are updated accordingly.
+Algorithm~\twprscc maintains two auxiliary data structures for computing TWPageRank: a) a mapping $Map$ that, given a node of the citation graph or venue graph $G$, returns the index of the SCC it belongs to,
+and b) a sequence $Seq$ of a valid topological order of the block-wise graph $G'$.
+Observing that both of $Map$ and $Seq$ can be easily maintained given the update $\Delta$, the idea is to divide $G$ into affected and unaffected areas such that TWPageRank scores of nodes in affected and unaffected areas are updated accordingly.
 
 
 %% DS maintain
-\stitle{Auxiliary data structure maintain}. The two auxiliary data structures can be maintained dynamically.
+\stitle{Auxiliary data structure maintain}. The two auxiliary data structures are dynamically maintained as follows.
 
-\sstab(1) The set of SCCs on the updated graph $G^+$ consists of existing SCCs on $G$ and SCCs on the induced subgraph $G^+[\Delta V]$, based on the fact that there only exist edges from $\Delta V$  to $V$.
+\sstab(1) We extend $Map$ with nodes of $\Delta V$ as well as their corresponding SCC indexes computed on the induced subgraph $G^+[\Delta V]$, based on the fact that there only exist edges from $\Delta V$  to $V$.
+%The set of SCCs on the updated graph $G^+$ consists of existing SCCs on $G$ and SCCs on the induced subgraph $G^+[\Delta V]$, based on the fact that there only exist edges from $\Delta V$  to $V$.
 
-\sstab(2) Let $\Delta O$ be a topological order of the block-wise graph $G'_\Delta(V'_\Delta,E'_\Delta)$ of $G^+[\Delta V]$; further let $O^+$ be $\Delta O/O$. We then have the follows.
+\sstab(2) We extend $Seq$ such that $O^+=\Delta O/O$, where $\Delta O$ is a topological order of the block-wise graph $G'_\Delta(V'_\Delta,E'_\Delta)$ of $G^+[\Delta V]$. And we have:
+%Let $\Delta O$ be a topological order of the block-wise graph $G'_\Delta(V'_\Delta,E'_\Delta)$ of $G^+[\Delta V]$; further let $O^+$ be $\Delta O/O$. We then have the follows.
 
 
 \begin{lemma} \label{lemma-inc-topo}
@@ -188,7 +196,7 @@ Figure~\ref{fig-inc-division} illustrates an example of affected and unaffected 
 Figure~\ref{fig-inc-division} illustrates an example of incremental TWPageRank computation. Consider an update $\Delta$ on the original graph $G$. It is obvious that the update $\Delta$ has on impacts on the SCCs of $G$, and $O^+$ defined earlier is a valid topological order of $G^+{'}$. The original graph $G$ is then divided into affected and unaffected areas, in which subgraphs $G_A$, $G_B$ and $G_C$ are associated with node sets $V_A$, $V_B$ and $\Delta V$, respectively. Here the citation peak time of node $x$ is changed, which leads to the changes of the normalized weights of edges $(w,x)$, $(w,y)$ and $(w,z)$. When updating the TWPageRank scores, following $O^+$, scores of nodes in $G_C$, $G_B$ and $G_A$ are computed by iterations from scratch, by iterations using existing TWPageRank vector and by scaling, respectively.
 \end{example}
 
-\begin{lemma} 
+\begin{lemma}
 \label{lemma-subgraphA}
 The TWPageRank vector $PR^+$ returned by~\inctwprscc converges such that $||PR^+-PR^{*}||_1 < \epsilon$, where $PR^{*}$ is the convergent TWPageRank vector.
 \end{lemma}
