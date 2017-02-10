@@ -139,14 +139,14 @@ The TWPageRank vector $PR$ of graph $G$ is mainly affected in two ways.
 %
 Then $V_B=V_{B,1}\cup V_{B,2}\cup V_{B,3}$ is obviously the set of nodes in $G$ affected by the update $\Delta$.
 %
-As a result, TWPageRank scores on $V_B$ are recomuted with iterations: 
+As a result, TWPageRank scores on $V_B$ are recomuted with iterations. 
 %using the existing TWPageRank vector scaled with constant ${n}/{n^+}$.
 %
 \begin{small}
 \begin{equation}\label{eq-inc-prscc}
 \begin{split}
-PR^+(v) = &  d \sum_{(u,v)\in E^+_i} M^+_{u,v} PR^+(u) + d \sum_{(u,v)\in E^+_a} M^+_{u,v} PR^+(u) + \frac{n}{n^+} PR(v) \\
- & - \frac{n\cdot d}{n^+} \sum_{(u,v)\in E_i} M_{u,v} PR(u) - \frac{n\cdot d}{n^+} \sum_{(u,v)\in E_a} M_{u,v} PR(u).
+PR^+(v) \ = \ &  d \sum_{(u,v)\in E^+_i} M^+_{u,v} PR^+(u) + d \sum_{(u,v)\in E^+_a} M^+_{u,v} PR^+(u)  \\
+ + \frac{n}{n^+} \Big( PR(v) &  - d \sum_{(u,v)\in E_i} M_{u,v} PR(u) - d\sum_{(u,v)\in E_a} M_{u,v} PR(u)\Big).
 \end{split}
 \end{equation}
 \end{small}
@@ -253,7 +253,7 @@ These make \inctwprscc faster than \twprscc even though they have very similar t
 
 \marked{
 \stitle{Time \& space complexity analyses of the complete algorithm}.
-By the analyses above, the time complexity of \incensemble is the same as \batensemble, except that \incensemble saves $O(|E^c_A\cup E^c_{AB}|)$ time on the updated citation graph and $O(|E^v_A\cup E^v_{AB}|)$ time on the updated venue graph when updating scores. And its space complexity is also the same as \batensemble, except that \incensemble uses $(|V^c\cup\Delta V^c|+|V^v\cup\Delta V^v|)$ extra space to store the affected and unaffected areas and $|E^c\cup \Delta E^c|+|E^v\cup \Delta E^v|$ extra space to store edge weights before updates.
+By the analyses above, the time complexity of \incensemble is the same as \batensemble, except that \incensemble saves $O(|E^c_A\cup E^c_{AB}|)$ and $O(|E^v_A\cup E^v_{AB}|)$ time on the updated citation graphs and venue graphs when updating scores. And its space complexity is also the same as \batensemble, except that it uses $(|V^c\cup\Delta V^c|+|V^v\cup\Delta V^v|)$ extra space to store the affected/unaffected areas and $|E^c\cup \Delta E^c|+|E^v\cup \Delta E^v|$ extra space to store original edge weights.
 }
 
 \marked{
