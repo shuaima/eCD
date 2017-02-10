@@ -21,8 +21,8 @@ set xlabel "splitting year" offset 0, 0.5
 set key vertical samplen 2 spacing 1 at graph 0.97, 0.4
 #set key horizontal samplen 2 spacing 1.4 at graph 0.97, 0.98
 #set key horizontal font ",13" 
-plot "AMiner_time_twpr.tab" using ($1):($2) title '{/=13 TWPR}' with linespoints linetype 1 pointtype 6 lc 7 lw 3,\
-"AMiner_time_twpr.tab" using ($1):($3) title '{/=13 incTWPR}' with linespoints linetype 1 pointtype 3 lc rgb "orchid4" lw 3,\
+plot "AMiner_time_twpr.tab" using ($1):($3) title '{/=13 incTWPR}' with linespoints linetype 1 pointtype 3 lc rgb "orchid4" lw 3,\
+"AMiner_time_twpr.tab" using ($1):($2) title '{/=13 batTWPR}' with linespoints linetype 1 pointtype 6 lc 7 lw 3,\
 "AMiner_time_twpr.tab" using ($1):($4) title '{/=13 powTWPR}'  with linespoints linetype 1 pointtype 12 lc rgb "olive" lw 3
 
 
