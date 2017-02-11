@@ -15,6 +15,6 @@ set yr [0:20]
 set ylabel "% of total citations" offset 2
 set xlabel "# of years after publication"
 set key at graph 1, 0.92
-plot "citation.tab" using ($1):($2)*100 title 'AAN' with linespoints linetype 1 pointtype 6 lc 1 lw 2,\
-"citation.tab" using ($1):($4)*100 title 'DBLP' with linespoints linetype 1 pointtype 4 lc rgb "red" lw 2,\
-"citation.tab" using ($1):($3)*100 title 'MAG' with linespoints linetype 0 pointtype 3 lc rgb "blue" lw 4 
+plot "citation.tab" using ($1):($2)*100 title 'AAN' with linespoints linetype 1 pointtype 6 lc rgb '#d95319' lw 3,\
+"citation.tab" using ($1):($4)*100 title 'DBLP' with linespoints linetype 1 pointtype 4 lc rgb "#228B22"  lw 3,\
+"citation.tab" using ($1):($3)*100 title 'MAG' with linespoints linetype 0 pointtype 3 lc rgb '#7e2f8e' lw 4 
