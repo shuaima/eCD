@@ -24,11 +24,11 @@ as almost all venues and authors are affected  by the definitions of the popular
 As the popularity of articles is defined as the freshness sum of all their citations, it is convenient to maintain. Consider an updated citation graph $G^{c,+}(V^c\cup\Delta V^c, E\cup\Delta E^c)$ of $G^c(V^c, E^c)$,  the updated popularity $pop_{c}^+(v)$ can be easily computed as:
 \begin{small}
 \begin{equation}\label{eq-inc-pop}
-pop_c^+(v) = pop_c(v) {e^{\sigma (T^+_0-T_0)}} + \sum_{(u,v)\in \Delta E^c} {e^{\sigma (T^+_0-T_u)}}.
+pop_c^+(v) = pop_c(v) {e^{\sigma (T^+_0-T_0)}} + \sum_{(u,v)\in \Delta E^c} {e^{\sigma (T^+_0-T_u)}},
 \end{equation}
 \end{small}
 \noindent
-Where $pop_c(v)$ (resp. $pop_c^+(v)$) is the popularity of node $v$ on $G^c$ (resp. $G^{c,+}$), and
+where $pop_c(v)$ (resp. $pop_c^+(v)$) is the popularity of node $v$ on $G^c$ (resp. $G^{c,+}$), and
  $T_0$ (resp. $T^+_0$) is the current time in $G^c$ (resp. $G^{c,+}$).
 %
 By Eq.~(\ref{eq-inc-pop}), it is easy to see that it takes $O($ $|V^c|+|\Delta V^c|+|\Delta E^c|)$ time to update the popularity of articles.
@@ -69,12 +69,12 @@ For the prestige of articles and venues, we propose an incremental algorithm to 
 \mat{0ex}{
 %%%%%%%%%%%%%%%%%%%
 {\sl Input:\/} \= An update $\Delta$ = $\Delta V\cup\Delta E$, TWPageRank vector $PR$ of $G$,  and the   \\
-\hspace{6ex} topological order $O$ of the block-wise graph $G'(V',E')$.\\
+\hspace{6ex} topological order $O$ of the block-wise graph $G'$.\\
 {\sl Output:\/} TWPageRank vector $PR^+$ of the updated graph $G^+$. \\
 \bcc \hspace{1.5ex}\=  $G_C'$ := the block-wise graph of $G_C$; \\
 %\ \  $E_{CB}'$ := edges from $G_C'$ to $G'$\\
 \icc\> $\Delta O$ := topological order of $G_C'$; \ \ $O^+$ := $\Delta O/O$; \\
-\icc\> label all SCCs of $G$ with outgoing edges having weight changes as $B$, \\ \hspace{2.5ex} all remailing SCCs of $G$ as $A$ and all SCCs of $G_C$ as $C$;\\
+\icc\> label all SCCs of $G_C$ as $C$ and all SCCs of $G$ with outgoing edges having \\ \hspace{2.5ex} weight changes as $B$,  all remailing SCCs of $G$ as $A$\\
 \icc\>  \For each node $v'$ following $O^+$ \Do\\
 \icc\>\hspace{2.5ex}\= $scc$ := the corresponding SCC of $v'$; \\
 %\icc\>\>\If impact weight of $(v,w)$ is changed where $v\in scc$ \Then \\
@@ -82,7 +82,7 @@ For the prestige of articles and venues, we propose an incremental algorithm to 
 %\icc\>\>\> label SCC $w'$ as $B$ such that $(v',w')\in E'$; \\
 \icc\>\> \If $scc$ is labeled as $C$ \Then \\
 \icc\>\>\hspace{3ex}\= update $PR^+(v)$ where $v\in scc$ following algorithm~\twprscc; \\
-\icc\>\>\> label SCC $w'\in G'$ as $B$ such that $w'$ is reachable from $w$;\\
+\icc\>\>\> label SCC $w'$ as $B$ such that $w'\in G'$ and $(v', w')\in E^+{'}$;\\
 \icc\>\> \Else \If $scc$ is labeled as $B$ \Then \\
 \icc\>\>\> update $PR^+(v)$ where $v\in scc$ with Eq.~(\ref{eq-inc-prscc}) until the sum of \\ \hspace{8ex} TWPageRank score changes is less than $\epsilon\cdot \frac{|scc|}{|V^+|}$; \\
 \icc\>\>\> label SCC $w'$ as $B$ such that $(v',w')\in E'$;\\
@@ -138,7 +138,7 @@ The TWPageRank vector $PR$ of graph $G$ is mainly affected in two ways.
 %
 Then $V_B=V_{B,1}\cup V_{B,2}\cup V_{B,3}$ is obviously the set of nodes in $G$ affected by the update $\Delta$.
 %
-As a result, TWPageRank scores on $V_B$ are recomputed by iterations as follows.
+As a result, TWPageRank scores on $V_B$ are incrementally re-iterated as follows.
 %using the existing TWPageRank vector scaled with constant ${n}/{n^+}$.
 %
 \begin{small}
@@ -167,15 +167,15 @@ It takes as input an update $\Delta$ and the previous results on the original gr
 %by concatenating the topological orders of $G_C'$ and $G'$
 (lines 1--2). %Note that $G_C'$ is the same to $G'_\Delta$.
 %
-After that, it labels the newly added \sccs with $C$ and existing \sccs with $A$ or $B$, depending on whether the existing \sccs have outgoing edges with weight changes (line 3).
+After that, it labels the newly added \sccs with $C$ and existing \sccs with $A$ or $B$, depending on whether the existing \sccs have weight changes on outgoing edges (line 3).
 %
-It then updates the TWPageRank scores of nodes in each \scc following $O^+$ according to the labels (lines 4--12) and finally returns the TWPageRank vector (line 13).
+It then processes each \scc in the order $O^+$ such that the TWPageRank scores of nodes in each \scc are updated according to the labels (lines 4--12), and finally returns the TWPageRank vector (line 13).
 %
 %More specifically, the scores of nodes in SCCs labeled as $C$ and $B$ are updated the same to Algorithm~\twprscc, while the scores of nodes in SCCs labeled as $A$ are simply scaled.
 %
 %It is also easy to verify that nodes in SCCs labeled as $A$, $B$ and $V$ corresponding to $V_A$, $V_B$ and $V_C$.
 
-When processing $V_B$ with Eq.~(\ref{eq-inc-prscc}), the {\em edges in $E_{AB}$ can be skipped}  since $PR^+(u)={n}/{n^+}\cdot PR(u)$ for nodes $u\in V_A$ and $M_{u,v}=M^+_{u,v}$ such that $(u,v)\in E_{AB}$. Besides, we use ${n}/{n^+}\cdot PR$ as the initial iteration vector. Both of them can speed up the computation.
+When processing on $V_B$ with Eq.~(\ref{eq-inc-prscc}), the {\em edges in $E_{AB}$ can be skipped}  since $PR^+(u)={n}/{n^+}\cdot PR(u)$ for nodes $u\in V_A$ and $M_{u,v}=M^+_{u,v}$ given $(u,v)\in E_{AB}$. Besides, we use ${n}/{n^+}\cdot PR$ as the initial iteration vector. Both of them can speed up the computation.
 
 
 \eat{
@@ -208,7 +208,7 @@ Figure~\ref{fig-inc-division} illustrates an example of incremental TWPageRank c
 %
 It is obvious that the update $\Delta$ has on impacts on the SCCs of $G$, and $O^+$ defined earlier is a valid topological order of $G^+{'}$.
 %
-The original graph $G$ is then divided into affected and unaffected areas, in which subgraphs $G_A$, $G_B$ and $G_C$ are associated with node sets $V_A$, $V_B$ and $\Delta V$, respectively. Here the citation peak time of node $x$ is changed, and, hence, node $y$ as well as all nodes reachable from $y$ are included in $G_B$.
+The original graph $G$ is then partitioned into affected and unaffected areas, in which subgraphs $G_A$, $G_B$ and $G_C$ are associated with node sets $V_A$, $V_B$ and $\Delta V$, respectively. Here the citation peak time of node $x$ is changed, and, hence, node $y$ as well as all nodes reachable from $y$ are included in $G_B$.
 %
 When updating the TWPageRank scores, following $O^+$, scores of nodes in $G_C$, $G_B$ and $G_A$ are computed by iterations from scratch, by iterations with Eq.~(\ref{eq-inc-prscc}) using existing TWPageRank vector and by scaling, respectively.
 \end{example}
