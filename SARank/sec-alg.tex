@@ -6,12 +6,12 @@ In this section, we present our batch algorithm for computing scholarly article 
 \subsection{Algorithm Framework}
 \label{subsec-bat-alg}
 
-Our batch algorithm \batensemble  combines the importance scores computed by the citation, venue and author components with Eq. (\ref{eq-ensemble}). It takes as input academic graph data $D$ and an iteration threshold $\epsilon$ and returns the scholarly article ranking of $D$. It first constructs the citation and venue graphs $G^c(V^c,E^c)$ and $G^v(V^v,E^v)$. Then it computes the prestige and popularity of citation, venue and author components.
-Finally, it combines the  prestige and popularity of the three components to produce the final ranking with Eq. (\ref{eq-ensemble}).
+Our batch algorithm \batensemble  combines the importance scores computed by the citation, venue and author components with Eq.~(\ref{eq-ensemble}). It takes as input academic graph data $D$ and an iteration threshold $\epsilon$ and returns the scholarly article ranking of $D$. It first constructs the citation and venue graphs $G^c(V^c,E^c)$ and $G^v(V^v,E^v)$. Then it computes the prestige and popularity of citation, venue and author components.
+Finally, it combines the  prestige and popularity of the three components to produce the final ranking with Eq.~(\ref{eq-ensemble}).
 
 
 
-\stitle{Popularity computation}. It is easy to see that (a) the popularity of articles can be computed by scanning through all citations once and adding the freshness of citations to their corresponding articles, by Eq. (\ref{eq-pop}), and (b) the popularity of venues in a specific year or authors is computed by averaging the popularity of the articles published in the venues or by the authors.
+\stitle{Popularity computation}. It is easy to see that (a) the popularity of articles can be computed by scanning through all citations once and adding the freshness of citations to their corresponding articles, by Eq.~(\ref{eq-pop}), and (b) the popularity of venues in a specific year or authors is computed by averaging the popularity of the articles published in the venues or by the authors.
 That is, the popularity computation can be done by scanning through all citations once.
 
 
@@ -69,10 +69,10 @@ The main result here is to speed up the TWPageRank computation by exploiting the
 \begin{claim}
 \label{thm-prestige}
 %TWPageRank can be computed in linear time in practice on scholarly data obeying a temporal order.
-A block-wise PageRank computation method~\cite{Berkhin05} is a good choice for computing TWPageRank on scholarly articles.
+A block-wise PageRank computation method~\cite{Berkhin05} is a good choice for computing TWPageRank on scholarly data.
 \end{claim}
 
-The main idea of the block-wise PageRank computation is that each strongly connected component (\scc) of the inputted graph is treated as a block, and one block is processed at a time following the {\em topological order} of the block-wise graph, \ie each node represents a block of the original graph~\cite{Berkhin05}.
+The main idea of the block-wise PageRank computation is that each strongly connected component (\scc) of the inputted graph is treated as a block, and blocks are processed one by one following the {\em topological order} of the block-wise graph, \ie each node represents a block of the original graph~\cite{Berkhin05}.
 We next show Claim~\ref{thm-prestige} by introducing and analyzing such a block-wise computation method.
 
 
@@ -80,7 +80,7 @@ We next show Claim~\ref{thm-prestige} by introducing and analyzing such a block-
 %the directed and acyclic structure of the  can improve the efficiency of PageRank computation~\cite{Berkhin05,ObjectRank04}.
 
 \stitle{Block-wise algorithm~\twprscc}.  It takes as input a citation or venue graph $G$ and an iteration threshold $\epsilon$, and returns the TWPageRank vector of $G$.
-Moreover, to process an \scc instead of the entire graph, the edges of the citation or venue graph $G(V, E)$ are partitioned into the sets $E_i$ and $E_a$ of edges inside and across \sccs  such that $E_i\cap E_a = \emptyset$ and $E = E_i \cup E_a$.  The update rule in Eq. (\ref{eq-twpr-update})  is revised accordingly to treat $E_i$ and $E_a$ separately as follows.
+Moreover, to process an \scc instead of the entire graph, the edges of the citation or venue graph $G(V, E)$ are partitioned into the sets $E_i$ and $E_a$ of edges inside and across \sccs  such that $E_i\cap E_a = \emptyset$ and $E = E_i \cup E_a$.  The update rule in Eq.~(\ref{eq-twpr-update})  is revised accordingly to treat $E_i$ and $E_a$ separately as follows.
 \begin{small}
 \begin{equation}\label{eq-prscc}
 PR(v) =  d \sum_{(u,v)\in E_i} M_{u,v} PR(u)
@@ -150,7 +150,7 @@ We first prove that the sum of changes after another iteration from $PR$, \ie $|
 
 
 
-\stitle{Analysis of the block-wise algorithm}. While similar block-wise algorithms were originally proposed for Web graphs~\cite{Berkhin05}, we next show that they are even better for the TWPageRank computation associated with scholarly articles.
+\stitle{Analysis of the block-wise algorithm}. While similar block-wise algorithms were originally proposed for Web graphs~\cite{Berkhin05}, we next show that they are even better for the TWPageRank computation associated with scholarly data.
 %
 As the block-wise graph and its topological order can be done in $O(|V|+|E|)$ time~\cite{CormenLRS01}, and updating TWPageRank scores takes $O(|V|+|E_a|+t|E_i|)$ time as the edges in $E_a$ are only scanned once. From these, we have the following.
 
@@ -170,10 +170,10 @@ Given a citation graph or venue graph $G(V, E)$, block-wise algorithm \twprscc r
 
 
 
-It is well-known that article citations obey a natural temporal order, \ie an article only cites those published earlier, and it is really rare for the mutual citation of two articles published in the same time. That is, $|E_i|$ is essentially small for the citation graphs of scholarly articles.
+It is well-known that article citations obey a natural temporal order, \ie an article only cites those published earlier, and it is really rare for the mutual citations of two articles published in the same time. That is, $|E_i|$ is essentially small for the citation graphs of scholarly articles.
 %
 We also collect the statistics of citation graphs, venue graphs and Web graphs, shown in Table~\ref{tab-batch}, to verify our observation.
-Due to the existence of the ``bow tie'' structure and the giant \scc in Web graphs~\cite{BroderKMRRSTW00}, the edge ratios $|E_i|/|E|$ are greater than 50\% of $|E|$ for all Web graphs~\cite{LeskovecLDM09}. In contrast, $|E_i|/|E|$ is less than 3\% for all tested citation graphs and venue graphs of scholarly data.
+Due to the existence of the ``bow tie'' structure and the giant \scc in Web graphs~\cite{BroderKMRRSTW00}, the edge ratios $|E_i|/|E|$ are greater than 50\% for all Web graphs~\cite{LeskovecLDM09}. In contrast, $|E_i|/|E|$ is less than 3\% for all tested citation graphs and venue graphs of scholarly data.
 %
 Taking $t=100$ for example, algorithm \twprscc needs to scan about $2|E|$ and $4|E|$ edges on citation and venue graphs, respectively, while over $50|E|$ edges are needed on Web graphs.
 
@@ -245,7 +245,7 @@ Compared with the traditional power method~\cite{Brin98:PageRank}, our block-wis
 We first present the computation of the citation ensemble.
 
 It is easy to see that the popularity of articles can be computed by scanning all citations once and adding the freshness of citations to their corresponding articles,
-by Eq. (\ref{eq-pop}).
+by Eq.~(\ref{eq-pop}).
 %
 The prestige of articles is computed with TWPageRank on citation graphs, which occupies most computation cost of the citation ensemble.
 Nevertheless, we speed-up  TWPageRank computation on citation graphs by exploiting the temporal order of scholarly data.
@@ -497,7 +497,7 @@ As the prestige (popularity) of authors is defined as the average prestige (popu
 
 \subsection{The Complete Batch Algorithm}
 \label{subsec-bat-alg}
-We finally present the complete batch algorithm \batensemble, which combines the computation of the citation, author and venue ensembles with Eq. (\ref{eq-ensemble}). It takes as input academic graph data $D$ and an iteration threshold $\epsilon$ and returns the scholarly article ranking of $D$. It first constructs the citation and venue graphs $G^c(V^c,E^c)$ and $G^v(V^v,E^v)$. Then it computes the prestige and popularity of citation, venue and author ensembles.
+We finally present the complete batch algorithm \batensemble, which combines the computation of the citation, author and venue ensembles with Eq.~(\ref{eq-ensemble}). It takes as input academic graph data $D$ and an iteration threshold $\epsilon$ and returns the scholarly article ranking of $D$. It first constructs the citation and venue graphs $G^c(V^c,E^c)$ and $G^v(V^v,E^v)$. Then it computes the prestige and popularity of citation, venue and author ensembles.
 Finally, it combines the prestige and popularity of three ensembles to produce the final ranking.
 
 \stitle{Time \& space complexity analyses}. By the analyses above and Lemmas~\ref{prop-citation-time-complexity} \& \ref{prop-venue-time-complexity}, it is easy to verify that algorithm \batensemble runs in $O(|V^c|+|E^c|+|V^v|+|E^v_b|+t|E^v_w|+|PA|)$, where $|E^v_w|$ is the number of edges inside SCCs of $G^v$ and $|PA|$

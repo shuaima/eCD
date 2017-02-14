@@ -251,8 +251,24 @@ All these make \inctwprscc faster than \twprscc even though they have very simil
 %, as will also been shown by the experimental study,
 
 
+
+
+
+
 \stitle{Time \& space complexity analyses of the complete algorithm}.
 By the analyses above, the time complexity of \incensemble is the same as \batensemble, except that \incensemble saves $O(|E^c_A\cup E^c_{AB}|)$ and $O(|E^v_A\cup E^v_{AB}|)$ time on the updated citation graphs and venue graphs when updating scores. And its space complexity is also the same as \batensemble, except that it uses $(|V^c\cup\Delta V^c|+|V^v\cup\Delta V^v|)$ extra space to store the affected/unaffected areas and $(|E^c\cup \Delta E^c|+|E^v\cup \Delta E^v|)$ extra space to store the original edge weights.
+
+Despite the similar time complexity, algorithm \incensemble achieves substantial efficiency improvement over \batensemble, according to our statistics of affected/unaffected areas shown in Table 2.
+%
+(a) It saves $O(|V^c|+|E^c|)$ and $O(|V^v|+|E^v|)$ time when maintaining \sccs and the topological order based on $\Delta^c$ and $\Delta^v$ only, where ($|V^c|$, $|E^c|$, $|V^v|$, $|E^v|$) are more than (92\%, 89\%, 93\%, 89\%) of ($|V^{c,+}|$, $|E^{c,+}|$, $|V^{v,+}|$, $|E^{v,+}|$) on all tested graphs;
+(b) It saves $O(|E^c_A \cup E^c_{AB}|)$ time when updating scores on $V^c$, where edges in $E^c_A\cup E^c_{AB}$ accounts for more than 28\% of total edges;
+(c) It saves $O(|E^c|)$ time when computing popularity of articles, \ie more than 89\% of $|E^{c,+}|$;
+Finally, (d) It is likely to compute TWPageRank scores on $V^c_B$ and $V^v_B$ with less iterations.
+
+
+
+
+\eat{By the analyses above, the time complexity of \incensemble is the same as \batensemble, except that \incensemble saves $O(|E^c_A\cup E^c_{AB}|)$ and $O(|E^v_A\cup E^v_{AB}|)$ time on the updated citation graphs and venue graphs when updating scores. And its space complexity is also the same as \batensemble, except that it uses $(|V^c\cup\Delta V^c|+|V^v\cup\Delta V^v|)$ extra space to store the affected/unaffected areas and $(|E^c\cup \Delta E^c|+|E^v\cup \Delta E^v|)$ extra space to store the original edge weights.
 
 
 Indeed, algorithm \incensemble is typically faster than \batensemble as follows.
@@ -261,7 +277,7 @@ Indeed, algorithm \incensemble is typically faster than \batensemble as follows.
 (c) It saves $O(|E^c|)$ time when computing popularity of articles;
 And, finally, (d) It is likely to compute TWPageRank scores on $V^c_B$ and $V^v_B$ with less iterations.
 %
-According to our statistics on citation and venue graphs in Table 2, $|V_A\cup V_B|$ (\ie $|V|$) and $|E_A\cup E_{AB}\cup E_B|$ (\ie $|E|$) are more than 89\% of $|V^+|$ and $|E^+|$ on all graphs, respectively, and edges in $E_A\cup E_{AB}$ accounts for more than 28\% of total edges on all citation graphs.
+According to our statistics on citation and venue graphs in Table 2, $|V_A\cup V_B|$ (\ie $|V|$) and $|E_A\cup E_{AB}\cup E_B|$ (\ie $|E|$) are more than 89\% of $|V^+|$ and $|E^+|$ on all graphs, respectively, and edges in $E_A\cup E_{AB}$ accounts for more than 28\% of total edges on all citation graphs.}
 
 %
 %
