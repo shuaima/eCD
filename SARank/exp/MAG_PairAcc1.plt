@@ -22,7 +22,7 @@ set key vertical samplen 2 spacing 1.0 at graph 0.98, 0.48
 #set key horizontal font ",13" 
 plot "MAG_PairAcc1_error.tab" using ($1):($2) title '' with linespoints linetype 0 pointtype 4 lc rgb "red" lw 5,\
 "MAG_PairAcc1.tab" using ($1):($5) title 'HRank' with linespoints linetype 1 pointtype 4 lc rgb "blue" lw 3,\
-"MAG_PairAcc1.tab" using ($1):($3) title 'FRank' with linespoints linetype 1 pointtype 2 lc rgb "green" lw 3,\
+"MAG_PairAcc1.tab" using ($1):($3) title 'FRank' with linespoints linetype 1 pointtype 2 lc rgb "#228B22" lw 3,\
 "MAG_PairAcc1.tab" using ($1):($2) title 'PRank' with linespoints linetype 1 pointtype 1 lc 1 lw 3,\
 "MAG_PairAcc1.tab" using ($1):($4) title 'SARank' with linespoints linetype 1 pointtype 6 lc 7 lw 3,\
 

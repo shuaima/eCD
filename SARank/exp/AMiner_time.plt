@@ -22,7 +22,7 @@ set key horizontal samplen 1.2 spacing 1 at graph 1, 0.7
 set key font ",14"
 #set key horizontal font ",13" 
 plot "AMiner_time.tab" using ($1):($6) title 'HRank' with linespoints linetype 1 pointtype 4 lc rgb "blue" lw 3,\
-"AMiner_time.tab" using ($1):($2) title 'FRank' with linespoints linetype 1 pointtype 2 lc rgb "green" lw 3,\
+"AMiner_time.tab" using ($1):($2) title 'FRank' with linespoints linetype 1 pointtype 2 lc rgb "#228B22" lw 3,\
 "AMiner_time.tab" using ($1):($4) title 'powSARank' with linespoints linetype 1 pointtype 12 lc rgb "olive" lw 3,\
 "AMiner_time.tab" using ($1):($3) title 'batSARank' with linespoints linetype 1 pointtype 6 lc 7 lw 3,\
 "AMiner_time.tab" using ($1):($5) title 'incSARank' with linespoints linetype 1 pointtype 3 lc rgb "orchid4" lw 3
