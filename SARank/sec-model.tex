@@ -1,7 +1,7 @@
 \section{Ranking Model}
 \label{sec-model}
 
-In this section, we first present Time-Weighted PageRank for evaluating  the importance of scholarly articles, and then introduce our ranking
+In this section, we first present Time-Weighted PageRank for evaluating  the importance, defined as a combination of the prestige and popularity, of scholarly articles, and then introduce our ranking
 model, referred to as \ensemblerank, that assembles the importance of articles, venues and authors involved in scholarly articles.
 
 %It further assembles the importance of heterogeneous entities involved to rank scholarly articles.
@@ -82,7 +82,7 @@ PR^{(t)}=d M^T  PR^{(t-1)} + (1-d)\cdot e/n.
 %
 \noindent
 Here $PR^{(t)}$ and $PR^{(t-1)}$ %, consisting of PageRank scores of all nodes,
-are two TWPageRank vectors after $t$ and $t-1$ iterations, respectively, $M$ is the transition matrix such that $M_{u,v}=w(u,v)/W(u)$ and $e$ is a $n$-dimensional vector $[1]_{n\times1}$.
+are two TWPageRank vectors after $t$ and $t-1$ iterations, respectively, $M$ is the transition matrix such that $M_{u,v}=w(u,v)/W(u)$ and $e$ is an $n$-dimensional vector $[1]_{n\times1}$.
 
 %We next present the convergence  of TWPageRank as follows.
 The linear systems in Eq.~(\ref{eq-twpr-update}) is equivalent to {\em irreducible} and {\em aperiodic} Markov chains~\cite{CorsoGR05}, which guarantees the following.
@@ -144,14 +144,6 @@ Observer that (a), intuitively, prestige favors articles with many citations soo
 
 
 
-\begin{figure}[tb!]
-\centering
-%\includegraphics[scale=0.15]{fig/framework.eps}
-\includegraphics[scale=0.15]{fig/framework-lite-2.eps}
-\vspace{-2.5ex}
-\caption{\small Ranking model \ensemblerank} \label{fig-rankmodel}
-\vspace{-3.5ex}
-\end{figure}
 
 
 
@@ -180,11 +172,11 @@ Intuitively, the more an article has recent citations, the higher its popularity
 %
 Note that the popularity is also normalized such that the sum of  all articles is equal to $1$, similar to the prestige produced by TWPageRank.
 
-\sstab(3) The prestige and popularity are finally seamlessly combined to produce importance of an article. As important articles are both prestigious and popular, the {\em citation importance score} of an article is defined as the geometric mean of its prestige and popularity.
+\sstab(3) The prestige and popularity are finally seamlessly combined to produce importance of an article. As important articles are both prestigious and popular, the {\em citation importance score} of an article is defined as a weighted combination of its prestige and popularity.
 \begin{small}
 \begin{equation}\label{eq-imp}
 %Imp_c(v) = \sqrt{Prs_c(v) \cdot Pop_c(v)}.
-Imp_c(v) = Prs_c(v)^\lambda \cdot Pop_c(v)^{1-\lambda}, 
+Imp_c(v) = Prs_c(v)^\lambda \cdot Pop_c(v)^{1-\lambda},
 \end{equation}
 \end{small}
 \noindent where $\lambda \in [0,1]$ is the importance weighting factor.
@@ -207,6 +199,18 @@ w_v(s,t)  = \sum_{u\in C(s), v\in C(t)} w(u,v).
 Here, $C(s)$ and $C(t)$ are the collections of articles published in $s$ and $t$, respectively, and $w(u,v)$ is the impact weight of edge $(u, v)$ produced in the citation component.
 
 The prestige of a venue in a specific year is computed using the impact weights and the update rule in Eq.~(\ref{eq-twpr}), and the popularity of a venue in a specific year is defined as the average popularity of its articles. The prestige and popularity are combined to derive the importance of a venue in a specific year in the same way as the citation component. Finally, the importance of a venue is treated as the {\em venue importance score} for all articles published in this venue.
+
+
+\begin{figure}[tb!]
+\centering
+%\includegraphics[scale=0.15]{fig/framework.eps}
+\includegraphics[scale=0.15]{fig/framework-lite-2.eps}
+\vspace{-2ex}
+\caption{\small Ranking model \ensemblerank} \label{fig-rankmodel}
+\vspace{-3ex}
+\end{figure}
+
+
 
 \stitle{Author component}.
 The author component computes the importance of authors with their published articles.
