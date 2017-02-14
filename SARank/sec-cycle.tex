@@ -1,0 +1,37 @@
+Actually, the citation networks of scholarly article in the three datasets are not DAG, since there are some mistaken citaions which can't be found in the references of articles. In order to delete these edges to make sure the citation network is a DAG, we do the followings:
+(1) Detect possible loops in the network by depth-first-search,
+(2) Delete all the edges in loops found in (1) only if all the edges in the loop haven't be deleted,
+(3) Repeat (1)-(2) until there is no loop in the network.
+
+These 3 datasets were cleaned by deleting loops using this method, which accounted for (0.84\%, 0.13\%, 0.05\%) of the total citations on (\aan, \aminer, \magdata).
+
+The results of \PairAcc are reported in Table~4. When deleting loops, the \PairAcc of all algorithms change smaller than 1\%, indicating that the loops don't effect the results much.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}[t!]
+%\vspace{-2ex}
+\label{tab-result}
+\begin{center}
+\begin{small}
+\vspace{1ex}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+{\bf Datasets}   &  \hspace{2ex}\pagerank\hspace{2ex}     & \hspace{2ex}\futurerank\hspace{2ex}  &  \hspace{2ex}\hhgrank\hspace{2ex}  &   \hspace{2ex}\ensemblerank\hspace{2ex}    \\
+\hline \hline
+\aan  & $0.671/0.673$   & $0.738/0.739$   & $0.758/0.758$     & {\bf 0.803/0.804}      \\  %\hline
+\aminer  & $0.731/0.731$   & $0.782/0.781$   & $0.787/0.787$     & {\bf 0.795/0.796}      \\ %\hline
+\magdata  & $0.615/0.614$   & $0.655/0.655$   & $0.658/$     & {\bf 0.677/0.677}      \\ \hline
+\hline \hline
+\aan  & $0.685/0.679$   & $0.778/0.777$   & $0.768/0.767$     & {\bf 0.801/0.802}      \\  %\hline
+\aminer  & $0.682/0.681$   & $0.779/0.779$   & $0.797/0.797$     & {\bf 0.855/0.855}      \\ %\hline
+\magdata  & $0.739/0.739$   & $0.798/$   & $0.826/$     & {\bf 0.840/0.840}      \\ \hline
+\end{tabular}
+\vspace{-.5ex}
+\end{small}
+\end{center}
+\caption{\small Accuracy tests with \recom}
+\vspace{-7ex}
+\end{table}
+%%%%%%%%%%%%%%%%%%%
+
+
