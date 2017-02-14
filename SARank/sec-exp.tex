@@ -161,28 +161,6 @@ When quantity measures are evaluated, the test was repeated over 5 times and the
 }
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{table}[t!]
-%\vspace{-2ex}
-\label{tab-result}
-\begin{center}
-\begin{small}
-\vspace{1ex}
-\begin{tabular}{|c|c|c|c|c|}
-\hline
-{\bf Datasets}   &  \hspace{2ex}\pagerank\hspace{2ex}     & \hspace{2ex}\futurerank\hspace{2ex}  &  \hspace{2ex}\hhgrank\hspace{2ex}  &   \hspace{2ex}\ensemblerank\hspace{2ex}    \\
-\hline \hline
-\aan  & $0.671$   & $0.738$   & $0.758$     & {\bf 0.803}      \\  %\hline
-\aminer  & $0.731$   & $0.782$   & $0.787$     & {\bf 0.795}      \\ %\hline
-\magdata  & $0.615$   & $0.655$   & $0.658$     & {\bf 0.677}      \\ \hline
-\end{tabular}
-\vspace{-.5ex}
-\end{small}
-\end{center}
-\caption{\small Accuracy tests with \recom}
-\vspace{-7ex}
-\end{table}
-%%%%%%%%%%%%%%%%%%%
 
 
 %% 5 column * 3 row
@@ -264,6 +242,61 @@ When quantity measures are evaluated, the test was repeated over 5 times and the
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 }
 
+
+
+
+
+
+
+\subsection{Experimental Results}
+\label{subsec-expres}
+
+We next present our findings.
+
+\stitle{Exp-1: Effectiveness with \recom}.
+%\subsubsection{Exp-1: Effectiveness with \recom}
+In the first set of our tests, we used ground-truth \recom to evaluate the effectiveness of our approach.
+All algorithms used articles published before 2012, since \recom is based on this portion of articles.
+Aggregating parameters were selected as follows: $(\alpha,\beta,\gamma)$ = $(0.1, 0.2, 0.2)$ for \futurerank, $(a_{i1},a_{i2},a_{i3})$ = $(0.6, 0.2, 0.2)$ for \hhgrank ($i\in[1,3]$), and $(\alpha,\beta)$ = $(0.1, 0.8)$ for \ensemblerank.
+%The venue ensemble contributed most in \ensemblerank, indicating that venue information plays a key role when people recommend scholarly articles.
+The results of \PairAcc are reported in Table~3.
+
+The \PairAcc of \pagerank is much lower than other algorithms, indicating that citation information alone is insufficient for scholarly article ranking, and other information helps to refine the results. Moreover, \ensemblerank consistently ranks better than all competitors. Indeed, \ensemblerank improves the \PairAcc over (\pagerank, \futurerank, \hhgrank) by (13.2\%, 6.5\%, 4.5\%) on \aan, (6.4\%, 1.3\%, 0.8\%) on \aminer, and (6.2\%, 2.2\%, 1.9\%) on \magdata, respectively.
+
+\stitle{Exp-2: Effectiveness with \fcita}.
+%\subsubsection{Exp-2: Effectiveness with \fcita}
+In the second set of tests, we used ground-truth \fcita to evaluate the effectiveness.
+%All algorithms produced results based on articles in ranking data.
+Aggregating parameters were selected as follows: $(\alpha, \beta, \gamma)$ = $(0.7, 0.1,$ $0.2)$ for \futurerank, $(a_{i1}, a_{i2}, a_{i3})$ = $(0.3, 0.6, 0.1)$ for \hhgrank ($i\in[1, 3]$), and $(\alpha, \beta)$ = $(0.8, 0.1)$ for \ensemblerank.
+%Here the citation component contributed most in \ensemblerank, since \fcita is based on citation information.
+To evaluate the effectiveness of ranking in different scenarios, we varied three factors in our tests: the splitting year $Y_s$, the number $T_i$ of issued years, and the difference $dif$ of future citation counts.
+%
+Given $Y_s$, $T_i$ and $dif$, we only used scholarly article pairs whose articles were issued no earlier than $T_i$ years before $Y_s$ and the difference of future citation counts was equal to or larger than $dif$ to test the \PairAcc.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}[t!]
+%\vspace{-2ex}
+\label{tab-result}
+\begin{center}
+\begin{small}
+\vspace{1ex}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+{\bf Datasets}   &  \hspace{2ex}\pagerank\hspace{2ex}     & \hspace{2ex}\futurerank\hspace{2ex}  &  \hspace{2ex}\hhgrank\hspace{2ex}  &   \hspace{2ex}\ensemblerank\hspace{2ex}    \\
+\hline \hline
+\aan  & $0.671$   & $0.738$   & $0.758$     & {\bf 0.803}      \\  %\hline
+\aminer  & $0.731$   & $0.782$   & $0.787$     & {\bf 0.795}      \\ %\hline
+\magdata  & $0.615$   & $0.655$   & $0.658$     & {\bf 0.677}      \\ \hline
+\end{tabular}
+\vspace{-.5ex}
+\end{small}
+\end{center}
+\caption{\small Accuracy tests with \recom}
+\vspace{-7ex}
+\end{table}
+%%%%%%%%%%%%%%%%%%%
 
 \newcommand{\graphscale}{0.356} %0.38
 \newcommand{\graphmargin}{-4ex}
@@ -372,32 +405,6 @@ When quantity measures are evaluated, the test was repeated over 5 times and the
 \end{figure}
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-\subsection{Experimental Results}
-\label{subsec-expres}
-
-We next present our findings.
-
-\stitle{Exp-1: Effectiveness with \recom}.
-%\subsubsection{Exp-1: Effectiveness with \recom}
-In the first set of our tests, we used ground-truth \recom to evaluate the effectiveness of our approach.
-All algorithms used articles published before 2012, since \recom is based on this portion of articles.
-Aggregating parameters were selected as follows: $(\alpha,\beta,\gamma)$ = $(0.1, 0.2, 0.2)$ for \futurerank, $(a_{i1},a_{i2},a_{i3})$ = $(0.6, 0.2, 0.2)$ for \hhgrank ($i\in[1,3]$), and $(\alpha,\beta)$ = $(0.1, 0.8)$ for \ensemblerank.
-%The venue ensemble contributed most in \ensemblerank, indicating that venue information plays a key role when people recommend scholarly articles.
-The results of \PairAcc are reported in Table~3.
-
-The \PairAcc of \pagerank is much lower than other algorithms, indicating that citation information alone is insufficient for scholarly article ranking, and other information helps to refine the results. Moreover, \ensemblerank consistently ranks better than all competitors. Indeed, \ensemblerank improves the \PairAcc over (\pagerank, \futurerank, \hhgrank) by (13.2\%, 6.5\%, 4.5\%) on \aan, (6.4\%, 1.3\%, 0.8\%) on \aminer, and (6.2\%, 2.2\%, 1.9\%) on \magdata, respectively.
-
-\stitle{Exp-2: Effectiveness with \fcita}.
-%\subsubsection{Exp-2: Effectiveness with \fcita}
-In the second set of tests, we used ground-truth \fcita to evaluate the effectiveness.
-%All algorithms produced results based on articles in ranking data.
-Aggregating parameters were selected as follows: $(\alpha, \beta, \gamma)$ = $(0.7, 0.1,$ $0.2)$ for \futurerank, $(a_{i1}, a_{i2}, a_{i3})$ = $(0.3, 0.6, 0.1)$ for \hhgrank ($i\in[1, 3]$), and $(\alpha, \beta)$ = $(0.8, 0.1)$ for \ensemblerank.
-%Here the citation component contributed most in \ensemblerank, since \fcita is based on citation information.
-To evaluate the effectiveness of ranking in different scenarios, we varied three factors in our tests: the splitting year $Y_s$, the number $T_i$ of issued years, and the difference $dif$ of future citation counts.
-%
-Given $Y_s$, $T_i$ and $dif$, we only used scholarly article pairs whose articles were issued no earlier than $T_i$ years before $Y_s$ and the difference of future citation counts was equal to or larger than $dif$ to test the \PairAcc.
 
 
 %varying number of years as future period
