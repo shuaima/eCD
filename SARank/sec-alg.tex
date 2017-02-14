@@ -151,6 +151,9 @@ We first prove that the sum of changes after another iteration from $PR$, \ie $|
 
 
 \stitle{Analysis of the block-wise algorithm}. While similar block-wise algorithms were originally proposed for Web graphs~\cite{Berkhin05}, we next show that they are even better for the TWPageRank computation associated with scholarly articles.
+%
+As the block-wise graph and its topological order can be done in $O(|V|+|E|)$ time~\cite{CormenLRS01}, and updating TWPageRank scores takes $O(|V|+|E_a|+t|E_i|)$ time as the edges in $E_a$ are only scanned once. From these, we have the following.
+
 
 
 \begin{lemma}
@@ -158,14 +161,11 @@ We first prove that the sum of changes after another iteration from $PR$, \ie $|
 Given a citation graph or venue graph $G(V, E)$, block-wise algorithm \twprscc runs in  $O(|V|+|E_a|+t|E_i|)$ time, where $t$ is  the maximum number of iterations among all \sccs.
 \end{lemma}
 
-% move this to the full version
-\begin{proof}
-Observe that (a) the block-wise graph and its topological order can be done in $O(|V|+|E|)$ time~\cite{CormenLRS01}, and (b) updating the TWPageRank scores takes $O(|V|+|E_a|+t|E_i|)$ time as the edges in $E_a$ are only scanned once.
-\end{proof}
 
 
- Recall that (a)  $t$ is very likely to be in the tens to hundreds~\cite{Brin98:PageRank}, and (b) $O(|V|+|E_a|+t|E_i|)$ is essentially $O(|V|+|E|+(t-1)|E_i|)$ as $|E_i|$ + $|E_a|$  = $|E|$. Hence, the efficiency of block-wise algorithm \twprscc is mainly affected by $|E_i|$.
-That is, the smaller $|E_i|$ is, the faster the block-wise algorithm is.
+ Recall that $t$ is very likely to be in the tens to hundreds~\cite{Brin98:PageRank}. 
+ %, and (b) $O(|V|+|E_a|+t|E_i|)$ is essentially $O(|V|+|E|+(t-1)|E_i|)$ as $|E_i|$ + $|E_a|$  = $|E|$. 
+ Hence, the efficiency of block-wise algorithm \twprscc is mainly affected by $|E_i|$, \ie, the smaller $|E_i|$ is, the faster the algorithm is.
 
 
 

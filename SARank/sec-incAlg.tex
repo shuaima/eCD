@@ -59,45 +59,6 @@ For the prestige of articles and venues, we propose an incremental algorithm to 
 
 
 
-%%%%%%%%%%%%%%%%%%%%%Algorithm
-\begin{figure}[tb!]
-%\vspace{2ex}
-\begin{center}
-{\small
-\begin{minipage}{3.36in}
-\myhrule \vspace{-1.5ex}
-\mat{0ex}{
-%%%%%%%%%%%%%%%%%%%
-{\sl Input:\/} \= An update $\Delta$ = $\Delta V\cup\Delta E$, TWPageRank vector $PR$ of $G$,  and the   \\
-\hspace{6ex} topological order $O$ of the block-wise graph $G'$.\\
-{\sl Output:\/} TWPageRank vector $PR^+$ of the updated graph $G^+$. \\
-\bcc \hspace{1.5ex}\=  $G_C'$ := the block-wise graph of $G_C$; \\
-%\ \  $E_{CB}'$ := edges from $G_C'$ to $G'$\\
-\icc\> $\Delta O$ := topological order of $G_C'$; \ \ $O^+$ := $\Delta O/O$; \\
-\icc\> label all SCCs of $G_C$ as $C$ and all SCCs of $G$ with outgoing edges having \\ \hspace{2.5ex} weight changes as $B$,  all remailing SCCs of $G$ as $A$\\
-\icc\>  \For each node $v'$ following $O^+$ \Do\\
-\icc\>\hspace{2.5ex}\= $scc$ := the corresponding SCC of $v'$; \\
-%\icc\>\>\If impact weight of $(v,w)$ is changed where $v\in scc$ \Then \\
-%\icc\>\>\hspace{3ex}\= label $scc$ as $B$;\\
-%\icc\>\>\> label SCC $w'$ as $B$ such that $(v',w')\in E'$; \\
-\icc\>\> \If $scc$ is labeled as $C$ \Then \\
-\icc\>\>\hspace{3ex}\= update $PR^+(v)$ where $v\in scc$ following algorithm~\twprscc; \\
-\icc\>\>\> label SCC $w'$ as $B$ with $w'\in G'$ and $(v', w')\in E^+{'}$;\\
-\icc\>\> \Else \If $scc$ is labeled as $B$ \Then \\
-\icc\>\>\> update $PR^+(v)$ where $v\in scc$ with Eq.~(\ref{eq-inc-prscc}) until the sum of \\ \hspace{8ex} TWPageRank score changes is less than $\epsilon\cdot \frac{|scc|}{|V^+|}$; \\
-\icc\>\>\> label SCC $w'$ as $B$ with $(v',w')\in E'$;\\
-\icc\>\> \Else $PR^+(v)$:=$PR(v)\cdot {n}/{n^+}$ where $v\in scc$; \\
-\icc\> \Return $PR^+$.
-}
-\vspace{-2.5ex} \myhrule
-\end{minipage}
-}
-\end{center}
-\vspace{-3ex}
-\caption{\small Algorithm~\inctwprscc for incremental TWPageRank} \label{alg-inctwprscc}
-\vspace{-3ex}
-\end{figure}
-%%%%%%%%%%%%Algorithm
 
 Consider a citation or venue graph $G(V, E)$, its TWPageRank vector $PR$ and the topological order $O$ of its block-wise graph. Given an update $\Delta$ = $\Delta V\cup\Delta E$ to $G$, the incremental prestige computation for articles and venues in a specific year is to compute the TWPageRank vector $PR^+$ on the updated graph $G^+(V\cup\Delta V, E\cup\Delta E)$.
 
@@ -160,6 +121,47 @@ In this way, graph $G^+$ is divided into subgraphs $\{G_A$, $G_B$, $G_C\}$ and e
 We then have $G_C$ = $G^+[\Delta V]$, $\Delta E$ = $E_C\cup E_{CB}$, $V$ = $V_A\cup V_B$ and $E$ = $E_A\cup E_B\cup E_{AB}$.
 
 
+
+%%%%%%%%%%%%%%%%%%%%%Algorithm
+\begin{figure}[tb!]
+%\vspace{2ex}
+\begin{center}
+{\small
+\begin{minipage}{3.36in}
+\myhrule \vspace{-1.5ex}
+\mat{0ex}{
+%%%%%%%%%%%%%%%%%%%
+{\sl Input:\/} \= An update $\Delta$ = $\Delta V\cup\Delta E$, TWPageRank vector $PR$ of $G$,  and the   \\
+\hspace{6ex} topological order $O$ of the block-wise graph $G'$.\\
+{\sl Output:\/} TWPageRank vector $PR^+$ of the updated graph $G^+$. \\
+\bcc \hspace{1.5ex}\=  $G_C'$ := the block-wise graph of $G_C$; \\
+%\ \  $E_{CB}'$ := edges from $G_C'$ to $G'$\\
+\icc\> $\Delta O$ := topological order of $G_C'$; \ \ $O^+$ := $\Delta O/O$; \\
+\icc\> label all SCCs of $G_C$ as $C$ and all SCCs of $G$ with outgoing edges having \\ \hspace{2.5ex} weight changes as $B$,  all remailing SCCs of $G$ as $A$\\
+\icc\>  \For each node $v'$ following $O^+$ \Do\\
+\icc\>\hspace{2.5ex}\= $scc$ := the corresponding SCC of $v'$; \\
+%\icc\>\>\If impact weight of $(v,w)$ is changed where $v\in scc$ \Then \\
+%\icc\>\>\hspace{3ex}\= label $scc$ as $B$;\\
+%\icc\>\>\> label SCC $w'$ as $B$ such that $(v',w')\in E'$; \\
+\icc\>\> \If $scc$ is labeled as $C$ \Then \\
+\icc\>\>\hspace{3ex}\= update $PR^+(v)$ where $v\in scc$ following algorithm~\twprscc; \\
+\icc\>\>\> label SCC $w'$ as $B$ with $w'\in G'$ and $(v', w')\in E^+{'}$;\\
+\icc\>\> \Else \If $scc$ is labeled as $B$ \Then \\
+\icc\>\>\> update $PR^+(v)$ where $v\in scc$ with Eq.~(\ref{eq-inc-prscc}) until the sum of \\ \hspace{8ex} TWPageRank score changes is less than $\epsilon\cdot \frac{|scc|}{|V^+|}$; \\
+\icc\>\>\> label SCC $w'$ as $B$ with $(v',w')\in E'$;\\
+\icc\>\> \Else $PR^+(v)$:=$PR(v)\cdot {n}/{n^+}$ where $v\in scc$; \\
+\icc\> \Return $PR^+$.
+}
+\vspace{-2.5ex} \myhrule
+\end{minipage}
+}
+\end{center}
+\vspace{-3ex}
+\caption{\small Algorithm~\inctwprscc for incremental TWPageRank} \label{alg-inctwprscc}
+\vspace{-3ex}
+\end{figure}
+%%%%%%%%%%%%Algorithm
+
 \stitle{Incremental algorithm \inctwprscc}. We now present our algorithm for incremental TWPageRank  computation, shown in Fig.~\ref{alg-inctwprscc}.
 
 
@@ -196,7 +198,7 @@ Figure~\ref{fig-inc-division} illustrates an example of affected and unaffected 
 \begin{figure}[tb!]
 \centering
 \includegraphics[scale=0.6]{fig/General_framework_peak.eps}
-\vspace{-3.5ex}
+\vspace{-2ex}
 \caption{\small An example of incremental TWPageRank computation}
 \label{fig-inc-division}
 \vspace{-4ex}
@@ -225,18 +227,17 @@ Assume a topological order $v_1'/\dots/v_{l}'$ of block-wise graph $G^+{'}$ wher
 \end{proofSketch}
 
 
-The main result here is stated as follows.
+
+Observe that (a) a topological order of $G'_C$ can be computed in $O(|V_C|+|E_C|+|E_{CB}|)$ time, 
+(b) updating the TWPageRank scores of nodes in subgraphs $G_B$ and $G_C$ costs $O(|V_B\cup V_C|+|E_{B,a}\cup E_{C,a}\cup E_{CB}|)+t^+|E_{B,i}\cup E_{C,i}|)$ time, and , finally, (c) updating the scores of nodes in $G_A$ costs $O(|V_A|)$ time. From these, the following holds.
 
 
 \begin{prop} \label{lemma-inc-citation-comp}
-Given an update $\Delta$ = $\Delta V\cup\Delta E$ of citation or venue graph $G(V,E)$, the TWPageRank vector and the topological order of the 
+Given an update $\Delta$ = $\Delta V\cup\Delta E$ of citation or venue graph $G(V,E)$, the TWPageRank vector and the topological order of the
 block-wise graph of $G$, algorithm \inctwprscc runs in $O(|V\cup \Delta V|+|E_B\cup E_C\cup E_{CB}|+t^+|E_{B,i}\cup E_{C,i}|)$ time.
 \end{prop}
 
-\begin{proof}
-Observe the following. (a) A topological order of $G'_C$ can be computed in $O(|V_C|+|E_C|+|E_{CB}|)$ time.
-(b) Updating the TWPageRank scores of nodes in subgraphs $G_B$ and $G_C$ costs $O(|V_B\cup V_C|+|E_{B,a}\cup E_{C,a}\cup E_{CB}|)+t^+|E_{B,i}\cup E_{C,i}|)$ time. Finally, (c) Updating the scores of nodes in $G_A$ costs $O(|V_A|)$ time.
-\end{proof}
+
 
 %Note that the incremental algorithm reduces the complexity of updating subgraph $A$ from $O(|E^c_A|)$ to $O(|V^c_A|)$. It is more effective when only a small number of articles are updates, resulting in $|V^c_A|>>|V^c_B|+|V^c_C|$ and updating subgraph $A$ occupies most of the computation.
 
