@@ -6,6 +6,7 @@
 \label{sec-proof}
 
 
+\eat{
 % move this to the full version
 \begin{proof}
 Observe that (a) the block-wise graph and its topological order can be done in $O(|V|+|E|)$ time~\cite{CormenLRS01}, and (b) updating the TWPageRank scores takes $O(|V|+|E_a|+t|E_i|)$ time as the edges in $E_a$ are only scanned once.
@@ -16,7 +17,7 @@ Observe that (a) the block-wise graph and its topological order can be done in $
 Observe the following. (a) A topological order of $G'_C$ can be computed in $O(|V_C|+|E_C|+|E_{CB}|)$ time.
 (b) Updating the TWPageRank scores of nodes in subgraphs $G_B$ and $G_C$ costs $O(|V_B\cup V_C|+|E_{B,a}\cup E_{C,a}\cup E_{CB}|)+t^+|E_{B,i}\cup E_{C,i}|)$ time. Finally, (c) Updating the scores of nodes in $G_A$ costs $O(|V_A|)$ time.
 \end{proof}
-
+}
 
 
 \eat{
@@ -65,16 +66,17 @@ The vector $PR$ returned by~\twprscc converges such that $||PR-PR^*||_1 < \epsil
 
 \begin{proof}
 %By lemma~\ref{prop-converg}, we know that TWPageRank converges on venue graphs.
-We first prove that the sum of changes after another iteration from $PR$ is smaller than $\epsilon$, \ie $||PR'-PR||_1 < \epsilon$ where $PR'=d M^T\cdot PR + \frac{1-d}{n} e$, and then prove that $||PR^*-PR||_1$ is smaller than the sum of changes.
+We first prove that the sum of changes after another iteration from $PR$ is smaller than $\epsilon$, \ie $||PR'-PR||_1 < \epsilon$ where $PR'=d M^T\cdot PR + \frac{1-d}{n} e$, and then prove that $||PR^*-PR||_1$ is smaller than $||PR'-PR||_1$.
+%the sum of changes.
 
-Consider $scc_1$, $\dots$, $scc_m$ of the (citation or venue) graph $G$ such that $v_1'/\dots$ $/v_m'$ is indeed a valid topological order of the block-wise $G'$ of $G$, where $m$ is the number of SCCs in $G$ and $v_k'$ ($k\in [1,m]$) is the corresponding node of $scc_k$ in $G'$.
+Consider $scc_1$, $\dots$, $scc_m$ of the (citation or venue) graph $G$ such that $v_1'/\dots$ $/v_m'$ is indeed a valid topological order of the block-wise graph $G'$ of $G$, where $m$ is the number of SCCs in $G$ and $v_k'$ ($k\in [1,m]$) is the corresponding node of $scc_k$ in $G'$.
 
 Let $PR_k$ and $PR_k^-$ be the current and the previous TWPageRank vectors of nodes in $scc_k$ produced
 by \twprscc, and $PR_k'$ be the TWPageRank vector of nodes in $scc_k$ extracted from $PR'$.
-Further let $\Delta_k^-=PR_k-PR_k^-$ and we have:
-$\sum_{k=1}^m ||\Delta_k^-||_1 < \epsilon$.
+Further let $\Delta_k=PR_k-PR^-_k$ and we have:
+$\sum_{k=1}^m ||\Delta_k||_1 < \epsilon$.
 
-Consider $M_{ij}$ ($i,j\in[1,m]$), the transition submatrix from $scc_i$ to $scc_j$. We have $M_{ij}=\bf{0}$ when $i>j$, since there exists no edges from nodes in $scc_i$ back to nodes in earlier $scc_j$. And, hence, $PR_k$ and $PR_k'$ are updated as:
+Consider $M_{ij}$ ($i,j\in[1,m]$), the submatrix of $M$ denoting the transition probability from nodes in $scc_i$ to nodes in $scc_j$. We have $M_{ij}=\bf{0}$ when $i>j$, since there exists no edges from nodes in $scc_i$ to $scc_j$. And, hence, $PR_k$ and $PR_k'$ are updated as:
 %
 \begin{small}
 \begin{equation*}
@@ -94,24 +96,24 @@ Given these, the sum of changes between $PR'$ and $PR$ is:
 \begin{small}
 \begin{equation*}
 \begin{split}
-||PR'-PR||_1=&\sum_{k=1}^m ||PR_k'-PR_k||_1=\sum_{k=1}^m ||d M_{kk}^T \Delta_k^-||_1 \\
-\le & d\sum_{k=1}^m ||\Delta_k^-||_1 < \epsilon,
+||PR'-PR||_1 & =\sum_{k=1}^m ||PR_k'-PR_k||_1 = \sum_{k=1}^m ||d M_{kk}^T \Delta_k||_1 \\  
+& \le d\sum_{k=1}^m ||\Delta_k||_1 < \epsilon,
 \end{split}
 \end{equation*}
 \end{small}
 \noindent
 based on the fact that the row sums of $M_{kk}$ are always $\le 1$. %less than or equal to 1.
 
-Moreover, $||PR'-PR||_1 = ||PR' - PR^* + PR^* -PR||_1 = ||d M^T (PR-PR^*)||_1 + ||PR-PR^*||_1$, which gives $||PR-PR^*||_1<\epsilon$ and proves the conclusion.
+Moreover, $||PR'-PR||_1 = ||PR' - PR^* + PR^* -PR||_1 = ||d M^T (PR-PR^*)||_1 + ||PR-PR^*||_1<\epsilon$, which gives $||PR-PR^*||_1<\epsilon$ and proves the conclusion.
 \end{proof}
 
 \subsection*{2. Proof of Proposition \ref{lemma-inc-topo}}
 $O^+=\Delta O/O$ is indeed a valid topological order of the block-wise graph of $G^+$.
 
 \begin{proof}
-Let $G'_\Delta(V'_\Delta, E'_\Delta)$ be the block-wise graph of $G^+[\Delta V]$; further let $E'_c$ denote the set of cross edges from $V'_\Delta$ to $V'$.
+Let $G'_\Delta(V'_\Delta, E'_\Delta)$ be the block-wise graph of $G^+[\Delta V]$; further let $E'_c$ denote the set of crossing edges from $V'_\Delta$ to $V'$.
 It suffices to show that for each $(u,v)\in E'\cup E'_\Delta \cup E'_c$, $u$ comes before $v$ in $O^+$,
-which obviously holds (1) for  $E'\cup E'_\Delta$ as $O$ and $\Delta O$ are topological orders of $G'$ and $G'_\Delta$, respectively, and (2) for $E_{c}'$ as nodes in $G'_\Delta$ come before nodes in $G'$.
+which obviously holds (a) for  $E'\cup E'_\Delta$ as $O$ and $\Delta O$ are topological orders of $G'$ and $G'_\Delta$, respectively, and (b) for $E_{c}'$ as nodes in $G'_\Delta$ come before nodes in $G'$.
 \end{proof}
 
 
@@ -120,25 +122,25 @@ which obviously holds (1) for  $E'\cup E'_\Delta$ as $O$ and $\Delta O$ are topo
 The TWPageRank vector $PR^+$ returned by~\inctwprscc converges such that $||PR^+-PR^{*}||_1 < \epsilon$, where $PR^{*}$ is the convergent TWPageRank vector.
 
 \begin{proof}
-Assume a topological order $v_1'/\dots/v_{l}'$ of graph $G^+{'}$ where $l=|O^+|$. We prove the sum of change of $PR^+(v)$ where $v\in scc_k$ is no more than $\epsilon\cdot\frac{|scc_k|}{|V^+|}$ for $scc_k$ corresponding to $v_k'$ ($k\in [1,l]$) by induction. Note that it obvious holds if $scc_k$ belongs to $G_B$ and $G_C$ by algorithm~\inctwprscc.
+Assume a topological order $v_1'/\dots/v_{l}'$ of block-wise graph $G^+{'}$ where $l=|O^+|$. We prove that the sum of change of $PR^+(v)$ where $v\in scc_k$ is no more than $\epsilon\cdot\frac{|scc_k|}{|V^+|}$ for $scc_k$ corresponding to $v_k'$ ($k\in [1,l]$) by induction. Note that it obvious holds for $scc_k$ belonging to $G_B$ and $G_C$ by algorithm~\inctwprscc.
 
 \noindent(1) When $k=1$, it holds since $scc_1$ belongs to $G_C$;
 
-\noindent(2) Assume that it holds for $1\le k\le q$. We then show it also holds for $k=q+1$. It suffices to show the case that $scc_k$ belongs to $G_A$. Recall that:
+\noindent(2) Assume that it holds when $1\le k\le q$. We then show that it also holds for $k=q+1$. It suffices to show the case when $scc_k$ belongs to $G_A$. Recall that:
 %
 \begin{small}
 \begin{equation*}
 \begin{split}
-PR(v) & =  d \sum_{(u,v)\in E_i} M_{u,v} PR(u) + d \sum_{(u,v)\in E_a} M_{u,v} PR(u) +  \frac{1-d}{n};,\\
+PR(v) & =  d \sum_{(u,v)\in E_i} M_{u,v} PR(u) + d \sum_{(u,v)\in E_a} M_{u,v} PR(u) +  \frac{1-d}{n},\\
 PR^+(v) & =  d \sum_{(u,v)\in E^+_i} M^+_{u,v} PR^+(u) + d \sum_{(u,v)\in E^+_a} M^+_{u,v} PR^+(u) +  \frac{1-d}{n^+}.
 \end{split}
 \end{equation*}
 \end{small}
 \noindent
-Since $scc_k$ belongs to $G_A$, we have $\{(u,v)|(u,v)\in E_i\}$ = $\{(u,v)|$ $(u,v)\in E^+_i\}$, $\{(u,v)|(u,v)\in E_a\}$ = $\{(u,v)|(u,v)\in E^+_a\}$ and $M_{u,v}=M^+_{u,v}$. Also note that $PR^+(u)=\frac{n}{n^+}PR(u)$ when $(u,v)\in E_a$ according to algorithm~\inctwprscc. Let $PR_{k,0}$, $PR_{k,1}$, $\dots$, $PR_{k,t}$ be the convergent sequence of TWPageRank vectors for $scc_k$ computed by algorithm \twprscc on $G$. Then $\frac{n}{n^+}PR_{k,0}$, $\frac{n}{n^+}PR_{k,1}$, $\dots$, $\frac{n}{n^+}PR_{k,t}$ is a valid convergent sequence of TWPageRank vectors for $scc_k$ computed by algorithm \inctwprscc on $G^+$ starting from $\frac{n}{n^+}PR_{k,0}$.
+Consider $scc_k$ belonging to $G_A$ and node $v\in scc_k$. We have $\{(u,v)|(u,v)\in E_i\}$ = $\{(u,v)|$ $(u,v)\in E^+_i\}$, $\{(u,v)|(u,v)\in E_a\}$ = $\{(u,v)|(u,v)\in E^+_a\}$ and $M_{u,v}=M^+_{u,v}$ when $(u,v)\in E_i\cup E_a$. Also note that $PR^+(u)=\frac{n}{n^+}PR(u)$ when $(u,v)\in E_a$ according to algorithm~\inctwprscc. Let $PR_{k,0}$, $PR_{k,1}$, $\dots$, $PR_{k,t}$ be the convergent sequence of TWPageRank vectors for $scc_k$ computed by algorithm \twprscc on $G$. Then $\frac{n}{n^+}PR_{k,0}$, $\frac{n}{n^+}PR_{k,1}$, $\dots$, $\frac{n}{n^+}PR_{k,t}$ is a valid convergent sequence of TWPageRank vectors for $scc_k$ computed by algorithm \inctwprscc on $G^+$ given the initial TWPageRank vector $\frac{n}{n^+}PR_{k,0}$.
 Hence, the sum of changes of $PR^+(v)$ where $v\in scc_k$ is $\frac{n}{n^+}||PR_{k,t}-PR_{k,t-1}||_1 < \epsilon\cdot\frac{|scc_k|}{|V^+|}$.
 
-Based on the above and Corollary \ref{prop-prscc}, the conclusion follows.
+Combining with Corollary \ref{prop-prscc}, we have the conclusion.
 \end{proof}
 
 
