@@ -16,7 +16,7 @@ set xtics ("1" 1, "3" 2, "7" 3, "15" 4, "31" 5, "+{/Symbol \245}" 6)
 #set logscale x
 #set logscale y
 set ylabel "PairAcc" offset 1.5
-set xlabel "number of issued years" offset 0, 0.5
+set xlabel "number of published years" offset 0, 0.5
 
 set key horizontal samplen 1.8 spacing 1.2 at graph 1.02, 0.3
 #set key horizontal font ",13" 
