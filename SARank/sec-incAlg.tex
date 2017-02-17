@@ -13,7 +13,7 @@ Scholarly articles are dynamic, and it is impractical to recompute ranking from 
 Our incremental algorithm \incensemble incrementally computes the popularity and prestige of scholarly articles.
 We consider that an update $\Delta$ = $\Delta V\cup\Delta E$ is added to a   (citation or venue) graph $G(V, E)$,
 and the resulting graph is $G^+(V\cup\Delta V, E\cup\Delta E)$, where
-$\Delta V\cap V = \emptyset$ is a set of nodes, and $\Delta E$ is a set of directed edges on $\Delta V$ and from $\Delta V$ to $V$ only, as article citations obey a natural temporal order, \ie an article only cites those published earlier, and it is really rare for the mutual citations of two articles published in the same time.
+$\Delta V\cap V = \emptyset$ is a set of nodes, and $\Delta E$ is a set of directed edges on $\Delta V$ and from $\Delta V$ to $V$ only, as article citations obey a natural temporal order, \ie an article only cites those published earlier, and it is rare for the mutual citations between two articles published in the same time.
 
 
 \stitle{Incremental popularity computation}.
@@ -211,7 +211,7 @@ Figure~\ref{fig-inc-division} illustrates an example of incremental TWPageRank c
 %
 It is obvious that the update $\Delta$ has no impacts on the SCCs of $G$, and $O^+$ defined earlier is a valid topological order of $G^+{'}$.
 %
-The original graph $G$ is then partitioned into affected and unaffected areas, in which subgraphs $G_A$, $G_B$ and $G_C$ are associated with node sets $V_A$, $V_B$ and $\Delta V$, respectively. Here edge weight on $(y, x)$ changes due to the change of the citation peak time of node $x$, and, hence, node $y$ as well as all nodes reachable from $y$ are included in $G_B$.
+The original graph $G$ is then partitioned into affected and unaffected areas, and subgraphs $G_A$, $G_B$ and $G_C$ are associated with node sets $V_A$, $V_B$ and $\Delta V$, respectively. Here edge weight on $(y, x)$ changes due to the change of the citation peak time of node $x$, and, hence, node $y$ as well as all nodes reachable from $y$ are included in $G_B$.
 %
 When updating the TWPageRank scores, following $O^+$, scores of nodes in $G_C$, $G_B$ and $G_A$ are computed by iterations from scratch, by iterations with Eq.~(\ref{eq-inc-prscc}) using the existing TWPageRank vector and by scaling, respectively.
 \end{example}
