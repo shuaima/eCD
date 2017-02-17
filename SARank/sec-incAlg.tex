@@ -11,9 +11,9 @@ Scholarly articles are dynamic, and it is impractical to recompute ranking from 
 
 
 Our incremental algorithm \incensemble incrementally computes the popularity and prestige of scholarly articles.
-We consider an update $\Delta$ = $\Delta V\cup\Delta E$ is added to a   (citation or venue) graph $G(V, E)$,
-and the resulting graph is denoted as $G^+(V\cup\Delta V, E\cup\Delta E)$, where
-$\Delta V\cap V = \emptyset$ is a set of nodes, and $\Delta E$ is a set of directed edges on $\Delta V$ and from $\Delta V$ to $V$ only, as article citations obey a natural temporal order, \ie an article only cites those published earlier, and it is really rare for the mutual citation of two articles published in the same time.
+We consider that an update $\Delta$ = $\Delta V\cup\Delta E$ is added to a   (citation or venue) graph $G(V, E)$,
+and the resulting graph is $G^+(V\cup\Delta V, E\cup\Delta E)$, where
+$\Delta V\cap V = \emptyset$ is a set of nodes, and $\Delta E$ is a set of directed edges on $\Delta V$ and from $\Delta V$ to $V$ only, as article citations obey a natural temporal order, \ie an article only cites those published earlier, and it is really rare for the mutual citations of two articles published in the same time.
 
 
 \stitle{Incremental popularity computation}.
@@ -21,7 +21,7 @@ The popularity of venues and authors is computed along the same lines as their b
 as almost all venues and authors are affected  by the definitions of the popularity of venues and authors.
 
 
-As the popularity of articles is defined as the freshness sum of all their citations, it is convenient to maintain. Consider an updated citation graph $G^{c,+}(V^c\cup\Delta V^c, E^c\cup\Delta E^c)$ of $G^c(V^c, E^c)$,  the updated popularity $pop_{c}^+(v)$ can be easily computed as:
+As the popularity of articles is defined as the freshness sum of all their citations, it is convenient to maintain. Consider an updated citation graph $G^{c,+}(V^c\cup\Delta V^c, E^c\cup\Delta E^c)$ of $G^c(V^c, E^c)$, and the updated popularity $pop_{c}^+(v)$ can be easily computed as:
 \begin{small}
 \begin{equation}\label{eq-inc-pop}
 pop_c^+(v) = pop_c(v) {e^{\sigma (T^+_0-T_0)}} + \sum_{(u,v)\in \Delta E^c} {e^{\sigma (T^+_0-T_u)}},
@@ -40,7 +40,7 @@ By Eq.~(\ref{eq-inc-pop}), it is easy to see that it takes $O($ $|V^c|+|\Delta V
 The prestige of authors is computed along the same lines as their batch counterparts of algorithm \batensemble,
 as almost all authors are affected  by the definition of the prestige of authors.
 %
-For the prestige of articles and venues, we propose an incremental algorithm to maintain their prestige.
+For articles and venues, we propose an incremental algorithm to maintain their prestige.
 
 
 
@@ -111,8 +111,9 @@ PR^+(v) \ = \ &  d \sum_{(u,v)\in E^+_i} M^+_{u,v} PR^+(u) + d \sum_{(u,v)\in E^
 \end{equation}
 \vspace{-2ex}
 \end{small}
+Here notations with superscript `$+$' are defined on  $G^+$.
 
-\sstab(2) Let $V_A = V\setminus V_B$. Since $V_A$ are not reachable from newly added or affected nodes, $V_A$ is essentially not affected by the update $\Delta$. And TWPageRank scores on $V_A$ can be simply adjusted by scaling existing results with constant ${n}/{n^+}$.
+\sstab(2) Let $V_A = V\setminus V_B$. Since nodes in $V_A$ are not reachable from newly added or affected nodes, $V_A$ is essentially not affected by the update $\Delta$. And TWPageRank scores on $V_A$ can be simply adjusted by scaling existing results with constant ${n}/{n^+}$.
 
 Let $G_A=(V_A,E_A)$, $G_B=(V_B,E_B)$ and $G_C=(V_C,E_C)$, respectively, and
 let $E_{AB}$ and $E_{CB}$  be the sets of edges from $G_A$ to $G_B$ and from $G_C$ to $G_B$, respectively.
@@ -137,18 +138,18 @@ We then have $G_C$ = $G^+[\Delta V]$, $\Delta E$ = $E_C\cup E_{CB}$, $V$ = $V_A\
 \bcc \hspace{1.5ex}\=  $G_C'$ := the block-wise graph of $G_C$; \\
 %\ \  $E_{CB}'$ := edges from $G_C'$ to $G'$\\
 \icc\> $\Delta O$ := topological order of $G_C'$; \ \ $O^+$ := $\Delta O/O$; \\
-\icc\> label all SCCs of $G_C$ as $C$ and all SCCs of $G$ with outgoing edges having \\ \hspace{2.5ex} weight changes as $B$,  all remailing SCCs of $G$ as $A$\\
+\icc\> label all \sccs of $G_C$ as $C$ and all \sccs of $G$ with outgoing edges having \\ \hspace{2.5ex} weight changes as $B$,  the remaining \sccs of $G$ as $A$\\
 \icc\>  \For each node $v'$ following $O^+$ \Do\\
-\icc\>\hspace{2.5ex}\= $scc$ := the corresponding SCC of $v'$; \\
+\icc\>\hspace{2.5ex}\= $scc$ := the corresponding \scc of $v'$; \\
 %\icc\>\>\If impact weight of $(v,w)$ is changed where $v\in scc$ \Then \\
 %\icc\>\>\hspace{3ex}\= label $scc$ as $B$;\\
 %\icc\>\>\> label SCC $w'$ as $B$ such that $(v',w')\in E'$; \\
 \icc\>\> \If $scc$ is labeled as $C$ \Then \\
 \icc\>\>\hspace{3ex}\= update $PR^+(v)$ where $v\in scc$ following algorithm~\twprscc; \\
-\icc\>\>\> label SCC $w'$ as $B$ with $w'\in G'$ and $(v', w')\in E^+{'}$;\\
+\icc\>\>\> label \scc $w'$ as $B$ with $w'\in G'$ and $(v', w')\in E^+{'}$;\\
 \icc\>\> \Else \If $scc$ is labeled as $B$ \Then \\
 \icc\>\>\> update $PR^+(v)$ where $v\in scc$ with Eq.~(\ref{eq-inc-prscc}) until the sum of \\ \hspace{8ex} TWPageRank score changes is less than $\epsilon\cdot \frac{|scc|}{|V^+|}$; \\
-\icc\>\>\> label SCC $w'$ as $B$ with $(v',w')\in E'$;\\
+\icc\>\>\> label \scc $w'$ as $B$ with $(v',w')\in E'$;\\
 \icc\>\> \Else $PR^+(v)$:=$PR(v)\cdot {n}/{n^+}$ where $v\in scc$; \\
 \icc\> \Return $PR^+$.
 }
@@ -156,9 +157,9 @@ We then have $G_C$ = $G^+[\Delta V]$, $\Delta E$ = $E_C\cup E_{CB}$, $V$ = $V_A\
 \end{minipage}
 }
 \end{center}
-\vspace{-2ex}
+\vspace{-3ex}
 \caption{\small Algorithm~\inctwprscc for incremental TWPageRank} \label{alg-inctwprscc}
-\vspace{-2ex}
+\vspace{-4ex}
 \end{figure}
 %%%%%%%%%%%%Algorithm
 
@@ -201,7 +202,7 @@ Figure~\ref{fig-inc-division} illustrates an example of affected and unaffected 
 \vspace{-2ex}
 \caption{\small An example of incremental TWPageRank computation}
 \label{fig-inc-division}
-\vspace{-4ex}
+\vspace{-5ex}
 \end{figure}
 
 
@@ -210,7 +211,7 @@ Figure~\ref{fig-inc-division} illustrates an example of incremental TWPageRank c
 %
 It is obvious that the update $\Delta$ has no impacts on the SCCs of $G$, and $O^+$ defined earlier is a valid topological order of $G^+{'}$.
 %
-The original graph $G$ is then partitioned into affected and unaffected areas, in which subgraphs $G_A$, $G_B$ and $G_C$ are associated with node sets $V_A$, $V_B$ and $\Delta V$, respectively. Here the citation peak time of node $x$ is changed, and, hence, node $y$ as well as all nodes reachable from $y$ are included in $G_B$.
+The original graph $G$ is then partitioned into affected and unaffected areas, in which subgraphs $G_A$, $G_B$ and $G_C$ are associated with node sets $V_A$, $V_B$ and $\Delta V$, respectively. Here edge weight on $(y, x)$ changes due to the change of the citation peak time of node $x$, and, hence, node $y$ as well as all nodes reachable from $y$ are included in $G_B$.
 %
 When updating the TWPageRank scores, following $O^+$, scores of nodes in $G_C$, $G_B$ and $G_A$ are computed by iterations from scratch, by iterations with Eq.~(\ref{eq-inc-prscc}) using the existing TWPageRank vector and by scaling, respectively.
 \end{example}
@@ -221,7 +222,7 @@ The TWPageRank vector $PR^+$ returned by~\inctwprscc converges such that $||PR^+
 \end{theorem}
 
 \begin{proofSketch}
-Assume a topological order $v_1'/\dots/v_{l}'$ of block-wise graph $G^+{'}$ where $l=|O^+|$. It suffices to prove the sum of change of $PR^+(v)$ where $v\in scc_k$ is no more than $\epsilon\cdot |scc_k|/|V^+|$ for $scc_k$ corresponding to $v_k'$ ($k\in [1,l]$) by induction.
+Assume a topological order $v_1'/\dots/v_{l}'$ of block-wise graph $G^+{'}$ where $l=|O^+|$. It suffices to prove that the change sum of $PR^+(v)$ with $v\in scc_k$ is no more than $\epsilon\cdot |scc_k|/|V^+|$ for $scc_k$ corresponding to $v_k'$ ($k\in [1,l]$) by induction.
 %The conclusion follows combining Lemma~\ref{prop-prscc}
 (see \cite{SARank-full} for details).
 \end{proofSketch}
@@ -261,7 +262,7 @@ By the analyses above, the time complexity of \incensemble is the same as \baten
 Despite of its similar time complexity to \batensemble, algorithm \incensemble typically achieves a substantial efficiency improvement over \batensemble, according to our statistics of affected/unaffected areas shown in Table 2.
 %
 (a) It saves $O(|V^c|+|E^c|)$ and $O(|V^v|+|E^v|)$ time when maintaining \sccs and the topological order based on $\Delta^c$ and $\Delta^v$ only, where ($|V^c|$, $|E^c|$, $|V^v|$, $|E^v|$) are more than (92\%, 89\%, 93\%, 89\%) of ($|V^{c,+}|$, $|E^{c,+}|$, $|V^{v,+}|$, $|E^{v,+}|$) on all tested graphs;
-(b) It saves $O(|E^c_A \cup E^c_{AB}|)$ time when updating scores on $V^c$, where edges in $E^c_A\cup E^c_{AB}$ accounts for more than 28\% of total edges;
+(b) It saves $O(|E^c_A \cup E^c_{AB}|)$ time when updating scores on $V^c$, where edges in $E^c_A\cup E^c_{AB}$ account for more than 28\% of total edges;
 (c) It saves $O(|E^c|)$ time when computing popularity of articles, \ie more than 89\% of $|E^{c,+}|$;
 Finally, (d) It is likely to compute TWPageRank scores on $V^c_B$ and $V^v_B$ with less iterations.
 
@@ -338,7 +339,7 @@ And, finally, (4) It is likely to update TWPageRank scores on $V^c_B$ and $V^v_B
 \end{center}
 \caption{\small Statistics of affected/unaffected areas on citation graphs (rows 2--4) and venue graphs (rows 5--7) given a yearly update, \ie articles of 2011 on \aan and 2015 on \aminer and \magdata, respectively.}
 \label{tab-inc}
-\vspace{-5ex}
+\vspace{-6ex}
 \end{table}
 %%%%%%%%%%%%%%%%%%%
 
