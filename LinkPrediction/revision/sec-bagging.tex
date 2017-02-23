@@ -1,0 +1,384 @@
+\section{Structural Bagging Methods}
+\label{sec-bagging}
+Since the link prediction problem scales worse than
+linearly with the network size, it is generally more efficient to
+solve smaller problems multiple times rather than solve a single
+large problem.
+The structural bagging approach provides an effective method to decompose
+the link prediction problem into smaller pieces that are solved
+independently.
+Furthermore, the aggregated results from multiple models often
+provide a robustness to the decomposition process  \cite{Breiman96b-1996}. In the
+following, we introduce three different ways for the bagging decomposition.
+We consider a network $G(N, A)$.
+
+
+\subsection{Random Node Bagging}
+
+Random node bagging is the simplest form of structural bagging, and its basic
+idea is to iteratively apply the following three steps:
+
+
+\begin{enumerate}
+%\item  Select a random set of nodes $N_r$ from the network $G$ corresponding to
+%a fraction $f$ of the nodes in the network. Determine the node set
+%$N_s \supseteq N_r$, corresponding to all nodes adjacent to $N_r$.
+%Construct a reduced adjacency matrix $W_s$ from the node set $N_s$
+%by using the subgraph induced on $N_s$ to select the relevant rows
+%and columns of $W$.
+
+%\vspace{-0.5ex}
+\item[(1)] Select a random set of nodes $N_r$ in the network $G$ corresponding to
+a fraction $f$ of the nodes in the network. Determine the node set
+$N_s \supseteq N_r$, corresponding to all nodes adjacent to $N_r$.
+
+
+\item[(2)]  Construct a reduced adjacency matrix $W_s$ from the node set $N_s$, by using the subgraph
+induced on $N_s$ of $G$ (referred to as an ensemble component or simply an ensemble) to select the relevant $|N_s|$ rows and columns of the matrix $W$.
+
+\item[(3)]  Apply the symmetric \NMF method in Section \ref{sec-NMF} to the reduced matrix $W_s$, and use the  pruning search
+process in Section \ref{sec-NMF-topk-optimization} to determine the predictions of all pairs of nodes of $N_s$.
+\end{enumerate}
+
+
+
+The main efficiency advantage of this approach is because of the
+smaller sizes of the matrices in the factorization. Furthermore,
+because of the smaller size of the induced subgraph in each ensemble
+component, the number of latent factors $r$, which is required, is
+also smaller. This will generally translate into efficiency
+advantages. In many cases, when the number of nodes is very large,
+it may be impractical to solve the entire problem in main memory. In
+such cases, the use of ensemble approach decomposes the problem into
+smaller memory-resident components.
+
+The main problem  with random node sampling is that it does not
+attempt to sample more {\em relevant} regions of the network which are
+more likely to contain possible links. Other forms of sampling are likely to
+be more effective in this context.
+
+\subsection{Edge Bagging}
+
+
+Edge bagging is designed to sample more {\em relevant} regions of
+the graph. After all, real-world networks are sparse and most of the
+$O(n^2)$  possibilities for edges are usually not populated. By
+sampling densely populated regions of the network, many node pairs
+will not be considered at all, but these node pairs are often not
+relevant to begin with.
+
+The edge bagging approach proceeds as follows:
+
+%\vspace{-1ex}
+\begin{enumerate}
+%\item  Let $N_s$ be a node set containing a single randomly chosen
+%node. Nodes which are adjacent to $N_s$ are randomly selected and
+%added to $N_s$. In the event that no node is adjacent to $N_s$, a
+%randomly chosen node from a different connected component is added
+%to $N_s$. The procedure is repeated until $N_s$ contains at least a
+%fraction $f$ of the total number of nodes. Construct a reduced
+%adjacency matrix $W_s$ from the node set $N_s$ by using the subgraph
+%induced on $N_s$ to select the relevant rows and columns of $W$.
+\item[(1)]Let $N_s$ be a node set containing a single randomly chosen
+node. Nodes which are adjacent to $N_s$ are randomly selected and
+added to $N_s$. In the event that no node is adjacent to $N_s$, a
+randomly chosen node from a different connected component is added
+to $N_s$. The procedure is repeated until $N_s$ contains at least a
+fraction $f$ of the total number of nodes.
+
+\item[(2)]  Construct a reduced
+adjacency matrix $W_s$ from the node set $N_s$ by using the subgraph
+induced on $N_s$ of $G$, \ie an ensemble, to select the relevant $|N_s|$ rows and columns of the matrix $W$.
+
+\item[(3)] Apply the symmetric \NMF method in Section \ref{sec-NMF}
+to the reduced matrix $W_s$, and use the pruning search process in Section \ref{sec-NMF-topk-optimization} to determine the predictions of all pairs of nodes  of $N_s$.
+%, except those that are less than $\epsilon$.
+\end{enumerate}
+%\vspace{-1ex}
+
+
+This method of growing the sampled node set with edge sampling is
+likely to select dense components from the network. Such dense
+components are more likely to contain random node pairs. Unlike the
+previous case where each node pair is considered with a high
+probability, many node pairs will not be considered at all. However,
+such node pairs are typically not present in the same dense
+component. Therefore, such node pairs are likely to be irrelevant,
+and in this way the approach already prunes unimportant node pairs
+during the process of ensemble construction.
+
+
+
+\subsection{Biased Edge Bagging}
+
+While the edge bagging procedure is effective at discovering dense
+components, it does have a drawback. Its main drawback is that  it
+selectively includes nodes with  high degrees within the resulting
+components.  Therefore, the same high-degree nodes are very likely to be included in
+all the ensemble components.  As a result, it often becomes more
+difficult to make robust predictions between low-degree nodes.
+
+In biased edge bagging, exactly the same procedure is used as the case
+of edge bagging.  The only difference is that when the node set
+$N_s$ is grown, a random adjacent node is not selected. Rather, an
+adjacent node with the least number of selected times
+in previous ensemble components, is used. Ties are broken randomly.
+
+This approach ensures  that each node is selected with an approximately
+similar number of times across various ensemble components, and it
+prevents the repeated selection of high-degree nodes.
+%
+Note that the
+bias in the edge bagging process makes that the vast majority node
+pairs will not be considered.
+However, such node pairs will usually be in components that are not
+as well connected. Therefore, such nodes  are far less likely to
+form links. In most practical applications, one only needs to
+recommend a small number of node pairs for prediction.  Therefore,
+it is reasonable to ignore such node pairs in the prediction
+process.
+
+
+
+\subsection{Incorporating Link Prediction Characteristics}
+\label{subsec-lp-char}
+
+\eat{
+Different from existing sampling methods \cite{ahmed2014tkdd}, our bagging methods should be designed in particular for link prediction.
+Motivated by the observation that most of all new links in social networks span within very short distances, typically closing triangles,
+which has been justified in \cite{leskovec-2008}, we develop three structural bagging approaches such that {\em a node is always sampled together
+with all its neighbors, which guarantees the possibility of forming triangles}. To achieve this, we revise the previous bagging methods as follows.
+
+\vspace{-1ex}
+\begin{enumerate}
+%\vspace{-0.5ex}
+\item[(1)]
+For random node bagging, when a node is selected uniformly at random from the network $G$, the node together with all of
+its neighbors are put into the node set $N_s$.
+%\vspace{-0.5ex}
+\item[(2)]
+For edge and biased edge bagging, when a node adjacent to $N_s$ is
+ selected and added to $N_s$, all of its neighbors are put into the node set $N_s$ together.
+\end{enumerate}
+\vspace{-1ex}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 2016-06-21 duan  begin
+
+
+Different from existing graph sampling methods \cite{ahmed2014tkdd, leskovec2006},
+we employ the characteristics of link prediction, as our bagging methods are designed in particular for link prediction.
+We develop a novel graph sampling method accompanied with two strategies:
+(1) node uptake, to choose those nodes with a high possibility of forming links  and (2) edge filter, to eliminate edges without affecting the prediction accuracy.
+
+
+\stitle{Node uptake}. Motivated by the observation that most of all new links in social networks span within very short distances, typically closing triangles, which has been justified in \cite{leskovec-2008}.  Inspired by this, we develop a node uptake strategy such that {\em a node is always sampled together
+with all its neighbors, which guarantees the possibility of forming triangles}. To achieve this, we revise the previous three bagging methods as follows.
+
+%\vspace{-1ex}
+\begin{enumerate}
+%\vspace{-0.5ex}
+\item[(1)]
+For random node bagging, when a node is selected uniformly at random from the network $G$, the node together with all of
+its neighbors are put into the node set $N_s$.
+%\vspace{-0.5ex}
+\item[(2)]
+For edge and biased edge bagging, when a node adjacent to $N_s$ is
+ selected and added to $N_s$, all of its neighbors are put into the node set $N_s$ together.
+\end{enumerate}
+%\vspace{-1ex}
+
+
+\stitle{Edge filter}. Inspired by graph sparsification \cite{chen2015, satuluri2011}
+which has been successfully applied to clustering without sacrificing the quality,
+we develop an edge filter strategy to choose a portion of edges only, rather than all the edges of the subgraph induced on $N_s$ of $G$,
+which significantly improves the efficiency of the bagging methods.
+The challenge here is how to remove edges as many as possible while maintaining the high prediction accuracy.
+To do this, we make use of the following link prediction characteristic.
+
+
+Preferential attachment (PA) \cite{albert1999,leskovec-2008} is one of the well-known
+link prediction characteristics, which says that {\em the probability
+that a new link is connected to a node $i$ is proportional to its degree}.
+In other words, nodes with small degree tend to have fewer links in the future.
+Therefore, we remove those edges that have at least one endpoint  with a smaller degree.
+Let $d_i$ and $d_j$ be the degrees of the endpoints $i$  and $j$ of edge $(i, j)$, respectively. Given a sampling ratio $\rho$,
+we sort edges in the induced subgraph by $\min(d_i, d_j)$ in a
+descending order and only select the top $m\rho$ edges, where $m$ is the total number of edges.
+%
+To achieve this, we further revise the previous three bagging methods as follows.
+
+\eat{Common neighbor (CN) \cite{kleinberg,linyuan-2011} is another significant characteristic for link prediction,
+which says that {\em two nodes $i$ and $j$ are more likely to have a link in the future if they
+have many common neighbors}. Ignoring the edge $(i, j)$ may cause as many as $d_i + d_j - 2$ nodes to lose
+their common neighbors. We adopt the method for filtering out edges in order to minimize the
+loss of common neighbors  \cite{chen2015}, which sorts edges by $d_i + d_j$ in a descending order, and keeps the top $ms$ edges, where $m$ is the total number of edges.}
+
+
+
+%\vspace{-1ex}
+\begin{enumerate}
+%\vspace{-0.5ex}
+\item[(1)]
+At the second step of the three bagging methods, construct a reduced adjacency matrix $W_s$
+from the reduced subgraph obtained by applying the edge filter
+on the subgraph induced on the node set $N_s$ of the network $G$.
+
+%\item[(1)]
+%For random node bagging, when a node is selected uniformly at random from the network $G$, the node together with all of
+%its neighbors are put into the node set $N_s$.
+%%\vspace{-0.5ex}
+%\item[(2)]
+%For edge and biased edge bagging, when a node adjacent to $N_s$ is
+% selected and added to $N_s$, all of its neighbors are put into the node set $N_s$ together.
+\end{enumerate}
+\vspace{-1ex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 2016-06-21 duan  end
+
+\subsection{Bound of Node Bagging Ensembles}
+
+Observe that even each ensemble component is much smaller,
+multiple samples are required. To meaningfully rank the various node
+pairs, each node pair needs to be included in the ensemble components with performance guarantees.
+What is the required number of samples to
+ensure that each node pair is included  at least $\mu$ times? Clearly,
+this number depends on the sampling fraction $f$. We next present a
+probabilistic bound on the expected number of times that a node pair is included as follows.
+
+%\begin{lemma}
+%Each node pair is included at least $\alpha$ times in an ensemble
+%component with probability at least $1 - e^{-\alpha}$ in $O( m/f^2)$
+%ensemble components.
+%\end{lemma}
+%\begin{proof}
+%Since each ensemble component includes a node with probability at
+%least $f$, it follows that each node pair is included with
+%probability $f^2$. Therefore, in $1/f^2$, the probability of not
+%including a node pair is given by $( 1- f^2)^{(1/f^2)} \leq 1/e$.
+%Therefore, the expected of  times a  particular  node pair not
+%included  in $9 m$ samples is $9 \alpha /e \leq 4 \alpha$. However,
+%it would need to be not included more than $8 \alpha$ times for the
+%node pair to be included less than $\alpha$ times. The upper-tail
+%Chernoff bound can be used to show that the probability of this is
+%less than $e^{-\alpha}$.
+%\end{proof}
+
+
+\begin{prop}
+The expected times of each node pair included in $\mu / f^{2}$ ensemble
+components is at least $\mu$.
+\end{prop}
+
+\begin{IEEEproof}
+Since each ensemble component includes a node with probability at
+least $f$, it follows that each node pair is included with
+probability $f^2$. Furthermore, all ensemble component are independent
+of each other. Let $X$ be the times of each node pair is included in
+all ensemble components, and the expected value $E(X)$ of $X$ is equal
+to $b \times f^2$, where $b$ is the number of ensemble components. For
+$E(X) \geq \mu$, we have $b \geq \mu / f^2 $.
+\end{IEEEproof}
+
+\eat{
+\marked{}
+\begin{lemma}
+Each node pair is include at least $\mu$ times in an ensemble
+component with probability at least $1 - \alpha$ in
+$( 2\mu + z_{\alpha} ) / f^{2}$ ensemble components, where $z_{\alpha}$
+is the cutoff point of a standard normal distribution.
+\end{lemma}
+\begin{proof}
+Since each ensemble component includes a node with probability at
+least $f$, it follows that each node pair is included with
+probability $f^2$. Furthermore, all ensemble component are independent
+of each other. Let $X$ be the times of each node pair is included in
+an ensemble component. From de Moivre-Laplace theorem, we have that
+$( X - bf^2 ) / \sqrt{bf^2 ( 1- f^2) }$ is approximately a standard
+normal distribution, if the number of ensemble components $b$ is very
+large. For $X \geq \mu$, we have $ b \geq ( 2\mu + z_{\alpha} ) / f^{2}$.
+\end{proof} }
+
+Note that while the above bound holds only for the original random node bagging method, and it provides a theoretical guarantee.
+Indeed, we could do much better in practice. For instance, the setting of $\mu = 0.1$ and $f = 0.1$ already achieves a pretty good result, as shown by our experimental study in Section~\ref{sec-exp}.
+
+\subsection{Ensemble Enabled Top-$K$ Predictions}
+
+
+\eat{
+%%%%%%%%%%%%%%%%%%%%%Baseline Algorithm
+\begin{figure}[tb!]
+%\vspace{-2ex}
+\begin{center}
+{\small
+\begin{minipage}{3.36in}
+\myhrule \vspace{-2ex}
+\mat{0ex}{
+\sttab {\sl Input:\/} \= Network $G(V, A)$, $\mu$ and $f$.\\
+{\sl Output:\/} Top-$k$ node pairs, not included in $A$. \\
+ \hspace{0ex}\= $\Gamma$ := $\emptyset$;\\
+\> {\bf Repeat} $\mu/f^2$  times {\bf do} \\
+\>\hspace{2ex}\= $N_s$ is a sampled ensemble of $G$ with at least $f\cdot|V|$ nodes; \\
+\>\>$W_s \approx F_s\cdot F_s^T$ using \NMF; \\
+\>\> $\Gamma'$ :=  top-$k$ largest value node pairs $(i,j)$ in $\overline{F_{s,i}} \cdot \overline{F_{s,j}}$;\\
+\>\> $\Gamma$ \ :=  top-$k$ largest value node pairs $(i,j)$ in $\Gamma'\cup\Gamma$;\\
+\> {\bf return} $\Gamma$.
+}
+\vspace{-2ex} \myhrule
+\end{minipage}
+}
+\end{center}
+\vspace{-3ex}
+\caption{Top-$K$ Predictions using Ensembles} \label{alg-topk}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+}
+
+
+We now explain the complete framework for top-$k$ predictions enabled with ensembles, shown as follows.
+
+%\vspace{-1ex}
+\begin{tabbing}1.\hspace{1ex}\=
+ {\bf given} a network $G(N, A)$ and parameters $\mu$ and $f$.\\
+2.\> {\bf let} $\Gamma$ be empty;\\
+3.\> {\bf repeat} $\mu/f^2$  times {\bf do} \\
+4.\>\hspace{2ex}\= {\bf let} $N_s$ be a sampled ensemble of $G$ with at least $f\cdot n$ nodes; \\
+5.\>\>Compute $W_s \approx F_s\cdot F_s^T$ using \NMF; \\
+6.\>\> {\bf let} $\Gamma'$ be top-$k$ largest value node pairs $(i,j)$ in $\{\overline{F_{s,i}} \cdot \overline{F_{s,j}}\}$;\\
+7.\>\> {\bf let} $\Gamma$ be top-$k$ largest value node pairs $(i,j)$ in $\Gamma'\cup\Gamma$;\\
+8.\> {\bf return} the top-$k$ node pairs $\Gamma$ not included in $A$.
+\end{tabbing}
+%\vspace{-1ex}
+
+
+To ensure that a node pair appears in the ensemble components at least $\mu$ expected times,  $\mu / f^{2}$ ensemble components are considered in total.
+For each time, an ensemble component $N_s$ is sampled by one of the above
+node, edge and biased edge bagging methods, the symmetric \NMF method in Section \ref{sec-NMF} is used on the matrix $W_s$ obtained
+by filtering edges on the reduced matrix, and the aforementioned
+pruning search process in Section \ref{sec-NMF-topk-optimization} is used to determine the predictions of
+all pairs of nodes. If a node pair appears in multiple ensemble components and has multiple
+prediction values, the maximum prediction value is considered, which means that we can use the
+minimum value in the previous predicted links to speed up the top-$k$ predictions.
+And, hence, only the top-$k$ predicted links are maintained for each ensemble component.
+At the end of the process, the top-$k$ predictions in all $\mu / f^{2}$ ensemble components are returned.
+
+
+\eat{Note that the top-$k$ nodes are
+not computed at this stage, but the  predicted values are simply
+added to any node-pair predictions from previous ensemble
+components. The number of times a node-pair has been encountered in
+one or more ensembles is also separately maintained.
+
+As in the case of node bagging, the predictions for any pair of
+nodes encountered in the search are averaged over the total number
+of times they were encountered. The top-$k$ predictions are then
+returned.
+
+
+%, except those that are less than $\epsilon$.
+Note that the top-$k$ nodes are
+not computed at this stage, but the  predicted values are simply
+added to any node-pair predictions from previous ensemble
+components. In addition, the number of times a node-pair has been encountered in
+one or more ensembles is also separately maintained.}
+
+
