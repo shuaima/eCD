@@ -108,7 +108,7 @@ multiplicative update rule:
 %\end{equation}
 \begin{equation}
 \label{equation-update}
-F_{ij} \leftarrow F_{ij} ( 1 - \beta + \beta \frac{(W F)_{ij} }{(F F^T F)_{ij}} ),
+F_{ij} \leftarrow F_{ij} \left( 1 - \beta + \beta \frac{ \left(W F \right)_{ij} }{ \left(F F^T F \right)_{ij}} \right),
 \end{equation}
 in which $\beta$ is a constant in $( 0, 1]$ \cite{ding}.
 
@@ -215,9 +215,54 @@ $\sum_{p = 1}^{r} f_p$ is equal to the number $n'$. Therefore, the complexity of
 top-$(\epsilon, k)$ prediction is $O(nn')$.
 \end{IEEEproof} }
 
- It remains to show that this procedure  does find a valid set of  top-$(\epsilon,
+ It remains to show that this procedure does find a valid set of top-$(\epsilon,
 k)$ link predictions. The reason that the procedure works correctly
-and efficiently  is because of nonnegativity and sparsity.
+and efficiently  is because of nonnegativity and sparsity. \marked{We next use an 
+example to illustrate how to search the top-$(\epsilon, k)$ link predictions based 
+on the above nested loop method.}
+
+%%%%%%%%%%% example for top-k prediction
+\vspace{2ex}
+\noindent\marked{\begin{example}
+\label{ex_top_k}
+Given a $5 \times 3$ matrix $F$, we sort the three columns of $F$ in a 
+descending order to generate the matrix $S$ and store the corresponding 
+inverted indices in the matrix $R$, shown as follows:
+\[\underbrace{
+  \begin{bmatrix}
+    0.7 & 0.3 & 0.7 \\
+    0.5 & 0.7 & 0.9 \\
+    0.4 & 1.1 & 0.7 \\
+    0.0 & 0.8 & 0.0 \\
+    0.5 & 0.0 & 0.1
+  \end{bmatrix}}_{F}
+  \Longrightarrow
+  \underbrace{\begin{bmatrix}
+    0.7 & 1.1 & 0.9 \\
+    0.5 & 0.8 & 0.7 \\
+    0.5 & 0.7 & 0.7 \\
+    0.4 & 0.3 & 0.1 \\
+    0.0 & 0.0 & 0.0
+  \end{bmatrix}}_{S}
+  \underbrace{\begin{bmatrix}
+    1 & 3 & 2 \\
+    2 & 4 & 1 \\
+    5 & 2 & 3 \\
+    3 & 1 & 5 \\
+    4 & 5 & 4
+  \end{bmatrix}}_{R}
+\] 
+Assume that $\epsilon = 1$, then $\sqrt{ \epsilon / r} = 0.58$ and $\epsilon / r = 0.33$. 
+For $p = 1$ (resp. $p = 2$ and $p = 3$), we have ($f_1 = 1, f'_1 = 4$) 
+(resp. ($f_2 = 3, f'_2 = 4$) and ($f_3 = 3, f'_3 = 4$)) and only need to calculate
+9 multiplications: ($S_{11} \cdot S_{21}$, 
+$S_{11} \cdot S_{31}$) (resp. ($S_{12} \cdot S_{22}$, $S_{12} \cdot S_{32}$, $S_{12} \cdot S_{42}$, 
+$S_{22} \cdot S_{32}$) and ($S_{13} \cdot S_{23}$, $S_{13} \cdot S_{33}$, $S_{23} \cdot S_{33}$)) 
+rather than 75 multiplications for calculating $FF^T$ directly. 
+As a result, a large portion of the search space is pruned. 
+\end{example} }
+
+
 
 \begin{prop}
 \label{prop-valid-topk}
@@ -258,13 +303,14 @@ This completes the proof.
  In real-life applications,
 a common scenario is to find a set of top-$(\epsilon, k)$ predictions with such that the prediction
 values are required to be greater than a given threshold $\theta$ \cite{ballard2015, lemp}. In this case,
-the top-$(\epsilon, k)$ prediction could be speeded up by pruning the node pairs whose prediction values are equal to or less than $\theta$.
+the top-$(\epsilon, k)$ prediction could be speeded up by pruning the node pairs
+whose prediction values are equal to or less than $\theta$ \marked{(See more details about setting $\theta$ in Section 3.6)}.
 
 The simple yet effective strategy is that the prediction value of a node pair $(i, j)$ satisfies:
 \begin{equation}
 \label{equation-length}
 \overline{F_i} \cdot \overline{F_j} = \|\overline{F_i} \| \cdot \| \overline{F_j} \| \cdot
-cos(\overline{F_i}, \overline{F_j}) \leq \|\overline{F_i} \| \cdot \| \overline{F_j} \|, 
+\cos(\overline{F_i}, \overline{F_j}) \leq \|\overline{F_i} \| \cdot \| \overline{F_j} \|,
 \end{equation} in which $\|\cdot\|$ is the length of a vector.
 
 By Equation \ref{equation-length}, we obtain the following:
