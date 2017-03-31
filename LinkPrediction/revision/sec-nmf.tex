@@ -217,16 +217,16 @@ top-$(\epsilon, k)$ prediction is $O(nn')$.
 
  It remains to show that this procedure does find a valid set of top-$(\epsilon,
 k)$ link predictions. The reason that the procedure works correctly
-and efficiently  is because of nonnegativity and sparsity. \marked{We next use an 
-example to illustrate how to search the top-$(\epsilon, k)$ link predictions based 
+and efficiently  is because of nonnegativity and sparsity. \marked{We next use an
+example to illustrate how to search the top-$(\epsilon, k)$ link predictions based
 on the above nested loop method.}
 
 %%%%%%%%%%% example for top-k prediction
 \vspace{2ex}
 \noindent\marked{\begin{example}
 \label{ex_top_k}
-Given a $5 \times 3$ matrix $F$, we sort the three columns of $F$ in a 
-descending order to generate the matrix $S$ and store the corresponding 
+Given a $5 \times 3$ matrix $F$, we sort the three columns of $F$ in a
+descending order to generate the matrix $S$ and store the corresponding
 inverted indices in the matrix $R$, shown as follows:
 \[\underbrace{
   \begin{bmatrix}
@@ -251,15 +251,15 @@ inverted indices in the matrix $R$, shown as follows:
     3 & 1 & 5 \\
     4 & 5 & 4
   \end{bmatrix}}_{R}
-\] 
-Assume that $\epsilon = 1$, then $\sqrt{ \epsilon / r} = 0.58$ and $\epsilon / r = 0.33$. 
-For $p = 1$ (resp. $p = 2$ and $p = 3$), we have ($f_1 = 1, f'_1 = 4$) 
+\]
+Assume that $\epsilon = 1$, then $\sqrt{ \epsilon / r} = 0.58$ and $\epsilon / r = 0.33$.
+For $p = 1$ (resp. $p = 2$ and $p = 3$), we have ($f_1 = 1, f'_1 = 4$)
 (resp. ($f_2 = 3, f'_2 = 4$) and ($f_3 = 3, f'_3 = 4$)) and only need to calculate
-9 multiplications: ($S_{11} \cdot S_{21}$, 
-$S_{11} \cdot S_{31}$) (resp. ($S_{12} \cdot S_{22}$, $S_{12} \cdot S_{32}$, $S_{12} \cdot S_{42}$, 
-$S_{22} \cdot S_{32}$) and ($S_{13} \cdot S_{23}$, $S_{13} \cdot S_{33}$, $S_{23} \cdot S_{33}$)) 
-rather than 75 multiplications for calculating $FF^T$ directly. 
-As a result, a large portion of the search space is pruned. 
+9 multiplications: ($S_{11} \cdot S_{21}$,
+$S_{11} \cdot S_{31}$) (resp. ($S_{12} \cdot S_{22}$, $S_{12} \cdot S_{32}$, $S_{12} \cdot S_{42}$,
+$S_{22} \cdot S_{32}$) and ($S_{13} \cdot S_{23}$, $S_{13} \cdot S_{33}$, $S_{23} \cdot S_{33}$))
+rather than 75 multiplications for calculating $FF^T$ directly.
+As a result, a large portion of the search space is pruned.
 \end{example} }
 
 
@@ -280,7 +280,8 @@ $\epsilon/r$. There are two sources of underestimation:
 \item  The outer loop does not consider rows $i$ for which $S_{ip} <
 \sqrt{\epsilon/r}$. This effectively prunes the products between
 pairs $(i, j)$ for which both $S_{ip}$ and $S_{jp}$ are less
-than $\sqrt{\epsilon/r}$. Therefore, the underestimation because of
+than $\sqrt{\epsilon/r}$ \marked{ since the matrix $S$ is sorted and $S_{ip} \geq S_{jp}$}. 
+Therefore, the underestimation because of
 the ignoring of this pair is at most $\sqrt{\epsilon/r} \times
 \sqrt{\epsilon/r} = \epsilon/r$.
 \item The second case is when the inner loop is terminated early.

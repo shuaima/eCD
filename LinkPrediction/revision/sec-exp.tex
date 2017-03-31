@@ -6,7 +6,7 @@ Using real-life datasets, we conducted four sets of experiments to evaluate:
 (1) the effectiveness and efficiency of our bagging methods with the top-$(\epsilon, k)$ speeding up technique,
 node uptake and edge filter techniques (referred to as bagging+ methods)
 vs. their counterparts bagging methods with only node uptake technique developed in \cite{liang2016},
-(2) the effectiveness and efficiency of our approach vs. conventional methods \Aa \cite{adamic}, 
+(2) the effectiveness and efficiency of our approach vs. conventional methods \Aa \cite{adamic},
 \marked{\RA \cite{zhou2009}} and \BIGCLAM \cite{yang-wsdm2013},
 (3) the impacts of various factors and (4) the improvements of bagging+ methods.
 
@@ -184,8 +184,8 @@ to $v$ with their common neighbors playing the role of transmitters. The
  \[ score(u, v) = \sum_{z \in N(u)\cap N(v)}\frac{1}{|N(z)|}.\]
 Note that \RA is very similar to \Aa when $|N(z)|$ is small, but
  great different when $|N(z)|$ is large. Zhou \etal \cite{zhou2009} showed that
- \RA performs better than \Aa in the networks with high average degree since 
- \RA punishes high degree common neighbors more heavily.  Therefore, 
+ \RA performs better than \Aa in the networks with high average degree since
+ \RA punishes high degree common neighbors more heavily.  Therefore,
  we choose it for comparison in the experiments.}
 
 \sstab  (3) \CAMBN \cite{yang-wsdm2013}:
@@ -230,6 +230,8 @@ $(50, 50, 50)$ (resp. $(10, 40, 50)$) for \NMF (resp. \BIGCLAM) on
 \Digg, \YouTube, and \Wikipedia, respectively, by default. For the bagging+ and bagging
 methods, we also fixed $r = 30$ on \Digg and $r = 10$ on other datasets by default
 (See Exp-3.4 for more details about the setting of $r$).
+\marked{In addition, we fixed $k$ to the same order of magnitude as the number of links
+in the ground truth data for each dataset \cite{yang2015}.}
 The other parameters with their descriptions and default values
 are presented in Table \ref{tab_parameter}.
 
@@ -386,14 +388,14 @@ the impacts of the number $k$ of predicted links.
 The results of accuracy and running time are reported in Figures \ref{fig_exp_2_1_k_acc_digg}--\ref{fig_exp_2_1_k_acc_wikipedia}
 and Figures \ref{fig_exp_2_1_k_time_digg}--\ref{fig_exp_2_1_k_time_wikipedia}, respectively.
 
-The accuracy results tell us that (a) \Biased outperforms other methods on 
+The accuracy results tell us that (a) \Biased outperforms other methods on
 \marked{most of the datasets}, (b) the accuracy of \Biasedp is very close to that of \Biased, (c) both
-\Biased and \Biasedp have a higher accuracy than \Aa, \marked{\RA and \BIGCLAM, except for \RA on \Wikipedia}, 
-(d) \NMF is more accurate than \marked{\Aa, \RA and \BIGCLAM, except for \RA on \Wikipedia}, 
+\Biased and \Biasedp have a higher accuracy than \Aa, \marked{\RA and \BIGCLAM, except for \RA on \Wikipedia},
+(d) \NMF is more accurate than \marked{\Aa, \RA and \BIGCLAM, except for \RA on \Wikipedia},
 and (e) the accuracy of all methods decreases with the increase of $k$.
 Indeed, \Biased improves the accuracy by $(2.5\%, 41.4\%, 113.4\%, 34.1\%)$ (resp. $(7.5\%, 45.2\%,$ $ 38.2\%, 46.2\%)$
 and $(12.7\%, 7.9\%, -25.2\%, 26.9\%)$) over \NMF, \Aa, \RA and \BIGCLAM on \Digg, \YouTube and \Wikipedia,
-respectively. \marked{Moreover, \Biased performs consistently well on all networks (\ie more robust), unlike \RA which works well 
+respectively. \marked{Moreover, \Biased performs consistently well on all networks (\ie more robust), unlike \RA which works well
 on \Wikipedia but poorly on other datasets.} This verifies the effectiveness of our bagging methods.
 
 
@@ -418,8 +420,8 @@ which is consistent to the $O(nr^2)$ complexity of \NMF.
 The running time of \marked{\Aa (resp. \RA) is about 50 (resp. 37) seconds on \YouTube,
 while more than 2,500 (resp. 1,900) seconds} on \Wikipedia.
 This is because that the average degrees of these datasets are 5 and 33,
-and \Aa  \marked{and \RA} take more time with the increase of the network degree. 
-\marked{Since \RA is suitable for high average degree networks \cite{zhou2009}, it performs best on \Wikipedia 
+and \Aa  \marked{and \RA} take more time with the increase of the network degree.
+\marked{Since \RA is suitable for high average degree networks \cite{zhou2009}, it performs best on \Wikipedia
 which has the largest average degree.}
 The running time of \BIGCLAM is also sensitive to the degree of networks because its complexity is $O(nd(r + d))$.
 As a result, it runs faster than
@@ -443,10 +445,10 @@ Note that there are {\em some missing plots} for \NMF, \Aa, \marked{\RA} and
 
 
 
-The accuracy results tell us that (a) \Biased obtains the highest accuracy on 
+The accuracy results tell us that (a) \Biased obtains the highest accuracy on
 \marked{most of the datasets}, (b) \Biasedp performs as well as its counterpart \Biased,
-(c) the bagging+ and bagging methods perform better than \NMF, \Aa, \marked{\RA 
-and \BIGCLAM, except for \RA on \Wikipedia}, 
+(c) the bagging+ and bagging methods perform better than \NMF, \Aa, \marked{\RA
+and \BIGCLAM, except for \RA on \Wikipedia},
 and (d) \NMF has a higher accuracy than \Aa, \marked{\RA
 and \BIGCLAM, except for \RA on \Wikipedia}. This means that
 our methods are more accurate and robust with the increase of network sizes.
