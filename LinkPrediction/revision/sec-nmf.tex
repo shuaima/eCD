@@ -27,7 +27,7 @@ Latent factor models work by associating a low dimensional factor
 with each row and column of the network. However, since link
 prediction is (predominantly) studied only for undirected networks,
 which have symmetric weight matrices, it suffices to associate an
-$r$-dimensional latent factor $\overline{F_i}$ with the $i$th node
+$r$-dimensional latent factor $\overline{f_i}$ with the $i$th node
 in the network. The value of $r$ is the {\em rank} of the
 factorization. This is an issue, which we will discuss slightly
 later.  The weight of a link between nodes $i$ and $j$ is defined by
@@ -35,12 +35,12 @@ the use of the dot product between the factors of nodes $i$ and $j$.
 In other words, for the weight matrix $W= [w_{ij}]_{n\times n}$, we
 would like to achieve the following:
 \begin{equation}
-w_{ij} \approx \overline{F_i} \cdot \overline{F_j}, \ \ \forall i, j
+w_{ij} \approx \overline{f_i} \cdot \overline{f_j}, \ \ \forall i, j
 \in \{ 1, \ldots, n \} \label{factor}.
 \end{equation}
 This condition can be directly written in the matrix form. Let $F$ be an
 $n \times r$ matrix, in which the $i$th row is the row vector
-$\overline{F_i}$. Then, the above condition of
+$\overline{f_i}$. Then, the above condition of
 Equation~(\ref{factor}) can be written as follows:
 \begin{equation}
 W \approx F F^T.
@@ -130,10 +130,10 @@ This remains quite high for large networks, which motivates us to develop fast s
 An advantage of the nonnegative factorization approach is that it
 enables an efficient search phase, which is generally not possible
 with most other link prediction methods. The value of
-$\overline{F_i} \cdot \overline{F_j}$ in Equation~(\ref{factor}) provides a prediction value
+$\overline{f_i} \cdot \overline{f_j}$ in Equation~(\ref{factor}) provides a prediction value
 for the links. The goal of the search phase is to return the top-$k$
 links with the largest prediction values. In real-world settings, the matrix $F$ is
-often nonnegative and sparse. This non-negativity and sparsity are
+often nonnegative and sparse \cite{NMF-nature99}. This non-negativity and sparsity are
 particularly useful in enabling an efficient approach. In order to
 speed up the search, we define the notion of $\epsilon$-approximate
 top-$k$ predictions, denoted as top-$(\epsilon, k)$ predictions.
@@ -148,9 +148,9 @@ top-$k$ predictions, denoted as top-$(\epsilon, k)$ predictions.
 %network.
 A set $L$ of predicted links in a network is a top-$(\epsilon, k)$ prediction, if
 the cardinality of $L$ is $k$, and the $k$-th best  value of
-$\overline{F_i} \cdot \overline{F_j}$ for a link $(i, j) \in L$ is
+$\overline{f_i} \cdot \overline{f_j} $ for a link $(i, j) \in L$ is
 at most $\epsilon$ less than the $k$-th best value of
-$\overline{F_h} \cdot \overline{F_l}$ over any link $(h , l)$ in the
+$\overline{f_h} \cdot \overline{f_l}$ over any link $(h , l)$ in the
 network.
 \end{definition}
 Intuitively, this definition allows a qualitative  tolerance of
@@ -258,8 +258,10 @@ For $p = 1$ (resp. $p = 2$ and $p = 3$), we have ($f_1 = 1, f'_1 = 4$)
 9 multiplications: ($S_{11} \cdot S_{21}$,
 $S_{11} \cdot S_{31}$) (resp. ($S_{12} \cdot S_{22}$, $S_{12} \cdot S_{32}$, $S_{12} \cdot S_{42}$,
 $S_{22} \cdot S_{32}$) and ($S_{13} \cdot S_{23}$, $S_{13} \cdot S_{33}$, $S_{23} \cdot S_{33}$))
-rather than 75 multiplications for calculating $FF^T$ directly.
-As a result, a large portion of the search space is pruned.
+rather than 75 multiplications for calculating $FF^T$ directly, thus pruning a large portion of
+the search space. We then save the above values into corresponding node pairs,
+\eg increase the score of node pair ($R_{11}, R_{21}$) by $S_{11} \cdot S_{21}$,
+and finally return all node pairs that we encountered.
 \end{example} }
 
 
@@ -280,7 +282,7 @@ $\epsilon/r$. There are two sources of underestimation:
 \item  The outer loop does not consider rows $i$ for which $S_{ip} <
 \sqrt{\epsilon/r}$. This effectively prunes the products between
 pairs $(i, j)$ for which both $S_{ip}$ and $S_{jp}$ are less
-than $\sqrt{\epsilon/r}$ \marked{ since the matrix $S$ is sorted and $S_{ip} \geq S_{jp}$}. 
+than $\sqrt{\epsilon/r}$ \marked{ since the matrix $S$ is sorted and $S_{ip} \geq S_{jp}$}.
 Therefore, the underestimation because of
 the ignoring of this pair is at most $\sqrt{\epsilon/r} \times
 \sqrt{\epsilon/r} = \epsilon/r$.
@@ -310,21 +312,21 @@ whose prediction values are equal to or less than $\theta$ \marked{(See more det
 The simple yet effective strategy is that the prediction value of a node pair $(i, j)$ satisfies:
 \begin{equation}
 \label{equation-length}
-\overline{F_i} \cdot \overline{F_j} = \|\overline{F_i} \| \cdot \| \overline{F_j} \| \cdot
-\cos(\overline{F_i}, \overline{F_j}) \leq \|\overline{F_i} \| \cdot \| \overline{F_j} \|,
+\overline{f_i} \cdot \overline{f_j} = \|\overline{f_i} \| \cdot \| \overline{f_j} \| \cdot
+\cos(\overline{f_i}, \overline{f_j}) \leq \|\overline{f_i} \| \cdot \| \overline{f_j} \|,
 \end{equation} in which $\|\cdot\|$ is the length of a vector.
 
 By Equation \ref{equation-length}, we obtain the following:
 \begin{equation}
 \label{equation-length-pruning}
-\|\overline{F_i} \| \cdot \| \overline{F_j} \| \leq \theta \Longrightarrow \overline{F_i} \cdot \overline{F_j} \leq \theta
+\|\overline{f_i} \| \cdot \| \overline{f_j} \| \leq \theta \Longrightarrow \overline{f_i} \cdot \overline{f_j} \leq \theta
 \end{equation}
 The prediction value is no larger than $\theta$ if the product of the vector lengths  is no larger than $\theta$.
 As we are to find the node pairs whose prediction values are greater than $\theta$, we can ignore
 the node pairs whose length products are no larger than $\theta$ in the search process.
 
 After  the matrixes $S$ and $R$ are obtained, an additional step is required to calculate the length of each row
-vector $\overline{F_i}$ and store them in an array $M$. Then the following if-clause is inserted  into line 3
+vector $\overline{f_i}$ and store them in an array $M$. Then the following if-clause is inserted  into line 3
 in the above nested loop to prune the node pairs whose prediction values are equal to or less than $\theta$.
 \begin{tabbing}\hspace{5ex}\=
 {\bf if} $M[R_{ip}] \cdot M[R_{jp}] \leq \theta$ {\bf then} continue;
@@ -345,7 +347,7 @@ By Proposition~\ref{prop-valid-topk}, the nested loop finds a valid set of
 top-$(\epsilon, k)$ predictions. The difference between the nested loop
 and the optimized nested loop (\ie the top-$(\epsilon, k)$ prediction with speeding up technique)
 is that the latter does not consider the node pairs $(i, j)$
-when $\|\overline{F_i} \| \cdot \| \overline{F_j} \| \leq \theta$.
+when $\|\overline{f_i} \| \cdot \| \overline{f_j} \| \leq \theta$.
 By Equation~(\ref{equation-length-pruning}), the prediction values of those node pairs
 are also  equal to or less than $\theta$.
 
@@ -366,4 +368,4 @@ r^2)$ term might be the bottleneck.  The required  number of latent
 components $r$ is often expected to increase with the network size. In
 order to handle this computational problem, we propose the method of
 {\em ensemble decomposition} that provides both efficiency {\em
-and} effectiveness advantages.
+and} \marked{robustness} advantages.

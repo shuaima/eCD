@@ -1,15 +1,14 @@
 \section{Structural Bagging Methods}
 \label{sec-bagging}
-Since the link prediction problem scales worse than
-linearly with the network size, it is generally more efficient to
-solve smaller problems multiple times rather than solve a single
-large problem.
-The structural bagging approach provides an effective method to decompose
-the link prediction problem into smaller pieces that are solved
-independently.
+Since the link prediction problem scales worse than linearly with the network size,
+\marked{\eg the previous mentioned latent factor model based method requires $O(nr^2)$ time, }
+it is generally more efficient to solve smaller problems multiple
+times rather than solve a single large problem. The structural bagging
+approach provides an effective method to decompose the link prediction
+problem into smaller pieces that are solved independently.
 Furthermore, the aggregated results from multiple models often
-provide a robustness to the decomposition process  \cite{Breiman96b-1996}. In the
-following, we introduce three different ways for the bagging decomposition.
+provide a robustness to the decomposition process  \cite{Breiman96b-1996}.
+In the following, we introduce three different ways for the bagging decomposition.
 We consider a network $G(N, A)$.
 
 
@@ -343,7 +342,7 @@ We now explain the complete framework for top-$k$ predictions enabled with ensem
 3.\> {\bf repeat} $\mu/f^2$  times {\bf do} \\
 4.\>\hspace{2ex}\= {\bf let} $N_s$ be a sampled ensemble of $G$ with at least $f\cdot n$ nodes; \\
 5.\>\>Compute $W_s \approx F_s\cdot F_s^T$ using \NMF; \\
-6.\>\> {\bf let} $\Gamma'$ be top-$k$ largest value node pairs $(i,j)$ in $\{\overline{F_{s,i}} \cdot \overline{F_{s,j}}\}$;\\
+6.\>\> {\bf let} $\Gamma'$ be top-$k$ largest value node pairs $(i,j)$ in $\{\overline{f_{s,i}} \cdot \overline{f_{s,j}}\}$;\\
 7.\>\> {\bf let} $\Gamma$ be top-$k$ largest value node pairs $(i,j)$ in $\Gamma'\cup\Gamma$;\\
 8.\> {\bf return} the top-$k$ node pairs $\Gamma$ not included in $A$.
 \end{tabbing}
@@ -357,11 +356,12 @@ by filtering edges on the reduced matrix, and the aforementioned
 pruning search process in Section \ref{sec-NMF-topk-optimization} is used to determine the predictions of
 all pairs of nodes. If a node pair appears in multiple ensemble components and has multiple
 prediction values, the maximum prediction value is considered, which means that we can use the
-minimum value in the previous predicted links to speed up the top-$k$ predictions,  
+minimum value in the previous predicted links to speed up the top-$k$ predictions,
 \marked{\ie the minimum value is assigned to the parameter $\theta$ in Section 2.2.}
 And, hence, only the top-$k$ predicted links are maintained for each ensemble component.
 At the end of the process, the top-$k$ predictions in all $\mu / f^{2}$ ensemble components are returned.
-
+\marked{One thing should be noted that the proposed ensemble-enabled approach is 
+not only designed for \NMF, but also applied to any link prediction methods. }
 
 \eat{Note that the top-$k$ nodes are
 not computed at this stage, but the  predicted values are simply

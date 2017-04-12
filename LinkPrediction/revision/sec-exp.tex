@@ -3,12 +3,13 @@
 
 In this section, we present an extensive experimental study of our ensemble-enabled approach for link prediction.
 Using real-life datasets, we conducted four sets of experiments to evaluate:
-(1) the effectiveness and efficiency of our bagging methods with the top-$(\epsilon, k)$ speeding up technique,
+(1) the \marked{robustness} and efficiency of our bagging methods with the top-$(\epsilon, k)$ speeding up technique,
 node uptake and edge filter techniques (referred to as bagging+ methods)
 vs. their counterparts bagging methods with only node uptake technique developed in \cite{liang2016},
-(2) the effectiveness and efficiency of our approach vs. conventional methods \Aa \cite{adamic},
+(2) the \marked{robustness} and efficiency of our approach vs. conventional methods \Aa \cite{adamic},
 \marked{\RA \cite{zhou2009}} and \BIGCLAM \cite{yang-wsdm2013},
-(3) the impacts of various factors and (4) the improvements of bagging+ methods.
+and (3) the impacts of various \marked{parameters}.
+%and (4) the improvements of bagging+ methods.
 
 
 \subsection{Experimental settings}
@@ -64,7 +65,7 @@ undirected graphs, we ignored the direction of edges in the directed graphs.
 \caption{Training and ground truth data. The data in the first time slot is the training data and
 the remaining is the ground truth data.}
 \label{tab_dataset}
-\vspace{0ex}
+\vspace{-2ex}
 \centering
 \begin{tabular}{cccc}
 \hline \hline Datasets & Date & Nodes &  Edges  \\
@@ -82,6 +83,7 @@ the remaining is the ground truth data.}
 \raisebox{1.0ex}[0pt]{ \Wikipedia } & 2006-11-01 --- 2007-04-05 & 1,682,759 & 5,856,596\\
 \hline \hline
 \end{tabular}
+\vspace{-2ex}
 \end{table}
 
 \begin{table}[tb!]
@@ -89,7 +91,7 @@ the remaining is the ground truth data.}
 Note that we set $k =  10^5$ for \Digg and \YouTube and $k = 10^6$ for
 other datasets, respectively.}
 \label{tab_parameter}
-\vspace{0ex}
+\vspace{-2ex}
 \centering
 \newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
 \begin{tabular}{c l c}
@@ -112,6 +114,7 @@ $\rho$   &  \tabincell{l}{Fraction of the number of edges to be\\
 $n$ & Number of nodes & see Table \ref{tab_dataset}\\
 \hline \hline
 \end{tabular}
+\vspace{-2ex}
 \end{table}
 
 
@@ -230,8 +233,8 @@ $(50, 50, 50)$ (resp. $(10, 40, 50)$) for \NMF (resp. \BIGCLAM) on
 \Digg, \YouTube, and \Wikipedia, respectively, by default. For the bagging+ and bagging
 methods, we also fixed $r = 30$ on \Digg and $r = 10$ on other datasets by default
 (See Exp-3.4 for more details about the setting of $r$).
-\marked{In addition, we fixed $k$ to the same order of magnitude as the number of links
-in the ground truth data for each dataset \cite{yang2015}.}
+%\marked{In addition, we fixed $k$ to the same order of magnitude as the number of links
+%in the ground truth data for each dataset \cite{yang2015}.}
 The other parameters with their descriptions and default values
 are presented in Table \ref{tab_parameter}.
 
@@ -258,22 +261,107 @@ are presented in Table \ref{tab_parameter}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   2016-06-22 duan begin
 \subsubsection{Bagging+ vs. Bagging}
-In the first set of test, we evaluated the effectiveness and efficiency of our bagging+ methods
-compared with bagging methods. Given one of top-$k$ link prediction methods, denoted by $x$, its effectiveness
+In the first set of test, we evaluated the \marked{robustness} and efficiency of our bagging+ methods
+compared with bagging methods. Given one of top-$k$ link prediction methods, denoted by $x$, its \marked{performance}
 of link prediction is evaluated with the following measure:
 \begin{equation}
 accuracy(x) = \frac{\# \textrm{ of correctly predicted links}}{\textrm{the number} \ k\ \textrm{of predicted links}}.
 \end{equation}
 
 
+We first evaluate the improvements of our bagging+ methods and then
+evaluate the impacts of $k$ and network sizes.
+Compared with their counterparts bagging methods~\cite{liang2016}, the bagging+ methods have two modifications:
+the top-$(\epsilon, k)$ speeding up technique (denoted as top-$(\epsilon, k)$+) and the edge filter technique.
+These techniques have no side effects on accuracy.
+Therefore, we focus on the efficiency improvements of these techniques.
 
 
-\stitle{Exp-1.1: Impacts of $k$}. To evaluate the impacts of the number $k$ of
+\stitle{Exp-1.1: Improvements of bagging+ methods}. To evaluate the
+efficiency improvements of these techniques, we generated different combinations
+of these techniques and fixed the parameters to their default values.
+The results of running time are reported in Table \ref{tab_improvements}.
+
+The results tell us that (a) Top-$(\epsilon, k)$+ indeed improves
+the efficiency of Top-$k$ on all datasets,
+(b) the edge filter technique also speeds up the bagging methods,
+and (c) the maximum speedup is obtained by taking the
+two techniques together. Therefore, we adopt these two techniques
+in our bagging+ methods to achieve the maximum speedup.
+Note that the running time of \Biasedp and \Nodep on \YouTube and \Wikipedia
+are very close because \Biasedp spends more time on sampling the nodes
+from the input graph than \Nodep while \Nodep spends more time on processing
+its ensembles. Furthermore, the improvement of Top-$(\epsilon, k)$+ on \Wikipedia is not
+distinct since the $\epsilon = 1$ is very suitable for this dataset.
+
+\begin{table}
+\caption{Running time (sec.) of different combinations of the modifications. Node+
+(resp. Edge+ and Biased+) is the Random Node Bagging (resp. Edge Bagging
+and Biased Edge Bagging) with edge filter.}
+\label{tab_improvements}
+\vspace{-2ex}
+\centering
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+\begin{tabular}{l|l|c|c|c}
+\hline \hline Bagging & Top-$k$ Prediction & Digg & YouTube & Wikipedia  \\
+\hline \hline
+Node & Top-$(\epsilon, k)$           & 74.15    & 43.43 & 134.06  \\
+Node & Top-$(\epsilon, k)$+        & 65.01    & 41.29 & 133.80 \\
+Node+ & Top-$(\epsilon, k)$        & 67.22    & 40.02 & 118.13  \\
+Node+ & Top-$(\epsilon, k)$+    & \textbf{60.38}   & \textbf{37.87} & \textbf{117.27} \\
+\hline
+Edge & Top-$(\epsilon, k)$            & 77.33   & 47.23 & 137.72  \\
+Edge & Top-$(\epsilon, k)$+        & 67.26    & 45.04 & 137.57  \\
+Edge+ & Top-$(\epsilon, k)$        & 70.29   & 43.69 & 121.42 \\
+Edge+ & Top-$(\epsilon, k)$+    & \textbf{62.31}    & \textbf{41.29} & \textbf{121.16} \\
+\hline
+Biased & Top-$(\epsilon, k)$         & 63.93    & 42.39 & 135.59  \\
+Biased & Top-$(\epsilon, k)$+      & 58.56    & 41.07 & 134.02  \\
+Biased+ & Top-$(\epsilon, k)$      & 58.97    & 39.61 & 119.44  \\
+Biased+ & Top-$(\epsilon, k)$+  & \textbf{55.32}    & \textbf{38.15} & \textbf{117.25}  \\
+\hline \hline
+\end{tabular}
+\vspace{-2ex}
+\end{table}
+
+
+
+
+
+\stitle{Exp-1.2: Impacts of $k$}. To evaluate the impacts of the number $k$ of
 predicted links, we varied $k$ from $1\times 10^4$ to $1\times 10^5$ on \Digg
 and \YouTube (resp. from $1\times 10^5$ to $1\times 10^6$ on \Wikipedia)
 and fixed other parameters to their default values.
 The results of accuracy and running time are reported in Figures \ref{fig_exp_1_1_k_acc_digg}--\ref{fig_exp_1_1_k_acc_wikipedia}
 and Figures \ref{fig_exp_1_1_k_time_digg}--\ref{fig_exp_1_1_k_time_wikipedia}, respectively.
+\marked{Moreover, we also report the accuracy together with its $95\%$ confidence intervals
+ in Table \ref{tab_accuracy}.}
+
+\begin{table}
+\caption{Accuracy (\%) comparison with \Aa, \RA and \BIGCLAM.}
+\label{tab_accuracy}
+\vspace{-2ex}
+\centering
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+\begin{tabular}{l|c|c|c}
+\hline \hline Algorithm  & Digg & YouTube & Wikipedia  \\
+\hline \hline
+\Aa & 3.50 &	1.57 &	2.14  \\
+\RA & 2.32 &	1.65 &	3.09  \\
+\BIGCLAM & 3.70 $\pm$ (0.256) &	1.56 $\pm$ (0.190) &	1.82 $\pm$ (0.100)  \\
+\NMF & 4.83 $\pm$ (0.072) 	&2.12 $\pm$ (0.090) 	&2.05 $\pm$ (0.109) \\
+\hline
+\Node & 4.91 $\pm$ (0.059)	& 2.26 $\pm$ (0.124)	& 2.28 $\pm$ (0.056) \\
+\Edge & 4.94 $\pm$ (0.115)	& 2.27 $\pm$ (0.034)	& 2.28 $\pm$ (0.034) \\
+\Biased & \textbf{4.95 $\pm$ (0.076)}	& \textbf{2.28 $\pm$ (0.159)}	& \textbf{2.31 $\pm$ (0.038)} \\
+\hline
+\Nodep & 4.92 $\pm$ (0.058)	& 2.15 $\pm$ (0.074)	& 2.25 $\pm$ (0.062) \\
+\Edgep & 4.94 $\pm$ (0.047)	& 2.17 $\pm$ (0.078)	& 2.25 $\pm$ (0.014) \\
+\Biasedp & \textbf{4.95 $\pm$ (0.096)}	& \textbf{2.25 $\pm$ (0.112)}	& \textbf{2.33 $\pm$ (0.045)} \\
+\hline \hline
+\end{tabular}
+\vspace{-2ex}
+\end{table}
 
 
 The accuracy results tell us that
@@ -283,7 +371,7 @@ of their counterparts bagging methods, and (c) the accuracy of all
 methods decreases with the increase of $k$. It is means that the
 bagging+ methods maintain the accuracy while some of the
 edges have been removed compared with their counterparts bagging methods.
-This verifies the effectiveness of the bagging+ methods.
+This verifies the \marked{robustness} of the bagging+ methods.
 
 
 The running time results tell us that (a) the \Biasedp outperforms
@@ -300,7 +388,7 @@ This verifies the efficiency of the bagging+ methods.
 
 
 
-\stitle{Exp-1.2: Impacts of network sizes}. To evaluate the impacts of network sizes, we varied the
+\stitle{Exp-1.3: Impacts of network sizes}. To evaluate the impacts of network sizes, we varied the
 number of nodes $n$ from $3\times 10^4$ to $1.5\times 10^5$ on \Digg (resp.
 from $3\times 10^5$ to $1.5\times 10^6$ on \YouTube and \Wikipedia,
 from $3\times 10^5$ to $5\times 10^6$ on \Twitter and
@@ -377,16 +465,18 @@ than $55$ on other subnetworks. }
 
 
 \subsubsection{Comparison with \Aa, \marked{\RA} and \BIGCLAM}
-In the second set of tests, we evaluated the effectiveness and efficiency of our
+In the second set of tests, we evaluated the \marked{robustness} and efficiency of our
 methods compared with \Aa, \marked{\RA} and \BIGCLAM. From the previous tests, we find that the
 \Biasedp and its counterpart \Biased are the best bagging methods. Therefore, we
 chose them for the comparison in this set of tests.
 
 
-\stitle{Exp-2.1: Impacts of $k$}. Using the same setting as Exp-1.1, we evaluated
+\stitle{Exp-2.1: Impacts of $k$}. Using the same setting as Exp-1.2, we evaluated
 the impacts of the number $k$ of predicted links.
 The results of accuracy and running time are reported in Figures \ref{fig_exp_2_1_k_acc_digg}--\ref{fig_exp_2_1_k_acc_wikipedia}
 and Figures \ref{fig_exp_2_1_k_time_digg}--\ref{fig_exp_2_1_k_time_wikipedia}, respectively.
+\marked{The comparison of accuracy together with its 95\% confidence intervals is shown
+in Table \ref{tab_accuracy}.}
 
 The accuracy results tell us that (a) \Biased outperforms other methods on
 \marked{most of the datasets}, (b) the accuracy of \Biasedp is very close to that of \Biased, (c) both
@@ -396,7 +486,7 @@ and (e) the accuracy of all methods decreases with the increase of $k$.
 Indeed, \Biased improves the accuracy by $(2.5\%, 41.4\%, 113.4\%, 34.1\%)$ (resp. $(7.5\%, 45.2\%,$ $ 38.2\%, 46.2\%)$
 and $(12.7\%, 7.9\%, -25.2\%, 26.9\%)$) over \NMF, \Aa, \RA and \BIGCLAM on \Digg, \YouTube and \Wikipedia,
 respectively. \marked{Moreover, \Biased performs consistently well on all networks (\ie more robust), unlike \RA which works well
-on \Wikipedia but poorly on other datasets.} This verifies the effectiveness of our bagging methods.
+on \Wikipedia but poorly on other datasets. This verifies the robustness of our bagging methods.}
 
 
 The running time results tell us that (a) \Biasedp is the fastest method on all
@@ -435,7 +525,7 @@ when the degree is increased.
 
 
 
-\stitle{Exp-2.2: Impacts of network sizes}. Using the same setting as Exp-1.2, we
+\stitle{Exp-2.2: Impacts of network sizes}. Using the same setting as Exp-1.3, we
 evaluated the impacts of network sizes. The results of accuracy and running time
 are reported in Figures \ref{fig_exp_2_2_size_acc_digg}--\ref{fig_exp_2_2_size_acc_wikipedia}
 and Figures \ref{fig_exp_2_2_size_time_twitter}--\ref{fig_exp_2_2_size_time_friendster}, respectively.
@@ -662,61 +752,61 @@ fixed $\epsilon = 1$ by default to achieve a better efficiency.
 
 
 
-
-\subsubsection{Performance Improvements of Bagging+ Methods}
-In the fourth set of tests, we evaluate the improvements of our bagging+ methods.
-Compared with their counterparts bagging methods~\cite{liang2016}, the bagging+ methods have two modifications:
-the top-$(\epsilon, k)$ speeding up technique (denoted as top-$(\epsilon, k)$+) and the edge filter technique.
-As shown in previous experiments, these techniques have no side effects on accuracy.
-Therefore, we focus on the efficiency improvements of these techniques.
-
-
-\stitle{Exp-4: Improvements of bagging+ methods}. To evaluate the
-efficiency improvements of these techniques, we generated different combinations
-of these techniques and fixed the parameters to their default values.
-The results of running time are reported in Table \ref{tab_improvements}.
-
-The results tell us that (a) Top-$(\epsilon, k)$+ indeed improves
-the efficiency of Top-$k$ on all datasets,
-(b) the edge filter technique also speeds up the bagging methods,
-and (c) the maximum speedup is obtained by taking the
-two techniques together. Therefore, we adopt these two techniques
-in our bagging+ methods to achieve the maximum speedup.
-Note that the running time of \Biasedp and \Nodep on \YouTube and \Wikipedia
-are very close because \Biasedp spends more time on sampling the nodes
-from the input graph than \Nodep while \Nodep spends more time on processing
-its ensembles. Furthermore, the improvement of Top-$(\epsilon, k)$+ on \Wikipedia is not
-distinct since the $\epsilon = 1$ is very suitable for this dataset.
-
-\begin{table}
-\caption{Running time of different combinations of the modifications. Node+
-(resp. Edge+ and Biased+) is the Random Node Bagging (resp. Edge Bagging
-and Biased Edge Bagging) with edge filter.}
-\label{tab_improvements}
-\vspace{0ex}
-\centering
-\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
-\begin{tabular}{l|l|c|c|c}
-\hline \hline Bagging & Top-$k$ Prediction & Digg & YouTube & Wikipedia  \\
-\hline \hline
-Node & Top-$(\epsilon, k)$           & 74.15    & 43.43 & 134.06  \\
-Node & Top-$(\epsilon, k)$+        & 65.01    & 41.29 & 133.80 \\
-Node+ & Top-$(\epsilon, k)$        & 67.22    & 40.02 & 118.13  \\
-Node+ & Top-$(\epsilon, k)$+    & \textbf{60.38}   & \textbf{37.87} & \textbf{117.27} \\
-\hline
-Edge & Top-$(\epsilon, k)$            & 77.33   & 47.23 & 137.72  \\
-Edge & Top-$(\epsilon, k)$+        & 67.26    & 45.04 & 137.57  \\
-Edge+ & Top-$(\epsilon, k)$        & 70.29   & 43.69 & 121.42 \\
-Edge+ & Top-$(\epsilon, k)$+    & \textbf{62.31}    & \textbf{41.29} & \textbf{121.16} \\
-\hline
-Biased & Top-$(\epsilon, k)$         & 63.93    & 42.39 & 135.59  \\
-Biased & Top-$(\epsilon, k)$+      & 58.56    & 41.07 & 134.02  \\
-Biased+ & Top-$(\epsilon, k)$      & 58.97    & 39.61 & 119.44  \\
-Biased+ & Top-$(\epsilon, k)$+  & \textbf{55.32}    & \textbf{38.15} & \textbf{117.25}  \\
-\hline \hline
-\end{tabular}
-\vspace{-0ex}
-\end{table}
+%
+%\subsubsection{Performance Improvements of Bagging+ Methods}
+%In the fourth set of tests, we evaluate the improvements of our bagging+ methods.
+%Compared with their counterparts bagging methods~\cite{liang2016}, the bagging+ methods have two modifications:
+%the top-$(\epsilon, k)$ speeding up technique (denoted as top-$(\epsilon, k)$+) and the edge filter technique.
+%As shown in previous experiments, these techniques have no side effects on accuracy.
+%Therefore, we focus on the efficiency improvements of these techniques.
+%
+%
+%\stitle{Exp-4: Improvements of bagging+ methods}. To evaluate the
+%efficiency improvements of these techniques, we generated different combinations
+%of these techniques and fixed the parameters to their default values.
+%The results of running time are reported in Table \ref{tab_improvements}.
+%
+%The results tell us that (a) Top-$(\epsilon, k)$+ indeed improves
+%the efficiency of Top-$k$ on all datasets,
+%(b) the edge filter technique also speeds up the bagging methods,
+%and (c) the maximum speedup is obtained by taking the
+%two techniques together. Therefore, we adopt these two techniques
+%in our bagging+ methods to achieve the maximum speedup.
+%Note that the running time of \Biasedp and \Nodep on \YouTube and \Wikipedia
+%are very close because \Biasedp spends more time on sampling the nodes
+%from the input graph than \Nodep while \Nodep spends more time on processing
+%its ensembles. Furthermore, the improvement of Top-$(\epsilon, k)$+ on \Wikipedia is not
+%distinct since the $\epsilon = 1$ is very suitable for this dataset.
+%
+%\begin{table}
+%\caption{Running time of different combinations of the modifications. Node+
+%(resp. Edge+ and Biased+) is the Random Node Bagging (resp. Edge Bagging
+%and Biased Edge Bagging) with edge filter.}
+%\label{tab_improvements}
+%\vspace{0ex}
+%\centering
+%\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+%\begin{tabular}{l|l|c|c|c}
+%\hline \hline Bagging & Top-$k$ Prediction & Digg & YouTube & Wikipedia  \\
+%\hline \hline
+%Node & Top-$(\epsilon, k)$           & 74.15    & 43.43 & 134.06  \\
+%Node & Top-$(\epsilon, k)$+        & 65.01    & 41.29 & 133.80 \\
+%Node+ & Top-$(\epsilon, k)$        & 67.22    & 40.02 & 118.13  \\
+%Node+ & Top-$(\epsilon, k)$+    & \textbf{60.38}   & \textbf{37.87} & \textbf{117.27} \\
+%\hline
+%Edge & Top-$(\epsilon, k)$            & 77.33   & 47.23 & 137.72  \\
+%Edge & Top-$(\epsilon, k)$+        & 67.26    & 45.04 & 137.57  \\
+%Edge+ & Top-$(\epsilon, k)$        & 70.29   & 43.69 & 121.42 \\
+%Edge+ & Top-$(\epsilon, k)$+    & \textbf{62.31}    & \textbf{41.29} & \textbf{121.16} \\
+%\hline
+%Biased & Top-$(\epsilon, k)$         & 63.93    & 42.39 & 135.59  \\
+%Biased & Top-$(\epsilon, k)$+      & 58.56    & 41.07 & 134.02  \\
+%Biased+ & Top-$(\epsilon, k)$      & 58.97    & 39.61 & 119.44  \\
+%Biased+ & Top-$(\epsilon, k)$+  & \textbf{55.32}    & \textbf{38.15} & \textbf{117.25}  \\
+%\hline \hline
+%\end{tabular}
+%\vspace{-0ex}
+%\end{table}
 
 
 
@@ -759,7 +849,7 @@ The results tell us that (a) the pairwise overlapping of predicted links on \Fli
 obviously higher than that on other datasets, which means that the diversity on \Flickr is the
 worst one, (b) the pairwise overlapping of nodes for
 \Node and \Edge methods on \Flickr is also higher than that on other datasets, which may be
-one of reasons decreasing the diversity of these methods. These impair the effectiveness of ensemble methods,
+one of reasons decreasing the diversity of these methods. These impair the \marked{performance} of ensemble methods,
 which leads to a lower accuracy for our bagging methods on \Flickr than \NMF
 
 Moreover, observer that \Edge has the highest
@@ -776,7 +866,7 @@ To address this limitation of ensemble-enabled methods, it deserves a full treat
 \begin{table}
 \caption{Pairwise overlapping of predicted links and nodes of ensemble components.}
 \label{tab_limitations}
-\vspace{0ex}
+\vspace{-2ex}
 \centering
 \newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
 \begin{tabular}{c|l|c|c|c|c}
@@ -802,7 +892,7 @@ we find the following.
 
 \sstab (1) \NMF is able to predict links and can be sped up
 by the top-($\epsilon$, $k$) process to explore the $O(n^2)$ search space. \NMF is
-more accurate than \Aa and \BIGCLAM, which verifies the effectiveness
+more accurate than \Aa and \BIGCLAM, which verifies the \marked{robustness}
 of \NMF. Moreover, \NMF runs faster than \BIGCLAM on dense networks,
 \eg~\Wikipedia, \Twitter and \Friendster, which is consistent with the complexity analysis
 that \BIGCLAM is sensitive to the degree of networks.
