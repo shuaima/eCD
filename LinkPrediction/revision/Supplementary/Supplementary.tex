@@ -300,6 +300,7 @@
 
 % duan
 \usepackage{xspace}
+\usepackage{bookmark}
 
 \newcommand{\spara}[1]{\smallskip\noindent{\bf #1}}
 \newcommand{\eat}[1]{}
@@ -383,7 +384,10 @@
 \newcommand{\Nodep}{{\sf NMF(Node+)}\xspace}
 \newcommand{\Edgep}{{\sf NMF(Edge+)}\xspace}
 \newcommand{\Biasedp}{{\sf NMF(Biased+)}\xspace}
-
+\newcommand{\AABiased}{{\sf AA(Biased)}\xspace}
+\newcommand{\AABiasedp}{{\sf AA(Biased+)}\xspace}
+\newcommand{\RABiased}{{\sf RA(Biased)}\xspace}
+\newcommand{\RABiasedp}{{\sf RA(Biased+)}\xspace}
 
 \newcommand{\ie}{\emph{i.e.,}\xspace}
 \newcommand{\eg}{\emph{e.g.,}\xspace}
@@ -391,6 +395,7 @@
 \newcommand{\aka}{\emph{a.k.a.}\xspace}
 \newcommand{\kwlog}{\emph{w.l.o.g.}\xspace}
 \newcommand{\etal}{\emph{et al.}\xspace}
+\newcommand{\resp}{\emph{resp.}\xspace}
 \newcommand{\sstab}{\rule{0pt}{8pt}\\[-2.4ex]}
 
 \newtheorem{definition}{Definition}
@@ -441,6 +446,7 @@ E-mail: tiejun.ma@soton.ac.uk}% <-this % stops an unwanted space
 \markboth{IEEE Transactions on Knowledge and Data Engineering,~Vol.~X, No.~X, November~2016}%
 {Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for Computer Society Journals}
 
+\IEEEspecialpapernotice{(Supplementary Material)}
 
 \maketitle
 
@@ -450,20 +456,21 @@ E-mail: tiejun.ma@soton.ac.uk}% <-this % stops an unwanted space
 
 
 \subsection{Bagging+ vs. Bagging}
-In this set of tests, we evaluated the robustness and efficiency of our 
-bagging+ methods compared with bagging methods. We varied $k$ from hundreds 
-to the number of links in the ground truth data \cite{yang2015}. We fixed $r = 30$ on \Digg and \YouTube, 
-$r = 20$ on \Wikipedia and fixed other parameters to their default values. 
-The results of accuracy and running time are reported 
-in Figures \ref{fig_exp_1_1_k_acc_digg}--\ref{fig_exp_1_1_k_acc_wikipedia} and 
+In this set of tests, we evaluated the robustness and efficiency of our
+bagging+ methods compared with bagging methods. We varied $k$ from hundreds
+to the number of links in the ground truth data \cite{yang2015}. 
+We fixed $r = 30$ on \Digg and \YouTube,
+$r = 20$ on \Wikipedia and fixed other parameters to their default values.
+The results of accuracy and running time are reported
+in Figures \ref{fig_exp_1_1_k_acc_digg}--\ref{fig_exp_1_1_k_acc_wikipedia} and
 Figures \ref{fig_exp_1_1_k_time_digg}--\ref{fig_exp_1_1_k_time_wikipedia}, respectively.
 
 The accuracy results tell us that
 (a) \Biasedp are the best methods on all datasets,
-(b) the accuracy of the bagging+ methods are higher than that of 
-their counterparts bagging methods when $k$ is small and very 
-close to that of their counterparts when $k$ is large, and 
-(c) the accuracy of all methods decreases with the increase of $k$. 
+(b) the accuracy of the bagging+ methods are higher than that of
+their counterparts bagging methods when $k$ is small and very
+close to that of their counterparts when $k$ is large, and
+(c) the accuracy of all methods decreases with the increase of $k$.
 It is means that the bagging+ methods maintain the accuracy while some of the
 edges have been removed compared with their counterparts bagging methods.
 This verifies the robustness of the bagging+ methods.
@@ -472,7 +479,7 @@ The running time results tell us that (a) the \Biasedp outperforms
 other methods on all datasets, (b) the three bagging+ methods are faster
 than their counterparts bagging methods, and (c) the running time of all
 methods increase slightly with the increase of $k$. For instance,
-\Biasedp is $(1.1, 1.1, 1.1)$ times faster than
+\Biasedp is $(1.2, 1.1, 1.2)$ times faster than
 \Biased on \Digg, \YouTube and \Wikipedia, respectively.
 This verifies the efficiency of the bagging+ methods.
 
@@ -495,16 +502,37 @@ This verifies the efficiency of the bagging+ methods.
   \vspace{-2ex}
 \end{figure*}
 
-
+\begin{figure*}[tb!]
+  \centering
+  %\vspace{-2ex}
+  % Requires \usepackage{graphicx}
+  \subfigure[Digg]{\label{fig_exp_2_1_k_acc_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-a.eps} }
+  \hspace{-3ex}
+  \subfigure[YouTube]{\label{fig_exp_2_1_k_acc_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-b.eps} }
+  \hspace{-3ex}
+  \subfigure[Wikipedia]{\label{fig_exp_2_1_k_acc_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-c.eps} }
+  \hspace{-3ex}
+  \subfigure[Flickr]{\label{fig_exp_2_1_k_acc_flickr}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-d.eps} }
+  \subfigure[Digg]{\label{fig_exp_2_1_k_time_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-e.eps} }
+  \hspace{-3ex}
+  \subfigure[YouTube]{\label{fig_exp_2_1_k_time_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-f.eps} }
+  \hspace{-3ex}
+  \subfigure[Wikipedia]{\label{fig_exp_2_1_k_time_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-g.eps}}
+  \hspace{-3ex}
+  \subfigure[Flickr]{\label{fig_exp_2_1_k_time_flickr}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-h.eps}}
+  \vspace{-1ex}
+  \caption{Accuracy and efficiency comparison: with respect to the number $k$ of predicted links.}\label{fig_exp_2_1}
+  \vspace{-1ex}
+\end{figure*}
 
 
 
 \subsection{Comparison with \Aa, \RA and \BIGCLAM}
 In this set of tests, we evaluated the robustness and efficiency of our
-methods compared with \Aa, \RA and \BIGCLAM. We fixed $k$ to the number of links 
-in the ground truth data \cite{yang2015}, $r = 30$ on \Digg and \YouTube, $r = 20$ on \Wikipedia 
-and fixed other parameters to their default values. 
-The results of accuracy together with their 95\% confidence intervals are reported 
+methods compared with \Aa, \RA and \BIGCLAM. We fixed $k$ to the number of links
+in the ground truth data \cite{yang2015}, $r = 30$ on \Digg and \YouTube, $r = 20$ on \Wikipedia
+and fixed other parameters to their default values.
+The results of accuracy together with their 95\% confidence intervals are reported
 in Table \ref{tab_accuracy} and the results of running time are reported in Table \ref{tab_time}.
 
 The accuracy results tell us that (a) \Biased and \Biased outperform other methods on
@@ -512,17 +540,17 @@ most of the datasets, (b) the accuracy of \Biasedp is very close to that of \Bia
 \Biased and \Biasedp have a higher accuracy than \Aa, \RA and \BIGCLAM, except for \Aa and \RA on \Wikipedia,
 (d) \NMF is more accurate than \Aa, \RA and \BIGCLAM, except for \Aa and \RA on \Wikipedia,
 and (e) the accuracy of all methods decreases with the increase of $k$.
-Indeed, \Biased improves the accuracy by $(2.1\%, 24.3\%, 70.8\%, 11.9\%)$ (resp. $(0.8\%, 34.0\%, 34.0\%, 22.9\%)$
-and $(10.1\%, -16.0\%, -51.3\%, 12.9\%)$) over \NMF, \Aa, \RA and \BIGCLAM on \Digg, \YouTube and \Wikipedia,
+Indeed, \Biased improves the accuracy by $(2.8\%, 24.3\%, 70.8\%, 11.9\%)$ (\resp $(1.5\%, 34.0\%, 34.0\%, 22.9\%)$
+and $(11.0\%, -16.0\%, -51.3\%, 12.9\%)$) over \NMF, \Aa, \RA and \BIGCLAM on \Digg, \YouTube and \Wikipedia,
 respectively. Moreover, \Biased and \Biased perform consistently well on all networks (\ie more robust), unlike \RA which works well
 on \Wikipedia but poorly on other datasets. This verifies the robustness of our bagging methods.
 
 
-The running time results tell us that (a) \Biasedp is the fastest method among 
+The running time results tell us that (a) \Biasedp is the fastest method among
 \Biased, \NMF and \BIGCLAM, (b) the two bagging methods are much faster than \NMF and \BIGCLAM,
 (c) the running time of \Aa and \RA increases rapidly since their complexities are $O(nd^2\log(k))$.
 Indeed, the bagging+ and bagging methods finished the prediction in 430 seconds on the three datasets.
-Furthermore, \Biasedp is $(7.1, 0.2, 0.1, 1.2)$ (resp. $(9.2, 0.1, 0.1, 1.5)$ and $(13.3, 7.2, 6.0, 16.0)$)
+Furthermore, \Biasedp is $(7.5, 0.2, 0.1, 1.2)$ (\resp $(8.8, 0.1, 0.1, 1.5)$ and $(11.4, 7.3, 6.1, 16.0)$)
 times faster than \NMF, \Aa, \RA and \BIGCLAM on
 \Digg, \YouTube and \Wikipedia, respectively.
 This verifies the efficiency of our bagging methods.
@@ -539,9 +567,9 @@ This verifies the efficiency of our bagging methods.
 \Aa & 2.35 &	1.00 &	1.56  \\
 \RA & 1.71 &	1.00 &	\textbf{2.69}  \\
 \BIGCLAM & 2.61 $\pm$ (0.101) &	1.09 $\pm$ (0.107) &	1.16 $\pm$ (0.018)  \\
-\NMF & 2.86 $\pm$ (0.082)	& 1.33 $\pm$ (0.087) 	& 1.19 $\pm$ (0.047) \\
+\NMF & 2.84 $\pm$ (0.056)	& 1.32 $\pm$ (0.059) 	& 1.18 $\pm$ (0.070) \\
 \Biased & \textbf{2.92 $\pm$ (0.020)}	& 1.34 $\pm$ (0.059)	& 1.31 $\pm$ (0.018)\\
-\Biasedp & 2.88 $\pm$ (0.054)	& \textbf{1.37 $\pm$ (0.062)}	& 1.32 $\pm$ (0.022) \\
+\Biasedp & 2.88 $\pm$ (0.054)	& \textbf{1.34 $\pm$ (0.044)}	& 1.30 $\pm$ (0.016) \\
 \hline \hline
 \end{tabular}
 \vspace{-2ex}
@@ -559,9 +587,9 @@ This verifies the efficiency of our bagging methods.
 \Aa & 10.46 &	56.78 &	2557.63  \\
 \RA & \textbf{7.74} &	\textbf{39.12} &	2136.36  \\
 \BIGCLAM & 70.34 &	598.06 &	5642.84  \\
-\NMF & 417.33 	& 3695.67 	& 4690.71 \\
+\NMF & 441.81 	& 3500.68 	& 4038.13 \\
 \Biased & 64.58	& 420.21	& 393.26 \\
-\Biasedp & 58.91	& 399.84	& \textbf{353.12} \\
+\Biasedp & 58.91	& 399.84	& \textbf{352.76} \\
 \hline \hline
 \end{tabular}
 \vspace{-2ex}
@@ -571,66 +599,101 @@ This verifies the efficiency of our bagging methods.
 
 
 
-\section{Appendix B }
+\section{Appendix B Ensemble-Enabled Approach with AA and RA}
 
-\subsection{Ensemble-Enabled Approach with AA and RA}
+One interesting thing should be noted that our ensemble-enabled
+approach is not only designed for \NMF, but also applied to any link
+prediction methods. Therefore, we implemented \AABiased and \AABiasedp
+(\resp \RABiased and \RABiasedp) by replacing \NMF with \Aa (\resp \RA) in
+\Biased and \Biasedp. Furthermore, we evaluated the robustness and efficiency
+of the ensemble-enabled approach with \Aa and \RA.
+We varied $k$ from hundreds to the number of links in the ground truth data
+and fixed other parameters to their default values. The results of accuracy
+and running time are reported in Figures \ref{fig_exp_2_1_k_acc_digg}--\ref{fig_exp_2_1_k_acc_flickr} 
+and Figures \ref{fig_exp_2_1_k_time_digg}--\ref{fig_exp_2_1_k_time_flickr}, respectively.
+
+The results of accuracy tell us that (a) \AABiased and \AABiasedp (\resp \RABiased and \RABiasedp)
+are more accurate than \Aa (\resp \RA) on most of the datasets, 
+(b) the accuracy of \AABiasedp (\resp \RABiasedp) is close to that of \AABiased (\resp \RABiased). 
+This is verifies the robustness of the ensemble-enabled approach. 
+
+Note that \AABiased and \AABiasedp (\resp \RABiasedp)
+perform worse than their counterpart \Aa (\resp \RA) on \Wikipedia because their diversities
+on this dataset are poor. For instance, the pairwise overlapping of predicted links of \AABiased
+(\resp \AABiasedp and \RABiasedp) is 0.62 (\resp 0.63 and 0.52). One reason for the decreasing
+of diversity may be that the dataset contains some extreme high degree nodes,
+\ie nodes with degree between $5 \times 10^4$ to $1.8 \times 10^5$.
+
+The results of running time tell us that \AABiased and \AABiasedp (\resp \RABiased and \RABiasedp)
+are faster than \Aa (\resp \RA) on \YouTube and \Wikipedia but 
+slower on other datasets. This is consistent with the complexity analysis 
+that the ensemble-enabled \Aa and \RA require $O(nd_{1}^{2}\log(k)\mu/f)$ time, 
+where $d_1$ is the average degree of each ensemble component. It is means 
+that the ensemble-enabled \Aa and \RA would be faster when $d_1$ is small. 
+Indeed, $d_1$ of \AABiased is 9 and 56 on \YouTube and \Wikipedia while the average 
+degree of these datasets is 5 and 33 respectively. However, $d_1$ of \AABiased is 30 and 75 
+on \Digg and \Flickr while the average degree of these datasets is 10 and 17 respectively.
+
+
+
+
 
 \begin{footnotesize}
 \bibliographystyle{abbrv}
 \bibliography{paper}
 \end{footnotesize}
 
-\begin{table}
-\caption{Accuracy (\%) comparison with \Aa, \RA and \BIGCLAM.}
-\label{tab_accuracy2}
-\vspace{-2ex}
-\centering
-\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
-\begin{tabular}{l|c|c|c}
-\hline \hline Algorithm  & Digg & YouTube & Wikipedia  \\
-\hline \hline
-\Aa & 2.35 &	1.00 &	1.56  \\
-\RA & 1.71 &	1.00 &	\textbf{2.69}  \\
-\BIGCLAM & 2.61 $\pm$ (0.101) &	1.09 $\pm$ (0.107) &	1.16 $\pm$ (0.018)  \\
-\NMF & \textbf{2.86 $\pm$ (0.082)}	& \textbf{1.33 $\pm$ (0.087)} 	& 1.19 $\pm$ (0.047) \\
-\hline
-\Node & 2.92 $\pm$ (0.017)	& 1.35 $\pm$ (0.086)	& 1.29 $\pm$ (0.026) \\
-\Edge & \textbf{2.93 $\pm$ (0.029)}	& \textbf{1.35 $\pm$ (0.065)}	& 1.31 $\pm$ (0.023) \\
-\Biased & 2.92 $\pm$ (0.020)	& 1.34 $\pm$ (0.059)	& \textbf{1.31 $\pm$ (0.018) }\\
-\hline
-\Nodep & 2.86 $\pm$ (0.020)	& 1.36 $\pm$ (0.040)	& 1.30 $\pm$ (0.031) \\
-\Edgep & \textbf{2.90 $\pm$ (0.032)}	& \textbf{1.38 $\pm$ (0.041)}	& 1.30 $\pm$ (0.012) \\
-\Biasedp & 2.88 $\pm$ (0.054)	& 1.37 $\pm$ (0.062)	& \textbf{1.32 $\pm$ (0.022)} \\
-\hline \hline
-\end{tabular}
-\vspace{-2ex}
-\end{table}
-
-\begin{table}
-\caption{Running time (sec.) comparison with \Aa, \RA and \BIGCLAM.}
-\label{tab_time2}
-\vspace{-2ex}
-\centering
-\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
-\begin{tabular}{l|r|r|r}
-\hline \hline Algorithm  & Digg & YouTube & Wikipedia  \\
-\hline \hline
-\Aa & 10.46 &	56.78 &	2557.63  \\
-\RA & 7.74 &	39.12 &	2136.36  \\
-\BIGCLAM & 70.34 &	598.06 &	5642.84  \\
-\NMF & 417.33 	& 3695.67 	& 4690.71 \\
-\hline
-\Node & 74.62	& 431.52	& 403.51 \\
-\Edge & 78.76	& 446.22	& 410.86 \\
-\Biased & 64.58	& 420.21	& 393.26 \\
-\hline
-\Nodep & 65.95	& 405.29	& 356.77 \\
-\Edgep & 68.26	& 415.26	& 374.73 \\
-\Biasedp & 58.91	& 399.84	& 353.12 \\
-\hline \hline
-\end{tabular}
-\vspace{-2ex}
-\end{table}
+%\begin{table}
+%\caption{Accuracy (\%) comparison with \Aa, \RA and \BIGCLAM.}
+%\label{tab_accuracy2}
+%\vspace{-2ex}
+%\centering
+%\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+%\begin{tabular}{l|c|c|c}
+%\hline \hline Algorithm  & Digg & YouTube & Wikipedia  \\
+%\hline \hline
+%\Aa & 2.35 &	1.00 &	1.56  \\
+%\RA & 1.71 &	1.00 &	\textbf{2.69}  \\
+%\BIGCLAM & 2.61 $\pm$ (0.101) &	1.09 $\pm$ (0.107) &	1.16 $\pm$ (0.018)  \\
+%\NMF & \textbf{2.86 $\pm$ (0.082)}	& \textbf{1.33 $\pm$ (0.087)} 	& 1.19 $\pm$ (0.047) \\
+%\hline
+%\Node & 2.92 $\pm$ (0.017)	& 1.35 $\pm$ (0.086)	& 1.29 $\pm$ (0.026) \\
+%\Edge & \textbf{2.93 $\pm$ (0.029)}	& \textbf{1.35 $\pm$ (0.065)}	& 1.31 $\pm$ (0.023) \\
+%\Biased & 2.92 $\pm$ (0.020)	& 1.34 $\pm$ (0.059)	& \textbf{1.31 $\pm$ (0.018) }\\
+%\hline
+%\Nodep & 2.86 $\pm$ (0.020)	& 1.36 $\pm$ (0.040)	& 1.30 $\pm$ (0.031) \\
+%\Edgep & \textbf{2.90 $\pm$ (0.032)}	& \textbf{1.38 $\pm$ (0.041)}	& 1.30 $\pm$ (0.012) \\
+%\Biasedp & 2.88 $\pm$ (0.054)	& 1.37 $\pm$ (0.062)	& \textbf{1.32 $\pm$ (0.022)} \\
+%\hline \hline
+%\end{tabular}
+%\vspace{-2ex}
+%\end{table}
+%
+%\begin{table}
+%\caption{Running time (sec.) comparison with \Aa, \RA and \BIGCLAM.}
+%\label{tab_time2}
+%\vspace{-2ex}
+%\centering
+%\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+%\begin{tabular}{l|r|r|r}
+%\hline \hline Algorithm  & Digg & YouTube & Wikipedia  \\
+%\hline \hline
+%\Aa & 10.46 &	56.78 &	2557.63  \\
+%\RA & 7.74 &	39.12 &	2136.36  \\
+%\BIGCLAM & 70.34 &	598.06 &	5642.84  \\
+%\NMF & 417.33 	& 3695.67 	& 4690.71 \\
+%\hline
+%\Node & 74.62	& 431.52	& 403.51 \\
+%\Edge & 78.76	& 446.22	& 410.86 \\
+%\Biased & 64.58	& 420.21	& 393.26 \\
+%\hline
+%\Nodep & 65.95	& 405.29	& 356.77 \\
+%\Edgep & 68.26	& 415.26	& 374.73 \\
+%\Biasedp & 58.91	& 399.84	& 353.12 \\
+%\hline \hline
+%\end{tabular}
+%\vspace{-2ex}
+%\end{table}
 
 
 \end{document}
