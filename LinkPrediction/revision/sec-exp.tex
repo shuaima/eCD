@@ -187,7 +187,7 @@ to $v$ with their common neighbors playing the role of transmitters. The
  \[ score(u, v) = \sum_{z \in N(u)\cap N(v)}\frac{1}{|N(z)|}.\]
 Note that \RA is very similar to \Aa when $|N(z)|$ is small, but
  great different when $|N(z)|$ is large. Zhou \etal \cite{zhou2009} showed that
- \RA performs better than \Aa in the networks with high average degree since
+ \RA performs better than \Aa in the networks with high degree heterogeneity since
  \RA punishes high degree common neighbors more heavily.  Therefore,
  we choose it for comparison in the experiments.}
 
@@ -499,16 +499,16 @@ Note that the accuracy of all methods is not very high, even the best
 accuracy (\Biasedp on \Digg when $k = 1\times 10^4$) is less than $10\%$. The reason is that
 there are more than $1\times 10^{10}$ possible links in the search space of each dataset,
 but less than $1\times 10^6$ links in the ground truth.
-\marked{Since \RA is suitable for high average degree networks \cite{zhou2009},
-it performs best on \Wikipedia which has the largest average degree.}
+\marked{Since \RA is suitable for high degree heterogeneity networks \cite{zhou2009},
+it performs the best on \Wikipedia which contains some extreme high degree nodes.}
 In addition, \NMF is slower than \marked{\Aa and \RA} on three datasets because $r$ is fixed to $50$,
 which is consistent to the $O(nr^2)$ complexity of \NMF.
 The running time of \marked{\Aa (resp. \RA) is about 50 (resp. 37) seconds on \YouTube,
 while more than 2,500 (resp. 1,900) seconds} on \Wikipedia.
 This is because that the average degrees of these datasets are 5 and 33,
 and \Aa  \marked{and \RA} take more time with the increase of the network degree.
-
-The running time of \BIGCLAM is also sensitive to the degree of networks because its complexity is $O(nd(r + d))$.
+The running time of \BIGCLAM is also sensitive to the degree of 
+networks because its complexity is $O(nd(r + d))$.
 As a result, it runs faster than
 \NMF on \YouTube when the degree is 5, but takes more time on \Wikipedia
 when the degree is increased.
@@ -807,11 +807,11 @@ fixed $\epsilon = 1$ by default to achieve a better efficiency.
 
 \subsubsection{Analysis of Limitations}
 \label{subsction-exp-limit}
-\marked{In the last set of tests, we discuss the accuracy limitations of our methods: 
-(1) bagging methods might not as good as \NMF in certain situations, and (2) both bagging methods 
-and \NMF cannot successfully predict links with large hop distances as well as short distances. 
-We first report the accuracy comparison between our bagging methods and \NMF on \Flickr and explain 
-the reasons. We then study the accuracy of the bagging methods and \NMF in each hop distance. 
+\marked{In the last set of tests, we discuss the accuracy limitations of our methods:
+(1) bagging methods might not as good as \NMF in certain situations, and (2) both bagging methods
+and \NMF cannot successfully predict links with large hop distances as well as short distances.
+We first report the accuracy comparison between our bagging methods and \NMF on \Flickr and explain
+the reasons. We then study the accuracy of the bagging methods and \NMF in each hop distance.
 These could be useful when users are to apply our bagging methods in practice.}
 
 %In the last set of tests, we discuss the accuracy limitations of our bagging methods
@@ -857,19 +857,19 @@ worst one, (b) the pairwise overlapping of nodes for
 one of reasons decreasing the diversity of these methods. These impair the \marked{performance} of ensemble methods,
 which leads to a lower accuracy for our bagging methods on \Flickr than \NMF.
 
-Moreover, observer that \Edge has the highest
+Moreover, observe that \Edge has the highest
 pairwise overlapping of predicted links and nodes since this method inclines to select high-degree
 nodes repeatedly. Moreover, \Biased overcomes the drawback of \Edge and obtains the lowest pairwise
 overlapping, which guarantees its higher accuracy. That is, to gain a high accuracy with the bagging methods, it
 is necessary to make each ensemble as unique as possible.
 
 
-\marked{We also study the distribution of hod distances induced by the links in the ground truth data 
-and then compared the accuracy of \BIGCLAM, \NMF and \Biased in each hop distance, shown in Table \ref{tab_hops}. 
-Although a large portion of ground truth links are not greater than 3 hops, there are many high-distance links. 
-However, \BIGCLAM, \NMF and \Biased are more accurate in predicting 2 or 3 hop links but have little ability to predict 
-links with large hop distances. To improve the prediction accuracy, a good predictor should successfully predict 
-links in high-distance regions as well as short distance.}
+\marked{We also study the distribution of hod distances induced by the links in the ground truth data
+and then compared the accuracy of \BIGCLAM, \NMF and \Biased in each hop distance, shown in Table \ref{tab_hops}.
+Although a large portion of ground truth links are not greater than 3 hops, there are many high-distance links.
+However, \BIGCLAM, \NMF and \Biased are more accurate in predicting 2 or 3 hop links but have little ability to predict
+links with large hop distances. To improve the prediction accuracy, a good predictor should successfully predict
+links in high-distance regions as well as in short distance.}
 
 To address these limitations of ensemble-enabled methods, it deserves a full treatment in the future.
 
@@ -899,7 +899,7 @@ To address these limitations of ensemble-enabled methods, it deserves a full tre
 
 
 \begin{table}
-\caption{The distribution of hops between ground truth links and the accuracy 
+\caption{The distribution of hops between ground truth links and the accuracy
 comparison of \BIGCLAM, \NMF and \Biased in each hop distance.}
 \label{tab_hops}
 \vspace{-2ex}
@@ -908,17 +908,17 @@ comparison of \BIGCLAM, \NMF and \Biased in each hop distance.}
 \begin{tabular}{c|c|c|c|c|c|c}
 \hline \hline
 \multicolumn{4}{c}{The Distribution of Hop Distances} & \multicolumn{3}{|c}{Accuracy of \BIGCLAM} \\
-\hline  
+\hline
 Hop  & Digg & YouTube & Wikipedia & Digg & YouTube & Wikipedia \\
-\hline 
+\hline
 2 & 32\% & 26\% & 63\%  & 3.8\% & 1.7\% & 1.9\% \\
 3 & 39\% & 37\% & 32\%  & 0.4\% & 0.1\% & 0 \\
 other & 29\% & 37\% & 5\% & 0 & 0.2\% & 0 \\
-\hline \hline  
+\hline \hline
 \multicolumn{4}{c}{Accuracy of \NMF} & \multicolumn{3}{|c}{Accuracy of \Biased}\\
 \hline
 Hop  & Digg & YouTube & Wikipedia & Digg & YouTube & Wikipedia \\
-\hline 
+\hline
 2 & 4.8\% & 2.1\% & 2.1\% & 4.9\% & 2.1\% & 2.4\% \\
 3 & 0.8\% & 0.3\% & 2.3\% & 0 & 1.1\% & 0.1\% \\
 other & 0 & 0 & 0 & 0 & 0 & 0 \\
