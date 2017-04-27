@@ -458,9 +458,9 @@ E-mail: tiejun.ma@soton.ac.uk}% <-this % stops an unwanted space
 \subsection{Bagging+ vs. Bagging}
 In this set of tests, we evaluated the robustness and efficiency of our
 bagging+ methods compared with bagging methods. We varied $k$ from hundreds
-to the number of links in the ground truth data \cite{yang2015}. 
+to the number of links in the ground truth data \cite{yang2015}.
 We fixed $r = 30$ on \Digg and \YouTube,
-$r = 20$ on \Wikipedia and fixed other parameters to their default values.
+$r = 20$ on \Wikipedia and other parameters to their default values.
 The results of accuracy and running time are reported
 in Figures \ref{fig_exp_1_1_k_acc_digg}--\ref{fig_exp_1_1_k_acc_wikipedia} and
 Figures \ref{fig_exp_1_1_k_time_digg}--\ref{fig_exp_1_1_k_time_wikipedia}, respectively.
@@ -531,25 +531,25 @@ This verifies the efficiency of the bagging+ methods.
 In this set of tests, we evaluated the robustness and efficiency of our
 methods compared with \Aa, \RA and \BIGCLAM. We fixed $k$ to the number of links
 in the ground truth data \cite{yang2015}, $r = 30$ on \Digg and \YouTube, $r = 20$ on \Wikipedia
-and fixed other parameters to their default values.
+and other parameters to their default values.
 The results of accuracy together with their 95\% confidence intervals are reported
 in Table \ref{tab_accuracy} and the results of running time are reported in Table \ref{tab_time}.
 
-The accuracy results tell us that (a) \Biased and \Biased outperform other methods on
+The accuracy results tell us that (a) \Biased and \Biasedp outperform other methods on
 most of the datasets, (b) the accuracy of \Biasedp is very close to that of \Biased, (c) both
-\Biased and \Biasedp have a higher accuracy than \Aa, \RA and \BIGCLAM, except for \Aa and \RA on \Wikipedia,
-(d) \NMF is more accurate than \Aa, \RA and \BIGCLAM, except for \Aa and \RA on \Wikipedia,
-and (e) the accuracy of all methods decreases with the increase of $k$.
+\Biased and \Biasedp have a higher accuracy than \NMF, \Aa, \RA and \BIGCLAM, except for \Aa and \RA on \Wikipedia,
+and (d) \NMF is more accurate than \Aa, \RA and \BIGCLAM, except for \Aa and \RA on \Wikipedia.
 Indeed, \Biased improves the accuracy by $(2.8\%, 24.3\%, 70.8\%, 11.9\%)$ (\resp $(1.5\%, 34.0\%, 34.0\%, 22.9\%)$
 and $(11.0\%, -16.0\%, -51.3\%, 12.9\%)$) over \NMF, \Aa, \RA and \BIGCLAM on \Digg, \YouTube and \Wikipedia,
-respectively. Moreover, \Biased and \Biased perform consistently well on all networks (\ie more robust), unlike \RA which works well
+respectively. Moreover, \Biased and \Biasedp perform consistently well on all networks (\ie more robust), unlike \RA which works well
 on \Wikipedia but poorly on other datasets. This verifies the robustness of our bagging methods.
 
 
-The running time results tell us that (a) \Biasedp is the fastest method among
+The running time results tell us that (a) \Biasedp is the fastest among 
 \Biased, \NMF and \BIGCLAM, (b) the two bagging methods are much faster than \NMF and \BIGCLAM,
-(c) the running time of \Aa and \RA increases rapidly since their complexities are $O(nd^2\log(k))$.
-Indeed, the bagging+ and bagging methods finished the prediction in 430 seconds on the three datasets.
+(c) the running time of \Aa and \RA increases rapidly with the increase of the network degree 
+ since their complexities are $O(nd^2\log(k))$.
+Indeed, the bagging+ and bagging methods finished the prediction in 421 seconds on the three datasets.
 Furthermore, \Biasedp is $(7.5, 0.2, 0.1, 1.2)$ (\resp $(8.8, 0.1, 0.1, 1.5)$ and $(11.4, 7.3, 6.1, 16.0)$)
 times faster than \NMF, \Aa, \RA and \BIGCLAM on
 \Digg, \YouTube and \Wikipedia, respectively.
@@ -609,13 +609,13 @@ prediction methods. Therefore, we implemented \AABiased and \AABiasedp
 of the ensemble-enabled approach with \Aa and \RA.
 We varied $k$ from hundreds to the number of links in the ground truth data
 and fixed other parameters to their default values. The results of accuracy
-and running time are reported in Figures \ref{fig_exp_2_1_k_acc_digg}--\ref{fig_exp_2_1_k_acc_flickr} 
+and running time are reported in Figures \ref{fig_exp_2_1_k_acc_digg}--\ref{fig_exp_2_1_k_acc_flickr}
 and Figures \ref{fig_exp_2_1_k_time_digg}--\ref{fig_exp_2_1_k_time_flickr}, respectively.
 
 The results of accuracy tell us that (a) \AABiased and \AABiasedp (\resp \RABiased and \RABiasedp)
-are more accurate than \Aa (\resp \RA) on most of the datasets, 
-(b) the accuracy of \AABiasedp (\resp \RABiasedp) is close to that of \AABiased (\resp \RABiased). 
-This is verifies the robustness of the ensemble-enabled approach. 
+are more accurate than \Aa (\resp \RA) on most of the datasets,
+(b) the accuracy of \AABiasedp (\resp \RABiasedp) is close to that of \AABiased (\resp \RABiased).
+This is verifies the robustness of the ensemble-enabled approach.
 
 Note that \AABiased and \AABiasedp (\resp \RABiasedp)
 perform worse than their counterpart \Aa (\resp \RA) on \Wikipedia because their diversities
@@ -625,13 +625,13 @@ of diversity may be that the dataset contains some extreme high degree nodes,
 \ie nodes with degree between $5 \times 10^4$ to $1.8 \times 10^5$.
 
 The results of running time tell us that \AABiased and \AABiasedp (\resp \RABiased and \RABiasedp)
-are faster than \Aa (\resp \RA) on \YouTube and \Wikipedia but 
-slower on other datasets. This is consistent with the complexity analysis 
-that the ensemble-enabled \Aa and \RA require $O(nd_{1}^{2}\log(k)\mu/f)$ time, 
-where $d_1$ is the average degree of each ensemble component. It is means 
-that the ensemble-enabled \Aa and \RA would be faster when $d_1$ is small. 
-Indeed, $d_1$ of \AABiased is 9 and 56 on \YouTube and \Wikipedia while the average 
-degree of these datasets is 5 and 33 respectively. However, $d_1$ of \AABiased is 30 and 75 
+are faster than \Aa (\resp \RA) on \YouTube and \Wikipedia but
+slower on other datasets. This is consistent with the complexity analysis
+that the ensemble-enabled \Aa and \RA require $O(nd_{1}^{2}\log(k)\mu/f)$ time,
+where $d_1$ is the average degree of each ensemble component. It is means
+that the ensemble-enabled \Aa and \RA would be faster when $d_1$ is small.
+Indeed, $d_1$ of \AABiased is 9 and 56 on \YouTube and \Wikipedia while the average
+degree of these datasets is 5 and 33 respectively. However, $d_1$ of \AABiased is 30 and 75
 on \Digg and \Flickr while the average degree of these datasets is 10 and 17 respectively.
 
 
