@@ -1,11 +1,10 @@
 \section{Latent Factor Model for Link Prediction}
 \label{sec-NMF}
-\marked{In this section, we first provide a link prediction method 
-based on latent factor models. We then design an efficient method to 
-search the possible links from $O(n^2)$ search space.}
+%\marked{In this section, we first provide a link prediction method based on latent factor models. We then design an efficient method to
+%search the possible links from $O(n^2)$ search space.}
 
 
-We assume that $G=(N, A)$ is an undirected network (or graph) containing node set $N$ and
+We assume that $G(N, A)$ is an undirected network (or graph) containing node set $N$ and
 edge set $A$. The node set $N$ contains $n$ nodes and the edge set
 $A$ contains $m$ edges. Furthermore, the $n \times n$ weight matrix
 $W= [w_{ij}]_{n\times n}$ contains the weights of the edges in $A$.
@@ -20,7 +19,7 @@ also be generalized to directed networks.
  The top-$k$ ranking problem for link prediction is formally stated as follows:
 
 \begin{definition}
-Given a network $G=(N, A)$ with node set $N$ and edge set $A$, the ranking problem for link
+Given a network $G(N, A)$ with node set $N$ and edge set $A$, the ranking problem for link
 prediction is to determine the top-$k$ node-pair recommendations such that these node pairs are not included in $A$.
 \end{definition}
 Note that this problem definition requires us to consider the entire
@@ -150,12 +149,11 @@ top-$k$ predictions, denoted as top-$(\epsilon, k)$ predictions.
 %at most $\epsilon$ less than the   $k$th best value of
 %$\overline{F_k} \cdot \overline{F_k}$ over any edge $(k , l)$ in the
 %network.
-A set $L$ of predicted links in a network is a top-$(\epsilon, k)$ prediction, if
+A set $L$ of predicted links in a network $G(N, A)$ is a top-$(\epsilon, k)$ prediction, if
 the cardinality of $L$ is $k$, and the $k$-th best  value of
 $\overline{f_i} \cdot \overline{f_j} $ for a link $(i, j) \in L$ is
 at most $\epsilon$ less than the $k$-th best value of
-$\overline{f_h} \cdot \overline{f_l}$ over any link $(h , l)$ in the
-network.
+$\overline{f_h} \cdot \overline{f_l}$ for any link $(h , l)$ not included in $A$.
 \end{definition}
 Intuitively, this definition allows a qualitative  tolerance of
 $\epsilon$ in the top-$k$ returned links. Allowing such a tolerance
@@ -170,8 +168,8 @@ identifiers  of $F$ arranged according to the sorted order of $S$. The
 $r$ inverted lists can also be represented as an $n \times r$ matrix
 $R$. Let the number of rows in the $p$-th column of $S$ ($p\in[1, r]$), for which
 the value of $S_{ip}$ is greater than $\sqrt{\epsilon/r}$ be $f_p$, and for which the value of $S_{ip}$ is greater than 0 be $f'_p$, respectively.
-
-Then the following nested loop is executed for each (say $p$-th) column of $S$:
+%
+Then, the following nested loop is executed for each (say $p$-th) column of $S$:
 
 %\vspace{-1ex}
 \begin{tabbing}1. \hspace{5ex}\=
@@ -219,19 +217,17 @@ $\sum_{p = 1}^{r} f_p$ is equal to the number $n'$. Therefore, the complexity of
 top-$(\epsilon, k)$ prediction is $O(nn')$.
 \end{IEEEproof} }
 
- It remains to show that this procedure does find a valid set of top-$(\epsilon,
-k)$ link predictions. The reason that the procedure works correctly
-and efficiently  is because of nonnegativity and sparsity. \marked{We next use an
-example to illustrate how to search the top-$(\epsilon, k)$ link predictions based
-on the above nested loop method.}
-
+We next illustrate the above nested searching with an
+example.
+ 
 %%%%%%%%%%% example for top-k prediction
-\vspace{2ex}
-\noindent\marked{\begin{example}
+\vspace{1ex}
+\noindent\begin{example}
 \label{ex_top_k}
 Given a $5 \times 3$ matrix $F$, we sort the three columns of $F$ in a
 descending order to generate the matrix $S$ and store the corresponding
 inverted indices in the matrix $R$, shown as follows:
+\begin{small}
 \[\underbrace{
   \begin{bmatrix}
     0.7 & 0.3 & 0.7 \\
@@ -256,20 +252,22 @@ inverted indices in the matrix $R$, shown as follows:
     4 & 5 & 4
   \end{bmatrix}}_{R}
 \]
-Assume that $\epsilon = 1$, then $\sqrt{ \epsilon / r} = 0.58$ and $\epsilon / r = 0.33$.
+\end{small}
+We \kwlog that $\epsilon = 1$, then $\sqrt{ \epsilon / r} = 0.58$ and $\epsilon / r = 0.33$.
 For $p = 1$ (resp. $p = 2$ and $p = 3$), we have ($f_1 = 1, f'_1 = 4$)
-(resp. ($f_2 = 3, f'_2 = 4$) and ($f_3 = 3, f'_3 = 4$)) and only need to calculate
-9 multiplications: ($S_{11} \cdot S_{21}$,
+(resp. ($f_2 = 3, f'_2 = 4$) and ($f_3 = 3, f'_3 = 4$)), and only need to multiply
+9 times: ($S_{11} \cdot S_{21}$,
 $S_{11} \cdot S_{31}$) (resp. ($S_{12} \cdot S_{22}$, $S_{12} \cdot S_{32}$, $S_{12} \cdot S_{42}$,
-$S_{22} \cdot S_{32}$) and ($S_{13} \cdot S_{23}$, $S_{13} \cdot S_{33}$, $S_{23} \cdot S_{33}$))
-rather than 75 multiplications for calculating $FF^T$ directly, thus pruning a large portion of
-the search space. We then save the above values into corresponding node pairs,
-\eg increase the score of node pair ($R_{11}, R_{21}$) by $S_{11} \cdot S_{21}$,
-and finally return all node pairs that we encountered.
-\end{example} }
+$S_{22} \cdot S_{32}$) and ($S_{13} \cdot S_{23}$, $S_{13} \cdot S_{33}$, $S_{23} \cdot S_{33}$)), instead of 75 times for calculating $FF^T$ directly, which reduces
+the search space. We then save the above values into the corresponding node pairs,
+\eg increasing the score of node pair ($R_{11}, R_{21}$) by $S_{11} \cdot S_{21}$,
+and finally return all node pairs encountered.
+\end{example} 
+\vspace{1ex}
 
-
-
+It remains to show that this procedure does find a valid set of top-$(\epsilon,
+k)$ link predictions. The reason that the procedure works correctly
+and efficiently  is because of nonnegativity and sparsity.
 \begin{prop}
 \label{prop-valid-topk}
 The nested loop method finds a valid set of top-$(\epsilon, k)$
@@ -282,24 +280,24 @@ containing the  nested loop is executed $r$ times, once for each
 latent component. Therefore, it suffices to show that the
 contribution of each nested loop is underestimated by at most
 $\epsilon/r$. There are two sources of underestimation:
-\begin{enumerate}
-\item  The outer loop does not consider rows $i$ for which $S_{ip} <
+
+\sstab(1) The outer loop does not consider rows $i$ for which $S_{ip} <
 \sqrt{\epsilon/r}$. This effectively prunes the products between
 pairs $(i, j)$ for which both $S_{ip}$ and $S_{jp}$ are less
-than $\sqrt{\epsilon/r}$ \marked{ since the matrix $S$ is sorted and $S_{ip} \geq S_{jp}$}.
+than $\sqrt{\epsilon/r}$ as the matrix $S$ is sorted and $S_{ip} \geq S_{jp}$.
 Therefore, the underestimation because of
 the ignoring of this pair is at most $\sqrt{\epsilon/r} \times
 \sqrt{\epsilon/r} = \epsilon/r$.
-\item The second case is when the inner loop is terminated early.
-The early termination condition in this case is that the product is
+
+\sstab(2) The second case is when the inner loop is terminated early.
+The termination condition here is that the product is
 at most $\epsilon/r$.
-\end{enumerate}
+
+
 Therefore, in both these mutually exclusive cases, the
 underestimation is at most $\epsilon/r$. Therefore, over all latent
 components the aggregate underestimation is at most
-$(\epsilon/r)\times r= \epsilon$.
-
-This completes the proof.
+$(\epsilon/r)\times r= \epsilon$. %This completes the proof.
 \end{IEEEproof}
 
 \subsection{Speeding up Top-$(\epsilon, k)$ Predictions}
@@ -309,9 +307,9 @@ This completes the proof.
 
  In real-life applications,
 a common scenario is to find a set of top-$(\epsilon, k)$ predictions with such that the prediction
-values are required to be greater than a given threshold $\theta$ \cite{ballard2015, lemp}. In this case,
-the top-$(\epsilon, k)$ prediction could be speeded up by pruning the node pairs
-whose prediction values are equal to or less than $\theta$ \marked{(See more details about setting $\theta$ in Section 3.6)}.
+values are required to be greater than a given threshold $\theta$ \cite{ballard2015,lemp}. In this case,
+the top-$(\epsilon, k)$ prediction can be further speeded up by pruning the node pairs
+whose prediction values are equal to or less than $\theta$ (see details on the setting of parameter $\theta$ in Section 3.6).
 
 The simple yet effective strategy is that the prediction value of a node pair $(i, j)$ satisfies:
 \begin{equation}
@@ -320,7 +318,7 @@ The simple yet effective strategy is that the prediction value of a node pair $(
 \cos(\overline{f_i}, \overline{f_j}) \leq \|\overline{f_i} \| \cdot \| \overline{f_j} \|,
 \end{equation} in which $\|\cdot\|$ is the length of a vector.
 
-By Equation \ref{equation-length}, we obtain the following:
+By Equation (\ref{equation-length}), we obtain the following:
 \begin{equation}
 \label{equation-length-pruning}
 \|\overline{f_i} \| \cdot \| \overline{f_j} \| \leq \theta \Longrightarrow \overline{f_i} \cdot \overline{f_j} \leq \theta
@@ -337,11 +335,14 @@ in the above nested loop to prune the node pairs whose prediction values are equ
 \end{tabbing}
 
 
-%It is intuitive that this procedure correctly finds a valid set of top-$(\epsilon, k)$
-%predictions with prediction values are greater than $\theta$. Since the node pairs whose
+It is easy to verify that this procedure correctly finds a valid set of top-$(\epsilon, k)$
+predictions whose values are greater than $\theta$. 
+
+%Since the node pairs whose
 %length products are less and equal than $\theta$ have been ignored in the nested loop,
 %this procedure speeds up the nested loop method.
 
+\eat{%%%%%%%%%%%%%%%%%%
 \begin{prop}
 The top-$(\epsilon, k)$ prediction with speeding up technique finds a valid set of top-$(\epsilon, k)$
 predictions with prediction values are greater than $\theta$.
@@ -357,7 +358,7 @@ are also  equal to or less than $\theta$.
 
 This completes the proof.
 \end{IEEEproof}
-%%%%%%%%%%%%%%%%%%%%%%   2016-06-20 duan end
+}%%%%%%%%%%%%%%%%%%
 
 
 %\vspace{-2ex}
@@ -371,5 +372,5 @@ sparse networks, whose node degrees are less than $r$, the $O(n
 r^2)$ term might be the bottleneck.  The required  number of latent
 components $r$ is often expected to increase with the network size. In
 order to handle this computational problem, we propose the method of
-{\em ensemble decomposition} that provides both efficiency {\em
-and} \marked{robustness} advantages.
+{\em ensemble decomposition} that provides both efficiency 
+and effectiveness advantages.
