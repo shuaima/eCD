@@ -173,20 +173,20 @@ networks with millions of nodes. Thanks for the suggestion!
 
 \textbf{Response to the comments of Referee 2.}
 
-\textbf{[R2W1]} \emph{Due to the fact that the decomposition is based
+\textbf{[R2C1]} \emph{Due to the fact that the decomposition is based
 on random sampling, thus authors should provide the 95\% confidence
 intervals of performance. This is important to demonstrate that the
 proposed methods are significantly better than the state-of-the-art
 methodology.}
 
 We have added the accuracy test with the 95\% confidence intervals when $k$ is fixed
-to its default value and the number of links in the ground truth data (R2W2). 
+to its default value and the number of links in the ground truth data (R2C2). 
 Due to space limitations, we choose to report these experimental results in the Appendix A
 of the supplementary material, in which the results justify he effectiveness of our methods compared with the state-of-the-art methods.
 Thanks for the suggestion!
 
 
-\textbf{[R2W2]} \emph{Authors are using top-k precision to evaluate
+\textbf{[R2C2]} \emph{Authors are using top-k precision to evaluate
 the link prediction results. However, the measurement is not used
 correctly. Top-k precision will give a fair comparison between different
 link prediction methods only when the K is well selected. Please refer
@@ -226,7 +226,7 @@ human navigation traces: A case study of wikipedia. In WWW, 2015.
 
 
 
-\textbf{[R2W3]} \emph{AA can only predict two hops links, it has no
+\textbf{[R2C3]} \emph{AA can only predict two hops links, it has no
 predictive power to infer any potential links with larger hop distance.
 Thus to provide a fair comparison, authors should provide the performance
 comparison in each hop distance, namely hop 2, hop 3, and etc.
@@ -241,7 +241,7 @@ This is a general limitation of most (if not all) existing methods, which deserv
 Thanks for helping us to identify the limitation of our method!
 
 
-\textbf{[R2W4]} \emph{Authors proposed a framework to decompose the
+\textbf{[R2C4]} \emph{Authors proposed a framework to decompose the
 large scale network link prediction problem, thus the latent factor
 model can be replaced with some other link prediction methods. So
 what if we replace latent factor model with the AA method, how is
@@ -279,11 +279,10 @@ A comment on the limitation of this assumption may be prudent. See also
 Peter Hoff. Modeling homophily and stochastic equivalence in symmetric
 relational data. NIPS 2008.}
 
-We adopt NMF because it requires only $O(nr^2)$ time to be trained and
-it generates non-negative and sparse factorized matrices [21], which could
-be searched efficiently by our top-$(\epsilon, k)$ prediction searching method.
-Without the non-negativity constrains, the factorized matrix would contain
+Yes, there are limitations. However, as pointed out in [46], the factorized matrix without the non-negativity constraints could contain
 negative entries and be dense [46], which makes it more difficult to be searched.
+Another benefit of NMF is that it requires $O(nr^2)$ time to be trained, and generates non-negative and sparse factorized matrices [21], which could
+be searched efficiently by our top-$(\epsilon, k)$ prediction searching method (Sections 2.1\&2.2). Thanks!
 
 %Moreover, NMF gives latent space an parts-based
 %interpretation. Each dimension of latent space could be interpreted by a
@@ -307,17 +306,19 @@ Nagarajan Natarajan, Inderjit Dhillon. PU Learning for Matrix Completion.
 ICML 2015. This is perhaps more prudent that directly fitting the value 0
 for absent links.}
 
-Since the social networks are often sparse, we fit the value 0 for absent links,
-which simplifies the framework of latent factor models and provides an
-intuitive way for predicting links. Thanks!
-
+We do agree that the prediction accuracy can be improved if noisy ones could be correctly fixed in the input matrix.
+However, social networks are very sparse, and it is hard to fix these noisy ones. 
+Since this is to change the input, it must be very cautious as it brings error propagation. 
+ Hence, we choose to fit the value 0 for absent links,
+which simplifies the framework of latent factor models, and provides an
+intuitive way for predicting links.
 
 \textbf{[R3C4]} \emph{A citation should be provided for the claim
 that NMF usually results in sparse F. In standard matrix factorisation
 models the latent weights are usually completely dense.}
 
-We have added a citation [21] that shows the factorized matrices of NMF
-are usually sparse. Thanks!
+We have added a citation [21] to show that the factorized matrices of NMF
+are usually sparse in Section 2.1. Thanks!
 
 [21] D. D. Lee and H. S. Seung. Learning the parts of objects by non-negative
 matrix factorization. Nature, 401:788¨C791, 1999.
@@ -382,7 +383,7 @@ the bagging methods in a correct way.
 \textbf{[R3C10]} \emph{4.2.1 and 4.2.4 seem like they should be merged,
 as both deal with the comparison of the same two groups of methods.}
 
-We have merged the Section 4.2.1 and 4.2.4. Thanks!
+We have merged the Sections 4.2.1 and 4.2.4. Thanks!
 
 \textbf{[R3C11]} \emph{On the presentation side, below are a few
 comments that may improve the final manuscript:\\
@@ -398,7 +399,7 @@ comments that may improve the final manuscript:\\
 - Sec 4, consider expanding lists of conclusions of the form (a) ..., (b) ..., so that each bullet starts on a new line.\\
 - Exp 1.2, "methods SCALE better than"}
 
-We have fixed these typos. Thanks!
+We have fixed these. Thanks!
 
 
 \line(1,0){500}
