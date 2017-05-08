@@ -172,9 +172,7 @@ to compare with our ensemble-enabled approach.
   produces a score for each link $(u, v)$, defined as follows:
   \[ score(u, v) = \sum_{z \in N(u)\cap N(v)}\frac{1}{\log|N(z)|}, \]
   where $N(u)$ is the set of neighbors of node $u$. L\"{u} \cite{linyuan-2011} showed that
-  \Aa performs well on a range of networks because it only concerns 2-hop neighbors and
-  reduces much of search space. Therefore, we implemented a top-$k$ link prediction
-  method by searching the $k$ largest \Aa scoring links. The complexity of this method is
+  \Aa performs well on a range of networks because it only concerns 2-hop neighbors. We implemented a top-$k$ version of \Aa by searching the $k$ largest \Aa scoring links. The complexity of this method is
   $O(nd^2\log(k))$, where $d$ is the average degree of networks. Indeed, there is also another popular link
   prediction method \Katz based on the ensemble of all paths \cite{katz-1953}. However, its
   complexity is $O(n^3)$, and does not work on large networks with millions
@@ -185,10 +183,11 @@ neighborhood based method that assumes the node $u$ can send some resource
 to $v$ with their common neighbors playing the role of transmitters. The
 \RA score for a link $(u, v)$ is defined as follows:
  \[ score(u, v) = \sum_{z \in N(u)\cap N(v)}\frac{1}{|N(z)|}.\]
+We also implemented a top-$k$ version of \RA by searching its $k$ largest scoring links, which has the same time complexity as \Aa.
 Note that \RA is very similar to \Aa when $|N(z)|$ is small, but
  greatly different when $|N(z)|$ is large. Zhou \etal \cite{zhou2009} show that
  \RA performs better than \Aa on the networks with the high degree heterogeneity since
- \RA punishes high degree common neighbors more heavily.  Therefore,
+ \RA punishes high degree common neighbors more.  Hence
  we chose it for comparison in the experiments.
 
 \sstab  (3) \CAMBN \cite{yang-wsdm2013}:
@@ -236,7 +235,7 @@ methods, we also fixed $r = 30$ on \Digg and $r = 10$ on other datasets by defau
 %\marked{In addition, we fixed $k$ to the same order of magnitude as the number of links
 %in the ground truth data for each dataset \cite{yang2015}.}
 The other parameters with their descriptions and default values
-are presented in Table \ref{tab_parameter}.
+are presented in Table \ref{tab_parameter}. Here \Flickr is used to illustrate the limitation of our bagging methods only.
 
 \begin{figure*}[tb!]
   \centering
@@ -262,7 +261,7 @@ are presented in Table \ref{tab_parameter}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   2016-06-22 duan begin
 \subsubsection{Bagging+ vs. Bagging}
 In the first set of tests, we evaluated the effectiveness and efficiency of our bagging+ methods
-compared with bagging methods. Given one of top-$k$ link prediction methods, denoted by $x$, its performance of link prediction is evaluated with the following measure:
+compared with bagging methods. Given one of top-$k$ link prediction methods, denoted by $x$, its prediction accuracy is evaluated with the following measure:
 \begin{equation}
 accuracy(x) = \frac{\# \textrm{ of correctly predicted links}}{\textrm{the number} \ k\ \textrm{of predicted links}}.
 \end{equation}
