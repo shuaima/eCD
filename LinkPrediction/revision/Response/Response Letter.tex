@@ -28,15 +28,20 @@ IEEE Transactions on Knowledge and Data Engineering, \emph{An Ensemble
 Approach to Link Prediction}.
 
 The paper has been substantially revised according to the referees¡¯ comments.
-In particular, (1) we have added an example for illustrating the procedure of
-the top-$(\epsilon, k)$ prediction in Section 2.1, (2) we have added the
-Resource Allocation (RA) algorithm for comparison in the experimental study,
-(3) we have compared our methods with the state-of-the-art methods when
-$k$ is fixed to the number of links in the ground truth data, (4) we have added
-a set of tests for evaluating the ensemble-enabled approach with other link
-prediction methods, \eg Adamic/Adar (AA) and RA,
-and (5) we have also taken this opportunity to rewrite several parts of the
-paper to improve the presentation.
+In particular, (1) we have added an example in Section 2.1 for illustrating
+the procedure of the top-$(\epsilon, k)$ prediction more clearly, (2) we have
+added the Resource Allocation (RA) algorithm as a comparison method in the experimental
+study in Section 4, (3) we have added an accuracy comparison in each hop distance
+of our methods and BIGCLAM in Section 4.2.4, (4) we have compared our methods
+with the state-of-the-art methods when $k$ is fixed to the number of links in
+the ground truth data and reported the results together with the accuracy
+95\% confidence intervals in the Appendix A of the supplementary
+material for the lack of space, (5) we have implemented and evaluated the
+ensemble-enabled approach with Adamic/Adar (AA) and RA in the Appendix B of
+the supplementary material, and (6) we have also taken this opportunity to
+rewrite several parts of the paper to improve the presentation.
+
+
 
 We would like to thank all the referees for their thorough reading of our
 paper and for their valuable comments.
@@ -175,7 +180,7 @@ proposed methods are significantly better than the state-of-the-art
 methodology.}
 
 We have added the accuracy test with the 95\% confidence intervals when $k$ is fixed
-to its default value and the number of links in the ground truth data. 
+to its default value and the number of links in the ground truth data (R2W2). 
 Due to space limitations, we choose to report these experimental results in the Appendix A
 of the supplementary material, in which the results justify he effectiveness of our methods compared with the state-of-the-art methods.
 Thanks for the suggestion!
@@ -192,20 +197,23 @@ number of true links in test set (fixed). In this paper, authors
 mentioned that the K range from $10^4 - 10^5$, this is not a correct
 way to employ this measurement.}
 
-Since we focus on the top-$k$ ranking problem for link prediction, we
-intuitively adopt the top-$k$ precision for evaluation. We agree with
-that small changes of the value $k$ may lead to different conclusions,
-so we tested the impact of varying $k$ in the experimental study.
-Moreover, we tested the ensemble-enabled approach when $k$ is fixed to the number of links in
-the ground truth data. The results are reported in the Appendix A
-of the supplementary material and indicate the robustness
-and efficiency of our methods compared with other methods.
-One thing should be noted that the datasets used in our experiments
-are more sparse than that used in [S1], which means that it
-is more difficult to predict links in our datasets. As a result, the top-$k$
+We agree that small changes of the value $k$ may lead to different conclusions. 
+This is why we tested the impact of varying $k$ in the experimental study. 
+
+Similar to [35][39] that do not use the number of links in the
+ground truth data for testing accuracy, we keep the results using default values for $k$ in the experimental study.
+However, we further tested the ensemble-enabled approach with $k$ fixed to the number of links in
+the ground truth data. Due to space limitations, we choose to report these experimental results in the Appendix A
+of the supplementary material, in which the results justify he effectiveness and efficiency of our methods compared with the state-of-the-art methods.
+Thanks for the suggestion!
+
+It is worth mentioning that the datasets used in our experiments
+are more much sparser than the one used in [S1], which means that it
+is more difficult to predict links on our datasets. As a result, the top-$k$
 precision on our datasets, when $k$ is fixed to the number of links in the
-ground truth data, is too small to be used in practice. Therefore, we maintain
-the default values for $k$ in the experimental study similar to [35][39].
+ground truth data, is too low to be useful in practice. 
+
+
 
 [S1] Y. Yang, R. N. Lichtenwalter, and N. V. Chawla. Evaluating link prediction
 methods. Knowl Inf Syst, 45:751¨C782, 2015.
@@ -225,11 +233,12 @@ comparison in each hop distance, namely hop 2, hop 3, and etc.
 An example can be found in "Evaluating link prediction methods".}
 
 We have added an accuracy comparison of our methods and
-BIGCLAM in each hop distance in Section 4.2.4. The results illustrate
-that all of these methods are more accurate in predicting short distance
-links and have little ability to predict links with distance greater than
-3 hops. This is a limitation of our methods and we want to address it
-in the future to provide a better predictor. Thanks for the suggestion!
+BIGCLAM with varied hop distances in Section 4.2.4. The results show
+that all these methods are more accurate in predicting 2 or 3 hop distance
+links, and they are not good at predicting links with large hop distances. 
+This is a general limitation of most (if not all) existing methods, which deserves  a full treatment in the future.
+
+Thanks for helping us to identify the limitation of our method!
 
 
 \textbf{[R2W4]} \emph{Authors proposed a framework to decompose the
