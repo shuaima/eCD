@@ -495,20 +495,15 @@ adopt the top-$k$ precision as the accuracy in the evaluation. However, a small
 difference in $k$ will lead to different conclusions on link prediction results
 and $k$ should be the number of links in the ground truth data for a fair
 comparison \cite{yang2015}. Therefore, we have conducted three sets of experiments when
-$k$ is varied from hundreds to the number of links in the ground truth data to evaluate:
-(1) the effectiveness and efficiency of our bagging+ methods vs. their counterparts
-bagging methods, (2) the effectiveness and efficiency of our methods
-vs. \Aa, \RA and \BIGCLAM, and (3) the impacts of parameters of our methods.
-Furthermore, we also report the accuracy comparison with confidence intervals
-to provide a more detailed comparison.
-
-
+$k$ is varied from hundreds to the number of links in the ground truth data to evaluate 
+the impacts of $k$ on our ensemble-enabled approach compared with conventional methods  
+\Aa, \RA and \BIGCLAM. This is useful for choosing $k$ appropriately.
 
 
 
 \subsection{Bagging+ vs. Bagging}
-In the first set of tests, we evaluated the effectiveness and efficiency of our
-bagging+ methods compared with bagging methods.
+In the first set of tests, we evaluated the impacts of $k$ on the 
+effectiveness and efficiency of our bagging+ methods compared with bagging methods.
 
 \stitle{Exp-4.1: Impacts of $k$}. We varied $k$ from hundreds
 to the number of links in the ground truth data \cite{yang2015}.
@@ -538,8 +533,9 @@ methods increase slightly with the increase of $k$. For instance,
 This verifies the efficiency of the bagging+ methods.
 
 
-\stitle{Exp-4.2: Impacts of network sizes}. To evaluate the impacts of
-network sizes, we used networks with different sizes that used in Exp-1.3,
+\stitle{Exp-4.2: Impacts of network sizes}. We evaluated the impacts of $k$ with 
+different network sizes when $k$ is fixed to the number of links in the ground truth data. 
+We used networks with different sizes that used in Exp-1.3,
 fixed $k$ to the number of links in the ground truth data
 and used the same setting of other parameters as Exp-4.1.
 The results of accuracy and running time are reported
@@ -631,7 +627,8 @@ increase of network sizes. This verifies the efficiency of the bagging+ methods.
 
 
 \subsection{Comparison with \Aa, \RA and \BIGCLAM}
-In the second set of tests, we evaluated the effectiveness and efficiency of
+In the second set of tests, we evaluated the impacts of $k$ on the 
+effectiveness and efficiency of
 our methods compared with \Aa, \RA and \BIGCLAM. We chose \Biased and \Biasedp
 for the comparison since they are the best bagging methods according to Exp-4.
 
@@ -671,7 +668,7 @@ This verifies the efficiency of our methods.
 
 
 \stitle{Exp-5.2: Impacts of network sizes}. Using the same setting as
-Exp-4.2, we evaluated the impacts of network sizes.
+Exp-4.2, we evaluated the impacts of $k$ with different network sizes.
 The results of accuracy and running time are reported in Figures \ref{fig_exp_5_2_size_acc_digg} -- \ref{fig_exp_5_2_size_acc_wikipedia}
 and Figures \ref{fig_exp_5_2_size_time_digg} -- \ref{fig_exp_5_2_size_time_wikipedia} , respectively.
 
@@ -1027,7 +1024,8 @@ in Exp-2.2 and also verifies the efficiency of our methods.
 In the third set of tests, we evaluated the impacts of the parameter when $k$
 is the number of links in the ground truth data.
 Since the parameters $\mu$, $f$, $\rho$ and $\epsilon$ have similar impacts as
-in Section 4.2.3, we only report the impacts of the parameter $r$ on
+in Section 4.2.3, we keep the default values for these parameters and 
+report the impacts of the parameter $r$ on
 the accuracy and running time of bagging+, bagging, \NMF and \BIGCLAM.
 
 \stitle{Exp-6: Impacts of $r$}. To evaluate the impacts of $r$, we varied
@@ -1045,40 +1043,26 @@ $r$ for \NMF and \BIGCLAM, and fixed $r = 30$ on \Digg and \YouTube and $r = 20$
 \Wikipedia for bagging+ and bagging methods.
 
 
+\stitle{Remarks}. From these experimental results, we find that $k$ has great
+impacts on predicting links: 
 
-\section{Appendix B: Accuracy Results with Confidence Intervals}
+\sstab (1) The bagging+ and bagging methods are more accurate than other 
+methods when $k$ is varied from hundreds to the number of links in the ground 
+truth data, except for \RA on \Wikipedia. Particularly, the bagging+ and bagging 
+methods have significant improvements when $k$ is small, and also accurate than 
+others when $k$ is the number of links in the ground truth data.
 
+\sstab (2) \Biased are more accurate than \Node and \Edge when $k$ is small, and 
+very close to the \Node and \Edge when $k$ is large, \eg $k$ is fixed to the 
+number of links in the ground truth data. In this case, however, it also provide an efficiency 
+advantage. Similar trends have been found for \Biasedp.
 
-To provide a more detailed comparison of accuracy, we
-report the 95\% confidence intervals of accuracy of our
-methods and \BIGCLAM in this section. The confidence interval of
-accuracy is given by
-\[ (\overline{x} - t_{[n-1,\alpha/2]}\frac{s}{\sqrt{n}}, \overline{x} + t_{[n-1,\alpha/2]}\frac{s}{\sqrt{n}})  \]
-where $\overline{x}$ is the average of the accuracy, $\alpha$ is the significance level
-(we set $\alpha$ to 0.05 for the $1 - \alpha = 95\%$ confidence level),
-$s$ is the sample standard deviation, $n$ is the number of repeated
-times of our experiments and $t_{[n-1,\alpha/2]}$ is the ($\alpha/2$)-quantile
-of Student's $t$ distribution with $n - 1$ degrees of freedom \cite{stati}.
-The confidence interval gives an indication of how much uncertainty there is in
-the estimate of the accuracy. The narrower the interval, the more precise is the estimate.
-
-The accuracy comparison in Exp-1.2, Exp-1.3, Exp-2.1 and Exp-2.2 are shown in
-Table \ref{tab_accuracy_1} -- Table \ref{tab_accuracy_4}, respectively.
-Further, the accuracy comparison in Exp-4.1, Exp-4.2, Exp-5.1 and Exp-5.2 are shown in
-Table \ref{tab_accuracy_5} -- Table \ref{tab_accuracy_8}, respectively.
-
-
-The results tell us that (a) \Biased and \Biasedp are more accurate than other methods
-on most of the datasets, (b) bagging+ and bagging methods perform
-better than other methods on most of the datasets,
-and (c) the accuracy of all methods decreases with the increase of $k$.
-Indeed, when $k$ is the number of the ground truth links, \Biased improves
-the accuracy by $(2.8\%, 24.3\%, 70.8\%, 11.9\%)$ (\resp $(1.5\%, 34.0\%, 34.0\%, 22.9\%)$)
-over \NMF, \Aa, \RA and \BIGCLAM on \Digg and \YouTube, respectively.
-All of these are consistent with the previous experimental analysis and
-verify the effectiveness of our methods. Note that the confidence intervals
-of all methods are narrow, which means that the accuracy estimate is reasonable.
-Thus, we only report the average of accuracy in other Sections for visual clarity.
+\sstab (3) The accuracy of all methods decrease with the increase of $k$, and 
+becomes very low when $k$ is very large. For instance, when $k$ is the number of 
+links in the ground truth data, the accuracy of \Aa and \RA is only 1\% on \YouTube. 
+Although our methods are more accurate than other methods under this condition, we still 
+keep the default value for $k$ since the higher accuracy would be more useful in 
+practice.
 
 
 
@@ -1121,6 +1105,53 @@ Thus, we only report the average of accuracy in other Sections for visual clarit
   \vspace{-1ex}
 \end{figure*}
 
+
+
+
+
+\section{Appendix B: Accuracy Results with Confidence Intervals}
+We report the average of accuracy for comparison in previous tests, 
+but it is would be more fair and detailed with providing the accuracy confidence 
+intervals in comparison. Therefore, we
+report the 95\% confidence intervals of accuracy of our
+methods and \BIGCLAM in this section. 
+
+The confidence interval of accuracy is given by
+\[ (\overline{x} - t_{[n-1,\alpha/2]}\frac{s}{\sqrt{n}}, \overline{x} + t_{[n-1,\alpha/2]}\frac{s}{\sqrt{n}})  \]
+where $\overline{x}$ is the average of the accuracy, $\alpha$ is the significance level
+(we set $\alpha$ to 0.05 for the $1 - \alpha = 95\%$ confidence level),
+$s$ is the sample standard deviation, $n$ is the number of repeated
+times of our experiments and $t_{[n-1,\alpha/2]}$ is the ($\alpha/2$)-quantile
+of Student's $t$ distribution with $n - 1$ degrees of freedom \cite{stati}.
+The confidence interval gives an indication of how much uncertainty there is in
+the estimate of the accuracy. The narrower the interval, the more precise is the estimate.
+
+The accuracy comparison in Exp-1.2, Exp-1.3, Exp-2.1 and Exp-2.2 are shown in
+Table \ref{tab_accuracy_1} -- Table \ref{tab_accuracy_4}, respectively.
+Further, the accuracy comparison in Exp-4.1, Exp-4.2, Exp-5.1 and Exp-5.2 are shown in
+Table \ref{tab_accuracy_5} -- Table \ref{tab_accuracy_8}, respectively.
+
+
+\stitle{Remarks}. From the results of accuracy comparison with confidence intervals, 
+we find the following. 
+
+\sstab (1) \Biased and \Biasedp are more accurate than other methods
+on most of the datasets. Even when $k$ is the number of the ground truth links, \Biased improves
+the accuracy by $(2.8\%, 24.3\%, 70.8\%, 11.9\%)$ (\resp $(1.5\%, 34.0\%, 34.0\%, 22.9\%)$)
+over \NMF, \Aa, \RA and \BIGCLAM on \Digg and \YouTube, respectively. 
+Moreover, Bagging+ and bagging methods perform better than other methods on most of the datasets. 
+
+\sstab (2) The accuracy of all methods decreases with the increase of $k$, 
+which is consistent with the previous experimental analysis.
+
+\sstab (3) The confidence intervals of all methods are narrow, which means that the accuracy estimate is reasonable.
+Thus, we only report the average of accuracy in other Sections for visual clarity.
+
+
+
+
+
+
 \section{Appendix C: Ensemble-Enabled AA \& RA}
 
 One interesting thing should be noted that our ensemble-enabled
@@ -1143,7 +1174,7 @@ The accuracy results tell us that (a) \AABiased and \AABiasedp (\resp \RABiased 
 are more accurate than \Aa (\resp \RA) on most of the datasets,
 (b) the accuracy of \AABiasedp (\resp \RABiasedp) is close to that of \AABiased (\resp \RABiased),
 and (c) the improvements of the ensemble-enabled methods are significant when $k$
-is small. This is verifies the effectiveness of the ensemble-enabled approach.
+is small. 
 
 Note that \AABiased and \AABiasedp (\resp \RABiasedp)
 perform worse than their counterpart \Aa (\resp \RA) on \Wikipedia because their diversities
@@ -1161,8 +1192,7 @@ where $d_1$ is the average degree of each ensemble component. It is means
 that the ensemble-enabled \Aa and \RA would be faster when $d_1$ is small.
 Indeed, $d_1$ of \AABiased is 9 and 56 on \YouTube and \Wikipedia while the average
 degree of these datasets is 5 and 33 respectively. However, $d_1$ of \AABiased is 30
-on \Digg  while the average degree of this datasets is 10. This is verifies the
-efficiency of the ensemble-enabled approach.
+on \Digg  while the average degree of this datasets is 10. 
 
 
 
@@ -1176,7 +1206,7 @@ and Figures \ref{fig_exp_7_2_size_time_digg}--\ref{fig_exp_7_2_size_time_wikiped
 The accuracy results tell us that (a) the ensemble-enabled methods are
 more accuracy than their counterparts \Aa and \RA  on most of the datasets,
 and (b) the improvements of \RABiased and \RABiasedp on \Digg and \YouTube are significant.
-This means that the ensemble-enabled methods are also accurate and robust
+This means that the ensemble-enabled methods are accurate and robust
 with the increase of network sizes.
 
 The running time results tell us that (a) the ensemble-enabled methods are
@@ -1188,6 +1218,24 @@ with \Aa and \RA on the large networks \Twitter and \Friendster, and the average
 speedup of \AABiased and \AABiasedp (\resp \RABiased and \RABiasedp)
 are (5, 4) and (14, 5) (\resp (7, 5) and (20, 6)) on (\Twitter and \Friendster),
 which verifies the efficiency of our ensemble-enabled approach.
+
+\stitle{Remarks}. From these results, we find the following.
+
+\sstab (1) The ensemble-enabled \Aa and \RA improve the accuracy 
+compared with their counterparts \Aa and \RA on some networks, but 
+they are not robust on all datasets. This means that it is difficult 
+to directly apply our ensemble-enabled framework to any link prediction 
+methods. 
+
+\sstab (2) The ensemble-enabled \Aa and \RA would provide an efficiency 
+advantage when the average degree of each ensemble component is small, 
+\eg on \YouTube and \Wikipedia. However, our sampling techniques tend to 
+sampling more dense subgraphs and reduce the efficiency of ensemble-enabled 
+approach with \Aa and \RA. To provide a general framework, the graph sampling techniques used
+in our methods should be augmented.
+
+
+
 
 
 \begin{footnotesize}
