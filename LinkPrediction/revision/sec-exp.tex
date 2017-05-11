@@ -134,7 +134,7 @@ $n$ & Number of nodes & see Table \ref{tab_dataset}\\
   \quad\quad
   \subfigure[Wikipedia]{\label{fig_exp_1_1_k_time_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/1-1-g.eps}}
   \vspace{-1ex}
-  \caption{Accuracy and efficiency comparison: with respect to the number $k$ of predicted links.}\label{fig_exp_1_1}
+  \caption{Bagging+ vs. Bagging on accuracy and efficiency:  with respect to the number $k$ of predicted links.}\label{fig_exp_1_1}
   \vspace{-2ex}
 \end{figure*}
 
@@ -157,7 +157,7 @@ $n$ & Number of nodes & see Table \ref{tab_dataset}\\
   \hspace{-2ex}
   \subfigure[Friendster]{\label{fig_exp_1_2_size_time_friendster}\includegraphics[width= 1.8in, height=1.2in]{eps-script/1-2-j.eps}}
   \vspace{-1ex}
-  \caption{Accuracy and efficiency comparison: with respect to the network sizes.}\label{fig_exp_1_2}
+  \caption{Bagging+ vs. Bagging on accuracy and efficiency:  with respect to the network sizes.}\label{fig_exp_1_2}
   \vspace{-2ex}
 \end{figure*}
 
@@ -171,7 +171,7 @@ to compare with our ensemble-enabled approach.
 \sstab (1) \Adamic \cite{adamic}: Algorithm \Aa is a popular neighborhood based method that
   produces a score for each link $(u, v)$
   \[ score(u, v) = \sum_{z \in N(u)\cap N(v)}\frac{1}{\log|N(z)|}, \]
-  where $N(u)$ is the set of neighbors of node $u$. L\"{u} \cite{linyuan-2011} showed that
+  where $N(u)$ is the set of neighbors of node $u$. L\"{u} \etal \cite{linyuan-2011} showed that
   \Aa performs well on a range of networks because it only concerns 2-hop neighbors. We implemented a top-$k$ version of \Aa by searching the $k$ largest \Aa scoring links. The complexity of this method is
   $O(nd^2\log(k))$, where $d$ is the average degree of networks. Indeed, there is also another popular link
   prediction method \Katz based on the ensemble of all paths \cite{katz-1953}. However, its
@@ -181,7 +181,7 @@ to compare with our ensemble-enabled approach.
 \sstab  (2) \Resource \cite{zhou2009}: Algorithm \RA is another
 neighborhood based method that assumes the node $u$ can send some resource
 to $v$ with their common neighbors playing the role of transmitters. The
-\RA score for a link $(u, v)$ is 
+\RA score for a link $(u, v)$ is
  \[ score(u, v) = \sum_{z \in N(u)\cap N(v)}\frac{1}{|N(z)|}.\]
 We also implemented a top-$k$ version of \RA by searching its $k$ largest scoring links, which has the same time complexity as \Aa.
 Note that \RA is very similar to \Aa when $|N(z)|$ is small, but
@@ -199,8 +199,8 @@ Note that \RA is very similar to \Aa when $|N(z)|$ is small, but
   Let $F$ be a nonnegative matrix where $F_{uc}$ is the degree of the node $u$ belongs to
   the community $c$. Given $F$, the \BIGCLAM generates a network $G(N, A)$ by creating edge
   $(u, v)$ between a pair of nodes $u, v \in N$ with the probability
-    \[ p(u, v) = 1 - \exp(-\overline{F_u}\cdot \overline{F_v}), \]
-where $\overline{F_u}$ is a weight vector for node $u$. Viewing the probability $p(u, v)$ as
+   \[ p(u, v) = 1 - \exp(-\overline{f_u}\cdot \overline{f_v}), \]
+where $\overline{f_u}$ is a weight vector for node $u$. Viewing the probability $p(u, v)$ as
   a score for the link $(u, v)$, it is reasonable to predict links based on \BIGCLAM.
 The complexity of  \BIGCLAM is $O(nd(r + d) )$, where $d$ is the average degree of networks.
   In addition, this model is not designed to search the entire space of $O( n^2 )$,
@@ -253,7 +253,7 @@ are presented in Table \ref{tab_parameter}.
   \quad\quad
   \subfigure[Wikipedia]{\label{fig_exp_2_1_k_time_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-g.eps}}
   \vspace{-1ex}
-  \caption{Accuracy and efficiency comparison: with respect to the number $k$ of predicted links.}\label{fig_exp_2_1}
+  \caption{Accuracy and efficiency comparison with \Aa, \RA and \BIGCLAM: with respect to the number $k$ of predicted links.}\label{fig_exp_2_1}
   \vspace{-2ex}
 \end{figure*}
 
@@ -289,7 +289,7 @@ and (c) the maximum speedup is obtained by taking the
 two techniques together. Therefore, we adopt these two techniques
 in our bagging+ methods to achieve the maximum speedup.
 Note that the running time of \Biasedp and \Nodep on \YouTube and \Wikipedia
-are very close because \Biasedp spends more time on sampling the nodes
+is very close because \Biasedp spends more time on sampling the nodes
 from the input graph than \Nodep while \Nodep spends more time on processing
 its ensembles. Furthermore, the improvement of Top-$(\epsilon, k)$+ on \Wikipedia is not
 distinct since the $\epsilon = 1$ is very suitable for this dataset.
@@ -340,7 +340,7 @@ and Figures \ref{fig_exp_1_1_k_time_digg}--\ref{fig_exp_1_1_k_time_wikipedia}, r
 
 The accuracy results tell us that
 (a) \Biased and \Biasedp are the best methods on all datasets,
-(b) the accuracy of the bagging+ methods are very close to that
+(b) the accuracy of the bagging+ methods is very close to that
 of their counterparts bagging methods, and (c) the accuracy of all
 methods decreases with the increase of $k$. It is means that the
 bagging+ methods maintain the accuracy while some of the
@@ -414,7 +414,7 @@ than $55$ on other subnetworks. }
   \hspace{-2ex}
   \subfigure[Friendster]{\label{fig_exp_2_2_size_time_friendster}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-2-j.eps}}
   \vspace{-1ex}
-  \caption{Accuracy and efficiency comparison: with respect to the network sizes.}\label{fig_exp_2_2}
+  \caption{Accuracy and efficiency comparison with \Aa, \RA and \BIGCLAM: with respect to the network sizes.}\label{fig_exp_2_2}
   \vspace{-2ex}
 \end{figure*}
 
@@ -477,7 +477,7 @@ and Figures \ref{fig_exp_2_1_k_time_digg}--\ref{fig_exp_2_1_k_time_wikipedia}, r
 The accuracy results tell us that (a) \Biased outperforms other methods on all datasets except \Wikipedia, (b) the accuracy of \Biasedp is very close to that of \Biased, (c) both \Biased and \Biasedp have a higher accuracy than \Aa, \RA and \BIGCLAM, except \RA on \Wikipedia,
 (d) \NMF is more accurate than \Aa, \RA and \BIGCLAM, except \RA on \Wikipedia,
 and (e) the accuracy of all methods decreases with the increase of $k$.
-Indeed, \Biased improves the accuracy by $(2.5\%, 41.4\%, 113.4\%, 34.1\%)$, $(7.5\%, 45.2\%,$ $ 38.2\%, 46.2\%)$
+Indeed, Indeed, when $k$ is the default value, \Biased improves the\Biased improves the\Biased improves the accuracy by $(2.5\%, 41.4\%, 113.4\%, 34.1\%)$, $(7.5\%, 45.2\%,$ $ 38.2\%, 46.2\%)$
 and $(12.7\%, 7.9\%, -25.2\%, 26.9\%)$ over (\NMF, \Aa, \RA, \BIGCLAM) on \Digg, \YouTube and \Wikipedia,
 respectively. Here, minus ($-$) means a worse accuracy. Moreover, \Biased performs consistently well on all networks (\ie more robust), unlike \RA which works well
 on \Wikipedia but poorly on other datasets. This verifies the effectiveness of our bagging methods.
@@ -497,7 +497,7 @@ This verifies the efficiency of our bagging methods.
 Note that the accuracy of all methods is not very high, even the best
 accuracy (\Biasedp on \Digg when $k = 1\times 10^4$) is less than $10\%$. The reason is that
 there are more than $1\times 10^{10}$ possible links in the search space of each dataset,
-but less than $1\times 10^6$ links in the ground truth.
+but less than $1\times 10^7$ links in the ground truth.
 Since \RA is suitable for high degree heterogeneity networks \cite{zhou2009},
 it performs the best on \Wikipedia which contains a number of extreme high degree nodes.
 In addition, \NMF is slower than \Aa and \RA on three datasets because $r$ is fixed to $50$,
@@ -529,7 +529,7 @@ Note that there are {\em some missing plots} for \NMF, \Aa, \RA and
 
 
 
-The accuracy results tell us that (a) \Biased has the highest accuracy 
+The accuracy results tell us that (a) \Biased has the highest accuracy
 on all datasets except \Wikipedia, (b) \Biasedp performs as well as its counterpart \Biased,
 (c) the bagging+ and bagging methods perform better than \NMF, \Aa, \RA
 and \BIGCLAM, except \RA on \Wikipedia,
@@ -539,7 +539,7 @@ our methods are more accurate and robust with the increase of network sizes.
 
 The running time results tell us that (a) our bagging+ and bagging methods are much faster than the other methods,
 (b) the running time of all methods increase with the increase of $n$. For
-instance, \Biasedp speeds up (\NMF, \Aa, \RA, \BIGCLAM) for around $(12, 135, 66, 53)$ (resp. $(15, 8, 8, 65)$) 
+instance, \Biasedp speeds up (\NMF, \Aa, \RA, \BIGCLAM) for around $(12, 135, 66, 53)$ (resp. $(15, 8, 8, 65)$)
 times on \Twitter (resp. \Friendster) and is thus essential for
 making our bagging methods scalable to large networks. Note
 that \NMF is slower than \BIGCLAM on \Digg and \YouTube,
@@ -758,7 +758,7 @@ than their counterparts bagging methods when $\rho$ is less than 0.95,
 and (d) the running time of the bagging+ methods increases linearly
 with the increase of $\rho$, which is consistent with
 the complexity that is proportional to the number of edges in the
-ensemble component. Keeping the accuracy of the bagging+ methods is close to
+ensemble component. Keeping the accuracy of the bagging+ methods close to
 that of the bagging methods, we fixed $\rho = 0.75$ by default to achieve a better efficiency.
 
 
@@ -866,9 +866,9 @@ fixed $\epsilon = 1$ by default to achieve a better efficiency.
 \subsubsection{Analysis of Limitations}
 \label{subsction-exp-limit}
 In the last set of tests, we discuss the limitations of our methods:
-(1) the bagging methods might not as good as \NMF in certain situations, and (2) both the bagging 
+(1) the bagging methods might not as good as \NMF in certain situations, and (2) both the bagging
 and \NMF methods cannot predict valid links with large hop distances as well as those with short hop distances.
-We first report the accuracy comparison between our bagging methods and \NMF on \Flickr. 
+We first report the accuracy comparison between our bagging methods and \NMF on \Flickr.
 We then report the accuracy of the bagging methods and \NMF with varied hop distances.
 These could be useful when users are to apply our bagging methods in practice.
 
@@ -896,7 +896,7 @@ shown in Figures \ref{fig_exp_3_r_acc_flickr} and \ref{fig_exp_2_k_acc_flickr}.
 We varied $r$ from 10 to 50 (resp. $k$ from $10^5$ to $10^6$)
 and fixed other parameters to their default values. The results tell us that
 the accuracy of our bagging methods is slightly lower than that of \NMF.
-Indeed, \Biased decreases the accuracy by $4\%$ on \Flickr compared with \NMF.
+Indeed, when $k$ is the default value, \Biased decreases the accuracy by $4\%$ on \Flickr compared with \NMF.
 
 We next explain the reasons. It is well known that the principle in ensemble methods is to make each ensemble as
 unique as possible and this is also called as diversity \cite{zhzhou}. Diversity can
@@ -971,7 +971,7 @@ Hop  & Digg & YouTube & Wikipedia & Digg & YouTube & Wikipedia \\
 \hline
 2 & 32\% & 26\% & 63\%  & 3.8\% & 1.7\% & 1.9\% \\
 3 & 39\% & 37\% & 32\%  & 0.4\% & 0.1\% & 0 \\
-other & 29\% & 37\% & 5\% & 0 & 0.2\% & 0 \\
+$\ge 4$ & 29\% & 37\% & 5\% & 0 & 0.2\% & 0 \\
 \hline \hline
 \multicolumn{4}{c}{Accuracy of \NMF} & \multicolumn{3}{|c}{Accuracy of \Biased}\\
 \hline
@@ -979,7 +979,7 @@ Hop  & Digg & YouTube & Wikipedia & Digg & YouTube & Wikipedia \\
 \hline
 2 & 4.8\% & 2.1\% & 2.1\% & 4.9\% & 2.1\% & 2.4\% \\
 3 & 0.8\% & 0.3\% & 2.3\% & 0 & 1.1\% & 0.1\% \\
-other & 0 & 0 & 0 & 0 & 0 & 0 \\
+$\ge 4$  & 0 & 0 & 0 & 0 & 0 & 0 \\
 \hline \hline
 \end{tabular}
 \vspace{-2ex}
