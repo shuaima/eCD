@@ -1,0 +1,200 @@
+\newpage
+\input{sec-exp-app}
+%\input{sec-exp-app2}
+
+\section*{APPENDIX B: Detailed Proofs}
+\label{sec-proof}
+
+
+\eat{
+% move this to the full version
+\begin{proof}
+Observe that (a) the block-wise graph and its topological order can be done in $O(|V|+|E|)$ time~\cite{CormenLRS01}, and (b) updating the TWPageRank scores takes $O(|V|+|E_a|+t|E_i|)$ time as the edges in $E_a$ are only scanned once.
+\end{proof}
+
+
+\begin{proof}
+Observe the following. (a) A topological order of $G'_C$ can be computed in $O(|V_C|+|E_C|+|E_{CB}|)$ time.
+(b) Updating the TWPageRank scores of nodes in subgraphs $G_B$ and $G_C$ costs $O(|V_B\cup V_C|+|E_{B,a}\cup E_{C,a}\cup E_{CB}|)+t^+|E_{B,i}\cup E_{C,i}|)$ time. Finally, (c) Updating the scores of nodes in $G_A$ costs $O(|V_A|)$ time.
+\end{proof}
+}
+
+
+\eat{
+\subsection*{1. Proof of Lemma \ref{prop-nonitercomputing}}
+
+The TWPageRank vector $PR$ returned by \twprdag equals to the convergent TWPageRank vector $PR^*$.
+
+\begin{proof}
+We have $PR^* = d M^T\cdot PR^* + \frac{1-d}{n} e$, as $PR^*$ is the convergent TWPageRank vector. Hence, we also have
+\begin{small}
+\begin{equation}
+PR^*(v)=d \sum_{(u,v)\in E^c} M_{u,v} PR^*(u) + \frac{1-d}{n}.
+\end{equation}
+\end{small}
+
+\vspace{-1ex}
+%\noindent
+
+Consider a topological order $v_1/\dots/v_n$ on citation graph $G^c$. We then prove $PR(v_k)=PR^*(v_k)$ ($k\in[1,n]$) by induction.
+
+\noindent(1) When $k=1$, it is obvious that $PR(v_k)=PR^*(v_k)=\frac{1-d}{n}$. %since $PR^*(v_1)=PR(v_1)=\frac{1-d}{n}$;
+
+\noindent(2) Assume that it holds for $1\leq k \leq q$, we then show $PR^*(v_k)=PR(v_k)$ when $k=q+1$ as follows.
+\begin{small}
+\begin{equation*}
+\begin{split}
+PR^*(v_{q+1}) & = d \sum_u M_{u,v_{q+1}} PR^*(u) + \frac{1-d}{n} \\
+ & = d \sum_u M_{u,v_{q+1}} PR(u) + \frac{1-d}{n}  = PR(v_{q+1}).
+\end{split}
+\end{equation*}
+\end{small}
+
+\vspace{-1ex}
+\noindent Here $\{u|(u,v_{q+1})\in E^c\}\subseteq \{v_1,\dots,v_q\}$.
+%By these, we have the conclusion.
+\end{proof}
+}
+
+
+
+
+
+
+\subsection*{1. Proof of Corollary \ref{prop-prscc}}
+The vector $PR$ returned by~\twprscc converges such that $||PR-PR^*||_1 < \epsilon$ given the convergent vector $PR^*$.
+
+\begin{proof}
+%By lemma~\ref{prop-converg}, we know that TWPageRank converges on venue graphs.
+We first prove that the sum of changes after another iteration from $PR$ is smaller than $\epsilon$, \ie $||PR'-PR||_1 < \epsilon$ where $PR'=d M^T\cdot PR + \frac{1-d}{n} e$, and then prove that $||PR^*-PR||_1$ is smaller than $||PR'-PR||_1$.
+%the sum of changes.
+
+Consider $scc_1$, $\dots$, $scc_m$ of the (citation or venue) graph $G$ such that $v_1'/\dots$ $/v_m'$ is indeed a valid topological order of the block-wise graph $G'$ of $G$, where $m$ is the number of \sccs in $G$ and $v_k'$ ($k\in [1,m]$) is the corresponding node of $scc_k$ in $G'$.
+
+Let $PR_k$ and $PR_k^-$ be the current and the previous TWPageRank vectors of nodes in $scc_k$ produced
+by \twprscc, and $PR_k'$ be the TWPageRank vector of nodes in $scc_k$ extracted from $PR'$.
+Further let $\Delta_k=PR_k-PR^-_k$ and we have:
+$\sum_{k=1}^m ||\Delta_k||_1 < \epsilon$.
+
+Consider $M_{ij}$ ($i,j\in[1,m]$), the submatrix of $M$ denoting the transition probability from nodes in $scc_i$ to nodes in $scc_j$. We have $M_{ij}=\bf{0}$ when $i>j$, since there exists no edges from nodes in $scc_i$ to $scc_j$. And, hence, $PR_k$ and $PR_k'$ are updated as:
+%
+\begin{small}
+\begin{equation*}
+\begin{split}
+PR_k=&\frac{1-d}{n} e_k+ d \sum_{j=1}^{k-1} M_{jk}^T PR_j + d M_{kk}^T PR_k^-,\\
+PR_k'=&\frac{1-d}{n}  e_k+ d \sum_{j=1}^{k-1} M_{jk}^T PR_j + d M_{kk}^T PR_k,
+\end{split}
+\end{equation*}
+\end{small}
+\noindent
+respectively, where $e_k=[1]_{|scc_k|\times 1}$.
+%, and, obviously, $\Delta_k^+=PR_k^+-PR_k=d M_{kk}^T \Delta_k^-$.
+
+\vspace{1ex}
+Given these, the sum of changes between $PR'$ and $PR$ is:
+%
+\begin{small}
+\begin{equation*}
+\begin{split}
+||PR'-PR||_1 & =\sum_{k=1}^m ||PR_k'-PR_k||_1 = \sum_{k=1}^m ||d M_{kk}^T \Delta_k||_1 \\
+& \le d\sum_{k=1}^m ||\Delta_k||_1 < \epsilon,
+\end{split}
+\end{equation*}
+\end{small}
+\noindent
+based on the fact that the row sums of $M_{kk}$ are always $\le 1$. %less than or equal to 1.
+
+Moreover, $||PR'-PR||_1 = ||PR' - PR^* + PR^* -PR||_1 = ||d M^T (PR-PR^*)||_1 + ||PR-PR^*||_1<\epsilon$, which gives $||PR-PR^*||_1<\epsilon$ and proves the conclusion.
+\end{proof}
+
+\subsection*{2. Proof of Proposition \ref{lemma-inc-topo}}
+$O^+=\Delta O/O$ is indeed a valid topological order of the block-wise graph of $G^+$.
+
+\begin{proof}
+Let $G'_\Delta(V'_\Delta, E'_\Delta)$ be the block-wise graph of $G^+[\Delta V]$; further let $E'_c$ denote the set of crossing edges from $V'_\Delta$ to $V'$.
+It suffices to show that for each $(u,v)\in E'\cup E'_\Delta \cup E'_c$, $u$ comes before $v$ in $O^+$,
+which obviously holds (a) for  $E'\cup E'_\Delta$ as $O$ and $\Delta O$ are topological orders of $G'$ and $G'_\Delta$, respectively, and (b) for $E_{c}'$ as nodes in $G'_\Delta$ come before nodes in $G'$.
+\end{proof}
+
+
+
+\subsection*{3. Proof of Theorem \ref{lemma-subgraphA}}
+The TWPageRank vector $PR^+$ returned by~\inctwprscc converges such that $||PR^+-PR^{*}||_1 < \epsilon$, where $PR^{*}$ is the convergent TWPageRank vector.
+
+\begin{proof}
+Assume a topological order $v_1'/\dots/v_{l}'$ of block-wise graph $G^+{'}$ where $l=|O^+|$. We prove that the sum of change of $PR^+(v)$ where $v\in scc_k$ is no more than $\epsilon\cdot\frac{|scc_k|}{|V^+|}$ for $scc_k$ corresponding to $v_k'$ ($k\in [1,l]$) by induction. Note that it obvious holds for $scc_k$ belonging to $G_B$ and $G_C$ by algorithm~\inctwprscc.
+
+\noindent(1) When $k=1$, it holds since $scc_1$ belongs to $G_C$;
+
+\noindent(2) Assume that it holds when $1\le k\le q$. We then show that it also holds for $k=q+1$. It suffices to show the case when $scc_k$ belongs to $G_A$. Recall that:
+%
+\begin{small}
+\begin{equation*}
+\begin{split}
+PR(v) & =  d \sum_{(u,v)\in E_i} M_{u,v} PR(u) + d \sum_{(u,v)\in E_a} M_{u,v} PR(u) +  \frac{1-d}{n},\\
+PR^+(v) & =  d \sum_{(u,v)\in E^+_i} M^+_{u,v} PR^+(u) + d \sum_{(u,v)\in E^+_a} M^+_{u,v} PR^+(u) +  \frac{1-d}{n^+}.
+\end{split}
+\end{equation*}
+\end{small}
+\noindent
+Consider $scc_k$ belonging to $G_A$ and node $v\in scc_k$. We have $\{(u,v)|(u,v)\in E_i\}$ = $\{(u,v)|$ $(u,v)\in E^+_i\}$, $\{(u,v)|(u,v)\in E_a\}$ = $\{(u,v)|(u,v)\in E^+_a\}$ and $M_{u,v}=M^+_{u,v}$ when $(u,v)\in E_i\cup E_a$. Also note that $PR^+(u)=\frac{n}{n^+}PR(u)$ when $(u,v)\in E_a$ according to algorithm~\inctwprscc. Let $PR_{k,0}$, $PR_{k,1}$, $\dots$, $PR_{k,t}$ be the convergent sequence of TWPageRank vectors for $scc_k$ computed by algorithm \twprscc on $G$. Then $\frac{n}{n^+}PR_{k,0}$, $\frac{n}{n^+}PR_{k,1}$, $\dots$, $\frac{n}{n^+}PR_{k,t}$ is a valid convergent sequence of TWPageRank vectors for $scc_k$ computed by algorithm \inctwprscc on $G^+$ given the initial TWPageRank vector $\frac{n}{n^+}PR_{k,0}$.
+Hence, the sum of changes of $PR^+(v)$ where $v\in scc_k$ is $\frac{n}{n^+}||PR_{k,t}-PR_{k,t-1}||_1 < \epsilon\cdot\frac{|scc_k|}{|V^+|}$.
+
+Combining with Corollary \ref{prop-prscc}, we have the conclusion.
+\end{proof}
+
+
+\eat{
+\subsection*{4. A Stronger Convergence Result}
+
+
+\begin{figure}[tb!]
+\centering
+\includegraphics[scale=.8]{fig/DAG_Layers.eps}
+\vspace{-2ex}
+\caption{An example of a four-layer citation graph}
+\label{fig-daglayers}
+\vspace{-2ex}
+\end{figure}
+
+
+Proposotion~\ref{prop-converg} has shown the convergence of TWPageRank. We further present a stronger convergence result giving the number of iterations needed for power method to achieve convergence, which is based on dividing citation graphs into ordered layers.
+
+Since the citation graph $G^c(V^c,E^c)$ can be treated as a directed acyclic graph, $V^c$ can be organized into ordered layers such that all edges are from later layers to earlier layers. To do this, let $l_v$ be the length of the longest path starting from node $v$,
+%Such values for all nodes in $G$ can be computed in linear time~\cite{SedgewickW11}, by finding a topological ordering of $G$ and updating the length $l_v$ of each node $v$ in the topological ordering.
+and $L$ be the length of the longest path starting from any node in $G^c$, \ie $L = \max_{v\in V^c} l_v$. Based on $l_v$,  $V^c$ is then divided into $L+1$ disjoint layers $V^c_0,V^c_1,\dots,V^c_{L}$ such that $V^c_0\bigcup V^c_1 \bigcup \dots \bigcup V^c_{L}=V^c$ and node $v\in V^c_{k}$ iff $l_v=k$. %($k\in[0,L]$).
+
+\begin{example}
+\label{eg-layer-dag}
+Fig.~\ref{fig-daglayers} illustrates a four-layer citation graph, where $L$ equals to the length of the longest path, \ie 3, and the nodes are divided into 4 layers $[V^c_0, \ldots, V^c_3]$, such that $V^c_{k}$ ($k\in[0,3]$) contains all nodes starting from whom the length of the longest path is exactly $k$, and all edges are from  $V^c_i$ to $V^c_j$ where $i>j$.
+\end{example}
+
+\begin{prop} \label{prop-strong-conv}
+TWPageRank converges to a unique vector on an $(L+1)$-layer citation graph after $L+1$ iterations, regardless of the initial vector.
+\end{prop}
+
+\begin{proof}
+Given the initial TWPageRank vector $PR^{(0)}$, the PageRank vector after $t$ iterations is:
+\vspace{-1ex}
+
+\begin{small}
+\begin{equation}
+\label{eq-noniterpr}
+%\begin{split}
+PR^{(t)} =  d^t (M^T)^t PR^{(0)} + \frac{1-d}{n} \sum_{k=1}^{t-1}(d M^T)^k e +\frac{1-d}{n} e,
+%\end{split}
+\end{equation}
+\end{small}
+
+\vspace{-1ex}
+\noindent
+which is derived by iteratively computing $PR^{(1)}$ up to $PR^{(t)}$.
+
+Without loss of generality, we consider $G^c$ whose nodes are properly arranged  such that nodes in $V^c_0$ come first, followed by ones in $V^c_1$ till $V^c_{L}$. In this case the transition matrix $M$ of $G^c$ is a strictly lower triangular matrix since all edges are from  $V^c_i$ to $V^c_j$ where $i>j$. Moreover, $M^{L+1}=\textbf{0}$.
+
+When $t\ge L+1$, the first term in the right hand of Eq.~(\ref{eq-noniterpr}) becomes $\textbf{0}$, and $PR^{(t)}$ equals to
+$\frac{1-d}{n} \sum_{k=1}^{L}(d M^T)^k e +\frac{1-d}{n} e$,
+which is the unique convergent TWPageRank vector of $G^c$, regardless of the initial vector $PR^{(0)}$.
+\end{proof}
+
+}
