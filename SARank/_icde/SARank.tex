@@ -1,0 +1,533 @@
+\documentclass[10pt,conference,balance,letterpaper]{IEEEtran}
+\special{papersize=8.5in,11in}
+
+\usepackage{latexsym}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{color}
+\usepackage{epsfig}
+\usepackage{xspace}
+\usepackage{graphicx,epstopdf}
+%\usepackage{times}
+\usepackage{subfigure}
+\usepackage{cite}
+\usepackage{balance}
+\usepackage{amsmath, bm}
+\usepackage[english]{babel}
+
+%\pdfpagewidth=8.5in
+%\pdfpageheight=11in
+
+% \newenvironment{note}[1]{\medskip\noindent \textbf{#1:}}%
+        % {\medskip}
+
+% \newenvironment{proofsketch}{\noindent{\bf Proof Sketch.}}%
+        % {\hspace*{\fill}$\Box$\par\vspace{4mm}}
+% \newenvironment{proofof}[1]{\smallskip\noindent{\bf Proof of #1.}}%
+        % {\hspace*{\fill}$\Box$\par}
+
+% \newcommand{\etc}{{etc.}\xspace}
+% \newcommand{\assign}{\leftarrow\xspace}
+% \newcommand{\eps}{\epsilon\xspace}
+
+% \newcommand{\ctab}{Table~}
+% \newcommand{\csec}{Section~}
+% \newcommand{\cthm}{Theorem~}
+% \newcommand{\clem}{Lemma~}
+% \newcommand{\cequ}{Equation~}
+% \newcommand{\cfig}{Figure~}
+% \newcommand{\calg}{Algorithm~}
+% \newcommand{\cexp}{Example~}
+
+% \newcommand{\opt}{\textrm{\sc OPT}\xspace}
+% \newcommand{\script}[1]{\mathcal{#1}\xspace}
+% \newcommand{\ceil}[1]{\lceil #1 \rceil\xspace}
+% \newcommand{\floor}[1]{\lfloor #1 \rfloor\xspace}
+
+% \newcommand{\pr}[1]{{\bf Pr}\!\left[#1\right]\xspace}
+% \newcommand{\bigoh}[1]{{\bf O}\!\left(#1\right)\xspace}
+% \newcommand{\reach}[3]{{\bf R}^{#1}_{#2}(#3)\xspace}
+% \newcommand{\Nreach}[3]{{\bf \overline{R}}^{#1}_{#2}(#3)\xspace}
+% \newcommand{\reachI}[3]{{\bf I}^{#1}_{#2}(#3)\xspace}
+% \newcommand{\NreachI}[3]{{\bf \overline{I}}^{#1}_{#2}(#3)\xspace}
+
+% \newcommand{\gset}{{\cal G}\xspace}
+% \newcommand{\dfst}{{\rm DFST}\xspace}
+% \newcommand{\dfs}{{\rm DFS}\xspace}
+% \newcommand{\dfsj}{{\rm JumpDFS}\xspace}
+
+\newcommand{\eat}[1]{}
+
+\eat{
+\newtheorem{definition}{Definition}
+\newtheorem{claim}{Claim}
+\newtheorem{observation}{Observation}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\newtheorem{problem}{Problem}
+\newtheorem{approximation}{Approximation}
+\newtheorem{cor}{Corollary}
+\newtheorem{property}{Property}
+\newtheorem{prop}{Proposition}
+}
+
+
+\newcommand{\eop}{\hspace*{\fill}\mbox{$\Box$}}     % End of proof
+
+\newcommand{\nthesection}{\arabic{section}}
+\newcounter{theorem}
+\renewcommand{\thetheorem}{\arabic{theorem}}
+\newcounter{prop}
+\renewcommand{\theprop}{\arabic{theorem}}
+\newcounter{property}
+\renewcommand{\theprop}{\arabic{theorem}}
+\newcounter{lemma}
+\renewcommand{\thelemma}{\arabic{theorem}}
+\newcounter{cor}
+\renewcommand{\thecor}{\arabic{theorem}}
+\newcounter{claim}
+\renewcommand{\theclaim}{\arabic{theorem}}
+
+\newenvironment{theorem}{\begin{em}
+        \refstepcounter{theorem}
+        {\vspace{0ex} \noindent\bf  Theorem  \thetheorem:}}{
+        \end{em}\eop\vspace{0ex}} %\hspace*{\fill}\vspace*{1ex}}
+\newenvironment{prop}{\begin{em}
+        \refstepcounter{theorem}
+        {\vspace{0ex}\noindent \bf Proposition \theprop:}}{
+        \end{em}\eop\vspace{0ex}}%\hspace*{\fill}\vspace*{1ex}}
+
+\newcounter{fact}
+\newenvironment{fact}{\begin{em}
+        \refstepcounter{fact}
+        {\vspace{0ex}\noindent \bf Fact \arabic{fact}:}}{
+        \end{em}\eop\vspace{0ex}}%\hspace*{\fill}\vspace*{1ex}}
+
+\newenvironment{lemma}{\begin{em}
+        \refstepcounter{theorem}
+        {\vspace{0ex}\noindent\bf Lemma \thelemma:}}{
+        \end{em}\eop\vspace{0ex}} %\hspace*{\fill}\vspace*{1ex}}
+\newenvironment{cor}{\begin{em}
+        \refstepcounter{theorem}
+        {\vspace{0ex}\noindent\bf Corollary \thecor:}}{
+        \end{em}\eop\vspace{0ex}} %\hspace*{\fill}\vspace*{1ex}}
+\newenvironment{claim}{\begin{em}
+        \refstepcounter{theorem}
+        {\vspace{0ex}\noindent\bf Claim \theclaim:}}{
+        \end{em}\eop\vspace{0ex}} %\hspace*{\fill}\vspace*{1ex}}
+
+\newcounter{definition}[section]
+\renewcommand{\thedefinition}{\nthesection.\arabic{definition}}
+\newenvironment{definition}{
+        \vspace{1.5ex}
+        \refstepcounter{definition}
+        {\noindent\bf Definition {\bf \thedefinition}:}}{\eop\vspace{1.5ex}}
+\newcounter{alg}[section]
+\renewcommand{\thealg}{\nthesection.\arabic{alg}}
+\newenvironment{alg}[1]{
+        \refstepcounter{alg}
+        {\vspace{1ex}\noindent\bf Algorithm \thealg:\, #1}}{
+        \vspace*{1ex}}
+\newcounter{arule}
+\renewcommand{\thearule}{\arabic{arule}}
+\newenvironment{arule}{
+        \vspace{0.6ex}
+        \refstepcounter{arule}
+        {\noindent \em Rule \thearule:}}{
+        }
+
+%\renewenvironment{proof}{
+%\newenvironment{proof}{
+%        \vspace{1ex}
+%        {\noindent\bf Proof:}}{\eop\vspace{1ex}}
+\newenvironment{proofS}{
+        \vspace{0ex}
+        {\noindent\bf Proof:}}{\eop\vspace{0ex}}
+\newenvironment{proofSketch}{
+        \vspace{0ex}
+        {\noindent\bf Proof Sketch:}}{\eop\vspace{0ex}}
+\newenvironment{property}{
+        \vspace{1ex}
+        {\noindent\bf Property:}}{\eop\vspace{1ex}}
+
+\newcounter{example}
+\renewcommand{\theexample}{\arabic{example}}
+\newenvironment{example}{
+        \vspace{1.5ex}
+        \refstepcounter{example}
+        {\noindent\bf Example \theexample:}}{
+        \eop\vspace{1.5ex}}
+
+\eat{
+\newcommand{\nthesection}{\arabic{section}}
+\newcounter{theoremc}
+\renewcommand{\thetheorem}{\arabic{theoremc}}
+\newcounter{prop}
+\renewcommand{\theprop}{\thetheorem}
+\newcounter{property}
+\renewcommand{\theprop}{\thetheorem}
+\newcounter{lemma}
+\renewcommand{\thelemma}{\thetheorem}
+\newcounter{cor}
+\renewcommand{\thecor}{\thetheorem}
+\renewenvironment{theorem}{\begin{em}
+        \refstepcounter{theoremc}
+        {\vspace{1ex} \noindent\bf  Theorem  \thetheorem:}}{
+        \end{em}\eop\vspace{.5ex}} %\hspace*{\fill}\vspace*{1ex}}
+\newenvironment{prop}{\begin{em}
+        \refstepcounter{theoremc}
+        {\vspace{1ex}\noindent \bf Proposition \theprop:}}{
+        \end{em}\eop\vspace{0.5ex}}%\hspace*{\fill}\vspace*{1ex}}
+\renewenvironment{lemma}{\begin{em}
+        \refstepcounter{theoremc}
+        {\vspace{1ex}\noindent\bf Lemma \thelemma:}}{
+        \end{em}\eop\vspace{0.5ex}} %\hspace*{\fill}\vspace*{1ex}}
+\newenvironment{cor}{\begin{em}
+        \refstepcounter{theoremc}
+        {\vspace{1ex}\noindent\bf Corollary \thecor:}}{
+        \end{em}\eop\vspace{0.5ex}} %\hspace*{\fill}\vspace*{1ex}}
+\newcounter{claim}
+\renewcommand{\theclaim}{\thetheorem}
+\newenvironment{claim}{\begin{em}
+        \refstepcounter{theoremc}
+        {\vspace{1ex}\noindent \bf Claim \theclaim:}}{
+        \end{em}\eop\vspace{0.5ex}}%\hspace*{\fill}\vspace*{1ex}}
+\newcounter{definition}[section]
+\renewcommand{\thedefinition}{\nthesection.\arabic{definition}}
+\renewenvironment{definition}{
+        \vspace{1.5ex}
+        \refstepcounter{definition}
+        {\noindent\bf Definition {\bf \thedefinition}:}}{\eop\vspace{1.5ex}
+}
+\newcounter{alg}[section]
+\renewcommand{\thealg}{\nthesection.\arabic{alg}}
+\newenvironment{alg}[1]{
+        \refstepcounter{alg}
+        {\vspace{1ex}\noindent\bf Algorithm \thealg:\, #1}}{
+        \vspace*{1ex}}
+\newcounter{arule}
+\renewcommand{\thearule}{\arabic{arule}}
+\newenvironment{arule}{
+        \vspace{0.6ex}
+        \refstepcounter{arule}
+        {\noindent \em Rule \thearule:}}{
+        }
+%\renewenvironment{proof}{
+\renewenvironment{proof}{
+        \vspace{.5ex}
+        {\noindent\bf Proof:}}{\eop\vspace{.5ex}}
+\newenvironment{proofS}{
+        \vspace{0ex}
+        {\noindent\bf Proof:}}{\eop\vspace{0ex}}
+\newenvironment{proofSketch}{
+        \vspace{.5ex}
+        {\noindent\bf Proof Sketch:}}{\eop\vspace{.5ex}}
+\newenvironment{property}{
+        \vspace{1ex}
+        {\noindent\bf Property:}}{\eop\vspace{1ex}}
+}
+
+\newcommand{\lemmachar}{{\unskip\nobreak\hfil\penalty50\hskip1em\hbox{}%
+\nobreak\hfil\rule{1.2ex}{1.4ex}\hfil%
+\parfillskip=0pt \finalhyphendemerits=0 \par}}
+
+      
+% ALGORITHMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\SELECT}{\mbox{{\bf select}}\ }
+\newcommand{\FROM}{\mbox{{\bf from}\ }}
+\newcommand{\WHERE}{\mbox{\bf where}\ }
+\newcommand{\SUM}{\mbox{{\bf sum}}\ }
+\newcommand{\GROUPBY}{\mbox{{\bf group by}}\ }
+\newcommand{\HAVING}{\mbox{{\bf having}}\ }
+\newcommand{\CASE}{\mbox{{\bf case}}\ }
+\newcommand{\END}{\mbox{{\bf end}}\ }
+\newcommand{\WHEN}{\mbox{{\bf when}}\ }
+\newcommand{\EXISTS}{\mbox{{\bf exists}}\ }
+\newcommand{\COUNT}{\mbox{\kw{count}}}
+\newcommand{\INSERTINTO}{\mbox{{\bf insert into}}\ }
+\newcommand{\UPDATE}{\mbox{{\bf update}}\ }
+\newcommand{\SET}{\mbox{{\bf set}}\ }
+\newcommand{\IN}{\mbox{{\bf in}}\ }
+\newcommand{\If}{\mbox{\bf if}\ }
+\newcommand{\Let}{\mbox{\bf let}\ }
+\newcommand{\Call}{\mbox{\bf call}\ }
+\newcommand{\Then}{\mbox{\bf then}\ }
+\newcommand{\To}{\mbox{\bf to}\ }
+\newcommand{\Else}{\mbox{\bf else}\ }
+\newcommand{\ElseIf}{\mbox{\bf elseif}\ }
+
+\newcommand{\While}{\mbox{\bf while}\ }
+\newcommand{\Begin}{\mbox{\bf begin}\ }
+\newcommand{\End}{\mbox{\bf end}\ }
+\newcommand{\Do}{\mbox{\bf do}\ }
+\newcommand{\Downto}{\mbox{\bf downto}\ }
+\newcommand{\Repeat}{\mbox{\bf repeat}\ }
+\newcommand{\Until}{\mbox{\bf until}\ }
+\newcommand{\For}{\mbox{\bf for}\ }
+\newcommand{\Merge}{\mbox{\bf merge}\ }
+\newcommand{\Replace}{\mbox{\bf replace}\ }
+\newcommand{\Remove}{\mbox{\bf remove}\ }
+\newcommand{\Find}{\mbox{\bf find}\ }
+\newcommand{\Each}{\mbox{\bf each}\ }
+
+\newcommand{\ForEach}{\mbox{\bf for each}\ }
+\newcommand{\Or}{\mbox{\bf or}\ }
+\renewcommand{\And}{\mbox{\bf and}\ }
+\newcommand{\Not}{\mbox{\bf not}\ }
+\newcommand{\Break}{\mbox{\bf break}\ }
+\newcommand{\Continue}{\mbox{\bf continue}\xspace}
+\newcommand{\Return}{\mbox{\bf return}\ }
+\newcommand{\Case}{\mbox{\bf case}\ }
+\newcommand{\Of}{\mbox{\bf of}\ }
+\newcommand{\EndCase}{\mbox{\bf end-case}\ }
+\newcommand{\NIL}{\mbox{\em nil}}
+\newcommand{\False}{\mbox{\em false}}
+\newcommand{\True}{\mbox{\em true}}
+\newcommand{\algAND}{{\sc and}\xspace}
+\newcommand{\OR}{{\sc or}\xspace}
+\newcommand{\NOT}{{\sc not}\xspace}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ALGORITHMS
+
+\newcommand{\spara}[1]{\smallskip\noindent{\bf #1}}
+\newcommand{\squishlist}{
+ \begin{list}{$\bullet$}
+  {  \setlength{\itemsep}{0pt}
+     \setlength{\parsep}{3pt}
+     \setlength{\topsep}{3pt}
+     \setlength{\partopsep}{0pt}
+     \setlength{\leftmargin}{2em}
+     \setlength{\labelwidth}{1.5em}
+     \setlength{\labelsep}{0.5em}
+} }
+\newcommand{\squishlisttight}{
+ \begin{list}{$\bullet$}
+  { \setlength{\itemsep}{0pt}
+    \setlength{\parsep}{0pt}
+    \setlength{\topsep}{0pt}
+    \setlength{\partopsep}{0pt}
+    \setlength{\leftmargin}{2em}
+    \setlength{\labelwidth}{1.5em}
+    \setlength{\labelsep}{0.5em}
+} }
+
+\newcommand{\squishdesc}{
+ \begin{list}{}
+  {  \setlength{\itemsep}{0pt}
+     \setlength{\parsep}{3pt}
+     \setlength{\topsep}{3pt}
+     \setlength{\partopsep}{0pt}
+     \setlength{\leftmargin}{1em}
+     \setlength{\labelwidth}{1.5em}
+     \setlength{\labelsep}{0.5em}
+} }
+
+\newcommand{\squishend}{
+  \end{list}
+}
+\newcommand{\sttab}{\rule{0pt}{8pt}\\[-3ex]}
+\newcounter{ccc}
+\newcommand{\bcc}{\setcounter{ccc}{1}\theccc.}
+\newcommand{\icc}{\addtocounter{ccc}{1}\theccc.}
+\newcommand{\myhrule}{\rule[.5pt]{\hsize}{.5pt}}
+\newcommand{\mat}[2]{{\begin{tabbing}\hspace{#1}\=\+\kill #2\end{tabbing}}}
+\newcommand{\stitle}[1]{\vspace{0.5ex}\noindent{\bf #1}}
+\newcommand{\etitle}[1]{\vspace{0.5ex}\noindent{\em \underline{#1}}}
+\newcommand{\marked}[1]{\textcolor{red}{#1}}
+\newcommand{\markedb}[1]{\textcolor{blue}{#1}}
+\newcommand{\subsubtitle}[1]{\vspace{0.5ex}\noindent\underline{{\bf #1}}}
+
+%\newcommand{\stab}{\rule{0pt}{8pt}\\[-1.6ex]}
+%\newcommand{\sttab}{\rule{0pt}{8pt}\\[-2ex]}
+\newcommand{\sstab}{\rule{0pt}{8pt}\\[-2ex]}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+
+\newcommand{\ie}{\emph{i.e.,}\xspace}
+\newcommand{\eg}{\emph{e.g.,}\xspace}
+\newcommand{\wrt}{\emph{w.r.t.}\xspace}
+\newcommand{\aka}{\emph{a.k.a.}\xspace}
+\newcommand{\kw}[1]{{\ensuremath {\mathsf{#1}}}\xspace}
+
+%baselines
+\newcommand{\ewpr}{{\sc EWPR}\xspace}
+\newcommand{\ewprall}{$\kw{EWPR^*}$}
+\newcommand{\blpr}{{\sc PR}\xspace}
+\newcommand{\blwpr}{{\sc WPR}\xspace}
+\newcommand{\blmulrank}{\kw{MulRank}}
+
+\newcommand{\pagerank}{\kw{PRank}} %PageRank
+\newcommand{\futurerank}{\kw{FRank}} %FutureRank
+\newcommand{\hhgrank}{\kw{HRank}} %HHGBiRank
+\newcommand{\ensemblerank}{\kw{SARank}}
+\newcommand{\batensemble}{\kw{batSARank}}
+\newcommand{\incensemble}{\kw{incSARank}}
+\newcommand{\powensemble}{\kw{powSARank}}
+
+%\newcommand{\twprdag}{{\sc CTWPR}\xspace}
+%\newcommand{\inctwprdag}{\kw{inc}{\sc CTWPR}\xspace}
+%\newcommand{\powtwprdag}{\kw{pow}{\sc CTWPR}\xspace}
+
+\newcommand{\scc}{{\sc SCC}\xspace}
+\newcommand{\sccs}{{\sc SCCs}\xspace}
+
+\newcommand{\twprscc}{\kw{bat}{\sc TWPR}\xspace}
+\newcommand{\inctwprscc}{\kw{inc}{\sc TWPR}\xspace}
+\newcommand{\powtwprscc}{\kw{pow}{\sc TWPR}\xspace}
+
+
+\newcommand{\PairAcc}{\kw{PairAcc}}
+
+%dataset
+\newcommand{\magdata}{{\sc MAG}\xspace}
+\newcommand{\aan}{{\sc AAN}\xspace}
+\newcommand{\aminer}{{\sc DBLP}\xspace}
+\newcommand{\recom}{{\sc Recom}\xspace}
+\newcommand{\fcita}{{\sc FCita}\xspace}
+
+\begin{document}
+
+
+\title{Ensemble Enabled Time-Weighted PageRank}
+
+
+\title{Scholarly Article Ranking with Ensembles}
+
+
+
+\title{Ensemble Enabled Scholarly Article Ranking}
+
+%\title{Dynamic Scholarly Article Ranking with Ensembles}
+
+\title{Query Independent Dynamic Scholarly Article Ranking}
+
+
+\author{\IEEEauthorblockN{Shuai Ma, Chen Gong, Renjun Hu, Dongsheng Luo, Chunming Hu, Jinpeng Huai\\
+{\small SKLSDE Lab, Beihang University, Beijing, China}\\
+{\small Beijing Advanced Innovation Center for Big Data and Brain Computing, Beijing, China}\\
+{\small \{mashuai, gongchen, hurenjun, lds1995, hucm, huaijp\}@buaa.edu.cn}}
+}
+
+\eat{
+\author{
+Shuai Ma, Chen Gong, Renjun Hu, Dongsheng Luo, Chunming Hu, Jinpeng Huai}
+\affiliation{%
+  \institution{SKLSDE Lab, Beihang University, China}
+  \institution{Beijing Advanced Innovation Center for Big Data and Brain Computing, China}
+  \institution{\{mashuai, gongchen, hurenjun, lds1995, hucm, huaijp\}@buaa.edu.cn}
+  }
+}
+
+
+\eat{
+\author{Shuai Ma}
+\affiliation{%
+  \institution{SKLSDE Lab, Beihang University}
+}
+\email{mashuai@buaa.edu.cn}
+\author{Chen Gong}
+\affiliation{%
+  \institution{SKLSDE Lab, Beihang University}
+}
+\email{gongchen@buaa.edu.cn}
+
+\author{Renjun Hu}
+\affiliation{%
+  \institution{SKLSDE Lab, Beihang University}
+}
+\email{hurenjun@buaa.edu.cn}
+
+\author{Dongsheng Luo}
+\affiliation{%
+  \institution{SKLSDE Lab, Beihang University}
+}
+\email{lds1995@buaa.edu.cn}
+
+\author{Chunming Hu}
+\affiliation{%
+  \institution{SKLSDE Lab, Beihang University}
+}
+\email{hucm@buaa.edu.cn}
+
+\author{Jinpeng Huai}
+\affiliation{%
+  \institution{SKLSDE Lab, Beihang University}
+}
+\email{huaijp@buaa.edu.cn}
+}
+
+
+% The default list of authors is too long for headers}
+%\renewcommand{\shortauthors}{S. Ma, C. Gong, R. Hu et al.}
+
+\maketitle
+
+
+\begin{abstract}
+%This paper describes our solution for WSDM Cup 2016.
+Ranking query independent scholarly articles is a
+critical and challenging task, due to the
+heterogeneous, evolving and dynamic nature of entities involved in scholarly articles.
+To do this, we first propose a scholarly article ranking model by assembling the importance of involved entities (\eg articles, venues and authors) such that the importance is a combination of {\em prestige} and {\em popularity} to capture the evolving nature of entities. To compute the prestige of articles and venues, we propose a novel Time-Weighted PageRank that extends traditional PageRank with a time decaying factor. We then develop  a batch algorithm for scholarly article ranking, in which we propose a block-wise method for Time-Weighted PageRank in terms of an analysis of the citation  characteristics of scholarly articles. We further develop  an incremental algorithm for dynamic scholarly article ranking, which partitions graphs into {\em affected and unaffected areas}, and employs different updating strategies for nodes in different areas. Using real-life data, we finally conduct an extensive experimental study, and show that our approach is both effective and efficient for ranking scholarly articles.
+\end{abstract}
+
+
+
+
+\input{sec-intro}
+\input{sec-related}
+\input{sec-model}
+\input{sec-alg}
+\input{sec-incAlg}
+%\balance
+\input{sec-exp}
+
+
+\section{Conclusions}
+\label{sec-conc}
+We have proposed a model \ensemblerank for scholarly article ranking,
+which assembles the importance of article, venue and author entities.
+We have also proposed efficient batch and incremental algorithms for the computation of their importance, a combination of prestige and popularity.
+As shown by the experimental study, our approach is both effective and efficient for scholarly article ranking.
+
+
+A couple of topics need further investigation. First, we are to clean scholarly article data with external data sources for further improving the quality of ranking. Second, we are to study distributed algorithms for importance computations, similar to \cite{ZhuYL05} that computes PageRank in distributed scenarios.
+
+%A couple of topics need further investigation. First, we are to systematically study the impacts of different types of entities on the ranking of articles. Second, we are to evaluate the improvement of using external data.
+
+%\end{document}  % This is where a 'short' article might terminate
+
+\eat{%%%%%%%%%%%%EAT
+\stitle{Acknowledgments}.
+This work is supported in part by  973 program ({\small No. 2014CB340300}), NSFC ({\small No. 61322207\&61421003}),  Special Funds of Beijing Municipal Science \& Technology Commission, and MSRA Collaborative Research Program. We also thank Liang Duan, Niannian Wu and Dr. Xuelian Lin for their support.
+}%%%%%%%%%%%%%%%%EAT
+
+
+%
+% The following two commands are all you need in the
+% initial runs of your .tex file to
+% produce the bibliography for the citations in your paper.
+
+%\newpage
+%\clearpage
+\balance
+
+\bibliographystyle{abbrv}
+\begin{small}
+\bibliography{paper}
+\end{small}
+
+%\bibliographystyle{ACM-Reference-Format}
+%\bibliography{paper}
+
+%APPENDICES are optional
+%\balancecolumns
+
+%\input{sec-proofs}
+
+%\input{sec-app}   %%use this one for appendix
+
+
+
+\end{document}
