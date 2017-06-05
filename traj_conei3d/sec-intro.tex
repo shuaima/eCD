@@ -1,0 +1,80 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\vspace{-0.5ex}
+\section{Introduction}
+\label{sec-intro}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Various mobile devices, such as smart-phones, on-board diagnostics, personal navigation devices, and wearable smart devices, have been widely using their sensors to collect massive trajectory data of moving objects at a certain sampling rate (e.g., every 5 seconds), which is transmitted to cloud servers for various applications such as location based services and trajectory mining.
+%
+Transmitting and storing raw trajectory data consumes too much network bandwidth and storage capacity \cite{Chen:Trajectory,  Chen:Fast, Meratnia:Spatiotemporal, Keogh:online, Liu:BQS, Muckell:Compression,Cao:Spatio, Popa:Spatio,Nibali:Trajic}. %Schmid:Semantic, Richter:Semantic, Long:Direction,
+%Further, we find that the online transmitting of raw trajectories also seriously aggravates several other issues such as out-of-order and duplicate data points in our experiences when implementing an online vehicle-to-cloud data transmission system.
+%These issues can be resolved or greatly alleviated by trajectory compression techniques via removing redundant data points of trajectories \cite{Douglas:Peucker, Hershberger:Speeding, Meratnia:Spatiotemporal, Liu:BQS, Muckell:survey, Muckell:Compression, Chen:Trajectory, Chen:Fast,Cao:Spatio, Shi:Survey, Nibali:Trajic}, % Keogh:online, Richter:Semantic, Long:Direction, Song:PRESS
+%
+%Trajectory compression techniques remove redundant data points of trajectories,
+%, or replace original data points in a trajectory with other places of interests, such as roads and shops.
+%A large number of trajectory compression techniques have been developed,
+% among which the piece-wise line {simplification}  technique is widely used \cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Muckell:Compression, Chen:Trajectory, Chen:Fast, Cao:Spatio, Shi:Survey}, due to its distinct advantages: (a) simple and easy to implement, (b) no need of extra knowledge and suitable for freely  moving  objects \cite{Popa:Spatio}, and (c) bounded errors with good compression ratios.
+%
+These issues can be resolved or greatly alleviated by trajectory compression techniques via removing redundant data points of trajectories \cite{Douglas:Peucker, Hershberger:Speeding, Meratnia:Spatiotemporal, Liu:BQS, Muckell:survey, Muckell:Compression, Chen:Trajectory, Chen:Fast,Cao:Spatio, Shi:Survey, Nibali:Trajic, Long:Direction, Popa:Spatio, Song:PRESS}, among which the piece-wise line {simplification} technique is widely used \cite{Douglas:Peucker, Meratnia:Spatiotemporal, Muckell:survey, Muckell:Compression, Chen:Trajectory, Chen:Fast, Cao:Spatio, Shi:Survey, Liu:BQS, lin:operb}, due to its distinct advantages: (a) simple and easy to implement, (b) no need of extra knowledge and suitable for freely  moving  objects \cite{Popa:Spatio}, and (c) bounded errors with good compression ratios.
+
+\begin{figure*}[tb!]
+\centering
+\vspace{-1ex}
+\includegraphics[scale=0.76]{figures/Fig-DP.png}
+\vspace{-1ex}
+\caption{\small A trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$  with eleven points is represented by two (left) and four (right) continuous line segments (solid blue), compressed by the Douglas--Peucker algorithm \cite{Douglas:Peucker} with distance metrics \ped and \sed, respectively.
+The Douglas--Peucker algorithm firstly creates line segment $\overline{P_0P_{10}}$, then it calculates the distance of each point in the trajectory to $\overline{P_0P_{10}}$. It finds that point $P_{4}$ has the maximum distance to $\overline{P_0P_{10}}$, which is greater than the user defined threshold $\epsilon$. Then it goes to compress sub-trajectories $[P_0, \ldots, P_{4}]$ and $[P_{4}, \ldots, P_{10}]$, separately.
+}
+\vspace{-2ex}
+\label{fig:notations}
+\end{figure*}
+
+
+Originally, line simplification algorithms adopt the \emph{perpendicular Euclidean distances} (\ped) as a metric to compute the error bounds,
+\eg $|P_4P^*_4|$ is the \ped of $P_4$ to the line $\overline{P_0P_{10}}$ in Figure~\ref{fig:notations} (left).
+Line simplification algorithms using \ped have good compression ratios~ \cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Muckell:Compression, Chen:Trajectory, Chen:Fast, Cao:Spatio, Shi:Survey}.  However, when using \ped, the temporal information is lost. Thus, a spatio-temporal query, \eg ``\emph{the position $pos$ of a moving object at time $t$}", on  compressed trajectories by line simplification algorithms using \ped may return an approximate point $P'$ whose distance to the actual position $P$ at time $t$ is unbounded. For example, in Figure~\ref{fig:notations} (right), a query for the position of $P_7$ at time $t_7$ may return an approximate data point $P'_7$ whose distance to $P_7$ is great than the  bound $\epsilon$.
+
+
+\eat{, of a data point to a proposed generalized line (\eg in Figure~\ref{fig:notations} (left), $|P_4P^*_4|$ is the \ped of $P_4$ to the line $\overline{P_0P_{10}}$) as the condition to discard or retain that data point.
+\lsa algorithms using \ped have good compression ratios and are error bounded on \ped, hence they are widely used in scenarios that compression ratio is the most concerned factor. However, when using \ped, the temporal information of trajectory points is lost. Thus, a temporal-spatio query, \eg ``\emph{the position $P$ of a moving object at time $t$}", on trajectories compressed by \lsa algorithms using \ped returns an approximated point $P'$ whose distance to the actual position $P$ at time $t$ is unbounded. For example, in Figure~\ref{fig:notations} (left), a query at time $t_7$ returns an approximated point $P'_7$ whose distance to the point $P_7$ is great than the threshold $\epsilon$.
+
+,  and implemented it in Douglas-Peucker (\dpa) ~\cite{Douglas:Peucker} algorithm
+}
+
+
+\emph{Synchronous Euclidean distances} (\sed) were introduced for trajectory compression to support the above spatio-temporal queries \cite{Meratnia:Spatiotemporal}. \sed is the Euclidean distance of a data point to its \emph{approximate temporally synchronized data point \cite{Meratnia:Spatiotemporal}} on the corresponding line segment (\eg $P'_4$ and $P'_7$ are the \emph{synchronized data point} of $P_4$ and $P_7$ \wrt line segment $\overline{P_0P_{10}}$ and $\overline{P_4P_{10}}$, respectively, in Figure~\ref{fig:notations} (right)).
+Line simplification algorithms using \sed may produce more line segments. However, \sed ensures that the Euclidean distance between any data point  and its  synchronized point \wrt the corresponding line segment is bounded. Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches return the synchronized point $P'$ of the data point $P$ with a bounded distance $\epsilon$  (if it exits).
+
+\sed enabled line simplification methods have been developed for batch algorithm (\eg Douglas-Peucker algorithm \cite{Meratnia:Spatiotemporal}) and online algorithms (\eg\ \squishe \cite{Muckell:Compression}).
+However, these methods still have a high time and/or space complexity, which significantly hinders their utility in resource-constrained devices \cite{lin:operb}.
+On the other hand, there are one-pass algorithms \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve, lin:operb}  that are more appropriate for resource-constrained devices.  However, to our knowledge, all these existing one-pass algorithms are using \ped, and they cannot be directly applied when using \sed.
+
+
+
+\stitle{\textcolor[rgb]{0.00,0.07,1.00}{Contributions}}.
+To this end, we propose an one-pass error bounded line simplification algorithm using \sed for compressing trajectories in an efficient and effective way.
+
+
+\stab (1) We develop a one-pass, error bounded and \sed enabled trajectory simplification algorithm, say, the \underline{C}one \underline{I}ntersection with \underline{S}ynchronous \underline{E}uclidean \underline{D}istance (\cist) algorithm, which runs in $O(n)$ time and $O(1)$ space.
+We first present a novel local distance checking method, \ie, the spatio-temporal cone intersection approach, which enables the one pass processing of trajectory data with the synchronous Euclidean distances checking. We then transform the spatio-temporal cone intersection problem to the approximated regular polygons intersection problem, which not only saves the running time, but also saves the memory.
+
+\stab (2) Using four real-life trajectory datasets (\truck, \sercar, \geolife, \pricar),
+we finally conduct an extensive experimental study, by comparing our algorithms \cist with \squishe (the fastest existing \sed enabled \lsa algorithm) and \dpa (the distinct existing LS algorithm in terms of compression ratio).
+%
+We find that \cist is on average $(4:1; 4:1; 5:4; 5:2)$ times faster than \squishe on (\truck, \sercar, \geolife, \pricar), respectively.
+%
+For compression ratios, \cist is comparable with \dpa, and is better than \squishe that is on average (84:2\%; 86:4\%; 97:1\%; 94:7\%) of \squishe on (\truck, \sercar, \geolife, \pricar), respectively.
+
+\stitle{\textcolor[rgb]{0.00,0.07,1.00}{Organization}}.
+The remainder of the paper is organized as follows.
+Section 2 introduces the basic concepts and notations.
+Section 3 presents the one-pass, error bounded trajectory simplification algorithm (\cist).
+Section 4 reports the experimental results, followed by related work in .
+Section 5 and conclusion in Section 6.
+%The appendix covers additional related work and experimental results.
+
+
+
+
+
+

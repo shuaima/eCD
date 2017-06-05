@@ -1,0 +1,167 @@
+\section{Preliminaries}
+In this section, we introduce basic concepts and one-pass cone intersection based algorithms using \sed for trajectory compression.
+%\textcolor[rgb]{1.00,0.00,0.00}{A discussion and summary is presented in the last.}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Cone Intersection
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[tb!]
+\centering
+\includegraphics[scale=0.8]{figures/Fig-sleeve.png}
+\vspace{-2.5ex}
+\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the \conei algorithm to two line segments.}
+\vspace{-2ex}
+\label{fig:sleeve}
+\end{figure*}
+
+
+
+\subsection{Basic Notations}
+
+We first introduce basic notations.
+
+\stitle{Points ($P$)}. A data point is defined as a triple $P(x, y, t)$, which represents that a moving object is located at {\em longitude} $x$ and {\em latitude} $y$ at {\em time} $t$. Note that data points can be viewed as points in a three-dimension Euclidean space.
+
+\stitle{Trajectories ($\dddot{\mathcal{T}}$)}. A trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is a sequence of data points in a monotonically increasing order of their associated time values (\ie $P_i.t < P_j.t$ for any $0\le i<j\le n$). Intuitively, a trajectory is the path (or track) that a moving object follows through space as a function of time~\cite{physics-trajectory}.
+
+
+\stitle{Directed line segments ($\mathcal{L}$)}. A directed line segment (or line segment for simplicity) $\mathcal{L}$ is defined as $\vv{P_{s}P_{e}}$, which represents the closed line segment that connects the start point $P_s$ and the end point $P_e$.
+Note that here $P_s$ or $P_e$ may not be a point in a trajectory $\dddot{\mathcal{T}}$, and hence, we also use notation $\mathcal{R}$ instead of $\mathcal{L}$ when both $P_s$ and $P_e$ belong to $\dddot{\mathcal{T}}$.
+
+We also use $|\mathcal{L}|$ and $\mathcal{L}.\theta\in [0, 2\pi)$ to denote the length of a directed line segment $\mathcal{L}$, and its angle with the $x$-axis of the coordinate system $(x, y)$, where $x$ and $y$ are the longitude and latitude, respectively.
+That is, a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$ can be treated as a triple $(P_s, |\mathcal{L}|, \mathcal{L}.\theta)$.
+
+\stitle{Piecewise line representation ($\overline{\mathcal{T}}$)}. A piece-wise line representation of a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is denoted as $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$), a sequence of continuous directed line segments $\mathcal{L}_{i}$ = $\vv{P_{s_i}P_{e_i}}$ of $\dddot{\mathcal{T}}$ ($i\in[0,m]$)  such that $\mathcal{L}_{0}.P_{s_0} = P_0$, $\mathcal{L}_{m}.P_{e_m} = P_n$ and  $\mathcal{L}_{i}.P_{e_i}$ = $\mathcal{L}_{i+1}.P_{s_{i+1}}$ for all $i\in[0, m-1]$. Note that each directed line segment in $\overline{\mathcal{T}}$ essentially represents a continuous sequence of data points in $\dddot{\mathcal{T}}$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\eat{
+\subsubsection{Notations of error metrics}
+
+{For line simplification, there are distance based and shape based error metrics\cite{Shi:Survey} that measure the errors between the original trajectory and the simplified trajectory.
+However, for trajectory simplification, the distance based metrics are definitely the distinct metrics.}
+
+\stitle{Included angles ($\angle$)}. Given two directed line segments $\mathcal{L}_1$ = $\vv{P_{s}P_{e_1}}$ and $\mathcal{L}_2$ = $\vv{P_{s}P_{e_2}}$ with the same start point $P_s$, the included angle from $\mathcal{L}_1$ to $\mathcal{L}_2$, denoted as $\angle(\mathcal{L}_1, \mathcal{L}_2)$,  is $\mathcal{L}_2.\theta - \mathcal{L}_1.\theta$. For convenience, we also represent the included angle  $\angle(\mathcal{L}_1, \mathcal{L}_2)$ as $\angle{P_{e_1}P_sP_{e_2}}$.
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\stitle{Perpendicular Euclidean Distances (\ped)}. Given a point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the distance of $P$ to $\mathcal{L}$, denoted as $ped(P, \mathcal{L})$, is the Euclidean distance from $P$ to $\vv{P_sP_e}$, commonly adopted by most existing trajectory simplification methods, \eg~\cite{Douglas:Peucker, Hershberger:Speeding, Keogh:online, Chen:Fast, Liu:BQS, Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve, lin:operb}.
+
+
+\stitle{Synchronized points}. Given a sub trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, P_e]$, the synchronized point $P'$ of a data point  $P(x, y, t) \in \dddot{\mathcal{T}}_s$, ~\wrt the line segment $\vv{P_sP_e}$ is $P'(x', y', t)$ such that $x' = P_s.x +  \frac{P.t-P_s.t}{P_e.t-P_s.t}(P_e.x - P_s.x)$ and $y' = P_s.y +  \frac{P.t-P_s.t}{P_e.t-P_s.t}(P_e.y - P_s.y)$.
+
+
+\stitle{Synchronous Euclidean Distances (\sed)}. The \sed of a data point $P$ to a line segment $\mathcal{L} = \vv{P_{s}P_{e}}$, denoted as $sed(P, \mathcal{L})$, is $|\vv{PP'}|$, the distance from $P$ to the synchronized data point $P'$ \wrt $\mathcal{L}$. %, adopted by recent trajectory simplification methods~\cite{Meratnia:Spatiotemporal, Potamias:Sampling, Chen:Fast, Muckell:Compression, Popa:Spatio}.
+
+%\stitle{Radial Euclidean Distances ($\red$)}. The \red of $P$ \wrt $\mathcal{L}$, denoted as $red(P, \mathcal{L})$, is the distance from the perpendicular point $P^*$ of $P$ to the Synchronous point $P'$ of $P$.
+
+
+%\stitle{Dual Euclidean distances $(\ped, ~\red)$}. A \ded is a two-tuples $(\ped, ~\red)$, whereas, \ped and \red either has its error bound ($\epsilon_p$ of \ped and $\epsilon_r$ of \red), and is checked separately. Note that the distance checking approach of the original \lsa algorithms, whose \red error bound $\epsilon_r$ is fixed with $\infty$, is a special case of \ded.
+
+We next illustrate these notations with examples as follows.
+
+\begin{example}
+\label{exm-notations}
+Consider Figure~\ref{fig:notations}, in which
+
+\sstab (1) $\dddot{\mathcal{T}}[P_0$, $\ldots, P_{10}]$ is a trajectory having eleven data points,
+
+\sstab (2) the set of two continuous line segments $\{\vv{P_0P_4}$, $\vv{P_4P_{10}}$\} (Left) and the set of four continuous line segments $\{\vv{P_0P_2}$, $\vv{P_2P_4}$, $\vv{P_4P_7}$, $\vv{P_7P_{10}}$\} (Right) are two piecewise line representations of trajectory $\dddot{\mathcal{T}}$,
+
+\sstab (3) $ped(P_4, \vv{P_0P_{10}})=|\vv{P_4P^*_4}|$, where $P^*_4$ is the perpendicular point of $P_4$ \wrt line segment $\vv{P_0P_{10}}$, and
+
+\sstab (4) $sed(P_4, \vv{P_0P_{10}})= |\vv{P_4P'_4}|$, $sed(P_2, \vv{P_0P_{4}})= |\vv{P_2P'_2}|$ and $sed(P_7, \vv{P_4P_{10}})$ $=$ $|\vv{P_7P'_7}|$, 
+where points $P'_4$, $P'_2$ and $P'_7$ are the synchronized points of points $P_4$, $P_2$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$, $\vv{P_0P_{4}}$ and $\vv{P_4P_{10}}$, respectively;
+
+\end{example}
+
+
+
+
+
+
+
+\subsection{Cone Intersection Algorithms using \ped}
+
+
+The Cone Intersection (\cia) algorithm \cite{Williams:Longest, Sklansky:Cone} was developed in disciplines of graphic and pattern recognition in the late 1970s, for the approximation of arbitrary planar curves by linear segments or finding a polygonal approximation of a set of input data points in a 2D-space. The \sleeve algorithm \cite{Zhao:Sleeve} in the cartographic discipline essentially indeed applies the same idea as the cone intersection algorithm.
+Further, \cite{Dunham:Cone}  optimized algorithm \cia by considering the distance between a potential end point and the initial point of a line segment. It is worth pointing out that all these algorithms use the perpendicular Euclidean distances.
+
+%Note that these notable algorithms are not introduced to the discipline of trajectory compression.
+%though these notable algorithms are famous in disciplines of graphic and pattern recognition,
+
+Given a sequence of points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$, the \cia approach processes the input points in order and produces a simplified poly-line.  Moreover, instead of using the distance threshold $\epsilon$ directly, \cia converts the distance tolerance into a variable angle tolerance for testing the points.
+
+For the start point $P_s$ and any point $P_{s+i}$, $1\le i\le k$, there are two different lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$, satisfying $ped(P_i, \vv{P_sP^u_{s+i}}) = \epsilon$, $ped(P_i, \vv{P_sP^l_{s+i}}) = \epsilon$ and $\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta$. Indeed, they forms a \emph{cone} $\mathcal{C}$($P_s$, $P_{s+i}$, $\epsilon$) (also named a \emph{Sector} in the \sleeve algorithm) taking $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the border lines.
+% , where $P_s$ is the center point, and $\vv{P_sP^l_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ are two bound lines.
+Then there exists a point $Q$ such that all points $P_{s+i}$, $i \in [1, ... k]$, have perpendicular distances to
+line $\mathcal{L}(P_s,Q)$ within the given \ped tolerance $\epsilon$ if and only if $\bigcap_{i=1}^{k}\mathcal{C}(P_s, P_{s+i}, \epsilon) \ne \phi$.
+Note that in this case, point $Q$ may not belong to $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$.
+However, if the last point $P_{s+k}$ is chosen as the end point of the approximating line segment, then a narrow \emph{cone} with a distance tolerance $\epsilon/2$ could be employed to ensure the algorithm be \ped error bounded by $\epsilon$ \cite{Zhao:Sleeve}.
+
+Algorithm \cia runs in $O(n)$ time and takes $O(1)$ space.
+
+Note that it runs in a 2D plane, and the \sed is not supported in the algorithm.
+
+
+
+\begin{example}
+\label{exm-alg-sleeve}
+Figure~\ref{fig:sleeve} is a running example of the narrow \emph{cone} taking a distance tolerance $\epsilon/2$. At the beginning, $P_0$ is the first start point.
+
+\sstab (1) The point $P_1$ is read, and the narrow cone $\mathcal{C}$($P_0$, $P_{1}$, $\epsilon/2$) of $P_1$ is created.
+
+\sstab (2) The narrow cone $\mathcal{C}$($P_0$, $P_{2}$, $\epsilon/2$) is created for $P_2$. The intersection of $\mathcal{C}$($P_0$, $P_{1}$, $\epsilon/2$) and $\mathcal{C}$($P_0$, $P_{2}$, $\epsilon/2$) is not $\phi$. It has a up border line $P_0P_2^u$ and a low border line $P_0P_1^l$.
+
+\sstab (3) The point $P_3$ is read, and the border lines of the intersection cone are update to $P_0P_3^u$ and $P_0P_3^l$.
+
+\sstab (4) The point $P_4$ is processed as above.
+
+\sstab (5) The point $P_5$ is read. Because $\bigcap_{i=1}^{4}\mathcal{C}(P_0, P_{s+i}, \epsilon/2) \ne \phi$ and $\bigcap_{i=1}^{5}\mathcal{C}(P_0, P_{s+i}, \epsilon/2) = \phi$, $\vv{P_0P_4}$ is output and $P_4$ becomes the start point of the next section.
+
+At last, the algorithm outputs two continuous line segments, \ie $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.
+\end{example}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\vspace{-3ex}
+\subsection{Problem Definition}
+This paper focus on the \emph{min-$\#$ problem} \cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment} of trajectory simplification.
+Given a trajectory \trajec{T}$[P_0, \dots, P_n]$ and a pre-specified constant $\epsilon$, a trajectory simplification algorithm $\mathcal{A}$ approximates \trajec{T} by $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$), where on
+each of them the data points $[P_{s_i}, \dots, P_{e_i}]$ are approximated by a line segment $\mathcal{L}_i = \vv{P_{s_i}P_{e_i}}$ with the maximum error of  $ped(P_j, \mathcal{L}_i)$ or $sed(P_j, \mathcal{L}_i)$, $s_i < j<e_i$,  less than $\epsilon$.
+The optimal methods that find the minimal $m$, having the time complexity of $O(n^2)$\cite{Chan:Optimal},
+making it impractical for large inputs\cite{Heckbert:Survey}.
+Hence, this paper evaluates the distinct sub-optimal methods.
+
+
+
+\begin{figure}[tb!]
+\label{fig:scope}
+\centering
+\includegraphics[scale=0.8]{figures/Fig-scope.png}
+\vspace{-1ex}
+\caption{Example \emph{scopes} of Synchronous points. The Synchronous point $P'$ has (1) a circle scope  when using \sed, and (2) a rectangle scope when using \ded.}
+
+\vspace{-2ex}
+\end{figure}
+
+%Given a line $\overline{P_sP_e}$, a Synchronous point $P'$ on line $\overline{P_sP_e}$ and a error bound $\epsilon_s$ of ~\sed (or error bounds $\epsilon_p$ and $\epsilon_r$ of \ded), all points potentially be compressed to a Synchronous point $P'$ forms a \emph{scope} of $P'$ (Fig.\ref{fig:scope}). The \emph{scope} of $P'$ in \sed is a circle around $P'$ whose radius is less than the \sed error bound $\epsilon_s$, and the \emph{scope} of $P'$ in \ded is a rectangle, paralleling to the line $\overline{P_sP_e}$, taking $P'$ as the central point and whose height and width are less than the \ded error bounds $\epsilon_p$ and $\epsilon_r$ respectively. With he help of \ded, one can set the value of $\epsilon_p$ and $\epsilon_r$ separately according to varied application requirements, \eg a smaller $\epsilon_p$ to limit the perpendicular deviation of the car to the road while a bigger $\epsilon_r$ to ensure a better compression ratio.
+}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
