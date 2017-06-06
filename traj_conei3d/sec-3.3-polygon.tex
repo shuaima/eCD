@@ -3,15 +3,15 @@
 %\textcolor[rgb]{1.00,0.00,0.00}{Todo....}
 The checking of the $N$ circles intersection has a time complexity of \textcolor[rgb]{1.00,0.00,0.00}{${O(N\log N)}$~\cite{Shamos:Circle}}, which is not a linear time.
 To develop a linear time complexity spatio-temporal simplification algorithm, we provide an approximate circles intersection method.
-That is, we further replace a circle $\mathcal{O}(P, r)$ to a $M$-edges inscribed regular polygon, 
+That is, we further replace a circle $\mathcal{O}(P, r)$ to a $M$-edges inscribed regular polygon,
 then we check the intersection of the regular polygons instead of the checking of circles intersection.
 Note that the intersection of regular polygons is only a sufficient condition of the intersection of the corresponding circles , and
 algorithms employ this policy may loss some compression ratio. Obviously, a larger $M$ leads to a better compression ratio and a poorer
 efficiency.
 
-\stitle{Approximate polygons}.
-Given a circle $\mathcal{O}(P, r)$, its approximate polygons is a $M$ edges inscribed regular polygon $\mathcal{G}(V, E)$, 
-where $V=\{v_1, \ldots, v_{M}\}$ is the set of vertexes and 
+\stitle{Approximate polygons ($\mathcal{G}$)}.
+Given a circle $\mathcal{O}(P, r)$, its approximate polygons is a $M$ edges inscribed regular polygon $\mathcal{G}(V, E)$,
+where $V=\{v_1, \ldots, v_{M}\}$ is the set of vertexes and
 $E= \{\overline{v_jv_{j+1}}| j\in [1,M-1]\} \bigcup \{\overline{v_Mv_1}\}$ is the set of edges.
 Furthermore, let the center point $P$ of the circle be the origin of a polar coordinate system, then each vertex satisfies:
 
@@ -24,6 +24,8 @@ Furthermore, let the center point $P$ of the circle be the origin of a polar coo
     \end{aligned}
 \end{equation*}
 \vspace{-2ex}
+
+%\stitle{intersection polygons ($\mathcal{G}^*$)}.
 
 For example, Figure~\ref{fig:polygons}-(1) is a regular octagon whose vertexes satisfying the Equation (3).
 
@@ -42,7 +44,7 @@ For example, in Figure~\ref{fig:polygons}-(2), all the $1^{th}$ edges form the $
 
 \begin{figure}[tb!]
 \centering
-\includegraphics[scale=0.9]{figures/Fig-polygons.png}
+\includegraphics[scale=0.88]{figures/Fig-polygons.png}
 \vspace{-1ex}
 \caption{\small Regular octagons and their intersections.}
 \vspace{-3ex}
@@ -77,21 +79,30 @@ Hence, the intersection polygon $\mathcal{G}^*_k$ includes at most one edge of a
 
 
 
-%\begin{cor}
-%\label{prop-rp-intersection}
-%If $\mathcal{G}_i$, $i \in [1, k]$, are M-edges regular polygons on a plane which are built by equation (3), then the intersection polygon
-%$\mathcal{G}^*$ of all $\mathcal{G}_i$ has no more than $M$ edges.
-%\end{cor}
+For example, in Figure~\ref{fig:polygons}-(2), the intersection polygon (red lines) of $G_1$, $G_2$ and $G_3$ has 7 edges, marked 1, 2, 3, 5-8, each from a different edge group. Note the $4^{th}$ edge group has no contribution to the intersection polygon.
 
 
-By Theorem~\ref{prop-rp-intersection}, the intersection polygon $\mathcal{G}^*_k$ of all approximate polygon $\mathcal{G}_i$, $i \in [1, k]$, has no more than $M$ edges, thus, the computing of the intersection polygon of polygon $\mathcal{G}^*_k$ and approximate polygon $\mathcal{G}_{k+1}$ can be implemented in a constant time, \ie time $O(M)$, by the distinct convex polygon intersection algorithm presented in~ \cite{ORourke:Intersection}.
+By Theorem~\ref{prop-rp-intersection}, the intersection polygon $\mathcal{G}^*_k$ of all approximate polygon $\mathcal{G}_i$, $i \in [1, k]$, has no more than $M$ edges, thus, the computing of the intersection polygon of polygon $\mathcal{G}^*_k$ and approximate polygon $\mathcal{G}_{k+1}$ can be implemented in a constant time, \ie time $O(M)$, by the distinct convex polygon intersection algorithm described in~\cite{ORourke:Intersection}.
 %
 Moreover, observe that the convex polygon intersection algorithm of \cite{ORourke:Intersection} is a algorithm for general convex polygons, while the approximate polygons are special polygons. We further develop an even fast approximate polygon intersection algorithm based on the properties of approximate polygons.
-  
+
 \subsubsection{Approximate polygons intersection}
-Given $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$, the approximate polygons intersection finds $\mathcal{G}^*_k = \mathcal{G}^*_k  \bigcap \mathcal{G}_{k+1}$.
+Given intersection polygon $\mathcal{G}^*_k$ of the preview $k$ polygons and the next approximate polygon $\mathcal{G}_{k+1}$, the approximate polygons intersection algorithm finds $\mathcal{G}^*_{k+1} = \mathcal{G}^*_k  \bigcap \mathcal{G}_{k+1}$. The basic idea of the algorithm is a two steps processing:
+ (1) Filtering. It first picks out $M$ candidate edges, one edge of an edge group, from $\mathcal{G}^*_k $ and $\mathcal{G}_{k+1}$; 
+ (2) Connecting. It tries to form the intersection polygon, \ie $\mathcal{G}^*_{k+1}$, by these candidate edges.
+
+\stitle{Filtering: Picks out $M$ candidate edges from $\mathcal{G}^*_k $ and $\mathcal{G}_{k+1}$.}
+
+
+\begin{figure}[tb!]
+\centering
+\includegraphics[scale=0.88]{figures/Fig-poly-edges.png}
+\vspace{-1ex}
+\caption{\small Edges.}
+\vspace{-3ex}
+\label{fig:poly-edges}
+\end{figure}
 
 
 
-
-
+\stitle{Connecting: Forms the intersection polygon by the candidate edges.}
