@@ -1,31 +1,46 @@
 \subsection{Approximate circles intersection}
 
-The checking of the $N$ circles intersection has a time complexity of ${O(N\log N)}$~\cite{Shamos:Circle}, which is not the linear time.
+\textcolor[rgb]{1.00,0.00,0.00}{Todo....}
+\textcolor[rgb]{1.00,0.00,0.00}{requirements: (1) linear; (2) incremental.} The checking of the $N$ circles intersection has a time complexity of \textcolor[rgb]{0.00,0.07,1.00}{${O(N\log N)}$}~\cite{Shamos:Circle}, which is not the linear time.
+
+
+
 To develop a linear time complexity spatio-temporal simplification algorithm, we provide an approximate circles intersection method.
-That is, we further replace a circle $\mathcal{O}(P, r)$ to a $M$-edges inscribed regular polygon $\mathcal{G}(V, E)$, where $V=\{v_1,
-\ldots, v_{M}\}$ is the set of vertexes and $E= \{\overline{v_jv_{j+1}}| j\in [1,M-1]\} \bigcup \{\overline{v_Mv_1}\}$ is the set of edges.
-Furthermore, if we let the center point $P$ of the circle be the origin of polar coordinate system, then each vertex satisfies:
+That is, we further replace a circle $\mathcal{O}(P, r)$ to a $M$-edges inscribed regular polygon, 
+then we check the intersection of the regular polygons instead of the checking of circles intersection.
+Note that the intersection of regular polygons is only a sufficient condition of the intersection of the corresponding circles , and
+algorithms employ this policy may loss some compression ratio. Obviously, a larger $M$ leads to a better compression ratio and a poorer
+efficiency.
+
+\stitle{Approximate polygons}.
+Given a circle $\mathcal{O}(P, r)$, its approximate polygons is a $M$ edges inscribed regular polygon $\mathcal{G}(V, E)$, 
+where $V=\{v_1, \ldots, v_{M}\}$ is the set of vertexes and 
+$E= \{\overline{v_jv_{j+1}}| j\in [1,M-1]\} \bigcup \{\overline{v_Mv_1}\}$ is the set of edges.
+Furthermore, let the center point $P$ of the circle be the origin of a polar coordinate system, then each vertex satisfies:
 
 \vspace{-2ex}
 \begin{equation*}
 \label{equ-regular-polygon}
 %\hspace{-1.5ex}
     \begin{aligned}
-        \hspace{10ex}  v_j = (r, \frac{2(j-1)}{M}\pi), ~j \in [1, M]    \hspace{15ex} (3)\\
+        \hspace{10ex}  v_j = (r, \frac{2(j-1)}{M}\pi), ~j \in [1, M]    \hspace{10ex} (3)\\
     \end{aligned}
 \end{equation*}
 \vspace{-2ex}
 
-
-
-
 For example, Figure~\ref{fig:polygons}-(1) is a regular octagon whose vertexes satisfying the Equation (3).
 
-%
-Then we check the intersection of the regular polygons instead of the checking of circles intersection.
 %The intersection of two M-edges convex polygons has a time complexity of $O(M)$ \cite{ORourke:Intersection}.
 The regular polygons built by equation (3) have elegant properties, which is helpful to derive an algorithm of linear time and constant space
 for the intersection of $N$ regular polygons.
+
+
+\stitle{Edge groups}.
+Let $e_{i,j} = \overline{v_{i,j}v_{i,j+1}}$, $j\in [1,M)$, or $e_{i,j} = \overline{v_{i,M}v_{i,1}}$, $j = M$, be an edge of an approximate polygon
+$\mathcal{G}_i$, then all $e_{i,j}$, $i\in [1, k]$, form an \emph{edge group}, namely the $j^{th}$ edge group.
+For example, in Figure~\ref{fig:polygons}-(2), all the $1^{th}$ edges form the $1^{th}$ edge group.
+
+
 
 
 \begin{figure}[tb!]
@@ -42,15 +57,11 @@ for the intersection of $N$ regular polygons.
 \begin{theorem}
 \label{prop-rp-intersection}
 If $\mathcal{G}_i$, $i \in [1, k]$, are M-edges regular polygons on a plane which are built by equation (3), then the intersection polygon
-$\mathcal{G}^*$ of all $\mathcal{G}_i$ has no more than $M$ edges.
+$\mathcal{G}^*$ of all $\mathcal{G}_i$ includes at most one edge from an edge group, \eg the $j^{th}$ edge group.
 \end{theorem}
 
 
 \begin{proof}
-Let $e_{i,j} = \overline{v_{i,j}v_{i,j+1}}$, $j\in [1,M)$, or $e_{i,j} = \overline{v_{i,M}v_{i,1}}$, $j = M$, be an edge of regular polygons
-$\mathcal{G}_i$, then all $e_{i,j}$, $i\in [1, k]$ form an \emph{edge group}, namely the $j^{th}$ edge group (see
-Figure~\ref{fig:polygons}-(2)).
-We first prove that the intersection polygon $\mathcal{G}^*$ includes at most one edge from an edge group, \eg the $j^{th}$ edge group.
 We prove this by contradiction.
 
 Suppose $\mathcal{G}^*$ have two different edges, $e_{h,j}$ and $e_{l,j}$, $h\ne l$, belonging to the $j^{th}$ edge group. Obviously, edge
@@ -67,7 +78,23 @@ Hence, the intersection polygon $\mathcal{G}^*$ includes at most one edge of an 
 There are at most $M$ edge groups, thus, the intersection polygon $\mathcal{G}^*$ has no more than $M$ edges.
 \end{proof}
 
-Note that the intersection of regular polygons is only a sufficient condition of the intersection of the corresponding circles , and
-algorithms employ this policy may loss some compression ratio. Obviously, a larger $M$ leads to a better compression ratio and a poorer
-efficiency.
+
+
+%\begin{cor}
+%\label{prop-rp-intersection}
+%If $\mathcal{G}_i$, $i \in [1, k]$, are M-edges regular polygons on a plane which are built by equation (3), then the intersection polygon
+%$\mathcal{G}^*$ of all $\mathcal{G}_i$ has no more than $M$ edges.
+%\end{cor}
+
+
+By Theorem~\ref{prop-rp-intersection}, the intersection polygon $\mathcal{G}^*$ of all approximate polygon $\mathcal{G}_i$, $i \in [1, k]$, has no more than $M$ edges, thus, the computing of the intersection polygon of polygon $\mathcal{G}^*$ and approximate polygon $\mathcal{G}_{k+1}$ can be implemented in a constant time, \ie time $O(M)$, by the distinct convex polygon intersection algorithm presented in~ \cite{ORourke:Intersection}.
+%
+However, the convex polygon intersection algorithm of \cite{ORourke:Intersection} is a algorithm for general convex polygons, while the approximate polygons are special polygons. 
+%
+In this observation, we further develop an even fast approximate polygon intersection algorithm based on the properties of approximate polygons.
+
+
+
+
+
 
