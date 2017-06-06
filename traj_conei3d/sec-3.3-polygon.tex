@@ -1,0 +1,73 @@
+\subsection{Approximate circles intersection}
+
+The checking of the $N$ circles intersection has a time complexity of ${O(N\log N)}$~\cite{Shamos:Circle}, which is not the linear time.
+To develop a linear time complexity spatio-temporal simplification algorithm, we provide an approximate circles intersection method.
+That is, we further replace a circle $\mathcal{O}(P, r)$ to a $M$-edges inscribed regular polygon $\mathcal{G}(V, E)$, where $V=\{v_1,
+\ldots, v_{M}\}$ is the set of vertexes and $E= \{\overline{v_jv_{j+1}}| j\in [1,M-1]\} \bigcup \{\overline{v_Mv_1}\}$ is the set of edges.
+Furthermore, if we let the center point $P$ of the circle be the origin of polar coordinate system, then each vertex satisfies:
+
+\vspace{-2ex}
+\begin{equation*}
+\label{equ-regular-polygon}
+%\hspace{-1.5ex}
+    \begin{aligned}
+        \hspace{10ex}  v_j = (r, \frac{2(j-1)}{M}\pi), ~j \in [1, M]    \hspace{15ex} (3)\\
+    \end{aligned}
+\end{equation*}
+\vspace{-2ex}
+
+
+
+
+For example, Figure~\ref{fig:polygons}-(1) is a regular octagon whose vertexes satisfying the Equation (3).
+
+%
+Then we check the intersection of the regular polygons instead of the checking of circles intersection.
+%The intersection of two M-edges convex polygons has a time complexity of $O(M)$ \cite{ORourke:Intersection}.
+The regular polygons built by equation (3) have elegant properties, which is helpful to derive an algorithm of linear time and constant space
+for the intersection of $N$ regular polygons.
+
+
+\begin{figure}[tb!]
+\centering
+\includegraphics[scale=0.9]{figures/Fig-polygons.png}
+\vspace{-1ex}
+\caption{\small Regular octagons and their intersections.}
+\vspace{-3ex}
+\label{fig:polygons}
+\end{figure}
+
+
+
+\begin{theorem}
+\label{prop-rp-intersection}
+If $\mathcal{G}_i$, $i \in [1, k]$, are M-edges regular polygons on a plane which are built by equation (3), then the intersection polygon
+$\mathcal{G}^*$ of all $\mathcal{G}_i$ has no more than $M$ edges.
+\end{theorem}
+
+
+\begin{proof}
+Let $e_{i,j} = \overline{v_{i,j}v_{i,j+1}}$, $j\in [1,M)$, or $e_{i,j} = \overline{v_{i,M}v_{i,1}}$, $j = M$, be an edge of regular polygons
+$\mathcal{G}_i$, then all $e_{i,j}$, $i\in [1, k]$ form an \emph{edge group}, namely the $j^{th}$ edge group (see
+Figure~\ref{fig:polygons}-(2)).
+We first prove that the intersection polygon $\mathcal{G}^*$ includes at most one edge from an edge group, \eg the $j^{th}$ edge group.
+We prove this by contradiction.
+
+Suppose $\mathcal{G}^*$ have two different edges, $e_{h,j}$ and $e_{l,j}$, $h\ne l$, belonging to the $j^{th}$ edge group. Obviously, edge
+$e_{h,j}$ belongs to regular polygon $\mathcal{G}_h$, edge $e_{l,j}$ belongs to regular polygon $\mathcal{G}_l$ and $e_{h,j}$ is parallel to
+$e_{l,j}$.
+
+If $\mathcal{G}_l \bigcap \mathcal{G}_h = \phi$, then $\mathcal{G}^*=\phi$, which conflicts with the hypothetic premises.
+
+If $\mathcal{G}_l \bigcap \mathcal{G}_h \ne \phi$, then the intersection polygon of $\mathcal{G}_h$ and $\mathcal{G}_l$ must include at most
+one edge of $e_{h,j}$ and $e_{l,j}$, which is also the contradiction with the hypothetic premises.
+
+Hence, the intersection polygon $\mathcal{G}^*$ includes at most one edge of an edge group.
+%
+There are at most $M$ edge groups, thus, the intersection polygon $\mathcal{G}^*$ has no more than $M$ edges.
+\end{proof}
+
+Note that the intersection of regular polygons is only a sufficient condition of the intersection of the corresponding circles , and
+algorithms employ this policy may loss some compression ratio. Obviously, a larger $M$ leads to a better compression ratio and a poorer
+efficiency.
+
