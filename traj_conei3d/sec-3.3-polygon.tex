@@ -84,15 +84,27 @@ For example, in Figure~\ref{fig:polygons}-(2), the intersection polygon (red lin
 
 By Theorem~\ref{prop-rp-intersection}, the intersection polygon $\mathcal{G}^*_k$ of all approximate polygon $\mathcal{G}_i$, $i \in [1, k]$, has no more than $M$ edges, thus, the computing of the intersection polygon of polygon $\mathcal{G}^*_k$ and approximate polygon $\mathcal{G}_{k+1}$ can be implemented in a constant time, \ie time $O(M)$, by the distinct convex polygon intersection algorithm described in~\cite{ORourke:Intersection}.
 %
-Moreover, observe that the convex polygon intersection algorithm of \cite{ORourke:Intersection} is a algorithm for general convex polygons, while the approximate polygons are special polygons. We further develop an even fast approximate polygon intersection algorithm based on the properties of approximate polygons.
+Moreover, observe that the convex polygon intersection algorithm of \cite{ORourke:Intersection} is a algorithm for general convex polygons, while the approximate polygons are special polygons. We further develop an even fast approximate polygon intersection method based on the properties of approximate polygons.
 
 \subsubsection{Approximate polygons intersection}
+
+
+\begin{figure}[tb!]
+\centering
+\includegraphics[scale=0.88]{figures/Fig-poly-edges.png}
+\vspace{-1ex}
+\caption{\small Samples of Candidate intersection edges.}
+\vspace{-2ex}
+\label{fig:poly-edges}
+\end{figure}
+
+
 Given intersection polygon $\mathcal{G}^*_k$ of the preview $k$ polygons and the next approximate polygon $\mathcal{G}_{k+1}$, the approximate polygons intersection algorithm finds $\mathcal{G}^*_{k+1} = \mathcal{G}^*_k  \bigcap \mathcal{G}_{k+1}$. The basic idea of the algorithm is a two steps processing:
- (1) Filtering, which picks out $M$ candidate intersection edges, one edge of an edge group, from $\mathcal{G}^*_k $ and $\mathcal{G}_{k+1}$;
- (2) Connecting, which tries to form the intersection polygon, \ie $\mathcal{G}^*_{k+1}$, by these candidate edges.
+ (1) \emph{Filtering}, which picks out $M$ candidate intersection edges, one edge of an edge group, from $\mathcal{G}^*_k $ and $\mathcal{G}_{k+1}$;
+ (2) \emph{Connecting}, which tries to form the intersection polygon, \ie $\mathcal{G}^*_{k+1}$, from these candidate edges.
 
 \stitle{Candidate intersection edges}.
-Let $e_{i,j}$, $1 \le i \le k+1$ and $1 \le j \le M$, be an edge of $\mathcal{G}_{i}$. The line containing the edge partitions the full plane into two half plane, the half plane that contains the central point $P_i$ of $\mathcal{G}_i$ be the inner half plane of $e_{i,j}$, denoted as $\mathcal{H}(e_{i,j})$.
+Let $e_{i,j}$, $1 \le i \le k+1$ and $1 \le j \le M$, be an edge of $\mathcal{G}_{i}$. The line containing the edge partitions the full plane into two half plane, the half plane that contains the central point $P_i$ of $\mathcal{G}_i$ be the \emph{inner half plane} of $e_{i,j}$, denoted as $\mathcal{H}(e_{i,j})$.
 %
 Then, the candidate intersection edge of the $j^{th}$ edge group is $e_{i,j}$, satisfying,
 
@@ -106,24 +118,57 @@ Then, the candidate intersection edge of the $j^{th}$ edge group is $e_{i,j}$, s
 \end{equation*}
 \vspace{-2ex}
 
-If there are more than one edges of an edge group satisfying Equation (4), then we random choose one edge from them so as to guarantee the unique of the candidate intersection edge of an edge group.
+
+If there are more than one edges of an edge group satisfying Equation (4), then we random choose one edge from them so as to guarantee the unique of the candidate intersection edge of an edge group. Note that not all candidate edges have contributions to its intersection polygon.
+
+
+%\stitle{Picks out $M$ candidate edges from $\mathcal{G}^*_k $ and $\mathcal{G}_{k+1}$.}
+By this definition, the selection of candidate edges can be implemented in an incremental way:
+
+\vspace{-2ex}
+\begin{equation*}
+\label{equ-inter-edge}
+%\hspace{-1.5ex}
+    \begin{aligned}
+        \hspace{1ex}  e^*_{k+1, j} = \left\{ 
+            \begin{aligned}
+                & e_{k+1, j},   \hspace{8ex}if~~ e_{k+1,j} \in \mathcal{H}(e^*_{k,j}) \\
+                & e^*_{k, j},   \hspace{10ex}if~~ e^*_{k,j} \in \mathcal{H}(e_{k+1,j})      \hspace{6ex} (5)  \\
+                & e_{k+1, j} ~or~ e^*_{k, j}, ~if~ \mathcal{H}(e^*_{k,j}) = \mathcal{H}(e_{k+1,j}) \\
+            \end{aligned}
+        \right.
+    \end{aligned}
+\end{equation*}
+\vspace{-1ex}
+
+where,  $e^*_{1, j} = e_{1, j}$, $j \in [1, M]$ and $k\ge 1$.
+
+
 
 \begin{example}
+In Figure~\ref{fig:poly-edges}(1)-(6), the eight candidate intersection edges of $\mathcal{G}^*_{k+1}$ are:
+ 
+(1) $e^*_{k,1}$, $e^*_{k,2}$, $e^*_{k,3}$, $e^*_{k,4}$, $e_{k+1,5}$, $e_{k+1,6}$, $e_{k+1,7}$ and $e_{k+1,8}$;
+
+(2) $e_{k+1,1}$, $e_{k+1,2}$, $e_{k+1,3}$, $e_{k+1,4}$, $e^*_{k,5}$, $e^*_{k,6}$, $e^*_{k,7}$ and $e^*_{k,8}$;
+
+(3) $e_{k+1,1}$ or $e^*_{k,1}$, $e_{k+1,2}$, $e_{k+1,3}$ or $e^*_{k,3}$, $e_{k+1,4}$, $e^*_{k,5}$, $e^*_{k,6}$ or $e_{k+1,6}$, $e_{k+1,7}$ and $e^*_{k,8}$;
+
+(4) $e_{k+1,j}$, $j \in [1, 8]$;
+
+(5) $e^*_{k,j}$, $j \in [1, 8]$;
+
+(6) $e^*_{k,1}$, $e^*_{k,2}$, $e^*_{k,3}$, $e_{k+1,4}$, $e_{k+1,5}$, $e_{k+1,6}$, $e_{k+1,7}$ and $e^*_{k,8}$.
+
 
 \end{example}
 
-\stitle{Filtering: Picks out $M$ candidate edges from $\mathcal{G}^*_k $ and $\mathcal{G}_{k+1}$.}
-
-
-\begin{figure}[tb!]
-\centering
-\includegraphics[scale=0.88]{figures/Fig-poly-edges.png}
-\vspace{-1ex}
-\caption{\small Edges.}
-\vspace{-2ex}
-\label{fig:poly-edges}
-\end{figure}
 
 
 
-\stitle{Connecting: Forms the intersection polygon by the candidate edges.}
+
+
+
+\stitle{Connecting the intersection polygon from the candidate intersection edges.}
+From the candidate intersection edges, one can straightly conclude whether $\mathcal{G}_{k+1}$ belongs to $\mathcal{G}^*_{k}$ (Figure~\ref{fig:poly-edges}-(4)) or $\mathcal{G}^*_{k}$ belongs to $\mathcal{G}_{k+1}$ (Figure~\ref{fig:poly-edges}-(5)). 
+Hence, 

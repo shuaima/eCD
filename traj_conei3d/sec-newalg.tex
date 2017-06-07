@@ -28,6 +28,25 @@ If $\bigcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_i, \epsilon/2)} \ne \{P_s\}$, then by
 
 
 
+We now are ready to present the \underline{C}one \underline{I}ntersection with \underline{S}ynchronous \underline{E}uclidean \underline{D}istance (\cist) algorithm.
+
+As shown in Figure~\ref{alg:CI3d}, the algorithm takes as input a trajectory $\dddot{\mathcal{T}}$, an error bound $\epsilon$ and the edges number $M$ of a regular polygon, and returns the simplified trajectory $\overline{\mathcal{T}}$.
+
+The algorithm first initializes the start and end points $P_s$ and $P_e$ to $P_0$, the intersection polygon $\mathcal{G}^*$ to $\phi$, the output set $\overline{\mathcal{T}}$ to $\phi$ and the index $i$ of point to $1$ (line 1).
+
+The algorithm sequentially processes each point in the trajectory (line 2).
+It gets the regular polygon of the current point $P_i$ (line 3).
+This is performed by calling procedure $getRegularPolygon()$. The procedure $getRegularPolygon()$ is an implementation of equations (1)-(3). It first gets the projection circle for the current point, defined by equations (1) and (2); then it builds the inscribed regular polygon $\mathcal{G}$ from the projection circle, defined by equation (3).
+
+After that, it gets the intersection polygon of the current regular polygon $\mathcal{G}$ with the polygon formed by all the preview regular polygons, and saves it in $\mathcal{G}^*$ (line 4).
+This is performed by calling procedure $getIntersectPolygon()$. The {procedure $getIntersectPolygon()$} implements the convex polygons intersection algorithm presented in \cite{ORourke:Intersection}, which returns the intersection polygon of the two input polygons.
+
+If the intersection polygon is not empty, then the process goes on to the next point (lines 5-7).
+Otherwise, the current section is terminated and a new section is started (lines 8-10).
+
+At last, the algorithm returns $\overline{\mathcal{T}}$ (line 11).
+
+
 %%%%%%%%%%%%%%%%%%%%%Baseline Algorithm
 \begin{figure}[tb!]
 \begin{center}
@@ -66,27 +85,6 @@ If $\bigcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_i, \epsilon/2)} \ne \{P_s\}$, then by
 \vspace{-2ex}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-We now are ready to present the \underline{C}one \underline{I}ntersection with \underline{S}ynchronous \underline{E}uclidean \underline{D}istance (\cist) algorithm.
-
-As shown in Figure~\ref{alg:CI3d}, the algorithm takes as input a trajectory $\dddot{\mathcal{T}}$, an error bound $\epsilon$ and the edges number $M$ of a regular polygon, and returns the simplified trajectory $\overline{\mathcal{T}}$.
-
-The algorithm first initializes the start and end points $P_s$ and $P_e$ to $P_0$, the intersection polygon $\mathcal{G}^*$ to $\phi$, the output set $\overline{\mathcal{T}}$ to $\phi$ and the index $i$ of point to $1$ (line 1).
-
-The algorithm sequentially processes each point in the trajectory (line 2).
-It gets the regular polygon of the current point $P_i$ (line 3).
-This is performed by calling procedure $getRegularPolygon()$. The procedure $getRegularPolygon()$ is an implementation of equations (1)-(3). It first gets the projection circle for the current point, defined by equations (1) and (2); then it builds the inscribed regular polygon $\mathcal{G}$ from the projection circle, defined by equation (3).
-
-After that, it gets the intersection polygon of the current regular polygon $\mathcal{G}$ with the polygon formed by all the preview regular polygons, and saves it in $\mathcal{G}^*$ (line 4).
-This is performed by calling procedure $getIntersectPolygon()$. The {procedure $getIntersectPolygon()$} implements the convex polygons intersection algorithm presented in \cite{ORourke:Intersection}, which returns the intersection polygon of the two input polygons.
-
-If the intersection polygon is not empty, then the process goes on to the next point (lines 5-7).
-Otherwise, the current section is terminated and a new section is started (lines 8-10).
-
-At last, the algorithm returns $\overline{\mathcal{T}}$ (line 11).
-
-
-
 
 
 \begin{example}
