@@ -82,9 +82,10 @@ Hence, the intersection polygon $\mathcal{G}^*_k$ includes at most one edge of a
 For example, in Figure~\ref{fig:polygons}-(2), the intersection polygon (red lines) of $G_1$, $G_2$ and $G_3$ has 7 edges, marked 1, 2, 3, 5-8, each from a different edge group. Note the $4^{th}$ edge group has no contribution to the intersection polygon.
 
 
-By Theorem~\ref{prop-rp-intersection}, the intersection polygon $\mathcal{G}^*_k$ of all proximate polygon $\mathcal{G}_i$, $i \in [1, k]$, has no more than $M$ edges, thus, the computing of the intersection polygon of polygon $\mathcal{G}^*_k$ and proximate polygon $\mathcal{G}_{k+1}$ can be implemented in a constant time, \ie time $O(M)$, by the distinct convex polygon intersection algorithm described in~\cite{ORourke:Intersection}.
+By Theorem~\ref{prop-rp-intersection}, the intersection polygon $\mathcal{G}^*_k$ of all proximate polygon $\mathcal{G}_i$, $i \in [1, k]$, has no more than $M$ edges. 
+We know the convex polygon intersection algorithm of~\cite{ORourke:Intersection} has a time complexity of $O(|\mathcal{G}^*_k| + |\mathcal{G}_{k+1}|)$, which is $O(2M)$ here, thus, the computing of the intersection polygon of polygon $\mathcal{G}^*_k$ and proximate polygon $\mathcal{G}_{k+1}$ can be implemented in a constant time, \ie time $O(M)$, by the distinct polygon intersection algorithm of~\cite{ORourke:Intersection}.
 %
-Moreover, observe that the convex polygon intersection algorithm of ~\cite{ORourke:Intersection} is a algorithm for general convex polygons, while the proximate polygons are special polygons. We further develop an even fast proximate polygon intersection method based on the properties of proximate polygons.
+Moreover, observe that the algorithm of ~\cite{ORourke:Intersection} is for general convex polygons, while the proximate polygons are special polygons. We further develop an even fast proximate polygon intersection method based on the properties of proximate polygons.
 
 \subsubsection{Proximate polygons intersection}
 
@@ -98,10 +99,15 @@ Moreover, observe that the convex polygon intersection algorithm of ~\cite{ORour
 \label{fig:poly-edges}
 \end{figure}
 
+The presented proximate polygon intersection algorithm is indeed a customized version of the convex polygon algorithm of ~\cite{ORourke:Intersection}.
+%
+Given intersection polygon $\mathcal{G}^*_k$ of the preview $k$ polygons and the next proximate polygon $\mathcal{G}_{k+1}$, the algorithm returns $\mathcal{G}^*_{k+1} = \mathcal{G}^*_k  \bigcap \mathcal{G}_{k+1}$.
 
-Given intersection polygon $\mathcal{G}^*_k$ of the preview $k$ polygons and the next proximate polygon $\mathcal{G}_{k+1}$, the proximate polygons intersection algorithm finds $\mathcal{G}^*_{k+1} = \mathcal{G}^*_k  \bigcap \mathcal{G}_{k+1}$. The basic idea of the algorithm is a two steps processing, \ie \emph{Filtering} and \emph{Joining}:
+The basic idea of the algorithm is a two steps processing, \ie \emph{Filtering} and \emph{Intersecting}:
  (1) \emph{Filtering}, which picks out $M$ candidate intersection edges, one edge of an edge group, from $\mathcal{G}^*_k $ and $\mathcal{G}_{k+1}$;
  (2) \emph{Intersecting}, which tries to form the intersection polygon, \ie $\mathcal{G}^*_{k+1}$, from these candidate edges.
+
+
 
 \stitle{Candidate intersection edges}.
 Let $e_{i,j}$, $1 \le i \le k+1$ and $1 \le j \le M$, be an edge of $\mathcal{G}_{i}$. The line containing the edge partitions the full plane into two half plane, the half plane that contains the central point $P_i$ of $\mathcal{G}_i$ be the \emph{inner half plane} of $e_{i,j}$, denoted as $\mathcal{H}(e_{i,j})$.
@@ -177,41 +183,53 @@ In Figure~\ref{fig:poly-edges}(1)-(6), the eight candidate intersection edges of
 \end{figure}
 
 
-\stitle{Finding the intersection polygon.}
-From the candidate intersection edges, one can straightly conclude whether $\mathcal{G}_{k+1}$ belongs to $\mathcal{G}^*_{k}$ (Figure~\ref{fig:poly-edges}-(4)) or $\mathcal{G}^*_{k}$ belongs to $\mathcal{G}_{k+1}$ (Figure~\ref{fig:poly-edges}-(5)).
-Hence, we need not consider these two cases in the intersection algorithm.
-%
-The presented intersection algorithm is essentially a customized version of the algorithm of ~\cite{ORourke:Intersection}.
-\textcolor[rgb]{1.00,0.00,0.00}{summary of customization?}
-
+\stitle{\textcolor[rgb]{0.00,0.07,1.00}{polygon intersection algorithm}}
 Given two proximate polygons $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$, and the candidate intersection edges, the algorithm returns the intersection polygon (may be null).
 
-The sketch of the algorithm is shown in Figure~
+The sketch of the algorithm is shown in Figure~\ref{alg:poly-inter}.
 
-Let $A$ and $B$ be directed edges on $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$ respectively. The algorithm has $A$ and $B$ ``chasing¡± one another. During the chasing, $A$ or $B$ moves on step by step in the counterclockwise order, following some rules designed depending on geometric conditions, as described in ~\cite{ORourke:Intersection}.
+Get the candidate edges
 
+Handle $G_1 \subset G_2$ and $G_2 \subset G_1$ cases.
+From the candidate intersection edges, one can straightly conclude whether $\mathcal{G}_{k+1}$ belongs to $\mathcal{G}^*_{k}$ (Figure~\ref{fig:poly-edges}-(4)) or $\mathcal{G}^*_{k}$ belongs to $\mathcal{G}_{k+1}$ (Figure~\ref{fig:poly-edges}-(5)).
 
-\textcolor[rgb]{0.00,0.07,1.00}{Algorithm: INTERSECTION OF CONVEX POLYGONS}
+%
 
-\hspace{4ex} Choose A and B \textcolor[rgb]{0.00,0.07,1.00}{arbitrarily}.
-
-\hspace{4ex} repeat
-
-\hspace{8ex} if A intersects B then
-
-\hspace{12ex} \textcolor[rgb]{0.00,0.07,1.00}{Check for termination}.
-
-\hspace{12ex} Update an inside flag.
-
-\hspace{8ex} Moves on either A or B \textcolor[rgb]{0.00,0.07,1.00}{on candidate edges}.
-
-\hspace{4ex} until both A and B cycle their polygons
-
-\hspace{4ex} return the intersection polygon
+Handle the other cases.
+Let $A$ and $B$ be directed edges on $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$ respectively. The algorithm has $A$ and $B$ ``chasing" one another. During the chasing, $A$ or $B$ moves on step by step in the counterclockwise order, following some rules designed depending on geometric conditions, as described in ~\cite{ORourke:Intersection}.
 
 
-
-
+%%%%%%%%%%%%%%%%%%%%%Baseline Algorithm
+\begin{figure}[tb!]
+\begin{center}
+{\small
+\begin{minipage}{3.36in}
+\myhrule
+\vspace{-1ex}
+\mat{0ex}{
+	{\bf Algorithm} ~$PolyInter$($\mathcal{G}^*$, $\mathcal{G}$, \textcolor[rgb]{1.00,0.00,0.00}{CandidateEdges of $\mathcal{G}^*$})\\
+	\bcc \hspace{1ex}\= \textcolor[rgb]{1.00,0.00,0.00}{Get candidate edges} \\
+	\bcc \hspace{1ex}\= \textcolor[rgb]{1.00,0.00,0.00}{Handle $G_1 \subset G_2$ and $G_2 \subset G_1$ cases, return?}  \\
+	\bcc \hspace{1ex}\= Choose A and B \textcolor[rgb]{0.00,0.07,1.00}{arbitrarily} \\
+	\icc \hspace{1ex}\= repeat \\
+	\icc \>\hspace{3ex} if A intersects B then \\
+	\icc \>\hspace{6ex} \textcolor[rgb]{0.00,0.07,1.00}{Check for termination} \\
+	\icc \>\hspace{6ex} Update an inside flag. \\
+	\icc \> \hspace{3ex} Moves on either A or B \textcolor[rgb]{0.00,0.07,1.00}{on candidate edges}.\\
+	\icc \hspace{1ex} until both A and B cycle their polygons \\
+	\icc \hspace{1ex} return the intersection polygon \\
+}
+\vspace{-2ex}
+\myhrule
+\end{minipage}
+}
+\end{center}
+\vspace{-2ex}
+\caption{\small Intersection of proximate polygons.}
+\label{alg:poly-inter}
+\vspace{-2ex}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
