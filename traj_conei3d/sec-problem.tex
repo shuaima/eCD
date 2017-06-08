@@ -125,12 +125,61 @@ At last, the algorithm outputs two continuous line segments, \ie $\vv{P_0P_4}$ a
 
 
 
+\subsection{Intersection of convex polygons}
+
+In the work, we also implement a fast polygon intersect algorithm which is a customization of the distinct convex polygon algorithm presented in ~\cite{ORourke:Intersection}. We next introduce the algorithm of~\cite{ORourke:Intersection}, whose structure is shown in Figure~\ref{alg:c-poly-inter}.
+
+%%%%%%%%%%%%%%%%%%%%%Baseline Algorithm
+\begin{figure}[tb!]
+\begin{center}
+{\small
+\begin{minipage}{3.36in}
+\myhrule
+\vspace{-1ex}
+\mat{0ex}{
+	{\bf Algorithm} ~$ConvexPolyInter$($\mathcal{G}_1$, $\mathcal{G}_2$) \\
+	\bcc \hspace{1ex}\=  Choose $A$ and $B$ {arbitrarily} \\
+	\icc \hspace{1ex}\= Repeat \\
+	\icc \>\hspace{3ex} If $A$ intersects $B$ Then \\
+	\icc \>\hspace{6ex} {Check for termination} \\
+	\icc \>\hspace{6ex} Update an inside flag. \\
+	\icc \> \hspace{3ex} Moves on either $A$ or $B$.\\
+	\icc \hspace{1ex} Until both $A$ and $B$ cycle their polygons \\
+	\icc \hspace{1ex} Handle $G_1 \subset G_2$ and $G_2 \subset G_1$ and $G_1 \bigcap G_2 = \phi$ cases \\
+    \icc \hspace{1ex} Return $G_1 \bigcap G_2$
+}
+\vspace{-2ex}
+\myhrule
+\end{minipage}
+}
+\end{center}
+\vspace{-2ex}
+\caption{\small Intersection of Convex polygons.}
+\label{alg:c-poly-inter}
+\vspace{-2ex}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The basic idea of the algorithm is straightforward. Assume the boundaries of the two polygons $G_1$ and $G_2$ are oriented counterclockwise, and let $A$ and $B$ be directed edges on each. The algorithm has $A$ and $B$ ``chasing" one another, step by step on the polygons, so that they meet at every crossing of $G_1$ and $G_2$.
+%
+(1) During each step, it checks the intersection of $A$ and $B$. If $A$ intersects $B$, then the algorithm records the inner segment, which is a boundary segment of the intersection polygon (lines 3-5).
+%
+(2) The algorithm moves on $A$ or $B$ one step under some carefully designed rules, which are depending on geometric conditions of $A$ and $B$ (line 6).
+The above processes repeated, until both $A$ and $B$ cycle their polygons (line 7).
+%
+After that, the algorithm handles three special cases of the two polygons, \ie $G_1 \subset G_2$, $G_2 \subset G_1$ and $G_1 \bigcap G_2 = \phi$ cases (line 8).
+%
+At last, it returns the intersection polygon (line 9).
+
+The algorithm has a time complexity of $O(|G_1| + |G_2|)$.
 
 
 
 
 
+\begin{example}
 
+\end{example}
 
 
 
