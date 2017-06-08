@@ -1,14 +1,14 @@
 %\section{One-pass Spatio-temporal data simplification}
 \section{One-pass \sed checking method}
 
-In this section, we first discuss the properties of synchronous data points and \sed, then we present a novel \sed checking method by extending the idea of cone intersection. 
+In this section, we first discuss the properties of synchronized data points and \sed, then we present a novel \sed checking method by extending the idea of cone intersection.
 Finally, we provide a one-pass, error-bounded and \sed enabled trajectory simplification algorithm.
 
 
 
 \subsection{Properties of \sed} %and synchronous points     %Spatio-temporal Data
-Recall in its definition, the \sed of point $P_i$ to a directed line segment $\mathcal{L} = \vv{P_{s}P_{e}}$, denoted as $sed(P_i, \mathcal{L})$, is $|P_iP_i'|$, the distance from $P_i$ to its synchronous point $P_i' (x_i', y_i', t_i)$ \wrt $\mathcal{L}$.
-We first demonstrate the \sed and the synchronous points in the spatio-temporal space, as shown in Figure~\ref{fig:sed3d}.
+Recall in its definition, the \sed of point $P_i$ to a directed line segment $\mathcal{L} = \vv{P_{s}P_{e}}$, denoted as $sed(P_i, \mathcal{L})$, is $|P_iP_i'|$, the distance from $P_i$ to its synchronized point $P_i' (x_i', y_i', t_i)$ \wrt $\mathcal{L}$.
+We first demonstrate the \sed and the synchronized points in the spatio-temporal space, as shown in Figure~\ref{fig:sed3d}.
 From the spatio-temporal space, we have the following findings.
 
 
@@ -18,11 +18,11 @@ From the spatio-temporal space, we have the following findings.
 
 \begin{lemma}
 \label{prop-3d-syn-point}
-Given a sub trajectory $[P_s, \ldots, P_e]$ and a point $P_i$, $s<i<e$, the intersection point $P'_i$ of the plane $t=t_i$ and the directed line segment $\mathcal{L} = \vv{P_sP_e}$ is the synchronous data point of $P_i$ \wrt $\mathcal{L}$ in the spatio-temporal space.
+Given a sub trajectory $[P_s, \ldots, P_e]$ and a point $P_i$, $s<i<e$, the intersection point $P'_i$ of the plane $t=t_i$ and the directed line segment $\mathcal{L} = \vv{P_sP_e}$ is the synchronized data point of $P_i$ \wrt $\mathcal{L}$ in the spatio-temporal space.
 \end{lemma}
 
 \begin{proof}
-As shown in Figure~\ref{fig:sed3d}, the point $P'_i (x'_i, y'_i, t'_i)$ is the intersection point of the plane $t=t_i$ and the directed line segment $\mathcal{L} = \vv{P_sP_e}$, thus, $t'_i = t_i$ and $\frac{t'_i - t_s}{t_e - t_s}$ = $\frac{t_i - t_s}{t_e - t_s}$  = $\frac{|P_sP'_i|}{|P_sP_e|}$ = $\frac{x'_i - x_s}{x_e - x_s}$ = $\frac{y'_i - y_s}{y_e - y_s}$. Hence, $x'_i = x_s +  \frac{t_i-t_s}{t_e - t_s}(x_e - x_s)$ and $y'_i = y_s +  \frac{t_i - t_s}{t_e - t_s}(y_e - y_s)$, which satisfies the definition of the synchronous data point $P_i$ \wrt $\vv{P_sP_e}$.
+As shown in Figure~\ref{fig:sed3d}, the point $P'_i (x'_i, y'_i, t'_i)$ is the intersection point of the plane $t=t_i$ and the directed line segment $\mathcal{L} = \vv{P_sP_e}$, thus, $t'_i = t_i$ and $\frac{t'_i - t_s}{t_e - t_s}$ = $\frac{t_i - t_s}{t_e - t_s}$  = $\frac{|P_sP'_i|}{|P_sP_e|}$ = $\frac{x'_i - x_s}{x_e - x_s}$ = $\frac{y'_i - y_s}{y_e - y_s}$. Hence, $x'_i = x_s +  \frac{t_i-t_s}{t_e - t_s}(x_e - x_s)$ and $y'_i = y_s +  \frac{t_i - t_s}{t_e - t_s}(y_e - y_s)$, which satisfies the definition of the synchronized data point $P_i$ \wrt $\vv{P_sP_e}$.
 \end{proof}
 
 
@@ -44,7 +44,7 @@ Given a sub trajectory $[P_s, \ldots, P_e]$ and a constant $\epsilon$, the sub t
 
 \begin{proof}
 As shown in Figure~\ref{fig:sed3d}, let $P'_i$ be the intersection point of the line segment $\vv{P_sP_e}$ and the plane $t=t_i$.
-By Lemma~\ref{prop-3d-syn-point}, the point $P'_i$ is the synchronous data point of $P_i$ \wrt line segment $\vv{P_sP_e}$.
+By Lemma~\ref{prop-3d-syn-point}, the point $P'_i$ is the synchronized data point of $P_i$ \wrt line segment $\vv{P_sP_e}$.
 
 (1) If the line segment $\vv{P_sP_e}$ passes through all synchronous circles $\mathcal{O}(P_i, \epsilon)$ for $i \in (s, e)$, then by the definition of synchronous circle, it must pass through the circle which is on the plane $t=t_i$ and around point $P_i$, and has a radius of $\epsilon$, thus, $|P'_iP_i| <\epsilon$. Furthermore, the property is hold for each $i \in (s, e)$, hence, the sub trajectory $[P_s, \ldots, P_e]$ can be represented by the line segment $\vv{P_sP_e}$.
 
@@ -86,7 +86,7 @@ Given a sub trajectory $[P_s,...,P_e]$ and a constant $\epsilon$, there exists a
 
 \begin{proof}
 Let $P'_i$ be the intersection point of the line segment $\vv{P_sQ}$ and the plane $t=t_i$.
-By Lemma~\ref{prop-3d-syn-point}, the point $P'_i$ is the synchronous data point of $P_i$ \wrt the line segment $\vv{P_sQ}$.
+By Lemma~\ref{prop-3d-syn-point}, the point $P'_i$ is the synchronized data point of $P_i$ \wrt the line segment $\vv{P_sQ}$.
 
 
 (1) If $\bigcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_i, \epsilon)} \ne \{P_s\}$, then there must exits a point $Q = (x,y,t_e)$ within the circle $\mathcal{O}(P_e, \epsilon)$ of $P_e$ such that $\vv{P_sQ}$ passes through the intersection of all the cones. Hence it pass through all circles $\mathcal{O}(P_i, \epsilon)$ for $i \in (s, e]$, and the intersection point, $P'_i$, is sure within the circle $\mathcal{O}(P_i, \epsilon)$. Thus, $sed(P_i, \vv{P_sQ}) = |P'_iP_i| < \zeta$, for $i \in (s, e]$.
