@@ -85,10 +85,9 @@ For example, in Figure~\ref{fig:polygons}-(2), the intersection polygon (red lin
 By Theorem~\ref{prop-rp-intersection}, the intersection polygon $\mathcal{G}^*_k$ of all proximate polygon $\mathcal{G}_i$, $i \in [1, k]$, has no more than $M$ edges.
 We know the convex polygon intersection algorithm of~\cite{ORourke:Intersection} has a time complexity of $O(|\mathcal{G}^*_k| + |\mathcal{G}_{k+1}|)$, which is $O(2M)$ here, thus, the computing of the intersection polygon of polygon $\mathcal{G}^*_k$ and proximate polygon $\mathcal{G}_{k+1}$ can be implemented in a constant time, \ie time $O(M)$, by the distinct polygon intersection algorithm of~\cite{ORourke:Intersection}.
 %
-Moreover, observe that the algorithm of ~\cite{ORourke:Intersection} is for general convex polygons, while the proximate polygons are special polygons. We further develop an even fast proximate polygon intersection method based on the properties of proximate polygons.
 
-\subsubsection{Proximate polygons intersection}
 
+\subsection{A fast polygon intersection method}
 
 \begin{figure}[tb!]
 \centering
@@ -99,6 +98,8 @@ Moreover, observe that the algorithm of ~\cite{ORourke:Intersection} is for gene
 \label{fig:poly-edges}
 \end{figure}
 
+Observe that the algorithm of ~\cite{ORourke:Intersection} is for general convex polygons, while the proximate polygons are special polygons. We further develop an even fast proximate polygon intersection method based on the properties of proximate polygons.
+%
 The presented proximate polygon intersection algorithm is indeed a customized version of the convex polygon algorithm of ~\cite{ORourke:Intersection}.
 %
 Given intersection polygon $\mathcal{G}^*_k$ of the preview $k$ polygons and the next proximate polygon $\mathcal{G}_{k+1}$, the algorithm returns $\mathcal{G}^*_{k+1} = \mathcal{G}^*_k  \bigcap \mathcal{G}_{k+1}$.
@@ -153,27 +154,31 @@ where,  $e^*_{1, j} = e_{1, j}$, $j \in [1, M]$ and $k\ge 1$.
 
 \begin{example}
 In Figure~\ref{fig:poly-edges}(1)-(6), the eight candidate intersection edges of $\mathcal{G}^*_{k+1}$ are:
-
 (1) $e^*_{k,1}$, $e^*_{k,2}$, $e^*_{k,3}$, $e^*_{k,4}$, $e_{k+1,5}$, $e_{k+1,6}$, $e_{k+1,7}$ and $e_{k+1,8}$;
-
+%
 (2) $e_{k+1,1}$, $e_{k+1,2}$, $e_{k+1,3}$, $e_{k+1,4}$, $e^*_{k,5}$, $e^*_{k,6}$, $e^*_{k,7}$ and $e^*_{k,8}$;
-
+%
 (3) $e_{k+1,1}$ or $e^*_{k,1}$, $e_{k+1,2}$, $e_{k+1,3}$ or $e^*_{k,3}$, $e_{k+1,4}$, $e^*_{k,5}$, $e^*_{k,6}$ or $e_{k+1,6}$, $e_{k+1,7}$ and $e^*_{k,8}$;
-
+%
 (4) $e_{k+1,j}$, $j \in [1, 8]$;
-
+%
 (5) $e^*_{k,j}$, $j \in [1, 8]$;
-
+%
 (6) $e^*_{k,1}$, $e^*_{k,2}$, $e^*_{k,3}$, $e_{k+1,4}$, $e_{k+1,5}$, $e_{k+1,6}$, $e_{k+1,7}$ and $e^*_{k,8}$.
-
-
 \end{example}
 
 
 
 
 
-
+\begin{figure}[tb!]
+\centering
+\includegraphics[scale=0.88]{figures/Fig-poly-inter.png}
+\vspace{-1ex}
+\caption{\small A running example of intersection of polygons.}
+\vspace{-2ex}
+\label{fig:p-poly-inter}
+\end{figure}
 
 
 
@@ -209,6 +214,21 @@ In Figure~\ref{fig:poly-edges}(1)-(6), the eight candidate intersection edges of
 \vspace{-2ex}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%example of Algorithm CISED
+\begin{figure*}[tb!]
+\centering
+\includegraphics[scale=0.8]{figures/Fig-ex-conest.png}
+\vspace{-1ex}
+\caption{\small A running example of the \cist algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed to four line segments.}
+\vspace{-2ex}
+\label{fig:exm-const}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 \stitle{\textcolor[rgb]{0.00,0.07,1.00}{polygon intersection algorithm}}
 Given two proximate polygons $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$, and the candidate intersection edges, the algorithm returns the intersection polygon (may be null).
@@ -255,12 +275,5 @@ At last, it returns the intersection polygon.
 
 
 
-\begin{figure}[tb!]
-\centering
-\includegraphics[scale=0.88]{figures/Fig-poly-inter.png}
-\vspace{-1ex}
-\caption{\small A running example of intersection of polygons.}
-\vspace{-2ex}
-\label{fig:p-poly-inter}
-\end{figure}
+
 
