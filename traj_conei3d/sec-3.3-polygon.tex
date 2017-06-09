@@ -1,4 +1,4 @@
-\subsection{Approximate circles intersection}
+\subsection{Intersection of projection circles }
 
 %\textcolor[rgb]{1.00,0.00,0.00}{Todo....}
 The checking of the $N$ circles intersection has a time complexity of \textcolor[rgb]{1.00,0.00,0.00}{${O(N\log N)}$~\cite{Shamos:Circle}}, which is not a linear time.
@@ -9,7 +9,7 @@ Note that the intersection of regular polygons is only a sufficient condition of
 algorithms employ this policy may loss some compression ratio. Obviously, a larger $M$ leads to a better compression ratio and a poorer
 efficiency.
 
-\stitle{Proximate polygons ($\mathcal{G}$)}.
+\stitle{Approximate polygons ($\mathcal{G}$)}.
 Given a circle $\mathcal{O}(P, r)$, its approximate polygons is a $M$ edges inscribed regular polygon $\mathcal{G}(V, E)$,
 where $V=\{v_1, \ldots, v_{M}\}$ is the set of vertexes and
 $E= \{\overline{v_jv_{j+1}}| j\in [1,M-1]\} \bigcup \{\overline{v_Mv_1}\}$ is the set of edges.
@@ -82,8 +82,8 @@ Hence, the intersection polygon $\mathcal{G}^*_k$ includes at most one edge of a
 For example, in Figure~\ref{fig:polygons}-(2), the intersection polygon (red lines) of $G_1$, $G_2$ and $G_3$ has 7 edges, marked 1, 2, 3, 5-8, each from a different edge group. Note the $4^{th}$ edge group has no contribution to the intersection polygon.
 
 
-By Theorem~\ref{prop-rp-intersection}, the intersection polygon $\mathcal{G}^*_k$ of all proximate polygon $\mathcal{G}_i$, $i \in [1, k]$, has no more than $M$ edges.
-We know the convex polygon intersection algorithm of~\cite{ORourke:Intersection} has a time complexity of $O(|\mathcal{G}^*_k| + |\mathcal{G}_{k+1}|)$, which is $O(2M)$ here, thus, the computing of the intersection polygon of polygon $\mathcal{G}^*_k$ and proximate polygon $\mathcal{G}_{k+1}$ can be implemented in a constant time, \ie time $O(M)$, by the distinct polygon intersection algorithm of~\cite{ORourke:Intersection}.
+By Theorem~\ref{prop-rp-intersection}, the intersection polygon $\mathcal{G}^*_k$ of all approximate polygon $\mathcal{G}_i$, $i \in [1, k]$, has no more than $M$ edges.
+We know the convex polygon intersection algorithm of~\cite{ORourke:Intersection} has a time complexity of $O(|\mathcal{G}^*_k| + |\mathcal{G}_{k+1}|)$, which is $O(2M)$ here, thus, the computing of the intersection polygon of polygon $\mathcal{G}^*_k$ and approximate polygon $\mathcal{G}_{k+1}$ can be implemented in a constant time, \ie time $O(M)$, by the distinct polygon intersection algorithm of~\cite{ORourke:Intersection}.
 %
 
 
@@ -98,11 +98,11 @@ We know the convex polygon intersection algorithm of~\cite{ORourke:Intersection}
 \label{fig:poly-edges}
 \end{figure}
 
-Observe that the algorithm of ~\cite{ORourke:Intersection} is for general convex polygons, while the proximate polygons are special polygons. We further develop an even fast proximate polygon intersection method based on the properties of proximate polygons.
+Observe that the algorithm of ~\cite{ORourke:Intersection} is for general convex polygons, while the approximate polygons are special polygons. We further develop an even fast approximate polygon intersection method based on the properties of approximate polygons.
 %
-The presented proximate polygon intersection algorithm is indeed a customized version of the convex polygon algorithm of ~\cite{ORourke:Intersection}.
+The presented approximate polygon intersection algorithm is indeed a customized version of the convex polygon algorithm of ~\cite{ORourke:Intersection}.
 %
-Given intersection polygon $\mathcal{G}^*_k$ of the preview $k$ polygons and the next proximate polygon $\mathcal{G}_{k+1}$, the algorithm returns $\mathcal{G}^*_{k+1} = \mathcal{G}^*_k  \bigcap \mathcal{G}_{k+1}$.
+Given intersection polygon $\mathcal{G}^*_k$ of the preview $k$ polygons and the next approximate polygon $\mathcal{G}_{k+1}$, the algorithm returns $\mathcal{G}^*_{k+1} = \mathcal{G}^*_k  \bigcap \mathcal{G}_{k+1}$.
 
 The basic idea of the algorithm is a two steps processing, \ie \emph{Filtering} and \emph{Intersecting}:
  (1) \emph{Filtering}, which picks out $M$ candidate intersection edges, one edge of an edge group, from $\mathcal{G}^*_k $ and $\mathcal{G}_{k+1}$;
@@ -209,7 +209,7 @@ In Figure~\ref{fig:poly-edges}(1)-(6), the eight candidate intersection edges of
 }
 \end{center}
 \vspace{-2ex}
-\caption{\small Intersection of proximate polygons.}
+\caption{\small Intersection of approximate polygons.}
 \label{alg:poly-inter}
 \vspace{-2ex}
 \end{figure}
@@ -231,7 +231,7 @@ In Figure~\ref{fig:poly-edges}(1)-(6), the eight candidate intersection edges of
 
 
 \stitle{\textcolor[rgb]{0.00,0.07,1.00}{polygon intersection algorithm}}
-Given two proximate polygons $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$, and the candidate intersection edges, the algorithm returns the intersection polygon (may be null).
+Given two approximate polygons $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$, and the candidate intersection edges, the algorithm returns the intersection polygon (may be null).
 
 The sketch of the algorithm is shown in Figure~\ref{alg:poly-inter}.
 
@@ -254,7 +254,7 @@ Let $A$ and $B$ be directed edges on $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$ r
 
 
 \begin{example}
-Figure~\ref{fig:p-poly-inter} is a running example of the proximate polygon intersection algorithm.
+Figure~\ref{fig:p-poly-inter} is a running example of the approximate polygon intersection algorithm.
 Initially, the candidate edges are marked and directed edges $A$ and $B$ are on polygons $\mathcal{G}_{k+1}$ and $\mathcal{G}^*_{k}$ separately
 
 \ni (1) $A \bigcap B = \phi$. $A$ moves forward one step;
