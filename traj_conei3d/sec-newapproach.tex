@@ -155,6 +155,94 @@ Hence, by Theorem~\ref{prop-3d-ci}, we have the conclusion.
 \end{proof}
 
 
+\subsection{Intersection of projection circles }
+
+%\textcolor[rgb]{1.00,0.00,0.00}{Todo....}
+The checking of the $N$ circles intersection has a time complexity of \textcolor[rgb]{1.00,0.00,0.00}{${O(N\log N)}$~\cite{Shamos:Circle}}, which is not a linear time.
+To develop a linear time complexity spatio-temporal simplification algorithm, we provide an approximate circles intersection method.
+That is, we further replace a circle $\mathcal{O}(P, r)$ to a $M$-edges inscribed regular polygon,
+then we check the intersection of the regular polygons instead of the checking of circles intersection.
+Note that the intersection of regular polygons is only a sufficient condition of the intersection of the corresponding circles , and
+algorithms employ this policy may loss some compression ratio. Obviously, a larger $M$ leads to a better compression ratio and a poorer
+efficiency.
+
+\stitle{Approximate polygons ($\mathcal{G}$)}.
+Given a circle $\mathcal{O}(P, r)$, its approximate polygons is a $M$ edges inscribed regular polygon $\mathcal{G}(V, E)$,
+where $V=\{v_1, \ldots, v_{M}\}$ is the set of vertexes and
+$E= \{\overline{v_jv_{j+1}}| j\in [1,M-1]\} \bigcup \{\overline{v_Mv_1}\}$ is the set of edges.
+Furthermore, let the center point $P$ of the circle be the origin of a polar coordinate system, then each vertex satisfies:
+
+\vspace{-2ex}
+\begin{equation*}
+\label{equ-regular-polygon}
+%\hspace{-1.5ex}
+    \begin{aligned}
+        \hspace{10ex}  v_j = (r, \frac{2(j-1)}{M}\pi), ~j \in [1, M]    \hspace{10ex} (3)\\
+    \end{aligned}
+\end{equation*}
+\vspace{-1ex}
+
+%\stitle{intersection polygons ($\mathcal{G}^*$)}.
+
+For example, Figure~\ref{fig:polygons}-(1) is a regular octagon whose vertexes satisfying the Equation (3).
+
+%The intersection of two M-edges convex polygons has a time complexity of $O(M)$ \cite{ORourke:Intersection}.
+The regular polygons built by equation (3) have elegant properties, which is helpful to derive an algorithm of linear time and constant space
+for the intersection of $N$ regular polygons.
+
+
+\stitle{Edge groups}.
+Let $e_{i,j} = \overline{v_{i,j}v_{i,j+1}}$, $j\in [1,M)$, or $e_{i,j} = \overline{v_{i,M}v_{i,1}}$, $j = M$, be an edge of an approximate polygon
+$\mathcal{G}_i$, then all $e_{i,j}$, $i\in [1, k]$, form an \emph{edge group}, namely the $j^{th}$ edge group.
+For example, in Figure~\ref{fig:polygons}-(2), all the $1^{th}$ edges form the $1^{th}$ edge group.
+
+
+
+
+\begin{figure}[tb!]
+\centering
+\includegraphics[scale=0.88]{figures/Fig-polygons.png}
+\vspace{-1ex}
+\caption{\small Regular octagons and their intersections.}
+\vspace{-3ex}
+\label{fig:polygons}
+\end{figure}
+
+
+
+\begin{theorem}
+\label{prop-rp-intersection}
+If $\mathcal{G}_i$, $i \in [1, k]$, are M-edges regular polygons on a plane which are built by equation (3), then the intersection polygon
+$\mathcal{G}^*_k$ of all $\mathcal{G}_i$ includes at most one edge from an edge group, \eg the $j^{th}$ edge group.
+\end{theorem}
+
+
+\begin{proof}
+We prove this by contradiction.
+
+Suppose $\mathcal{G}^*_k$ have two different edges, $e_{h,j}$ and $e_{l,j}$, $h\ne l$, belonging to the $j^{th}$ edge group. Obviously, edge
+$e_{h,j}$ belongs to regular polygon $\mathcal{G}_h$, edge $e_{l,j}$ belongs to regular polygon $\mathcal{G}_l$ and $e_{h,j}$ is parallel to
+$e_{l,j}$.
+
+If $\mathcal{G}_l \bigcap \mathcal{G}_h = \phi$, then $\mathcal{G}^*_k=\phi$, which conflicts with the hypothetic premises.
+
+If $\mathcal{G}_l \bigcap \mathcal{G}_h \ne \phi$, then the intersection polygon of $\mathcal{G}_h$ and $\mathcal{G}_l$ must include at most
+one edge of $e_{h,j}$ and $e_{l,j}$, which is also the contradiction with the hypothetic premises.
+
+Hence, the intersection polygon $\mathcal{G}^*_k$ includes at most one edge of an edge group.
+%
+%There are at most $M$ edge groups, thus, the intersection polygon $\mathcal{G}^*$ has no more than $M$ edges.
+\end{proof}
+
+
+
+For example, in Figure~\ref{fig:polygons}-(2), the intersection polygon (red lines) of $G_1$, $G_2$ and $G_3$ has 7 edges, marked 1, 2, 3, 5-8, each from a different edge group. Note the $4^{th}$ edge group has no contribution to the intersection polygon.
+
+
+By Theorem~\ref{prop-rp-intersection}, the intersection polygon $\mathcal{G}^*_k$ of all approximate polygon $\mathcal{G}_i$, $i \in [1, k]$, has no more than $M$ edges.
+We know the convex polygon intersection algorithm of~\cite{ORourke:Intersection} has a time complexity of $O(|\mathcal{G}^*_k| + |\mathcal{G}_{k+1}|)$, which is $O(2M)$ here, thus, the computing of the intersection polygon of polygon $\mathcal{G}^*_k$ and approximate polygon $\mathcal{G}_{k+1}$ can be implemented in a constant time, \ie time $O(M)$, by the distinct polygon intersection algorithm of~\cite{ORourke:Intersection}.
+%
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
