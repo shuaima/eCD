@@ -13,7 +13,6 @@ Given intersection polygon $\mathcal{G}^*_k$ of the preview $k$ polygons and the
 
 
 
-
 %%%%%%%%%%%%%%%%%%%%%Baseline Algorithm
 \begin{figure}[tb!]
 \begin{center}
@@ -22,17 +21,18 @@ Given intersection polygon $\mathcal{G}^*_k$ of the preview $k$ polygons and the
 \myhrule
 \vspace{-1ex}
 \mat{0ex}{
-	{\bf Algorithm} ~$PolyInter$($\mathcal{G}^*$, $\mathcal{G}$, \textcolor[rgb]{1.00,0.00,0.00}{CandidateEdges of $\mathcal{G}^*$})\\
-	\bcc \hspace{1ex}\= \textcolor[rgb]{1.00,0.00,0.00}{Get candidate edges} \\
-	\bcc \hspace{1ex}\= \textcolor[rgb]{1.00,0.00,0.00}{Handle $G_1 \subset G_2$ and $G_2 \subset G_1$ cases, return?}  \\
-	\bcc \hspace{1ex}\= Choose A and B \textcolor[rgb]{0.00,0.07,1.00}{arbitrarily} \\
-	\icc \hspace{1ex}\= repeat \\
-	\icc \>\hspace{3ex} if A intersects B then \\
-	\icc \>\hspace{6ex} \textcolor[rgb]{0.00,0.07,1.00}{Check for termination} \\
+	{\bf Algorithm} ~$RegularPolyInter$($\mathcal{G}^*_k$, $\mathcal{G}_{k+1}$) \\
+	\bcc \hspace{2ex}\=  Set $A$ and $B$ {arbitrarily} on $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$\\
+	\icc \>\hspace{0ex}\= Repeat \\
+	\icc \>\hspace{3ex} If $A$ intersects $B$ Then \\
+	\icc \>\hspace{6ex} {Check for termination.} \\
 	\icc \>\hspace{6ex} Update an inside flag. \\
-	\icc \> \hspace{3ex} Moves on either A or B \textcolor[rgb]{0.00,0.07,1.00}{on candidate edges}.\\
-	\icc \hspace{1ex} until \textcolor[rgb]{1.00,0.00,0.00}{both} A and B cycle their polygons \\
-	\icc \hspace{1ex} return the intersection polygon
+	\icc \>\hspace{6ex} \textcolor[rgb]{0.00,0.00,1.00}{Moves on either $A$ or $B$ multiple steps.}\\
+	\icc \>\hspace{3ex} Else \\
+	\icc \>\hspace{6ex} Moves on either $A$ or $B$.\\
+	\icc \hspace{1ex} Until both $A$ and $B$ cycle their polygons \\
+	\icc \hspace{0ex} Handle $\mathcal{G}^*_k \subset \mathcal{G}_{k+1}$ and $\mathcal{G}^*_k \subset \mathcal{G}_{k+1}$ and $\mathcal{G}^*_k \bigcap \mathcal{G}_{k+1} = \phi$ cases \\
+    \icc \hspace{0ex} Return $\mathcal{G}^*_k \bigcap \mathcal{G}_{k+1}$
 }
 \vspace{-2ex}
 \myhrule
@@ -40,8 +40,8 @@ Given intersection polygon $\mathcal{G}^*_k$ of the preview $k$ polygons and the
 }
 \end{center}
 \vspace{-2ex}
-\caption{\small Intersection of approximate polygons.}
-\label{alg:poly-inter}
+\caption{\small Intersection of Regular polygons.}
+\label{alg:r-poly-inter}
 \vspace{-2ex}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -51,11 +51,10 @@ Given intersection polygon $\mathcal{G}^*_k$ of the preview $k$ polygons and the
 
 
 
-
-\stitle{\textcolor[rgb]{0.00,0.07,1.00}{polygon intersection algorithm}}
+\stitle{\textcolor[rgb]{0.00,0.07,1.00}{Regular polygon intersection algorithm}}
 Given two approximate polygons $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$, and the candidate intersection edges, the algorithm returns the intersection polygon (may be null).
 
-The sketch of the algorithm is shown in Figure~\ref{alg:poly-inter}.
+The sketch of the algorithm is shown in Figure~\ref{alg:r-poly-inter}.
 
 Let $A$ and $B$ be directed edges on $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$ respectively. The algorithm has $A$ and $B$ ``chasing" one another. During the chasing, $A$ or $B$ moves on step by step in the counterclockwise order, following some rules designed depending on geometric conditions, as described in ~\cite{ORourke:Intersection}.
 

@@ -145,8 +145,8 @@ In the work, we also implement a fast polygon intersect algorithm which is a cus
 	\icc \>\hspace{6ex} Update an inside flag. \\
 	\icc \> \hspace{3ex} Moves on either $A$ or $B$.\\
 	\icc \hspace{1ex} Until both $A$ and $B$ cycle their polygons \\
-	\icc \hspace{1ex} Handle $G_1 \subset G_2$ and $G_2 \subset G_1$ and $G_1 \bigcap G_2 = \phi$ cases \\
-    \icc \hspace{1ex} Return $G_1 \bigcap G_2$
+	\icc \hspace{1ex} Handle $\mathcal{G}_1 \subset \mathcal{G}_2$ and $\mathcal{G}_2 \subset \mathcal{G}_1$ and $\mathcal{G}_1 \bigcap \mathcal{G}_2 = \phi$ cases \\
+    \icc \hspace{1ex} Return $\mathcal{G}_1 \bigcap \mathcal{G}_2$
 }
 \vspace{-2ex}
 \myhrule
@@ -160,27 +160,27 @@ In the work, we also implement a fast polygon intersect algorithm which is a cus
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The basic idea of the algorithm is straightforward. Assume the boundaries of the two polygons $G_1$ and $G_2$ are oriented counterclockwise, and let $A$ and $B$ be directed edges on each. The algorithm has $A$ and $B$ ``chasing" one another, step by step on the polygons, so that they meet at every crossing of $G_1$ and $G_2$.
+The basic idea of the algorithm is straightforward. Assume the boundaries of the two polygons $\mathcal{G}_1$ and $\mathcal{G}_2$ are oriented counterclockwise, and let $A$ and $B$ be directed edges on each. The algorithm has $A$ and $B$ ``chasing" one another, step by step on the polygons, so that they meet at every crossing of $\mathcal{G}_1$ and $\mathcal{G}_2$.
 %
-(1) During each step, it checks the intersection of $A$ and $B$. If $A$ intersects $B$ (line 3), then the algorithm checks for some special termination conditions (\eg if $A$ and $B$ are overlapped, and at the same time, $G_1$ and $G_2$ are on the opposite sides of the overlapped line segment, then the process is terminated) (line 4), and records the inner segment, which is a boundary segment of the intersection polygon (line 5).
+(1) During each step, it checks the intersection of $A$ and $B$. If $A$ intersects $B$ (line 3), then the algorithm checks for some special termination conditions (\eg if $A$ and $B$ are overlapped, and at the same time, $\mathcal{G}_1$ and $\mathcal{G}_2$ are on the opposite sides of the overlapped line segment, then the process is terminated) (line 4), and records the inner segment, which is a boundary segment of the intersection polygon (line 5).
 %
 (2) The algorithm moves on $A$ or $B$ one step under some carefully designed rules, depending on geometric conditions of $A$ and $B$ (line 6).
 The above processes repeated, until both $A$ and $B$ cycle their polygons (line 7).
 %
-After that, the algorithm handles three special cases of the two polygons, \ie $G_1 \subset G_2$, $G_2 \subset G_1$ and $G_1 \bigcap G_2 = \phi$ cases (line 8).
+After that, the algorithm handles three special cases of the two polygons, \ie $\mathcal{G}_1 \subset \mathcal{G}_2$, $\mathcal{G}_2 \subset \mathcal{G}_1$ and $\mathcal{G}_1 \bigcap \mathcal{G}_2 = \phi$ cases (line 8).
 %
 At last, it returns the intersection polygon (line 9).
 
-The algorithm has a time complexity of $O(|G_1| + |G_2|)$, where $|G|$ is the number of edges of polygon $G$.
+The algorithm has a time complexity of $O(|\mathcal{G}_1| + |\mathcal{G}_2|)$, where $|\mathcal{G}|$ is the number of edges of polygon $\mathcal{G}$.
 
 
 
 
 
 \begin{example}
-Figure~\ref{fig:c-poly-inter} is a running example of the convex polygon intersection algorithm. 
+Figure~\ref{fig:c-poly-inter} is a running example of the convex polygon intersection algorithm.
 
-\ni (1) Initially, directed edges $A$ and $B$ are on polygons $G_2$ and $G_1$ separately. $A \bigcap B = P_1$. 
+\ni (1) Initially, directed edges $A$ and $B$ are on polygons $\mathcal{G}_2$ and $\mathcal{G}_1$ separately. $A \bigcap B = P_1$.
 
 \ni (2) $A$ moves forward a step. $A \bigcap B = \phi$.
 
