@@ -1,28 +1,28 @@
 
-\subsection{A fast regular polygon intersection method}
+\subsubsection{A fast regular polygon intersection method}
 
 
 Observe that the algorithm of ~\cite{ORourke:Intersection} is for general convex polygons, while the approximate polygons are special polygons. We further develop an even fast approximate polygon intersection method based on the properties of approximate polygons.
 %
-The presented approximate polygon intersection algorithm is indeed a customized version of the convex polygon intersection algorithm of ~\cite{ORourke:Intersection}. The major optimization is it allows the algorithm to move $A$ or $B$ multiple steps one time.
+The presented approximate polygon intersection algorithm is indeed a customized version of the convex polygon intersection algorithm of ~\cite{ORourke:Intersection}. 
+
+Let $A$ and $B$ be directed edges on polygons $\mathcal{G}_{k+1}$ and $\mathcal{G}^*_k$ respectively. The major optimization is it allows the algorithm to move on $A$ or $B$ multiple steps at one time.
+%The algorithm has $A$ and $B$ ``chasing" one another in the counterclockwise order like the algorithm ~\cite{ORourke:Intersection}.
+Recall $A$ and $B$ are advanced by the advance rules of the algorithm ~\cite{ORourke:Intersection}.
+Moreover, these rules are indeed four categories, \ie $A \bigcap B \ne \phi$ and advances $A$, $A \bigcap B \ne \phi$ and advances $B$, $A \bigcap B = \phi$ and advances $A$, and $A \bigcap B = \phi$ and advances $B$.
 %
-
-
-Let $A$ and $B$ be directed edges on $\mathcal{G}_{k+1}$ and $\mathcal{G}^*_k$ respectively. The algorithm has $A$ and $B$ ``chasing" one another in the counterclockwise order like the algorithm ~\cite{ORourke:Intersection}.
-%
-Here, the advancing rules are four categories, \ie $A \bigcap B \ne \phi$ and advances $A$, $A \bigcap B \ne \phi$ and advances $B$, $A \bigcap B = \phi$ and advances $A$, and $A \bigcap B = \phi$ and advances $B$.
-%
-In each of these four cases, it allows $A$ or $B$ moves on multiple steps, as follows.
+In each of these categories, the new algorithm allows $A$ or $B$ moves on multiple steps, as follows.
 
 
 
-\emph{Rule 1: 
+\sstab \emph{Rule 1: 
 If $A \bigcap B \ne \phi$ and advances $B$, then moves on $B$ to the next edge of $g(A)$.}
 
 
+For example, in Figure~\ref{fig:r-poly-inter}-(3), $A \bigcap B = P_2$, hence $B$ moves on to the $3^{th}$ edge of $\mathcal{G}^*_k$, the next edge of $g(A) = 4$. Though, in this case, the $4^{th}$ edge does not exist in $\mathcal{G}^*_k$. Furthermore, if the $3^{th}$ edge were not existing, then $B$ should move on to the next real edge of $\mathcal{G}^*_k$.
 
 
-\emph{Rule 2: 
+\sstab \emph{Rule 2: 
 If $A \bigcap B \ne \phi$ and advances $A$, then moves on $A$ ``s" steps, where}
 \vspace{-1ex}
 \begin{equation*}
@@ -39,11 +39,11 @@ If $A \bigcap B \ne \phi$ and advances $A$, then moves on $A$ ``s" steps, where}
 \vspace{-1ex}
 
 
-\emph{Rule 3:
+\sstab \emph{Rule 3:
 If $A \bigcap B = \phi$ and advances $A$, then moves on $B$ ``" steps.}
 
 
-\emph{Rule 4:
+\sstab \emph{Rule 4:
 If $A \bigcap B = \phi$ and advances $B$, then moves on $B$ ``" steps.}
 
 
@@ -109,15 +109,15 @@ The sketch of the algorithm is shown in Figure~\ref{alg:r-poly-inter}.
 Figure~\ref{fig:r-poly-inter} is a running example of the approximate polygon intersection algorithm.
 Initially, the candidate edges are marked and directed edges $A$ and $B$ are on polygons $\mathcal{G}_{k+1}$ and $\mathcal{G}^*_{k}$ separately
 
-\ni (1) Initially, directed edges $A$ and $B$ are on polygons $\mathcal{G}_{k+1}$ and $\mathcal{G}^*_{k}$ separately. $A \bigcap B = P_1$.
+\ni (1) Initially, directed edges $A$ and $B$ are on polygons $\mathcal{G}_{k+1}$ and $\mathcal{G}^*_{k}$ separately. $A \bigcap B = P_1$, $A$ moves on.
 
-\ni (2) $A$ moves forward a 4-steps. $A \bigcap B = \phi$.
+\ni (2) $A$ moves forward a 4-steps, from $2^{th}$ to $6^{th}$, under rule 2. Here, $A \bigcap B = \phi$, $B$ moves on.
 
-\ni (3) After 4 steps of moving, $A \bigcap B = P_2$
+\ni (3) After 4 steps of moving in turn, $A \bigcap B = P_2$, $B$ moves on.
 
-\ni (4) $B$ moves forward a 2-steps. $A \bigcap B = \phi$.
+\ni (4) $B$ moves forward a 2-steps under rule 1. $A \bigcap B = \phi$, $A$ moves on.
 
-\ni (5) After 5 steps of moving, both $A$ and $B$ cycle their polygons;
+\ni (5) After 5 steps of moving in turn, both $A$ and $B$ cycle their polygons;
 
 \ni (6) At last, it returns the intersection polygon.
 \end{example}
