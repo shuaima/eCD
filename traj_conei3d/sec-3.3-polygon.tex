@@ -4,12 +4,47 @@
 
 Observe that the algorithm of ~\cite{ORourke:Intersection} is for general convex polygons, while the approximate polygons are special polygons. We further develop an even fast approximate polygon intersection method based on the properties of approximate polygons.
 %
-The presented approximate polygon intersection algorithm is indeed a customized version of the convex polygon intersection algorithm of ~\cite{ORourke:Intersection}, it optimizes the algorithm by customizing the rules for advancing $A$ and $B$, which are the key of algorithm~\cite{ORourke:Intersection}.
+The presented approximate polygon intersection algorithm is indeed a customized version of the convex polygon intersection algorithm of ~\cite{ORourke:Intersection}. The major optimization is it allows the algorithm to move $A$ or $B$ multiple steps one time.
+%
+
+
+Let $A$ and $B$ be directed edges on $\mathcal{G}_{k+1}$ and $\mathcal{G}^*_k$ respectively. The algorithm has $A$ and $B$ ``chasing" one another in the counterclockwise order like the algorithm ~\cite{ORourke:Intersection}.
+%
+Here, the advancing rules are four categories, \ie $A \bigcap B \ne \phi$ and advances $A$, $A \bigcap B \ne \phi$ and advances $B$, $A \bigcap B = \phi$ and advances $A$, and $A \bigcap B = \phi$ and advances $B$.
+%
+In each of these four cases, it allows $A$ or $B$ moves on multiple steps, as follows.
+
+
+
+\emph{Rule 1: 
+If $A \bigcap B \ne \phi$ and advances $B$, then moves on $B$ to the next edge of $g(A)$.}
 
 
 
 
+\emph{Rule 2: 
+If $A \bigcap B \ne \phi$ and advances $A$, then moves on $A$ ``s" steps, where}
+\vspace{-1ex}
+\begin{equation*}
+\small
+\label{equ-rule1}
+    \hspace{2ex} s =  \left\{
+    \begin{aligned}
+        & 2*(g(A) - g(B)),  \hspace{5ex} ~if  ~g(A) > g(B) \\
+        & \textcolor[rgb]{1.00,0.00,0.00}{1}, \hspace{21ex}\textcolor[rgb]{1.00,0.00,0.00}{if  ~g(A) = g(B)} \\
+        & 2*(M+g(A) - g(B)), ~if  ~g(A) < g(B) \\
+    \end{aligned}
+    \right.       \hspace{6ex}(4)
+\end{equation*}
+\vspace{-1ex}
 
+
+\emph{Rule 3:
+If $A \bigcap B = \phi$ and advances $A$, then moves on $B$ ``" steps.}
+
+
+\emph{Rule 4:
+If $A \bigcap B = \phi$ and advances $B$, then moves on $B$ ``" steps.}
 
 
 
@@ -27,9 +62,9 @@ The presented approximate polygon intersection algorithm is indeed a customized 
 	\icc \>\hspace{3ex} If $A$ intersects $B$ Then \\
 	\icc \>\hspace{6ex} {Check for termination.} \\
 	\icc \>\hspace{6ex} Update an inside flag. \\
-	\icc \>\hspace{6ex} \textcolor[rgb]{0.00,0.00,1.00}{Moves on either $A$ or $B$ multiple steps.}\\
+	\icc \>\hspace{6ex} \textcolor[rgb]{0.00,0.00,1.00}{Moves on either $A$ or $B$ under rule 1 or 2.}\\
 	\icc \>\hspace{3ex} Else \\
-	\icc \>\hspace{6ex} Moves on either $A$ or $B$.\\
+	\icc \>\hspace{6ex} \textcolor[rgb]{0.00,0.07,1.00}{Moves on either $A$ or $B$ under rule 3 or 4.}\\
 	\icc \hspace{1ex} Until both $A$ and $B$ cycle their polygons \\
 	\icc \hspace{0ex} Handle $\mathcal{G}^*_k \subset \mathcal{G}_{k+1}$ and $\mathcal{G}^*_k \subset \mathcal{G}_{k+1}$ and $\mathcal{G}^*_k \bigcap \mathcal{G}_{k+1} = \phi$ cases \\
     \icc \hspace{0ex} Return $\mathcal{G}^*_k \bigcap \mathcal{G}_{k+1}$
@@ -47,24 +82,11 @@ The presented approximate polygon intersection algorithm is indeed a customized 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\emph{Rule 1: 
-If $A \bigcap B \ne \phi$ and advances $A$, then moves on $A$ ``"steps.}
-
-\emph{Rule 2: 
-If $A \bigcap B \ne \phi$ and advances $B$, then moves on $B$ ``"steps.}
-
-\emph{Rule 3:
-If $A \bigcap B = \phi$ and advances $A$, then moves on $B$ ``"steps.}
-
-\emph{Rule 4:
-If $A \bigcap B = \phi$ and advances $B$, then moves on $B$ ``"steps.}
-
-
 \stitle{\textcolor[rgb]{0.00,0.07,1.00}{Regular polygon intersection algorithm}}
 Given intersection polygon $\mathcal{G}^*_k$ of the preview $k$ polygons and the next approximate polygon $\mathcal{G}_{k+1}$, the algorithm returns $\mathcal{G}^*_{k+1} = \mathcal{G}^*_k  \bigcap \mathcal{G}_{k+1}$.
 The sketch of the algorithm is shown in Figure~\ref{alg:r-poly-inter}.
 
-Let $A$ and $B$ be directed edges on $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$ respectively. The algorithm has $A$ and $B$ ``chasing" one another. During the chasing, $A$ or $B$ moves on step by step in the counterclockwise order, following some rules designed depending on geometric conditions, as described in ~\cite{ORourke:Intersection}.
+%Let $A$ and $B$ be directed edges on $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$ respectively. The algorithm has $A$ and $B$ ``chasing" one another. During the chasing, $A$ or $B$ moves on step by step in the counterclockwise order, following some rules designed depending on geometric conditions, as described in ~\cite{ORourke:Intersection}.
 
 
 
