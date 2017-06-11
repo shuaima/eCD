@@ -4,33 +4,33 @@
 
 Observe that the algorithm of ~\cite{ORourke:Intersection} is for general convex polygons, while the approximate polygons are special polygons. We further develop an even fast approximate polygon intersection method based on the properties of approximate polygons.
 %
-The presented approximate polygon intersection algorithm is indeed a customized version of the convex polygon intersection algorithm of ~\cite{ORourke:Intersection}. 
+The presented approximate polygon intersection algorithm is indeed a customized version of the convex polygon intersection algorithm of ~\cite{ORourke:Intersection}.
 
 Let $A$ and $B$ be directed edges on polygons $\mathcal{G}_{k+1}$ and $\mathcal{G}^*_k$ respectively. The major optimization is it allows the algorithm to move on $A$ or $B$ multiple steps at one time.
 %The algorithm has $A$ and $B$ ``chasing" one another in the counterclockwise order like the algorithm ~\cite{ORourke:Intersection}.
-Recall $A$ and $B$ are advanced by the advance rules of the algorithm ~\cite{ORourke:Intersection}.
-Moreover, these rules are indeed four categories, \ie $A \bigcap B \ne \phi$ and advances $A$, $A \bigcap B \ne \phi$ and advances $B$, $A \bigcap B = \phi$ and advances $A$, and $A \bigcap B = \phi$ and advances $B$.
+Recall $A$ and $B$ are advanced by the advancing rules of algorithm ~\cite{ORourke:Intersection}.
+These rules are indeed four categories, \ie $A \bigcap B \ne \phi$ and advances $A$, $A \bigcap B \ne \phi$ and advances $B$, $A \bigcap B = \phi$ and advances $A$, and $A \bigcap B = \phi$ and advances $B$.
 %
 In each of these categories, the new algorithm allows $A$ or $B$ moves on multiple steps, as follows.
 
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \sstab \emph{Rule 1: 
-If $A \bigcap B \ne \phi$ and advances $B$, then moves on $B$ to the next edge of $g(A)$, where $g(A)$ denotes the edge group of edge $A$.}
-
+If $A \bigcap B \ne \phi$ and advances $B$, then advance $B$ to \textcolor[rgb]{1.00,0.00,0.00}{the next edge }of $g(A)$, where $g(A)$ denotes the edge group of edge $A$.}
 
 For example, in Figure~\ref{fig:r-poly-inter}-(3), $A \bigcap B = P_2$ and $B$ moves on, hence rule 1 is applied. $B$ moves forward to the $3^{th}$ edge of $\mathcal{G}^*_k$, \ie the next edge of $g(A) = 4$ (Figure~\ref{fig:r-poly-inter}-(4)).
-%In this case, the $4^{th}$ edge does not exist in $\mathcal{G}^*_k$. 
+%In this case, the $4^{th}$ edge does not exist in $\mathcal{G}^*_k$.
 Note if the $3^{th}$ edge were not actually existing in $\mathcal{G}^*_k$, then $B$ should move on to the next real edge of $\mathcal{G}^*_k$.
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \sstab \emph{Rule 2: 
-If $A \bigcap B \ne \phi$ and advances $A$, then moves on $A$ ``s" steps, where}
+If $A \bigcap B \ne \phi$ and advances $A$, then moves forward $A$ ``$a$" steps, where}
 \vspace{-1ex}
 \begin{equation*}
+\label{equ-rule2}
 \small
-\label{equ-rule1}
-    \hspace{2ex} s =  \left\{
+    \hspace{2ex} a =  \left\{
     \begin{aligned}
         & 2*(g(A) - g(B)),  \hspace{5ex} ~if  ~g(A) > g(B) \\
         & \textcolor[rgb]{1.00,0.00,0.00}{1}, \hspace{21ex}\textcolor[rgb]{1.00,0.00,0.00}{if  ~g(A) = g(B)} \\
@@ -45,13 +45,43 @@ For example, in Figure~\ref{fig:r-poly-inter}-(1), $A \bigcap B = P_1$ and $A$ m
 
 
 
-\sstab \emph{Rule 3:
-If $A \bigcap B = \phi$ and advances $A$, then moves on $B$ ``" steps.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\sstab \emph{Rule 3: 
+If $A \bigcap B = \phi$ and advances $A$, then moves on $A$ and $B$ ``$a$ and $b$" steps respectively, where}
+\vspace{-1ex}
+\begin{equation*}
+\label{equ-rule3}
+\small
+    \hspace{0ex} (a,b) =  \left\{
+    \begin{aligned}
+        & (2,0), ~if~ g(\textcolor[rgb]{1.00,0.00,0.00}{next}(A)) = g(B) ~and~ \textcolor[rgb]{1.00,0.00,0.00}{outside}(A)  \\
+        & (1,1), ~if~ g(next(A)) = g(B) ~and~ \textcolor[rgb]{1.00,0.00,0.00}{inside}(A)\\
+        & (1,0), ~else
+    \end{aligned}
+    \right.       \hspace{2ex}(5)
+\end{equation*}
+\vspace{-1ex}
+
+For example, in Figure~\ref{fig:r-poly-inter}-(4), $A \bigcap B = \phi$ and advances $A$, hence, rule 3 is applied. Because $A$ is inner and $g(next(A))=3 = g(B)$, $A$ and $B$ both move forward one step (Figure~\ref{fig:r-poly-inter}-(5)).
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \sstab \emph{Rule 4:
-If $A \bigcap B = \phi$ and advances $B$, then moves on $B$ ``" steps.}
+If $A \bigcap B = \phi$ and advances $B$, then moves on $A$ and $B$ ``$a$ and $b$" steps respectively, where}
+\vspace{-1ex}
+\begin{equation*}
+\label{equ-rule4}
+\small
+    \hspace{0ex} (a,b) =  \left\{
+    \begin{aligned}
+        & (0,2), ~if~ g(next(B)) = g(A) ~and~ outside(B)\\
+        & (1,1), ~if~ g(next(B)) = g(A) ~and~ inside(B)\\
+        & (0,1), ~else
+    \end{aligned}
+    \right.       \hspace{2ex}(6)
+\end{equation*}
+\vspace{-1ex}
 
 
 
@@ -66,13 +96,14 @@ If $A \bigcap B = \phi$ and advances $B$, then moves on $B$ ``" steps.}
 	{\bf Algorithm} ~$RegularPolyInter$($\mathcal{G}^*_k$, $\mathcal{G}_{k+1}$) \\
 	\bcc \hspace{2ex}\=  Set $A$ and $B$ {arbitrarily} on $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$\\
 	\icc \>\hspace{0ex}\= Repeat \\
-	\icc \>\hspace{3ex} If $A$ intersects $B$ Then \\
+	\icc \>\hspace{3ex} If $A \bigcap B \ne \phi$ Then \\
 	\icc \>\hspace{6ex} {Check for termination.} \\
-	\icc \>\hspace{6ex} Update an inside flag. \\
+	\icc \>\hspace{6ex} Update an \textcolor[rgb]{0.00,0.07,1.00}{inside} flag for $A$ or $B$. \\
 	\icc \>\hspace{6ex} \textcolor[rgb]{0.00,0.00,1.00}{Moves on either $A$ or $B$ under rule 1 or 2.}\\
 	\icc \>\hspace{3ex} Else \\
-	\icc \>\hspace{6ex} \textcolor[rgb]{0.00,0.07,1.00}{Moves on either $A$ or $B$ under rule 3 or 4.}\\
-	\icc \hspace{1ex} Until both $A$ and $B$ cycle their polygons \\
+	\icc \>\hspace{6ex} Update an inside flag for $A$ or $B$. \\
+	\icc \>\hspace{6ex} \textcolor[rgb]{0.00,0.07,1.00}{Moves on $A$ and/or $B$ under rule 3 or 4.}\\
+	\icc \hspace{0ex} Until both $A$ and $B$ cycle their polygons \\
 	\icc \hspace{0ex} Handle $\mathcal{G}^*_k \subset \mathcal{G}_{k+1}$ and $\mathcal{G}^*_k \subset \mathcal{G}_{k+1}$ and $\mathcal{G}^*_k \bigcap \mathcal{G}_{k+1} = \phi$ cases \\
     \icc \hspace{0ex} Return $\mathcal{G}^*_k \bigcap \mathcal{G}_{k+1}$
 }
@@ -117,15 +148,15 @@ Figure~\ref{fig:r-poly-inter} is a running example of the approximate polygon in
 
 \ni (1) Initially, directed edges $A$ and $B$ are on polygons $\mathcal{G}_{k+1}$ and $\mathcal{G}^*_{k}$ separately. $A \bigcap B = P_1$ and $A$ moves on.
 
-\ni (2) $A$ moves forward a 4-steps, from $2^{th}$ to $6^{th}$, under rule 2. Here, $A \bigcap B = \phi$ and $B$ moves on.
+\ni (2) $A$ moves forward a 4-steps, from $2^{th}$ to $6^{th}$, under rule 2. Then, $A \bigcap B = \phi$ and $B$ moves on.
 
-\ni (3) After 4 steps of moving (in turn), here, $A \bigcap B = P_2$ and $B$ moves on.
+\ni (3) After 4 steps of moving (in turn), $A \bigcap B = P_2$ and $B$ moves on.
 
 \ni (4) $B$ moves forward a 2-steps, from $6^{th}$ to $3^{th}$, under rule 1. Then $A \bigcap B = \phi$ and $A$ moves on.
 
-\ni (5) After 5 steps of moving in turn, both $A$ and $B$ cycle their polygons;
+\ni (5) $A$ and $B$ both move forward a step, under rule 3. Then $A \bigcap B = \phi$ and $B$ moves on.
 
-\ni (6) At last, it returns the intersection polygon.
+\ni (6) After 3 steps of moving, both $A$ and $B$ cycle their polygons. The intersection polygon is returned.
 \end{example}
 
 
