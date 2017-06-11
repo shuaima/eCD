@@ -1,5 +1,5 @@
 \section{Preliminaries}
-In this section, we introduce basic concepts and cone intersection based one-pass algorithms using \textcolor[rgb]{0.00,0.07,1.00}{\ped} for trajectory compression.
+In this section, we introduce basic concepts and cone intersection based one-pass algorithms using the perpendicular Euclidean distances for trajectory compression.
 %\textcolor[rgb]{1.00,0.00,0.00}{A discussion and summary is presented in the last.}
 
 
@@ -81,7 +81,7 @@ where points $P'_4$, $P'_2$ and $P'_7$ are the synchronized points of points $P_
 
 
 
-\subsection{Cone Intersection Algorithms using \ped}
+\subsection{Cone Intersection based Algorithms using \ped}
 
 
 The Cone Intersection (\cia) algorithm \cite{Williams:Longest, Sklansky:Cone} was developed in disciplines of graphic and pattern recognition in the late 1970s, for the approximation of arbitrary planar curves by linear segments or finding a polygonal approximation of a set of input data points in a 2D-space. The \sleeve algorithm \cite{Zhao:Sleeve} in the cartographic discipline essentially indeed applies the same idea as the cone intersection algorithm.
@@ -90,18 +90,19 @@ Further, \cite{Dunham:Cone}  optimized algorithm \cia by considering the distanc
 %Note that these notable algorithms are not introduced to the discipline of trajectory compression.
 %though these notable algorithms are famous in disciplines of graphic and pattern recognition,
 
-Given a sequence of data points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$, the \cia algorithms process the input points one by one in order and produce a simplified poly-line.  Instead of using the distance threshold $\epsilon$ directly, \cia converts the distance tolerance into a variable angle tolerance for testing the points.
+Given a sequence of data points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$, the \cia based algorithms process the input points one by one in order, and produce a simplified polyline.  Instead of using the distance threshold $\epsilon$ directly, the \cia based algorithms convert the distance tolerance into a variable angle tolerance for testing the points.
 
-For the start point $P_s$ and any point $P_{s+i}$, $1\le i\le k$, there are two different lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$, satisfying $ped(P_i, \vv{P_sP^u_{s+i}}) = \epsilon$, $ped(P_i, \vv{P_sP^l_{s+i}}) = \epsilon$ and $\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta$. Indeed, they forms a \emph{cone} $\mathcal{C}$($P_s$, $P_{s+i}$, $\epsilon$) (also named a \emph{Sector} in the \sleeve algorithm) taking $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the border lines.
+For the start point $P_s$ and any point $P_{s+i}$ ($i\in[1, k]$), there are two different lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ such that $ped(P_i, \vv{P_sP^u_{s+i}})$ $=$ $ped(P_i, \vv{P_sP^l_{s+i}}) = \epsilon$ and $\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta$. Indeed, they forms a \emph{cone} $\mathcal{C}$($P_s$, $P_{s+i}$, $\epsilon$) (also called a \emph{sector} in algorithm \sleeve \cite{Zhao:Sleeve}) that takes $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the border lines.
 % , where $P_s$ is the center point, and $\vv{P_sP^l_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ are two bound lines.
-Then there exists a point $Q$ such that all points $P_{s+i}$, $i \in [1, ... k]$, have perpendicular distances to
-line $\mathcal{L}(P_s,Q)$ within the given \ped tolerance $\epsilon$ if and only if $\bigcap_{i=1}^{k}\mathcal{C}(P_s, P_{s+i}, \epsilon) \ne \phi$.
-Note that in this case, point $Q$ may not belong to $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$.
-However, if the last point $P_{s+k}$ is chosen as the end point of the approximating line segment, then a narrow \emph{cone} with a distance tolerance $\epsilon/2$ could be employed to ensure the algorithm be \ped error bounded by $\epsilon$ \cite{Zhao:Sleeve}.
+Then there exists a data point $Q$ such that for any data point $P_{s+i}$ ($i \in [1, ... k]$), its \ped to
+line $|P_sQ|$ is less than the given \ped tolerance $\epsilon$ if and only if $\bigcap_{i=1}^{k}\mathcal{C}(P_s, P_{s+i}, \epsilon) \ne \phi$.
 
-Algorithm \cia runs in $O(n)$ time and takes $O(1)$ space.
+\stitle{Remarks}. (1) The point $Q$ may not belong to $[P_{s}, P_{s+1},$ $\ldots, P_{s+k}]$.
+However, if the last point $P_{s+k}$ is chosen as the end point of the approximating line segment (\ie $\vv{P_sP_{s+k}}$), then \emph{cones} with a distance tolerance $\epsilon/2$ could be employed to ensure the \ped error bounded $\epsilon$ \cite{Zhao:Sleeve}. That is, these \cia based algorithms can be easily adopted for trajectory compression by forming cones with a distance tolerance $\epsilon/2$. 
 
-Note that it runs in a 2D plane, and the \sed is not supported in the algorithm.
+\ni(2) It is easy to see that \cia based algorithms  run in $O(n)$ time and takes $O(1)$ space.
+
+%Note that it runs in a 2D plane, and the \sed is not supported in the algorithm.
 
 
 
