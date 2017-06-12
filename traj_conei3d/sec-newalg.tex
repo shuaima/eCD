@@ -26,7 +26,7 @@ The second algorithm, name \cista, outputs points that may not belong to the ori
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\subsection{{One-pass algorithm}}
 \subsection{{Algorithm \cist}}
-In Theorem~\ref{prop-3d-ci}, the point $Q$ may not be in the sub trajectory $[P_s,...,P_e]$. 
+In Theorem~\ref{prop-3d-ci}, the point $Q$ may not be in the sub trajectory $[P_s,...,P_e]$.
 If we mandatory require $Q=P_e$, the end point of the sub trajectory, then a \emph{narrow} spatio-temporal cone with a threshold of $\epsilon/2$ would help.
 
 \begin{theorem}
@@ -126,8 +126,18 @@ For convenience, here, we project the points and the oblique circular cones on a
 
 
 
-If we allow $\overline{\mathcal{T}}$ be not a sub set of $\dddot{\mathcal{T}}$, then an aggressive \cist will bring better compression ratios.
-Figure~\ref{alg:ciseda} is the P-code of the \cista. \cista runs the similar routine as the \cist algorithm, except that in the line 3 of Figure~\ref{alg:CI3d}, $\epsilon/2$ is replaced by $\epsilon$; and in the lines 9-10, $P_e$ is replace by $Q$ of Theorem~\ref{prop-3d-ci}.
+If we allow $\overline{\mathcal{T}}$ be not a sub set of $\dddot{\mathcal{T}}$, then an aggressive \cist, named \cista, which outputs points that may not belong to the original points, will bring better compression ratios.
+This approach, also known as the ``interpolation" method, is used in disciplines of \textcolor[rgb]{1.00,0.00,0.00}{polygonal curve approximation \cite{Heckbert:Survey, Zhao:Sleeve}, time series simplification and trajectory compression \cite{Lin:Operb}}.
+%\cista is the directly result of Corollary~\ref{prop-circle-intersection}.
+%
+
+Given a sub trajectory $[P_s,...,P_e]$, a constant $\epsilon$ and time $t_c > t_s$, algorithm \cista outputs point $Q$ of Corollary~\ref{prop-circle-intersection}, which is got by the following strategies.
+
+(1) if $G^*_e \ne \phi$ and $P^c_e \in G^*_e$, meaning the projection point of $P_e$ on the plane ``$t=t_c$", \ie $P^c_e$, is in the intersection polygon of regular polygons \{$\mathcal{G}_s, \dots, \mathcal{G}_e$\} of all projection circles \{$\mathcal{O}(P^c_s, \epsilon^c_s), \ldots, \mathcal{O}(P^c_e, \epsilon^c_e)$\}, then the point $P_e$ is a candidate point of $Q$ and the algorithm outputs $Q=P_e$.
+
+(2) if $G^*_e \ne \phi$ and $P^c_e \notin G^*_e$, then it gets the central point of intersection polygon $G^*_e$, projects it on the plane ``$t=t_e$", and outputs the projection point $Q$.
+
+Figure~\ref{alg:ciseda} is the P-code of algorithm \cista. \cista runs the similar routine as algorithm \cist, except that in line 3 of Figure~\ref{alg:CI3d}, $\epsilon/2$ is replaced by $\epsilon$; and in lines 9-10 of Figure~\ref{alg:CI3d}, $P_e$ is replace by $Q$, got by the above strategies.
 
 
 %%%%%%%%%%%%%%%%%%%%%Baseline Algorithm
@@ -180,13 +190,13 @@ Figure~\ref{alg:ciseda} is the P-code of the \cista. \cista runs the similar rou
 Figure~\ref{fig:exm-consta} is a running example of the \cista algorithm taking as input the same trajectory as shown in above.
 The points and the oblique circular cones are projected on a x-y space.
 
-\ni (1) After initialization, the \cista algorithm reads point $P_1$ and builds a \emph{oblique circular cone} $\mathcal{C}$($P_0$, $P_{1}$, $\epsilon$), and projects it on the plane $t=t_1$. The inscribe regular polygon $\mathcal{G}_1$ of the projection circle is returned. The intersection of $\mathcal{G}_1$ and $\mathcal{G}^*$ is $\mathcal{G}_1 \ne \phi$.
+\ni (1) After initialization, the \cista algorithm reads point $P_1$ and builds a \emph{oblique circular cone} $\mathcal{C}$($P_0$, $P_{1}$, $\epsilon$), and projects it on the plane $t=t_1$. The inscribe regular polygon $\mathcal{G}_1$ of the projection circle is returned. The intersection of polygon $\mathcal{G}_1$ and polygon $\mathcal{G}^*$ is $\mathcal{G}_1 \ne \phi$.
 
-\ni (2) $P_2$, $P_3$ and $P_4$ are processed, the intersection polygons are not $\phi$.
+\ni (2) $P_2$, $P_3$ and $P_4$ are processed in turn. The intersection polygons are not empty.
 
-\ni (3) For point $P_5$, the intersection of $\mathcal{G}_5$ and $\mathcal{G}^*$ is $\phi$. Thus, line segment $\vv{P_0P'_4}$ is output, and a new section is started, taking $P'_4$ as the new start point.
+\ni (3) For point $P_5$, the intersection of $\mathcal{G}_5$ and $\mathcal{G}^*$ is $\phi$. Thus, line segment $\vv{P_0Q} =\vv{P_0P'_4}$ is output, and a new section is started, taking $P'_4$ as the new start point.
 
-\ni (4) At last, the algorithm outputs 3 continuous line segments, \ie $\vv{P_0P'_4}$, $\vv{P'_4P_8}$ and $\vv{P_8P_{10}}$.
+\ni (4) At last, the algorithm outputs 3 continuous line segments, \ie $\vv{P_0P'_4}$, $\vv{P'_4P_8}$ and $\vv{P_8P_{10}}$. Note $P_8$ and $P_{10}$ are the original points.
 \end{example}
 
 
@@ -196,10 +206,10 @@ The points and the oblique circular cones are projected on a x-y space.
 
 \subsection{Correctness and complexity analysis}
 
-The correctness of algorithm \cist follows from Corollary~\ref{prop-3d-ci-half} and Corollary~\ref{prop-circle-intersection}. For the circles intersection of Corollary~\ref{prop-circle-intersection}, we replace it by the regular polygons intersection.
+The correctness of algorithm \cist follows from Theorem~\ref{prop-3d-ci-half} and Corollary~\ref{prop-circle-intersection}, and the correctness of algorithm \cista follows from Corollary~\ref{prop-circle-intersection}. For the circles intersection of Corollary~\ref{prop-circle-intersection}, we replace it by the regular polygons intersection.
 Meanwhile, given time $t_c$ and projection circles $\mathcal{O}(P^c_i, r^c_i)$, $i \in (s, e]$, we get a inscribed regular polygon from each projection circle.
 If these regular polygons are intersecting, then $sed(P_i, \vv{P_sP_e})<\epsilon$ for all points $P_i$, $i \in [s,e]$.
-This ensures the correctness of the algorithm.
+This ensures the correctness of the algorithms.
 
 
 For time complexity, we have follows.
@@ -211,15 +221,15 @@ For time complexity, we have follows.
 
 \begin{theorem}
 \label{prop-cist-complexity}
-The spatio-temporal cone intersection (\cist) algorithm has a linear time complexity.
+The spatio-temporal cone intersection algorithms (\cist and \cista) have a linear time complexity.
 \end{theorem}
 
 \begin{proof}
-For each data point, the procedures $getPolygon()$ and $getIntersection()$ are both called one time.
+For each data point, the procedures $getRegularPolygon()$ and $getIntersectPolygon()$ are both called one time.
 
-\hspace{-2ex}(1) Procedure $getPolygon()$ completes in $O(1)$ time, and,
+\hspace{-2ex}(1) Procedure $getRegularPolygon()$ completes in $O(1)$ time, and,
 
-\hspace{-2ex}(2) Procedure $getIntersection()$ implements the polygon intersection algorithm presented in [18]. Given the inputs polygon $\mathcal{G}_1$ and $\mathcal{G}_2$, the algorithm has the time complexity of $O(|\mathcal{G}_1.E| + |\mathcal{G}_2.E|)$. By Theorem~\ref{prop-rp-intersection}, we know that $|\mathcal{G}_1.E| \le M$ and $|\mathcal{G}_2.E|\le M$, where $M$ is the number of vertices in a regular polygon. Hence, $getIntersection()$ completes in $O(M)$ time.
+\hspace{-2ex}(2) Procedure $getIntersectPolygon(\mathcal{G}^*, \mathcal{G})$ completes in $O(|\mathcal{G}^*| + |\mathcal{G}|)$ time. By Theorem~\ref{prop-rp-intersection}, we know that $|\mathcal{G}^*| \le M$ and $|\mathcal{G}|\le M$, where $M$ is the number of vertices in a regular polygon. Hence, $getIntersectPolygon()$ completes in $O(M)$ time.
 
 $M$ is a constant, thus, the process of a point needs constant time. Hence, the algorithm has a time complexity of $O(N)$.
 This finishes the proof.
