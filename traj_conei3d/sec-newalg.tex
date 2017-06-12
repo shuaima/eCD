@@ -1,28 +1,33 @@
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%A running example of the \cista algorithm
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[tb!]
+\centering
+\includegraphics[scale=0.8]{figures/Fig-conesta.png}
+\vspace{-1ex}
+\caption{\small A running example of the \cista algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed to three line segments.}
+\vspace{-2ex}
+\label{fig:exm-consta}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \section{One pass algorithms}
-In this section, we present two one pass algorithms implementing the one pass \sed checking method.
+We now are ready to present the \underline{C}one \underline{I}ntersection with \underline{S}ynchronous \underline{E}uclidean \underline{D}istance (\cist) algorithm.
+We present two one pass and error bounded algorithms implementing the above \sed checking method.
+The first algorithm, named \cist, outputs a subset of original points.
+The second algorithm, name \cista, outputs points that may not belong to the original points.
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%example of Algorithm CISED
-\begin{figure*}[tb!]
-\centering
-\includegraphics[scale=0.8]{figures/Fig-ex-conest.png}
-\vspace{-1ex}
-\caption{\small A running example of the \cist algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed to four line segments.}
-\vspace{-2ex}
-\label{fig:exm-const}
-\end{figure*}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\subsection{{One-pass algorithm}}
 \subsection{{Algorithm \cist}}
-
-Note that in Theorem~\ref{prop-3d-ci}, the point $Q$ may not be in the sub trajectory $[P_s,...,P_e]$. If we mandatory require $Q=P_e$, the end point of the sub trajectory, then a \emph{narrow} spatio-temporal cone with a threshold of $\epsilon/2$ would help.
+In Theorem~\ref{prop-3d-ci}, the point $Q$ may not be in the sub trajectory $[P_s,...,P_e]$. 
+If we mandatory require $Q=P_e$, the end point of the sub trajectory, then a \emph{narrow} spatio-temporal cone with a threshold of $\epsilon/2$ would help.
 
 \begin{theorem}
 \label{prop-3d-ci-half}
@@ -35,10 +40,6 @@ If $\bigcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_i, \epsilon/2)} \ne \{P_s\}$, then by
 
 
 
-
-
-We now are ready to present the \underline{C}one \underline{I}ntersection with \underline{S}ynchronous \underline{E}uclidean \underline{D}istance (\cist) algorithm.
-
 As shown in Figure~\ref{alg:CI3d}, the algorithm takes as input a trajectory $\dddot{\mathcal{T}}$, an error bound $\epsilon$ and the edges number $M$ of a regular polygon, and returns the simplified trajectory $\overline{\mathcal{T}}$.
 
 The algorithm first initializes the start and end points $P_s$ and $P_e$ to $P_0$, the intersection polygon $\mathcal{G}^*$ to $\phi$, the output set $\overline{\mathcal{T}}$ to $\phi$ and the index $i$ of point to $1$ (line 1).
@@ -48,11 +49,11 @@ It gets the regular polygon of the current point $P_i$ (line 3).
 This is performed by calling procedure $getRegularPolygon()$. The procedure $getRegularPolygon()$ is an implementation of equations (1)-(3). It first gets the projection circle for the current point, defined by equations (1) and (2); then it builds the inscribed regular polygon $\mathcal{G}$ from the projection circle, defined by equation (3).
 
 After that, it gets the intersection polygon of the current regular polygon $\mathcal{G}$ with the polygon formed by all the preview regular polygons, and saves it in $\mathcal{G}^*$ (line 4).
-This is performed by calling procedure $getIntersectPolygon()$. The {procedure $getIntersectPolygon()$} implements the convex polygons intersection algorithm presented in \cite{ORourke:Intersection}, which returns the intersection polygon of the two input polygons.
+This is performed by calling procedure $getIntersectPolygon()$. The {procedure $getIntersectPolygon()$} implements the regular polygons intersection algorithm of Figure~\ref{alg:r-poly-inter}, which returns the intersection polygon of the two input polygons.
 
 If the intersection polygon is not empty, then the process goes on to the next point (lines 5-7).
 Otherwise, the current section is terminated and a new section is started (lines 8-10).
-
+%
 At last, the algorithm returns $\overline{\mathcal{T}}$ (line 11).
 
 
@@ -65,7 +66,7 @@ At last, the algorithm returns $\overline{\mathcal{T}}$ (line 11).
 \vspace{-1ex}
 \mat{0ex}{
 	{\bf Algorithm} ~$\cist(\dddot{\mathcal{T}}[P_0,\ldots,P_n], \epsilon, M)$\\
-	\sstab
+%	\sstab
 	\bcc \hspace{1ex}\= $P_s := P_0$; $P_e := P_0$; $\overline{\mathcal{T}} := \phi$; $\mathcal{G}^* := \phi$; $i := 1$;\\
 %         \hspace{2ex}     $intersection = \emptyset$;   \\
 	\icc \hspace{1ex}\= \While $i \le n$ \Do \\
@@ -97,18 +98,6 @@ At last, the algorithm returns $\overline{\mathcal{T}}$ (line 11).
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%A running example of the \cista algorithm
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure*}[tb!]
-\centering
-\includegraphics[scale=0.8]{figures/Fig-conesta.png}
-\vspace{-1ex}
-\caption{\small A running example of the \cista algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed to three line segments.}
-\vspace{-2ex}
-\label{fig:exm-consta}
-\end{figure*}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
@@ -131,9 +120,14 @@ For convenience, here, we project the points and the oblique circular cones on a
 
 
 
+
+
 \subsection{{Algorithm \cista}}
 
 
+
+If we allow $\overline{\mathcal{T}}$ be not a sub set of $\dddot{\mathcal{T}}$, then an aggressive \cist will bring better compression ratios.
+Figure~\ref{alg:ciseda} is the P-code of the \cista. \cista runs the similar routine as the \cist algorithm, except that in the line 3 of Figure~\ref{alg:CI3d}, $\epsilon/2$ is replaced by $\epsilon$; and in the lines 9-10, $P_e$ is replace by $Q$ of Theorem~\ref{prop-3d-ci}.
 
 
 %%%%%%%%%%%%%%%%%%%%%Baseline Algorithm
@@ -145,18 +139,18 @@ For convenience, here, we project the points and the oblique circular cones on a
 \vspace{-1ex}
 \mat{0ex}{
 	{\bf Algorithm} ~$\cista(\dddot{\mathcal{T}}[P_0,\ldots,P_n], \epsilon, M)$\\
-	\sstab
+%	\sstab
 	\bcc \hspace{1ex}\= $P_s := P_0$; $P_e := P_0$; $\overline{\mathcal{T}} := \phi$; $\mathcal{G}^* := \phi$; $i := 1$;\\
 %         \hspace{2ex}     $intersection = \emptyset$;   \\
 	\icc \hspace{1ex}\= \While $i \le n$ \Do \\
-	\icc \>\hspace{3ex} $\mathcal{G} := {getRegularPolygon}$($P_s$, $P_i$, $\epsilon/2$, $M$) \\
+	\icc \>\hspace{3ex} $\mathcal{G} := {getRegularPolygon}$($P_s$, $P_i$, $\epsilon$, $M$) \\
 	\icc \>\hspace{3ex} $\mathcal{G}^* := {getIntersectPolygon}(\mathcal{G}^*, ~\mathcal{G})$ \\
 	\icc \>\hspace{3ex} \If $\mathcal{G}^* \ne \phi$ \Then \\
 	\icc \> \hspace{6ex} $P_e := P_i$ \\
 	\icc \> \hspace{6ex} $i := i+1$ \\
 	\icc \>\hspace{3ex} \Else\\
-	\icc \> \hspace{6ex} $\overline{\mathcal{T}} := \overline{\mathcal{T}}\cup \{\mathcal{L}(P_s,P_e)\}$ \\
-	\icc \> \hspace{6ex} $P_s = P_e$; $\mathcal{G}^* = \phi$ \\
+	\icc \> \hspace{6ex} $\overline{\mathcal{T}} := \overline{\mathcal{T}}\cup \{\mathcal{L}(P_s,Q)\}$ \\
+	\icc \> \hspace{6ex} $P_s = Q$; $\mathcal{G}^* = \phi$ \\
 	\icc \hspace{1ex}\Return $\overline{\mathcal{T}}$
 %
 %	{\bf procedure} $getPolygon$($P_s$, $P_i$, $\epsilon/2$) \\
@@ -176,12 +170,28 @@ For convenience, here, we project the points and the oblique circular cones on a
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-If we allow $\overline{\mathcal{T}}$ be not a sub set of $\dddot{\mathcal{T}}$, then an aggressive \cist (\ie in Figure~\ref{alg:CI3d}, $\epsilon/2$ of line 3 be replaced by $\epsilon$ and $P_e$ of lines 9-10 be replace by $Q$ of Theorem~\ref{prop-3d-ci}) will bring better compression ratios.
+
+
+
+
 
 \begin{example}
 \label{exm-alg-conesta}
 Figure~\ref{fig:exm-consta} is a running example of the \cista algorithm taking as input the same trajectory as shown in above.
+The points and the oblique circular cones are projected on a x-y space.
+
+\ni (1) After initialization, the \cista algorithm reads point $P_1$ and builds a \emph{oblique circular cone} $\mathcal{C}$($P_0$, $P_{1}$, $\epsilon$), and projects it on the plane $t=t_1$. The inscribe regular polygon $\mathcal{G}_1$ of the projection circle is returned. The intersection of $\mathcal{G}_1$ and $\mathcal{G}^*$ is $\mathcal{G}_1 \ne \phi$.
+
+\ni (2) $P_2$, $P_3$ and $P_4$ are processed, the intersection polygons are not $\phi$.
+
+\ni (3) For point $P_5$, the intersection of $\mathcal{G}_5$ and $\mathcal{G}^*$ is $\phi$. Thus, line segment $\vv{P_0P'_4}$ is output, and a new section is started, taking $P'_4$ as the new start point.
+
+\ni (4) At last, the algorithm outputs 3 continuous line segments, \ie $\vv{P_0P'_4}$, $\vv{P'_4P_8}$ and $\vv{P_8P_{10}}$.
 \end{example}
+
+
+
+
 
 
 \subsection{Correctness and complexity analysis}
