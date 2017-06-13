@@ -16,24 +16,26 @@
 
 Observe that the \cpia algorithm (Figure~\ref{alg:c-poly-inter}) is for general convex polygons, while the approximate polygons are special polygons. We further develop an even fast polygon intersection method based on the properties of approximate polygons.
 %
-The presented polygon intersection algorithm is indeed a customized version of the \cpia algorithm.
+The presented regular polygon intersection (\rpia in short) algorithm is indeed a customized version of the \cpia algorithm.
+The major modifications are 2 folds.
 
-\stitle{Saves polygon in array}.
+\ni \emph{{(1) Saves polygons in arrays}}.
 In \cpia algorithm, polygons are saved in linked lists.
 Considering the regular polygons each having a fixed number of edges, marked from $1$ to $M$, we save polygons in arrays. This policy alow us to quickly address an edge or vertex by its index.
 %, as well as avoid the creating and removing of link nodes.
 
 %\stitle{Parallel of edges}.
 
-\stitle{Advances multiple steps}.
+\ni \emph{(2) Advances multiple steps}.
 Let $A$ and $B$ be directed edges on polygons $\mathcal{G}_{k+1}$ and $\mathcal{G}^*_k$ respectively.
-Originally, $A$ and $B$ are advanced step by step each time by the advancing rules of the \cpia algorithm.
+Originally, $A$ and $B$ are advanced step by step each time by the advancing rules of algorithm \cpia .
 %
-However, the new algorithm allows the algorithm to advance $A$ or $B$ multiple steps at one time.
-%
+However, algorithm \rpia allows to advance $A$ or $B$ multiple steps at one time by the following rules.
+
+\eat{
 The advancing rules of \cpia are indeed four categories, \ie $A \bigcap B \ne \phi$ and advances $A$, $A \bigcap B \ne \phi$ and advances $B$, $A \bigcap B = \phi$ and advances $A$, and $A \bigcap B = \phi$ and advances $B$.
 For $A \bigcap B \ne \phi$, extensions are developed, as follows.
-
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{1ex}
@@ -169,11 +171,11 @@ If $A \bigcap B = \phi$ and advances $B$, then moves $A$ and $B$ forward ``$a$ a
 
 
 
-\stitle{{Regular polygon intersection algorithm.}}
+\stitle{{Regular polygon intersection algorithm (\rpia).}}
 Given intersection polygon $\mathcal{G}^*_k$ of the preview $k$ polygons and the next approximate polygon $\mathcal{G}_{k+1}$, the algorithm returns $\mathcal{G}^*_{k+1} = \mathcal{G}^*_k  \bigcap \mathcal{G}_{k+1}$.
 The sketch of the algorithm is shown in Figure~\ref{alg:r-poly-inter}.
 %
-It runs the similar routine as the \cpia algorithm, except the advance strategies are partitioned into two parts, \ie $A \bigcap B \ne \phi$ and $A \bigcap B = \phi$, where the former applies rules 1 and 2 (line 6), and the later remains the same as the \cpia algorithm (line 8).
+It runs the similar routine as the \cpia algorithm, except that it saves polygons in arrays, and the advance strategies are partitioned into two parts, \ie $A \bigcap B \ne \phi$ and $A \bigcap B = \phi$, where the former applies rules 1 and 2 (line 6), and the later remains the same as the \cpia algorithm (line 8).
 
 
 
