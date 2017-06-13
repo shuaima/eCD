@@ -16,15 +16,20 @@
 
 Observe that the \cpia algorithm (Figure~\ref{alg:c-poly-inter}) is for general convex polygons, while the approximate polygons are special polygons. We further develop an even fast polygon intersection method based on the properties of approximate polygons.
 %
-The presented approximate polygon intersection algorithm is indeed a customized version of the \cpia algorithm.
-%
-Let $A$ and $B$ be directed edges on polygons $\mathcal{G}_{k+1}$ and $\mathcal{G}^*_k$ respectively. 
+The presented polygon intersection algorithm is indeed a customized version of the \cpia algorithm.
+
+\stitle{Data structures}.
+
+\stitle{Parallel of edges}.
+
+\stitle{Advancing rules}.
+Let $A$ and $B$ be directed edges on polygons $\mathcal{G}_{k+1}$ and $\mathcal{G}^*_k$ respectively.
 Originally, $A$ and $B$ are advanced step by step each time by the advancing rules of the \cpia algorithm.
 %
 However, the new algorithm allows the algorithm to advance $A$ or $B$ multiple steps at one time.
 
 The advancing rules of the \cpia algorithm are indeed four categories, \ie $A \bigcap B \ne \phi$ and advances $A$, $A \bigcap B \ne \phi$ and advances $B$, $A \bigcap B = \phi$ and advances $A$, and $A \bigcap B = \phi$ and advances $B$.
-In each of these categories, an extension is developed, as follows.
+For $A \bigcap B \ne \phi$, extensions are developed, as follows.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -60,7 +65,7 @@ If $A \bigcap B \ne \phi$ and advances $A$, then moves $A$ forward ``$a$" steps,
 For example, in Figure~\ref{fig:r-poly-inter}-(1), $A \bigcap B = P_1$ and $A$ moves on, hence, rule 2 is applied. Because $g(A)=2 < 8=g(B)$, $A$ moves forward $2*(M+g(A) - g(B)) = 2*(8+2-8)= 4$ steps, \ie from $2^{th}$ to $6^{th}$ (Figure~\ref{fig:r-poly-inter}-(2)).
 
 
-
+\eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{1ex}
 \ni \emph{\underline{Rule 3}:
@@ -73,9 +78,9 @@ If $A \bigcap B = \phi$ and advances $A$, then moves $A$ and $B$ forward ``$a$ a
     \begin{aligned}
         & (2,0), ~if~ g(next(A)) = g(B) ~and~ {outside}(A)  \\
         & (1,1), ~if~ g(next(A)) = g(B) ~and~ {inside}(A)\\
-        & (1,0), ~else 
+        & (1,0), ~else
     \end{aligned}
-    \right.       \hspace{2ex}(5) 
+    \right.       \hspace{2ex}(5)
     %\vspace{-1ex}
 \end{equation*}
 %\vspace{-1ex}
@@ -105,7 +110,7 @@ If $A \bigcap B = \phi$ and advances $B$, then moves $A$ and $B$ forward ``$a$ a
 \end{equation*}
 \vspace{-1ex}
 
-
+}%%%%%%%%%%%%%%%%%%%%%%%%%%End of Eat
 
 
 
@@ -133,11 +138,11 @@ If $A \bigcap B = \phi$ and advances $B$, then moves $A$ and $B$ forward ``$a$ a
 	\bcc \hspace{2ex}\=  Set $A$ and $B$ {arbitrarily} on $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$\\
 	\icc \>\hspace{0ex}\= Repeat \\
 	\icc \>\hspace{3ex} If $A \bigcap B \ne \phi$ Then \\
-	\icc \>\hspace{6ex} {Check for termination.} \\
+	\icc \>\hspace{6ex} {\textcolor[rgb]{0.00,0.00,1.00}{Check for termination}.} \\
 	\icc \>\hspace{6ex} Update an {\emph{inside}} flag for $A$ or $B$. \\
 	\icc \>\hspace{6ex} {\emph{Moves on either $A$ or $B$ under rule 1 or 2.}}\\
 	\icc \>\hspace{3ex} Else \\
-	\icc \>\hspace{6ex} {\emph{Moves on $A$ and/or $B$ under rule 3 or 4.}}\\
+	\icc \>\hspace{6ex} {\emph{Moves on either $A$ or $B$.}}\\
 	\icc \hspace{1ex} Until both $A$ and $B$ cycle their polygons \\
 	\icc \hspace{0ex} Handle $\mathcal{G}^*_k \subset \mathcal{G}_{k+1}$ and $\mathcal{G}^*_k \subset \mathcal{G}_{k+1}$ and $\mathcal{G}^*_k \bigcap \mathcal{G}_{k+1} = \phi$ cases \\
     \icc \hspace{0ex} Return $\mathcal{G}^*_k \bigcap \mathcal{G}_{k+1}$
@@ -164,8 +169,8 @@ If $A \bigcap B = \phi$ and advances $B$, then moves $A$ and $B$ forward ``$a$ a
 \stitle{{Regular polygon intersection algorithm.}}
 Given intersection polygon $\mathcal{G}^*_k$ of the preview $k$ polygons and the next approximate polygon $\mathcal{G}_{k+1}$, the algorithm returns $\mathcal{G}^*_{k+1} = \mathcal{G}^*_k  \bigcap \mathcal{G}_{k+1}$.
 The sketch of the algorithm is shown in Figure~\ref{alg:r-poly-inter}.
-
-It runs the similar routine as the \cpia algorithm, except the advance strategies are partitioned into two parts, \ie $A \bigcap B \ne \phi$ and $A \bigcap B = \phi$, where the former applies rules 1 and 2 (line 6), and the later applies rules 3 and 4 (line 8).
+%
+It runs the similar routine as the \cpia algorithm, except the advance strategies are partitioned into two parts, \ie $A \bigcap B \ne \phi$ and $A \bigcap B = \phi$, where the former applies rules 1 and 2 (line 6), and the later remains the same as the \cpia algorithm (line 8).
 
 
 
@@ -183,9 +188,9 @@ Figure~\ref{fig:r-poly-inter} is a running example of the approximate polygon in
 
 \ni (3) After 4 steps of moving (in turn), $A \bigcap B = P_2$ and $B$ moves on.
 
-\ni (4) $B$ moves forward a 2-steps, from $6^{th}$ to $3^{th}$, under rule 1. Then $A \bigcap B = \phi$ and $A$ moves on.
+\ni (4) $B$ advances a 2-steps, from $6^{th}$ to $3^{th}$, under rule 1. Then $A \bigcap B = \phi$ and $A$ moves on.
 
-\ni (5) $A$ and $B$ both move forward a step, under rule 3. Then $A \bigcap B = \phi$ and $B$ moves on.
+\ni (5) $A$ advances a step. Then $A \bigcap B = \phi$ and $B$ moves on.
 
 \ni (6) After 3 steps of moving, both $A$ and $B$ cycle their polygons. The intersection polygon is returned.
 \end{example}
