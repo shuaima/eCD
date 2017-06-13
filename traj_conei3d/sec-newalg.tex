@@ -14,7 +14,7 @@
 
 
 \section{One pass algorithms}
-We now are ready to present the \underline{C}one \underline{I}ntersection with \underline{S}ynchronous \underline{E}uclidean \underline{D}istance (\cist) algorithm.
+We now are ready to present the cone intersection with synchronous Euclidean distance algorithms.
 We present two one pass and error bounded algorithms implementing the above \sed checking method.
 The first algorithm, named \cist, outputs a subset of original points.
 The second algorithm, name \cista, outputs points that may not belong to the original points.
@@ -40,7 +40,7 @@ If $\bigcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_i, \epsilon/2)} \ne \{P_s\}$, then by
 
 
 
-As shown in Figure~\ref{alg:CI3d}, the algorithm takes as input a trajectory $\dddot{\mathcal{T}}$, an error bound $\epsilon$ and the edges number $M$ of a regular polygon, and returns the simplified trajectory $\overline{\mathcal{T}}$.
+This algorithm is named \cist. As shown in Figure~\ref{alg:CI3d}, it takes as input a trajectory $\dddot{\mathcal{T}}$, an error bound $\epsilon$ and the edges number $M$ of a regular polygon, and returns the simplified trajectory $\overline{\mathcal{T}}$.
 
 The algorithm first initializes the start and end points $P_s$ and $P_e$ to $P_0$, the intersection polygon $\mathcal{G}^*$ to $\phi$, the output set $\overline{\mathcal{T}}$ to $\phi$ and the index $i$ of point to $1$ (line 1).
 
@@ -49,7 +49,7 @@ It gets the regular polygon of the current point $P_i$ (line 3).
 This is performed by calling procedure $getRegularPolygon()$. The procedure $getRegularPolygon()$ is an implementation of equations (1)-(3). It first gets the projection circle for the current point, defined by equations (1) and (2); then it builds the inscribed regular polygon $\mathcal{G}$ from the projection circle, defined by equation (3).
 
 After that, it gets the intersection polygon of the current regular polygon $\mathcal{G}$ with the polygon formed by all the preview regular polygons, and saves it in $\mathcal{G}^*$ (line 4).
-This is performed by calling procedure $getIntersectPolygon()$. The {procedure $getIntersectPolygon()$} implements the regular polygons intersection algorithm of Figure~\ref{alg:r-poly-inter}, which returns the intersection polygon of the two input polygons.
+This is performed by calling procedure $\rpia()$, as shown in Figure~\ref{alg:r-poly-inter}, which returns the intersection polygon of the two input polygons.
 
 If the intersection polygon is not empty, then the process goes on to the next point (lines 5-7).
 Otherwise, the current section is terminated and a new section is started (lines 8-10).
@@ -71,7 +71,7 @@ At last, the algorithm returns $\overline{\mathcal{T}}$ (line 11).
 %         \hspace{2ex}     $intersection = \emptyset$;   \\
 	\icc \hspace{1ex}\= \While $i \le n$ \Do \\
 	\icc \>\hspace{3ex} $\mathcal{G} := {getRegularPolygon}$($P_s$, $P_i$, $\epsilon/2$, $M$) \\
-	\icc \>\hspace{3ex} $\mathcal{G}^* := {getIntersectPolygon}(\mathcal{G}^*, ~\mathcal{G})$ \\
+	\icc \>\hspace{3ex} $\mathcal{G}^* := {\rpia}(\mathcal{G}^*, ~\mathcal{G})$ \\
 	\icc \>\hspace{3ex} \If $\mathcal{G}^* \ne \phi$ \Then \\
 	\icc \> \hspace{6ex} $P_e := P_i$ \\
 	\icc \> \hspace{6ex} $i := i+1$ \\
@@ -154,7 +154,7 @@ Figure~\ref{alg:ciseda} is the P-code of algorithm \cista. \cista runs the simil
 %         \hspace{2ex}     $intersection = \emptyset$;   \\
 	\icc \hspace{1ex}\= \While $i \le n$ \Do \\
 	\icc \>\hspace{3ex} $\mathcal{G} := {getRegularPolygon}$($P_s$, $P_i$, $\epsilon$, $M$) \\
-	\icc \>\hspace{3ex} $\mathcal{G}^* := {getIntersectPolygon}(\mathcal{G}^*, ~\mathcal{G})$ \\
+	\icc \>\hspace{3ex} $\mathcal{G}^* := {\rpia}(\mathcal{G}^*, ~\mathcal{G})$ \\
 	\icc \>\hspace{3ex} \If $\mathcal{G}^* \ne \phi$ \Then \\
 	\icc \> \hspace{6ex} $P_e := P_i$ \\
 	\icc \> \hspace{6ex} $i := i+1$ \\
@@ -225,14 +225,14 @@ The spatio-temporal cone intersection algorithms (\cist and \cista) have a linea
 \end{theorem}
 
 \begin{proof}
-For each data point, the procedures $getRegularPolygon()$ and $getIntersectPolygon()$ are both called one time.
-(1) Procedure $getRegularPolygon()$ completes in $O(1)$ time, and,
-(2) Procedure $getIntersectPolygon(\mathcal{G}^*, \mathcal{G})$ completes in $O(M)$ time.
+For each data point, the procedures $getRegularPolygon()$ and $\rpia()$ are both called one time.
+(1) Procedure $getRegularPolygon()$ completes in $O(1)$ time, and
+(2) Procedure $\rpia(\mathcal{G}^*, \mathcal{G})$ completes in $O(M)$ time.
 %completes in $O(|\mathcal{G}^*| + |\mathcal{G}|)$ time. By Theorem~\ref{prop-rp-intersection}, we know that $|\mathcal{G}^*| \le M$ and $|\mathcal{G}|\le M$, where $M$ is the number of vertices in a regular polygon. Hence, $getIntersectPolygon()$
 
-$M$ is a constant, thus, the process of a point needs constant time. Hence, the algorithm has a time complexity of $O(N)$.
+$M$ is a constant, thus, the process of a point needs constant time. Hence, these algorithms both have a time complexity of $O(N)$.
 This finishes the proof.
 \end{proof}
 
 
-{For space complexity, the algorithm needs $O(M)$ space.}
+{For space complexity, the algorithms need $O(M)$ space.}
