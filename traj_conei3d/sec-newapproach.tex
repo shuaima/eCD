@@ -1,39 +1,36 @@
 %\section{One-pass Spatio-temporal data simplification}
 \section{One-pass \sed checking method}
 
-In this section, we first discuss the properties of synchronized data points and \sed, then we present a novel \sed checking method by extending the idea of cone intersection.
+In this section, we first discuss the properties of synchronized points and \sed, then we present a novel \sed checking method by extending the idea of cone intersection.
 %Finally, we provide a one-pass, error-bounded and \sed enabled trajectory simplification algorithm.
 
 
 
 \subsection{Properties of \sed} %and synchronous points     %Spatio-temporal Data
 Recall in its definition, the \sed of point $P_i$ to a directed line segment $\mathcal{L} = \vv{P_{s}P_{e}}$, denoted as $sed(P_i, \mathcal{L})$, is $|P_iP_i'|$, the distance from $P_i$ to its synchronized point $P_i' (x_i', y_i', t_i)$ \wrt $\mathcal{L}$.
-We first demonstrate the \sed and the synchronized points in the spatio-temporal space, as shown in Figure~\ref{fig:sed3d}.
+Let $P_s$ be the original of coordination, we demonstrate the \sed and the synchronized points in the spatio-temporal space, as shown in Figure~\ref{fig:sed3d}.
 From the spatio-temporal space, we have the following findings.
-
-
 
 
 %\textcolor[rgb]{1.00,0.00,0.00}{The \sed is demonstrated in 2D space in the previews works~\cite{Meratnia:Spatiotemporal, Chen:Fast, Muckell:Compression, Popa:Spatio}. However,  the trajectory and the \sed are also capable presented in 3D space.}
 
 \begin{lemma}
 \label{prop-3d-syn-point}
-Given a sub trajectory $[P_s, \ldots, P_e]$ and a point $P_i$, $s<i<e$, the intersection point $P'_i$ of the plane $t=t_i$ and the directed line segment $\mathcal{L} = \vv{P_sP_e}$ is the synchronized data point of $P_i$ \wrt $\mathcal{L}$ in the spatio-temporal space.
+Given a sub trajectory $[P_s, \ldots, P_e]$ and a point $P_i$, $s<i<e$, the intersection point $P'_i$ of the directed line segment $\mathcal{L} = \vv{P_sP_e}$ and the plane $t=t_i$ is the synchronized data point of $P_i$ \wrt $\mathcal{L}$ in the spatio-temporal space.
 \end{lemma}
 
 \begin{proof}
-As shown in Figure~\ref{fig:sed3d}, the point $P'_i (x'_i, y'_i, t'_i)$ is the intersection point of the plane $t=t_i$ and the directed line segment $\mathcal{L} = \vv{P_sP_e}$, thus, $t'_i = t_i$ and $\frac{t'_i - t_s}{t_e - t_s}$ = $\frac{t_i - t_s}{t_e - t_s}$  = $\frac{|P_sP'_i|}{|P_sP_e|}$ = $\frac{x'_i - x_s}{x_e - x_s}$ = $\frac{y'_i - y_s}{y_e - y_s}$. Hence, $x'_i = x_s +  \frac{t_i-t_s}{t_e - t_s}(x_e - x_s)$ and $y'_i = y_s +  \frac{t_i - t_s}{t_e - t_s}(y_e - y_s)$, which satisfies the definition of the synchronized data point $P_i$ \wrt $\vv{P_sP_e}$.
+As shown in Figure~\ref{fig:sed3d}, the point $P'_i (x'_i, y'_i, t'_i)$ is the intersection point of the directed line segment $\mathcal{L} = \vv{P_sP_e}$ and the plane $t=t_i$, thus, $t'_i = t_i$ and $\frac{t'_i - t_s}{t_e - t_s}$ = $\frac{t_i - t_s}{t_e - t_s}$  = $\frac{|P_sP'_i|}{|P_sP_e|}$ = $\frac{x'_i - x_s}{x_e - x_s}$ = $\frac{y'_i - y_s}{y_e - y_s}$. Hence, $x'_i = x_s +  \frac{t_i-t_s}{t_e - t_s}(x_e - x_s)$ and $y'_i = y_s +  \frac{t_i - t_s}{t_e - t_s}(y_e - y_s)$, which satisfies the definition of the synchronized data point $P_i$ \wrt $\vv{P_sP_e}$.
 \end{proof}
 
-
-
+The distance from point $P_i$ to synchronized point $P'_i$, $|P_iP'_i|$, is the \sed of $P_i$ \wrt $\vv{P_sP_e}$.
 
 %\begin{definition}
 %\label{def:scircle}
 \stitle{Synchronous Circles ($\mathcal{O})$}. The synchronous circle of point $P_i$, denoted as $\mathcal{O}(P_i, \epsilon)$, is a circle on the plane $t=t_i$, taking $P_i$ as the center point and having radius of $\epsilon$. %(see Figure~\ref{fig:sed3d}).
 %\end{definition}
 
-For example, in Figure~\ref{fig:sed3d}, the point $P_i$ has a synchronous circles $\mathcal{O}(P_i, \epsilon)$. All points in the circle have distances (\ie \sed) less than $\epsilon$ to $P_i$.
+For example, in Figure~\ref{fig:sed3d}, the point $P_i$ has a synchronous circles $\mathcal{O}(P_i, \epsilon)$. Any point $P'_i$ in the circle has distance, \ie $|P_iP'_i|$, less than $\epsilon$ to point $P_i$. 
 
 With Lemma~\ref{prop-3d-syn-point} and the notion of \emph{synchronous circle}, and from the geometrical perspective, we have Theorem~\ref{prop-3d-sed-sim}.
 
@@ -70,8 +67,8 @@ We have the conclusion.
 
 \subsection{Spatio-temporal cone intersection}
 
-In this section, we expand the \emph{cone intersection} method from a 2D space, \ie the $x$-$y$ space, to a 3D space, \ie the spatio-temporal space.
-In the spatio-temporal space, the notion \emph{cone} of the cone intersection \cite{Williams:Longest, Sklansky:Cone} (or \emph{sector} of sleeve \cite{Zhao:Sleeve}) algorithm is extended to a new notion, \ie the \emph{spatio-temporal cone}.
+We next extend the \emph{cone intersection} method \cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve} from a 2D space, \ie the $x$-$y$ space, to a 3D space, \ie the spatio-temporal space.
+In the spatio-temporal space, the notion \emph{cone} of cone intersection \cite{Williams:Longest, Sklansky:Cone} (or \emph{sector} in sleeve \cite{Zhao:Sleeve}) algorithm is extended to a new notion in 3D space, \ie the \emph{spatio-temporal cone}.
 
 \stitle{Spatio-temporal cones ($\mathcal{C}$)}. Given a sub trajectory $\{P_s,...,P_e\}$ and a constant $\epsilon$, the spatio-temporal cone of point $P_i$ \wrt point $P_s$, denoted as $\mathcal{C}(P_s, P_i, \epsilon)$, is an oblique circular cone which takes the start point $P_s$ as its vertex and the synchronous circle $\mathcal{O}(P_i, \epsilon)$ as its bottom circle.
 
