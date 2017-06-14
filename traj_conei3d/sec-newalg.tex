@@ -69,7 +69,7 @@ At last, the algorithm returns $\overline{\mathcal{T}}$ (line 11).
 \mat{0ex}{
 	{\bf Algorithm} ~$\cist(\dddot{\mathcal{T}}[P_0,\ldots,P_n], \epsilon, M)$\\
 %	\sstab
-	\bcc \hspace{1ex}\= $P_s := P_0$; $P_e := P_0$; $\overline{\mathcal{T}} := \phi$; $\mathcal{G}^* := \phi$; $i := 1$;\\
+	\bcc \hspace{1ex}\= $P_s := P_0$;  $P_e := P_0$;  $\overline{\mathcal{T}} := \phi$;  $\mathcal{G}^* := \phi$;  $i := 1$\\
 %         \hspace{2ex}     $intersection = \emptyset$;   \\
 	\icc \hspace{1ex}\= \While $i \le n$ \Do \\
 	\icc \>\hspace{3ex} $\mathcal{G} := {getRegularPolygon}$($P_s$, $P_i$, $\epsilon/2$, $M$) \\
@@ -79,19 +79,19 @@ At last, the algorithm returns $\overline{\mathcal{T}}$ (line 11).
 	\icc \> \hspace{6ex} $i := i+1$ \\
 	\icc \>\hspace{3ex} \Else\\
 	\icc \> \hspace{6ex} $\overline{\mathcal{T}} := \overline{\mathcal{T}}\cup \{\mathcal{L}(P_s,P_e)\}$ \\
-	\icc \> \hspace{6ex} $P_s = P_e$; $\mathcal{G}^* = \phi$ \\
+	\icc \> \hspace{6ex} $P_s := P_e$;  $\mathcal{G}^* := \phi$ \\
 	\icc \hspace{1ex}\Return $\overline{\mathcal{T}}$ \\
 \\
 	{\bf Procedure} ~$getRegularPolygon(P_s,P_i,r,M,t_c)$ \\
 	\bcc \hspace{1ex} \textcolor[rgb]{0.00,0.07,1.00}{Transform $P_s$ and $P_i$ to points in Cartesian coordinates} \\
-	\icc \hspace{1ex} $k = (t_c-t_s)/(P_i.t - P_s.t)$ \\
-	\icc \hspace{1ex} $r = k*r$  \\
-	\icc \hspace{1ex} $P_i.x = P_s.x + k*(P_i.x-P_s.x)$ \\
-	\icc \hspace{1ex} $P_i.y = P_s.y + k*(P_i.y-P_s.y)$ \\
-	\icc \hspace{1ex} \For $(j = 1;j \le M;j++)$ \\
-	\icc \> \hspace{3ex} $\theta =  (2 * j + 1)*\pi /M $ \\
-	\icc \> \hspace{3ex} $\mathcal{G}.vertex[j].x = P_i.x + r*\cos\theta$\\
-	\icc \> \hspace{3ex} $\mathcal{G}.vertex[j].y = P_i.y + r*\sin\theta$\\
+	\icc \hspace{1ex} $k := (t_c-t_s)/(P_i.t - P_s.t)$ \\
+	\icc \hspace{1ex} $r := k*r$  \\
+	\icc \hspace{1ex} $P_i.x := P_s.x + k*(P_i.x-P_s.x)$ \\
+	\icc \hspace{1ex} $P_i.y := P_s.y + k*(P_i.y-P_s.y)$ \\
+	\icc \hspace{1ex} \For $(j := 1;j \le M;j++)$ \\
+	\icc \> \hspace{3ex} $\theta :=  (2 * j + 1)*\pi /M $ \\
+	\icc \> \hspace{3ex} $\mathcal{G}.vertex[j].x := P_i.x + r*\cos\theta$\\
+	\icc \> \hspace{3ex} $\mathcal{G}.vertex[j].y := P_i.y + r*\sin\theta$\\
 	\icc \hspace{1ex}\Return $\mathcal{G}$
 }
 \vspace{-2ex}
@@ -137,7 +137,7 @@ For convenience, here, we project the points and the oblique circular cones on a
 
 
 If we allow $\overline{\mathcal{T}}$ be not a sub set of $\dddot{\mathcal{T}}$, then an aggressive \cist, named \cista, which outputs points that may not belong to the original points, will bring better compression ratios.
-This approach, known as the ``interpolation" method, is used in disciplines of polygonal curve approximation \cite{Williams:Bounded, Heckbert:Survey, Zhao:Sleeve}, time series approximation \cite{ORourke:Fitting, Keogh:online, Elmeleegy:Stream, Xie:Stream, Luo:Streaming} and trajectory simplification \cite{Trajcevski:DDR, Lin:Operb}. The ``interpolation" method is also called \emph{weak simplification} in \cite{Trajcevski:DDR}.
+This method, known as the ``interpolation" approach, is used in disciplines of polygonal curve approximation \cite{Williams:Bounded, Heckbert:Survey, Zhao:Sleeve}, time series approximation \cite{ORourke:Fitting, Keogh:online, Elmeleegy:Stream, Xie:Stream, Luo:Streaming} and trajectory simplification \cite{Trajcevski:DDR, Lin:Operb}. The ``interpolation" approach is also called a \emph{weak simplification} in \cite{Trajcevski:DDR}.
 
 %\cista is the directly result of Corollary~\ref{prop-circle-intersection}.
 %
@@ -161,7 +161,7 @@ Figure~\ref{alg:ciseda} is the P-code of algorithm \cista. \cista runs the simil
 \mat{0ex}{
 	{\bf Algorithm} ~$\cista(\dddot{\mathcal{T}}[P_0,\ldots,P_n], \epsilon, M)$\\
 %	\sstab
-	\bcc \hspace{1ex}\= $P_s := P_0$; $P_e := P_0$; $\overline{\mathcal{T}} := \phi$; $\mathcal{G}^* := \phi$; $i := 1$;\\
+	\bcc \hspace{1ex}\= $P_s := P_0$;  $P_e := P_0$;  $\overline{\mathcal{T}} := \phi$;  $\mathcal{G}^* := \phi$;  $i := 1$\\
 %         \hspace{2ex}     $intersection = \emptyset$;   \\
 	\icc \hspace{1ex}\= \While $i \le n$ \Do \\
 	\icc \>\hspace{3ex} $\mathcal{G} := {getRegularPolygon}$($P_s$, $P_i$, $\epsilon$, $M$) \\
@@ -171,7 +171,7 @@ Figure~\ref{alg:ciseda} is the P-code of algorithm \cista. \cista runs the simil
 	\icc \> \hspace{6ex} $i := i+1$ \\
 	\icc \>\hspace{3ex} \Else\\
 	\icc \> \hspace{6ex} $\overline{\mathcal{T}} := \overline{\mathcal{T}}\cup \{\mathcal{L}(P_s,Q)\}$ \\
-	\icc \> \hspace{6ex} $P_s = Q$; $\mathcal{G}^* = \phi$ \\
+	\icc \> \hspace{6ex} $P_s := Q$;  $\mathcal{G}^* := \phi$ \\
 	\icc \hspace{1ex}\Return $\overline{\mathcal{T}}$
 %
 %	{\bf procedure} $getPolygon$($P_s$, $P_i$, $\epsilon/2$) \\
