@@ -80,21 +80,18 @@ At last, the algorithm returns $\overline{\mathcal{T}}$ (line 11).
 	\icc \> \hspace{6ex} $P_s = P_e$; $\mathcal{G}^* = \phi$ \\
 	\icc \hspace{1ex}\Return $\overline{\mathcal{T}}$ \\
 \\
-	{\bf Procedure} ~$getRegularPolygon(P,start,radius,M)$\\
+	{\bf Procedure} ~$getRegularPolygon(P_s,P_i,radius,M,t_c)$\\
 %	\sstab
-	\bcc \hspace{1ex}\= $t_0 := 1000$; \\
-%         \hspace{2ex}     $intersection = \emptyset$;   \\
-	\icc \hspace{1ex}\= $k = t_0/P.time$ \\
-	\icc \hspace{1ex} $P = transform(P,start)$ \\
+	\bcc \hspace{1ex} transform $P_i$ to Cartesian coordinate \\
+	\icc \hspace{1ex}\= $k = t_c/(P_i.t - P_s.t)$ \\
 	\icc \hspace{1ex} $radius = radius / k$ \\
-	\icc \hspace{1ex} $P.x = P.x / k$ \\
-	\icc \hspace{1ex} $P.y = P.y / k$ \\
-	\icc \hspace{1ex} \For $(i = 0;i < M;i++)$ \\
+	\icc \hspace{1ex} $P_i.x = P_i.x / k$; $P_i.y = P_i.y / k$ \\
+	\icc \hspace{1ex} \For $(j = 0;j < M;j++)$ \\
 	\icc \> \hspace{3ex} $angle = PI / M * (2 * i + 1)$ \\
-	\icc \> \hspace{3ex} $x = P.x + cos(angle) * radius$\\
-	\icc \> \hspace{3ex} $y = P.y + sin(angle) * radius$\\
-	\icc \> \hspace{3ex} $res.vertices[i] = setVertex(x,y,i)$\\
-	\icc \hspace{1ex}\Return $res$
+	\icc \> \hspace{3ex} $x = P_i.x + cos(angle) * radius$\\
+	\icc \> \hspace{3ex} $y = P_i.y + sin(angle) * radius$\\
+	\icc \> \hspace{3ex} $Poly[j].x = x$; $Poly[j].y = y$\\
+	\icc \hspace{1ex}\Return $Poly$
 }
 \vspace{-2ex}
 \myhrule
