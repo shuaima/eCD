@@ -47,6 +47,7 @@ The algorithm first initializes the start and end points $P_s$ and $P_e$ to $P_0
 The algorithm sequentially processes each point in the trajectory (line 2).
 It gets the regular polygon of the current point $P_i$ (line 3).
 This is performed by calling procedure $getRegularPolygon()$. The procedure $getRegularPolygon()$ is an implementation of equations (1)-(3). It first gets the projection circle for the current point $P_i$, defined by equations (1) and (2); then it builds and returns the inscribed regular polygon $\mathcal{G}$, whose vertexes are defined by equation (3), from the projection circle.
+Note that the computing of $\theta$, $\sin(\theta)$ and $\cos(\theta)$ can be optimized to run one time only during the processing of a trajectory.
 
 After that, it gets the intersection polygon of the current regular polygon $\mathcal{G}$ with the polygon $\mathcal{G}^*$, which is formed by all the preview regular polygons, and saves it in $\mathcal{G}^*$ (line 4).
 This is performed by calling procedure $\rpia()$, as shown in Figure~\ref{alg:r-poly-inter}.
@@ -89,8 +90,8 @@ At last, the algorithm returns $\overline{\mathcal{T}}$ (line 11).
 	\icc \hspace{1ex} $P_i.y = P_s.y + k*(P_i.y-P_s.y)$ \\
 	\icc \hspace{1ex} \For $(j = 1;j \le M;j++)$ \\
 	\icc \> \hspace{3ex} $\theta =  (2 * j + 1)*\pi /M $ \\
-	\icc \> \hspace{3ex} $\mathcal{G}.vertex[j].x = P_i.x + cos(\theta) * radius$\\
-	\icc \> \hspace{3ex} $\mathcal{G}.vertex[j].y = P_i.y + sin(\theta) * radius$\\
+	\icc \> \hspace{3ex} $\mathcal{G}.vertex[j].x = P_i.x + \cos(\theta) * radius$\\
+	\icc \> \hspace{3ex} $\mathcal{G}.vertex[j].y = P_i.y + \sin(\theta) * radius$\\
 	\icc \hspace{1ex}\Return $\mathcal{G}$
 }
 \vspace{-2ex}
@@ -137,10 +138,12 @@ For convenience, here, we project the points and the oblique circular cones on a
 
 If we allow $\overline{\mathcal{T}}$ be not a sub set of $\dddot{\mathcal{T}}$, then an aggressive \cist, named \cista, which outputs points that may not belong to the original points, will bring better compression ratios.
 This approach, also known as the ``interpolation" method, is used in disciplines of \textcolor[rgb]{1.00,0.00,0.00}{polygonal curve approximation \cite{Heckbert:Survey, Zhao:Sleeve}, time series simplification and trajectory compression \cite{Lin:Operb}}.
+
+\textcolor[rgb]{1.00,0.00,0.00}{Weak simplification.}
 %\cista is the directly result of Corollary~\ref{prop-circle-intersection}.
 %
 
-Given a sub trajectory $[P_s,...,P_e]$, a constant $\epsilon$ and time $t_c > t_s$, algorithm \cista outputs point $Q$ of Corollary~\ref{prop-circle-intersection}, which is got by the following strategies.
+Given a sub trajectory $[P_s,...,P_e]$, a constant $\epsilon$ and time $t_c > t_s$, algorithm \cista outputs point $Q$ of Corollary~\ref{prop-circle-intersection}. The point $Q$ is got by the following strategies.
 
 (1) if $G^*_e \ne \phi$ and $P^c_e \in G^*_e$, meaning the projection point of $P_e$ on the plane ``$t=t_c$", \ie $P^c_e$, is in the intersection polygon of regular polygons \{$\mathcal{G}_s, \dots, \mathcal{G}_e$\} of all projection circles \{$\mathcal{O}(P^c_s, \epsilon^c_s), \ldots, \mathcal{O}(P^c_e, \epsilon^c_e)$\}, then the point $P_e$ is a candidate point of $Q$ and the algorithm outputs $Q=P_e$.
 
