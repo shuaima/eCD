@@ -14,10 +14,8 @@
 
 
 \section{One pass algorithms}
-We now are ready to present the algorithms of cone intersection with \sed.
-We present two one pass and error bounded algorithms implementing the above \sed checking method.
-The first algorithm, named \cist, outputs a subset of original points.
-The second algorithm, name \cista, outputs points that may not belong to the original points.
+We now are ready to present two one pass, error bounded and \sed enabled line simplification algorithms, namely \cist and \cista, implementing the above cone intersection based \sed checking.
+
 
 
 
@@ -26,7 +24,8 @@ The second algorithm, name \cista, outputs points that may not belong to the ori
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\subsection{{One-pass algorithm}}
 \subsection{{Algorithm \cist}}
-In Theorem~\ref{prop-3d-ci}, the point $Q$ may not be in the input sub trajectory $[P_s,...,P_e]$.
+The first algorithm, \cist, outputs a subset of original points.
+Recall in Theorem~\ref{prop-3d-ci}, the point $Q$ may not be in the input sub trajectory $[P_s,...,P_e]$.
 If we mandatory require $Q=P_e$, the end point of the sub trajectory, then a \emph{narrow} spatio-temporal cone with a threshold of $\epsilon/2$ would help.
 
 \begin{theorem}
@@ -40,7 +39,7 @@ If $\bigcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_i, \epsilon/2)} \ne \{P_s\}$, then by
 
 
 
-This algorithm is named \cist. As shown in Figure~\ref{alg:CI3d}, it takes as input a trajectory $\dddot{\mathcal{T}}$, an error bound $\epsilon$ and the edges number $M$ of a regular polygon, and returns the simplified trajectory $\overline{\mathcal{T}}$.
+Figure~\ref{alg:CI3d} is the P-codes of algorithm \cist. It takes as input a trajectory $\dddot{\mathcal{T}}$, an error bound $\epsilon$, the number $M$ of edges of a regular polygon and a time $t_c>t_s$, and returns the simplified trajectory $\overline{\mathcal{T}}$.
 
 The algorithm first initializes the start and end points $P_s$ and $P_e$ to $P_0$, the intersection polygon $\mathcal{G}^*$ to $\phi$, the output set $\overline{\mathcal{T}}$ to $\phi$ and the index $i$ of point to $1$ (line 1).
 
@@ -67,12 +66,12 @@ At last, the algorithm returns $\overline{\mathcal{T}}$ (line 11).
 \myhrule
 \vspace{-1ex}
 \mat{0ex}{
-	{\bf Algorithm} ~$\cist(\dddot{\mathcal{T}}[P_0,\ldots,P_n], \epsilon, M)$\\
+	{\bf Algorithm} ~$\cist(\dddot{\mathcal{T}}[P_0,\ldots,P_n], \epsilon, M, t_c)$\\
 %	\sstab
 	\bcc \hspace{1ex}\= $P_s := P_0$;  $P_e := P_0$;  $\overline{\mathcal{T}} := \phi$;  $\mathcal{G}^* := \phi$;  $i := 1$\\
 %         \hspace{2ex}     $intersection = \emptyset$;   \\
 	\icc \hspace{1ex}\= \While $i \le n$ \Do \\
-	\icc \>\hspace{3ex} $\mathcal{G} := {getRegularPolygon}$($P_s$, $P_i$, $\epsilon/2$, $M$) \\
+	\icc \>\hspace{3ex} $\mathcal{G} := {getRegularPolygon}$($P_s$, $P_i$, $\epsilon/2$, $M$, $t_c$) \\
 	\icc \>\hspace{3ex} $\mathcal{G}^* := {\rpia}(\mathcal{G}^*, ~\mathcal{G})$ \\
 	\icc \>\hspace{3ex} \If $\mathcal{G}^* \ne \phi$ \Then \\
 	\icc \> \hspace{6ex} $P_e := P_i$ \\
@@ -134,8 +133,7 @@ For convenience, here, we project the points and the oblique circular cones on a
 
 \subsection{{Algorithm \cista}}
 
-
-
+%The second algorithm, name \cista, outputs points that may not belong to the original points.
 If we allow $\overline{\mathcal{T}}$ be not a sub set of $\dddot{\mathcal{T}}$, then an aggressive \cist, named \cista, which outputs points that may not belong to the original points, will bring better compression ratios.
 This method, known as the ``interpolation" approach, is used in disciplines of polygonal curve approximation \cite{Williams:Bounded, Heckbert:Survey, Zhao:Sleeve}, time series approximation \cite{ORourke:Fitting, Keogh:online, Elmeleegy:Stream, Xie:Stream, Luo:Streaming} and trajectory simplification \cite{Trajcevski:DDR, Lin:Operb}. The ``interpolation" approach is also called a \emph{weak simplification} in \cite{Trajcevski:DDR}.
 
@@ -148,7 +146,7 @@ Given a sub trajectory $[P_s,...,P_e]$, a constant $\epsilon$ and time $t_c > t_
 
 (2) if $G^*_e \ne \phi$ and $P^c_e \notin G^*_e$, then it gets the central point of intersection polygon $G^*_e$, projects it on the plane ``$t=t_e$", and outputs the projection point $Q$.
 
-Figure~\ref{alg:ciseda} is the P-code of algorithm \cista. \cista runs the similar routine as algorithm \cist, except that in line 3 of Figure~\ref{alg:CI3d}, $\epsilon/2$ is replaced by $\epsilon$; and in lines 9-10 of Figure~\ref{alg:CI3d}, $P_e$ is replace by $Q$, got by the above strategies.
+Figure~\ref{alg:ciseda} is the P-codes of algorithm \cista. \cista runs the similar routine as algorithm \cist, except that in line 3 of Figure~\ref{alg:CI3d}, $\epsilon/2$ is replaced by $\epsilon$; and in lines 9-10 of Figure~\ref{alg:CI3d}, $P_e$ is replace by $Q$, got by the above strategies.
 
 
 %%%%%%%%%%%%%%%%%%%%%Baseline Algorithm
@@ -159,12 +157,12 @@ Figure~\ref{alg:ciseda} is the P-code of algorithm \cista. \cista runs the simil
 \myhrule
 \vspace{-1ex}
 \mat{0ex}{
-	{\bf Algorithm} ~$\cista(\dddot{\mathcal{T}}[P_0,\ldots,P_n], \epsilon, M)$\\
+	{\bf Algorithm} ~$\cista(\dddot{\mathcal{T}}[P_0,\ldots,P_n], \epsilon, M, t_c)$\\
 %	\sstab
 	\bcc \hspace{1ex}\= $P_s := P_0$;  $P_e := P_0$;  $\overline{\mathcal{T}} := \phi$;  $\mathcal{G}^* := \phi$;  $i := 1$\\
 %         \hspace{2ex}     $intersection = \emptyset$;   \\
 	\icc \hspace{1ex}\= \While $i \le n$ \Do \\
-	\icc \>\hspace{3ex} $\mathcal{G} := {getRegularPolygon}$($P_s$, $P_i$, $\epsilon$, $M$) \\
+	\icc \>\hspace{3ex} $\mathcal{G} := {getRegularPolygon}$($P_s$, $P_i$, $\epsilon$, $M$, $t_c$) \\
 	\icc \>\hspace{3ex} $\mathcal{G}^* := {\rpia}(\mathcal{G}^*, ~\mathcal{G})$ \\
 	\icc \>\hspace{3ex} \If $\mathcal{G}^* \ne \phi$ \Then \\
 	\icc \> \hspace{6ex} $P_e := P_i$ \\
