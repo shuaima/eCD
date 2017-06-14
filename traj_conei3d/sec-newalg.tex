@@ -47,7 +47,7 @@ The algorithm first initializes the start and end points $P_s$ and $P_e$ to $P_0
 The algorithm sequentially processes each point in the trajectory (line 2).
 It gets the regular polygon of the current point $P_i$ (line 3).
 This is performed by calling procedure $getRegularPolygon()$. The procedure $getRegularPolygon()$ is an implementation of equations (1)-(3). It first gets the projection circle for the current point $P_i$, defined by equations (1) and (2); then it builds and returns the inscribed regular polygon $\mathcal{G}$, whose vertexes are defined by equation (3), from the projection circle.
-Note that the computing of $\theta$, $\sin(\theta)$ and $\cos(\theta)$ can be optimized to run one time only during the processing of a trajectory.
+Note that the computing of $\theta$, $\sin\theta$ and $\cos\theta$ can be optimized to run one time only during the processing of a trajectory.
 
 After that, it gets the intersection polygon of the current regular polygon $\mathcal{G}$ with the polygon $\mathcal{G}^*$, which is formed by all the preview regular polygons, and saves it in $\mathcal{G}^*$ (line 4).
 This is performed by calling procedure $\rpia()$, as shown in Figure~\ref{alg:r-poly-inter}.
@@ -82,16 +82,16 @@ At last, the algorithm returns $\overline{\mathcal{T}}$ (line 11).
 	\icc \> \hspace{6ex} $P_s = P_e$; $\mathcal{G}^* = \phi$ \\
 	\icc \hspace{1ex}\Return $\overline{\mathcal{T}}$ \\
 \\
-	{\bf Procedure} ~$getRegularPolygon(P_s,P_i,radius,M,t_c)$ \\
-	\bcc \hspace{1ex} \textcolor[rgb]{0.00,0.07,1.00}{Transform $P_s$ and $P_i$ to a Cartesian coordinate} \\
+	{\bf Procedure} ~$getRegularPolygon(P_s,P_i,r,M,t_c)$ \\
+	\bcc \hspace{1ex} \textcolor[rgb]{0.00,0.07,1.00}{Transform $P_s$ and $P_i$ to points in Cartesian coordinates} \\
 	\icc \hspace{1ex} $k = (t_c-t_s)/(P_i.t - P_s.t)$ \\
-	\icc \hspace{1ex} $radius = k*radius$  \\
+	\icc \hspace{1ex} $r = k*r$  \\
 	\icc \hspace{1ex} $P_i.x = P_s.x + k*(P_i.x-P_s.x)$ \\
 	\icc \hspace{1ex} $P_i.y = P_s.y + k*(P_i.y-P_s.y)$ \\
 	\icc \hspace{1ex} \For $(j = 1;j \le M;j++)$ \\
 	\icc \> \hspace{3ex} $\theta =  (2 * j + 1)*\pi /M $ \\
-	\icc \> \hspace{3ex} $\mathcal{G}.vertex[j].x = P_i.x + \cos(\theta) * radius$\\
-	\icc \> \hspace{3ex} $\mathcal{G}.vertex[j].y = P_i.y + \sin(\theta) * radius$\\
+	\icc \> \hspace{3ex} $\mathcal{G}.vertex[j].x = P_i.x + r*\cos\theta$\\
+	\icc \> \hspace{3ex} $\mathcal{G}.vertex[j].y = P_i.y + r*\sin\theta$\\
 	\icc \hspace{1ex}\Return $\mathcal{G}$
 }
 \vspace{-2ex}
