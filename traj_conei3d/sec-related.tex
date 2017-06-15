@@ -42,13 +42,14 @@ the \sed is first introduce in ~\cite{Meratnia:Spatiotemporal}, called the \emph
 We next introduce these algorithms and their distance metrics.
 
 \stitle{Batch algorithms.}
-The batch algorithms enforces the global distance checking policy.
+The batch algorithms enforces global distance checking policy.
 Global checking requires that all trajectory points be loaded before they start compressing, hence they run in batch.
-Further more, these batch algorithms can be either top-down or bottom-up.
+Furthermore, these batch algorithms can be either top-down or bottom-up.
 Top-down algorithms, e.g., Ramer \cite{Ramer:Split} and Douglas-Peucker \cite{Douglas:Peucker}, recursively divide a trajectory into sub-trajectories until the stopping condition is met.
 %
 Bottom-up algorithms, e.g., Theo Pavlidis' Algorithm \cite{Pavlidis:Segment}, is the natural complement to top-down ones, which recursively merge adjacent sub-trajectories with the smallest distance, initially $n/2$  sub-trajectories for a trajectory with $n$ points, until the stopping condition is met.
-Note that the distances of newly generated line segments are recalculated during the process.
+%
+The distances of newly generated line segments are recalculated during the process.
 %
 These batch algorithms originally support \ped, however, it is easy to extend them to support \sed.
 %
@@ -56,7 +57,8 @@ The batch nature and high time complexities make them not practical in online sc
 
 
 \stitle{Online algorithms.}
-The online algorithms enforces a constrained global distance checking policy which restricts the checking within a sliding or opening window, hence, they are online algorithms.
+The online algorithms enforces a constrained global distance checking policy which restricts the checking within a sliding or opening window.
+%, hence, they are online algorithms.
 Constrained global checking algorithms need not have the entire trajectory ready before they start compressing, and are appropriate for compressing trajectories on sensors of mobile devices.
 %Moreover, the existing constrained global checking algorithms~\cite{Keogh:online,Meratnia:Spatiotemporal,Muckell:Compression} usually use a sliding or opening window and compress sub-trajectories in the window.
 Several line simplification algorithms have been developed, e.g., by combining \dpa or \pavlidis with sliding or opening windows for online processing\cite{Meratnia:Spatiotemporal}. %, Keogh:online
