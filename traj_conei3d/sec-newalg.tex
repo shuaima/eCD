@@ -14,7 +14,7 @@
 
 
 \section{One pass algorithms}
-We now are ready to present two one pass, error bounded and \sed enabled line simplification algorithms, namely \cist and \cista, implementing the above cone intersection based \sed checking.
+We now are ready to present two one pass, error bounded and \sed enabled line simplification algorithms, namely \cist and \cista, implementing the above spatio-temporal cone intersection approach.
 
 
 
@@ -26,7 +26,7 @@ We now are ready to present two one pass, error bounded and \sed enabled line si
 \subsection{{Algorithm \cist}}
 The first algorithm, \cist, outputs a subset of original points.
 Recall in Theorem~\ref{prop-3d-ci}, the point $Q$ may not be in the input sub trajectory $[P_s,...,P_e]$.
-If we mandatory require $Q=P_e$, the end point of the sub trajectory, then a \emph{narrow} spatio-temporal cone with a threshold of $\epsilon/2$ would help.
+If we mandatory require $Q=P_e$, the end point of the sub trajectory, then a \emph{narrow} spatio-temporal cone with a threshold of $\epsilon/2$ is helpful.
 
 \begin{theorem}
 \label{prop-3d-ci-half}
@@ -41,7 +41,7 @@ If $\bigcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_i, \epsilon/2)} \ne \{P_s\}$, then by
 
 Figure~\ref{alg:CI3d} is the P-codes of algorithm \cist. It takes as input a trajectory $\dddot{\mathcal{T}}$, an error bound $\epsilon$, the number $M$ of edges of a regular polygon and a time $t_c>t_s$, and returns the simplified trajectory $\overline{\mathcal{T}}$.
 
-The algorithm first initializes the start and end points $P_s$ and $P_e$ to $P_0$, the intersection polygon $\mathcal{G}^*$ to $\phi$, the output set $\overline{\mathcal{T}}$ to $\phi$ and the index $i$ of point to $1$ (line 1).
+The algorithm first initializes the start and end points, $P_s$ and $P_e$, to $P_0$, the intersection polygon $\mathcal{G}^*$ to $\phi$, the output set $\overline{\mathcal{T}}$ to $\phi$ and the index $i$ of point to $1$ (line 1).
 
 The algorithm sequentially processes each point in the trajectory (line 2).
 It gets the regular polygon of the current point $P_i$ (line 3).
@@ -242,7 +242,7 @@ For each data point, the procedures $getRegularPolygon()$ and $\rpia()$ are both
 (2) Procedure $\rpia(\mathcal{G}^*, \mathcal{G})$ completes in $O(M)$ time.
 %completes in $O(|\mathcal{G}^*| + |\mathcal{G}|)$ time. By Theorem~\ref{prop-rp-intersection}, we know that $|\mathcal{G}^*| \le M$ and $|\mathcal{G}|\le M$, where $M$ is the number of vertices in a regular polygon. Hence, $getIntersectPolygon()$
 
-$M$ is a constant, thus, the process of a point needs constant time. Hence, these algorithms both have a time complexity of $O(N)$.
+$M$ is a constant, thus, the process of a point needs a constant time. Hence, these algorithms both have a time complexity of $O(N)$.
 This finishes the proof.
 \end{proof}
 
