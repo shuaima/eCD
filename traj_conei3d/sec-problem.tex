@@ -107,7 +107,7 @@ We next illustrate how \cia based algorithms can be used for trajectory compress
 \begin{example}
 \label{exm-alg-sleeve}
 Consider Figure~\ref{fig:sleeve}. The \cia algorithm takes as input a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$, and returns a simplified ployline consisting of two line segments $\vv{P_0P_4}$ and  $\vv{P_4P_{10}}$.
- 
+
 Initially, $P_0$ is the start point. The point $P_1$ is firstly read, and the cone $\mathcal{C}$($P_0$, $P_{1}$, $\epsilon/2$) of $P_1$ is created as shown in Figure~\ref{fig:sleeve}.(1).
 Then $P_2$ is read, and the cone $\mathcal{C}$($P_0$, $P_{2}$, $\epsilon/2$) is created for $P_2$. The intersection of $\mathcal{C}$($P_0$, $P_{1}$, $\epsilon/2$) and $\mathcal{C}$($P_0$, $P_{2}$, $\epsilon/2$) is not empty as shown in Figure~\ref{fig:sleeve}.(2), which has a up border line $P_0P_2^u$ and a low border line $P_0P_1^l$.
 %
@@ -175,19 +175,13 @@ The algorithm has a time complexity of $O(|\mathcal{G}_1| + |\mathcal{G}_2|)$, w
 
 
 \begin{example}
-Figure~\ref{fig:c-poly-inter} is a running example of the convex polygon intersection algorithm.
+Figure~\ref{fig:c-poly-inter} shows a running example of the convex polygon intersection algorithm.
 
-\ni (1) Initially, directed edges $A$ and $B$ are on polygons $\mathcal{G}_2$ and $\mathcal{G}_1$ separately. $A \bigcap B = P_1$.
-
-\ni (2) $A$ moves forward a step. $A \bigcap B = \phi$.
-
-\ni (3) After 7 steps of moving, $A$ and $B$ intersect on $P_2$;
-
-\ni (4) $B$ moves forward a step. $A \bigcap B = \phi$.
-
-\ni (5) After 6 steps of moving, both $A$ and $B$ cycle their polygons;
-
-\ni (6) At last, it returns the intersection polygon.
+(1) Initially, directed edges $A$ and $B$ are on polygons $\mathcal{G}_2$ and $\mathcal{G}_1$ separately, and $A \bigcap B = P_1$. Then $A$ moves  a step forward, and $A \bigcap B = \phi$. After 7 steps of moving $A$, $A$ and $B$ intersect on $P_2$  as shown in Figure~\ref{fig:c-poly-inter}.(3).
+%
+(2) Then edge $B$ moves  a step forward, and $A \bigcap B = \phi$. After 6 steps of moving $B$, $B$ finishes its cycle along the polygon.
+%
+As both edges$A$ and $B$ finish their cycles, the algorithm finally returns the intersection polygon as shown in Figure~\ref{fig:c-poly-inter}.(6).
 \end{example}
 
 
