@@ -1,13 +1,13 @@
 %\section{One-pass Spatio-temporal data simplification}
-\section{One-pass \sed checking method}
+\section{Local One-Pass Distances Checking}
 
-In this section, we first discuss the properties of synchronized points and \sed, then we present a novel \sed checking method by extending the idea of cone intersection.
+In this section, we first analyze the properties of synchronized points and \sed, then we present a local one-pass \sed checking method by extending the cone intersection for \ped checking in Section~\ref{sub-ci-ped}.
 %Finally, we provide a one-pass, error-bounded and \sed enabled trajectory simplification algorithm.
 
 
 
 \subsection{Properties of \sed} %and synchronous points     %Spatio-temporal Data
-Recall in its definition, the \sed of point $P_i$ to a directed line segment $\mathcal{L} = \vv{P_{s}P_{e}}$, denoted as $sed(P_i, \mathcal{L})$, is $|P_iP_i'|$, the distance from $P_i$ to its synchronized point $P_i' (x_i', y_i', t_i)$ \wrt $\mathcal{L}$.
+Recall that the \sed of point $P_i$ to a directed line segment $\mathcal{L} = \vv{P_{s}P_{e}}$, denoted as $sed(P_i, \mathcal{L})$, is $|P_iP_i'|$, the distance from $P_i$ to its synchronized point $P_i' (x_i', y_i', t_i)$ \wrt $\mathcal{L}$.
 Let $P_s$ be the original of coordination, we demonstrate the \sed and the synchronized points in the spatio-temporal space, as shown in Figure~\ref{fig:sed3d}.
 From the spatio-temporal space, we have the following findings.
 
@@ -82,7 +82,7 @@ Based on the notion of spatio-temporal cone, we further check the intersection o
 
 \begin{theorem}
 \label{prop-3d-ci}
-Given a sub trajectory $[P_s,...,P_e]$ and a constant $\epsilon$, there exists a point $Q$, $Q.t = P_e.t$, such that $sed(P_i, \vv{P_sQ})<\epsilon$ for all $P_i$, $i \in [s,e]$, if and only if $\bigcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_i, \epsilon)} \ne \{P_s\}$.
+Given a sub trajectory $[P_s,...,P_e]$ and an error bound $\epsilon$, there exists a point $Q$ such that $Q.t = P_e.t$ and $sed(P_i, \vv{P_sQ})<\epsilon$ for each $i \in [s,e]$ if and only if $\bigcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_i, \epsilon)} \ne \{P_s\}$.
 \end{theorem}
 
 \begin{proof}
@@ -161,7 +161,7 @@ To develop a one pass spatio-temporal simplification algorithm, we provide an ap
 That is, we further replace a circle $\mathcal{O}(P, r)$ to a specially designed $M$-edges inscribed regular polygon,
 then we check the intersection of the regular polygons instead of the checking of circles intersection.
 Obviously, the intersection of regular polygons is only a sufficient condition of the intersection of the corresponding circles , and
-algorithms employ this policy may loss some compression ratio. 
+algorithms employ this policy may loss some compression ratio.
 And, a larger $M$ would lead to a better compression ratio and a poorer efficiency.
 
 \stitle{Approximate polygons ($\mathcal{G}$)}.
