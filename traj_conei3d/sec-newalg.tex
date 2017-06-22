@@ -41,24 +41,7 @@ If $\bigcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_i, \epsilon/2)} \ne \{P_s\}$, then by
 
 Figure~\ref{alg:CI3d} is the P-codes of algorithm \cist. It takes as input a trajectory $\dddot{\mathcal{T}}$, an error bound $\epsilon$, the number $M$ of edges of a regular polygon and a time $t_c>t_s$, and returns the simplified trajectory $\overline{\mathcal{T}}$.
 
-The algorithm first initializes the start and end points, $P_s$ and $P_e$, to $P_0$, the intersection polygon $\mathcal{G}^*$ to $\phi$, the output set $\overline{\mathcal{T}}$ to $\phi$ and the index $i$ of point to $1$ (line 1).
-
-The algorithm sequentially processes each point in the trajectory (line 2).
-It gets the regular polygon of the current point $P_i$ (line 3).
-This is performed by calling procedure $getRegularPolygon()$. The procedure $getRegularPolygon()$ is an implementation of equations (1)-(3). It first gets the projection circle for the current point $P_i$, defined by equations (1) and (2); then it builds and returns an inscribed regular polygon $\mathcal{G}$, whose vertexes are defined by equation (3), of the projection circle.
-Note that the computing of $\theta$, $\sin\theta$ and $\cos\theta$ can be optimized to run one time only during the processing of a trajectory.
-
-After that, it gets the intersection polygon of the current regular polygon $\mathcal{G}$ with the polygon $\mathcal{G}^*$, which is formed by all the preview regular polygons, and saves it in $\mathcal{G}^*$ (line 4).
-This is performed by calling procedure $\rpia()$, as shown in Figure~\ref{alg:r-poly-inter}.
-% which returns the intersection polygon of input polygons $\mathcal{G}^*$ and $\mathcal{G}$.
-
-If the intersection polygon is not empty, then the process goes on to the next point (lines 5-7).
-Otherwise, the current section is terminated and a new section is started (lines 8-10).
-%
-At last, the algorithm returns $\overline{\mathcal{T}}$ (line 11).
-
-
-%%%%%%%%%%%%%%%%%%%%%Baseline Algorithm
+%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}[tb!]
 \begin{center}
 {\small
@@ -72,7 +55,10 @@ At last, the algorithm returns $\overline{\mathcal{T}}$ (line 11).
 %         \hspace{2ex}     $intersection = \emptyset$;   \\
 	\icc \hspace{1ex}\= \While $i \le n$ \Do \\
 	\icc \>\hspace{3ex} $\mathcal{G} := {getRegularPolygon}$($P_s$, $P_i$, $\epsilon/2$, $M$, $t_c$) \\
-	\icc \>\hspace{3ex} $\mathcal{G}^* := {\rpia}(\mathcal{G}^*, ~\mathcal{G})$ \\
+	\icc \>\hspace{3ex} \If $\mathcal{G}^* = \phi$ \Then \\
+	\icc \>\hspace{6ex} $\mathcal{G}^* :=\mathcal{G}$ \\
+	\icc \>\hspace{3ex} \Else \\
+	\icc \>\hspace{6ex} $\mathcal{G}^* := {\rpia}(\mathcal{G}^*, ~\mathcal{G})$ \\
 	\icc \>\hspace{3ex} \If $\mathcal{G}^* \ne \phi$ \Then \\
 	\icc \> \hspace{6ex} $P_e := P_i$ \\
 	\icc \> \hspace{6ex} $i := i+1$ \\
@@ -98,11 +84,29 @@ At last, the algorithm returns $\overline{\mathcal{T}}$ (line 11).
 }
 \end{center}
 \vspace{-2ex}
-\caption{\small Spatio-temporal cone intersection algorithm.}
+\caption{\small Spatio-temporal cone intersection algorithm (\cist).}
 \label{alg:CI3d}
 \vspace{-2ex}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+The algorithm first initializes the start and end points, $P_s$ and $P_e$, to $P_0$, the intersection polygon $\mathcal{G}^*$ to $\phi$, the output set $\overline{\mathcal{T}}$ to $\phi$ and the index $i$ of point to $1$ (line 1).
+
+The algorithm sequentially processes each point in the trajectory (line 2).
+It gets the regular polygon of the current point $P_i$ (line 3).
+This is performed by calling procedure $getRegularPolygon()$. The procedure $getRegularPolygon()$ is an implementation of equations (1)-(3). It first gets the projection circle for the current point $P_i$, defined by equations (1) and (2); then it builds and returns an inscribed regular polygon $\mathcal{G}$, whose vertexes are defined by equation (3), of the projection circle.
+Note that the computing of $\theta$, $\sin\theta$ and $\cos\theta$ can be optimized to run one time only during the processing of a trajectory.
+
+After that, it gets the intersection polygon of the current regular polygon $\mathcal{G}$ with the polygon $\mathcal{G}^*$, which is formed by all the preview regular polygons, and saves it in $\mathcal{G}^*$ (lines 4-7).
+This is performed by calling procedure $\rpia()$, as shown in Figure~\ref{alg:r-poly-inter}.
+% which returns the intersection polygon of input polygons $\mathcal{G}^*$ and $\mathcal{G}$.
+
+If the intersection polygon is not empty, then the process goes on to the next point (lines 8-10).
+Otherwise, the current section is terminated and a new section is started (lines 11-13).
+%
+At last, the algorithm returns $\overline{\mathcal{T}}$ (line 14).
 
 
 
@@ -148,7 +152,7 @@ Given a sub trajectory $[P_s,...,P_e]$, an error bound $\epsilon$, a constant $M
 \ni (2) if $G^*_e \ne \phi$ and $P^c_e \notin G^*_e$, then it gets the central point of intersection polygon $G^*_e$, projects it on the plane ``$t=t_e$", and outputs the projection point $Q$.
 
 \vspace{1ex}
-Figure~\ref{alg:ciseda} is the P-codes of algorithm \cista. \cista runs the similar routine as algorithm \cist, except that in line 3 of Figure~\ref{alg:CI3d}, $\epsilon/2$ is replaced by $\epsilon$; and in lines 9-10 of Figure~\ref{alg:CI3d}, $P_e$ is replace by $Q$, got by the above strategies.
+Figure~\ref{alg:ciseda} is the P-codes of algorithm \cista. \cista runs the similar routine as algorithm \cist, except that in line 3 of Figure~\ref{alg:CI3d}, $\epsilon/2$ is replaced by $\epsilon$; and in lines 12-13 of Figure~\ref{alg:CI3d}, $P_e$ is replace by $Q$, got by the above strategies.
 
 
 %%%%%%%%%%%%%%%%%%%%%Baseline Algorithm
@@ -165,7 +169,10 @@ Figure~\ref{alg:ciseda} is the P-codes of algorithm \cista. \cista runs the simi
 %         \hspace{2ex}     $intersection = \emptyset$;   \\
 	\icc \hspace{1ex}\= \While $i \le n$ \Do \\
 	\icc \>\hspace{3ex} $\mathcal{G} := {getRegularPolygon}$($P_s$, $P_i$, $\epsilon$, $M$, $t_c$) \\
-	\icc \>\hspace{3ex} $\mathcal{G}^* := {\rpia}(\mathcal{G}^*, ~\mathcal{G})$ \\
+	\icc \>\hspace{3ex} \If $\mathcal{G}^* = \phi$ \Then \\
+	\icc \>\hspace{6ex} $\mathcal{G}^* :=\mathcal{G}$ \\
+	\icc \>\hspace{3ex} \Else \\
+	\icc \>\hspace{6ex} $\mathcal{G}^* := {\rpia}(\mathcal{G}^*, ~\mathcal{G})$ \\
 	\icc \>\hspace{3ex} \If $\mathcal{G}^* \ne \phi$ \Then \\
 	\icc \> \hspace{6ex} $P_e := P_i$ \\
 	\icc \> \hspace{6ex} $i := i+1$ \\
@@ -184,7 +191,7 @@ Figure~\ref{alg:ciseda} is the P-codes of algorithm \cista. \cista runs the simi
 }
 \end{center}
 \vspace{-2ex}
-\caption{\small Aggression spatio-temporal cone intersection algorithm.}
+\caption{\small Aggressive spatio-temporal cone intersection algorithm (\cista).}
 \label{alg:ciseda}
 \vspace{-2ex}
 \end{figure}
@@ -207,7 +214,7 @@ The points and the oblique circular cones are projected on a x-y space.
 
 \ni (3) For point $P_5$, the intersection of $\mathcal{G}_5$ and $\mathcal{G}^*$ is $\phi$. Thus, line segment $\vv{P_0Q} =\vv{P_0P'_4}$ is output, and a new section is started, taking $P'_4$ as the new start point.
 
-\ni (4) At last, the algorithm outputs 3 continuous line segments, \ie $\vv{P_0P'_4}$, $\vv{P'_4P_8}$ and $\vv{P_8P_{10}}$. Note that $P_8$ and $P_{10}$ are original points.
+\ni (4) At last, the algorithm outputs 3 continuous line segments, \ie $\vv{P_0P'_4}$, $\vv{P'_4P_8}$ and $\vv{P_8P_{10}}$. Where, $P_0$, $P_8$ and $P_{10}$ are original points.
 \end{example}
 
 
