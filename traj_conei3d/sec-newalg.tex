@@ -1,21 +1,9 @@
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%A running example of the \cista algorithm
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure*}[tb!]
-\centering
-\includegraphics[scale=0.8]{figures/Fig-conesta.png}
-\vspace{-1ex}
-\caption{\small A running example of the \cista algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed to three line segments.}
-\vspace{-2ex}
-\label{fig:exm-consta}
-\end{figure*}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 
 \section{One pass algorithms}
 We now are ready to present two one pass, error bounded and \sed enabled line simplification algorithms, namely \cist and \cista, implementing the above spatio-temporal cone intersection approach.
-
 
 
 
@@ -92,6 +80,7 @@ Figure~\ref{alg:CI3d} is the P-codes of algorithm \cist. It takes as input a tra
 
 
 
+
 The algorithm first initializes the start and end points, $P_s$ and $P_e$, to $P_0$, the intersection polygon $\mathcal{G}^*$ to $\phi$, the output set $\overline{\mathcal{T}}$ to $\phi$ and the index $i$ of point to $1$ (line 1).
 
 The algorithm sequentially processes each point in the trajectory (line 2).
@@ -109,6 +98,18 @@ Otherwise, the current section is terminated and a new section is started (lines
 At last, the algorithm returns $\overline{\mathcal{T}}$ (line 14).
 
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%example of Algorithm CISED
+\begin{figure*}[tb!]
+\centering
+\includegraphics[scale=0.8]{figures/Fig-ex-conest.png}
+\vspace{-1ex}
+\caption{\small A running example of the \cist algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed to four line segments.}
+\vspace{-2ex}
+\label{fig:exm-const}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
@@ -133,8 +134,11 @@ For convenience, here, we project the points and the oblique circular cones on a
 
 
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{{Algorithm \cista}}
+
+
+
 
 %The second algorithm, name \cista, outputs points that may not belong to the original points.
 If we allow $\overline{\mathcal{T}}$ be not a sub set of $\dddot{\mathcal{T}}$, then an \emph{aggressive} \cist, named \cista, which outputs points that may not belong to the original points, will bring better compression ratios.
@@ -153,6 +157,23 @@ Given a sub trajectory $[P_s,...,P_e]$, an error bound $\epsilon$, a constant $M
 
 \vspace{1ex}
 Figure~\ref{alg:ciseda} is the P-codes of algorithm \cista. \cista runs the similar routine as algorithm \cist, except that in line 3 of Figure~\ref{alg:CI3d}, $\epsilon/2$ is replaced by $\epsilon$; and in lines 12-13 of Figure~\ref{alg:CI3d}, $P_e$ is replace by $Q$, got by the above strategies.
+
+
+
+\begin{example}
+\label{exm-alg-conesta}
+Figure~\ref{fig:exm-consta} is a running example of the \cista algorithm taking as input the same trajectory as shown in above.
+The points and the oblique circular cones are projected on a x-y space.
+
+\ni (1) After initialization, the \cista algorithm reads point $P_1$ and builds a \emph{oblique circular cone} $\mathcal{C}$($P_0$, $P_{1}$, $\epsilon$), and projects it on the plane $t=t_1$. The inscribe regular polygon $\mathcal{G}_1$ of the projection circle is returned. The intersection of polygon $\mathcal{G}_1$ and polygon $\mathcal{G}^*$ is $\mathcal{G}_1 \ne \phi$.
+
+\ni (2) $P_2$, $P_3$ and $P_4$ are processed in turn. The intersection polygons are not empty.
+
+\ni (3) For point $P_5$, the intersection of $\mathcal{G}_5$ and $\mathcal{G}^*$ is $\phi$. Thus, line segment $\vv{P_0Q} =\vv{P_0P'_4}$ is output, and a new section is started, taking $P'_4$ as the new start point.
+
+\ni (4) At last, the algorithm outputs 3 continuous line segments, \ie $\vv{P_0P'_4}$, $\vv{P'_4P_8}$ and $\vv{P_8P_{10}}$. Where, $P_0$, $P_8$ and $P_{10}$ are original points.
+\end{example}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%Baseline Algorithm
@@ -200,25 +221,18 @@ Figure~\ref{alg:ciseda} is the P-codes of algorithm \cista. \cista runs the simi
 
 
 
-
-
-
-\begin{example}
-\label{exm-alg-conesta}
-Figure~\ref{fig:exm-consta} is a running example of the \cista algorithm taking as input the same trajectory as shown in above.
-The points and the oblique circular cones are projected on a x-y space.
-
-\ni (1) After initialization, the \cista algorithm reads point $P_1$ and builds a \emph{oblique circular cone} $\mathcal{C}$($P_0$, $P_{1}$, $\epsilon$), and projects it on the plane $t=t_1$. The inscribe regular polygon $\mathcal{G}_1$ of the projection circle is returned. The intersection of polygon $\mathcal{G}_1$ and polygon $\mathcal{G}^*$ is $\mathcal{G}_1 \ne \phi$.
-
-\ni (2) $P_2$, $P_3$ and $P_4$ are processed in turn. The intersection polygons are not empty.
-
-\ni (3) For point $P_5$, the intersection of $\mathcal{G}_5$ and $\mathcal{G}^*$ is $\phi$. Thus, line segment $\vv{P_0Q} =\vv{P_0P'_4}$ is output, and a new section is started, taking $P'_4$ as the new start point.
-
-\ni (4) At last, the algorithm outputs 3 continuous line segments, \ie $\vv{P_0P'_4}$, $\vv{P'_4P_8}$ and $\vv{P_8P_{10}}$. Where, $P_0$, $P_8$ and $P_{10}$ are original points.
-\end{example}
-
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%A running example of the \cista algorithm
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[tb!]
+\centering
+\includegraphics[scale=0.8]{figures/Fig-conesta.png}
+\vspace{-1ex}
+\caption{\small A running example of the \cista algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed to three line segments.}
+\vspace{-2ex}
+\label{fig:exm-consta}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 

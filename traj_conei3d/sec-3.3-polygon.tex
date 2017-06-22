@@ -1,13 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%example of Algorithm CISED
-\begin{figure*}[tb!]
-\centering
-\includegraphics[scale=0.8]{figures/Fig-ex-conest.png}
-\vspace{-1ex}
-\caption{\small A running example of the \cist algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed to four line segments.}
-\vspace{-2ex}
-\label{fig:exm-const}
-\end{figure*}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 
 
@@ -133,6 +124,38 @@ If $A \bigcap B = \phi$ and advances $B$, then moves $A$ and $B$ forward ``$a$ a
 
 
 
+
+\stitle{{Regular polygon intersection algorithm.}}
+Given intersection polygon $\mathcal{G}^*_k$ of the preview $k$ polygons and the next approximate polygon $\mathcal{G}_{k+1}$, the algorithm \rpia returns $\mathcal{G}^*_{k+1} = \mathcal{G}^*_k  \bigcap \mathcal{G}_{k+1}$.
+The sketch of the algorithm is shown in Figure~\ref{alg:r-poly-inter}.
+%
+It runs the similar routine as the \cpia algorithm, except that it saves polygons in arrays, and the advance strategies are partitioned into two parts, \ie $A \bigcap B \ne \phi$ and $A \bigcap B = \phi$, where the former applies rules 1 and 2 (line 6), and the later remains the same as the \cpia algorithm (line 8).
+
+
+
+
+
+
+
+\begin{example}
+Figure~\ref{fig:r-poly-inter} is a running example of algorithm \rpia. The input is the same as Figure~\ref{fig:c-poly-inter}.
+
+\ni (1) Initially, directed edges $A$ and $B$ are on polygons $\mathcal{G}_{k+1}$ and $\mathcal{G}^*_{k}$ separately. $A \bigcap B = P_1$ and $A$ moves on.
+
+\ni (2) $A$ moves forward a 4-steps, from $2^{th}$ to $6^{th}$, under rule 2. Then, $A \bigcap B = \phi$ and $B$ moves on.
+
+\ni (3) After 4 steps of moving (in turn), $A \bigcap B = P_2$ and $B$ moves on.
+
+\ni (4) $B$ advances a 2-steps, from $6^{th}$ to $3^{th}$, under rule 1. Then $A \bigcap B = \phi$ and $A$ moves on.
+
+\ni (5) $A$ advances a step. Then $A \bigcap B = \phi$ and $B$ moves on.
+
+\ni (6) After 3 steps of moving, both $A$ and $B$ cycle their polygons. The intersection polygon, the same as the result of \cpia (also see Figure~\ref{fig:c-poly-inter}), is returned.
+\end{example}
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%Algorithm
 \begin{figure}[tb!]
 \begin{center}
@@ -167,40 +190,6 @@ If $A \bigcap B = \phi$ and advances $B$, then moves $A$ and $B$ forward ``$a$ a
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-
-
-
-
-
-
-\stitle{{Regular polygon intersection algorithm.}}
-Given intersection polygon $\mathcal{G}^*_k$ of the preview $k$ polygons and the next approximate polygon $\mathcal{G}_{k+1}$, the algorithm \rpia returns $\mathcal{G}^*_{k+1} = \mathcal{G}^*_k  \bigcap \mathcal{G}_{k+1}$.
-The sketch of the algorithm is shown in Figure~\ref{alg:r-poly-inter}.
-%
-It runs the similar routine as the \cpia algorithm, except that it saves polygons in arrays, and the advance strategies are partitioned into two parts, \ie $A \bigcap B \ne \phi$ and $A \bigcap B = \phi$, where the former applies rules 1 and 2 (line 6), and the later remains the same as the \cpia algorithm (line 8).
-
-
-
-
-
-
-
-
-\begin{example}
-Figure~\ref{fig:r-poly-inter} is a running example of algorithm \rpia. The input is the same as Figure~\ref{fig:c-poly-inter}.
-
-\ni (1) Initially, directed edges $A$ and $B$ are on polygons $\mathcal{G}_{k+1}$ and $\mathcal{G}^*_{k}$ separately. $A \bigcap B = P_1$ and $A$ moves on.
-
-\ni (2) $A$ moves forward a 4-steps, from $2^{th}$ to $6^{th}$, under rule 2. Then, $A \bigcap B = \phi$ and $B$ moves on.
-
-\ni (3) After 4 steps of moving (in turn), $A \bigcap B = P_2$ and $B$ moves on.
-
-\ni (4) $B$ advances a 2-steps, from $6^{th}$ to $3^{th}$, under rule 1. Then $A \bigcap B = \phi$ and $A$ moves on.
-
-\ni (5) $A$ advances a step. Then $A \bigcap B = \phi$ and $B$ moves on.
-
-\ni (6) After 3 steps of moving, both $A$ and $B$ cycle their polygons. The intersection polygon, the same as the result of \cpia (also see Figure~\ref{fig:c-poly-inter}), is returned.
-\end{example}
 
 
 
