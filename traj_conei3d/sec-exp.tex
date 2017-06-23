@@ -37,7 +37,7 @@ each trajectory has around $114.1K$ data points.
 %The details of these datasets are shown in Table~\ref{tab:dataset}.
 
 \stitle{Algorithms and implementation}.
-We implement four line simplification algorithms, \ie our \cist and \cista, \sed equipped \dpa ~\cite{Douglas:Peucker} (\dpa-\sed in short) which has the outstanding compression ratios, and \squishe~\cite{Muckell:Compression} which is the most current \sed enabled online trajectory simplification algorithm.
+We implement four line simplification algorithms, \ie our \cist and \cista, \sed equipped \dpa ~\cite{Douglas:Peucker} (\dpa-\sed in short, which has the outstanding compression ratios), and \squishe~\cite{Muckell:Compression} (which is the most current \sed enabled online trajectory simplification algorithm).
 We also implement polygon intersection algorithms, \cpia and our \rpia.
 All algorithms were implemented with Java.
 All tests were run on an {x64-based  PC with 8 Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz and 8GB of memory, and each test was repeated
@@ -142,7 +142,7 @@ over 3 times and the average is reported here}.
 \end{figure*}
 
 
-In this set of tests, we first evaluate the impacts of polygon intersection algorithm \rpia and parameter $M$ on the compression ratios of algorithms \cist and \cista, then compare the compression ratios of our algorithms \cist and \cista with \dpa and \squishe.
+In this set of tests, we first evaluate the impacts of polygon intersection algorithm \rpia and parameter $M$ on the compression ratios of algorithms \cist and \cista, then compare the compression ratios of our algorithms \cist and \cista with \dps and \squishe.
 
 Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations $\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$, the compression ratio of an algorithm is $(\sum_{j=1}^{M} |\overline{\mathcal{T}}_j |)/(\sum_{j=1}^{M} |\dddot{\mathcal{T}}_j |)$.
 By the definition, \emph{algorithms with lower compression ratios are better}.
@@ -163,12 +163,12 @@ More specially, the compression ratio decreases (a) fast when $M < 10$, (b) slow
 
 
 \ni(3) \emph{The region $[10, 20]$ is the candidate region for $M$ in terms of compression ratio.}
-Where, the compression ratio of $M=10$ is average \textcolor[rgb]{1.00,0.00,0.00}{$101.263730\%$} of $M=20$.
+Where, the compression ratio of $M=10$ is average {$101.26\%$} of $M=20$ on all datasets and for all $\epsilon$.
 %The former is average \textcolor[rgb]{1.00,0.00,0.00}{$102\%$} of the later.
 
 
 \stitle{Exp-1.2: Impacts of the error bound $\epsilon$ to compression ratios}.
-To evaluate the impacts of $\epsilon$ on compression ratios of these algorithms, we fixed $M=20$, and varied $\epsilon$ from $10m$ to $200m$ on the entire four datasets, respectively.
+To evaluate the impacts of $\epsilon$ on compression ratios of these algorithms, we fixed $M=20$ and varied $\epsilon$ from $10m$ to $200m$ on the entire four datasets, respectively.
 The results are reported in Figure~\ref{fig:cr-m20} .
 %Figure~\ref{fig:cr-m10}.  and
 
@@ -180,13 +180,13 @@ The results are reported in Figure~\ref{fig:cr-m20} .
 \ni (2) \pricar has the lowest compression ratios, compared with \truck, \sercar and \geolife, due to its highest sampling rate,
 \truck has the highest compression ratios due to its lowest sampling rate, and \sercar and \geolife have the compression ratios in the middle accordingly.
 
-\ni \textcolor[rgb]{1.00,0.00,0.00}{(3)} Algorithm \cist has \textcolor[rgb]{1.00,0.00,0.00}{comparable} compression ratios with \dpa, and is better than \squishe on all datasets.
-For all $\epsilon$, the compression ratios of \cist are on average ($112.9\%$, $108.8\%$, $107.6\%$, $108.7\%$) and ($91.5\%$, $79.1\%$, $71.6\%$, {$72.5\%$}) of \dpa and \squishe on (\truck, \sercar, \geolife, \pricar), respectively.
-For example, when $\epsilon = 40m$, the compression ratios are ($26.9\%$, $14.7\%$, $5.4\%$, $3.4\%$), ($29.9\%$, $16.0\%$, $5.8\%$, $3.6\%$) and ($31.3\%$, $19.9\%$, $8.0\%$, $4.9\%$) of \dpa, \cist and \squishe on (\truck, \sercar, \geolife, \pricar), respectively.
+\ni {(3)} Algorithm \cist has better compression ratios than \squishe, and is {comparable} with \dps, on all datasets and for all $\epsilon$.
+For all $\epsilon$, the compression ratios of \cist are on average ($91.5\%$, $79.1\%$, $71.6\%$, {$72.5\%$}) and ($112.9\%$, $108.8\%$, $107.6\%$, $108.7\%$) of \squishe and \dps on (\truck, \sercar, \geolife, \pricar), respectively.
+For example, when $\epsilon$=$40m$, the compression ratios of \squishe, \cist and \dps are ($31.3\%$, $19.9\%$, $8.0\%$, $4.9\%$), ($29.9\%$, $16.0\%$, $5.8\%$, $3.6\%$) and ($26.9\%$, $14.7\%$, $5.4\%$, $3.4\%$) on (\truck, \sercar, \geolife, \pricar), respectively.
 
-\ni \textcolor[rgb]{1.00,0.00,0.00}{(4)} Algorithm \cista has \textcolor[rgb]{1.00,0.00,0.00}{the best} compression ratios on all datasets.
-For all $\epsilon$, the compression ratios of \cista are on average ($79.0\%$, $79.3\%$, $80.7\%$, $81.7\%$) and ($64.3\%$, $57.6\%$, $53.7\%$, {$54.4\%$}) of \dpa and \squishe on (\truck, \sercar, \geolife, \pricar), respectively.
-For example, when $\epsilon = 40m$, the compression ratios of \cista are ($21.7\%$, $11.5\%$, $4.2\%$, $2.7\%$) on (\truck, \sercar, \geolife, \pricar), respectively.
+\ni {(4)} Algorithm \cista has {the best} compression ratios on all datasets and for all $\epsilon$.
+For all $\epsilon$, the compression ratios of \cista are on average ($64.3\%$, $57.6\%$, $53.7\%$, {$54.4\%$}) and ($79.0\%$, $79.3\%$, $80.7\%$, $81.7\%$) of \squishe and \dps on (\truck, \sercar, \geolife, \pricar), respectively.
+For example, when $\epsilon$=$40m$, the compression ratios of \cista are ($21.7\%$, $11.5\%$, $4.2\%$, $2.7\%$) on (\truck, \sercar, \geolife, \pricar), respectively.
 
 
 %The results also show that \cist has better compression ratios than \squishe on datasets with higher sampling rates.
@@ -198,7 +198,7 @@ For example, when $\epsilon = 40m$, the compression ratios of \cista are ($21.7\
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Evaluation of Average Errors}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-In this set of tests, we first evaluate the impacts of polygon intersection algorithm \rpia and parameter $M$ on the average errors of algorithms \cist and \cista, then compare the average errors of our algorithms \cist and \cista with \dpa and \squishe.
+In this set of tests, we first evaluate the impacts of polygon intersection algorithm \rpia and parameter $M$ on the average errors of algorithms \cist and \cista, then compare the average errors of our algorithms \cist and \cista with \dps and \squishe.
 
 Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations $\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$, and point $P_{j,i}$ denoting
 a point in trajectory $\dddot{\mathcal{T}}_j$ contained in a line segment $\mathcal{L}_{l,i}\in\overline{\mathcal{T}_l}$ ($l\in[1,M]$),
@@ -289,7 +289,7 @@ Similar as compression ratios, the average errors increases (a) fast when $M < 1
 
 
 \ni(3) \emph{The region $[10, 20]$ is also the candidate region for $M$ in terms of average errors.}
-Where, the average error of $M=10$ is average \textcolor[rgb]{1.00,0.00,0.00}{$97.5\%$} of $M=20$.
+Where, the average error of $M=10$ is average {$97.5\%$} of $M=20$.
 
 
 
@@ -301,10 +301,10 @@ The results are reported in Figure~\ref{fig:ae-m20}. %~\ref{fig:ae-m10} and
 
 \ni(1) Average errors obviously increase with the increase of $\epsilon$.
 
-\ni(2) Algorithms \cist and \cista have lager average errors compared with \dpa and \squishe.
+\ni(2) Algorithms \cist and \cista have lager average errors compared with \dps and \squishe.
 
 %\ni(2) All datasets have the similar average error in every $\epsilon$.
-%\ni(3) Algorithm \squishe has lower average errors than algorithms \dpa and \cist on all datasets and all $\epsilon$ values.
+%\ni(3) Algorithm \squishe has lower average errors than algorithms \dps and \cist on all datasets and all $\epsilon$ values.
 
 
 
@@ -343,7 +343,7 @@ The results are reported in Figure~\ref{fig:orig-points}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-In the set of tests, we compare the efficiency of polygon intersection algorithms \rpia and \cpia, the efficiency (execution time) of our approaches \cist and \cista with algorithms \dpa and \squishe, and test the impacts of parameter $M$, \ie the edge number of a regular polygon, to the efficiency of algorithms \cist and \cista.
+In the set of tests, we compare the efficiency of polygon intersection algorithms \rpia and \cpia, the efficiency of our approaches \cist and \cista with algorithms \dps and \squishe, and test the impacts of parameter $M$, \ie the edge number of a regular polygon, to the efficiency of algorithms \cist and \cista.
 %
 %The execution time is the running time of the compressing process.
 %For a small size trajectory, we repeat compress it tens of times and accumulation the total running time so as to get the average compression time.
@@ -455,10 +455,10 @@ To evaluate the impacts of $\epsilon$, we fixed $M=20$ and varying $\epsilon$  f
 The results are reported in Figure~\ref{fig:time-epsilon}.
 
 \ni(1) All algorithms are not very sensitive to $\epsilon$, but their running time all decreases a little bit with the increase of $\epsilon$, as the increment of $\epsilon$ decreases the number of directed line segments in the output.
-Further, algorithm \dpa is more sensitive to $\epsilon$ than the other three algorithms.
+Further, algorithm \dps is more sensitive to $\epsilon$ than the other three algorithms.
 
-\ni\textcolor[rgb]{1.00,0.00,0.00}{(2)} Algorithms \cist and \cista are obviously faster than \dpa and \squishe in all cases.
-\cist and \cista are on average ($17.9$, $12.2$, $15.3$, {$3.7$}) times faster than \dpa, and {($2.3$, $2.4$, $2.9$, {$2.4$}) times faster} than \squishe on (\truck, \sercar, {\geolife}, \pricar), respectively.
+\ni{(2)} Algorithms \cist and \cista are obviously faster than \dps and \squishe in all cases.
+\cist and \cista are on average ($17.9$, $12.2$, $15.3$, \textcolor[rgb]{1.00,0.50,0.25}{{$3.7$}}) times faster than \dps, and ($2.3$, $2.4$, $2.9$, {$2.4$}) times faster than \squishe on (\truck, \sercar, {\geolife}, \pricar), respectively.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -470,10 +470,10 @@ fixed $M=20$ and $\epsilon = 60m$, and varying the size \trajec{|T|} of trajecto
 The results are reported in Figure~\ref{fig:time-size}.
 
 \ni(1) Algorithms \cist and \cista scale well with the increase of the size of trajectories on all datasets,
-and have a linear running time, while algorithm \dpa does not.
+and have a linear running time, while algorithm \dps does not.
 This is consistent with their time complexity analyses.
 
-\ni\textcolor[rgb]{1.00,0.00,0.00}{(2)} Algorithms \cist and \cista are the fastest \sed enabled \lsa algorithms, and are {($6.3$--$10.1$, $4.0$--$6.7$, $2.4$--$7.0$, $3.5$--$6.3$)} times faster than \dpa,
+\ni\textcolor[rgb]{1.00,0.00,0.00}{(2)} Algorithms \cist and \cista are the fastest \sed enabled \lsa algorithms, and are {($6.3$--$10.1$, $4.0$--$6.7$, $2.4$--$7.0$, $3.5$--$6.3$)} times faster than \dps,
 and {($1.0$--$1.4$, $1.3$--$1.6$, $1.2$--$1.9$, $1.9$--$2.3$)} times faster than \squishe on the selected $1K$ to $10K$ points data sets (\truck, \sercar, \geolife, \pricar), respectively.
 The advantages of \cist and \cista increase with the increase of the size of trajectories.
 
