@@ -12,7 +12,7 @@ We now are ready to present two one pass, error bounded and \sed enabled line si
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\subsection{{One-pass algorithm}}
 \subsection{{Algorithm \cist}}
-The first algorithm, \cist, is a \emph{strong simplification}\cite{Trajcevski:DDR}, which outputs a subset of the original points.
+The first algorithm, \cist, is a \emph{strong simplification}\cite{Trajcevski:DDR} algorithm, which outputs a subset of the original points.
 Recall in Theorem~\ref{prop-3d-ci}, the point $Q$ may not be in the input sub trajectory $[P_s,...,P_e]$.
 If we mandatory require $Q=P_e$, the end point of the sub trajectory, then a \emph{narrow} spatio-temporal cone with a threshold of $\epsilon/2$ is helpful.
 
@@ -138,15 +138,11 @@ For convenience, here, we project the points and the oblique circular cones on a
 \subsection{{Algorithm \cista}}
 
 
+The second algorithm, named \cista, allows outputting points $\overline{\mathcal{T}}$ that may not belong to the original points $\dddot{\mathcal{T}}$.
+This method, known as the ``interpolation" approach, is used in disciplines of polygonal curve approximation \cite{Williams:Bounded, Heckbert:Survey, Zhao:Sleeve}, time series approximation \cite{ORourke:Fitting, Elmeleegy:Stream, Xie:Stream, Luo:Streaming} and trajectory simplification \cite{Lin:Operb}. 
+The ``interpolation" approach is also called a \emph{weak simplification} in \cite{Trajcevski:DDR}, and will usually bring better compression ratios.
 
-
-%The second algorithm, name \cista, outputs points that may not belong to the original points.
-If we allow $\overline{\mathcal{T}}$ be not a sub set of $\dddot{\mathcal{T}}$, then an \emph{aggressive} \cist, named \cista, which outputs points that may not belong to the original points, will bring better compression ratios.
-This method, known as the ``interpolation" approach, is used in disciplines of polygonal curve approximation \cite{Williams:Bounded, Heckbert:Survey, Zhao:Sleeve}, time series approximation \cite{ORourke:Fitting, Elmeleegy:Stream, Xie:Stream, Luo:Streaming} and trajectory simplification \cite{Lin:Operb}. The ``interpolation" approach is also called a \emph{weak simplification} in \cite{Trajcevski:DDR}.
-
-%\cista is the directly result of Corollary~\ref{prop-circle-intersection}.
-%
-
+Algorithm \cista is the directly result of Corollary~\ref{prop-circle-intersection}.
 Given a sub trajectory $[P_s,...,P_e]$, an error bound $\epsilon$, a constant $M$ and a time $t_c > t_s$, \cista outputs point $Q$ of Corollary~\ref{prop-circle-intersection}. The point $Q$ is got by the following strategies.
 
 \vspace{1ex}
@@ -156,7 +152,7 @@ Given a sub trajectory $[P_s,...,P_e]$, an error bound $\epsilon$, a constant $M
 \ni (2) if $G^*_e \ne \phi$ and $P^c_e \notin G^*_e$, then it gets the central point of intersection polygon $G^*_e$, projects it on the plane ``$t=t_e$", and outputs the projection point $Q$.
 
 \vspace{1ex}
-%Figure~\ref{alg:ciseda} is the P-codes of algorithm \cista. 
+%Figure~\ref{alg:ciseda} is the P-codes of algorithm \cista.
 Algorithm \cista runs the similar routine as algorithm \cist, except that in line 3 of Figure~\ref{alg:CI3d}, $\epsilon/2$ is replaced by $\epsilon$; and in lines 12-13 of Figure~\ref{alg:CI3d}, $P_e$ is replace by $Q$ which is got by the above strategies.
 
 

@@ -56,19 +56,24 @@ To this end, we propose an one-pass error bounded line simplification algorithm 
 
 \stab {(1)} We first present a novel local distance checking method, \ie the spatio-temporal cone intersection approach, which enables the one pass processing of trajectory data with the synchronous Euclidean distances checking. We then transform the spatio-temporal cone intersection problem to the approximated regular polygons intersection problem, which not only saves the running time, but also saves the memory.
 
-\stab {(2)} We develop a one-pass, error bounded and \sed enabled trajectory simplification algorithm, say, the \underline{C}one \underline{I}ntersection with \underline{S}ynchronous \underline{E}uclidean \underline{D}istance (\cist) algorithm, which runs in $O(n)$ time and $O(1)$ space.
+\stab {(2)} We develop two one-pass, error bounded and \sed enabled trajectory simplification algorithms, \ie the \underline{C}one \underline{I}ntersection with \underline{S}ynchronous \underline{E}uclidean \underline{D}istance algorithm (\cist) and the aggressive \cist (\cista), both running in $O(n)$ time and $O(1)$ space.
+\cist is a \emph{strong simplification}\cite{Trajcevski:DDR} algorithm, which outputs a subset of the original points.
+\cista is a \emph{weak simplification}\cite{Trajcevski:DDR} algorithm, which allows interpolating new data points into a trajectory under certain
+conditions.
+
 
 \stab (3) Using four real-life trajectory datasets (\truck, \sercar, \geolife, \pricar),
-we finally conduct an extensive experimental study, by comparing our algorithms \cist with \squishe (the fastest existing \sed enabled \lsa algorithm) and \dpa (the distinct existing LS algorithm in terms of compression ratio).
+we finally conduct an extensive experimental study, by comparing our algorithms \cist and \cista with \squishe (the fastest existing \sed enabled \lsa algorithm) and \dpa-\sed (\sed equipped \dpa, the distinct existing LS algorithm in terms of compression ratio).
 %
-We find that \cist is on average $(4:1; 4:1; 5:4; 5:2)$ times faster than \squishe on (\truck, \sercar, \geolife, \pricar), respectively.
+We find that \cist and \cista are on average ($4:1$; $4:1$; $5:4$; $5:2$) times faster than \squishe on (\truck, \sercar, \geolife, \pricar), respectively.
 %
-For compression ratios, \cist is comparable with \dpa, and is better than \squishe that is on average (84:2\%; 86:4\%; 97:1\%; 94:7\%) of \squishe on (\truck, \sercar, \geolife, \pricar), respectively.
+For compression ratios, \cist is comparable with \dpa, and is better than \squishe that is on average (84:2\%; 86:4\%; 97:1\%; 94:7\%) of \squishe on (\truck, \sercar, \geolife, \pricar), respectively; and \cista is better than \dpa-\sed and \squishe that are on average (84:2\%; 86:4\%; 97:1\%; 94:7\%) and (84:2\%; 86:4\%; 97:1\%; 94:7\%) of \dpa-\sed and \squishe on (\truck, \sercar, \geolife, \pricar), respectively.
+
 
 \stitle{{Organization}}.
 The remainder of the paper is organized as follows.
 Section 2 introduces the basic concepts and notations.
-Section 3 presents the one-pass, error bounded trajectory simplification algorithm (\cist).
+Section 3 presents the one-pass, error bounded trajectory simplification algorithms \cist and \cista.
 Section 4 reports the experimental results, followed by related work in
 Section 5 and conclusion in Section 6.
 %The appendix covers additional related work and experimental results.
