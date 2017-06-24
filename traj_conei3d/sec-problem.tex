@@ -124,7 +124,7 @@ Similarly, points $P_3$ and $P_4$ are processed, as shown in Figure~\ref{fig:sle
 
 
 
-\subsection{Intersection Computation of Convex Polygons}
+\subsection{\textcolor[rgb]{0.00,0.07,1.00}{Intersection Computation of Convex Polygons}}
 
 We implement a convex polygon intersection algorithm based on the one in~\cite{ORourke:Intersection}, which is shown in Figure~\ref{alg:c-poly-inter}.
 
@@ -139,7 +139,7 @@ We implement a convex polygon intersection algorithm based on the one in~\cite{O
 	{\bf Algorithm} ~$\kw{CPIntersection}$($\mathcal{G}_1$, $\mathcal{G}_2$) \\
 	\bcc \hspace{1ex}\=  \SET $A$ and $B$ {arbitrarily} on $\mathcal{G}_1$ and $\mathcal{G}_2$\\
 	\icc \hspace{1ex}\= \Repeat \\
-	\icc \>\hspace{3ex} \If $A$ intersects $B$ \Then \\
+	\icc \>\hspace{3ex} \If $A \bigcap B \ne \phi$ \Then \\
 	\icc \>\hspace{6ex} {Check for termination.} \\
 	\icc \>\hspace{6ex} Update an inside flag. \\
 	\icc \> \hspace{3ex} Moves on either $A$ or $B$.\\
@@ -159,12 +159,20 @@ We implement a convex polygon intersection algorithm based on the one in~\cite{O
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The basic idea of the algorithm~\cite{ORourke:Intersection} is straightforward. Assume the boundaries of the two polygons $\mathcal{G}_1$ and $\mathcal{G}_2$ are oriented counterclockwise, and let $A$ and $B$ be directed edges on each. The algorithm has $A$ and $B$ ``chasing'' one another, step by step on the polygons, so that they meet at every crossing of $\mathcal{G}_1$ and $\mathcal{G}_2$.
+The basic idea of the algorithm~\cite{ORourke:Intersection} is straightforward. Assume the boundaries of the two polygons $\mathcal{G}_1$ and $\mathcal{G}_2$ are oriented counterclockwise, and let $\vv{A} = (P_{As}, P_{Ae})$ and $\vv{B} = (P_{Bs}, P_{Be})$ be directed edges on each (see Figure~\ref{fig:c-poly-inter}).
+The algorithm has $\vv{A}$ and $\vv{B}$ ``chasing'' one another, \ie moves on $\vv{A}$ or $\vv{B}$ on polygon $\mathcal{G}_1$ or $\mathcal{G}_2$ step by step under some rules, so that they meet at every crossing of $\mathcal{G}_1$ and $\mathcal{G}_2$.
 %
-(1) During each step, it checks the intersection of $A$ and $B$. If $A$ intersects $B$ (line 3), then the algorithm checks for some special termination conditions (\eg if $A$ and $B$ are overlapped, and at the same time, $\mathcal{G}_1$ and $\mathcal{G}_2$ are on the opposite sides of the overlapped line segment, then the process is terminated) (line 4), and records the inner segment, which is a boundary segment of the intersection polygon (line 5).
+The rules are carefully designed depending on geometric conditions of $\vv{A}$ and $\vv{B}$.
+Let $\mathcal{H}(\vv{A})$ be the open half-plane to the left of $\vv{A}$, the rules are follows:
+(1) if $\vv{A} \times \vv{B} < 0$ and $P_{Ae} \not \in \mathcal{H}(\vv{B})$, or $\vv{A} \times \vv{B} > 0$ and $P_{Be} \in \mathcal{H}(\vv{A})$, then advance $\vv{A}$ a step;
+(2) if $\vv{A} \times \vv{B} > 0$ and $P_{Be} \not \in \mathcal{H}(\vv{A})$, or $\vv{A} \times \vv{B} < 0$ and $P_{Ae} \in \mathcal{H}(\vv{B})$, then advance $\vv{B}$ a step.
+
+
+
+During the process, it checks the intersection of $\vv{A}$ and $\vv{B}$. If $\vv{A}$ intersects $\vv{B}$ (line 3), then the algorithm checks for some special termination conditions (\eg if $\vv{A}$ and $\vv{B}$ are overlapped, and at the same time, $\mathcal{G}_1$ and $\mathcal{G}_2$ are on the opposite sides of the overlapped line segment, then the process is terminated) (line 4), and records the inner segment, which is a boundary segment of the intersection polygon (line 5).
 %
-(2) The algorithm moves on $A$ or $B$ one step under some carefully designed rules, depending on geometric conditions of $A$ and $B$ (line 6).
-The above processes repeated, until both $A$ and $B$ cycle their polygons (line 7).
+The algorithm moves on $\vv{A}$ or $\vv{B}$ one step under the above rules (line 6).
+The above processes repeated, until both $\vv{A}$ and $\vv{B}$ cycle their polygons (line 7).
 %
 After that, the algorithm handles three special cases of the two polygons, \ie $\mathcal{G}_1 \subset \mathcal{G}_2$, $\mathcal{G}_2 \subset \mathcal{G}_1$ and $\mathcal{G}_1 \bigcap \mathcal{G}_2 = \emptyset$ cases (line 8).
 %
@@ -179,16 +187,15 @@ The algorithm has a time complexity of $O(|\mathcal{G}_1| + |\mathcal{G}_2|)$, w
 \begin{example}
 Figure~\ref{fig:c-poly-inter} shows a running example of the convex polygon intersection algorithm.
 
-\sstab(1) Initially, directed edges $A$ and $B$ are on polygons $\mathcal{G}_2$ and $\mathcal{G}_1$, respectively, such that $A \bigcap B = \{P_1\}$, \ie
-$A$ and $B$ intersect on point $P_1$,  as shown in Figure~\ref{fig:c-poly-inter}.(1).
+\sstab(1) Initially, directed edges $\vv{A}$ and $\vv{B}$ are on polygons $\mathcal{G}_2$ and $\mathcal{G}_1$, respectively, such that $\vv{A} \bigcap \vv{B} = \{P_1\}$, \ie $\vv{A}$ and $\vv{B}$ intersect on point $P_1$,  as shown in Figure~\ref{fig:c-poly-inter}.(1).
 %
-Then $A$ moves  a step forward, and makes $A \bigcap B = \emptyset$ as shown in Figure~\ref{fig:c-poly-inter}.(2). 
+Then $\vv{A}$ moves  a step forward, and makes $\vv{A} \bigcap \vv{B} = \emptyset$ as shown in Figure~\ref{fig:c-poly-inter}.(2).
 %
-After 7 steps of moving $A$, $A$ and $B$ intersect on point $P_2$  as shown in Figure~\ref{fig:c-poly-inter}.(3).
+After 7 steps of moving $\vv{A}$, edges $\vv{A}$ and $\vv{B}$ intersect on point $P_2$  as shown in Figure~\ref{fig:c-poly-inter}.(3).
 
-\sstab(2) Then edge $B$ moves  a step forward, and $A \bigcap B = \emptyset$  as shown in Figure~\ref{fig:c-poly-inter}.(4). After 6 steps of moving $B$, $B$ finishes its cycle along the polygon  as shown in Figure~\ref{fig:c-poly-inter}.(5).
+\sstab(2) Then edge $\vv{B}$ moves  a step forward, and $\vv{A} \bigcap \vv{B} = \emptyset$  as shown in Figure~\ref{fig:c-poly-inter}.(4). After 6 steps of moving of $\vv{B}$, $\vv{B}$ finishes its cycle along the polygon as shown in Figure~\ref{fig:c-poly-inter}.(5).
 
-\sstab(3) As both edges$A$ and $B$ have finished their cycles, the algorithm finally returns the intersection polygon as shown in Figure~\ref{fig:c-poly-inter}.(6).
+\sstab(3) As both edges $\vv{A}$ and $\vv{B}$ have finished their cycles, the algorithm finally returns the intersection polygon as shown in Figure~\ref{fig:c-poly-inter}.(6).
 \end{example}
 
 
