@@ -96,7 +96,7 @@ Given a sequence of data points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error
 For the start point $P_s$ and any point $P_{s+i}$ ($i\in[1, k]$), there are two different lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ such that $ped(P_i, \vv{P_sP^u_{s+i}})$ $=$ $ped(P_i, \vv{P_sP^l_{s+i}}) = \epsilon$ and $\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta$. Indeed, they forms a \emph{cone} $\mathcal{C}$($P_s$, $P_{s+i}$, $\epsilon$) (also called a \emph{sector} in \sleeve \cite{Zhao:Sleeve}) that takes $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the border lines.
 % , where $P_s$ is the center point, and $\vv{P_sP^l_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ are two bound lines.
 Then there exists a data point $Q$ such that for any data point $P_{s+i}$ ($i \in [1, ... k]$), its \ped to
-line $\overline{P_sQ}$ is less than the given \ped tolerance $\epsilon$ if and only if $\bigcap_{i=1}^{k}\mathcal{C}(P_s, P_{s+i}, \epsilon) \ne \phi$.
+line $\overline{P_sQ}$ is less than the given \ped tolerance $\epsilon$ if and only if $\bigcap_{i=1}^{k}\mathcal{C}(P_s, P_{s+i}, \epsilon) \ne \emptyset$.
 
 The point $Q$ may not belong to $\{P_{s}, P_{s+1},$ $\ldots, P_{s+k}\}$.
 However, if $P_{s+i}$ ($1\le i\le k$) is chosen as $Q$, then \emph{cones} with a distance tolerance $\epsilon/2$ could be employed to ensure that the \ped is error bounded by $\epsilon$ \wrt line segment $\vv{P_sP_{s+i}}$ \cite{Zhao:Sleeve}. That is, {\em these \cia based algorithms can be easily adopted for trajectory compression by forming cones with a distance tolerance $\epsilon/2$}.  It is also worth pointing out that the \cia based algorithms  run in $O(n)$ time and $O(1)$ space, and are one-pass algorithms.
@@ -115,7 +115,7 @@ Then $P_2$ is read, and the cone $\mathcal{C}$($P_0$, $P_{2}$, $\epsilon/2$) is 
 %
 Similarly, points $P_3$ and $P_4$ are processed, as shown in Figure~\ref{fig:sleeve}.(3) and Figure~\ref{fig:sleeve}.(4), respectively.
 
-\sstab(2) When point $P_5$ is read,  line segment $\vv{P_0P_4}$ is output, and point $P_4$ becomes the start point, as $\bigcap_{i=1}^{4}\mathcal{C}(P_0, P_{s+i}, \epsilon/2) \ne \phi$ and $\bigcap_{i=1}^{5}\mathcal{C}(P_0, P_{s+i}, \epsilon/2) = \phi$ as shown in Figure~\ref{fig:sleeve}.(5).
+\sstab(2) When point $P_5$ is read,  line segment $\vv{P_0P_4}$ is output, and point $P_4$ becomes the start point, as $\bigcap_{i=1}^{4}\mathcal{C}(P_0, P_{s+i}, \epsilon/2) \ne \emptyset$ and $\bigcap_{i=1}^{5}\mathcal{C}(P_0, P_{s+i}, \epsilon/2) = \emptyset$ as shown in Figure~\ref{fig:sleeve}.(5).
 
 
 \sstab(3) Points $P_5, \ldots, P_{10}$ are processed one by one in order, and finally the algorithm outputs another line segment $\vv{P_4P_{10}}$ as shown in Figure~\ref{fig:sleeve}.(5).
@@ -144,7 +144,7 @@ We implement a convex polygon intersection algorithm based on the one in~\cite{O
 	\icc \>\hspace{6ex} Update an inside flag. \\
 	\icc \> \hspace{3ex} Moves on either $A$ or $B$.\\
 	\icc \hspace{1ex} \Until both $A$ and $B$ cycle their polygons \\
-	\icc \hspace{1ex} Handle $\mathcal{G}_1 \subset \mathcal{G}_2$ and $\mathcal{G}_2 \subset \mathcal{G}_1$ and $\mathcal{G}_1 \bigcap \mathcal{G}_2 = \phi$ cases \\
+	\icc \hspace{1ex} Handle $\mathcal{G}_1 \subset \mathcal{G}_2$ and $\mathcal{G}_2 \subset \mathcal{G}_1$ and $\mathcal{G}_1 \bigcap \mathcal{G}_2 = \emptyset$ cases \\
     \icc \hspace{1ex} \Return $\mathcal{G}_1 \bigcap \mathcal{G}_2$
 }
 \vspace{-2ex}
@@ -166,7 +166,7 @@ The basic idea of the algorithm~\cite{ORourke:Intersection} is straightforward. 
 (2) The algorithm moves on $A$ or $B$ one step under some carefully designed rules, depending on geometric conditions of $A$ and $B$ (line 6).
 The above processes repeated, until both $A$ and $B$ cycle their polygons (line 7).
 %
-After that, the algorithm handles three special cases of the two polygons, \ie $\mathcal{G}_1 \subset \mathcal{G}_2$, $\mathcal{G}_2 \subset \mathcal{G}_1$ and $\mathcal{G}_1 \bigcap \mathcal{G}_2 = \phi$ cases (line 8).
+After that, the algorithm handles three special cases of the two polygons, \ie $\mathcal{G}_1 \subset \mathcal{G}_2$, $\mathcal{G}_2 \subset \mathcal{G}_1$ and $\mathcal{G}_1 \bigcap \mathcal{G}_2 = \emptyset$ cases (line 8).
 %
 At last, it returns the intersection polygon (line 9).
 
@@ -179,11 +179,16 @@ The algorithm has a time complexity of $O(|\mathcal{G}_1| + |\mathcal{G}_2|)$, w
 \begin{example}
 Figure~\ref{fig:c-poly-inter} shows a running example of the convex polygon intersection algorithm.
 
-(1) Initially, directed edges $A$ and $B$ are on polygons $\mathcal{G}_2$ and $\mathcal{G}_1$ separately, and $A \bigcap B = P_1$. Then $A$ moves  a step forward, and $A \bigcap B = \phi$. After 7 steps of moving $A$, $A$ and $B$ intersect on $P_2$  as shown in Figure~\ref{fig:c-poly-inter}.(3).
+\sstab(1) Initially, directed edges $A$ and $B$ are on polygons $\mathcal{G}_2$ and $\mathcal{G}_1$, respectively, such that $A \bigcap B = P_1$, \ie
+$A$ and $B$ intersect on point $P_1$,  as shown in Figure~\ref{fig:c-poly-inter}.(1).
 %
-(2) Then edge $B$ moves  a step forward, and $A \bigcap B = \phi$. After 6 steps of moving $B$, $B$ finishes its cycle along the polygon.
+Then $A$ moves  a step forward, and makes $A \bigcap B = \emptyset$ as shown in Figure~\ref{fig:c-poly-inter}.(2). 
 %
-As both edges$A$ and $B$ finish their cycles, the algorithm finally returns the intersection polygon as shown in Figure~\ref{fig:c-poly-inter}.(6).
+After 7 steps of moving $A$, $A$ and $B$ intersect on point $P_2$  as shown in Figure~\ref{fig:c-poly-inter}.(3).
+
+\sstab(2) Then edge $B$ moves  a step forward, and $A \bigcap B = \emptyset$  as shown in Figure~\ref{fig:c-poly-inter}.(4). After 6 steps of moving $B$, $B$ finishes its cycle along the polygon  as shown in Figure~\ref{fig:c-poly-inter}.(5).
+
+\sstab(3) As both edges$A$ and $B$ finish their cycles, the algorithm finally returns the intersection polygon as shown in Figure~\ref{fig:c-poly-inter}.(6).
 \end{example}
 
 
