@@ -65,13 +65,13 @@ We next illustrate these notations with examples.
 \label{exm-notations}
 Consider Figure~\ref{fig:notations}, in which
 
-\ni(1) $\dddot{\mathcal{T}}[P_0$, $\ldots, P_{10}]$ is a trajectory having eleven data points,
+\sstab(1) $\dddot{\mathcal{T}}[P_0$, $\ldots, P_{10}]$ is a trajectory having eleven data points,
 
-\ni (2) the set of two continuous line segments $\{\vv{P_0P_4}$, $\vv{P_4P_{10}}$\} (Left) and the set of four continuous line segments $\{\vv{P_0P_2}$, $\vv{P_2P_4}$, $\vv{P_4P_7}$, $\vv{P_7P_{10}}$\} (Right) are two piecewise line representations of trajectory $\dddot{\mathcal{T}}$,
+\sstab (2) the set of two continuous line segments $\{\vv{P_0P_4}$, $\vv{P_4P_{10}}$\} (Left) and the set of four continuous line segments $\{\vv{P_0P_2}$, $\vv{P_2P_4}$, $\vv{P_4P_7}$, $\vv{P_7P_{10}}$\} (Right) are two piecewise line representations of trajectory $\dddot{\mathcal{T}}$,
 
-\ni (3) $ped(P_4, \vv{P_0P_{10}})=|\vv{P_4P^*_4}|$, where $P^*_4$ is the perpendicular point of $P_4$ \wrt line segment $\vv{P_0P_{10}}$, and
+\sstab(3) $ped(P_4, \vv{P_0P_{10}})=|\vv{P_4P^*_4}|$, where $P^*_4$ is the perpendicular point of $P_4$ \wrt line segment $\vv{P_0P_{10}}$, and
 
-\ni  (4) $sed(P_4, \vv{P_0P_{10}})= |\vv{P_4P'_4}|$, $sed(P_2, \vv{P_0P_{4}})= |\vv{P_2P'_2}|$ and $sed(P_7, \vv{P_4P_{10}})$ $=$ $|\vv{P_7P'_7}|$,
+\sstab (4) $sed(P_4, \vv{P_0P_{10}})= |\vv{P_4P'_4}|$, $sed(P_2, \vv{P_0P_{4}})= |\vv{P_2P'_2}|$ and $sed(P_7, \vv{P_4P_{10}})$ $=$ $|\vv{P_7P'_7}|$,
 where points $P'_4$, $P'_2$ and $P'_7$ are the synchronized points of points $P_4$, $P_2$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$, $\vv{P_0P_{4}}$ and $\vv{P_4P_{10}}$, respectively.
 \end{example}
 \vspace{-2ex}
@@ -99,7 +99,7 @@ Then there exists a data point $Q$ such that for any data point $P_{s+i}$ ($i \i
 line $\overline{P_sQ}$ is less than the given \ped tolerance $\epsilon$ if and only if $\bigcap_{i=1}^{k}\mathcal{C}(P_s, P_{s+i}, \epsilon) \ne \phi$.
 
 The point $Q$ may not belong to $\{P_{s}, P_{s+1},$ $\ldots, P_{s+k}\}$.
-However, if $P_{s+i}$ ($1\le i\le k$) is chosen as $Q$, then \emph{cones} with a distance tolerance $\epsilon/2$ could be employed to ensure that the \ped is error bounded by $\epsilon$ \wrt line segment $\vv{P_sP_{s+i}}$ \cite{Zhao:Sleeve}. That is, these \cia based algorithms can be easily adopted for trajectory compression by forming cones with a distance tolerance $\epsilon/2$.  It is also worth pointing out that the \cia based algorithms  run in $O(n)$ time and $O(1)$ space, and are one-pass algorithms.
+However, if $P_{s+i}$ ($1\le i\le k$) is chosen as $Q$, then \emph{cones} with a distance tolerance $\epsilon/2$ could be employed to ensure that the \ped is error bounded by $\epsilon$ \wrt line segment $\vv{P_sP_{s+i}}$ \cite{Zhao:Sleeve}. That is, {\em these \cia based algorithms can be easily adopted for trajectory compression by forming cones with a distance tolerance $\epsilon/2$}.  It is also worth pointing out that the \cia based algorithms  run in $O(n)$ time and $O(1)$ space, and are one-pass algorithms.
 %
 We next illustrate how the \cia based algorithms can be used for trajectory compression.
 
@@ -110,15 +110,15 @@ We next illustrate how the \cia based algorithms can be used for trajectory comp
 \label{exm-alg-sleeve}
 Consider Figure~\ref{fig:sleeve}. A \cia based algorithm takes as input a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$, and returns a simplified ployline consisting of two line segments $\vv{P_0P_4}$ and  $\vv{P_4P_{10}}$.
 
-\ni(1) Initially, $P_0$ is the start point. The point $P_1$ is firstly read, and the cone $\mathcal{C}$($P_0$, $P_{1}$, $\epsilon/2$) of $P_1$ is created as shown in Figure~\ref{fig:sleeve}.(1).
+\sstab(1) Initially, $P_0$ is the start point. The point $P_1$ is firstly read, and the cone $\mathcal{C}$($P_0$, $P_{1}$, $\epsilon/2$) of $P_1$ is created as shown in Figure~\ref{fig:sleeve}.(1).
 Then $P_2$ is read, and the cone $\mathcal{C}$($P_0$, $P_{2}$, $\epsilon/2$) is created for $P_2$. The intersection of $\mathcal{C}$($P_0$, $P_{1}$, $\epsilon/2$) and $\mathcal{C}$($P_0$, $P_{2}$, $\epsilon/2$) is not empty as shown in Figure~\ref{fig:sleeve}.(2), which has a up border line $P_0P_2^u$ and a low border line $P_0P_1^l$.
 %
 Similarly, points $P_3$ and $P_4$ are processed, as shown in Figure~\ref{fig:sleeve}.(3) and Figure~\ref{fig:sleeve}.(4), respectively.
 
-\ni(2) When point $P_5$ is read,  line segment $\vv{P_0P_4}$ is output, and point $P_4$ becomes the start point, as $\bigcap_{i=1}^{4}\mathcal{C}(P_0, P_{s+i}, \epsilon/2) \ne \phi$ and $\bigcap_{i=1}^{5}\mathcal{C}(P_0, P_{s+i}, \epsilon/2) = \phi$ as shown in Figure~\ref{fig:sleeve}.(5).
+\sstab(2) When point $P_5$ is read,  line segment $\vv{P_0P_4}$ is output, and point $P_4$ becomes the start point, as $\bigcap_{i=1}^{4}\mathcal{C}(P_0, P_{s+i}, \epsilon/2) \ne \phi$ and $\bigcap_{i=1}^{5}\mathcal{C}(P_0, P_{s+i}, \epsilon/2) = \phi$ as shown in Figure~\ref{fig:sleeve}.(5).
 
 
-\ni(3) Points $P_5, \ldots, P_{10}$ are processed one by one in order, and finally the algorithm outputs another line segment $\vv{P_4P_{10}}$ as shown in Figure~\ref{fig:sleeve}.(5).
+\sstab(3) Points $P_5, \ldots, P_{10}$ are processed one by one in order, and finally the algorithm outputs another line segment $\vv{P_4P_{10}}$ as shown in Figure~\ref{fig:sleeve}.(5).
 \end{example}
 
 
@@ -137,15 +137,15 @@ We implement a convex polygon intersection algorithm based on the one in~\cite{O
 \vspace{-1ex}
 \mat{0ex}{
 	{\bf Algorithm} ~$\kw{CPIntersection}$($\mathcal{G}_1$, $\mathcal{G}_2$) \\
-	\bcc \hspace{1ex}\=  Set $A$ and $B$ {arbitrarily} on $\mathcal{G}_1$ and $\mathcal{G}_2$\\
-	\icc \hspace{1ex}\= Repeat \\
-	\icc \>\hspace{3ex} If $A$ intersects $B$ Then \\
+	\bcc \hspace{1ex}\=  \SET $A$ and $B$ {arbitrarily} on $\mathcal{G}_1$ and $\mathcal{G}_2$\\
+	\icc \hspace{1ex}\= \Repeat \\
+	\icc \>\hspace{3ex} \If $A$ intersects $B$ \Then \\
 	\icc \>\hspace{6ex} {Check for termination.} \\
 	\icc \>\hspace{6ex} Update an inside flag. \\
 	\icc \> \hspace{3ex} Moves on either $A$ or $B$.\\
-	\icc \hspace{1ex} Until both $A$ and $B$ cycle their polygons \\
+	\icc \hspace{1ex} \Until both $A$ and $B$ cycle their polygons \\
 	\icc \hspace{1ex} Handle $\mathcal{G}_1 \subset \mathcal{G}_2$ and $\mathcal{G}_2 \subset \mathcal{G}_1$ and $\mathcal{G}_1 \bigcap \mathcal{G}_2 = \phi$ cases \\
-    \icc \hspace{1ex} Return $\mathcal{G}_1 \bigcap \mathcal{G}_2$
+    \icc \hspace{1ex} \Return $\mathcal{G}_1 \bigcap \mathcal{G}_2$
 }
 \vspace{-2ex}
 \myhrule
