@@ -11,14 +11,14 @@ In this section, we first analyze the properties of synchronized points and sync
 \subsection{Spatio-Temporal Cone Intersection}
 
 %Recall that the \sed of point $P_i$ to a directed line segment $\mathcal{L} = \vv{P_{s}P_{e}}$, denoted as $sed(P_i, \mathcal{L})$, is $|P_iP_i'|$, the distance from $P_i$ to its synchronized point $P_i' (x_i', y_i', t_i)$ \wrt $\mathcal{L}$.
-Consider a sub-trajectory $[P_s, \ldots, P_e]$, an error bound $\epsilon$, and a 3D coordinate system whose origin, $x$-axis, $y$-axis and $t$-axis  are $P_s$, longitude, latitude and time, respectively, as shown in Figure~\ref{fig:sed3d}.
+Consider a sub-trajectory $[P_s, \ldots, P_e]$, an error bound $\epsilon$, and a 3D Cartesian coordinate system whose origin, $x$-axis, $y$-axis and $t$-axis  are $P_s$, longitude, latitude and time, respectively, as shown in Figure~\ref{fig:sed3d}.
 
 
 
 \stitle{Synchronous Circles (\circle{}}. The synchronous circle of a point $P_i(x_i, y_i, t_i)$, denoted as \circle{(P_i, \epsilon)}, is a circle on the plane $t=t_i$ that takes $P_i$ as its center and $\epsilon$ as its radius.
 
 
-It is easy to know that for any point $P'_i$ in the area of a circle \circle{(P_i, \epsilon)}, its distance to $P_i$ is less than $\epsilon$, 
+It is easy to know that for any point $P'_i$ in the area of a circle \circle{(P_i, \epsilon)}, its distance to $P_i$ is less than $\epsilon$,
 and Figure~\ref{fig:sed3d} illustrates a synchronous circle \circle{(P_i, \epsilon)} of point $P_i$.
 
 %Note that in this definition, a \emph{synchronous circle} $\mathcal{O}(P_i, \epsilon)$ is only defined by a central point $P_i$ and a constant $\epsilon$. Indeed, it is nothing to do with any start point $P_s$ or end point $P_e$.
@@ -55,9 +55,9 @@ We have the conclusion.
 
 \stitle{Spatio-temporal cones (\cone{})}. Given a sub-trajectory $\{P_s,\ldots,$ $P_e\}$ and an error bound $\epsilon$, the spatio-temporal cone of point $P_i$ \wrt point $P_s$, denoted as \cone{(P_s, \mathcal{O}(P_i, \epsilon))}, is an oblique circular cone that takes the start point $P_s$ as its apex and the synchronous circle $\mathcal{O}(P_i, \epsilon)$ as its base.
 
-Two spatio-temporal cones \cone{(P_s, \mathcal{O}(P_i, \epsilon))} and \cone{(P_s, \mathcal{O}(P_{i+1}, \epsilon))} are illustrated in Figure~\ref{fig:cis}. 
+Two spatio-temporal cones \cone{(P_s, \mathcal{O}(P_i, \epsilon))} and \cone{(P_s, \mathcal{O}(P_{i+1}, \epsilon))} are illustrated in Figure~\ref{fig:cis}.
 
-\stitle{Cone projection}. The projection of a cone \cone{(P_s, \mathcal{O}(P_i, \epsilon))} of $P_i(x_i, y_i, t_i)$ \wrt $P_s(x_s, y_s, t_s)$ on a plane $t = t_c > t_s$ is a circle \circle{(P^c_i, r^c_i)} such that (1)  $P^c_i.x = x_s +  \frac{t_c - t_s}{t_i - t_s}(x_i - x_s)$, (2)  $P^c_i.y = y_s +  \frac{t_c - t_s}{t_i - t_s}(y_i - y_s)$, (3)   $P^c_i.t = t_c$ and (4) $r^c_i =\frac{t_c-t_s}{t_i-t_s}{\epsilon}$.
+\stitle{Cone projection circle}. The projection of \cone{(P_s, \mathcal{O}(P_i(x_i, y_i, t_i), \epsilon))}  \wrt $P_s(x_s, y_s, t_s)$ on a plane $t = t_c > t_s$ is a circle \circle{(P^c_i, r^c_i)} such that (1)  $P^c_i.x = x_s +  \frac{t_c - t_s}{t_i - t_s}(x_i - x_s)$, (2)  $P^c_i.y = y_s +  \frac{t_c - t_s}{t_i - t_s}(y_i - y_s)$, (3)   $P^c_i.t = t_c$ and (4) $r^c_i =\frac{t_c-t_s}{t_i-t_s}{\epsilon}$.
 
 
 
@@ -65,7 +65,7 @@ Two spatio-temporal cones \cone{(P_s, \mathcal{O}(P_i, \epsilon))} and \cone{(P_
 
 The red dashed circle $\mathcal{O}(P^i_{i+1}, r^i_{i+1})$ on plane $t=t_i$ in Figure~\ref{fig:cis} is the projection of cone \cone{(P_s, \mathcal{O}(P_i, \epsilon))}.
 
-We are now ready to extend the \emph{cone intersection} method \cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve} from a 2D space to a 3D space. 
+We are now ready to extend the \emph{cone intersection} method \cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve} from a 2D space to a 3D space.
 
 
 
@@ -74,14 +74,13 @@ We are now ready to extend the \emph{cone intersection} method \cite{Williams:Lo
 
 \begin{lemma}
 \label{prop-3d-syn-point}
-Given a sub-trajectory $[P_s, \ldots, P_e]$, the intersection point $P'_i$ of the directed line segment $\vv{P_sP_e}$ and the plane $t=t_i$ is the synchronized data point of $P_i(x_i, y_i, t_i)$ ($s<i<e$) \wrt  $\vv{P_sP_e}$,
-and the distance $|\vv{P_iP'_i}|$ from $P_i$ to $P'_i$ is the \sed distance of $P_i$ to $\vv{P_sP_e}$.
+Given a sub-trajectory $[P_s, \ldots, P_e]$, the intersection point $P'_i$ of the directed line segment $\vv{P_sP_e}$ and the plane $t=t_i$ is the synchronized data point of $P_i(x_i, y_i, t_i)$ ($s<i<e$) \wrt  $\vv{P_sP_e}$, and the distance $|\vv{P_iP'_i}|$ from $P_i$ to $P'_i$ is the \sed distance of $P_i$ to $\vv{P_sP_e}$.
 %in the spatio-temporal space.
 \end{lemma}
 
 \begin{proof} It suffices to show that $P'_i$ is indeed a synchronized data point $P_i$ \wrt $\vv{P_sP_e}$ only.
 %
-The intersection point $P'_i(x'_i, y'_i, t'_i)$ the directed line segment $\vv{P_sP_e}$ and the plane $t=t_i$ satisfies that $t'_i = t_i$ and $\frac{t'_i - t_s}{t_e - t_s}$ = $\frac{t_i - t_s}{t_e - t_s}$  = $\frac{|P_sP'_i|}{|P_sP_e|}$ = $\frac{x'_i - x_s}{x_e - x_s}$ = $\frac{y'_i - y_s}{y_e - y_s}$. Hence, $x'_i = x_s +  \frac{t_i-t_s}{t_e - t_s}(x_e - x_s)$ and $y'_i = y_s +  \frac{t_i - t_s}{t_e - t_s}(y_e - y_s)$. 
+The intersection point $P'_i(x'_i, y'_i, t'_i)$ the directed line segment $\vv{P_sP_e}$ and the plane $t=t_i$ satisfies that $t'_i = t_i$ and $\frac{t'_i - t_s}{t_e - t_s}$ = $\frac{t_i - t_s}{t_e - t_s}$  = $\frac{|P_sP'_i|}{|P_sP_e|}$ = $\frac{x'_i - x_s}{x_e - x_s}$ = $\frac{y'_i - y_s}{y_e - y_s}$. Hence, $x'_i = x_s +  \frac{t_i-t_s}{t_e - t_s}(x_e - x_s)$ and $y'_i = y_s +  \frac{t_i - t_s}{t_e - t_s}(y_e - y_s)$.
 %
 By the definition of synchronized data points, we have the conclusion.
 \end{proof}
@@ -102,7 +101,7 @@ By the definition of synchronized data points, we have the conclusion.
 
 \begin{theorem}
 \label{prop-3d-ci}
-Given a sub-trajectory $[P_s,...,P_e]$ and an error bound $\epsilon$, there exists a point $Q$ such that $Q.t = P_e.t$ and $sed(P_i, \vv{P_sQ})<\epsilon$ for each $i \in (s,e]$ if and only if $\bigcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_i, \epsilon)} \ne \{P_s\}$.
+Given a sub-trajectory $[P_s,...,P_e]$ and an error bound $\epsilon$, there exists a point $Q$ such that $Q.t = P_e.t$ and $sed(P_i, \vv{P_sQ})<\epsilon$ for each $i \in (s,e]$ if and only if $\bigsqcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_i, \epsilon)} \ne \{P_s\}$.
 \end{theorem}
 
 \begin{proof}
@@ -137,7 +136,7 @@ Theorem~\ref{prop-3d-ci} tells us that ...
 
 \begin{prop}
 \label{prop-circle-intersection}
-Given time $t_c > t_s$, there exists a point $Q$, $Q.t = P_e.t$, such that $sed(P_i, \vv{P_sQ})<\epsilon$ for all points $P_i$, $i \in [s,e]$, if and only if $\bigcap_{i=s+1}^{e}{\mathcal{O}(P^c_i, r^c_i)} \ne \phi$.
+Given time $t_c > t_s$, there exists a point $Q$, $Q.t = P_e.t$, such that $sed(P_i, \vv{P_sQ})<\epsilon$ for all points $P_i$, $i \in [s,e]$, if and only if $\bigcap_{i=s+1}^{e}{\mathcal{O}(P^c_i, r^c_i)} \ne \emptyset$.
 \end{prop}
 
 
@@ -157,7 +156,7 @@ Moreover, the checking of intersection of these 3D cones could be enforced by a 
 
 In the spatio-temporal space, the notion \emph{cone} of cone intersection \cite{Williams:Longest, Sklansky:Cone} (or \emph{sector} in sleeve \cite{Zhao:Sleeve}) algorithm is extended to a new notion in 3D space, \ie the \emph{spatio-temporal cone}.
 
-\subsection{Approximating Circles with Polygons}
+\subsection{Approximating Circles with Regular Polygons}
 Finding the common intersection of $N$ circles has a ${O(N\log N)}$ time~\cite{Shamos:Circle}, which is not linear.
 To develop a one pass spatio-temporal simplification algorithm, we provide an approximate circles intersection method.
 That is, we further replace a circle $\mathcal{O}(P, r)$ to a specially designed $M$-edges inscribed regular polygon,
@@ -167,25 +166,26 @@ algorithms employ this policy may loss some compression ratio.
 And, a larger $M$ would lead to a better compression ratio and a poorer efficiency.
 \textcolor[rgb]{0.00,0.07,1.00}{The setting of $M$ is studied in Section 4. In a summary, region $[10, 20]$ are the candidate selections of $M$.}
 
-\stitle{Approximate polygons ($\mathcal{G}$)}.
-Given a circle $\mathcal{O}(P, r)$, its approximate polygons is a $M$ edges inscribed regular polygon $\mathcal{G}(V, E)$,
-where $V=\{v_1, \ldots, v_{M}\}$ is the set of vertexes and
-$E= \{\overline{v_jv_{j+1}}| j\in [1,M-1]\} \bigcup \{\overline{v_Mv_1}\}$ is the set of edges.
-Furthermore, let the center point $P$ of the circle be the origin of a polar coordinate system, then each vertex satisfies:
+\stitle{Inscribed regular polygons ($\mathcal{G}$)}.
+Given a circle $\mathcal{O}(P, r)$, its inscribed $m$-edge regular polygon $\mathcal{G}(V, E)$,
+where $V=\{v_1, \ldots, v_{m}\}$ is the set of vertexes and
+$E= \{\overline{v_mv_1}\} \bigcup \{\overline{v_jv_{j+1}}\ |\ j\in [1, m-1]\}$ is the set of edges,
+and its vertexes are defined by a polar coordinate system whose  origin is $P$, the center of circle \circle{} as follows:
+
 
 \vspace{-2ex}
 \begin{equation*}
 \label{equ-regular-polygon}
 %\hspace{-1.5ex}
     \begin{aligned}
-        \hspace{10ex}  v_j = (r, \frac{2(j-1)}{M}\pi), ~j \in [1, M]    \hspace{10ex} (3)\\
+        \hspace{10ex}  v_j = (r, \frac{(j-1)}{m}2\pi), ~j \in [1, m].\\
     \end{aligned}
 \end{equation*}
 \vspace{-1ex}
 
 %\stitle{intersection polygons ($\mathcal{G}^*$)}.
 
-For example, Figure~\ref{fig:polygons}-(1) is a regular octagon whose vertexes satisfying the Equation (3).
+Figure~\ref{fig:polygons}-(1) illustrates an inscribed regular octagon of a circle \circle{(P, r)}.
 
 %The intersection of two M-edges convex polygons has a time complexity of $O(M)$ \cite{ORourke:Intersection}.
 The regular polygons built by equation (3) have elegant properties, which is helpful to derive an algorithm of linear time and constant space
@@ -241,10 +241,10 @@ Hence, the intersection polygon $\mathcal{G}^*_k$ includes at most one edge of a
 
 For example, in Figure~\ref{fig:polygons}-(2), the intersection polygon (red lines) of $\mathcal{G}_1$, $\mathcal{G}_2$ and $\mathcal{G}_3$ has 7 edges, marked 1, 2, 3, 5-8, each from a different edge group. Note the $4^{th}$ edge group has no contribution to the intersection polygon.
 
-\begin{cor}
+\begin{prop}
 \label{prop-cpi-time}
 The computing of the intersection polygon of polygons $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$ can be implemented in a constant time, \ie $O(M)$, by the \cpia algorithm.
-\end{cor}
+\end{prop}
 
 \begin{proof}
 By Theorem~\ref{prop-rp-intersection}, the intersection polygon $\mathcal{G}^*_k$ of all approximate polygon $\mathcal{G}_i$, $i \in [1, k]$, has no more than $M$ edges.
