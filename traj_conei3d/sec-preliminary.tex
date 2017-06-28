@@ -103,10 +103,10 @@ Then there exists a data point $Q$ such that for any data point $P_{s+i}$ ($i \i
 line $\overline{P_sQ}$ is no greater than the error bound $\epsilon$ if and only if there $k$ sectors \sector{(P_s, P_{s+i}, \epsilon)} ($i\in[1,k]$) share common data points other than $P_s$, \ie $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon)} $\ne \{P_s\}$ \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}.
 
 The point $Q$ may not belong to $\{P_{s}, P_{s+1},$ $\ldots, P_{s+k}\}$.
-However, if $P_{s+i}$ ($1\le i\le k$) is chosen as $Q$, then 
+However, if $P_{s+i}$ ($1\le i\le k$) is chosen as $Q$, then
 for any data point $P_{s+i}$ ($i \in [1, ... i]$), its \ped to
 line $\overline{P_sP_{s+i}}$ is no greater than the error bound $\epsilon$ if and only if $\bigsqcap_{j=1}^{i}$\sector{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$, as pointed out in \cite{Zhao:Sleeve}.
- 
+
  That is, these \cia based algorithms can be easily adopted for trajectory compression although they have been overlooked by existing trajectory simplification studies.  It is also worth pointing out that the \cia based algorithms  run in $O(n)$ time and $O(1)$ space, and are one-pass algorithms.
 
 We next illustrate how the \cia based algorithms can be used for trajectory compression.
@@ -118,15 +118,15 @@ We next illustrate how the \cia based algorithms can be used for trajectory comp
 \label{exm-alg-sleeve}
 Consider Figure~\ref{fig:sleeve}. A \cia based algorithm takes as input a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$, and returns a simplified ployline consisting of two line segments $\vv{P_0P_4}$ and  $\vv{P_4P_{10}}$.
 
-\sstab(1) Initially, $P_0$ is the start point. The point $P_1$ is firstly read, and the cone $\mathcal{C}$($P_0$, $P_{1}$, $\epsilon/2$) of $P_1$ is created as shown in Figure~\ref{fig:sleeve}.(1).
-Then $P_2$ is read, and the cone $\mathcal{C}$($P_0$, $P_{2}$, $\epsilon/2$) is created for $P_2$. The intersection of $\mathcal{C}$($P_0$, $P_{1}$, $\epsilon/2$) and $\mathcal{C}$($P_0$, $P_{2}$, $\epsilon/2$) is not empty as shown in Figure~\ref{fig:sleeve}.(2), which has a up border line $P_0P_2^u$ and a low border line $P_0P_1^l$.
-%
+\sstab(1) Initially, $P_0$ is the start point. Point $P_1$ is firstly read, and the sector \sector{(P_0, P_{1}, \epsilon/2)} of $P_1$ is created as shown in Figure~\ref{fig:sleeve}.(1).
+Then $P_2$ is read, and the sector \sector{(P_0, P_{2}, \epsilon/2)}  is created for $P_2$. The intersection of sectors \sector{(P_0, P_{1}, \epsilon/2)} and  \sector{(P_0, P_{2}, \epsilon/2)} contains data points other than $P_0$  which has an up border line $P_0P_2^u$ and a low border line $P_0P_1^l$, as shown in Figure~\ref{fig:sleeve}.(2).
+
 Similarly, points $P_3$ and $P_4$ are processed, as shown in Figure~\ref{fig:sleeve}.(3) and Figure~\ref{fig:sleeve}.(4), respectively.
 
-\sstab(2) When point $P_5$ is read,  line segment $\vv{P_0P_4}$ is output, and point $P_4$ becomes the start point, as $\bigsqcap_{i=1}^{4}\mathcal{C}(P_0, P_{s+i}, \epsilon/2) \ne \emptyset$ and $\bigsqcap_{i=1}^{5}\mathcal{C}(P_0, P_{s+i}, \epsilon/2) = \emptyset$ as shown in Figure~\ref{fig:sleeve}.(5).
+\sstab(2) When point $P_5$ is read,  line segment $\vv{P_0P_4}$ is produced, and point $P_4$ becomes the start point, as $\bigsqcap_{i=1}^{4}$\sector{(P_0, P_{s+1}, \epsilon/2)} $\ne\{P_0\}$ and $\bigsqcap_{i=1}^{5}$\sector{(P_0, P_{s+1}, \epsilon/2)} $=\{P_0\}$ as shown in Figure~\ref{fig:sleeve}.(5).
 
 
-\sstab(3) Points $P_5, \ldots, P_{10}$ are processed one by one in order, and finally the algorithm outputs another line segment $\vv{P_4P_{10}}$ as shown in Figure~\ref{fig:sleeve}.(5).
+\sstab(3) Points $P_5, \ldots, P_{10}$ are processed similarly one by one in order, and finally the algorithm outputs another line segment $\vv{P_4P_{10}}$ as shown in Figure~\ref{fig:sleeve}.(5).
 \end{example}
 
 
