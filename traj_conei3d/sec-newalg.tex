@@ -23,19 +23,22 @@ We shall prove this by providing such algorithm for both strong and weak traject
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\subsection{{One-pass algorithm}}
 \subsection{Strong Trajectory Simplification}
-The first algorithm, \cist, is a \emph{strong simplification}\cite{Trajcevski:DDR} algorithm, which outputs a subset of the original points.
-Recall in Theorem~\ref{prop-3d-ci}, the point $Q$ may not be in the input sub trajectory $[P_s,...,P_e]$.
-If we mandatory require $Q=P_e$, the end point of the sub trajectory, then a \emph{narrow} spatio-temporal cone with a threshold of $\epsilon/2$ is helpful.
+Recall that in Theorem~\ref{prop-3d-ci}, the point $Q$ may not be in the input sub trajectory $[P_s,...,P_e]$.
+If we restrict $Q=P_e$, the end point of the sub trajectory, then a \emph{narrower} spatio-temporal cone with a base radius of $\epsilon/2$ suffices.
 
-\begin{theorem}
+\begin{prop}
 \label{prop-3d-ci-half}
-Given a sub trajectory $\{P_s, \ldots, P_e\}$ and a constant $\epsilon$, if $\bigcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_i, \epsilon/2)} \ne \{P_s\}$ then the sub trajectory can be represented by the line segment $\vv{P_sP_e}$.
-\end{theorem}
+Given a sub-trajectory $\{P_s, \ldots, P_e\}$ and an error bound $\epsilon$, if $\bigsqcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_i, \epsilon/2)} \ne \{P_s\}$ then the sub trajectory can be represented by the line segment $\vv{P_sP_e}$.
+\end{prop}
 
 \begin{proof}
-If $\bigcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_i, \epsilon/2)} \ne \{P_s\}$, then by Theorem~\ref{prop-3d-ci}, there exists a point $Q$, $Q.t = P_e.t$, such that $sed(P_i, \vv{P_sQ})<\epsilon/2$ for all $P_i$, $i \in [s,e]$. Hence, $sed(P_i, \vv{P_sP_e})\le \epsilon/2 + |P_eQ| < \epsilon/2 + \epsilon/2 = \epsilon$.
+If $\bigcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_i, \epsilon/2)} \ne \{P_s\}$, then by Theorem~\ref{prop-3d-ci}, there exists a point $Q$, $Q.t = P_e.t$, such that $sed(P_i, \vv{P_sQ})<\epsilon/2$ for all $P_i$, $i \in [s,e]$. By the triangle inequality, $sed(P_i, \vv{P_sP_e})\le \epsilon/2 + |\vv{P_eQ}| < \epsilon/2 + \epsilon/2 = \epsilon$.
 \end{proof}
 
+
+Based on Proposition~\ref{prop-3d-ci-half} and the local one-pass distance checking technique in Section~\ref{sec-localcheck}, we next develop strong simplification algorithm.
+
+\stitle{Algorithm \cist}. The first algorithm, , is a \emph{strong simplification}\cite{Trajcevski:DDR} algorithm, which outputs a subset of the original points.
 
 
 Figure~\ref{alg:CI3d} is the P-codes of algorithm \cist. It takes as input a trajectory $\dddot{\mathcal{T}}$, an error bound $\epsilon$, the number $M$ of edges of a regular polygon and a time $t_c>t_s$, and returns the simplified trajectory $\overline{\mathcal{T}}$.
@@ -148,12 +151,11 @@ For convenience, here, we project the points and the oblique circular cones on a
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Weak Trajectory Simplification}
 
+We next develop a weak simplification algorithm based on Proposition~\ref{prop-circle-intersection} and the local one-pass distance checking technique in Section~\ref{sec-localcheck}.
 
-The second algorithm, named \cista, allows outputting points $\overline{\mathcal{T}}$ that may not belong to the original points $\dddot{\mathcal{T}}$.
-This method, known as the ``interpolation" approach, is used in disciplines of polygonal curve approximation \cite{Williams:Bounded, Heckbert:Survey, Zhao:Sleeve}, time series approximation \cite{ORourke:Fitting, Elmeleegy:Stream, Xie:Stream, Luo:Streaming} and trajectory simplification \cite{Lin:Operb}.
-The ``interpolation" approach is also called a \emph{weak simplification} in \cite{Trajcevski:DDR}, and will usually bring better compression ratios.
 
-Algorithm \cista is the directly result of Corollary~\ref{prop-circle-intersection}.
+
+\stitle{Algorithm \cista}.  is the directly result of Corollary~\ref{prop-circle-intersection}.
 Given a sub trajectory $[P_s,...,P_e]$, an error bound $\epsilon$, a constant $M$ and a time $t_c > t_s$, \cista outputs point $Q$ of Corollary~\ref{prop-circle-intersection}. The point $Q$ is got by the following strategies.
 
 \vspace{1ex}
@@ -244,7 +246,7 @@ The points and the oblique circular cones are projected on a x-y space.
 
 
 
-\subsection{Correctness and complexity analysis}
+\subsection{Correctness and Complexity Analyses}
 
 The correctness of algorithm \cist follows from Theorem~\ref{prop-3d-ci-half} and Corollary~\ref{prop-circle-intersection}, and the correctness of algorithm \cista follows from Corollary~\ref{prop-circle-intersection}. For the circles intersection of Corollary~\ref{prop-circle-intersection}, we replace it by the regular polygons intersection.
 Meanwhile, given time $t_c$ and projection circles $\mathcal{O}(P^c_i, r^c_i)$, $i \in (s, e]$, we get a inscribed regular polygon from each projection circle.
