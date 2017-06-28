@@ -107,7 +107,7 @@ However, if $P_{s+i}$ ($1\le i\le k$) is chosen as $Q$, then
 for any data point $P_{s+i}$ ($i \in [1, ... i]$), its \ped to
 line $\overline{P_sP_{s+i}}$ is no greater than the error bound $\epsilon$ if and only if $\bigsqcap_{j=1}^{i}$\sector{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$, as pointed out in \cite{Zhao:Sleeve}.
 
- That is, these \cia based algorithms can be easily adopted for trajectory compression although they have been overlooked by existing trajectory simplification studies.  It is also worth pointing out that the \cia based algorithms  run in $O(n)$ time and $O(1)$ space, and are one-pass algorithms.
+ That is, {\em these \cia based algorithms can be easily adopted for trajectory compression although they have been overlooked by existing trajectory simplification studies}.  It is also worth pointing out that the \cia based algorithms  run in $O(n)$ time and $O(1)$ space, and are one-pass algorithms.
 
 We next illustrate how the \cia based algorithms can be used for trajectory compression.
 
@@ -134,34 +134,33 @@ Similarly, points $P_3$ and $P_4$ are processed, as shown in Figure~\ref{fig:sle
 
 \subsection{Intersection Computation of Convex Polygons}
 
-We implement a convex polygon intersection algorithm based on the one in~\cite{ORourke:Intersection}.
-%
-The basic idea of the algorithm~\cite{ORourke:Intersection} is straightforward. Assume the boundaries of the two polygons $\mathcal{G}_1$ and $\mathcal{G}_2$ are oriented counterclockwise, and let $\vv{A} = (P_{s_A}, P_{e_A})$ and $\vv{B} = (P_{s_B}, P_{e_B})$ be directed edges on each (see Figure~\ref{fig:c-poly-inter}).
-%
-The algorithm has $\vv{A}$ and $\vv{B}$ ``chasing'' one another, \ie moves on $\vv{A}$ or $\vv{B}$ on $\mathcal{G}_2$ or $\mathcal{G}_1$ step by step under some rules, so that they meet at every crossing of $\mathcal{G}_1$ and $\mathcal{G}_2$.
+We also employ a convex polygon intersection algorithm ~\cite{ORourke:Intersection}, whose basic idea is straightforward.
+Assume \kwlog that the edges of polygons $\mathcal{G}_1$ and $\mathcal{G}_2$ are oriented counterclockwise, and $\vv{A} = (P_{s_A}, P_{e_A})$ and $\vv{B} = (P_{s_B}, P_{e_B})$ are two (directed) edges on $\mathcal{G}_2$ and $\mathcal{G}_1$, repectively (see Figure~\ref{fig:c-poly-inter}).
+
+The algorithm has $\vv{A}$ and $\vv{B}$ ``chasing'' one another, \ie moves $\vv{A}$ on $\mathcal{G}_1$ and $\vv{B}$ on $\mathcal{G}_1$ counter-clockwise step by step under certain rules, so that they meet at every crossing of $\mathcal{G}_1$ and $\mathcal{G}_2$.
 %
 The rules, called \emph{advance rules}, are carefully designed depending on geometric conditions of $\vv{A}$ and $\vv{B}$.
 %If $\vv{B}$ ``aims toward" the line containing $\vv{A}$, but does not cross it, then we want to advance $\vv{B}$ in order to ``close in" on a possible intersection with A.
-Let $\vv{A} \times \vv{B}$ be the cross product of $\vv{A}$ and $\vv{B}$, and $\mathcal{H}(\vv{A})$ be the open half-plane to the left of $\vv{A}$, the rules are follows:
+Let $\vv{A} \times \vv{B}$ be the cross product of (vectors) $\vv{A}$ and $\vv{B}$, and $\mathcal{H}(\vv{A})$ be the open half-plane to the left of $\vv{A}$, the rules are as follows:
 
-(1) if $\vv{A} \times \vv{B} < 0$ and $P_{e_A} \not \in \mathcal{H}(\vv{B})$, or $\vv{A} \times \vv{B} > 0$ and $P_{e_B} \in \mathcal{H}(\vv{A})$, then advance $\vv{A}$ a step. For examples, in Figure~\ref{fig:c-poly-inter}.(1) and ~\ref{fig:c-poly-inter}.(2), there are $\vv{A} \times \vv{B} > 0$ and $P_{e_B} \in \mathcal{H}(\vv{A})$, hence, $\vv{A}$ advances a step.
+(1) If $\vv{A} \times \vv{B} < 0$ and $P_{e_A} \not \in \mathcal{H}(\vv{B})$, or $\vv{A} \times \vv{B} > 0$ and $P_{e_B} \in \mathcal{H}(\vv{A})$, then $\vv{A}$ is advanced a step. For examples, in Figure~\ref{fig:c-poly-inter}.(1) and ~\ref{fig:c-poly-inter}.(2), $\vv{A} \times \vv{B} > 0$ and $P_{e_B} \in \mathcal{H}(\vv{A})$, hence, $\vv{A}$ moves forward a step.
 
-(2) if $\vv{A} \times \vv{B} > 0$ and $P_{e_B} \not \in \mathcal{H}(\vv{A})$, or $\vv{A} \times \vv{B} < 0$ and $P_{e_A} \in \mathcal{H}(\vv{B})$, then advance $\vv{B}$ a step. For examples, in Figure~\ref{fig:c-poly-inter}.(3) and ~\ref{fig:c-poly-inter}.(4), there are $\vv{A} \times \vv{B} < 0$ and $P_{e_A} \in \mathcal{H}(\vv{B})$, hence, $\vv{B}$ advances a step.
+(2) If $\vv{A} \times \vv{B} > 0$ and $P_{e_B} \not \in \mathcal{H}(\vv{A})$, or $\vv{A} \times \vv{B} < 0$ and $P_{e_A} \in \mathcal{H}(\vv{B})$, then  $\vv{B}$ is advanced a step. For examples, in Figure~\ref{fig:c-poly-inter}.(3) and ~\ref{fig:c-poly-inter}.(4), $\vv{A} \times \vv{B} < 0$ and $P_{e_A} \in \mathcal{H}(\vv{B})$, hence, $\vv{B}$ moves forward a step.
 
 
-The P-codes of convex polygon intersection algorithm ~\cite{ORourke:Intersection} is shown in Figure~\ref{alg:c-poly-inter}.
+The compplete convex polygon intersection algorithm ~\cite{ORourke:Intersection} is shown in Figure~\ref{alg:c-poly-inter}.
 Given polygons $\mathcal{G}_1$ and $\mathcal{G}_2$, it first arbitrarily sets $\vv{A}$ and $\vv{B}$ on $\mathcal{G}_2$ and $\mathcal{G}_1$, respectively (line 1).
 %
 It then checks the intersection of $\vv{A}$ and $\vv{B}$. If $\vv{A}$ intersects $\vv{B}$ (line 3), then the algorithm checks for some special termination conditions (\eg if $\vv{A}$ and $\vv{B}$ are overlapped and, at the same time, $\mathcal{G}_1$ and $\mathcal{G}_2$ are on the opposite sides of the overlapped edges, then the process is terminated) (line 4), and records the inner edge, which is a boundary segment of the intersection polygon (line 5).
 After that, the algorithm moves on $\vv{A}$ or $\vv{B}$ one step under the advance rules (lines 6--11).
 The above processes repeated, until both $\vv{A}$ and $\vv{B}$ cycle their polygons (line 12).
 %
-Next, the algorithm handles three special cases of the two polygons, \ie $\mathcal{G}_1$ is inside of $\mathcal{G}_2$, $\mathcal{G}_2$ is inside of $\mathcal{G}_1$ and $\mathcal{G}_1 \bigcap \mathcal{G}_2 = \emptyset$ cases (line 13).
+Next, the algorithm handles three special cases of the two polygons, \ie $\mathcal{G}_1$ is inside of $\mathcal{G}_2$, $\mathcal{G}_2$ is inside of $\mathcal{G}_1$ and $\mathcal{G}_1 \bigsqcap \mathcal{G}_2 = \emptyset$ cases (line 13).
 %
 At last, it returns the intersection polygon (line 14).
 
 The algorithm has a time complexity of $O(|\mathcal{G}_1| + |\mathcal{G}_2|)$, where $|\mathcal{G}|$ is the number of edges of polygon $\mathcal{G}$.
-It is worth to point out that $|\mathcal{G}_1 \bigcap \mathcal{G}_2| \in [0, |\mathcal{G}_1| + |\mathcal{G}_2|]$.
+It is worth to point out that $|\mathcal{G}_1 \bigsqcap \mathcal{G}_2| \le (|\mathcal{G}_1| + |\mathcal{G}_2|)$.
 
 
 \begin{figure}[tb!]
@@ -214,12 +213,12 @@ It is worth to point out that $|\mathcal{G}_1 \bigcap \mathcal{G}_2| \in [0, |\m
 \begin{example}
 Figure~\ref{fig:c-poly-inter} shows a running example of the convex polygon intersection algorithm.
 
-Initially, directed edges $\vv{A}$ and $\vv{B}$ are on polygons $\mathcal{G}_2$ and $\mathcal{G}_1$, respectively, such that $\vv{A} \bigcap \vv{B} = \{P_1\}$ by coincidence, \ie $\vv{A}$ and $\vv{B}$ intersect on point $P_1$, as shown in Figure~\ref{fig:c-poly-inter}.(1).
+Initially, directed edges $\vv{A}$ and $\vv{B}$ are on polygons $\mathcal{G}_2$ and $\mathcal{G}_1$, respectively, such that $\vv{A} \bigsqcap \vv{B} = \{P_1\}$ by coincidence, \ie $\vv{A}$ and $\vv{B}$ intersect on point $P_1$, as shown in Figure~\ref{fig:c-poly-inter}.(1).
 %
-Then, by the advance rules, edge $\vv{A}$ moves on a step and makes $\vv{A} \bigcap \vv{B} = \emptyset$ as shown in Figure~\ref{fig:c-poly-inter}.(2).
+Then, by the advance rules, edge $\vv{A}$ moves on a step and makes $\vv{A} \bigsqcap \vv{B} = \emptyset$ as shown in Figure~\ref{fig:c-poly-inter}.(2).
 And after 7 steps of moving of $\vv{A}$ or $\vv{B}$, each by an advance rule, edges $\vv{A}$ and $\vv{B}$ intersect on point $P_2$, as shown in Figure~\ref{fig:c-poly-inter}.(3).
 %
-Next, edge $\vv{B}$ moves on a step, and makes $\vv{A} \bigcap \vv{B} = \emptyset$, as shown in Figure~\ref{fig:c-poly-inter}.(4).
+Next, edge $\vv{B}$ moves on a step, and makes $\vv{A} \bigsqcap \vv{B} = \emptyset$, as shown in Figure~\ref{fig:c-poly-inter}.(4).
 After 6 steps of moving of edge $\vv{B}$ or $\vv{A}$ one by one, both edges $\vv{A}$ and $\vv{B}$ have finished their cycles as shown in Figure~\ref{fig:c-poly-inter}.(5).
 %
 The algorithm finally returns the intersection polygon as shown in Figure~\ref{fig:c-poly-inter}.(6).
