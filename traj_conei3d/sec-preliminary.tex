@@ -50,11 +50,13 @@ However, for trajectory simplification, the distance based metrics are definitel
 \stitle{Perpendicular Euclidean Distances (\ped)}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the perpendicular Euclidean distance (or simply perpendicular distance) $ped(P, \mathcal{L})$ of $P$ to $\mathcal{L}$  is the Euclidean distance of $P$ to line $\overline{P_{s}P_{e}}$, adopted by many trajectory simplification methods, \eg~\cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve, Lin:Operb}.
 
 
-\stitle{Synchronized points}. Given a sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, P_e]$, the synchronized point $P'$ of a data point  $P(x, y, t) \in \dddot{\mathcal{T}}_s$, ~\wrt the line segment $\vv{P_sP_e}$ is $P'(x', y', t)$ such that:
+\stitle{Synchronized points}. Given a sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, P_e]$, the synchronized point $P'$ of a data point  $P \in \dddot{\mathcal{T}}_s$, ~\wrt line segment $\vv{P_sP_e}$ is defined as follows:
 
-\ni $x' = P_s.x +  \frac{P.t-P_s.t}{P_e.t-P_s.t}(P_e.x - P_s.x)$ and
+ $P'.x$ = $P_s.x +  \frac{P.t-P_s.t}{P_e.t-P_s.t}(P_e.x - P_s.x)$,
 
-\ni $y' = P_s.y +  \frac{P.t-P_s.t}{P_e.t-P_s.t}(P_e.y - P_s.y)$.
+ $P'.y$ = $P_s.y +  \frac{P.t-P_s.t}{P_e.t-P_s.t}(P_e.y - P_s.y)$, and 
+
+ $P'.t$ = $P.t$.
 
 
 \stitle{Synchronous Euclidean Distances (\sed)}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the synchronous Euclidean distance (or simply synchronous distance) $sed(P, \mathcal{L})$ of $P$ to $\mathcal{L}$ is $|\vv{PP'}|$ that is the Euclidean distance from $P$ to its synchronized data point $P'$ \wrt $\mathcal{L}$. %, adopted by recent trajectory simplification methods~\cite{Meratnia:Spatiotemporal, Potamias:Sampling, Chen:Fast, Muckell:Compression, Popa:Spatio}.
@@ -89,7 +91,7 @@ we say that algorithm $\mathcal{A}$ is error bounded by $\zeta$ if  for each poi
 \label{sub-ci-ped}
 
 
-The Sector Intersection (\cia) algorithm \cite{Williams:Longest, Sklansky:Cone} was developed in the disciplines of graphic and pattern recognition in the late 1970s, for the approximation of arbitrary planar curves by linear segments or finding a polygonal approximation of a set of input data points in a 2D-space. The \sleeve algorithm \cite{Zhao:Sleeve} in the cartographic discipline essentially applies the same idea as the \cia algorithm.
+The sector intersection (\cia) algorithm \cite{Williams:Longest, Sklansky:Cone} was developed in the disciplines of graphic and pattern recognition in the late 1970s, for the approximation of arbitrary planar curves by linear segments or finding a polygonal approximation of a set of input data points in a 2D-space. The \sleeve algorithm \cite{Zhao:Sleeve} in the cartographic discipline essentially applies the same idea as the \cia algorithm.
 Further, \cite{Dunham:Cone}  optimized algorithm \cia by considering the distance between a potential end point and the initial point of a line segment. It is worth pointing out that all these \cia based algorithms use the perpendicular Euclidean distances.
 
 %Note that these notable algorithms are not introduced to the discipline of trajectory compression.
@@ -134,7 +136,7 @@ Similarly, points $P_3$ and $P_4$ are processed, as shown in Figure~\ref{fig:sle
 
 \subsection{Intersection Computation of Convex Polygons}
 
-We also employ a convex polygon intersection algorithm ~\cite{ORourke:Intersection}, whose basic idea is straightforward.
+We also employ a convex polygon intersection algorithm in~\cite{ORourke:Intersection}, whose basic idea is straightforward.
 Assume \kwlog that the edges of polygons $\mathcal{G}_1$ and $\mathcal{G}_2$ are oriented counterclockwise, and $\vv{A} = (P_{s_A}, P_{e_A})$ and $\vv{B} = (P_{s_B}, P_{e_B})$ are two (directed) edges on $\mathcal{G}_2$ and $\mathcal{G}_1$, repectively (see Figure~\ref{fig:c-poly-inter}).
 
 The algorithm has $\vv{A}$ and $\vv{B}$ ``chasing'' one another, \ie moves $\vv{A}$ on $\mathcal{G}_1$ and $\vv{B}$ on $\mathcal{G}_1$ counter-clockwise step by step under certain rules, so that they meet at every crossing of $\mathcal{G}_1$ and $\mathcal{G}_2$.
