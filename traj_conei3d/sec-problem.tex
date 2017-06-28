@@ -49,9 +49,9 @@ However, for trajectory simplification, the distance based metrics are definitel
 \stitle{Perpendicular Euclidean Distances (\ped)}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the perpendicular Euclidean distance of $P$ to $\mathcal{L}$, denoted as $ped(P, \mathcal{L})$, is the Euclidean distance of $P$ to line $\overline{P_{s}P_{e}}$, adopted by many trajectory simplification methods, \eg~\cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve, Lin:Operb}.
 
 
-\stitle{Synchronized points}. Given a sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, P_e]$, the synchronized point $P'$ of a data point  $P(x, y, t) \in \dddot{\mathcal{T}}_s$, ~\wrt the line segment $\vv{P_sP_e}$ is $P'(x', y', t)$ such that: 
+\stitle{Synchronized points}. Given a sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, P_e]$, the synchronized point $P'$ of a data point  $P(x, y, t) \in \dddot{\mathcal{T}}_s$, ~\wrt the line segment $\vv{P_sP_e}$ is $P'(x', y', t)$ such that:
 
-\ni $x' = P_s.x +  \frac{P.t-P_s.t}{P_e.t-P_s.t}(P_e.x - P_s.x)$ and 
+\ni $x' = P_s.x +  \frac{P.t-P_s.t}{P_e.t-P_s.t}(P_e.x - P_s.x)$ and
 
 \ni $y' = P_s.y +  \frac{P.t-P_s.t}{P_e.t-P_s.t}(P_e.y - P_s.y)$.
 
@@ -100,7 +100,7 @@ Given a sequence of data points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error
 For the start point $P_s$ and any point $P_{s+i}$ ($i\in[1, k]$), there are two different lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ such that $ped(P_i, \vv{P_sP^u_{s+i}})$ $=$ $ped(P_i, \vv{P_sP^l_{s+i}}) = \epsilon$ and $\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta$. Indeed, they forms a \emph{cone} $\mathcal{C}$($P_s$, $P_{s+i}$, $\epsilon$) (also called a \emph{sector} in \sleeve \cite{Zhao:Sleeve}) that takes $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the border lines.
 % , where $P_s$ is the center point, and $\vv{P_sP^l_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ are two bound lines.
 Then there exists a data point $Q$ such that for any data point $P_{s+i}$ ($i \in [1, ... k]$), its \ped to
-line $\overline{P_sQ}$ is less than the given \ped tolerance $\epsilon$ if and only if $\bigcap_{i=1}^{k}\mathcal{C}(P_s, P_{s+i}, \epsilon) \ne \emptyset$.
+line $\overline{P_sQ}$ is less than the given \ped tolerance $\epsilon$ if and only if $\bigsqcap_{i=1}^{k}\mathcal{C}(P_s, P_{s+i}, \epsilon) \ne \emptyset$.
 
 The point $Q$ may not belong to $\{P_{s}, P_{s+1},$ $\ldots, P_{s+k}\}$.
 However, if $P_{s+i}$ ($1\le i\le k$) is chosen as $Q$, then \emph{cones} with a distance tolerance $\epsilon/2$ could be employed to ensure that the \ped is error bounded by $\epsilon$ \wrt line segment $\vv{P_sP_{s+i}}$ \cite{Zhao:Sleeve}. That is, {\em these \cia based algorithms can be easily adopted for trajectory compression by forming cones with a distance tolerance $\epsilon/2$}.  It is also worth pointing out that the \cia based algorithms  run in $O(n)$ time and $O(1)$ space, and are one-pass algorithms.
@@ -119,7 +119,7 @@ Then $P_2$ is read, and the cone $\mathcal{C}$($P_0$, $P_{2}$, $\epsilon/2$) is 
 %
 Similarly, points $P_3$ and $P_4$ are processed, as shown in Figure~\ref{fig:sleeve}.(3) and Figure~\ref{fig:sleeve}.(4), respectively.
 
-\sstab(2) When point $P_5$ is read,  line segment $\vv{P_0P_4}$ is output, and point $P_4$ becomes the start point, as $\bigcap_{i=1}^{4}\mathcal{C}(P_0, P_{s+i}, \epsilon/2) \ne \emptyset$ and $\bigcap_{i=1}^{5}\mathcal{C}(P_0, P_{s+i}, \epsilon/2) = \emptyset$ as shown in Figure~\ref{fig:sleeve}.(5).
+\sstab(2) When point $P_5$ is read,  line segment $\vv{P_0P_4}$ is output, and point $P_4$ becomes the start point, as $\bigsqcap_{i=1}^{4}\mathcal{C}(P_0, P_{s+i}, \epsilon/2) \ne \emptyset$ and $\bigsqcap_{i=1}^{5}\mathcal{C}(P_0, P_{s+i}, \epsilon/2) = \emptyset$ as shown in Figure~\ref{fig:sleeve}.(5).
 
 
 \sstab(3) Points $P_5, \ldots, P_{10}$ are processed one by one in order, and finally the algorithm outputs another line segment $\vv{P_4P_{10}}$ as shown in Figure~\ref{fig:sleeve}.(5).
