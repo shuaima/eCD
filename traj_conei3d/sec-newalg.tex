@@ -3,15 +3,31 @@
 
 
 \section{One-Pass Trajectory Simplification}
+
+Following \cite{Trajcevski:DDR,Lin:Operb}, we consider two classes of trajectory simplification.
+The first one, referred to as \emph{strong simplification}, that takes input a trajectory \trajec{T} and an error bound $\epsilon$ as inputs, and produces   
+a simplified trajectory \trajec{T'} such that all data points in \trajec{T'} belongs to \trajec{T}.
+The second one, referred to as \emph{weak simplification}, that takes input a trajectory \trajec{T} and an error bound $\epsilon$ as inputs, and produces
+a simplified trajectory \trajec{T'} such that some data points in \trajec{T'} may not belong to \trajec{T}. That is,  weak simplification allows data interpolation,
+commonly used in polygonal curve approximation \cite{Williams:Bounded, Heckbert:Survey, Zhao:Sleeve}, time series approximation \cite{ORourke:Fitting, Elmeleegy:Stream, Xie:Stream, Luo:Streaming} and trajectory simplification \cite{Lin:Operb}.
+
+
+The main result here is stated as follows.
+
+\begin{theorem}
+\label{prop-cist-complexity}
+There exists an one-pass error bounded trajectory simplification algorithm using the synchronous Euclidean Distance for either strong or weak trajectory simplification.
+\end{theorem}
+
+We shall prove this by providing such algorithm for both strong and weak trajectory simplification, by employing the techniques developed .
+
 We now are ready to present two one pass, error bounded and \sed enabled trajectory simplification algorithms, namely \cist and \cista, implementing the above spatio-temporal cone intersection approach.
-
-
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\subsection{{One-pass algorithm}}
-\subsection{Strong Simplification Algorithm}
+\subsection{Strong Trajectory Simplification}
 The first algorithm, \cist, is a \emph{strong simplification}\cite{Trajcevski:DDR} algorithm, which outputs a subset of the original points.
 Recall in Theorem~\ref{prop-3d-ci}, the point $Q$ may not be in the input sub trajectory $[P_s,...,P_e]$.
 If we mandatory require $Q=P_e$, the end point of the sub trajectory, then a \emph{narrow} spatio-temporal cone with a threshold of $\epsilon/2$ is helpful.
@@ -37,12 +53,12 @@ Figure~\ref{alg:CI3d} is the P-codes of algorithm \cist. It takes as input a tra
 \myhrule
 \vspace{-1ex}
 \mat{0ex}{
-	{\bf Algorithm} ~$\cist(\dddot{\mathcal{T}}[P_0,\ldots,P_n], ~\epsilon, ~M, ~t_c)$\\
+	{\bf Algorithm} ~\cist$(\dddot{\mathcal{T}}[P_0,\ldots,P_n], ~\epsilon, ~M, ~t_c)$\\
 %	\sstab
 	\bcc \hspace{1ex}\= $P_s := P_0$;  ~$P_e := P_0$;  ~$\overline{\mathcal{T}} := \phi$;  ~$\mathcal{G}^* := \phi$;  ~$i := 1$\\
 %         \hspace{2ex}     $intersection = \emptyset$;   \\
 	\icc \hspace{1ex}\= \While $i \le n$ \Do \\
-	\icc \>\hspace{3ex} $\mathcal{G} := {getRegularPolygon}$($P_s$, $P_i$, $\epsilon/2$, $M$, $t_c$) \\
+	\icc \>\hspace{3ex} $\mathcal{G}$ := \kw{getRegularPolygon}($P_s$, $P_i$, $\epsilon/2$, $M$, $t_c$) \\
 	\icc \>\hspace{3ex} \If $\mathcal{G}^* = \phi$ \Then \\
 	\icc \>\hspace{6ex} $\mathcal{G}^* :=\mathcal{G}$ \\
 	\icc \>\hspace{3ex} \Else \\
@@ -55,7 +71,7 @@ Figure~\ref{alg:CI3d} is the P-codes of algorithm \cist. It takes as input a tra
 	\icc \> \hspace{6ex} $P_s := P_e$;  ~~$\mathcal{G}^* := \phi$ \\
 	\icc \hspace{1ex}\Return $\overline{\mathcal{T}}$ \\
 \\
-	{\bf Procedure} ~$getRegularPolygon(P_s,~P_i,~r,~M,~t_c)$ \\
+	{\bf Procedure} ~\kw{getRegularPolygon}$(P_s,~P_i,~r,~M,~t_c)$ \\
 %	\bcc \hspace{1ex} \textcolor[rgb]{0.00,0.07,1.00}{Transform $P_s$ and $P_i$ to points in Cartesian coordinates} \\
 	\bcc \hspace{1ex} $k := (t_c-t_s)/(P_i.t - P_s.t)$ \\
 	\icc \hspace{1ex} $P_i.x := P_s.x + k*(P_i.x-P_s.x)$ \\
@@ -72,7 +88,7 @@ Figure~\ref{alg:CI3d} is the P-codes of algorithm \cist. It takes as input a tra
 }
 \end{center}
 \vspace{-2ex}
-\caption{\small Spatio-temporal cone intersection algorithm (\cist).}
+\caption{\small One-pass strong trajectory  simplification algorithm.}
 \label{alg:CI3d}
 \vspace{-2ex}
 \end{figure}
@@ -135,7 +151,7 @@ For convenience, here, we project the points and the oblique circular cones on a
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Weak Simplification Algorithm}
+\subsection{Weak Trajectory Simplification}
 
 
 The second algorithm, named \cista, allows outputting points $\overline{\mathcal{T}}$ that may not belong to the original points $\dddot{\mathcal{T}}$.
@@ -243,10 +259,6 @@ This ensures the correctness of the algorithms.
 {For space complexity, the algorithms need $O(M)$ space.}
 For time complexity, we have follows.
 
-\begin{theorem}
-\label{prop-cist-complexity}
-The spatio-temporal cone intersection algorithms (\cist and \cista) have a linear time complexity.
-\end{theorem}
 
 \begin{proof}
 For each data point in the input trajectory, the procedures $getRegularPolygon()$ and $\rpia()$ are both called one time.
