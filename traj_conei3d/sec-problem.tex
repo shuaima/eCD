@@ -130,22 +130,23 @@ Similarly, points $P_3$ and $P_4$ are processed, as shown in Figure~\ref{fig:sle
 
 
 
-\subsection{\textcolor[rgb]{0.00,0.07,1.00}{Intersection Computation of Convex Polygons}}
+\subsection{Intersection Computation of Convex Polygons}
 
-We \textcolor[rgb]{0.00,0.07,1.00}{optimize} a convex polygon intersection algorithm based on the one in~\cite{ORourke:Intersection}, which is shown in Figure~\ref{alg:c-poly-inter}.
-
-
+We implement a convex polygon intersection algorithm based on the one in~\cite{ORourke:Intersection}.
+%
 The basic idea of the algorithm~\cite{ORourke:Intersection} is straightforward. Assume the boundaries of the two polygons $\mathcal{G}_1$ and $\mathcal{G}_2$ are oriented counterclockwise, and let $\vv{A} = (P_{s_A}, P_{e_A})$ and $\vv{B} = (P_{s_B}, P_{e_B})$ be directed edges on each (see Figure~\ref{fig:c-poly-inter}).
+%
 The algorithm has $\vv{A}$ and $\vv{B}$ ``chasing'' one another, \ie moves on $\vv{A}$ or $\vv{B}$ on $\mathcal{G}_2$ or $\mathcal{G}_1$ step by step under some rules, so that they meet at every crossing of $\mathcal{G}_1$ and $\mathcal{G}_2$.
 %
 The rules, called \emph{advance rules}, are carefully designed depending on geometric conditions of $\vv{A}$ and $\vv{B}$.
 That is, let $\mathcal{H}(\vv{A})$ be the open half-plane to the left of $\vv{A}$, the rules are follows:
 (1) if $\vv{A} \times \vv{B} < 0$ and $P_{e_A} \not \in \mathcal{H}(\vv{B})$, or $\vv{A} \times \vv{B} > 0$ and $P_{e_B} \in \mathcal{H}(\vv{A})$, then advance $\vv{A}$ a step;
+%
 (2) if $\vv{A} \times \vv{B} > 0$ and $P_{e_B} \not \in \mathcal{H}(\vv{A})$, or $\vv{A} \times \vv{B} < 0$ and $P_{e_A} \in \mathcal{H}(\vv{B})$, then advance $\vv{B}$ a step.
 
 
-
-During the process, it checks the intersection of $\vv{A}$ and $\vv{B}$. If $\vv{A}$ intersects $\vv{B}$ (line 3), then the algorithm checks for some special termination conditions (\eg if $\vv{A}$ and $\vv{B}$ are overlapped, and at the same time, $\mathcal{G}_1$ and $\mathcal{G}_2$ are on the opposite sides of the overlapped line segment, then the process is terminated) (line 4), and records the inner segment, which is a boundary segment of the intersection polygon (line 5).
+The P-codes of convex polygon intersection algorithm is shown in Figure~\ref{alg:c-poly-inter}.
+Given two polygons, it checks the intersection of $\vv{A}$ and $\vv{B}$. If $\vv{A}$ intersects $\vv{B}$ (line 3), then the algorithm checks for some special termination conditions (\eg if $\vv{A}$ and $\vv{B}$ are overlapped, and at the same time, $\mathcal{G}_1$ and $\mathcal{G}_2$ are on the opposite sides of the overlapped line segment, then the process is terminated) (line 4), and records the inner segment, which is a boundary segment of the intersection polygon (line 5).
 %
 The algorithm moves on $\vv{A}$ or $\vv{B}$ one step under the advance rules (line 6).
 The above processes repeated, until both $\vv{A}$ and $\vv{B}$ cycle their polygons (line 7).
