@@ -139,7 +139,7 @@ The basic idea of the algorithm~\cite{ORourke:Intersection} is straightforward. 
 The algorithm has $\vv{A}$ and $\vv{B}$ ``chasing'' one another, \ie moves on $\vv{A}$ or $\vv{B}$ on $\mathcal{G}_2$ or $\mathcal{G}_1$ step by step under some rules, so that they meet at every crossing of $\mathcal{G}_1$ and $\mathcal{G}_2$.
 %
 The rules, called \emph{advance rules}, are carefully designed depending on geometric conditions of $\vv{A}$ and $\vv{B}$.
-%If $\vv{B}$ ``aims toward" the line containing $\vv{A}$, but does not cross it, then we want to advance $\vv{B}$ in order to ``close in" on a possible intersection with A. 
+%If $\vv{B}$ ``aims toward" the line containing $\vv{A}$, but does not cross it, then we want to advance $\vv{B}$ in order to ``close in" on a possible intersection with A.
 Let $\vv{A} \times \vv{B}$ be the cross product of $\vv{A}$ and $\vv{B}$, and $\mathcal{H}(\vv{A})$ be the open half-plane to the left of $\vv{A}$, the rules are follows:
 
 (1) if $\vv{A} \times \vv{B} < 0$ and $P_{e_A} \not \in \mathcal{H}(\vv{B})$, or $\vv{A} \times \vv{B} > 0$ and $P_{e_B} \in \mathcal{H}(\vv{A})$, then advance $\vv{A}$ a step. For examples, in Figure~\ref{fig:c-poly-inter}.(1) and ~\ref{fig:c-poly-inter}.(2), there are $\vv{A} \times \vv{B} > 0$ and $P_{e_B} \in \mathcal{H}(\vv{A})$, hence, $\vv{A}$ advances a step.
@@ -148,12 +148,13 @@ Let $\vv{A} \times \vv{B}$ be the cross product of $\vv{A}$ and $\vv{B}$, and $\
 
 
 The P-codes of convex polygon intersection algorithm ~\cite{ORourke:Intersection} is shown in Figure~\ref{alg:c-poly-inter}.
-Given polygons $\mathcal{G}_1$ and $\mathcal{G}_2$, it arbitrarily sets $\vv{A}$ and $\vv{B}$ on each of them (line 1). After that, it checks the intersection of $\vv{A}$ and $\vv{B}$. If $\vv{A}$ intersects $\vv{B}$ (line 3), then the algorithm checks for some special termination conditions (\eg if $\vv{A}$ and $\vv{B}$ are overlapped and, at the same time, $\mathcal{G}_1$ and $\mathcal{G}_2$ are on the opposite sides of the overlapped edges, then the process is terminated) (line 4), and records the inner edge, which is a boundary segment of the intersection polygon (line 5).
+Given polygons $\mathcal{G}_1$ and $\mathcal{G}_2$, it first arbitrarily sets $\vv{A}$ and $\vv{B}$ on $\mathcal{G}_2$ and $\mathcal{G}_1$, respectively (line 1). 
 %
-The algorithm moves on $\vv{A}$ or $\vv{B}$ one step under the advance rules (lines 6-11).
+It then checks the intersection of $\vv{A}$ and $\vv{B}$. If $\vv{A}$ intersects $\vv{B}$ (line 3), then the algorithm checks for some special termination conditions (\eg if $\vv{A}$ and $\vv{B}$ are overlapped and, at the same time, $\mathcal{G}_1$ and $\mathcal{G}_2$ are on the opposite sides of the overlapped edges, then the process is terminated) (line 4), and records the inner edge, which is a boundary segment of the intersection polygon (line 5).
+After that, the algorithm moves on $\vv{A}$ or $\vv{B}$ one step under the advance rules (lines 6--11).
 The above processes repeated, until both $\vv{A}$ and $\vv{B}$ cycle their polygons (line 12).
 %
-After that, the algorithm handles three special cases of the two polygons, \ie $\mathcal{G}_1 \subset \mathcal{G}_2$, $\mathcal{G}_2 \subset \mathcal{G}_1$ and $\mathcal{G}_1 \bigcap \mathcal{G}_2 = \emptyset$ cases (line 13).
+Next, the algorithm handles three special cases of the two polygons, \ie $\mathcal{G}_1$ is inside of $\mathcal{G}_2$, $\mathcal{G}_2$ is inside of $\mathcal{G}_1$ and $\mathcal{G}_1 \bigcap \mathcal{G}_2 = \emptyset$ cases (line 13).
 %
 At last, it returns the intersection polygon (line 14).
 
@@ -186,11 +187,11 @@ It is worth to point out that $|\mathcal{G}_1 \bigcap \mathcal{G}_2| \in [0, |\m
 	\icc \>\hspace{3ex} \If $\vv{A} \bigcap \vv{B} \ne \phi$ \Then \\
 	\icc \>\hspace{6ex} {Check for termination.} \\
 	\icc \>\hspace{6ex} Update an inside flag. \\
-	\icc \> \hspace{3ex} \If $\vv{A} \times \vv{B} < 0$ \And $P_{e_A} \not \in \mathcal{H}(\vv{B})$, \\
-	\icc \> \hspace{6ex} \Or $\vv{A} \times \vv{B} > 0$ \And $P_{e_B} \in \mathcal{H}(\vv{A})$ \Then \\
+	\icc \> \hspace{3ex} \If ($\vv{A} \times \vv{B} < 0$ \And $P_{e_A} \not \in \mathcal{H}(\vv{B})$) \\
+	\icc \> \hspace{6ex} \Or ($\vv{A} \times \vv{B} > 0$ \And $P_{e_B} \in \mathcal{H}(\vv{A})$) \Then \\
 	\icc \> \hspace{6ex} advance $\vv{A}$ one step \\
-	\icc \> \hspace{3ex} \Else \If $\vv{A} \times \vv{B} > 0$ \And $P_{e_B} \not \in \mathcal{H}(\vv{A})$ \\
-	\icc \> \hspace{6ex} \Or $\vv{A} \times \vv{B} < 0$ \And $P_{e_A} \in \mathcal{H}(\vv{B})$ \Then \\
+	\icc \> \hspace{3ex} \Else \If ($\vv{A} \times \vv{B} > 0$ \And $P_{e_B} \not \in \mathcal{H}(\vv{A})$) \\
+	\icc \> \hspace{6ex} \Or ($\vv{A} \times \vv{B} < 0$ \And $P_{e_A} \in \mathcal{H}(\vv{B})$) \Then \\
 	\icc \> \hspace{6ex} advance $\vv{B}$ one step \\
 	\icc \hspace{1ex} \Until both $\vv{A}$ and $\vv{B}$ cycle their polygons \\
 	\icc \hspace{1ex} Handle $\mathcal{G}_1 \subset \mathcal{G}_2$ and $\mathcal{G}_2 \subset \mathcal{G}_1$ and $\mathcal{G}_1 \bigcap \mathcal{G}_2 = \emptyset$ cases \\
