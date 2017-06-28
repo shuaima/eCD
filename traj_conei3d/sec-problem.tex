@@ -79,8 +79,8 @@ Consider Figure~\ref{fig:notations}, in which
 where points $P'_4$, $P'_2$ and $P'_7$ are the synchronized points of points $P_4$, $P_2$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$, $\vv{P_0P_{4}}$ and $\vv{P_4P_{10}}$, respectively.
 \end{example}
 
-\stitle{Error bounded algorithms}. Given a trajectory \trajec{T} and its compression  algorithm $\mathcal{A}$ that produces a simplified trajectory \trajec{T'},
-we say that algorithm $\mathcal{A}$ is error bounded by $\zeta$ if  for each point $P$ in \trajec{T}, there exists a point $P_j$ in \trajec{T'} such that the  distance (either \ped or \sed) of $P$ to  $\mathcal{L}(P_j,P_{j+1})$ is equal to or less  than $\zeta$.
+\stitle{Error bounded algorithms}. Given a trajectory \trajec{T} and its compression  algorithm $\mathcal{A}$ that produces another trajectory \trajec{T'},
+we say that algorithm $\mathcal{A}$ is error bounded by $\zeta$ if  for each point $P$ in \trajec{T}, there exists a point $P_j$ in \trajec{T'} such that the  $sed(P, \mathcal{L}(P_j,P_{j+1}))\le \zeta$.
 
 
 
@@ -139,14 +139,16 @@ The basic idea of the algorithm~\cite{ORourke:Intersection} is straightforward. 
 The algorithm has $\vv{A}$ and $\vv{B}$ ``chasing'' one another, \ie moves on $\vv{A}$ or $\vv{B}$ on $\mathcal{G}_2$ or $\mathcal{G}_1$ step by step under some rules, so that they meet at every crossing of $\mathcal{G}_1$ and $\mathcal{G}_2$.
 %
 The rules, called \emph{advance rules}, are carefully designed depending on geometric conditions of $\vv{A}$ and $\vv{B}$.
-That is, let $\mathcal{H}(\vv{A})$ be the open half-plane to the left of $\vv{A}$, the rules are follows:
-(1) if $\vv{A} \times \vv{B} < 0$ and $P_{e_A} \not \in \mathcal{H}(\vv{B})$, or $\vv{A} \times \vv{B} > 0$ and $P_{e_B} \in \mathcal{H}(\vv{A})$, then advance $\vv{A}$ a step;
-%
-(2) if $\vv{A} \times \vv{B} > 0$ and $P_{e_B} \not \in \mathcal{H}(\vv{A})$, or $\vv{A} \times \vv{B} < 0$ and $P_{e_A} \in \mathcal{H}(\vv{B})$, then advance $\vv{B}$ a step.
+%If $\vv{B}$ ``aims toward" the line containing $\vv{A}$, but does not cross it, then we want to advance $\vv{B}$ in order to ``close in" on a possible intersection with A. 
+Let $\vv{A} \times \vv{B}$ be the cross product of $\vv{A}$ and $\vv{B}$, and $\mathcal{H}(\vv{A})$ be the open half-plane to the left of $\vv{A}$, the rules are follows:
+
+(1) if $\vv{A} \times \vv{B} < 0$ and $P_{e_A} \not \in \mathcal{H}(\vv{B})$, or $\vv{A} \times \vv{B} > 0$ and $P_{e_B} \in \mathcal{H}(\vv{A})$, then advance $\vv{A}$ a step. For examples, in Figure~\ref{fig:c-poly-inter}.(1) and ~\ref{fig:c-poly-inter}.(2), there are $\vv{A} \times \vv{B} > 0$ and $P_{e_B} \in \mathcal{H}(\vv{A})$, hence, $\vv{A}$ advances a step.
+
+(2) if $\vv{A} \times \vv{B} > 0$ and $P_{e_B} \not \in \mathcal{H}(\vv{A})$, or $\vv{A} \times \vv{B} < 0$ and $P_{e_A} \in \mathcal{H}(\vv{B})$, then advance $\vv{B}$ a step. For examples, in Figure~\ref{fig:c-poly-inter}.(3) and ~\ref{fig:c-poly-inter}.(4), there are $\vv{A} \times \vv{B} < 0$ and $P_{e_A} \in \mathcal{H}(\vv{B})$, hence, $\vv{B}$ advances a step.
 
 
-The P-codes of convex polygon intersection algorithm is shown in Figure~\ref{alg:c-poly-inter}.
-Given two polygons, it checks the intersection of $\vv{A}$ and $\vv{B}$. If $\vv{A}$ intersects $\vv{B}$ (line 3), then the algorithm checks for some special termination conditions (\eg if $\vv{A}$ and $\vv{B}$ are overlapped, and at the same time, $\mathcal{G}_1$ and $\mathcal{G}_2$ are on the opposite sides of the overlapped line segment, then the process is terminated) (line 4), and records the inner segment, which is a boundary segment of the intersection polygon (line 5).
+The P-codes of convex polygon intersection algorithm ~\cite{ORourke:Intersection} is shown in Figure~\ref{alg:c-poly-inter}.
+Given two polygons, it checks the intersection of $\vv{A}$ and $\vv{B}$. If $\vv{A}$ intersects $\vv{B}$ (line 3), then the algorithm checks for some special termination conditions (\eg if $\vv{A}$ and $\vv{B}$ are overlapped and, at the same time, $\mathcal{G}_1$ and $\mathcal{G}_2$ are on the opposite sides of the overlapped edges, then the process is terminated) (line 4), and records the inner edge, which is a boundary segment of the intersection polygon (line 5).
 %
 The algorithm moves on $\vv{A}$ or $\vv{B}$ one step under the advance rules (line 6).
 The above processes repeated, until both $\vv{A}$ and $\vv{B}$ cycle their polygons (line 7).
@@ -157,6 +159,17 @@ At last, it returns the intersection polygon (line 9).
 
 The algorithm has a time complexity of $O(|\mathcal{G}_1| + |\mathcal{G}_2|)$, where $|\mathcal{G}|$ is the number of edges of polygon $\mathcal{G}$.
 It is worth to point out that $|\mathcal{G}_1 \bigcap \mathcal{G}_2| \in [0, |\mathcal{G}_1| + |\mathcal{G}_2|]$.
+
+
+\begin{figure}[tb!]
+\centering
+\includegraphics[scale=0.88]{figures/Fig-convex-poly-inter.png}
+\vspace{-2ex}
+\caption{\small A running example of convex polygons intersection.}
+\vspace{-1ex}
+\label{fig:c-poly-inter}
+\end{figure}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%Baseline Algorithm
@@ -210,14 +223,6 @@ The algorithm finally returns the intersection polygon as shown in Figure~\ref{f
 \end{example}
 
 
-\begin{figure}[tb!]
-\centering
-\includegraphics[scale=0.88]{figures/Fig-convex-poly-inter.png}
-\vspace{-1ex}
-\caption{\small A running example of convex polygons intersection.}
-\vspace{-2ex}
-\label{fig:c-poly-inter}
-\end{figure}
 
 
 
