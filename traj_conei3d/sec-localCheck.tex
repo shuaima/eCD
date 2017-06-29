@@ -156,26 +156,25 @@ By Proposition~\ref{prop-3d-ci}, it suffices to show that $\bigsqcap_{i=1}^{k}$ 
 %For example, in Figure~\ref{fig:sed3d}, $\mathcal{O}(P^i_{i+1}, r^i_{i+1})$ is the projection circle of synchronous circle $\mathcal{O}(P_{i+1}, \epsilon)$ on the plane $t=t_i$, then ``${\mathcal{O}(P^i_{i+1}, r^i_{i+1})} \bigcap{\mathcal{O}(P_i, \epsilon)} \ne \emptyset$" is equal to ``$\mathcal{C}(P_s, P_i, \epsilon) \bigcap {\mathcal{C}(P_s, P_{i+1}, \epsilon)} \ne \{P_s\}$". Hence, by Theorem~\ref{prop-3d-ci}, we have the conclusion.
 
 
-Proposition~\ref{prop-circle-intersection} tells us that the intersection checking of  spatio-temporal cone can be reduced to simply check the intersection of cone projection circles on a plane.
+Proposition~\ref{prop-circle-intersection} tells us that the intersection checking of  spatio-temporal cones can be reduced to simply check the intersection of cone projection circles on a plane.
 
 %In the spatio-temporal space, the notion \emph{cone} of cone intersection \cite{Williams:Longest, Sklansky:Cone} (or \emph{sector} in sleeve \cite{Zhao:Sleeve}) algorithm is extended to a new notion in 3D space, \ie the \emph{spatio-temporal cone}.
 
 \subsection{Approximating Circles with Regular Polygons}
-Finding the common intersection of $N$ circles has a ${O(N\log N)}$ time~\cite{Shamos:Circle}, which is not linear.
-To develop a one pass spatio-temporal simplification algorithm, we provide an approximate circles intersection method.
-That is, we further replace a circle $\mathcal{O}(P, r)$ to a specially designed $M$-edges inscribed regular polygon,
-then we check the intersection of the regular polygons instead of the checking of circles intersection.
-Obviously, the intersection of regular polygons is only a sufficient condition of the intersection of the corresponding circles , and
-algorithms employ this policy may loss some compression ratio.
-And, a larger $M$ would lead to a better compression ratio and a poorer efficiency.
-\textcolor[rgb]{0.00,0.07,1.00}{The setting of $M$ is studied in Section 4.}
-% In a summary, region $[12, 20]$ are the candidate selections of $M$.
+\label{subsec-RPI}
+
+Finding the common intersection of $N$ circles has a time complexity of ${O(N\log N)}$~\cite{Shamos:Circle}, which cannot be used 
+for designing one-pass trajectory simplification algorithms using the synchronous distance.
+%
+However, we can approximate a circle with its $m$-edge inscribed regular polygon, whose intersection can be computed more efficiently.
+Indeed, the intersection of two $m$-edge convex polygons can be computed in $O(m)$ time~\cite{ORourke:Intersection}.
+
+
+
 
 \stitle{Inscribed regular polygons ($\mathcal{G}$)}.
-Given a cone projection circle $\mathcal{O}(P, r)$, its inscribed $m$-edge regular polygon $\mathcal{G}(V, E)$,
-where $V=\{v_1, \ldots, v_{m}\}$ is the set of vertexes and
-$E= \{\overline{v_mv_1}\} \bigcup \{\overline{v_jv_{j+1}}\ |\ j\in [1, m-1]\}$ is the set of edges,
-and its vertexes are defined by a polar coordinate system whose  origin is $P$, the center of circle \circle{} as follows:
+Given a cone projection circle \pcircle{(P, r)}, its inscribed $m$-edge regular polygon $\mathcal{G}(V, E)$,
+where (1) $V=\{v_1, \ldots, v_{m}\}$ is the set of vertexes that are defined by a polar coordinate system, whose origin is the center $P$ of \pcircle{}, as follows:
 
 
 \vspace{-1ex}
@@ -183,27 +182,23 @@ and its vertexes are defined by a polar coordinate system whose  origin is $P$, 
 \label{equ-regular-polygon}
 %\hspace{-1.5ex}
     \begin{aligned}
-        \hspace{10ex}  v_j = (r, \frac{(j-1)}{m}2\pi), ~j \in [1, m].\\
+        \hspace{10ex}  v_j = (r, \frac{(j-1)}{m}2\pi), ~j \in [1, m], \\
     \end{aligned}
 \end{equation*}
 \vspace{-1ex}
 
+\ni and (2) $E= \{\vv{v_mv_1}\} \bigcup \{\vv{v_jv_{j+1}}\ |\ j\in [1, m-1]\}$ is the set of edges that are labeled with the subscript of their start points.
+
 %\stitle{intersection polygons ($\mathcal{G}^*$)}.
 
-Figure~\ref{fig:polygons}-(1) illustrates an inscribed regular octagon of a cone projection  circle \circle{(P, r)}.
+Figure~\ref{fig:polygons}-(1) illustrates an inscribed $m$-edge regular octagon of the cone projection  circle  \pcircle{(P, r)}.
 
-%The intersection of two M-edges convex polygons has a time complexity of $O(M)$ \cite{ORourke:Intersection}.
-The regular polygons built by equation (3) have elegant properties, which is helpful to derive an algorithm of linear time and constant space
-for the intersection of $N$ regular polygons. We show this based on a notion of \emph{edge group}.
+Let $\mathcal{G}_{s+i}$ ($i\in[1, k]$) be the inscribed regular polygons of the cone projection  circle \pcircle{(P^c_{s+i}, r^c_{s+i})},
+and $E^j$ ($j\in[1, m]$) be the group of $k$ edges labeled with $j$ in $\mathcal{G}_{s+i}$ ($i\in[1, k]$).
+It is easy to verify that the edges in all edge groups $E^j$ ($j\in[1, m]$) are in parallel with each other by the above definition of inscribed regular polygons, as illustrated in Figure~\ref{fig:polygons}.(2).
 
 
-\stitle{Edge groups}.
-Let $e_{i,j} = \overline{v_{i,j}v_{i,j+1}}$, $j\in [1,M)$, or $e_{i,j} = \overline{v_{i,M}v_{i,1}}$, $j = M$, be an edge of an approximate polygon
-$\mathcal{G}_i$, then all $e_{i,j}$, $i\in [1, k]$, form an \emph{edge group}, namely the $j^{th}$ edge group.
-%
-For example, in Figure~\ref{fig:polygons}-(2), all the $1^{th}$ edges form the $1^{th}$ edge group.
-%
-We also use notation $g(e)$ to denote the edge group of an edge $e$, \ie $g(e_{i,j})=j$.
+
 
 
 
@@ -264,6 +259,15 @@ Based on the notion of spatio-temporal cone, we further check the intersection o
 Let $P_s$ be the original of coordination, we demonstrate the \sed and the synchronized points in the spatio-temporal space, as shown in Figure~\ref{fig:sed3d}.
 From the spatio-temporal space, we have the following findings.
 
+
+
+we further replace a circle $\mathcal{O}(P, r)$ to a specially designed $M$-edges inscribed regular polygon,
+then we check the intersection of the regular polygons instead of the checking of circles intersection.
+Obviously, the intersection of regular polygons is only a sufficient condition of the intersection of the corresponding circles , and
+algorithms employ this policy may loss some compression ratio.
+And, a larger $M$ would lead to a better compression ratio and a poorer efficiency.
+\textcolor[rgb]{0.00,0.07,1.00}{The setting of $M$ is studied in Section 4.}
+% In a summary, region $[12, 20]$ are the candidate selections of $M$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{subsec-fastRPI}
