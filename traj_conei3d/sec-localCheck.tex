@@ -167,7 +167,6 @@ Finding the common intersection of $N$ circles has a time complexity of ${O(N\lo
 for designing one-pass trajectory simplification algorithms using the synchronous distance.
 %
 However, we can approximate a circle with its $m$-edge inscribed regular polygon, whose intersection can be computed more efficiently.
-Indeed, the intersection of two $m$-edge convex polygons can be computed in $O(m)$ time~\cite{ORourke:Intersection}.
 
 
 
@@ -214,10 +213,10 @@ It is easy to verify that the edges in all edge groups $E^j$ ($j\in[1, m]$) are 
 \end{figure}
 
 
-\begin{theorem}
+\begin{prop}
 \label{prop-rp-intersection}
 The intersection $\mathcal{G}^*_l \bigsqcap \mathcal{G}_{s+l+1}$ ($ 1\le l< k$) has at most $m$ edges, \ie at most one from each edge group.
-\end{theorem}
+\end{prop}
 
 
 
@@ -247,15 +246,21 @@ Figure~\ref{fig:polygons}.(2) shows the intersection polygon (red lines) of $\ma
 
 \begin{prop}
 \label{prop-cpi-time}
-The computing of the intersection polygon of polygons $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$ can be implemented in a constant time, \ie $O(M)$, by the \cpia algorithm.
+The intersection $\mathcal{G}^*_l \bigsqcap \mathcal{G}_{s+l+1}$ ($ 1\le l< k$) of $\mathcal{G}^*_l$ and $\mathcal{G}_{s+l+1}$ can be done in $O(1)$
+time.
 \end{prop}
 
 \begin{proof}
-By Theorem~\ref{prop-rp-intersection}, the intersection polygon $\mathcal{G}^*_k$ of all approximate polygon $\mathcal{G}_i$, $i \in [1, k]$, has no more than $M$ edges.
-We know the convex polygon intersection algorithm, \ie \cpia, of Figure~\ref{alg:c-poly-inter} has a time complexity of $O(|\mathcal{G}^*_k| + |\mathcal{G}_{k+1}|)$, which is $O(2M)$ here, thus, the computing of the intersection of polygons $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$ can be implemented in a constant time, \ie $O(M)$, by the \cpia algorithm.
+The inscribed regular polygon $\mathcal{G}_{s+l+1}$ has $m$ edges, and  $\mathcal{G}^*_l$ has at most $m$ edges by Proposition~\ref{prop-rp-intersection}. 
+As the intersection of two $m$-edge convex polygons can be computed in $O(m)$ time~\cite{ORourke:Intersection}, the intersection $\mathcal{G}^*_l \bigsqcap \mathcal{G}_{s+l+1}$ can be done in $O(1)$ time for a fixed $m$.
 \end{proof}
 
+%By Theorem~\ref{prop-rp-intersection}, the intersection polygon $\mathcal{G}^*_k$ of all approximate polygon $\mathcal{G}_i$, $i \in [1, k]$, has no more than $M$ edges. We know the convex polygon intersection algorithm, \ie \cpia, of Figure~\ref{alg:c-poly-inter} has a time complexity of $O(|\mathcal{G}^*_k| + |\mathcal{G}_{k+1}|)$, which is $O(2M)$ here, thus, the computing of the intersection of polygons $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$ can be implemented in a constant time, \ie $O(M)$, by the \cpia algorithm.
 
+
+
+
+\eat{%%%%%%%%%%%%%%%%
 
 Based on the notion of spatio-temporal cone, we further check the intersection of 3D cones, similar as the checking of intersection of 2D cones, to find whether there exists a line starting from $P_s$ and approximating these points.
 
@@ -272,6 +277,8 @@ algorithms employ this policy may loss some compression ratio.
 And, a larger $M$ would lead to a better compression ratio and a poorer efficiency.
 \textcolor[rgb]{0.00,0.07,1.00}{The setting of $M$ is studied in Section 4.}
 % In a summary, region $[12, 20]$ are the candidate selections of $M$.
+
+}%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{subsec-fastRPI}
