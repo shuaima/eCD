@@ -57,7 +57,7 @@ This finishes the proof.
 \centering
 \includegraphics[scale=0.88]{figures/Fig-r-poly-rule1.png}
 \vspace{-1ex}
-\caption{\small Rule 1.}
+\caption{\small Examples of fast advancing.}
 \vspace{-2ex}
 \label{fig:r-poly-rule1}
 \end{figure}
@@ -69,25 +69,19 @@ This finishes the proof.
 \begin{theorem}
 \label{prop-rule2}
 Let $\vv{A}$ and $\vv{B}$ on polygons $\mathcal{G}_{k+1}$ and $\mathcal{G}^*_k$ respectively.
-If ($\vv{A} \bigcap \vv{B} \ne \phi$ and $\vv{A} \times \vv{B} > 0$ and $P_{e_B} \not \in \mathcal{H}(\vv{A})$) or ($\vv{A} \bigcap \vv{B} \ne \phi$ and $\vv{A} \times \vv{B} < 0$ and $P_{e_A} \in \mathcal{H}(\vv{B})$), then advance $\vv{B}$ to $next(e)$ on $\mathcal{G}^*_k$, where $next(e)$ denotes the first edge on the graph that follows $e$.
+If ($\vv{A} \bigcap \vv{B} \ne \phi$ and $\vv{A} \times \vv{B} > 0$ and $P_{e_B} \not \in \mathcal{H}(\vv{A})$) or ($\vv{A} \bigcap \vv{B} \ne \phi$ and $\vv{A} \times \vv{B} < 0$ and $P_{e_A} \in \mathcal{H}(\vv{B})$), then directly advance $\vv{B}$ to the next of the edge having the same edge group as $\vv{B}$.
 \end{theorem}
 
 \begin{proof}
-
+Omitted.
 \end{proof}
 
-For example, in Figure~\ref{fig:r-poly-rule1}.(2), $\vv{A} \bigcap \vv{B} = P_2$ and $\vv{B}$ moves on, hence rule 2 is applied. $\vv{B}$ moves forward to $e^*_{k, 3}$, \ie the next edge of the $4^{th}$ edge as $g(A) = 4$.
+For example, in Figure~\ref{fig:r-poly-rule1}.(2), $\vv{A} \bigcap \vv{B} \ne \phi$ and $\vv{B}$ moves on. $\vv{B}$ moves to $e^*_{k, 3}$, \ie the next edge of the $4^{th}$ edge as $g(A) = 4$.
 %In this case, the $4^{th}$ edge does not exist in $\mathcal{G}^*_k$.
 Note if the $3^{th}$ edge were not actually existing in $\mathcal{G}^*_k$, then $\vv{B}$ should move on to the next real edge of $\mathcal{G}^*_k$.
 
 
 
-
-\vspace{1ex}
-\ni \emph{{(2) Saves vertexes or edges of a polygon in an array}}.
-In \cpia algorithm, polygons are saved in linked lists.
-Considering the regular polygons each having a fixed number of edges, marked from $1$ to $M$, we save vertexes or edges of a polygon in an fixed size array. This policy alow us to quickly address an edge or vertex by its index.
-%, as well as avoid the creating and removing of link nodes.
 
 \eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -141,11 +135,14 @@ If $A \bigcap B = \phi$ and advances $B$, then moves $A$ and $B$ forward ``$a$ a
 
 
 
-\stitle{{Regular polygon intersection algorithm.}}
+\stitle{Regular polygon intersection algorithm.}
+The presented regular polygon intersection algorithm, \ie \rpia, is the optimization of the convex polygon intersection algorithm, by Theorem \ref{prop-rule1} and \ref{prop-rule2}. We also saves vertexes or edges of a polygon in an fixe size array, which is different with algorithm \cpia  that saves polygons in linked lists.
+Considering the regular polygons each having a fixed number of edges, marked from $1$ to $M$, this policy alow us to quickly address an edge or vertex by its index.
+%, as well as avoid the creating and removing of link nodes.
+
 Given intersection polygon $\mathcal{G}^*_k$ of the preview $k$ polygons and the next approximate polygon $\mathcal{G}_{k+1}$, the algorithm \rpia returns $\mathcal{G}^*_{k+1} = \mathcal{G}^*_k  \bigcap \mathcal{G}_{k+1}$.
-The sketch of the algorithm is shown in Figure~\ref{alg:r-poly-inter}.
-%
-It runs the similar routine as the \cpia algorithm, except that it saves polygons in arrays, and the advance strategies are partitioned into two parts, \ie $\vv{A} \bigcap \vv{B} \ne \phi$ and $\vv{A} \bigcap \vv{B} = \phi$, where the former applies rules 1 and 2 (line 6), and the later remains the same as the \cpia algorithm (line 8).
+%The sketch of the algorithm is shown in Figure~\ref{alg:r-poly-inter}.
+It runs the similar routine as the \cpia algorithm, except that (1) it saves polygons in arrays, and (2) the advance strategies are partitioned into two parts, \ie $\vv{A} \bigcap \vv{B} \ne \phi$ and $\vv{A} \bigcap \vv{B} = \phi$, where the former applies Theorem \ref{prop-rule1} and \ref{prop-rule2}, and the later remains the same as the \cpia algorithm.
 
 
 
@@ -214,7 +211,7 @@ Figure~\ref{fig:r-poly-inter} is a running example of algorithm \rpia. The input
 
 
 \stitle{Correctness and complexity analysis.}
-Algorithm \emph{regularPolyInter} runs in the same routine as algorithm \cpia, except that it fastens the advancing speed of directed edges $\vv{A}$ and $\vv{B}$ in some circumstances as shown in Rule 1 and Rule 2. Given $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$,  Rule 1 and Rule 2 will not changes the result the output, \ie $\mathcal{G}^*_{k+1}$. This ensure the correctness of \emph{regularPolyInter}.
+Algorithm \emph{regularPolyInter} runs in the same routine as algorithm \cpia, except that it fastens the advancing speed of directed edges $\vv{A}$ and $\vv{B}$ in some circumstances as shown in Theorem \ref{prop-rule1} and \ref{prop-rule2}. Given $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$,  Theorem \ref{prop-rule1} and \ref{prop-rule2} prove that it has the same result as the output of \emph{convexPolyInter}, \ie $\mathcal{G}^*_{k+1}$. This ensure the correctness of \emph{regularPolyInter}.
 For time complexity, algorithm \rpia runs the same time, $O(M)$, as algorithm \cpia.
 
 
