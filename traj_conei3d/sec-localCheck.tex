@@ -6,7 +6,7 @@
 
 In this section, we develop a local synchronous distance checking approach such that each data point in a trajectory is checked only once in $O(1)$ time during the entire process of trajectory simplification, by extending the sector intersection method in Section~\ref{sub-ci-ped}, which lays down the key for the one-pass trajectory simplification algorithms in Section~\ref{sec-alg}.
 
-We consider a sub-trajectory $[P_s, \ldots, P_e]$, an error bound $\epsilon$, and a 3D Cartesian coordinate system whose origin, $x$-axis, $y$-axis and $t$-axis  are $P_s$, longitude, latitude and time, respectively, as shown in Figure~\ref{fig:sed3d}.
+We consider a sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, P_{s+k}]$, an error bound $\epsilon$, and a 3D Cartesian coordinate system whose origin, $x$-axis, $y$-axis and $t$-axis  are $P_s$, longitude, latitude and time, respectively.
 
 \subsection{Spatio-Temporal Cone Intersection}
 
@@ -17,11 +17,11 @@ We first present the spatio-temporal cone intersection method in a 3D Cartesian 
 
 
 
-\stitle{Synchronous Circles (\circle{}}. The synchronous circle of a point $P_i(x_i, y_i, t_i)$, denoted as \circle{(P_i, \epsilon)}, is a circle on the plane $t=t_i$ that takes $P_i$ as its center and $\epsilon$ as its radius.
+\stitle{Synchronous Circles (\circle{})}. The synchronous circle of a data point $P_{s+i}$ ($1\le i\le k$) in $\dddot{\mathcal{T}}_s$, denoted as \circle{(P_{s+i}, \epsilon)}, is a circle on the plane $P.t-P_{s+i}.t = 0$ such that $P_{s+i}$ is its center and $\epsilon$ is its radius.
 
 
-It is easy to know that for any point $P'_i$ in the area of a circle \circle{(P_i, \epsilon)}, its distance to $P_i$ is less than $\epsilon$,
-and Figure~\ref{fig:sed3d} illustrates a synchronous circle \circle{(P_i, \epsilon)} of point $P_i$.
+It is easy to know that for any point in the area of a circle \circle{(P_{s+i}, \epsilon)}, its distance to $P_{s+i}$ is no greater than $\epsilon$, and
+Figure~\ref{fig:cis} shows two synchronous circles \circle{(P_{s+i}, \epsilon)} of point $P_{s+i}$ and \circle{(P_{s+i+1}, \epsilon)} of point $P_{s+i+1}$.
 
 %Note that in this definition, a \emph{synchronous circle} $\mathcal{O}(P_i, \epsilon)$ is only defined by a central point $P_i$ and a constant $\epsilon$. Indeed, it is nothing to do with any start point $P_s$ or end point $P_e$.
 
@@ -55,42 +55,53 @@ We have the conclusion.
 %\subsection{Spatio-Temporal Cone Intersection}
 
 
-\stitle{Spatio-temporal cones (\cone{})}. Given a sub-trajectory $\{P_s,\ldots,$ $P_e\}$ and an error bound $\epsilon$, the spatio-temporal cone of point $P_i$ \wrt point $P_s$, denoted as \cone{(P_s, \mathcal{O}(P_i, \epsilon))}, is an oblique circular cone that takes the start point $P_s$ as its apex and the synchronous circle $\mathcal{O}(P_i, \epsilon)$ as its base.
+\stitle{Spatio-temporal cones (\cone{})}. The spatio-temporal cone (or simply cone) of point $P_{s+i}$ \wrt point $P_s$, denoted as \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))}, is an oblique circular cone such that the start point $P_s$ is its apex and the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$ is its base.
+%
+Two example cones \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} and \cone{(P_s, \mathcal{O}(P_{i+1}, \epsilon))} are illustrated in Figure~\ref{fig:cis}.
 
-Two spatio-temporal cones \cone{(P_s, \mathcal{O}(P_i, \epsilon))} and \cone{(P_s, \mathcal{O}(P_{i+1}, \epsilon))} are illustrated in Figure~\ref{fig:cis}.
-
-\stitle{Cone projection circles}. The projection of \cone{(P_s, \mathcal{O}(P_i(x_i, y_i, t_i), \epsilon))}  \wrt $P_s(x_s, y_s, t_s)$ on a plane $t = t_c > t_s$ is a circle \circle{(P^c_i, r^c_i)} such that (1)  $P^c_i.x = x_s +  \frac{t_c - t_s}{t_i - t_s}(x_i - x_s)$, (2)  $P^c_i.y = y_s +  \frac{t_c - t_s}{t_i - t_s}(y_i - y_s)$, (3)   $P^c_i.t = t_c$ and (4) $r^c_i =\frac{t_c-t_s}{t_i-t_s}{\epsilon}$.
-
-
-The red dashed circle $\mathcal{O}(P^i_{i+1}, r^i_{i+1})$ on plane $t=t_i$ in Figure~\ref{fig:cis} is the projection of cone \cone{(P_s, \mathcal{O}(P_i, \epsilon))}.
-
-
-\begin{figure}[tb!]
-\centering
-\includegraphics[scale=0.56]{figures/Fig-SEDin3D.png}
-\vspace{-1ex}
-\caption{\small Trajectory simplification in the Spatio-temporal space. Note the synchronous circle $\mathcal{O}(P_i, \epsilon)$ is on plane $t=t_i$.} %
-\vspace{-3ex}
-\label{fig:sed3d}
-\end{figure}
+\stitle{Cone projection circles}. The projection of a cone \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} on a plane $P.t- t_c = 0$ ($t_c > P_s.t$) is a circle \pcircle{(P^c_i, r^c_i)} such that
+%
+(1) $P^c_i.x = P_s.x +  c\cdot(P_{s+i}.x- P_{s}.x)$, 
+%
+(2) $P^c_i.y = P_s.y +  c\cdot(P_{s+i}.y- P_{s}.y)$, 
+%
+(3) $P^c_i.t = t_c$ and
+%
+(4) $r^c_i =c\cdot\epsilon$, where $c=\frac{t_c - P_s.t}{P_{s+i}.t - P_s.t}$.
 
 
+The red dashed circle\pcircle{(P^c_{i+1}, r^c_{i+1})} on plane $t=t_i$ in Figure~\ref{fig:cis} is the projection circle of cone \cone{(P_s, \mathcal{O}(P_i, \epsilon))}.
 
-We are now ready to extend the \emph{cone intersection} method \cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve} from a 2D space to a 3D space.
+
+%\begin{figure}[tb!]
+%\centering
+%\includegraphics[scale=0.56]{figures/Fig-SEDin3D.png}
+%\vspace{-1ex}
+%\caption{\small Trajectory simplification in the Spatio-temporal space. Note the synchronous circle $\mathcal{O}(P_i, \epsilon)$ is on plane $t=t_i$.} %
+%\vspace{-3ex}
+%\label{fig:sed3d}
+%\end{figure}
+
+
+
+We are now ready to extend the \emph{sector intersection} method \cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve} from a 2D space to a 3D space.
 
 %\textcolor[rgb]{1.00,0.00,0.00}{The \sed is demonstrated in 2D space in the previews works~\cite{Meratnia:Spatiotemporal, Chen:Fast, Muckell:Compression, Popa:Spatio}. However,  the trajectory and the \sed are also capable presented in 3D space.}
 
 \begin{lemma}
 \label{prop-3d-syn-point}
-Given a sub-trajectory $[P_s, \ldots, P_e]$, the intersection point $P'_i$ of the directed line segment $\vv{P_sP_e}$ and the plane $t=t_i$ is the synchronized data point of $P_i(x_i, y_i, t_i)$ ($s<i<e$) \wrt  $\vv{P_sP_e}$, and the distance $|\vv{P_iP'_i}|$ from $P_i$ to $P'_i$ is the \sed distance of $P_i$ to $\vv{P_sP_e}$.
+Given a sub-trajectory $[P_s, \ldots, P_{s+k}]$, the intersection point $P'_{s+i}$ of the directed line segment $\vv{P_sP_{s+k}}$ and the plane $P.t - P_{s+i}.t = 0$ is the synchronized data point of $P_{s+i}$ ($1\le i\le k$) \wrt  $\vv{P_sP_{s+k}}$, and the distance $|\vv{P_{s+i}P'_{s+i}}|$ from $P_{s+i}$ to $P'_{s+i}$ is the synchronous distance of $P_{s+i}$ to $\vv{P_sP_{s+k}}$.
 %in the spatio-temporal space.
 \end{lemma}
 
-\begin{proof} It suffices to show that $P'_i$ is indeed a synchronized data point $P_i$ \wrt $\vv{P_sP_e}$ only.
+\begin{proof} It suffices to show that $P'_{s+i}$ is indeed a synchronized data point $P_{s+i}$ \wrt $\vv{P_sP_{s+k}}$.
 %
-The intersection point $P'_i(x'_i, y'_i, t'_i)$ the directed line segment $\vv{P_sP_e}$ and the plane $t=t_i$ satisfies that $t'_i = t_i$ and $\frac{t'_i - t_s}{t_e - t_s}$ = $\frac{t_i - t_s}{t_e - t_s}$  = $\frac{|P_sP'_i|}{|P_sP_e|}$ = $\frac{x'_i - x_s}{x_e - x_s}$ = $\frac{y'_i - y_s}{y_e - y_s}$. Hence, $x'_i = x_s +  \frac{t_i-t_s}{t_e - t_s}(x_e - x_s)$ and $y'_i = y_s +  \frac{t_i - t_s}{t_e - t_s}(y_e - y_s)$.
+The intersection point $P'_{s+i}$ satisfies that $P'_{s+i}.t = P_{s+i}.t$ and 
+$\frac{P'_{s+i}.t - P_{s}.t}{P_{s+k}.t - P_{s}.t}$ = $\frac{P_{s+i}.t - P_{s}.t}{P_{s+k}.t - P_{s}.t}$  = 
+$\frac{|\vv{P_sP'_{s+i}}|}{|\vv{P_sP_{s+k}}|}$ = 
+$\frac{P'_{s+i}.t - P_{s}.x}{P_{s+k}.x - P_{s}.x}$ = $\frac{P'_{s+i}.y - P_{s}.y}{P_{s+k}.y - P_{s}.y}$.
 %
-By the definition of synchronized data points, we have the conclusion.
+Hence, by the definition of synchronized points, we have the conclusion.
 \end{proof}
 
 
@@ -121,7 +132,7 @@ Theorem~\ref{prop-3d-ci} tells us that ...
 \begin{figure}[tb!]
 \centering
 \includegraphics[scale=0.6]{figures/Fig-cis.png}
-%\vspace{-1ex}
+\vspace{-2ex}
 \caption{\small Examples of spatio-temporal cones. A spatio-temporal cone is an oblique circular cone whose bottom circle and projection circle are parallel to the x-y plane. }
 \vspace{-2ex}
 \label{fig:cis}
