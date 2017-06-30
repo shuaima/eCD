@@ -132,6 +132,7 @@ Similarly, points $P_3$ and $P_4$ are processed, as shown in Figure~\ref{fig:sle
 
 
 \subsection{Intersection Computation of Convex Polygons}
+\label{subsec-cpi}
 
 We also employ a convex polygon intersection algorithm in~\cite{ORourke:Intersection}, whose basic idea is straightforward.
 Assume \kwlog that the edges of polygons $\mathcal{G}_1$ and $\mathcal{G}_2$ are oriented counterclockwise, and $\vv{A} = (P_{s_A}, P_{e_A})$ and $\vv{B} = (P_{s_B}, P_{e_B})$ are two (directed) edges on $\mathcal{G}_2$ and $\mathcal{G}_1$, repectively (see Figure~\ref{fig:c-poly-inter}).
@@ -151,8 +152,8 @@ For example, in Figure~\ref{fig:c-poly-inter}.(1) and ~\ref{fig:c-poly-inter}.(2
 For example, in Figure~\ref{fig:c-poly-inter}.(3) and ~\ref{fig:c-poly-inter}.(4), $\vv{B}$ moves forward a step as $\vv{A} \times \vv{B} < 0$ and $P_{e_A} \in \mathcal{H}(\vv{B})$.
 
 
-The compplete convex polygon intersection algorithm ~\cite{ORourke:Intersection} is shown in Figure~\ref{alg:c-poly-inter}.
-Given polygons $\mathcal{G}_1$ and $\mathcal{G}_2$, it first arbitrarily sets $\vv{A}$ and $\vv{B}$ on $\mathcal{G}_2$ and $\mathcal{G}_1$, respectively (line 1).
+\stitle{Algorithm \cpia}. The complete algorithm is shown in Figure~\ref{alg:c-poly-inter}.
+Given polygons $\mathcal{G}_1$ and $\mathcal{G}_2$, algorithm \cpia first arbitrarily sets $\vv{A}$ and $\vv{B}$ on $\mathcal{G}_2$ and $\mathcal{G}_1$, respectively (line 1).
 %
 It then checks the intersection of $\vv{A}$ and $\vv{B}$. If $\vv{A}$ intersects $\vv{B}$ (line 3), then the algorithm checks for some special termination conditions (\eg if $\vv{A}$ and $\vv{B}$ are overlapped and, at the same time, $\mathcal{G}_1$ and $\mathcal{G}_2$ are on the opposite sides of the overlapped edges, then the process is terminated) (line 4), and records the inner edge, which is a boundary segment of the intersection polygon (line 5).
 After that, the algorithm moves on $\vv{A}$ or $\vv{B}$ one step under the advance rules (lines 6--11).
@@ -202,7 +203,7 @@ After 6 steps of moving of edge $\vv{B}$ or $\vv{A}$ one by one, both edges $\vv
 \myhrule
 \vspace{-1ex}
 \mat{0ex}{
-	{\bf Algorithm} ~$\kw{CPIntersection}$($\mathcal{G}_1$, $\mathcal{G}_2$) \\
+	{\bf Algorithm} ~\cpia($\mathcal{G}_1$, $\mathcal{G}_2$) \\
 	\bcc \hspace{1ex}\=  \SET $\vv{A}$ and $\vv{B}$ {arbitrarily} on $\mathcal{G}_1$ and $\mathcal{G}_2$\\
 	\icc \hspace{1ex}\= \Repeat \\
 	\icc \>\hspace{2ex} \If $\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \Then \\

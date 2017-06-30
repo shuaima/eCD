@@ -2,51 +2,49 @@
 \label{subsec-fastRPI}
 
 
-Observe that the \cpia algorithm (Figure~\ref{alg:c-poly-inter}) is for general convex polygons, while the approximate polygons are special polygons. We further develop an even fast polygon intersection method based on the properties of approximate polygons.
-%
-The presented regular polygon intersection algorithm, \ie \rpia, is indeed a customized version of the \cpia algorithm.
+Observe that algorithm \cpia in Figure~\ref{alg:c-poly-inter} is for general convex polygons,
+while the inscribed regular polygons $\mathcal{G}_{s+i}$ ($i\in[1, k]$) the cone projection  circles are constructed in a unified way,
+while allows us to develop a fast method to compute their intersection.
 
-Let $\vv{A}$ and $\vv{B}$ be directed edges on polygons $\mathcal{G}_{k+1}$ and $\mathcal{G}^*_k$ respectively.
-Originally, $\vv{A}$ and $\vv{B}$ are advanced step by step each time by the advancing rules of algorithm \cpia .
-However, algorithm \rpia allows to directly advance $\vv{A}$ or $\vv{B}$ multiple steps at one time.
+Let $\vv{A} = (P_{s_A}, P_{e_A})$ and $\vv{B} = (P_{s_B}, P_{e_B})$  be two directed edges on polygons $\mathcal{G}_{l+1}$ and $\mathcal{G}^*_l$, respectively.
+Note that $\vv{A}$ and $\vv{B}$ are advanced step by step each time by the two advancing rules of algorithm \cpia.
 %
-For example, in Figure~\ref{fig:c-poly-inter}.(1)--\ref{fig:c-poly-inter}.(5), edge $\vv{A}$ successively moves 4 steps under advance rule ``$\vv{A} \times \vv{B} < 0$ and $P_{e_A} \not \in \mathcal{H}(\vv{B})$" or ``$\vv{A} \times \vv{B} > 0$ and $P_{e_B} \in \mathcal{H}(\vv{A})$".
-This process can be compacted to a fast moving, \ie directly moving $A$ from Figure~\ref{fig:c-poly-inter}.(1) to Figure~\ref{fig:c-poly-inter}.(5), by the properties of regular polygon, as follows.
-
+However, it is possible to advance $\vv{A}$ or $\vv{B}$ multiple steps each time.
+%
+For example, in Figure~\ref{fig:c-poly-inter}.(1)--(5), edge $\vv{A}$ successively moves four steps under the advance rules ``$\vv{A} \times \vv{B} < 0$ and $P_{e_A} \not \in \mathcal{H}(\vv{B})$'' and ``$\vv{A} \times \vv{B} > 0$ and $P_{e_B} \in \mathcal{H}(\vv{A})$'' of algorithm \cpia.
+Alternatively, we can directly move $A$ from Figure~\ref{fig:c-poly-inter}.(1) to Figure~\ref{fig:c-poly-inter}.(5), by reducing four steps to one step only.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\vspace{1ex}
+
 \begin{theorem}
 \label{prop-rule1}
-Let $\vv{A}$ and $\vv{B}$ on polygons $\mathcal{G}_{k+1}$ and $\mathcal{G}^*_k$ respectively.
-If ($\vv{A} \bigcap \vv{B} \ne \phi$ and $\vv{A} \times \vv{B} < 0$ and $P_{e_A} \not \in \mathcal{H}(\vv{B})$) or ($\vv{A} \bigcap \vv{B} \ne \phi$ and $\vv{A} \times \vv{B} > 0$ and $P_{e_B} \in \mathcal{H}(\vv{A})$), then moves $\vv{A}$ forward ``$s$" steps, where
+If either $(\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} < 0$ \And $P_{e_A} \not \in \mathcal{H}(\vv{B}))$ or $(\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} > 0$ \And $P_{e_B} \in \mathcal{H}(\vv{A}))$, then $\vv{A}$ is moved forward $s$ steps such that
 %\vspace{-1ex}
 \begin{equation*}
 \label{equ-rule1}
 \small
     \hspace{2ex} s =  \left\{
     \begin{aligned}
-        & 2*(g(A) - g(B)),  \hspace{5ex} ~if  ~g(A) > g(B) \\
-        & {1},              \hspace{20.5ex}~if  ~g(A) = g(B) \\
-        & 2*(M+g(A) - g(B)), ~if  ~g(A) < g(B) \\
+        & 2(g(\vv{A}) - g(\vv{B}))  \hspace{5ex}~if  ~g(\vv{A}) > g(\vv{B}) \\
+        & {1}              \hspace{18ex}~if  ~g(\vv{A}) = g(\vv{B}) \\
+        & 2(m+g(\vv{A}) - g(\vv{B})) ~if  ~g(\vv{A}) < g(\vv{B}), \\
     \end{aligned}
-    \right.       \hspace{6ex}(4)
+    \right.       \hspace{6ex}{}
 \end{equation*}
-and $g(e)$ denotes the edge group of edge $e$.
+in which $g(e)$ denotes the label of edge $e$.
 \end{theorem}
 
 
 
 \begin{proof}
-We first explain the Equation (4).
-By equation (4), $\vv{A}$ is indeed moved from the original position to its opposite edge on polygon $\mathcal{G}_{k+1}$ \wrt the edge with the same group number as edge $\vv{B}$.
-For example, in Figure~\ref{fig:r-poly-rule1}.(1), there is $\vv{A} \bigcap \vv{B} \ne \phi$ and $\vv{A} \times \vv{B} > 0$ and $P_{e_B} \in \mathcal{H}(\vv{A})$, hence $\vv{A}$ moves on. Because $g(A)=2 < 8=g(B)$, $\vv{A}$ moves forward $2*(M+g(A) - g(B)) = 2*(8+2-8)= 4$ steps, \ie from $2^{th}$ to $6^{th}$. Here, $6^{th}$ is the $2^{th}$ opposite edge \wrt the $8^{th}$ edge on on polygon $\mathcal{G}_{k+1}$.
+We first explain how the edges $\vv{A}$ and $\vv{B}$ are moved forward.
+Indeed, $\vv{A}$ is moved from its original position to its opposite edge on $\mathcal{G}_{l+1}$ \wrt $\vv{B}$.
+For example, in Figure~\ref{fig:r-poly-rule1}.(1), there is $\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} > 0$ \And $P_{e_B} \in \mathcal{H}(\vv{A})$, hence $\vv{A}$ moves on. As $g(\vv{A})=2 < 8=g(\vv{A})$, $\vv{A}$ moves forward $2(m+g(\vv{A}) - g(\vv{A})) = 2(8+2-8)= 4$ steps. 
+Here, the label of edge $\vv{A}$ is changed to $6$, the opposite of $2$ \wrt edge $\vv{B}$ labeled with $8$ on $\mathcal{G}^*_l$.
 
-We next prove the Theorem.
-If ($\vv{A} \bigcap \vv{B} \ne \phi$ and $\vv{A} \times \vv{B} < 0$ and $P_{e_A} \not \in \mathcal{H}(\vv{B})$) or ($\vv{A} \bigcap \vv{B} \ne \phi$ and $\vv{A} \times \vv{B} > 0$ and $P_{e_B} \in \mathcal{H}(\vv{A})$), then by the properties of regular polygon, it is easy to find that, for each edge $\vv{A}$ among the region from the original position to its opposite position (\eg in Figure~\ref{fig:r-poly-rule1}.(1), it is $1^{th}, 8^{th}, 7^{th}$ on $\mathcal{G}_{k+1}$), there is (1) $\vv{A} \bigcap \vv{B} = \phi$, and (2) ($P_{e_A} \not \in \mathcal{H}(\vv{B})$) and ($P_{e_B} \in \mathcal{H}(\vv{A})$). Hence, by the advance rules of the convex polygon intersection algorithm~\cite{ORourke:Intersection}, it is always the edge $\vv{A}$ that moves on a step.
-
-This finishes the proof.
+We then present the proof.
+If ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} < 0$ \And $P_{e_A} \not \in \mathcal{H}(\vv{B})$) or ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} > 0$ \And $P_{e_B} \in \mathcal{H}(\vv{A})$), then as all edges in the same edge groups $E^j$ ($1\le j\le m$) are in parallel with each other, it is easy to find that, for each position of $\vv{A}$ between its original to its opposite positions, we have $\vv{A} \bigsqcap \vv{B} = \emptyset$ and $P_{e_A} \not \in \mathcal{H}(\vv{B})$ and $P_{e_B} \in \mathcal{H}(\vv{A})$. Hence, by the advance rule (1) of algorithm \cpia in Section~\ref{subsec-cpi}, edge $\vv{A}$ is always moved forward until it reaches the opposite position of its original one. From this, we have the conclusion.
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%example of intersection of regular polygons
@@ -63,15 +61,11 @@ This finishes the proof.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{theorem}
+\begin{cor}
 \label{prop-rule2}
-Let $\vv{A}$ and $\vv{B}$ on polygons $\mathcal{G}_{k+1}$ and $\mathcal{G}^*_k$ respectively.
-If ($\vv{A} \bigcap \vv{B} \ne \phi$ and $\vv{A} \times \vv{B} > 0$ and $P_{e_B} \not \in \mathcal{H}(\vv{A})$) or ($\vv{A} \bigcap \vv{B} \ne \phi$ and $\vv{A} \times \vv{B} < 0$ and $P_{e_A} \in \mathcal{H}(\vv{B})$), then directly advance $\vv{B}$ to the next of the edge having the same edge group as $\vv{B}$.
-\end{theorem}
+If either ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} > 0$ \And $P_{e_B} \not \in \mathcal{H}(\vv{A})$) or ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} < 0$ \And $P_{e_A} \in \mathcal{H}(\vv{B})$), then $\vv{B}$ is directly moved to the edge after the one having the same edge group as $\vv{A}$.
+\end{cor}
 
-\begin{proof}
-Omitted.
-\end{proof}
 
 For example, in Figure~\ref{fig:r-poly-rule1}.(2), $\vv{A} \bigcap \vv{B} \ne \phi$ and $\vv{B}$ moves on. $\vv{B}$ moves to $e^*_{k, 3}$, \ie the next edge of the $4^{th}$ edge as $g(A) = 4$.
 %In this case, the $4^{th}$ edge does not exist in $\mathcal{G}^*_k$.
@@ -132,7 +126,7 @@ If $A \bigcap B = \phi$ and advances $B$, then moves $A$ and $B$ forward ``$a$ a
 
 
 
-\stitle{Regular polygon intersection algorithm.}
+\stitle{Algorithm \rpia}
 The presented regular polygon intersection algorithm, \ie \rpia, is the optimization of the convex polygon intersection algorithm, by Theorem \ref{prop-rule1} and \ref{prop-rule2}. We also saves vertexes or edges of a polygon in an fixe size array, which is different with algorithm \cpia  that saves polygons in linked lists.
 Considering the regular polygons each having a fixed number of edges, marked from $1$ to $M$, this policy alow us to quickly address an edge or vertex by its index.
 %, as well as avoid the creating and removing of link nodes.
