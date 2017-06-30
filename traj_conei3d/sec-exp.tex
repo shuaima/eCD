@@ -16,17 +16,21 @@ Using four real-life datasets, we conducted three sets of experiments to evaluat
 \stitle{Real-life Trajectory Datasets}.
 We use four real-life datasets shown in Table~\ref{tab:datasets} to test our solutions.
 
+\vspace{0.5ex}
 \ni \emph{(1) Truck trajectory data}, referred to as \truck, is the GPS trajectories collected by \eat{10,368} trucks equipped with GPS sensors in China
 during a period from Mar. 2015 to Oct. 2015. The sampling rate varied from 1s to 60s.
 %Trajectories mostly have around $50$ to $90$ thousand data points.
 
+\vspace{0.5ex}
 \ni \emph{(2) Service car trajectory data}, referred to as \sercar,  is the GPS trajectories collected by a car rental company.
 We chose $1,000$ cars from them, during Apr. 2015 to Nov. 2015. The sampling rate was one point per $3$--$5$ seconds, and
 each trajectory has around $114.1K$ data points.
 
+\vspace{0.5ex}
 \ni \emph{(3) GeoLife trajectory data}, referred to as \geolife, is the GPS trajectories collected in GeoLife project~\cite{Zheng:GeoLife} by 182 users in a period from Apr. 2007 to Oct. 2011. These trajectories have a variety of sampling rates, among which 91\% are logged in each 1-5 seconds or each 5-10 meters per point.
 %The longest trajectory has 2,156,994 points.
 
+\vspace{0.5ex}
 \ni \emph{(4) Private car trajectory data}, referred to as \pricar, is a small set of high sampling (the sampling rate is fixed with one point per second) GPS trajectories collected by our team members in 2017. There are 10 trajectories and each trajectory has around 11.8K points.
 
 %{This dataset contains 182 trajectories, one trajectory for each user, with a total distance of about 1.2 million kilometers. }
@@ -66,7 +70,7 @@ over 3 times and the average is reported here}.
 \hline
 \end{tabular}
 \label{tab:datasets}
-\vspace{-3ex}
+\vspace{-2ex}
 \end{table}
 
 
@@ -104,7 +108,7 @@ By the definition, \emph{algorithms with lower compression ratios are better}.
 \vspace{-2ex}
 \caption{\small Evaluation of compression ratios: fixed error bound with $\epsilon=60m$ and varying $M$.}
 \label{fig:m-cr-e60}
-\vspace{-2ex}
+\vspace{-1ex}
 \end{figure*}
 
 
@@ -117,7 +121,7 @@ By the definition, \emph{algorithms with lower compression ratios are better}.
 \vspace{-2ex}
 \caption{\small Evaluation of compression ratios: fixed with $M=16$ and varying error bound $\epsilon$.}
 \label{fig:cr-m16}
-\vspace{-2.0ex}
+\vspace{-1.0ex}
 \end{figure*}
 
 
@@ -130,9 +134,10 @@ By the definition, \emph{algorithms with lower compression ratios are better}.
 \vspace{-2ex}
 \caption{\small Evaluation of compression ratios: fixed with $M=16$ and $\epsilon=60m$, and varying the size of trajectories.}
 \label{fig:cr-size}
-\vspace{-2ex}
+\vspace{-1ex}
 \end{figure*}
 
+%\vspace{0.5ex}
 \stitle{Exp-1.1: Impacts of parameter $M$ on compression ratios}.
 To evaluate the impacts of parameter $M$ on compression ratios of algorithms \cist and \cista, we fixed the error bounds {$\epsilon =60m$} and varied $M$ from $4$ to $40$.
 The results are reported in Figures~\ref{fig:m-cr-e60}.
@@ -146,33 +151,29 @@ Where, the compression ratio of $M=12$ is average {$100.88\%$} of $M=20$ on all 
 
 %\ni(1) The polygon intersection algorithms \rpia and \cpia have the same impacts on compression ratios on all datasets. \eg the compression ratio of \rpia equipped simplification algorithm \cist, \ie \cist-\rpia, is the same as the \cpia equipped simplification algorithm, \ie \cist-\cpia, for each $M$.
 
-
+%\vspace{0.5ex}
 \stitle{Exp-1.2: Impacts of the error bound $\epsilon$ to compression ratios}.
 To evaluate the impacts of $\epsilon$ on compression ratios of these algorithms, we fixed {$M$=$16$} and varied $\epsilon$ from $10m$ to $200m$ on the entire four datasets, respectively.
 The results are reported in Figure~\ref{fig:cr-m16} .
 %Figure~\ref{fig:cr-m10}.  and
 
 
-\ni (1) When increasing $\epsilon$, the compression ratios decrease on.
+\ni (1) When increasing $\epsilon$, the compression ratios decrease on all datasets.
 
 \ni (2) \pricar has the lowest compression ratios, compared with \truck, \sercar and \geolife, due to its highest sampling rate,
 \truck has the highest compression ratios due to its lowest sampling rate, and \sercar and \geolife have the compression ratios in the middle accordingly.
 
 \ni {(3)} Algorithm \cist has better compression ratios than \squishe, and is {comparable} with \dps, on all datasets and for all $\epsilon$.
-%
 The compression ratios of \cist are on average ($91.8\%$, $79.3\%$, $71.9\%$, {$72.7\%$}) and ($113.2\%$, $109.2\%$, $108.0\%$, $109.1\%$) of \squishe and \dps on (\truck, \sercar, \geolife, \pricar), respectively.
-%
 For example, when $\epsilon$=$40m$, the compression ratios of \squishe, \cist and \dps are ($31.3\%$, $19.9\%$, $8.0\%$, $4.9\%$), ($30.0\%$, $16.1\%$, $5.8\%$, $3.6\%$) and ($26.9\%$, $14.7\%$, $5.4\%$, $3.4\%$) on (\truck, \sercar, \geolife, \pricar), respectively.
 
 \ni {(4)} Algorithm \cista has {the best} compression ratios on all datasets and for all $\epsilon$.
-%
 The compression ratios of \cista are on average ($64.4\%$, $57.7\%$, $53.8\%$, {$54.6\%$}) and ($79.2\%$, $79.5\%$, $80.9\%$, $82.0\%$) of \squishe and \dps on (\truck, \sercar, \geolife, \pricar), respectively.
-%
 For example, when $\epsilon$=$40m$, the compression ratios of \cista are ($21.8\%$, $11.5\%$, $4.3\%$, $2.7\%$) on (\truck, \sercar, \geolife, \pricar), respectively.
 
 
 %The results also show that \cist has better compression ratios than \squishe on datasets with higher sampling rates.
-
+%\vspace{0.5ex}
 \stitle{Exp-1.3: Impacts of trajectory size on compression ratios}.
 To evaluate the impacts of trajectory size, \ie the number of data points in a trajectory, on compression ratios,
 we chose {$10$} trajectories from \truck, \sercar, \geolife and \pricar, respectively,
@@ -213,7 +214,7 @@ then the average error is $\sum_{j=1}^{M}\sum_{i=0}^{M} d(P_{j,i},
 \vspace{-2ex}
 \caption{\small Evaluation of average errors: fixed error bound with $\epsilon = 60m$ and varying $M$.}
 \label{fig:m-error-e60}
-\vspace{-2ex}
+\vspace{-1ex}
 \end{figure*}
 
 
@@ -226,7 +227,7 @@ then the average error is $\sum_{j=1}^{M}\sum_{i=0}^{M} d(P_{j,i},
 \vspace{-2ex}
 \caption{\small Evaluation of average errors: fixed with $M=16$ and varying error bound $\epsilon$.}
 \label{fig:ae-m16}
-\vspace{-2ex}
+\vspace{-1ex}
 \end{figure*}
 
 
@@ -240,11 +241,12 @@ then the average error is $\sum_{j=1}^{M}\sum_{i=0}^{M} d(P_{j,i},
 \vspace{-2ex}
 \caption{\small Evaluation of average errors: fixed with $M=16$ and $\epsilon=60m$, and varying the size of trajectories.}
 \label{fig:ae-size}
-\vspace{-2ex}
+\vspace{-1ex}
 \end{figure*}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\vspace{0.5ex}
 \stitle{Exp-2.1: Impacts of parameter $M$ on average errors}.
 To evaluate the impacts of parameter $M$ on average errors of algorithms \cist and \cista, we fixed the error bounds {$\epsilon =60m$} and varied $M$ from $4$ to $40$.
 The results are reported in Figures~\ref{fig:m-error-e60}.
@@ -263,6 +265,7 @@ Where, the average error of $M=12$ is average {$98.4\%$} of $M=20$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\vspace{0.5ex}
 \stitle{Exp-2.2: Impacts of the error bound $\epsilon$ to average errors}.
 To evaluate the average errors of these algorithms, we fixed {$M$=$16$}, and varied $\epsilon$ from $10m$ to $200m$ on the entire \truck, \sercar, \geolife and \pricar, respectively.
 The results are reported in Figure~\ref{fig:ae-m16}.
@@ -276,7 +279,7 @@ The results are reported in Figure~\ref{fig:ae-m16}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%\vspace{0.5ex}
 \stitle{Exp-2.3: Impacts of trajectory size on average errors}.
 To evaluate the impacts of trajectory size on average errors, we chose the same {$10$} trajectories from \truck, \sercar, \geolife and \pricar, respectively.
 We fixed {$M$=$16$} and $\epsilon = 60m$, and varying the size \trajec{|T|} of trajectories from $1K$ points to $10K$ points.
@@ -305,6 +308,7 @@ In the set of tests, we test the impacts of parameter $M$, \ie the edge number o
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\vspace{0.5ex}
 \stitle{Exp-3.1: Impacts of algorithm \rpia and parameter $M$ on efficiency.}
 To evaluate the impacts of parameter $M$ on execution time of line simplification algorithms \cist and \cista, we fixed $\epsilon =60m$ and varying $M$ from $4$ to $40$.
 %
@@ -314,7 +318,7 @@ The results are reported in Figure~\ref{fig:m-time-e60} and ~\ref{fig:m-poly-tim
 
 \ni(2) Parameter $M$ has the similar impacts on all the datasets.
 
-\ni(3) The execution time of algorithm \cpia and algorithm \rpia are on average $(92.5\%, 93.5\%, 96.0\%, 97.0\%)$ and  $(89.0\%, 90.5\%, 92.5\%, 96.5\%)$ of the entire compression on (\truck, \sercar, \geolife, \pricar), respectively.
+\ni(3) The execution time of algorithms \cpia and \rpia is on average ($92.5\%$, $93.5\%$, $96.0\%$, $97.0\%$) and ($89.0\%$, $90.5\%$, $92.5\%$, $96.5\%$) of the entire compression on (\truck, \sercar, \geolife, \pricar), respectively.
 
 \ni(4) The execution time of algorithms \cist-\rpia and \cista-\rpia is average $81.3\%$ that of \cpia equipped algorithms.
 
@@ -335,7 +339,7 @@ The results are reported in Figure~\ref{fig:m-time-e60} and ~\ref{fig:m-poly-tim
 \vspace{-2ex}
 \caption{\small Evaluation of running time: fixed error bound with $\epsilon=60m$, and varying $M$.}
 \label{fig:m-time-e60}
-\vspace{-2ex}
+\vspace{-1ex}
 \end{figure*}
 
 \begin{figure*}[tb!]
@@ -347,7 +351,7 @@ The results are reported in Figure~\ref{fig:m-time-e60} and ~\ref{fig:m-poly-tim
 \vspace{-2ex}
 \caption{\small Evaluation of running time of polygon intersection algorithms: fixed error bound with $\epsilon=60m$, and varying $M$.}
 \label{fig:m-poly-time}
-\vspace{-2ex}
+\vspace{-1ex}
 \end{figure*}
 
 
@@ -360,7 +364,7 @@ The results are reported in Figure~\ref{fig:m-time-e60} and ~\ref{fig:m-poly-tim
 \vspace{-2ex}
 \caption{\small Evaluation of running time: fixed with $M=16$ and varying error bounds $\epsilon$.}
 \label{fig:time-epsilon}
-\vspace{-2ex}
+\vspace{-1ex}
 \end{figure*}
 
 
@@ -374,7 +378,7 @@ The results are reported in Figure~\ref{fig:m-time-e60} and ~\ref{fig:m-poly-tim
 \vspace{-2ex}
 \caption{\small Evaluation of running time: fixed with $M=16$ and $\epsilon=60m$, and varying the size of trajectories.}
 \label{fig:time-size}
-\vspace{-2ex}
+\vspace{-1ex}
 \end{figure*}
 
 
@@ -382,6 +386,7 @@ The results are reported in Figure~\ref{fig:m-time-e60} and ~\ref{fig:m-poly-tim
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\vspace{0.5ex}
 \stitle{{Exp-3.2}:  Impacts of the error bound $\epsilon$}.
 To evaluate the impacts of $\epsilon$, we fixed $M$=$16$ and varying $\epsilon$  from $10m$ to $200m$ on the entire \truck, \sercar, \geolife and \pricar, respectively.
 The results are reported in Figure~\ref{fig:time-epsilon}.
@@ -394,6 +399,7 @@ They are on average ($20.7$, $14.2$, $18.2$, $10.0$) times faster than \dps, and
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\vspace{0.5ex}
 \stitle{{Exp-3.3}: Impacts of the sizes of trajectories}.
 To evaluate the impacts of the number of data points in a trajectory (\ie the size of a trajectory) on the execution time,
 we chose {$10$} trajectories from \truck, \sercar,\geolife and \pricar, respectively,
@@ -417,24 +423,24 @@ and {($2.0$--$2.8$, $2.4$--$2.7$, $2.8$--$3.0$, $2.8$--$4.0$)} times faster than
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 From these tests we find the following.
 
-%\vspace{0.5ex}
+\vspace{0.5ex}
 \ni\emph{(1) Polygon intersection Algorithms}. \rpia runs fast than \cpia on all datasets, and it has the same effectiveness as \cpia.
 
-%\vspace{0.5ex}
-\ni\emph{(2) Parameter $M$}. The compression ratio decreases with the increase of $M$, and the running time increases approximately linear with the increase of $M$. In practical, region $[10, 20]$ is the candidate region of parameter $M$.
+\vspace{0.5ex}
+\ni\emph{(2) Parameter $M$}. The compression ratio decreases with the increase of $M$, and the running time increases approximately linear with the increase of $M$. In practical, region $[12, 20]$ is the candidate region of parameter $M$.
 
-%\vspace{0.5ex}
-\ni\emph{(3) Compression ratios}. \cist is comparable with \dps and \cista is better than \dps.
+\vspace{0.5ex}
+\ni\emph{(3) Compression ratios}. Algorithm \cist is comparable with \dps and algorithm \cista is better than \dps.
 They are better than \squishe.
-The compression ratios of \cist and \cista are on average ($91.8\%$, $79.3\%$, $71.9\%$, {$72.7\%$}) and ($64.4\%$, $57.7\%$, $53.8\%$, {$54.6\%$}) of \squishe and ($113.2\%$, $109.2\%$, $108.0\%$, $109.1\%$) and ($79.2\%$, $79.5\%$, $80.9\%$, $82.0\%$) of \dps on (\truck, \sercar, \geolife, \pricar), respectively.
+The compression ratios of algorithms \cist and \cista are on average ($91.8\%$, $79.3\%$, $71.9\%$, {$72.7\%$}) and ($64.4\%$, $57.7\%$, $53.8\%$, {$54.6\%$}) of \squishe and ($113.2\%$, $109.2\%$, $108.0\%$, $109.1\%$) and ($79.2\%$, $79.5\%$, $80.9\%$, $82.0\%$) of \dps on (\truck, \sercar, \geolife, \pricar), respectively.
 %And They have a better performance on trajectories with higher sampling rates.
 
 
-%\vspace{0.5ex}
+\vspace{0.5ex}
 \ni\emph{(4) Average errors}. {Algorithms \cist and \cista have higher average errors than the other algorithms.}
 
-%\vspace{0.5ex}
-\ni\emph{(5) Running time}. \cist and \cista are on average ($20.7$, $14.2$, $18.2$, $10.0$) times faster than \dps, and ($2.7$, $2.8$, $3.4$, {$2.9$}) times faster than \squishe on (\truck, \sercar, {\geolife}, \pricar), respectively.The efficiency advantage of \cist and \cista enlarges with the increase of the size of trajectories.
+\vspace{0.5ex}
+\ni\emph{(5) Running time}. Algorithms \cist and \cista are on average ($20.7$, $14.2$, $18.2$, $10.0$) and ($2.7$, $2.8$, $3.4$, {$2.9$}) times faster than algorithms \dps and \squishe on (\truck, \sercar, {\geolife}, \pricar), respectively. The efficiency advantage of algorithms \cist and \cista enlarges with the increase of the size of trajectories.
 
 
 
