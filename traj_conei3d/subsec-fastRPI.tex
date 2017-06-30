@@ -6,7 +6,7 @@ Observe that algorithm \cpia in Figure~\ref{alg:c-poly-inter} is for general con
 while the inscribed regular polygons $\mathcal{G}_{s+i}$ ($i\in[1, k]$) the cone projection  circles are constructed in a unified way,
 while allows us to develop a fast method to compute their intersection.
 
-Let $\vv{A} = (P_{s_A}, P_{e_A})$ and $\vv{B} = (P_{s_B}, P_{e_B})$  be two directed edges on polygons $\mathcal{G}_{l+1}$ and $\mathcal{G}^*_l$, respectively.
+Let $\vv{A} = (P_{s_A}, P_{e_A})$ and $\vv{B} = (P_{s_B}, P_{e_B})$  be two directed edges on polygons $\mathcal{G}_{s+l+1}$ and $\mathcal{G}^*_{s+l}$, respectively.
 Again edges $\vv{A}$ and $\vv{B}$ are moved counter-clockwise. Note that $\vv{A}$ and $\vv{B}$ are advanced step by step each time by the two advancing rules of algorithm \cpia.
 %
 However, it is possible to advance $\vv{A}$ or $\vv{B}$ multiple steps each time.
@@ -38,10 +38,10 @@ in which $g(e)$ denotes the label of edge $e$.
 
 
 \begin{proof}
-We first explain how the edges $\vv{A}$ and $\vv{B}$ are moved forward.
-Indeed, $\vv{A}$ is moved from its original position to its opposite edge on $\mathcal{G}_{l+1}$ \wrt $\vv{B}$.
+We first explain how the edges $\vv{A}$ is moved forward.
+Indeed, $\vv{A}$ is moved from its original position to its opposite edge on $\mathcal{G}_{s+l+1}$ \wrt $\vv{B}$.
 For example, in Figure~\ref{fig:r-poly-rule1}.(1), there is $\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} > 0$ \And $P_{e_B} \in \mathcal{H}(\vv{A})$, hence $\vv{A}$ moves on. As $g(\vv{B})=3 > 1=g(\vv{A})$, $\vv{A}$ moves forward $2\times(g(\vv{B}) - g(\vv{A})) = 2\times(3-1)= 4$ steps.
-Here, the label of edge $\vv{A}$ is changed to $5$, the opposite of $1$ \wrt edge $\vv{B}$ labeled with $3$ on $\mathcal{G}^*_l$.
+Here, the label of edge $\vv{A}$ is changed to $5$, the opposite of $1$ \wrt edge $\vv{B}$ labeled with $3$ on $\mathcal{G}^*_{s+l}$.
 
 We then present the proof.
 If ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} < 0$ \And $P_{e_A} \not \in \mathcal{H}(\vv{B})$) or ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} > 0$ \And $P_{e_B} \in \mathcal{H}(\vv{A})$), then as all edges in the same edge groups $E^j$ ($1\le j\le m$) are in parallel with each other, it is easy to find that, for each position of $\vv{A}$ between its original to its opposite positions, we have (1) $\vv{A} \bigsqcap \vv{B} = \emptyset$, and (2) either $P_{e_A} \not \in \mathcal{H}(\vv{B})$ or $P_{e_B} \in \mathcal{H}(\vv{A})$. Hence, by the advance rule (1) of algorithm \cpia in Section~\ref{subsec-cpi}, edge $\vv{A}$ is always moved forward until it reaches the opposite position of its original one. From this, we have the conclusion.
@@ -61,15 +61,23 @@ If ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} < 0$ \And
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{cor}
+\begin{prop}
 \label{prop-rule2}
 If either ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} > 0$ \And $P_{e_B} \not \in \mathcal{H}(\vv{A})$) or ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} < 0$ \And $P_{e_A} \in \mathcal{H}(\vv{B})$), then $\vv{B}$ is directly moved to the edge after the one having the same edge group as $\vv{A}$.
-\end{cor}
+\end{prop}
+
+\begin{proof}
+We first explain how the edges $\vv{B}$ is moved forward.
+For example, in Figure~\ref{fig:r-poly-rule1}.(2), $\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} < 0$ \And $P_{e_A} \in \mathcal{H}(\vv{B})$, hence $\vv{B}$ is moved forward. As the edge $\vv{A}$ is labeled with 7,
+$\vv{B}$ moves to the edge labeled with 8 on $\mathcal{G}^*_{s+l}$, which is the next of the edge labeled with 7 on $\mathcal{G}^*_{s+l}$.
+Note that if the edge labeled with 8 were not actually existing in intersection polygon $\mathcal{G}^*_{s+l}$, then $\vv{B}$ should repeat move on until it reaches the first ``real" edge on $\mathcal{G}^*_{s+l}$.
+
+We then present the proof.
+If ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} > 0$ \And $P_{e_B} \not \in \mathcal{H}(\vv{A})$) or ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} < 0$ \And $P_{e_A} \in \mathcal{H}(\vv{B})$), then it is also easy to find that, for each position of $\vv{B}$ between its original to its target positions, we have (1) $\vv{A} \bigsqcap \vv{B} = \emptyset$, and (2) either $P_{e_B} \not \in \mathcal{H}(\vv{A})$ or $P_{e_A} \in \mathcal{H}(\vv{B})$. Hence, by the advance rule (2) of algorithm \cpia in Section~\ref{subsec-cpi}, edge $\vv{B}$ is always moved forward until it reaches the target position. From this, we have the conclusion.
+\end{proof}
 
 
-For example, in Figure~\ref{fig:r-poly-rule1}.(2), $\vv{A} \bigsqcap \vv{B} \ne \emptyset$ and $\vv{B}$ is moved forward. $\vv{B}$ moves to $e^*_{k, 3}$, \ie the next edge of the $4^{th}$ edge as $g(A) = 4$.
-%In this case, the $4^{th}$ edge does not exist in $\mathcal{G}^*_k$.
-Note if the $3^{th}$ edge were not actually existing in $\mathcal{G}^*_k$, then $\vv{B}$ should move on to the next real edge of $\mathcal{G}^*_k$.
+
 
 
 
@@ -126,14 +134,14 @@ If $A \bigcap B = \phi$ and advances $B$, then moves $A$ and $B$ forward ``$a$ a
 
 
 
-\stitle{Algorithm \rpia}
-The presented regular polygon intersection algorithm, \ie \rpia, is the optimization of the convex polygon intersection algorithm, by Theorem \ref{prop-rule1} and \ref{prop-rule2}. We also saves vertexes or edges of a polygon in an fixe size array, which is different with algorithm \cpia  that saves polygons in linked lists.
-Considering the regular polygons each having a fixed number of edges, marked from $1$ to $M$, this policy alow us to quickly address an edge or vertex by its index.
+\stitle{Algorithm \rpia}.
+The presented regular polygon intersection algorithm, \ie \rpia, is the optimization of the convex polygon intersection algorithm, by Proposition \ref{prop-rule1} and \ref{prop-rule2}. We also saves vertexes or edges of a polygon in a fixed size array, which is different with algorithm \cpia  that saves polygons in linked lists.
+Considering the regular polygons each having a fixed number of edges, marked from $1$ to $M$, this policy allow us to quickly address an edge or vertex by its label.
 %, as well as avoid the creating and removing of link nodes.
 
-Given intersection polygon $\mathcal{G}^*_k$ of the preview $k$ polygons and the next approximate polygon $\mathcal{G}_{k+1}$, the algorithm \rpia returns $\mathcal{G}^*_{k+1} = \mathcal{G}^*_k  \bigcap \mathcal{G}_{k+1}$.
+Given intersection polygon $\mathcal{G}^*_{s+l}$ of the preview $l$ polygons and the next approximate polygon $\mathcal{G}_{s+l+1}$, the algorithm \rpia returns $\mathcal{G}^*_{s+l+1} = \mathcal{G}^*_{s+l}  \bigcap \mathcal{G}_{s+l+1}$.
 %The sketch of the algorithm is shown in Figure~\ref{alg:r-poly-inter}.
-It runs the similar routine as the \cpia algorithm, except that (1) it saves polygons in arrays, and (2) the advance strategies are partitioned into two parts, \ie $\vv{A} \bigcap \vv{B} \ne \phi$ and $\vv{A} \bigcap \vv{B} = \phi$, where the former applies Theorem \ref{prop-rule1} and \ref{prop-rule2}, and the later remains the same as the \cpia algorithm.
+It runs the similar routine as the \cpia algorithm, except that (1) it saves polygons in arrays, and (2) the advance strategies are partitioned into two parts, \ie $\vv{A} \bigcap \vv{B} \ne \phi$ and $\vv{A} \bigcap \vv{B} = \phi$, where the former applies Proposition \ref{prop-rule1} and \ref{prop-rule2}, and the later remains the same as the \cpia algorithm.
 
 
 
@@ -202,7 +210,7 @@ Figure~\ref{fig:r-poly-inter} is a running example of algorithm \rpia. The input
 
 
 \stitle{Correctness and complexity analysis.}
-Algorithm \emph{regularPolyInter} runs in the same routine as algorithm \cpia, except that it fastens the advancing speed of directed edges $\vv{A}$ and $\vv{B}$ in some circumstances as shown in Theorem \ref{prop-rule1} and \ref{prop-rule2}. Given $\mathcal{G}^*_k$ and $\mathcal{G}_{k+1}$,  Theorem \ref{prop-rule1} and \ref{prop-rule2} prove that it has the same result as the output of \emph{convexPolyInter}, \ie $\mathcal{G}^*_{k+1}$. This ensure the correctness of \emph{regularPolyInter}.
+Algorithm \emph{regularPolyInter} runs in the same routine as algorithm \cpia, except that it fastens the advancing speed of directed edges $\vv{A}$ and $\vv{B}$ in some circumstances as shown in Proposition \ref{prop-rule1} and \ref{prop-rule2}. Given $\mathcal{G}^*_{s+l}$ and $\mathcal{G}_{s+l+1}$,  Proposition \ref{prop-rule1} and \ref{prop-rule2} prove that it has the same result as the output of {\cpia}, \ie $\mathcal{G}^*_{s+l+1}$. This ensure the correctness of \rpia.
 For time complexity, algorithm \rpia runs the same time, $O(M)$, as algorithm \cpia.
 
 
