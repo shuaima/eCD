@@ -19,8 +19,8 @@ In this section, we introduce basic concepts and cone intersection based one-pas
 
 
 \subsection{Basic Notations}
+We first introduce basic notations. 
 
-We first introduce basic notations.
 
 \stitle{Points ($P$)}. A data point is defined as a triple $P(x, y, t)$, which represents that a moving object is located at {\em longitude} $x$ and {\em latitude} $y$ at {\em time} $t$. Note that data points can be viewed as points in a three-dimension Euclidean space.
 
@@ -60,7 +60,12 @@ However, for trajectory simplification, the distance based metrics are definitel
 
 %\stitle{Dual Euclidean distances $(\ped, ~\red)$}. A \ded is a two-tuples $(\ped, ~\red)$, whereas, \ped and \red either has its error bound ($\epsilon_p$ of \ped and $\epsilon_r$ of \red), and is checked separately. Note that the distance checking approach of the original \lsa algorithms, whose \red error bound $\epsilon_r$ is fixed with $\infty$, is a special case of \ded.
 
-We next illustrate these notations with examples.
+
+
+We illustrate these notations with examples.
+
+
+
 
 \begin{example}
 \label{exm-notations}
@@ -77,9 +82,61 @@ where points $P'_4$, $P'_2$ and $P'_7$ are the synchronized points of points $P_
 \end{example}
 
 \stitle{Error bounded algorithms}. Given a trajectory \trajec{T} and its compression  algorithm $\mathcal{A}$ using \sed (respectively \ped) that produces another trajectory \trajec{T'},
-we say that algorithm $\mathcal{A}$ is error bounded by $\zeta$ if  for each point $P$ in \trajec{T}, there exists a point $P_j$ in \trajec{T'} such that the  $sed(P, \mathcal{L}(P_j,P_{j+1}))\le \zeta$ (respectively $ped(P, \mathcal{L}(P_j,P_{j+1}))\le \zeta$).
+we say that algorithm $\mathcal{A}$ is error bounded by $\epsilon$ if  for each point $P$ in \trajec{T}, there exists a point $P_j$ in \trajec{T'} such that the  $sed(P, \mathcal{L}(P_j,P_{j+1}))\le \epsilon$ (respectively $ped(P, \mathcal{L}(P_j,P_{j+1}))\le \epsilon$).
 
 
+
+We summarize notations used in Table ~\ref{tab:notations}
+
+\begin{table}
+\caption{\small Summary of notations}
+\vspace{-1ex}
+\centering
+\footnotesize
+\begin{tabular}{|c|l|}
+\hline
+\kw{Notations}& \kw{Semantics}   \\
+\hline\hline
+ $P$ & A data point \\
+\hline
+ $\dddot{\mathcal{T}}$ & A trajectory $\dddot{\mathcal{T}}$ is a sequence of data points\\
+\hline
+$\mathcal{L}$ & A directed line segment  \\
+\hline
+$\overline{\mathcal{T}}$&  A piece-wise line representation $\overline{\mathcal{T}}$ of a trajectory $\dddot{\mathcal{T}}$ \\
+\hline
+$ped(P, \mathcal{L})$ & The perpendicular Euclidean distance of $P$ to $\mathcal{L}$\\
+\hline
+$sed(P, \mathcal{L})$ & The synchronous Euclidean distances of $P$ to $\mathcal{L}$\\
+\hline
+$\epsilon$ & The threshold of error \\
+\hline
+\sector{} & A sector\\
+\hline
+$\vv{A} \times \vv{B}$ & The cross product of (vectors) $\vv{A}$ and $\vv{B}$\\
+\hline
+$\mathcal{H}(\vv{A})$ & The open half-plane to the left of $\vv{A}$\\
+\hline
+$\mathcal{G}$& A polygon \\
+\hline
+$\mathcal{G}^*$ & The intersection of polygons \\
+\hline
+$M$ & The max number of vertexes/edges of a polygon\\
+\hline
+$E^j$ & A group of edges labeled with $j$\\
+\hline
+\circle{} & A synchronous circle\\
+\hline
+\cone{} & A spatio-temporal cone \\
+\hline
+\pcircle{} &A cone projection circles \\
+\hline
+$\bigsqcap$ & Intersecting of geometries\\
+\hline
+\end{tabular}
+\label{tab:notations}
+\vspace{-2ex}
+\end{table}
 
 
 
@@ -174,12 +231,12 @@ Figure~\ref{fig:c-poly-inter} shows a running example of the convex polygon inte
 \sstab(1) Initially, directed edges $\vv{A}$ and $\vv{B}$ are on polygons $\mathcal{G}_2$ and $\mathcal{G}_1$, respectively, such that $\vv{A} \bigsqcap \vv{B} = \{P_1\}$ by coincidence, \ie $\vv{A}$ and $\vv{B}$ intersect on point $P_1$, as shown in Figure~\ref{fig:c-poly-inter}.(1).
 
 \sstab(2) Then, by the advance rules, edge $\vv{A}$ moves on a step and makes $\vv{A} \bigsqcap \vv{B} = \emptyset$ as shown in Figure~\ref{fig:c-poly-inter}.(2).
-And after 7 steps of moving of $\vv{A}$ or $\vv{B}$, each by an advance rule, edges $\vv{A}$ and $\vv{B}$ intersect on point $P_2$, as shown in Figure~\ref{fig:c-poly-inter}.(3).
+And after 7 steps of moving of $\vv{A}$ or $\vv{B}$, each by an advance rule, edges $\vv{A}$ and $\vv{B}$ intersect on point $P_2$, as shown in Figure~\ref{fig:c-poly-inter}.(6).
 
-\sstab(3) Next, edge $\vv{B}$ moves on a step, and makes $\vv{A} \bigsqcap \vv{B} = \emptyset$, as shown in Figure~\ref{fig:c-poly-inter}.(4).
-After 6 steps of moving of edge $\vv{B}$ or $\vv{A}$ one by one, both edges $\vv{A}$ and $\vv{B}$ have finished their cycles as shown in Figure~\ref{fig:c-poly-inter}.(5).
+\sstab(3) Next, edge $\vv{B}$ moves on a step, and makes $\vv{A} \bigsqcap \vv{B} = \emptyset$, as shown in Figure~\ref{fig:c-poly-inter}.(7).
+After 6 steps of moving of edge $\vv{B}$ or $\vv{A}$ one by one, both edges $\vv{A}$ and $\vv{B}$ have finished their cycles as shown in Figure~\ref{fig:c-poly-inter}.(8).
 
-\sstab(4) The algorithm finally returns the intersection polygon as shown in Figure~\ref{fig:c-poly-inter}.(6).
+\sstab(4) The algorithm finally returns the intersection polygon as shown in Figure~\ref{fig:c-poly-inter}.(9).
 \end{example}
 
 
