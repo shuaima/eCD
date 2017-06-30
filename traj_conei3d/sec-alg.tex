@@ -12,28 +12,29 @@ The main result here is stated as follows.
 
 \begin{theorem}
 \label{prop-cist-complexity}
-There exists an one-pass error bounded trajectory simplification algorithm using the synchronous Euclidean Distance for either strong or weak trajectory simplification.
+There exist one-pass error bounded trajectory simplification algorithms using the synchronous Euclidean Distance for both strong and weak trajectory simplification.
 \end{theorem}
 
-We shall prove this by providing such algorithm for both strong and weak trajectory simplification, by employing the local one-pass distance checking technique in Section~\ref{sec-localcheck}.
+We shall prove this by providing such algorithms for both strong and weak trajectory simplification, by employing the constant time synchronous distance checking technique developed in Section~\ref{sec-localcheck}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\subsection{{One-pass algorithm}}
 \subsection{Strong Trajectory Simplification}
-Recall that in Theorem~\ref{prop-3d-ci}, the point $Q$ may not be in the input sub trajectory $[P_s,...,P_e]$.
-If we restrict $Q=P_e$, the end point of the sub trajectory, then a \emph{narrower} spatio-temporal cone with a base radius of $\epsilon/2$ suffices.
+Recall that in Proposition~\ref{prop-3d-ci}, the point $Q$ may not be in the input sub-trajectory $[P_s,...,P_{s+k}]$.
+If we restrict $Q=P_{s+k}$, the end point of the sub-trajectory, then the cone projection circles with a radius of $\epsilon/2$ suffices.
 
 \begin{prop}
 \label{prop-3d-ci-half}
-Given a sub-trajectory $\{P_s, \ldots, P_e\}$ and an error bound $\epsilon$, if $\bigsqcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_i, \epsilon/2)} \ne \{P_s\}$ then the sub trajectory can be represented by the line segment $\vv{P_sP_e}$.
+Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P_{s+i}, \vv{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if and only if $\bigsqcap_{i=1}^{k}$\cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon/2))} $\ne \{P_s\}$.
 \end{prop}
 
+
 \begin{proof}
-If $\bigcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_i, \epsilon/2)} \ne \{P_s\}$, then by Theorem~\ref{prop-3d-ci}, there exists a point $Q$, $Q.t = P_e.t$, such that $sed(P_i, \vv{P_sQ})<\epsilon/2$ for all $P_i$, $i \in [s,e]$. By the triangle inequality, $sed(P_i, \vv{P_sP_e})\le \epsilon/2 + |\vv{P_eQ}| < \epsilon/2 + \epsilon/2 = \epsilon$.
+If $\bigsqcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_{s+i}, \epsilon/2)} \ne \{P_s\}$, then by Proposition~\ref{prop-3d-ci}, there exists a point $Q$, $Q.t = P_{s+k}.t$, such that $sed(P_{s+i}, \vv{P_sQ})\le \epsilon/2$ for all $i \in [1,k]$. By the triangle inequality essentially, $sed(P_{s+i}, \vv{P_sP_{s+k}})\le  sed(P_{s+i}, \vv{P_sQ}) + |\vv{QP_{s+k}}| \le  \epsilon/2+\epsilon/2 = \epsilon$.
 \end{proof}
 
 
-Based on Proposition~\ref{prop-3d-ci-half} and the local one-pass distance checking technique in Section~\ref{sec-localcheck}, we next develop strong simplification algorithm.
+we now present our one-pass strong simplification algorithm. 
 
 \stitle{Algorithm \cist}. The first algorithm, , is a \emph{strong simplification}\cite{Trajcevski:DDR} algorithm, which outputs a subset of the original points.
 
