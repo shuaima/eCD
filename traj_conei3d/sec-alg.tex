@@ -36,7 +36,7 @@ If $\bigsqcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_{s+i}, \epsilon/2)} \ne \{P_s\}$, t
 
  We now present the  one-pass error bounded {\em strong trajectory simplification} algorithm using the synchronous distance, which is shown in Figure~\ref{alg:CI3d} .
 
-\stitle{Algorithm \cist}. It takes as input a trajectory $\dddot{\mathcal{T}}$, an error bound $\epsilon$ and the number $m$ of regular polygons, and returns a simplified  piece-wise line representation $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$.
+\stitle{Algorithm \cist}. It takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of regular polygons, and returns a simplified  piece-wise line representation $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$.
 
 %%%%%%%%%%%%%%%%%%%%%
 \begin{figure}[tb!]
@@ -46,34 +46,31 @@ If $\bigsqcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_{s+i}, \epsilon/2)} \ne \{P_s\}$, t
 \myhrule
 \vspace{-1ex}
 \mat{0ex}{
-	{\bf Algorithm} ~\cist$(\dddot{\mathcal{T}}[P_0,\ldots,P_n], ~\epsilon, ~M, ~t_c)$\\
+	{\bf Algorithm} ~\cist$(\dddot{\mathcal{T}}[P_0,\ldots,P_n],~\epsilon,~m)$\\
 %	\sstab
-	\bcc \hspace{1ex}\= $P_s := P_0$;  ~$P_e := P_0$;  ~$\overline{\mathcal{T}} := \phi$;  ~$\mathcal{G}^* := \phi$;  ~$i := 1$\\
-%         \hspace{2ex}     $intersection = \emptyset$;   \\
+	\bcc \hspace{1ex}\= $P_s := P_0$;  ~$P_e := P_0$;\\
+\icc \hspace{1ex}\= ~$\overline{\mathcal{T}} := \emptyset$;  ~$\mathcal{G}^* := \emptyset$;  ~$i := 1$; ,~$t_c$ := $P_n.t$;\\
 	\icc \hspace{1ex}\= \While $i \le n$ \Do \\
-	\icc \>\hspace{3ex} $\mathcal{G}$ := \kw{getRegularPolygon}($P_s$, $P_i$, $\epsilon/2$, $M$, $t_c$) \\
-	\icc \>\hspace{3ex} \If $\mathcal{G}^* = \phi$ \Then \\
-	\icc \>\hspace{6ex} $\mathcal{G}^* :=\mathcal{G}$ \\
-	\icc \>\hspace{3ex} \Else \\
-	\icc \>\hspace{6ex} $\mathcal{G}^* := {\rpia}(\mathcal{G}^*, ~\mathcal{G})$ \\
-	\icc \>\hspace{3ex} \If $\mathcal{G}^* \ne \phi$ \Then \\
-	\icc \> \hspace{6ex} $P_e := P_i$ \\
-	\icc \> \hspace{6ex} $i := i+1$ \\
-	\icc \>\hspace{3ex} \Else\\
-	\icc \> \hspace{6ex} $\overline{\mathcal{T}} := \overline{\mathcal{T}}\cup \{\mathcal{L}(P_s,P_e)\}$ \\
-	\icc \> \hspace{6ex} $P_s := P_e$;  ~~$\mathcal{G}^* := \phi$ \\
-	\icc \hspace{1ex}\Return $\overline{\mathcal{T}}$ \\
+	\icc \>\hspace{3ex} $\mathcal{G}$ := \kw{getRegularPolygon}($P_s$, $P_i$, $\epsilon/2$, $m$, $t_c$); \\
+	\icc \>\hspace{3ex} \If $\mathcal{G}^* = \emptyset$  \\
+	\icc \>\hspace{3ex} \Then \ \ $\mathcal{G}^* :=\mathcal{G};$ \\
+	\icc \>\hspace{3ex} \Else\ \ $\mathcal{G}^* := {\rpia}(\mathcal{G}^*, ~\mathcal{G})$; \\
+	\icc \>\hspace{3ex} \If $\mathcal{G}^* \ne \emptyset$ \\
+	\icc \> \hspace{3ex} \Then \ \  $P_e := P_i$; \ \ $i := i+1$; \\
+	\icc \>\hspace{3ex} \Else\ \ $\overline{\mathcal{T}} := \overline{\mathcal{T}}\cup \{\mathcal{L}(P_s,P_e)\}$; \ \ $P_s := P_e$;  ~~$\mathcal{G}^* := \emptyset$; \\
+	\icc \hspace{1ex}\Return $\overline{\mathcal{T}}$. 
 \\
-	{\bf Procedure} ~\kw{getRegularPolygon}$(P_s,~P_i,~r,~M,~t_c)$ \\
+\\
+	{\bf Procedure} ~\kw{getRegularPolygon}$(P_s,~P_i,~r,~m,~t_c)$ \\
 %	\bcc \hspace{1ex} \textcolor[rgb]{0.00,0.07,1.00}{Transform $P_s$ and $P_i$ to points in Cartesian coordinates} \\
-	\bcc \hspace{1ex} $k := (t_c-t_s)/(P_i.t - P_s.t)$ \\
-	\icc \hspace{1ex} $P_i.x := P_s.x + k*(P_i.x-P_s.x)$ \\
-	\icc \hspace{1ex} $P_i.y := P_s.y + k*(P_i.y-P_s.y)$ \\
-	\icc \hspace{1ex} \For $(j := 1;j \le M;j++)$ \\
-	\icc \> \hspace{3ex} $\theta :=  (2 * j + 1)*\pi /M $ \\
-	\icc \> \hspace{3ex} $\mathcal{G}.vertex[j].x := P_i.x + k*r*\cos\theta$\\
-	\icc \> \hspace{3ex} $\mathcal{G}.vertex[j].y := P_i.y + k*r*\sin\theta$\\
-	\icc \hspace{1ex} \Return $\mathcal{G}$
+	\bcc \hspace{1ex} $c := (t_c-t_s)/(P_i.t - P_s.t)$; \\
+	\icc \hspace{1ex} $P_i.x := P_s.x + c\cdot(P_i.x-P_s.x)$; \\
+	\icc \hspace{1ex} $P_i.y := P_s.y + c\cdot(P_i.y-P_s.y)$; \\
+	\icc \hspace{1ex} \For $(j := 1;j \le m;j++)$ \Do \\
+	\icc \> \hspace{3ex} $\theta :=  (2 * j + 1)*\pi /m $; \\
+	\icc \> \hspace{3ex} $\mathcal{G}.vertex[j].x := P_i.x + k*r*\cos\theta$;\\
+	\icc \> \hspace{3ex} $\mathcal{G}.vertex[j].y := P_i.y + k*r*\sin\theta$;\\
+	\icc \hspace{1ex} \Return $\mathcal{G}$.
 }
 \vspace{-2ex}
 \myhrule
