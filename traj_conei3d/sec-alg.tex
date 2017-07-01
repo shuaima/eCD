@@ -48,28 +48,30 @@ If $\bigsqcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_{s+i}, \epsilon/2)} \ne \{P_s\}$, t
 \mat{0ex}{
 	{\bf Algorithm} ~\cist$(\dddot{\mathcal{T}}[P_0,\ldots,P_n],~\epsilon,~m)$\\
 %	\sstab
-	\bcc \hspace{1ex}\= $P_s := P_0$;  ~$P_e := P_0$;\\
-\icc \hspace{1ex}\= ~$\overline{\mathcal{T}} := \emptyset$;  ~$\mathcal{G}^* := \emptyset$;  ~$i := 1$; ,~$t_c$ := $P_n.t$;\\
+	\bcc \hspace{1ex}\= $P_s := P_0$; ~$i := 1$;  ~$\mathcal{G}^* := \emptyset$;  ~$t_c$ := $P_n.t$; ~$\overline{\mathcal{T}} := \emptyset$; \\
 	\icc \hspace{1ex}\= \While $i \le n$ \Do \\
-	\icc \>\hspace{3ex} $\mathcal{G}$ := \kw{getRegularPolygon}($P_s$, $P_i$, $\epsilon/2$, $m$, $t_c$); \\
-	\icc \>\hspace{3ex} \If $\mathcal{G}^* = \emptyset$  \\
-	\icc \>\hspace{3ex} \Then \ \ $\mathcal{G}^* :=\mathcal{G};$ \\
-	\icc \>\hspace{3ex} \Else\ \ $\mathcal{G}^* := {\rpia}(\mathcal{G}^*, ~\mathcal{G})$; \\
-	\icc \>\hspace{3ex} \If $\mathcal{G}^* \ne \emptyset$ \\
-	\icc \> \hspace{3ex} \Then \ \  $P_e := P_i$; \ \ $i := i+1$; \\
-	\icc \>\hspace{3ex} \Else\ \ $\overline{\mathcal{T}} := \overline{\mathcal{T}}\cup \{\mathcal{L}(P_s,P_e)\}$; \ \ $P_s := P_e$;  ~~$\mathcal{G}^* := \emptyset$; \\
-	\icc \hspace{1ex}\Return $\overline{\mathcal{T}}$. 
+	\icc \>\hspace{2ex} $\mathcal{G}$ := \kw{getRegularPolygon}($P_s$, $P_i$, $\epsilon/2$, $m$, $t_c$); \\
+	\icc \>\hspace{2ex} \If $\mathcal{G}^* = \emptyset$  \Then $\mathcal{G}^* :=\mathcal{G};$ \\
+%	\icc \>\hspace{2ex} \Else\\ 
+    \icc \>\hspace{2ex} $\mathcal{G}^* := {\rpia}(\mathcal{G}^*, ~\mathcal{G})$; \\
+
+%    \icc \>\hspace{2ex} \If $\mathcal{G}^* \ne \emptyset$ \Then \\
+%	\icc \> \hspace{2ex} \ \  $P_e := P_i$; \ \ $i := i+1$; \\
+	\icc \>\hspace{2ex} \If $\mathcal{G}^* = \emptyset$ \Or $i = n$ \Then \\ 
+    \icc \> \hspace{2ex} \ \  $\overline{\mathcal{T}} := \overline{\mathcal{T}}\cup \{\mathcal{L}(P_s,P_i)\}$; \ \ $P_s := P_i$;\\
+    \icc \>\hspace{2ex} $i$ := $i +1$;\\
+ 	\icc \hspace{1ex}\Return $\overline{\mathcal{T}}$.
 \\
 \\
 	{\bf Procedure} ~\kw{getRegularPolygon}$(P_s,~P_i,~r,~m,~t_c)$ \\
 %	\bcc \hspace{1ex} \textcolor[rgb]{0.00,0.07,1.00}{Transform $P_s$ and $P_i$ to points in Cartesian coordinates} \\
 	\bcc \hspace{1ex} $c := (t_c-t_s)/(P_i.t - P_s.t)$; \\
-	\icc \hspace{1ex} $P_i.x := P_s.x + c\cdot(P_i.x-P_s.x)$; \\
-	\icc \hspace{1ex} $P_i.y := P_s.y + c\cdot(P_i.y-P_s.y)$; \\
+	\icc \hspace{1ex} $x := P_s.x + c\cdot(P_i.x-P_s.x)$; \\
+	\icc \hspace{1ex} $y := P_s.y + c\cdot(P_i.y-P_s.y)$; \\
 	\icc \hspace{1ex} \For $(j := 1;j \le m;j++)$ \Do \\
-	\icc \> \hspace{3ex} $\theta :=  (2 * j + 1)*\pi /m $; \\
-	\icc \> \hspace{3ex} $\mathcal{G}.vertex[j].x := P_i.x + k*r*\cos\theta$;\\
-	\icc \> \hspace{3ex} $\mathcal{G}.vertex[j].y := P_i.y + k*r*\sin\theta$;\\
+	\icc \> \hspace{2ex} $\theta :=  (2j + 1)*\pi /m $; \\
+	\icc \> \hspace{2ex} $\mathcal{G}.v_j.x := x + c\cdot r\cdot\cos\theta$;\\
+	\icc \> \hspace{2ex} $\mathcal{G}.v_j.y := y + c\cdot r\cdot\sin\theta$;\\
 	\icc \hspace{1ex} \Return $\mathcal{G}$.
 }
 \vspace{-2ex}
