@@ -1,5 +1,7 @@
 To do list:
 
+10. t_c的设置
+
 9. 图5符号C和t与文字不对应。
 
 8. prop 1. "Q in the area of synchronous circle O."    --> Q.t = P_{s+i+1}.t
