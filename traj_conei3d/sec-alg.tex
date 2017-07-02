@@ -51,16 +51,15 @@ If $\bigsqcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_{s+i}, \epsilon/2)} \ne \{P_s\}$, t
 	\bcc \hspace{1ex}\= $P_s := P_0$; ~$i := 1$;  ~$\mathcal{G}^* := \emptyset$;  ~$t_c$ := $P_n.t$; ~$\overline{\mathcal{T}} := \emptyset$; \\
 	\icc \hspace{1ex}\= \While $i \le n$ \Do \\
 	\icc \>\hspace{2ex} $\mathcal{G}$ := \kw{getRegularPolygon}($P_s$, $P_i$, $\epsilon/2$, $m$, $t_c$); \\
-	\icc \>\hspace{2ex} \If $\mathcal{G}^* = \emptyset$  \Then $\mathcal{G}^* :=\mathcal{G};$ \\
-%	\icc \>\hspace{2ex} \Else\\ 
-    \icc \>\hspace{2ex} $\mathcal{G}^* := {\rpia}(\mathcal{G}^*, ~\mathcal{G})$; \\
-
-%    \icc \>\hspace{2ex} \If $\mathcal{G}^* \ne \emptyset$ \Then \\
-%	\icc \> \hspace{2ex} \ \  $P_e := P_i$; \ \ $i := i+1$; \\
-	\icc \>\hspace{2ex} \If $\mathcal{G}^* = \emptyset$ \Or $i = n$ \Then \\ 
-    \icc \> \hspace{2ex} \ \  $\overline{\mathcal{T}} := \overline{\mathcal{T}}\cup \{\mathcal{L}(P_s,P_i)\}$; \ \ $P_s := P_i$;\\
+	\icc \>\hspace{2ex} \If $\mathcal{G}^* = \emptyset$  \Then \hspace{3ex} /* $\mathcal{G}^*$ needs to be initialized */\\
+    \icc \>\hspace{2ex} \ \ \ $\mathcal{G}^* :=\mathcal{G};$ \\
+    \icc \>\hspace{2ex} \Else \\
+    \icc \>\hspace{2ex}\ \ \ \ $\mathcal{G}^* := {\rpia}(\mathcal{G}^*, ~\mathcal{G})$; \\
+    \icc \>\hspace{4ex} \If $\mathcal{G}^* = \emptyset$ \Then \hspace{3ex} /* generate a new line segment */\\
+    \icc \> \hspace{4ex} \ \ \ $i$ := $i - 1$;\ \ $\overline{\mathcal{T}} := \overline{\mathcal{T}}\cup \{\mathcal{L}(P_s,P_{i})\}$; \ \ $P_s := P_{i}$;\\
     \icc \>\hspace{2ex} $i$ := $i +1$;\\
- 	\icc \hspace{1ex}\Return $\overline{\mathcal{T}}$.
+ 	\icc \> \hspace{0ex} $\overline{\mathcal{T}}$ := $\overline{\mathcal{T}}\cup \{\mathcal{L}(P_s,P_{n})\}$; \\
+    \icc \hspace{1ex}\Return $\overline{\mathcal{T}}$.
 \\
 \\
 	{\bf Procedure} ~\kw{getRegularPolygon}$(P_s,~P_i,~r,~m,~t_c)$ \\
