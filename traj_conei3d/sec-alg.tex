@@ -116,7 +116,18 @@ After the  final new line segment $\vv{P_sP_{n}}$ is generated (line 11), it ret
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%A running example of the \cista algorithm
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[tb!]
+\centering
+\includegraphics[scale=0.8]{figures/Fig-conesta.png}
+\vspace{-1ex}
+\caption{\small A running example of the \cista algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed into three line segments.}
+\vspace{-2ex}
+\label{fig:exm-consta}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \begin{example}
@@ -157,7 +168,8 @@ It also generates new line segments with interpolated data points $Q$, and, henc
 
 
 \begin{cor}
-Given a sub-trajectory \trajec{T}${[P_s, \ldots, P_{s+k}]}$ and an error bound $\epsilon$, let $t_c=t_{s+k}$ and $G^*_k$ \wrt $t_c=t_{s+k}$ be the intersection polygons of all polygons $G_{s+i}$, $1\le i\le k$, on the plane $t=t_c=t_{s+k}$. If $G^*_k$ is not empty, then any point in $G^*_k$ is feasible for $Q$.
+\label{prop-cist-Q}
+Given a sub-trajectory \trajec{T}${[P_s, \ldots, P_{s+k}]}$ and an error bound $\epsilon$,  let $t_c=t_{s+k}$ and $G^*_k$ be the intersection polygons of all polygons $G_{s+i}$, $1\le i\le k$, on the plane $t=t_c=t_{s+k}$. If $G^*_k$ is not empty, then any point in $G^*_k$ is feasible for $Q$.
 \end{cor}
 
 \begin{proof}
@@ -171,7 +183,7 @@ The selection of a $Q$ from $G^*_k$ \wrt $t_c=t_{s+k}$ may slight affect the eff
 
 \sstab (2) If $G^*_k \ne \emptyset$ and $P_e \not\in G^*_k$ \wrt $t_c=t_{s+k}$, then it outputs the central point of the intersection polygon $G^*_k$ as $Q$.
 
-\sstab (3) If $t_c \ne t_{s+k}$, which is the general cases, then we project the intersection polygon $G^*_k$ \wrt $t_c \ne t_{s+k}$ on the plane $t=t_{s+k}$ and apply the above strategies. By Proposition~\ref{prop-circle-intersection}, this projection shall not affect the selection of $Q$.
+  If $t_c \ne t_{s+k}$, which is the general cases, then we project the intersection polygon $G^*_k$ \wrt $t_c \ne t_{s+k}$ on the plane $t=t_{s+k}$ and apply the above strategies. By Proposition~\ref{prop-circle-intersection}, this projection shall not affect the selection of $Q$.
 %so as to get the $G^*_k$ \wrt $t_c = t_{s+k}$,
 
 \begin{example}
@@ -240,41 +252,26 @@ The points and the oblique circular cones are projected on a x-y space.
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%A running example of the \cista algorithm
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure*}[tb!]
-\centering
-\includegraphics[scale=0.8]{figures/Fig-conesta.png}
-\vspace{-1ex}
-\caption{\small A running example of the \cista algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed into three line segments.}
-\vspace{-2ex}
-\label{fig:exm-consta}
-\end{figure*}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 
 
 \subsection{Correctness and Complexity Analyses}
 
-The correctness of algorithm \cist follows from Theorem~\ref{prop-3d-ci-half} and Corollary~\ref{prop-circle-intersection}, and the correctness of algorithm \cista follows from Corollary~\ref{prop-circle-intersection}. For the circles intersection of Corollary~\ref{prop-circle-intersection}, we replace it by the regular polygons intersection.
-Meanwhile, given time $t_c$ and projection circles $\mathcal{O}(P^c_i, r^c_i)$, $i \in (s, e]$, we get a inscribed regular polygon from each projection circle.
+The correctness of algorithm \cist follows from Propositions~\ref{prop-circle-intersection} and~\ref{prop-3d-ci-half}, and the correctness of algorithm \cista follows from Proposition~\ref{prop-circle-intersection} and Corollary~\ref{prop-cist-Q}. For the circles intersection of Proposition~\ref{prop-circle-intersection}, we replace it by the regular polygons intersection.
+Meanwhile, given $t_c$ and projection circles \pcircle{(P^c_i, r^c_i)}, $i \in (s, e]$, we get a inscribed regular polygon from each projection circle.
 If these regular polygons are intersecting, then $sed(P_i, \vv{P_sP_e})<\epsilon$ for all points $P_i$, $i \in [s,e]$.
 This ensures the correctness of the algorithms.
 
-{For space complexity, the algorithms need $O(M)$ space.}
-For time complexity, we have follows.
-
-
-\begin{proof}
+For time complexity, the algorithms run in linear time.
 For each data point in the input trajectory, the procedures $getRegularPolygon()$ and $\rpia()$ are both called one time.
-(1) Procedure $getRegularPolygon()$ completes in $O(M)$ time, and
-(2) Procedure $\rpia(\mathcal{G}^*, \mathcal{G})$ also completes in $O(M)$ time.
+(1) Procedure $getRegularPolygon()$ completes in $O(m)$ time, and
+(2) Procedure $\rpia(\mathcal{G}^*, \mathcal{G})$ also completes in $O(m)$ time.
 %completes in $O(|\mathcal{G}^*| + |\mathcal{G}|)$ time. By Theorem~\ref{prop-rp-intersection}, we know that $|\mathcal{G}^*| \le M$ and $|\mathcal{G}|\le M$, where $M$ is the number of vertices in a regular polygon. Hence, $getIntersectPolygon()$
-$M$ is a constant, thus, the process of a point needs a constant time.
+The process of a point needs a constant time as $m$ is a constant.
 Hence, algorithms \cist and \cista both have a time complexity of $O(N)$, where $N$ is the size of the input trajectory.
-This finishes the proof.
-\end{proof}
+
+{For space complexity, the algorithms need $O(m)$ space.}
 
 
 
