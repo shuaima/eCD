@@ -1,5 +1,11 @@
 To do list:
 
+9. 图5符号C和t与文字不对应。
+
+8. prop 1. "Q in the area of synchronous circle O."    --> Q.t = P_{s+i+1}.t
+
+7. prop 1,2和图5不对应，图中缺少Q，prop 1,2不直观。
+
 6. "RPolyInter"  --> CPolyInter ?
 
 5.sec 3.2, "all edges in the same edge groups Ej are in parallel with each other."
@@ -7,7 +13,7 @@ To do list:
 may be overlapping?
 
 
-
+--------------------closed----------------------
 
 
 4. extended experiences. 2017.06.05 
