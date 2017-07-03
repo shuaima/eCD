@@ -1,12 +1,14 @@
 To do list:
 
-10. t_c的设置
+11. \phi -> \emptyset
 
-9. 图5符号C和t与文字不对应。
+10. t_c的设置, OK
 
-8. prop 1. "Q in the area of synchronous circle O."    --> Q.t = P_{s+i+1}.t
+9. 图5符号C和t与文字不对应。OK
 
-7. prop 1,2和图5不对应，图中缺少Q，prop 1,2不直观。
+8. prop 1. "Q in the area of synchronous circle O."    --> Q.t = P_{s+i+1}.t  
+
+7. prop 1,2和图5不对应，图中缺少Q，prop 1,2不直观。   ok.
 
 6. "RPolyInter"  --> CPolyInter ?
 
