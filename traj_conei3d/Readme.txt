@@ -1,5 +1,7 @@
 To do list:
 
+13. P.t - tc  --> t - tc  ?
+
 12. advancing rules: convex polygon intersection algorithm的规则里没有包含A*B=0, 当时代码有。
 
 11. \phi -> \emptyset
