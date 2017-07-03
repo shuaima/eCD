@@ -2,12 +2,12 @@
 \section{Experimental Study} %
 \label{sec-exp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-In this section, we present an extensive experimental study of the spatio-temporal cone intersection algorithms (\cist and \cista) and algorithms of \dps and \squishe on trajectory data sets.
+In this section, we present an extensive experimental study of the spatio-temporal cone intersection algorithms (\cist and \cista) and algorithms of \dps and \squishe on trajectory datasets.
 Using four real-life datasets, we conducted three sets of experiments to evaluate:
 (1) the compression ratios of these algorithms,
 (2) the average errors of these algorithms,
 (3) the execution time of these algorithms, and
-(4) the impacts of algorithm \rpia and the edge number $m$ of the regular polygons to the effectiveness and efficiency of algorithms \cist and \cista.
+(4) the impacts of polygon intersection algorithms, \rpia and \cpia, and the edge number $m$ of a regular polygon to the effectiveness and efficiency of algorithms \cist and \cista.
 
 
 \subsection{Experimental Setting}
@@ -22,9 +22,9 @@ during a period from Mar. 2015 to Oct. 2015. The sampling rate varied from 1s to
 %Trajectories mostly have around $50$ to $90$ thousand data points.
 
 \vspace{0.5ex}
-\ni \emph{(2) Service car trajectory data}, referred to as \sercar,  is the GPS trajectories collected by a car rental company.
-We chose $1,000$ cars from them, during Apr. 2015 to Nov. 2015. The sampling rate was one point per $3$--$5$ seconds, and
-each trajectory has around $114.1K$ data points.
+\ni \emph{(2) Service car trajectory data}, referred to as \sercar,  is the GPS trajectories collected by a car rental company during Apr. 2015 to Nov. 2015. The sampling rate was one point per $3$--$5$ seconds, and
+each trajectory has around $114.1K$ points.
+%.We randomly chose $1,000$ cars from them
 
 \vspace{0.5ex}
 \ni \emph{(3) GeoLife trajectory data}, referred to as \geolife, is the GPS trajectories collected in GeoLife project~\cite{Zheng:GeoLife} by 182 users in a period from Apr. 2007 to Oct. 2011. These trajectories have a variety of sampling rates, among which 91\% are logged in each 1-5 seconds or each 5-10 meters per point.
@@ -88,7 +88,7 @@ over 3 times and the average is reported here}.
 
 In this set of tests, we evaluate the impacts of parameter $m$ on the compression ratios of our algorithms \cist and \cista, and compare the compression ratios of \cist and \cista with \dps and \squishe.
 
-In the work, the compression ratios is defined as follows: Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations $\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$, the compression ratio of an algorithm is $(\sum_{j=1}^{M} |\overline{\mathcal{T}}_j |)/(\sum_{j=1}^{M} |\dddot{\mathcal{T}}_j |)$.
+In the work, the compression ratio is defined as follows: Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations $\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$, the compression ratio of an algorithm is $(\sum_{j=1}^{M} |\overline{\mathcal{T}}_j |)/(\sum_{j=1}^{M} |\dddot{\mathcal{T}}_j |)$.
 By the definition, \emph{algorithms with lower compression ratios are better}.
 
 
@@ -139,12 +139,14 @@ By the definition, \emph{algorithms with lower compression ratios are better}.
 
 %\vspace{0.5ex}
 \stitle{Exp-1.1: Impacts of parameter $m$ on compression ratios}.
-To evaluate the impacts of parameter $m$ on compression ratios of algorithms \cist and \cista, we fixed the error bounds {$\epsilon =60$ meters} and varied $m$ from $4$ to $40$.
+To evaluate the impacts of parameter $m$, the number of edges of a polygon, on compression ratios of algorithms \cist and \cista, we fixed the error bounds {$\epsilon =60$ meters} and varied $m$ from $4$ to $40$.
 The results are reported in Figures~\ref{fig:m-cr-e60}.
 
 \ni(1) Algorithms \cist and \cista using \rpia have the same compression ratios as using \cpia on all datasets and for all $m$.
 
-\ni(2) When varying $m$, the compression ratios of algorithms \cist and \cista decrease with the increase of $m$ on all datasets. This feature is also holding on small error bounds, \eg $\epsilon < 60$ meters, and large error bounds, \eg $\epsilon > 60$ meters.
+\ni(2) When varying $m$, the compression ratios of \cist and \cista decrease with the increase of $m$ on all datasets. 
+%The feature is holding on all error bounds $\epsilon$.
+%small error bounds, \eg $\epsilon < 60$ meters, and large error bounds, \eg $\epsilon > 60$ meters.
 
 \ni(3) When varying $m$, the compression ratio of algorithms \cist and \cista decreases (a) fast when $m < 12$, (b) slow when $m \in [12, 20]$, and (c) very slow when $m > 20$.
 \emph{The region $[12, 20]$ is the candidate region for $m$ in terms of compression ratio.}
