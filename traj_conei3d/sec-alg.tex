@@ -132,16 +132,16 @@ After the  final new line segment $\vv{P_sP_{n}}$ is generated (line 11), it ret
 
 \begin{example}
 \label{exm-alg-conest}
-Figure~\ref{fig:exm-const} shows a running example of algorithm \cist for compressing the the trajectory \trajec{T} in Figure~\ref{fig:notations}.
+Figure~\ref{fig:exm-const} shows a running example of algorithm \cist for compressing the trajectory \trajec{T} in Figure~\ref{fig:notations}.
 %For convenience, here, we project the points and the oblique circular cones on a x-y space.
 
-\ni (1) After initialization, the \cist algorithm reads point $P_1$ and builds a narrow \emph{oblique circular cone} \cone{(P_0, \mathcal{O}(P_{1}, \epsilon/2))}, taking $P_0$ as its apex and \circle{(P_1, \epsilon/2)} as its base (green dash). The \emph{circular cone} is projected on the plane ``$t-P_1.t=0$", and the inscribe regular polygon $\mathcal{G}_1$ of the projection circle is returned. As $\mathcal{G}^*$ is empty, $\mathcal{G}^*$ is set to $\mathcal{G}_1$.
+\sstab (1) After initialization, the \cist algorithm reads point $P_1$ and builds a narrow \emph{oblique circular cone} \cone{(P_0, \mathcal{O}(P_{1}, \epsilon/2))}, taking $P_0$ as its apex and \circle{(P_1, \epsilon/2)} as its base (green dash). The \emph{circular cone} is projected on the plane ``$t-P_1.t=0$", and the inscribe regular polygon $\mathcal{G}_1$ of the projection circle is returned. As $\mathcal{G}^*$ is empty, $\mathcal{G}^*$ is set to $\mathcal{G}_1$.
 
-\ni (2) The algorithm reads $P_2$ and builds \cone{(P_0, \mathcal{O}(P_{2}, \epsilon/2))} (red dash). The \emph{circular cone} is also projected on the plane ``$t-P_1.t=0$" and the inscribe regular polygon $\mathcal{G}_2$ of the projection circle is returned. As $\mathcal{G}^*=\mathcal{G}_1$ is not empty, $\mathcal{G}^*$ is set to the intersection of $\mathcal{G}_2$ and $\mathcal{G}^*$, which is $\mathcal{G}_1 \bigsqcap \mathcal{G}_2 \ne \emptyset$.
+\sstab(2) The algorithm reads $P_2$ and builds \cone{(P_0, \mathcal{O}(P_{2}, \epsilon/2))} (red dash). The \emph{circular cone} is also projected on the plane ``$t-P_1.t=0$" and the inscribe regular polygon $\mathcal{G}_2$ of the projection circle is returned. As $\mathcal{G}^*=\mathcal{G}_1$ is not empty, $\mathcal{G}^*$ is set to the intersection of $\mathcal{G}_2$ and $\mathcal{G}^*$, which is $\mathcal{G}_1 \bigsqcap \mathcal{G}_2 \ne \emptyset$.
 
-\ni (3) For point $P_3$, the algorithm runs the same routing as $P_2$ until the intersection of $\mathcal{G}_3$ and $\mathcal{G}^*$ is $\emptyset$. Thus, line segment $\vv{P_0P_2}$ is generated, and the process of a new line segment is started, taking $P_2$ as the new start point and ``$t-P_3.t=0$'' as the new projection plane.
+\sstab (3) For point $P_3$, the algorithm runs the same routing as $P_2$ until the intersection of $\mathcal{G}_3$ and $\mathcal{G}^*$ is $\emptyset$. Thus, line segment $\vv{P_0P_2}$ is generated, and the process of a new line segment is started, taking $P_2$ as the new start point and ``$t-P_3.t=0$'' as the new projection plane.
 
-\ni (4) At last, the algorithm outputs four continuous line segments, \ie $\{\vv{P_0P_2}$, $\vv{P_2P_4}$, $\vv{P_4P_{7}}$, $\vv{P_7P_{10}}\}$.
+\sstab (4) At last, the algorithm outputs four continuous line segments, \ie $\{\vv{P_0P_2}$, $\vv{P_2P_4}$, $\vv{P_4P_{7}}$, $\vv{P_7P_{10}}\}$.
 \end{example}
 
 
@@ -169,35 +169,35 @@ hence, it replaces point $P_i$ and line segment $\vv{P_sP_i}$  (line 9 of \cist)
 
 \begin{prop}
 \label{prop-cist-Q}
-Given a sub-trajectory \trajec{T}${[P_s, \ldots, P_{s+k}]}$ and an error bound $\epsilon$,  let $t_c=t_{s+k}$ and $G^*_k$ be the intersection polygons of all polygons $G_{s+i}$, $1\le i\le k$, on the plane $t=t_c=t_{s+k}$. If $G^*_k$ is not empty, then any point in $G^*_k$ is feasible for $Q$.
+Given a sub-trajectory \trajec{T}${[P_s, \ldots, P_{s+k}]}$ and an error bound $\epsilon$,  $t_c=P_{s+k}.t$ and $G^*_k$ be the intersection polygons of all polygons $G_{s+i}$ ($i\in[1,k]$) on the plane $P.t - t_c = 0$. If $G^*_k$ is not empty, then any point in $G^*_k$ is feasible for $Q$.
 \end{prop}
 
 \begin{proof}
 By Proposition~\ref{prop-circle-intersection} and the nature of inscribed regular polygon, it is easy to find that for any $Q \in G^*_k$  \wrt $t_c=P_{s+k}.t$, there is $sed(P_i, \vv{P_sQ})\le \epsilon$ for all points $P_{s+i}$ ($i \in [1,k]$). From this, we have the conclusion.
 \end{proof}
 
-The selection of a $Q$ from $G^*_k$ \wrt $t_c=t_{s+k}$ may slight affect the effectiveness (\eg average errors and compression ratios) of the algorithm. However, the selection of the ``best" $Q$ is trivial and unworthy. Thus, we straightforward apply the following strategies.
+The choice of $Q$ from $G^*_k$ may slightly affect the effectiveness (\eg average errors and compression ratios). However, the choice of an optimal $Q$ is non-trivial. For the benefit of efficiency, we apply the following strategies.
 
-\sstab (1) If $P_e \in G^*_k$ when $t_c=t_{s+k}$, then the algorithm outputs $Q=P_e$.
+\sstab (1) If $P_e \in G^*_k$ \wrt $t_c=P_{s+k}.t$, then $Q$ is simply $P_{s+k}$.
 %meaning the projection point of $P_e$ on the plane ``$t=t_c$", \ie $P^c_e$, is in the intersection polygon of regular polygons \{$\mathcal{G}_s, \dots, \mathcal{G}_e$\} of all projection circles \{$\mathcal{O}(P^c_s, \epsilon^c_s), \ldots, \mathcal{O}(P^c_e, \epsilon^c_e)$\},
 
-\sstab (2) If $G^*_k \ne \emptyset$ and $P_e \not\in G^*_k$ \wrt $t_c=t_{s+k}$, then it outputs the central point of the intersection polygon $G^*_k$ as $Q$.
+\sstab (2) If $G^*_k \ne \emptyset$ and $P_{s+k} \not\in G^*_k$ \wrt $t_c=P_{s+k}.t$, then the central point of $G^*_k$ is chosen as $Q$.
 
-  If $t_c \ne t_{s+k}$, which is the general cases, then we project the intersection polygon $G^*_k$ \wrt $t_c \ne t_{s+k}$ on the plane $t=t_{s+k}$ and apply the above strategies. By Proposition~\ref{prop-circle-intersection}, this projection shall not affect the selection of $Q$.
+\sstab (3)  If $t_c \ne P_{s+k}.t$, which is the general cases, then we project the intersection polygon $G^*_k$ \wrt $t_c \ne P_{s+k}.t$ on the plane $P.t -P_{s+k}.t = 0$, then we apply strategies (1) and (2) above. That is, the projection has no affects on the choice of $Q$.
 %so as to get the $G^*_k$ \wrt $t_c = t_{s+k}$,
 
 \begin{example}
 \label{exm-alg-conesta}
-Figure~\ref{fig:exm-consta} is a running example of the \cista algorithm taking as input the same trajectory as shown in above.
-The points and the oblique circular cones are projected on a x-y space.
+Figure~\ref{fig:exm-consta}  shows a running example of algorithm \cista for compressing the trajectory \trajec{T} in Figure~\ref{fig:notations} again.
 
-\ni (1) After initialization, the \cista algorithm reads point $P_1$ and builds a \emph{oblique circular cone} \cone{(P_0, \mathcal{O}(P_{1}, \epsilon))}, and projects it on the plane ``$t-P_1.t=0$". The inscribe regular polygon $\mathcal{G}_1$ of the projection circle is returned. The intersection of polygon $\mathcal{G}_1$ and polygon $\mathcal{G}^*$ is $\mathcal{G}_1 \ne \phi$.
 
-\ni (2) $P_2$, $P_3$ and $P_4$ are processed in turn. The intersection polygons are not empty.
+\sstab (1) After initialization, the \cista algorithm reads point $P_1$ and builds a \emph{oblique circular cone} \cone{(P_0, \mathcal{O}(P_{1}, \epsilon))}, and projects it on the plane ``$t-P_1.t=0$''. The inscribed regular polygon $\mathcal{G}_1$ of the projection circle is returned. The intersection of polygon $\mathcal{G}_1$ and polygon $\mathcal{G}^*$ is $\mathcal{G}_1 \ne \emptyset$.
 
-\ni (3) For point $P_5$, the intersection of $\mathcal{G}_5$ and $\mathcal{G}^*$ is $\phi$. Thus, line segment $\vv{P_0Q} =\vv{P_0P'_4}$ is output, and a new section is started, taking $Q=P'_4$ as the new start point and ``$t-P_5.t=0$" as the new plane.
+\sstab (2) $P_2$, $P_3$ and $P_4$ are processed in turn. The intersection polygons are not empty.
 
-\ni (4) At last, the algorithm outputs 3 continuous line segments, \ie $\vv{P_0P'_4}$, $\vv{P'_4P_8}$ and $\vv{P_8P_{10}}$. Where, $P_0$, $P_8$ and $P_{10}$ are original points.
+\sstab (3) For point $P_5$, the intersection of $\mathcal{G}_5$ and $\mathcal{G}^*$ is $\phi$. Thus, line segment $\vv{P_0Q} =\vv{P_0P'_4}$ is output, and a new process is started such that $Q=P'_4$ is the new start point and ``$t-P_5.t=0$'' is the new projection plane.
+
+\sstab (4) At last, the algorithm outputs 3 continuous line segments, \ie $\vv{P_0P'_4}$, $\vv{P'_4P_8}$ and $\vv{P_8P_{10}}$, in which $P'_4$ is a interpolated data points not in \trajec{T}.
 \end{example}
 
 
