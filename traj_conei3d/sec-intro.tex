@@ -53,12 +53,13 @@ On the other hand, there are one-pass algorithms \cite{Williams:Longest, Sklansk
 \stitle{{Contributions}}.
 To this end, we propose two one-pass error bounded line simplification algorithms using \sed for compressing trajectories in an efficient and effective way.
 
-\stab {(1)} We first present a novel local distance checking method, \ie the spatio-temporal cone intersection approach, which enables the one pass processing of trajectory data with the synchronous Euclidean distances checking. We then transform the spatio-temporal cone intersection problem to the approximated regular polygons intersection problem, which not only saves the running time, but also saves the memory.
+\stab {(1)} We first develop a novel local synchronous distance checking approach, \ie the spatio-temporal \underline{C}one \underline{I}ntersection with \underline{S}ynchronous \underline{E}uclidean \underline{D}istance (CISED), by extending the sector intersection method \cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve}. We further approximate the spatio-temporal cone intersection by the regular polygon intersection and develop a fast regular polygon intersection algorithm,
+such that each data point in a trajectory is checked in O(1) time during the entire process of trajectory simplification.
 
-\stab {(2)} We then develop two one-pass, error bounded and \sed enabled trajectory simplification algorithms, \ie the \underline{C}one \underline{I}ntersection with \underline{S}ynchronous \underline{E}uclidean \underline{D}istance algorithm (\cist) and the aggressive \cist (\cista), both running in $O(n)$ time and $O(1)$ space.
-\cist is a \emph{strong simplification}\cite{Trajcevski:DDR} algorithm, which outputs a subset of the original points;
-and \cista is a \emph{weak simplification}\cite{Trajcevski:DDR} algorithm, which allows interpolating new data points into a trajectory under certain conditions.
-
+\stab {(2)} We then develop two one-pass, error bounded and \sed enabled trajectory simplification algorithms based on the local synchronous distance checking approach.
+The first one, called \cist, is a \emph{\underline{S}trong simplification}\cite{Trajcevski:DDR}, which outputs a subset of the original points;
+and the second one, called \cista, is a \emph{\underline{W}eak simplification}\cite{Trajcevski:DDR}, which allows interpolating data into trajectories under certain conditions.
+Both of them run in $O(n)$ time and $O(1)$ space.
 
 \stab (3) Using four real-life trajectory datasets (\truck, \sercar, \geolife, \pricar),
 we finally conduct an extensive experimental study, by comparing our algorithms \cist and \cista with algorithms \squishe \cite{Muckell:Compression} (the existing \sed enabled \lsa algorithm with improved time perfromance) and \dps~\cite{Meratnia:Spatiotemporal} (\sed equipped \dpa, the distinct existing \lsa algorithm being famous of compression ratio).
