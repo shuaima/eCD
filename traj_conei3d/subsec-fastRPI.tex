@@ -4,14 +4,14 @@
 
 Observe that algorithm \cpia in Figure~\ref{alg:c-poly-inter} is for general convex polygons,
 while the inscribed regular polygons $\mathcal{G}_{s+i}$ ($i\in[1, k]$) of the cone projection circles are constructed in a unified way,
-while allows us to develop a fast method to compute their intersection.
+which allows us to develop a fast method to compute their intersection.
 
 Let $\vv{A} = (P_{s_A}, P_{e_A})$ and $\vv{B} = (P_{s_B}, P_{e_B})$  be two directed edges on polygons $\mathcal{G}_{s+l+1}$ and $\mathcal{G}^*_{l}$, respectively.
 Again edges $\vv{A}$ and $\vv{B}$ are moved counter-clockwise. Note that $\vv{A}$ and $\vv{B}$ are advanced step by step each time by the two advancing rules of algorithm \cpia.
 %
 However, it is possible to advance $\vv{A}$ or $\vv{B}$ multiple steps each time.
 %
-For example, in Figure~\ref{fig:c-poly-inter}.(1)--(5), edge $\vv{A}$ successively moves four steps under the advance rules ``$\vv{A} \times \vv{B} < 0$ and $P_{e_A} \not \in \mathcal{H}(\vv{B})$'' and ``$\vv{A} \times \vv{B} > 0$ and $P_{e_B} \in \mathcal{H}(\vv{A})$'' of algorithm \cpia.
+For example, in Figure~\ref{fig:c-poly-inter}.(1)--(5), edge $\vv{A}$ successively moves four steps, each under the advance rule (1) ``($\vv{A} \times \vv{B} < 0$ and $P_{e_A} \not \in \mathcal{H}(\vv{B})$) or ($\vv{A} \times \vv{B} > 0$ and $P_{e_B} \in \mathcal{H}(\vv{A})$)'' of algorithm \cpia.
 Alternatively, we can directly move $A$ from Figure~\ref{fig:c-poly-inter}.(1) to Figure~\ref{fig:c-poly-inter}.(5), by reducing four steps to one step only.
 
 %%%%%%%%%%%%%%%%%%%%%example of intersection of regular polygons
@@ -137,11 +137,11 @@ If $A \bigcap B = \phi$ and advances $B$, then moves $A$ and $B$ forward ``$a$ a
 
 
 \stitle{Algorithm \rpia}.
-The presented regular polygon intersection algorithm, \ie \rpia, is the optimization of the convex polygon intersection algorithm, by Proposition \ref{prop-rule1} and \ref{prop-rule2}. We also saves vertexes or edges of a polygon in a fixed size array, which is different with algorithm \cpia  that saves polygons in linked lists.
-Considering the regular polygons each having a fixed number of edges, marked from $1$ to $m$, this policy allow us to quickly address an edge or vertex by its label.
+The presented regular polygon intersection algorithm, \ie \rpia, is the optimization of the convex polygon intersection algorithm, by Propositions \ref{prop-rule1} and \ref{prop-rule2}. We also saves vertexes of a polygon in a fixed size array, which is different with algorithm \cpia  that saves polygons in linked lists.
+Considering the regular polygons each having a fixed number of vertexes/edges, marked from $1$ to $m$, this policy allow us to quickly address an edge or vertex by its label.
 %, as well as avoid the creating and removing of link nodes.
 
-Given intersection polygon $\mathcal{G}^*_{l}$ of the preview $l$ polygons and the next approximate polygon $\mathcal{G}_{s+l+1}$, the algorithm \rpia returns $\mathcal{G}^*_{l+1} = \mathcal{G}^*_{l}  \bigsqcap \mathcal{G}_{s+l+1}$.
+Given intersection polygon $\mathcal{G}^*_{l}$ of the preview $l$ polygons and the next approximate polygon $\mathcal{G}_{s+l+1}$, the algorithm \rpia returns $\mathcal{G}^*_{l+1}=\mathcal{G}^*_{l}  \bigsqcap \mathcal{G}_{s+l+1}$.
 %The sketch of the algorithm is shown in Figure~\ref{alg:r-poly-inter}.
 It runs the similar routine as the \cpia algorithm, except that (1) it saves polygons in arrays, and (2) the advance strategies are partitioned into two parts, \ie $\vv{A} \bigsqcap \vv{B} \ne \emptyset$ and $\vv{A} \bigsqcap \vv{B} = \emptyset$, where the former applies Propositions \ref{prop-rule1} and \ref{prop-rule2}, and the later remains the same as algorithm \cpia.
 
