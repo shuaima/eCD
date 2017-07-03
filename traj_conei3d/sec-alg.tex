@@ -45,15 +45,15 @@ If $\bigsqcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_{s+i}, \epsilon/2)} \ne \{P_s\}$, t
 \mat{0ex}{
 	{\bf Algorithm} ~\cist$(\dddot{\mathcal{T}}[P_0,\ldots,P_n],~\epsilon,~m)$\\
 %	\sstab
-	\bcc \hspace{1ex}\= $P_s := P_0$; ~$i := 1$;  ~$\mathcal{G}^* := \emptyset$;  ~$t_c$ := $P_1.t$; ~$\overline{\mathcal{T}} := \emptyset$; \\
+	\bcc \hspace{1ex}\= $P_s := P_0$; ~$i := 1$;  ~$\mathcal{G}^* := \emptyset$;  ~$\overline{\mathcal{T}} := \emptyset$; \\
 	\icc \hspace{1ex}\= \While $i \le n$ \Do \\
-	\icc \>\hspace{2ex} $\mathcal{G}$ := \kw{getRegularPolygon}($P_s$, $P_i$, $\epsilon/2$, $m$, $t_c$); \\
-	\icc \>\hspace{2ex} \If $\mathcal{G}^* = \emptyset$  \Then \hspace{2ex} /* $\mathcal{G}^*$ needs to be initialized */\\
+	\icc \>\hspace{2ex} $\mathcal{G}$ := \kw{getRegularPolygon}($P_s$, $P_i$, $\epsilon/2$, $m$, $P_{i}.t$); \\
+	\icc \>\hspace{2ex} \If $\mathcal{G}^* = \emptyset$  \Then \hspace{4ex} /* $\mathcal{G}^*$ needs to be initialized */\\
     \icc \>\hspace{2ex} \ \ \ $\mathcal{G}^* :=\mathcal{G};$ \\
     \icc \>\hspace{2ex} \Else \\
     \icc \>\hspace{2ex}\ \ \ \ $\mathcal{G}^* := {\rpia}(\mathcal{G}^*, ~\mathcal{G})$; \\
     \icc \>\hspace{4ex} \If $\mathcal{G}^* = \emptyset$ \Then \hspace{2ex} /* generate a new line segment */\\
-    \icc \> \hspace{4ex} \ \ \ $i$ := $i - 1$;\ \ $\overline{\mathcal{T}} := \overline{\mathcal{T}}\cup \{\vv{P_sP_{i}}\}$;\ \ $P_s := P_{i}$; ~$t_c$ := $P_{i+1}.t$;\\
+    \icc \> \hspace{4ex} \ \ \ $i$ := $i - 1$;\ \ $\overline{\mathcal{T}} := \overline{\mathcal{T}}\cup \{\vv{P_sP_{i}}\}$;\ \ $P_s := P_{i}$; \\
     \icc \>\hspace{2ex} $i$ := $i +1$;\\
  	\icc \> \hspace{0ex} $\overline{\mathcal{T}}$ := $\overline{\mathcal{T}}\cup \{\vv{P_sP_{n}}\}$; \\
     \icc \hspace{1ex}\Return $\overline{\mathcal{T}}$.
@@ -96,7 +96,7 @@ into a Cartesian one. Note that here $\theta$, $r\cdot\sin\theta$ and $r\cdot\co
 
 
 
-The algorithm first initializes the start point $P_s$ to $P_0$, the index $i$ of the current data point to $1$, the intersection polygon $\mathcal{G}^*$ to $\emptyset$, the projection plane $P.t - P_1.t = 0$, the output $\overline{\mathcal{T}}$ to $\emptyset$, respectively (line 1).
+The algorithm first initializes the start point $P_s$ to $P_0$, the index $i$ of the current data point to $1$, the intersection polygon $\mathcal{G}^*$ to $\emptyset$, the output $\overline{\mathcal{T}}$ to $\emptyset$, respectively (line 1).
 %
 The algorithm sequentially processes the data points of the trajectory one by one  (lines 2--10). It gets the $m$-inscribed regular polygon \wrt the current point $P_i$ (line 3) by calling procedure $\kw{getRegularPolygon}$. When $\mathcal{G}^* = \emptyset$, $\mathcal{G}^*$ is simply initialized as $\mathcal{G}$ (lines 4, 5). Otherwise,
 $\mathcal{G}^*$ is  the intersection of the current regular polygon $\mathcal{G}$ with $\mathcal{G}^*$ by calling procedure $\rpia()$ introduced in Section~\ref{subsec-fastRPI} (line 7). If the resulting intersection $\mathcal{G}^*$ is empty, then a new line segment $\vv{P_sP_{i-1}}$ is generated (lines 8--10).
