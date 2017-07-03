@@ -11,7 +11,7 @@ a simplified trajectory \trajec{T'} such that some data points in \trajec{T'} ma
 The main result here is stated as follows.
 
 \begin{theorem}
-\label{prop-cist-complexity}
+\label{prop-cist-op}
 There exist one-pass error bounded trajectory simplification algorithms using the synchronous distance for both strong and weak trajectory simplification.
 \end{theorem}
 
@@ -197,7 +197,7 @@ Figure~\ref{fig:exm-consta}  shows a running example of algorithm \cista for com
 
 \sstab (3) For point $P_5$, the intersection of $\mathcal{G}_5$ and $\mathcal{G}^*$ is $\phi$. Thus, line segment $\vv{P_0Q} =\vv{P_0P'_4}$ is output, and a new process is started such that $Q=P'_4$ is the new start point and ``$t-P_5.t=0$'' is the new projection plane.
 
-\sstab (4) At last, the algorithm outputs 3 continuous line segments, \ie $\vv{P_0P'_4}$, $\vv{P'_4P_8}$ and $\vv{P_8P_{10}}$, in which $P'_4$ is a interpolated data points not in \trajec{T}.
+\sstab (4) At last, the algorithm outputs 3 continuous line segments, \ie $\vv{P_0P'_4}$, $\vv{P'_4P_8}$ and $\vv{P_8P_{10}}$, in which $P'_4$ is an interpolated data points not in \trajec{T}.
 \end{example}
 
 
@@ -256,22 +256,18 @@ Figure~\ref{fig:exm-consta}  shows a running example of algorithm \cista for com
 
 
 
-\subsection{Correctness and Complexity Analyses}
+\stitle{Correctness and complexity analyses}
+%
+The correctness of algorithms \cist and \cista follows from Propositions~\ref{prop-circle-intersection} and~\ref{prop-3d-ci-half}, and Propositions~\ref{prop-circle-intersection} and~\ref{prop-cist-Q}, respectively.
+%
+It is easy to verify that each data point in a trajectory is only processed once, and each time can be done in $O(1)$ time,
+as both procedures  $\kw{getRegularPolygon}$ and $\rpia$ can be done in $O(1)$ time. 
+Hence, these algorithms are both one-pass error bounded trajectory simplification algorithms. 
+It is also easy to see that these algorithms take $O(1)$ space.
 
-The correctness of algorithm \cist follows from Propositions~\ref{prop-circle-intersection} and~\ref{prop-3d-ci-half}, and the correctness of algorithm \cista follows from Proposition~\ref{prop-circle-intersection} and Corollary~\ref{prop-cist-Q}. For the circles intersection of Proposition~\ref{prop-circle-intersection}, we replace it by the regular polygons intersection.
-Meanwhile, given $t_c$ and projection circles \pcircle{(P^c_i, r^c_i)}, $i \in (s, e]$, we get a inscribed regular polygon from each projection circle.
-If these regular polygons are intersecting, then $sed(P_i, \vv{P_sP_e})<\epsilon$ for all points $P_i$, $i \in [s,e]$.
-This ensures the correctness of the algorithms.
+These together also complete the proof of Theorem~\ref{prop-cist-op}.
 
-For time complexity, the algorithms run in linear time.
-For each data point in the input trajectory, the procedures $getRegularPolygon()$ and $\rpia()$ are both called one time.
-(1) Procedure $getRegularPolygon()$ completes in $O(m)$ time, and
-(2) Procedure $\rpia(\mathcal{G}^*, \mathcal{G})$ also completes in $O(m)$ time.
-%completes in $O(|\mathcal{G}^*| + |\mathcal{G}|)$ time. By Theorem~\ref{prop-rp-intersection}, we know that $|\mathcal{G}^*| \le M$ and $|\mathcal{G}|\le M$, where $M$ is the number of vertices in a regular polygon. Hence, $getIntersectPolygon()$
-The process of a point needs a constant time as $m$ is a constant.
-Hence, algorithms \cist and \cista both have a time complexity of $O(N)$, where $N$ is the size of the input trajectory.
 
-{For space complexity, the algorithms need $O(m)$ space.}
 
 
 
