@@ -4,7 +4,7 @@
 \label{sec-intro}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Various mobile devices, such as smart-phones, on-board diagnostics, personal navigation devices, and wearable smart devices, have been widely using their sensors to collect massive trajectory data of moving objects at a certain sampling rate (e.g., every 5 seconds), which is transmitted to cloud servers for various applications such as location based services and trajectory mining.
+Various mobile devices, such as smart-phones, on-board diagnostics, personal navigation devices, and wearable smart devices, have been widely using their sensors to collect massive trajectory data of moving objects at a certain sampling rate (e.g., a point every $5$ seconds), which is transmitted to cloud servers for various applications such as location based services and trajectory mining.
 %
 Transmitting and storing raw trajectory data consumes too much network bandwidth and storage capacity \cite{Chen:Trajectory, Meratnia:Spatiotemporal, Liu:BQS, Muckell:Compression,Cao:Spatio, Popa:Spatio,Nibali:Trajic}. %Schmid:Semantic, Richter:Semantic, Long:Direction,
 %Further, we find that the online transmitting of raw trajectories also seriously aggravates several other issues such as out-of-order and duplicate data points in our experiences when implementing an online vehicle-to-cloud data transmission system.
@@ -29,7 +29,7 @@ These issues can be resolved or greatly alleviated by trajectory compression tec
 \end{figure*}
 
 
-Originally, line simplification algorithms adopt the \emph{perpendicular Euclidean distance} (\ped) as a metric to compute the error bounds,
+Originally, line simplification algorithms adopt the \emph{perpendicular Euclidean distance} (\ped) as a metric to compute the errors,
 \eg $|\vv{P_4P^*_4}|$ is the \ped of $P_4$ to the line $\overline{P_0P_{10}}$ in Figure~\ref{fig:notations} (left).
 Line simplification algorithms using \ped have good compression ratios~ \cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey}.  However, when using \ped, the temporal information is lost. Thus, a spatio-temporal query, \eg ``\emph{the position $pos$ of a moving object at time $t$}", on  compressed trajectories by line simplification algorithms using \ped may return an approximate point $P'$ whose distance to the actual position $P$ at time $t$ is unbounded. %For example, a query for the position of $P_7$ at time $t_7$ may return an approximate data point $P'_7$ whose distance to $P_7$ is great than the  bound $\epsilon$ in Figure~\ref{fig:notations} (left).
 
@@ -56,10 +56,10 @@ To this end, we propose two one-pass error bounded line simplification algorithm
 \stab {(1)} We first develop a novel local synchronous distance checking approach, \ie the \underline{C}one \underline{I}ntersection with \underline{S}ynchronous \underline{E}uclidean \underline{D}istance (CISED), by extending the sector intersection method \cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve}. We further approximate the spatio-temporal cone intersection by the regular polygon intersection and develop a fast regular polygon intersection algorithm,
 such that each data point in a trajectory is checked in O(1) time during the entire process of trajectory simplification.
 
-\stab {(2)} We then develop two one-pass, error bounded and \sed enabled trajectory simplification algorithms based on the local synchronous distance checking approach.
+\stab {(2)} We then develop two one-pass, error bounded and \sed enabled trajectory simplification algorithms based on the local synchronous distance checking approach, and both of them run in $O(n)$ time and $O(1)$ space.
 The first one, called \cist, is a \emph{\underline{S}trong simplification}\cite{Trajcevski:DDR}, which outputs a subset of the original points;
 and the second one, called \cista, is a \emph{\underline{W}eak simplification}\cite{Trajcevski:DDR}, which allows interpolating data into trajectories under certain conditions.
-Both of them run in $O(n)$ time and $O(1)$ space.
+
 
 \stab (3) Using four real-life trajectory datasets (\truck, \sercar, \geolife, \pricar),
 we finally conduct an extensive experimental study, by comparing our algorithms \cist and \cista with algorithms \dps~\cite{Meratnia:Spatiotemporal} (\sed equipped \dpa, the distinct existing \lsa algorithm being famous of compression ratio) and \squishe \cite{Muckell:Compression} (the existing \sed enabled \lsa algorithm with improved time performance).
