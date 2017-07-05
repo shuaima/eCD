@@ -28,12 +28,14 @@ We first introduce basic notations.
 
 
 \stitle{Directed line segments ($\mathcal{L}$)}. A directed line segment (or line segment for simplicity) $\mathcal{L}$ is defined as $\vv{P_{s}P_{e}}$, which represents the closed line segment that connects the start point $P_s$ and the end point $P_e$.
-Note that here $P_s$ or $P_e$ may not be a point in a trajectory $\dddot{\mathcal{T}}$, and hence, we also use notation $\mathcal{R}$ instead of $\mathcal{L}$ when both $P_s$ and $P_e$ belong to $\dddot{\mathcal{T}}$.
+Note that here $P_s$ or $P_e$ may not be a point in a trajectory $\dddot{\mathcal{T}}$.
+
+%, and hence, we also use notation $\mathcal{R}$ instead of $\mathcal{L}$ when both $P_s$ and $P_e$ belong to $\dddot{\mathcal{T}}$.
 
 We also use $|\mathcal{L}|$ and $\mathcal{L}.\theta\in [0, 2\pi)$ to denote the length of a directed line segment $\mathcal{L}$, and its angle with the $x$-axis of the coordinate system $(x, y)$, where $x$ and $y$ are the longitude and latitude, respectively.
 That is, a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$ can be treated as a triple $(P_s, |\mathcal{L}|, \mathcal{L}.\theta)$.
 
-\stitle{Piecewise line representation ($\overline{\mathcal{T}}$)}. A piece-wise line representation $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$) of a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is a sequence of continuous directed line segments $\mathcal{L}_{i}$ = $\vv{P_{s_i}P_{e_i}}$ of $\dddot{\mathcal{T}}$ ($i\in[0,m]$)  such that $\mathcal{L}_{0}.P_{s_0} = P_0$, $\mathcal{L}_{m}.P_{e_m} = P_n$ and  $\mathcal{L}_{i}.P_{e_i}$ = $\mathcal{L}_{i+1}.P_{s_{i+1}}$ for all $i\in[0, m-1]$. Note that each directed line segment in $\overline{\mathcal{T}}$ essentially represents a continuous sequence of data points in $\dddot{\mathcal{T}}$.
+\stitle{Piecewise line representation ($\overline{\mathcal{T}}$)}. A piece-wise line representation $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$) of a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is a sequence of continuous directed line segments $\mathcal{L}_{i}$ = $\vv{P_{s_i}P_{e_i}}$ ($i\in[0,m]$) of $\dddot{\mathcal{T}}$  such that $\mathcal{L}_{0}.P_{s_0} = P_0$, $\mathcal{L}_{m}.P_{e_m} = P_n$ and  $\mathcal{L}_{i}.P_{e_i}$ = $\mathcal{L}_{i+1}.P_{s_{i+1}}$ for all $i\in[0, m-1]$. Note that each directed line segment in $\overline{\mathcal{T}}$ essentially represents a continuous sequence of data points in $\dddot{\mathcal{T}}$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \eat{
@@ -77,7 +79,7 @@ where points $P'_4$, $P'_2$ and $P'_7$ are the synchronized points of points $P_
 \end{example}
 
 \stitle{Error bounded algorithms}. Given a trajectory \trajec{T} and its compression  algorithm $\mathcal{A}$ using \sed (respectively \ped) that produces another trajectory \trajec{T'},
-we say that algorithm $\mathcal{A}$ is error bounded by $\epsilon$ if  for each point $P$ in \trajec{T}, there exists a point $P_j$ in \trajec{T'} such that $sed(P, \mathcal{L}(P_j,P_{j+1}))\le \epsilon$ (respectively $ped(P, \mathcal{L}(P_j,P_{j+1}))\le \epsilon$).
+we say that algorithm $\mathcal{A}$ is error bounded by $\epsilon$ if  for each point $P$ in \trajec{T}, there exist points $P_j$ and $P_{j+1}$ in \trajec{T'} such that $sed(P, \mathcal{L}(P_j,P_{j+1}))\le \epsilon$ (respectively $ped(P, \mathcal{L}(P_j,P_{j+1}))\le \epsilon$).
 
 
 
@@ -98,11 +100,11 @@ We summarize notations used in Table~\ref{tab:notations}.
 \hline
 $\mathcal{L}$ & a directed line segment  \\
 \hline
-$\overline{\mathcal{T}}$&  a piece-wise line representation $\overline{\mathcal{T}}$ \\
+$\overline{\mathcal{T}}$&  a piece-wise line representation of a trajectory\\
 \hline
 $ped(P, \mathcal{L})$ & the perpendicular Euclidean distance of $P$ to $\mathcal{L}$\\
 \hline
-$sed(P, \mathcal{L})$ & the synchronous Euclidean distances of $P$ to $\mathcal{L}$\\
+$sed(P, \mathcal{L})$ & the synchronous Euclidean distance of $P$ to $\mathcal{L}$\\
 \hline
 $\epsilon$ & the error bound \\
 \hline
@@ -120,7 +122,7 @@ $m$ & the max number of vertexes/edges of a polygon\\
 \hline
 $E^j$ & a group of edges labeled with $j$\\
 \hline
-$g(e)$ & the label of edge $e$ \\
+$g(e)$ & the label of an edge $e$ of polygons \\
 \hline
 \circle{} & a synchronous circle\\
 \hline
@@ -150,17 +152,17 @@ Further, \cite{Dunham:Cone}  optimized algorithm \cia by considering the distanc
 
 Given a sequence of data points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$, the \cia based algorithms process the input points one by one in order, and produce a simplified polyline.  Instead of using the distance threshold $\epsilon$ directly, the \cia based algorithms convert the distance tolerance into a variable angle tolerance for testing the points.
 
-For the start point $P_s$ and any point $P_{s+i}$ ($i\in[1, k]$), there are two different lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ such that $ped(P_i, \vv{P_sP^u_{s+i}})$ $=$ $ped(P_i, \vv{P_sP^l_{s+i}}) = \epsilon$ and $\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta$. Indeed, they forms a \emph{sector} \sector{(P_s, P_{s+i}, \epsilon)} that takes $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the border lines.
+For the start point $P_s$ and any point $P_{s+i}$ ($i\in[1, k]$), there are two different lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ such that $ped(P_{s+i}, \vv{P_sP^u_{s+i}})$ $=$ $ped(P_{s+i}, \vv{P_sP^l_{s+i}}) = \epsilon$ and $\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta$. Indeed, they forms a \emph{sector} \sector{(P_s, P_{s+i}, \epsilon)} that takes $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the border lines.
 % , where $P_s$ is the center point, and $\vv{P_sP^l_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ are two bound lines.
 Then there exists a data point $Q$ such that for any data point $P_{s+i}$ ($i \in [1, ... k]$), its \ped to
-line $\overline{P_sQ}$ is no greater than the error bound $\epsilon$ if and only if there $k$ sectors \sector{(P_s, P_{s+i}, \epsilon)} ($i\in[1,k]$) share common data points other than $P_s$, \ie $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon)} $\ne \{P_s\}$ \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}.
+line $\overline{P_sQ}$ is no greater than the error bound $\epsilon$ if and only if the $k$ sectors \sector{(P_s, P_{s+i}, \epsilon)} ($i\in[1,k]$) share common data points other than $P_s$, \ie $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon)} $\ne \{P_s\}$ \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}.
 
 The point $Q$ may not belong to $\{P_{s}, P_{s+1},$ $\ldots, P_{s+k}\}$.
 However, if $P_{s+i}$ ($1\le i\le k$) is chosen as $Q$, then
-for any data point $P_{s+i}$ ($i \in [1, ... i]$), its \ped to
-line $\overline{P_sP_{s+i}}$ is no greater than the error bound $\epsilon$ if and only if $\bigsqcap_{j=1}^{i}$\sector{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$, as pointed out in \cite{Zhao:Sleeve}.
+for any data point $P_{s+j}$ ($j \in [1, ... i]$), its \ped to
+line $\overline{P_sP_{s+i}}$ is no greater than the error bound $\epsilon$ if and only if $\bigsqcap_{j=1}^{i}$\sector{(P_s, P_{s+j}, \epsilon/2)} $\ne \{P_s\}$, as pointed out in \cite{Zhao:Sleeve}.
 
- That is, {\em these \cia based algorithms can be easily adopted for trajectory compression although they have been overlooked by existing trajectory simplification studies}.  It is also worth pointing out that the \cia based algorithms  run in $O(n)$ time and $O(1)$ space, and are one-pass algorithms.
+ That is, {\em these \cia based algorithms can be easily adopted for trajectory compression using \sed although they have been overlooked by existing trajectory simplification studies}.  It is also worth pointing out that the \cia based algorithms  run in $O(n)$ time and $O(1)$ space, and are one-pass algorithms.
 
 We next illustrate how the \cia based algorithms can be used for trajectory compression.
 
@@ -175,7 +177,7 @@ Consider Figure~\ref{fig:sleeve}. A \cia based algorithm takes as input a trajec
 Then $P_2$ is read, and the sector \sector{(P_0, P_{2}, \epsilon/2)}  is created for $P_2$. The intersection of sectors \sector{(P_0, P_{1}, \epsilon/2)} and  \sector{(P_0, P_{2}, \epsilon/2)} contains data points other than $P_0$  which has an up border line $P_0P_2^u$ and a low border line $P_0P_1^l$, as shown in Figure~\ref{fig:sleeve}.(2).
 Similarly, points $P_3$ and $P_4$ are processed, as shown in Figures~\ref{fig:sleeve}.(3) and \ref{fig:sleeve}.(4), respectively.
 
-\sstab(2) When point $P_5$ is read,  line segment $\vv{P_0P_4}$ is produced, and point $P_4$ becomes the start point, as $\bigsqcap_{i=1}^{4}$\sector{(P_0, P_{s+1}, \epsilon/2)} $\ne\{P_0\}$ and $\bigsqcap_{i=1}^{5}$\sector{(P_0, P_{s+1}, \epsilon/2)} $=\{P_0\}$ as shown in Figure~\ref{fig:sleeve}.(5).
+\sstab(2) When point $P_5$ is read,  line segment $\vv{P_0P_4}$ is produced, and point $P_4$ becomes the start point, as $\bigsqcap_{i=1}^{4}$\sector{(P_0, P_{s+i}, \epsilon/2)} $\ne\{P_0\}$ and $\bigsqcap_{i=1}^{5}$\sector{(P_0, P_{s+i}, \epsilon/2)} $=\{P_0\}$ as shown in Figure~\ref{fig:sleeve}.(5).
 
 
 \sstab(3) Points $P_5, \ldots, P_{10}$ are processed similarly one by one in order, and finally the algorithm outputs another line segment $\vv{P_4P_{10}}$ as shown in Figure~\ref{fig:sleeve}.(5).
@@ -190,7 +192,7 @@ Similarly, points $P_3$ and $P_4$ are processed, as shown in Figures~\ref{fig:sl
 We also employ a convex polygon intersection algorithm in~\cite{ORourke:Intersection}, whose basic idea is straightforward.
 Assume \kwlog that the edges of polygons $\mathcal{G}_1$ and $\mathcal{G}_2$ are oriented counterclockwise, and $\vv{A} = (P_{s_A}, P_{e_A})$ and $\vv{B} = (P_{s_B}, P_{e_B})$ are two (directed) edges on $\mathcal{G}_2$ and $\mathcal{G}_1$, repectively (see Figure~\ref{fig:c-poly-inter}).
 
-The algorithm has $\vv{A}$ and $\vv{B}$ ``chasing'' one another, \ie moves $\vv{A}$ on $\mathcal{G}_1$ and $\vv{B}$ on $\mathcal{G}_1$ counter-clockwise step by step under certain rules, so that they meet at every crossing of $\mathcal{G}_1$ and $\mathcal{G}_2$.
+The algorithm has $\vv{A}$ and $\vv{B}$ ``chasing'' one another, \ie moves $\vv{A}$ on $\mathcal{G}_2$ and $\vv{B}$ on $\mathcal{G}_1$ counter-clockwise step by step under certain rules, so that they meet at every crossing of $\mathcal{G}_1$ and $\mathcal{G}_2$.
 %
 The rules, called \emph{advance rules}, are carefully designed depending on geometric conditions of $\vv{A}$ and $\vv{B}$.
 %If $\vv{B}$ ``aims toward" the line containing $\vv{A}$, but does not cross it, then we want to advance $\vv{B}$ in order to ``close in" on a possible intersection with A.
@@ -216,7 +218,7 @@ For example, in Figure~\ref{fig:c-poly-inter}.(6) and ~\ref{fig:c-poly-inter}.(7
 
 
 \stitle{Algorithm \cpia}. The complete algorithm is shown in Figure~\ref{alg:c-poly-inter}.
-Given polygons $\mathcal{G}_1$ and $\mathcal{G}_2$, algorithm \cpia first arbitrarily sets $\vv{A}$ and $\vv{B}$ on $\mathcal{G}_2$ and $\mathcal{G}_1$, respectively (line 1).
+Given polygons $\mathcal{G}_1$ and $\mathcal{G}_2$, algorithm \cpia first arbitrarily sets $\vv{A}$ on $\mathcal{G}_2$ and $\vv{B}$ on $\mathcal{G}_1$, respectively (line 1).
 %
 It then checks the intersection of $\vv{A}$ and $\vv{B}$. If $\vv{A}$ intersects $\vv{B}$ (line 3), then the algorithm checks for some special termination conditions (\eg if $\vv{A}$ and $\vv{B}$ are overlapped and, at the same time, $\mathcal{G}_1$ and $\mathcal{G}_2$ are on the opposite sides of the overlapped edges, then the process is terminated) (line 4), and records the inner edge, which is a boundary segment of the intersection polygon (line 5).
 After that, the algorithm moves on $\vv{A}$ or $\vv{B}$ one step under the advance rules (lines 6--11).
@@ -228,7 +230,7 @@ At last, it returns the intersection polygon (line 14).
 
 
 The algorithm has a time complexity of $O(|\mathcal{G}_1| + |\mathcal{G}_2|)$, where $|\mathcal{G}|$ is the number of edges of polygon $\mathcal{G}$.
-It is worth to point out that $|\mathcal{G}_1 \bigsqcap \mathcal{G}_2| \le (|\mathcal{G}_1| + |\mathcal{G}_2|)$.
+It is worth pointing out that $|\mathcal{G}_1 \bigsqcap \mathcal{G}_2| \le (|\mathcal{G}_1| + |\mathcal{G}_2|)$.
 
 
 

@@ -22,7 +22,7 @@ We next introduce the related work on lossy trajectory compression  from two asp
 
 %Line simplification (\lsa) methods use a set of continuous line segments to represent a compressed trajectory (Fig.\ref{fig:notations}).
 The idea of piece-wise line simplification comes from computational geometry.
-Its target is to approximate a given finer piece-wise linear curve by another coarser piece-wise linear curve, which is typically a subset of the former, such that the maximum distance of the former from the later is bounded by a user specified constant $\epsilon$.
+Its target is to approximate a given finer piece-wise linear curve by another coarser piece-wise linear curve, which is typically a subset of the former, such that the maximum distance of the former to the later is bounded by a user specified bound $\epsilon$.
 The optimal methods that find the minimal number of points or segments have the time complexity of $O(n^2)$ where $n$ is the number of the original points \cite{Chan:Optimal}.
 They are time-consuming and impractical for large inputs~\cite{Heckbert:Survey}. Hence, many studies have been targeting at finding the sub-optimal results.
 \eat{
@@ -33,10 +33,10 @@ Some online \lsa algorithms were further developed by combining batch algorithms
 Recently, the authors of this paper developed a one-pass trajectory simplification algorithm (\operb) \cite{Lin:Operb}, which runs great fast and also has comparable compression ratio comparing with batch algorithms. Moreover, the ``cone intersection'' algorithm \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} is another notable one-pass \lsa algorithm.
 }
 %In this section, we focus on the piece-wise line simplification based methods for trajectory data.
-In particular, the state-of-the-art the sub-optimal line simplification approaches fall into three categories, \ie \emph{batch algorithms}, \emph{online algorithms} and \emph{one-pass algorithms}.
+In particular, the state-of-the-art sub-optimal line simplification approaches fall into three categories, \ie \emph{batch algorithms}, \emph{online algorithms} and \emph{one-pass algorithms}.
 
 For trajectory compression, there are two types of widely used distance metrics: perpendicular Euclidean distances (\ped) and synchronous Euclidean distances (\sed).
-Mostly existing line simplification algorithms use \ped, and more attentions are needed to be paid on \sed. 
+Mostly existing line simplification algorithms use \ped, and more attentions are needed to be paid on \sed.
 \sed was first introduced in the name of \emph{time-ratio distance} in~\cite{Meratnia:Spatiotemporal}, and formally presented in~\cite{Potamias:Sampling} as the \emph{synchronous Euclidean distance}. %It is a specific distance metric for trajectory data, and is normally enabled in some batch and online algorithms.
 
 We next introduce these line simplification  algorithms from the aspect of the three categories.
@@ -87,7 +87,7 @@ In these routines, for every fixed number of consecutive points along the line, 
 They are fast, but are obviously not error bounded.
 %
 In Reumann-Witkam routine\cite{Reumann:Strip}, it builds a strip paralleling to the line connecting the first two points, then the points within this strip compose one section of the line.
-The Reumann-Witkam routine also runs fast, and at the same time, it has limited compression ratios.
+The Reumann-Witkam routine also runs fast, but has limited compression ratios.
 %
 The sector intersection (\cia) algorithm \cite{Williams:Longest, Sklansky:Cone} was developed for graphic and pattern recognition in the late 1970s, for the approximation of arbitrary planar curves by linear segments or finding a polygonal approximation of a set of input data points in a 2D Cartesian coordinate system. \cite{Dunham:Cone} optimized algorithm \cia by considering the distance between a potential end point and the initial point of a line segment, and the \sleeve algorithm \cite{Zhao:Sleeve} in the cartographic discipline essentially applies the same idea as the \cia algorithm.
 %
@@ -95,7 +95,7 @@ Moreover, {fast \bqsa \cite{Liu:BQS} (\fbqsa in short), the simplified version o
 %
 The authors of this article also developed an One-Pass ERror Bounded (\operb) algorithm \cite{Lin:Operb}.
 %
-It is worth pointing out that all existing one-pass algorithms  use \ped \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve,Liu:BQS,Lin:Operb}, while this study focuses on \sed.
+However, all existing one-pass algorithms  use \ped \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve,Liu:BQS,Lin:Operb}, while this study focuses on \sed.
 
 
 

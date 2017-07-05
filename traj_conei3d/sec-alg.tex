@@ -2,10 +2,8 @@
 \label{sec-alg}
 
 Following \cite{Trajcevski:DDR,Lin:Operb}, we consider two classes of trajectory simplification.
-The first one, referred to as \emph{strong simplification}, that takes as input a trajectory \trajec{T} and an error bound $\epsilon$, and produces
-a simplified trajectory \trajec{T'} such that all data points in \trajec{T'} belongs to \trajec{T}.
-The second one, referred to as \emph{weak simplification}, that takes input a trajectory \trajec{T} and an error bound $\epsilon$, and produces
-a simplified trajectory \trajec{T'} such that some data points in \trajec{T'} may not belong to \trajec{T}. That is,  weak simplification allows data interpolation. %,commonly used in polygonal curve approximation \cite{Williams:Bounded, Heckbert:Survey, Zhao:Sleeve}, time series approximation \cite{ORourke:Fitting, Elmeleegy:Stream, Xie:Stream, Luo:Streaming} and trajectory simplification \cite{Lin:Operb}.
+The first one, referred to as \emph{strong simplification}, that takes as input a trajectory \trajec{T}, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and produces a simplified trajectory \trajec{T'} such that all data points in \trajec{T'} belongs to \trajec{T}.
+The second one, referred to as \emph{weak simplification}, that takes input a trajectory \trajec{T}, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and produces a simplified trajectory \trajec{T'} such that some data points in \trajec{T'} may not belong to \trajec{T}. That is,  weak simplification allows data interpolation. %,commonly used in polygonal curve approximation \cite{Williams:Bounded, Heckbert:Survey, Zhao:Sleeve}, time series approximation \cite{ORourke:Fitting, Elmeleegy:Stream, Xie:Stream, Luo:Streaming} and trajectory simplification \cite{Lin:Operb}.
 
 
 The main result here is stated as follows.
@@ -88,11 +86,11 @@ If $\bigsqcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_{s+i}, \epsilon/2)} \ne \{P_s\}$, t
 \stitle{Procedure \kw{getRegularPolygon}}.
 We first present procedure \kw{getRegularPolygon} that given a cone projection circle, generates its inscribed $m$-edge regular polygon,  following the definition in Section~\ref{subsec-RPI}.
 
-The parameters $P_s$, $P_i$, $r$ and $t_c$ together forms the projection circle \pcircle{(P^c_i, r^c_i)} of the spatio-temporal cone \cone{(P_s, \mathcal{O}(P_{i}, r))} of point $P_{i}$ \wrt point $P_s$ on the plane $P.t - t_c$ = $0$. Firstly, $P^c_i.x$ and $P^c_i.y$ are computed (lines 1--3), and $r^c_i = c\cdot r$.
+The parameters $P_s$, $P_i$, $r$ and $t_c$ together form the projection circle \pcircle{(P^c_i, r^c_i)} of the spatio-temporal cone \cone{(P_s, \mathcal{O}(P_{i}, r))} of point $P_{i}$ \wrt point $P_s$ on the plane $P.t - t_c$ = $0$. Firstly, $P^c_i.x$ and $P^c_i.y$ are computed (lines 1--3), and $r^c_i = c\cdot r$.
 Then it builds and returns an $m$-edge inscribed regular polygon $\mathcal{G}$ of \pcircle{(P^c_i, r^c_i)} (lines 4--8), by transforming a polar coordinate system
 into a Cartesian one. Note that here $\theta$, $r\cdot\sin\theta$ and $r\cdot\cos\theta$ only need to be computed once during the entire processing of a trajectory.
 
-\stitle{Algorithm \cist}. We now present algorithm Algorithm \cist. It takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and returns a simplified  piece-wise line representation $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$.
+\stitle{Algorithm \cist}. We now present algorithm \cist. It takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and returns a simplified  trajectory $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$.
 
 
 
@@ -159,7 +157,7 @@ We then present the one-pass error bounded {\em weak simplification} algorithm u
 
 \stitle{Algorithm \cista}.
 Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed
-regular polygons, its returns a simplified  piece-wise line representation $\overline{\mathcal{T}}$,
+regular polygons, it returns a simplified trajectory $\overline{\mathcal{T}}$,
 which may contain interpolated points.
 
 By Proposition~\ref{prop-circle-intersection}, algorithm \cista generates spatio-temporal cones whose bases are circles with a radius of $\epsilon$,
@@ -178,7 +176,7 @@ By Proposition~\ref{prop-circle-intersection} and the nature of inscribed regula
 
 The choice of $Q$ from $G^*_k$ may slightly affect the effectiveness (\eg average errors and compression ratios). However, the choice of an optimal $Q$ is non-trivial. For the benefit of efficiency, we apply the following strategies.
 
-\sstab (1) If $P_e \in G^*_k$ \wrt $t_c=P_{s+k}.t$, then $Q$ is simply $P_{s+k}$.
+\sstab (1) If $P_{s+k} \in G^*_k$ \wrt $t_c=P_{s+k}.t$, then $Q$ is simply $P_{s+k}$.
 %meaning the projection point of $P_e$ on the plane ``$t=t_c$", \ie $P^c_e$, is in the intersection polygon of regular polygons \{$\mathcal{G}_s, \dots, \mathcal{G}_e$\} of all projection circles \{$\mathcal{O}(P^c_s, \epsilon^c_s), \ldots, \mathcal{O}(P^c_e, \epsilon^c_e)$\},
 
 \sstab (2) If $G^*_k \ne \emptyset$ and $P_{s+k} \not\in G^*_k$ \wrt $t_c=P_{s+k}.t$, then the central point of $G^*_k$ is chosen as $Q$.
@@ -191,7 +189,7 @@ The choice of $Q$ from $G^*_k$ may slightly affect the effectiveness (\eg averag
 Figure~\ref{fig:exm-consta}  shows a running example of algorithm \cista for compressing the trajectory \trajec{T} in Figure~\ref{fig:notations} again.
 
 
-\sstab (1) After initialization, the \cista algorithm reads point $P_1$ and builds a \emph{oblique circular cone} \cone{(P_0, \mathcal{O}(P_{1}, \epsilon))}, and projects it on the plane $P.t-P_1.t=0$. The inscribed regular polygon $\mathcal{G}_1$ of the projection circle is returned. The intersection of polygon $\mathcal{G}_1$ and polygon $\mathcal{G}^*$ is $\mathcal{G}_1 \ne \emptyset$.
+\sstab (1) After initialization, the \cista algorithm reads point $P_1$ and builds an \emph{oblique circular cone} \cone{(P_0, \mathcal{O}(P_{1}, \epsilon))}, and projects it on the plane $P.t-P_1.t=0$. The inscribed regular polygon $\mathcal{G}_1$ of the projection circle is returned. The intersection of polygon $\mathcal{G}_1$ and polygon $\mathcal{G}^*$ is $\mathcal{G}_1 \ne \emptyset$.
 
 \sstab (2) $P_2$, $P_3$ and $P_4$ are processed in turn. The intersection polygons are not empty.
 
