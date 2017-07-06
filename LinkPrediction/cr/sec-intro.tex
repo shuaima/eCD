@@ -1,0 +1,198 @@
+\section{Introduction}
+\label{sec-intro}
+% Computer Society journal (but not conference!) papers do something unusual
+% with the very first section heading (almost always called "Introduction").
+% They place it ABOVE the main text! IEEEtran.cls does not automatically do
+% this for you, but you can achieve this effect with the provided
+% \IEEEraisesectionheading{} command. Note the need to keep any \label that
+% is to refer to the section immediately after \section in the above as
+% \IEEEraisesectionheading puts \section within a raised box.
+The problem of {\em link prediction} or {\em link inference} is that of predicting the formation of future links in a dynamic and
+evolving network (see \cite{chancc,linyuan-2011,Hasan-2011} for surveys). The link prediction problem has numerous
+applications, such as the recommendation of friends in a social
+network \cite{barbieri2014,back,tang2015}, the recommendation of images in a multimedia network \cite{adom}, or
+the recommendation of collaborators in a scientific network \cite{kunegis,kleinberg}, and, therefore, link
+prediction methods have been extensively studied  because of their numerous applications in various network-centered domains.
+
+Link prediction methods are often applied to very large networks, which are also sparse.  The massive sizes of such networks can
+create challenges for the prediction process in spite of their sparsity. This is because the {\em search space} for the link
+prediction problem is of the size $O(n^2)$, where $n$ is the number of nodes. Quadratic scalability can rapidly become untenable for
+larger networks. In fact, an often overlooked fact is that most {\em current link prediction algorithms evaluate the link
+propensities only over a subset of possibilities rather than exhaustively search for link propensities over the entire network}, \eg
+\cite{dwang,lee,zhao2016,zhu2016}.
+%\marked{the common neighborhood based methods only concentrate on the
+%possible links occurred in 2-hop neighbors \cite{linyuan-2011,dwang,lee,zhao2016,zhu2016} }.
+
+In order to understand why this is the case,
+consider a network with $10^6$ nodes. Note that a size such as
+$10^6$ is not large at all by modern standards, and even common
+bibliographic networks such as \DBLP now exceed this size. Even
+for this modest network, the number of {\em possibilities} for links
+is of the order of $10^{12}$. Therefore, a 1GHz processor would
+require at least $10^3$ seconds just to allocate one {\em machine cycle} to
+every pair of nodes. This implies that in order to determine the
+top-ranked link predictions over the {\em entire network}, the
+running time will be much larger than $10^3$ seconds.  It is
+instructive, therefore, to examine how this (lower bound on) running
+time scales with increasing network size. Table~\ref{time} shows the
+time requirements for allocating a single machine cycle to each
+pair-wise possibility. The running time in this table represent
+very optimistic lower bounds on the required time because link
+prediction algorithms are complex and require far more than a single
+machine cycle for processing a node-pair. Note that for larger
+networks, even the presented lower bounds on the running time are
+impractical.
+\begin{table}
+\caption{The $O(n^2)$ problem in link prediction: Time required to
+allocate a {\em single machine cycle} to every node-pair possibility
+in networks.} % of varying sizes and processors of various speeds.}
+\label{time}
+\vspace{-2ex}
+\centering
+\begin{tabular}{cccc}
+\hline \hline Network Sizes & 1 GHz &  3 GHz & 10 GHz \\
+\hline \hline $10^6$ nodes & 1000 sec. & 333 sec. & 100 sec.\\
+\hline $10^7$ nodes & 27.8 hrs &  9.3 hrs &  2.78 hrs\\
+\hline $10^8$ nodes & $>100$ days &  $>35$ days & $> 10$ days\\
+\hline $10^9$ nodes & $>10000$ days & $>3500$ days & $> 1000$ days\\
+\hline \hline
+\end{tabular}
+\vspace{-3ex}
+\end{table}
+
+
+%\begin{table}
+%\vspace{4ex}
+%{\small
+%\begin{tabular}{cccc}
+%\hline \hline Network Sizes & 1 GHz &  3 GHz & 10 GHz \\
+%\hline \hline $10^6$ nodes & 1000 sec. & 333 sec. & 100 sec.\\
+%\hline $10^7$ nodes & 27.8 hrs &  9.3 hrs &  2.78 hrs\\
+%\hline $10^8$ nodes & $>100$ days &  $>35$ days & $> 10$ days\\
+%\hline $10^9$ nodes & $>10000$ days & $>3500$ days & $> 1000$ days\\
+%\hline \hline
+%\end{tabular}}
+%\vspace{-1ex}
+%\caption{}
+%\label{}
+%\vspace{-3ex}
+%\end{table}
+
+
+
+It is noteworthy that most link prediction algorithms in the
+literature are not designed to search over the entire space of
+$O(n^2)$ possibilities. A closer examination of the relevant
+publications shows that even for networks of modest size, these
+algorithms perform benchmarking only by evaluating over a {\em
+sample of the possibilities} for links. This is only to be expected
+in light of the lower bounds shown in Table~\ref{time}.  In other
+words, the {\em complete ranking problem} for link prediction in
+very large networks remains largely unsolved at least from a
+computational point of view. It is evident from the presented lower
+bounds in Table~\ref{time} that any ranking-based link prediction
+algorithm {\em must integrate search space pruning} within the
+prediction algorithm in order to even  have any  hope of exploring
+the $O(n^2)$ search space in a reasonable amount of time. The
+algorithmic design of most link prediction algorithms largely
+overlooks this basic requirement~\cite{chancc,propflow}.
+
+The link prediction algorithms are classified into unsupervised and
+supervised methods. Unsupervised methods~\cite{kleinberg} typically
+use neighborhood measures such as the Adamic-Adar~\cite{adamic} and
+the Jaccard coefficient \cite{kleinberg}. Supervised methods~\cite{propflow} treat the
+link prediction problem as a classification problem in which each node pair
+is treated as a test instance. Supervised methods are the
+state-of-the-art and generally provide more accurate results than
+unsupervised methods~\cite{propflow}. It is also noteworthy that
+most supervised methods evaluate link prediction algorithms by using
+only {\em a sample} of test links because of computational
+consideration.  In real-world applications, it is often desirable to
+determine the {\em top-$k$} most relevant links for prediction {\em
+over all possibilities for test links}. This problem remains largely
+unsolved even for networks of any reasonable size.
+
+The link prediction problem is also closely related to the missing value
+estimation problem, which is commonly used in collaborative
+filtering~\cite{adom}.  Just as collaborative filtering attempts to
+predict missing entries in a matrix of users and items, the link
+prediction problem attempts to predict missing entries in a
+node-node adjacency matrix. In fact, the missing value estimation
+framework seems to be a more compact and relevant model for the link
+prediction problem, as compared with the vanilla classification
+problem.  Many of the modern methods for collaborative filtering use
+latent factor models~\cite{conceptualr,web} such as \SVD and
+\NMF for predicting missing entries. These methods have been
+shown to be wildly successful at least within the domain of
+collaborative filtering~\cite{web}. In spite of the obvious
+similarity between link prediction and collaborative filtering and
+the obvious effectiveness of latent factor models, there are only a
+few methods~\cite{menon} which attempt to use these models.
+
+One of the reasons that latent factor models are rarely used for
+link prediction is simply due to their complexity. In
+collaborative filtering applications, the item dimension is of the
+order of a few hundred thousand, whereas even the smallest  real-world networks contain more than a million nodes.
+Furthermore, collaborative filtering methods  often perform the
+recommendation on a per-user basis rather than try to determine
+the top-$k$ user-item pairs.  The latter is particularly important
+in the context of link prediction. The factorization of a matrix of
+size $O(n^2)$ is not only computationally expensive, but also
+memory-intensive.  As will be seen later in this article, one advantage
+of  latent-factor models is that they are able to  transform the
+adjacency matrix to a multidimensional space which can be searched
+efficiently {\em by pruning} large portions of the $O(n^2)$ search
+space in order to recommend the top-$k$ possibilities.
+%\marked{Furthermore, more portions of the search space could be pruned when finding the top-$k$ possibilities that take values above some application-defined threshold \cite{ballard2015, lemp}. }
+This is essential in such a top-$k$ setting.
+
+\stitle{Contributions}. To this end, we explore an {\em ensemble approach} to
+achieving the aforementioned goals.
+
+We show how to make latent factor models
+practical for link prediction by decomposing the search space into a
+ set of smaller matrices. As a result, large parts of the $O(n^2)$
+search space can be pruned without even having to evaluate the
+relevant node pairs. An optimizing method is also provided for
+speeding up the search process when a threshold is available.
+This provides an efficient approach for the
+top-$k$ problem in link prediction.
+
+Our problem decomposition method is an ensemble approach
+enabled with three structural bagging methods with performance guarantees,
+which has obvious {\em robustness} advantages. Note that the bagging methods combine the outputs of several predictors
+may reduce the overall risk of making a particularly poor prediction \cite{Breiman96b-1996}. By incorporating with the
+characteristics of link prediction, the bagging methods maintain high prediction
+accuracy while reducing the network size via graph sampling techniques.
+
+%Note that the bagging methods combine the outputs of several predictors
+%may reduce the overall risk of making a particularly poor prediction \cite{Breiman96b-1996}. Therefore,
+%the use of an ensemble approach has obvious robustness advantages as well.}
+
+
+%Furthermore, our problem
+%decomposition method is an ensemble approach enabled with three
+%structural bagging methods with performance guarantees, which has obvious {\em
+%effectiveness} advantages. By incorporating with the characteristics of  link prediction, the bagging methods maintain high prediction
+%accuracy while reducing the network size via graph sampling techniques.
+%Note that the same bias-variance
+%tradeoffs apply to the link-prediction problem, as they apply to the
+%standard classification problem. Therefore, the use of an ensemble
+%approach has obvious effectiveness advantages as well.
+
+Using real-life datasets, we finally conduct an extensive experimental study,
+and show that our ensemble approach for link prediction is both effective and efficient.
+Indeed, (1) on \Friendster with $15$ million nodes and $1$ billion edges, our approach could finish in
+two hours, while existing methods direct \NMF, \Aa \cite{adamic}, \RA \cite{zhou2009}
+and \BIGCLAM \cite{yang-wsdm2013} could not finish in a day, and
+(2) our approach in general improves the accuracy on (\Digg, \YouTube, \Wikipedia)
+compared with direct \NMF, \Aa, \RA and \BIGCLAM.
+
+
+\stitle{Organization}. This article is organized as follows. In the next section, we  provide
+the basic framework for the approach and describe the efficient use
+of  latent factor models for link prediction. Section~3 discusses
+how latent factor models can be augmented with ensembles to provide
+more effective and efficient results. Section~4 presents and discusses the
+experimental results, followed by related work in Section~5 and conclusions in Section~6.
+

@@ -1,0 +1,1334 @@
+\documentclass[10pt,journal,compsoc]{IEEEtran}
+
+\special{papersize=8.5in,11in}
+% *** CITATION PACKAGES ***
+%
+\ifCLASSOPTIONcompsoc
+  % IEEE Computer Society needs nocompress option
+  % requires cite.sty v4.0 or later (November 2003)
+  \usepackage[nocompress]{cite}
+\else
+  % normal IEEE
+  \usepackage{cite}
+\fi
+% cite.sty was written by Donald Arseneau
+% V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
+% \cite{} output to follow that of the IEEE. Loading the cite package will
+% result in citation numbers being automatically sorted and properly
+% "compressed/ranged". e.g., [1], [9], [2], [7], [5], [6] without using
+% cite.sty will become [1], [2], [5]--[7], [9] using cite.sty. cite.sty's
+% \cite will automatically add leading space, if needed. Use cite.sty's
+% noadjust option (cite.sty V3.8 and later) if you want to turn this off
+% such as if a citation ever needs to be enclosed in parenthesis.
+% cite.sty is already installed on most LaTeX systems. Be sure and use
+% version 5.0 (2009-03-20) and later if using hyperref.sty.
+% The latest version can be obtained at:
+% http://www.ctan.org/pkg/cite
+% The documentation is contained in the cite.sty file itself.
+%
+% Note that some packages require special options to format as the Computer
+% Society requires. In particular, Computer Society  papers do not use
+% compressed citation ranges as is done in typical IEEE papers
+% (e.g., [1]-[4]). Instead, they list every citation separately in order
+% (e.g., [1], [2], [3], [4]). To get the latter we need to load the cite
+% package with the nocompress option which is supported by cite.sty v4.0
+% and later. Note also the use of a CLASSOPTION conditional provided by
+% IEEEtran.cls V1.7 and later.
+
+
+
+
+
+% *** GRAPHICS RELATED PACKAGES ***
+%
+\ifCLASSINFOpdf
+  % \usepackage[pdftex]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../pdf/}{../jpeg/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
+  % will default to the driver specified in the system graphics.cfg if no
+  % driver is specified.
+  % \usepackage[dvips]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../eps/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.eps}
+\fi
+% graphicx was written by David Carlisle and Sebastian Rahtz. It is
+% required if you want graphics, photos, etc. graphicx.sty is already
+% installed on most LaTeX systems. The latest version and documentation
+% can be obtained at:
+% http://www.ctan.org/pkg/graphicx
+% Another good source of documentation is "Using Imported Graphics in
+% LaTeX2e" by Keith Reckdahl which can be found at:
+% http://www.ctan.org/pkg/epslatex
+%
+% latex, and pdflatex in dvi mode, support graphics in encapsulated
+% postscript (.eps) format. pdflatex in pdf mode supports graphics
+% in .pdf, .jpeg, .png and .mps (metapost) formats. Users should ensure
+% that all non-photo figures use a vector format (.eps, .pdf, .mps) and
+% not a bitmapped formats (.jpeg, .png). The IEEE frowns on bitmapped formats
+% which can result in "jaggedy"/blurry rendering of lines and letters as
+% well as large increases in file sizes.
+%
+% You can find documentation about the pdfTeX application at:
+% http://www.tug.org/applications/pdftex
+
+
+
+
+
+
+% *** MATH PACKAGES ***
+%
+%\usepackage{amsmath}
+% A popular package from the American Mathematical Society that provides
+% many useful and powerful commands for dealing with mathematics.
+%
+% Note that the amsmath package sets \interdisplaylinepenalty to 10000
+% thus preventing page breaks from occurring within multiline equations. Use:
+%\interdisplaylinepenalty=2500
+% after loading amsmath to restore such page breaks as IEEEtran.cls normally
+% does. amsmath.sty is already installed on most LaTeX systems. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/pkg/amsmath
+
+
+
+
+
+% *** SPECIALIZED LIST PACKAGES ***
+%
+%\usepackage{algorithmic}
+% algorithmic.sty was written by Peter Williams and Rogerio Brito.
+% This package provides an algorithmic environment fo describing algorithms.
+% You can use the algorithmic environment in-text or within a figure
+% environment to provide for a floating algorithm. Do NOT use the algorithm
+% floating environment provided by algorithm.sty (by the same authors) or
+% algorithm2e.sty (by Christophe Fiorio) as the IEEE does not use dedicated
+% algorithm float types and packages that provide these will not provide
+% correct IEEE style captions. The latest version and documentation of
+% algorithmic.sty can be obtained at:
+% http://www.ctan.org/pkg/algorithms
+% Also of interest may be the (relatively newer and more customizable)
+% algorithmicx.sty package by Szasz Janos:
+% http://www.ctan.org/pkg/algorithmicx
+
+
+
+
+% *** ALIGNMENT PACKAGES ***
+%
+%\usepackage{array}
+% Frank Mittelbach's and David Carlisle's array.sty patches and improves
+% the standard LaTeX2e array and tabular environments to provide better
+% appearance and additional user controls. As the default LaTeX2e table
+% generation code is lacking to the point of almost being broken with
+% respect to the quality of the end results, all users are strongly
+% advised to use an enhanced (at the very least that provided by array.sty)
+% set of table tools. array.sty is already installed on most systems. The
+% latest version and documentation can be obtained at:
+% http://www.ctan.org/pkg/array
+
+
+% IEEEtran contains the IEEEeqnarray family of commands that can be used to
+% generate multiline equations as well as matrices, tables, etc., of high
+% quality.
+
+
+
+
+% *** SUBFIGURE PACKAGES ***
+%\ifCLASSOPTIONcompsoc
+%  \usepackage[caption=false,font=footnotesize,labelfont=sf,textfont=sf]{subfig}
+%\else
+%  \usepackage[caption=false,font=footnotesize]{subfig}
+%\fi
+% subfig.sty, written by Steven Douglas Cochran, is the modern replacement
+% for subfigure.sty, the latter of which is no longer maintained and is
+% incompatible with some LaTeX packages including fixltx2e. However,
+% subfig.sty requires and automatically loads Axel Sommerfeldt's caption.sty
+% which will override IEEEtran.cls' handling of captions and this will result
+% in non-IEEE style figure/table captions. To prevent this problem, be sure
+% and invoke subfig.sty's "caption=false" package option (available since
+% subfig.sty version 1.3, 2005/06/28) as this is will preserve IEEEtran.cls
+% handling of captions.
+% Note that the Computer Society format requires a sans serif font rather
+% than the serif font used in traditional IEEE formatting and thus the need
+% to invoke different subfig.sty package options depending on whether
+% compsoc mode has been enabled.
+%
+% The latest version and documentation of subfig.sty can be obtained at:
+% http://www.ctan.org/pkg/subfig
+
+
+
+
+% *** FLOAT PACKAGES ***
+%
+%\usepackage{fixltx2e}
+% fixltx2e, the successor to the earlier fix2col.sty, was written by
+% Frank Mittelbach and David Carlisle. This package corrects a few problems
+% in the LaTeX2e kernel, the most notable of which is that in current
+% LaTeX2e releases, the ordering of single and double column floats is not
+% guaranteed to be preserved. Thus, an unpatched LaTeX2e can allow a
+% single column figure to be placed prior to an earlier double column
+% figure.
+% Be aware that LaTeX2e kernels dated 2015 and later have fixltx2e.sty's
+% corrections already built into the system in which case a warning will
+% be issued if an attempt is made to load fixltx2e.sty as it is no longer
+% needed.
+% The latest version and documentation can be found at:
+% http://www.ctan.org/pkg/fixltx2e
+
+
+%\usepackage{stfloats}
+% stfloats.sty was written by Sigitas Tolusis. This package gives LaTeX2e
+% the ability to do double column floats at the bottom of the page as well
+% as the top. (e.g., "\begin{figure*}[!b]" is not normally possible in
+% LaTeX2e). It also provides a command:
+%\fnbelowfloat
+% to enable the placement of footnotes below bottom floats (the standard
+% LaTeX2e kernel puts them above bottom floats). This is an invasive package
+% which rewrites many portions of the LaTeX2e float routines. It may not work
+% with other packages that modify the LaTeX2e float routines. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/pkg/stfloats
+% Do not use the stfloats baselinefloat ability as the IEEE does not allow
+% \baselineskip to stretch. Authors submitting work to the IEEE should note
+% that the IEEE rarely uses double column equations and that authors should try
+% to avoid such use. Do not be tempted to use the cuted.sty or midfloat.sty
+% packages (also by Sigitas Tolusis) as the IEEE does not format its papers in
+% such ways.
+% Do not attempt to use stfloats with fixltx2e as they are incompatible.
+% Instead, use Morten Hogholm'a dblfloatfix which combines the features
+% of both fixltx2e and stfloats:
+%
+% \usepackage{dblfloatfix}
+% The latest version can be found at:
+% http://www.ctan.org/pkg/dblfloatfix
+
+
+
+
+%\ifCLASSOPTIONcaptionsoff
+%  \usepackage[nomarkers]{endfloat}
+% \let\MYoriglatexcaption\caption
+% \renewcommand{\caption}[2][\relax]{\MYoriglatexcaption[#2]{#2}}
+%\fi
+% endfloat.sty was written by James Darrell McCauley, Jeff Goldberg and
+% Axel Sommerfeldt. This package may be useful when used in conjunction with
+% IEEEtran.cls'  captionsoff option. Some IEEE journals/societies require that
+% submissions have lists of figures/tables at the end of the paper and that
+% figures/tables without any captions are placed on a page by themselves at
+% the end of the document. If needed, the draftcls IEEEtran class option or
+% \CLASSINPUTbaselinestretch interface can be used to increase the line
+% spacing as well. Be sure and use the nomarkers option of endfloat to
+% prevent endfloat from "marking" where the figures would have been placed
+% in the text. The two hack lines of code above are a slight modification of
+% that suggested by in the endfloat docs (section 8.4.1) to ensure that
+% the full captions always appear in the list of figures/tables - even if
+% the user used the short optional argument of \caption[]{}.
+% IEEE papers do not typically make use of \caption[]'s optional argument,
+% so this should not be an issue. A similar trick can be used to disable
+% captions of packages such as subfig.sty that lack options to turn off
+% the subcaptions:
+% For subfig.sty:
+% \let\MYorigsubfloat\subfloat
+% \renewcommand{\subfloat}[2][\relax]{\MYorigsubfloat[]{#2}}
+% However, the above trick will not work if both optional arguments of
+% the \subfloat command are used. Furthermore, there needs to be a
+% description of each subfigure *somewhere* and endfloat does not add
+% subfigure captions to its list of figures. Thus, the best approach is to
+% avoid the use of subfigure captions (many IEEE journals avoid them anyway)
+% and instead reference/explain all the subfigures within the main caption.
+% The latest version of endfloat.sty and its documentation can obtained at:
+% http://www.ctan.org/pkg/endfloat
+%
+% The IEEEtran \ifCLASSOPTIONcaptionsoff conditional can also be used
+% later in the document, say, to conditionally put the References on a
+% page by themselves.
+
+
+
+
+% *** PDF, URL AND HYPERLINK PACKAGES ***
+%
+%\usepackage{url}
+% url.sty was written by Donald Arseneau. It provides better support for
+% handling and breaking URLs. url.sty is already installed on most LaTeX
+% systems. The latest version and documentation can be obtained at:
+% http://www.ctan.org/pkg/url
+% Basically, \url{my_url_here}.
+
+
+
+
+
+% *** Do not adjust lengths that control margins, column widths, etc. ***
+% *** Do not use packages that alter fonts (such as pslatex).         ***
+% There should be no need to do such things with IEEEtran.cls V1.6 and later.
+% (Unless specifically asked to do so by the journal or conference you plan
+% to submit to, of course. )
+
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\usepackage{graphicx} % This is used to load the crest in the title page
+\usepackage{subfigure}
+%%%\usepackage{subfig}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{url}
+\usepackage{times}
+\usepackage{subfigure}
+\usepackage{graphicx,epstopdf}
+%\usepackage{latexsym}
+\usepackage{amsthm,amssymb}
+\usepackage{amsmath}
+%\usepackage{showkeys}
+\usepackage{xcolor}
+\usepackage{balance}
+\usepackage{cite}
+\usepackage[english]{babel}
+
+% duan
+\usepackage{xspace}
+\usepackage{multirow}
+
+\newcommand{\spara}[1]{\smallskip\noindent{\bf #1}}
+\newcommand{\eat}[1]{}
+\newcommand{\squishlist}{
+ \begin{list}{$\bullet$}
+  {  \setlength{\itemsep}{0pt}
+     \setlength{\parsep}{3pt}
+     \setlength{\topsep}{3pt}
+     \setlength{\partopsep}{0pt}
+     \setlength{\leftmargin}{2em}
+     \setlength{\labelwidth}{1.5em}
+     \setlength{\labelsep}{0.5em}
+} }
+\newcommand{\squishlisttight}{
+ \begin{list}{$\bullet$}
+  { \setlength{\itemsep}{0pt}
+    \setlength{\parsep}{0pt}
+    \setlength{\topsep}{0pt}
+    \setlength{\partopsep}{0pt}
+    \setlength{\leftmargin}{2em}
+    \setlength{\labelwidth}{1.5em}
+    \setlength{\labelsep}{0.5em}
+} }
+
+\newcommand{\squishdesc}{
+ \begin{list}{}
+  {  \setlength{\itemsep}{0pt}
+     \setlength{\parsep}{3pt}
+     \setlength{\topsep}{3pt}
+     \setlength{\partopsep}{0pt}
+     \setlength{\leftmargin}{1em}
+     \setlength{\labelwidth}{1.5em}
+     \setlength{\labelsep}{0.5em}
+} }
+
+\newcommand{\squishend}{
+  \end{list}
+}
+\newcommand{\sttab}{\rule{0pt}{8pt}\\[-3ex]}
+\newcounter{ccc}
+\newcommand{\bcc}{\setcounter{ccc}{1}\theccc.}
+\newcommand{\icc}{\addtocounter{ccc}{1}\theccc.}
+\newcommand{\myhrule}{\rule[.5pt]{\hsize}{.5pt}}
+\newcommand{\mat}[2]{{\begin{tabbing}\hspace{#1}\=\+\kill #2\end{tabbing}}}
+\newcommand{\stitle}[1]{\vspace{0.5ex}\noindent{\bf #1}}
+\newcommand{\etitle}[1]{\vspace{0.5ex}\noindent{\em \underline{#1}}}
+\newcommand{\marked}[1]{\textcolor{red}{#1}}
+\newcommand{\markedb}[1]{\textcolor{blue}{#1}}
+
+\newcommand{\eop}{\hspace*{\fill}\mbox{$\Box$}}     % End of proof
+\newcounter{example}
+\renewcommand{\theexample}{\arabic{example}}
+\newenvironment{example}{
+        \vspace{0ex}
+        \refstepcounter{example}
+        {\noindent\bf Example \theexample:}}{
+        \eop\vspace{0ex}}
+\def\copyrightspace{}
+
+
+%%%%%%%%%% symbols of methods and datasets  by duan 2015-07-13
+\newcommand{\DBLP}{{\sf DBLP}\xspace}
+\newcommand{\SVD}{{\sf SVD}\xspace}
+\newcommand{\NMF}{{\sf NMF}\xspace }
+\newcommand{\Node}{{\sf NMF(Node)}\xspace}
+\newcommand{\Edge}{{\sf NMF(Edge)}\xspace}
+\newcommand{\Biased}{{\sf NMF(Biased)}\xspace}
+\newcommand{\Aa}{{\sf AA}\xspace }
+\newcommand{\Adamic}{{\sf Adamic/Adar (AA)}\xspace}
+\newcommand{\RA}{{\sf RA}\xspace }
+\newcommand{\Resource}{{\sf Resource Allocation (RA)}\xspace}
+\newcommand{\Katz}{{\sf Katz}\xspace}
+\newcommand{\BIGCLAM}{{\sf BIGCLAM}\xspace}
+\newcommand{\CAMBN}{{\sf Cluster Affiliation Model for Big Networks (BIGCLAM)}\xspace}
+\newcommand{\Digg}{{\sf Digg}\xspace}
+\newcommand{\YouTube}{{\sf YouTube}\xspace}
+\newcommand{\Flickr}{{\sf Flickr}\xspace}
+\newcommand{\Wikipedia}{{\sf Wikipedia}\xspace}
+\newcommand{\Twitter}{{\sf Twitter}\xspace}
+\newcommand{\Friendster}{{\sf Friendster}\xspace}
+\newcommand{\Nodep}{{\sf NMF(Node+)}\xspace}
+\newcommand{\Edgep}{{\sf NMF(Edge+)}\xspace}
+\newcommand{\Biasedp}{{\sf NMF(Biased+)}\xspace}
+\newcommand{\AABiased}{{\sf AA(Biased)}\xspace}
+\newcommand{\AABiasedp}{{\sf AA(Biased+)}\xspace}
+\newcommand{\RABiased}{{\sf RA(Biased)}\xspace}
+\newcommand{\RABiasedp}{{\sf RA(Biased+)}\xspace}
+
+\newcommand{\ie}{\emph{i.e.,}\xspace}
+\newcommand{\eg}{\emph{e.g.,}\xspace}
+\newcommand{\wrt}{\emph{w.r.t.}\xspace}
+\newcommand{\aka}{\emph{a.k.a.}\xspace}
+\newcommand{\kwlog}{\emph{w.l.o.g.}\xspace}
+\newcommand{\etal}{\emph{et al.}\xspace}
+\newcommand{\resp}{\emph{resp.}\xspace}
+\newcommand{\sstab}{\rule{0pt}{8pt}\\[-2.4ex]}
+
+\newtheorem{definition}{Definition}
+
+\newtheorem{observation}{Observation}
+\newtheorem{lemma}{Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{problem}{Problem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{property}{Property}
+\newcommand{\lemmachar}{{\unskip\nobreak\hfil\penalty50\hskip1em\hbox{}%
+\nobreak\hfil\rule{1.2ex}{1.4ex}\hfil%
+\parfillskip=0pt \finalhyphendemerits=0 \par}}
+
+
+
+%\newenvironment{proof}{{\bf Proof:}}{\lemmachar\par}
+
+
+\newfont{\mycrnotice}{ptmr8t at 7pt}
+\newfont{\myconfname}{ptmri8t at 7pt}
+\let\crnotice\mycrnotice%
+\let\confname\myconfname%
+
+
+\begin{document}
+
+\title{An Ensemble Approach to Link Prediction}
+
+\author{Liang~Duan,
+        Charu~Aggarwal,
+        Shuai~Ma$^*$,
+        Tiejun~Ma,
+        Jinpeng~Huai
+\IEEEcompsocitemizethanks{\IEEEcompsocthanksitem L. Duan, S. Ma (correspondence) and J. Huai are
+with SKLSDE lab, School of Computer Science and Engineering, Beihang University, China.\hfil\break
+% note need leading \protect in front of \\ to get a newline within \thanks as
+% \\ is fragile and will error, could use \hfil\break instead.
+E-mail: \{duanliang, mashuai, huaijp\}@buaa.edu.cn
+\IEEEcompsocthanksitem C. Aggarwal is with IBM Thomas J. Watson Research Center, USA.\hfil\break
+E-mail: charu@us.ibm.com
+\IEEEcompsocthanksitem T. Ma is with Centre for Risk Research, Department of Decision Analytics and Risk, University of Southampton, UK.\hfil\break
+E-mail: tiejun.ma@soton.ac.uk}% <-this % stops an unwanted space
+\thanks{Manuscript received XXX, 2016; revised XXX, 2017.}}
+
+
+\markboth{IEEE Transactions on Knowledge and Data Engineering,~Vol.~X, No.~X, May~2017}%
+{Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for Computer Society Journals}
+
+\IEEEspecialpapernotice{(Supplementary Material)}
+
+\maketitle
+
+\begin{figure*}[tb!]
+  \centering
+  %\vspace{-2ex}
+  % Requires \usepackage{graphicx}
+  \subfigure[Digg]{\label{fig_exp_4_1_k_acc_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/4-1-a.eps} }
+  \quad\quad
+  \subfigure[YouTube]{\label{fig_exp_4_1_k_acc_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/4-1-b.eps} }
+  \quad\quad
+  \subfigure[Wikipedia]{\label{fig_exp_4_1_k_acc_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/4-1-c.eps} }
+  \subfigure[Digg]{\label{fig_exp_4_1_k_time_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/4-1-e.eps} }
+  \quad\quad
+  \subfigure[YouTube]{\label{fig_exp_4_1_k_time_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/4-1-f.eps} }
+  \quad\quad
+  \subfigure[Wikipedia]{\label{fig_exp_4_1_k_time_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/4-1-g.eps}}
+  \vspace{-1ex}
+  \caption{Bagging+ vs. Bagging on accuracy and efficiency: with respect to the number $k$ of predicted links.}\label{fig_exp_4_1}
+  \vspace{-1ex}
+\end{figure*}
+\begin{figure*}[tb!]
+  \centering
+  %\vspace{-2ex}
+  % Requires \usepackage{graphicx}
+  \subfigure[Digg]{\label{fig_exp_4_2_size_acc_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/4-2-a.eps} }
+  \quad\quad
+  \subfigure[YouTube]{\label{fig_exp_4_2_size_acc_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/4-2-b.eps} }
+  \quad\quad
+  \subfigure[Wikipedia]{\label{fig_exp_4_2_size_acc_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/4-2-c.eps} }
+  \subfigure[Digg]{\label{fig_exp_4_2_size_time_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/4-2-e.eps} }
+  \quad\quad
+  \subfigure[YouTube]{\label{fig_exp_4_2_size_time_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/4-2-f.eps} }
+  \quad\quad
+  \subfigure[Wikipedia]{\label{fig_exp_4_2_size_time_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/4-2-g.eps}}
+  \vspace{-1ex}
+  \caption{Bagging+ vs. Bagging on accuracy and efficiency: with respect to the network sizes.}\label{fig_exp_4_2}
+  \vspace{-1ex}
+\end{figure*}
+
+
+\section{Appendix A: The Choice of Values for K}
+
+ As pointed out in \cite{yang2015}, a small
+difference in $k$ will lead to different conclusions on link prediction results
+and $k$ should be the number of links in the ground truth data for a fair
+comparison. Here, we have further conducted three sets of experiments when
+$k$ is varied from hundreds to the number of links in the ground truth data to evaluate
+the impacts of $k$ on our ensemble-enabled approach compared with conventional methods
+\Aa, \RA and \BIGCLAM. These are useful for choosing a proper value for $k$.
+
+
+
+\subsection{Bagging+ vs. Bagging}
+In the first set of tests, we evaluated the impacts of $k$ on the
+effectiveness and efficiency of our bagging+ methods compared with bagging methods.
+
+\stitle{Exp-4.1: Impacts of $k$}. We varied $k$ from hundreds
+to the number of links in the ground truth data \cite{yang2015}.
+We fixed $r = 30$ on \Digg and \YouTube, $r = 20$ on \Wikipedia according to Exp-6
+and fixed other parameters to their default values.
+The results of accuracy and efficiency are reported
+in Figures \ref{fig_exp_4_1_k_acc_digg}--\ref{fig_exp_4_1_k_acc_wikipedia} and
+Figures \ref{fig_exp_4_1_k_time_digg}--\ref{fig_exp_4_1_k_time_wikipedia}, respectively.
+
+The accuracy results tell us that
+(a) \Biasedp is the best method on all datasets,
+(b) the accuracy of all methods decreases with the increase of $k$,
+and (c) the accuracy of the bagging+ methods is higher than that of
+their counterparts bagging methods when $k$ is small and very
+close to that of their counterparts when $k$ is large.
+This means that the bagging+ methods maintain the high accuracy while some of the
+edges have been removed compared with their counterparts bagging methods.
+This justifies the effectiveness of the bagging+ methods.
+
+
+The  efficiency  results tell us that (a) the \Biasedp is the fastest, (b) the three bagging+ methods are faster
+than their counterparts bagging methods, and (c) the running time of all
+methods increases slightly with the increase of $k$. For instance,
+\Biasedp is $(1.2, 1.1, 1.2)$ times faster than
+\Biased on \Digg, \YouTube and \Wikipedia, respectively.
+This justifies the efficiency of the bagging+ methods.
+
+
+\stitle{Exp-4.2: Impacts of network sizes}. We evaluated the impacts of $k$ with
+different network sizes when $k$ is fixed to the number of links in the ground truth data.
+We used the same networks with different sizes as Exp-1.3,
+fixed $k$ to the number of links in the ground truth data
+and used the same setting of other parameters as Exp-4.1.
+The results of accuracy and efficiency are reported
+in Figures \ref{fig_exp_4_2_size_acc_digg}--\ref{fig_exp_4_2_size_acc_wikipedia} and
+Figures \ref{fig_exp_4_2_size_time_digg}--\ref{fig_exp_4_2_size_time_wikipedia}, respectively.
+Since we focus on the accuracy comparison in
+this section, we did not report the results on \Twitter and \Friendster
+as they do not have the ground truth data for comparison.
+
+The accuracy results tell us that (a) the accuracy of bagging+ methods is very close to
+that of bagging methods, and (b) the accuracy of all methods decreases with the
+increase of network sizes because $k$ is smaller on the small networks, which is consistent
+with the conclusion in Exp-4.1 that the accuracy is higher when $k$ is smaller. It is hard
+for \Biased to provide a significant accuracy improvement when $k$ is very large, but it still provides
+an efficiency advantage while keeping its accuracy close to \Node and \Edge. Similar trends have been found for \Biasedp. 
+This means that our bagging+ methods are effective on the networks with different sizes.
+
+The efficiency results tell us that (a) \Biasedp is the fastest, (b) bagging+ methods are faster than their counterparts bagging
+methods, and (c) the running time of all methods increases nearly linearly with the
+increase of network sizes. This justifies the efficiency of the bagging+ methods.
+
+
+
+
+
+
+
+
+\begin{figure*}[tb!]
+  \centering
+  %\vspace{-2ex}
+  % Requires \usepackage{graphicx}
+  \subfigure[Digg]{\label{fig_exp_5_1_k_acc_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/1-2-a.eps} }
+  \quad\quad
+  \subfigure[YouTube]{\label{fig_exp_5_1_k_acc_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/1-2-b.eps} }
+  \quad\quad
+  \subfigure[Wikipedia]{\label{fig_exp_5_1_k_acc_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/1-2-c.eps} }
+  \subfigure[Digg]{\label{fig_exp_5_1_k_time_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/1-2-e.eps} }
+  \quad\quad
+  \subfigure[YouTube]{\label{fig_exp_5_1_k_time_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/1-2-f.eps} }
+  \quad\quad
+  \subfigure[Wikipedia]{\label{fig_exp_5_1_k_time_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/1-2-g.eps}}
+  \vspace{-1ex}
+  \caption{Accuracy and efficiency comparison with \Aa, \RA and \BIGCLAM: with respect to the number $k$ of predicted links.}\label{fig_exp_5_1}
+  \vspace{-1ex}
+\end{figure*}
+
+\begin{figure*}[tb!]
+  \centering
+  %\vspace{-2ex}
+  % Requires \usepackage{graphicx}
+  \subfigure[Digg]{\label{fig_exp_5_2_size_acc_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/5-2-a.eps} }
+  \quad\quad
+  \subfigure[YouTube]{\label{fig_exp_5_2_size_acc_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/5-2-b.eps} }
+  \quad\quad
+  \subfigure[Wikipedia]{\label{fig_exp_5_2_size_acc_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/5-2-c.eps} }
+  \subfigure[Digg]{\label{fig_exp_5_2_size_time_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/5-2-e.eps} }
+  \quad\quad
+  \subfigure[YouTube]{\label{fig_exp_5_2_size_time_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/5-2-f.eps} }
+  \quad\quad
+  \subfigure[Wikipedia]{\label{fig_exp_5_2_size_time_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/5-2-g.eps}}
+  \vspace{-1ex}
+  \caption{Accuracy and efficiency comparison with \Aa, \RA and \BIGCLAM: with respect to the network sizes.}\label{fig_exp_5_2}
+  \vspace{-1ex}
+\end{figure*}
+
+
+
+\begin{figure*}[tb!]
+  \centering
+  \vspace{1ex}
+  % Requires \usepackage{graphicx}
+  \subfigure[Digg]{\label{fig_exp_6_r_acc_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-4-a.eps} }
+  \quad\quad
+  \subfigure[YouTube]{\label{fig_exp_6_r_acc_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-4-b.eps} }
+  \quad\quad
+  \subfigure[Wikipedia]{\label{fig_exp_6_r_acc_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-4-c.eps} }
+  \subfigure[Digg]{\label{fig_exp_6_r_time_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-4-e.eps} }
+  \quad\quad
+  \subfigure[YouTube]{\label{fig_exp_6_r_time_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-4-f.eps} }
+  \quad\quad
+  \subfigure[Wikipedia]{\label{fig_exp_6_r_time_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/3-4-g.eps}}
+  \vspace{-1ex}
+  \caption{Accuracy and efficiency comparison: with respect to the number $r$ of latent factors.}\label{fig_exp_6_r}
+  \vspace{-2ex}
+\end{figure*}
+
+
+
+\subsection{Comparison with \Aa, \RA and \BIGCLAM}
+In the second set of tests, we evaluated the impacts of $k$ on the
+effectiveness and efficiency of
+our methods compared with \Aa, \RA and \BIGCLAM. We chose \Biased and \Biasedp
+for the comparison since they are the best bagging methods according to Exp-4.1.
+
+
+
+\stitle{Exp-5.1: Impacts of $k$}. Using the same setting as
+Exp-4.1, we evaluated the impacts of the number $k$ of predicted links.
+The results of accuracy and  efficiency  are reported
+in Figures \ref{fig_exp_5_1_k_acc_digg}--\ref{fig_exp_5_1_k_acc_wikipedia} and
+Figures \ref{fig_exp_5_1_k_time_digg}--\ref{fig_exp_5_1_k_time_wikipedia}, respectively.
+
+The accuracy results tell us that (a) the bagging+ and bagging methods outperform the other methods on
+most datasets, (b) both \Biased and \Biasedp have a higher accuracy than
+\NMF, \Aa, \RA and \BIGCLAM, except for \Wikipedia,
+and (c) \NMF is more accurate than \Aa, \RA and \BIGCLAM on most datasets.
+Moreover, \Biased and \Biasedp perform consistently well on all networks (\ie more robust),
+unlike \RA which works well on \Wikipedia, but poorly on the other datasets.
+This means that our methods are more accurate and robust.
+
+%the accuracy of \Biasedp is very close to that of \Biased, (c) both
+%\Biased and \Biasedp have a higher accuracy than \NMF, \Aa, \RA and \BIGCLAM,
+%except for \Aa and \RA on \Wikipedia when $k$ is large,
+%and (d) \NMF is more accurate than \Aa, \RA and \BIGCLAM, except for \Aa and \RA on \Wikipedia.
+%Indeed, \Biased improves the accuracy by $(2.8\%, 24.3\%, 70.8\%, 11.9\%)$ (\resp $(1.5\%, 34.0\%, 34.0\%, 22.9\%)$
+%and $(11.0\%, -16.0\%, -51.3\%, 12.9\%)$) over \NMF, \Aa, \RA and \BIGCLAM on \Digg, \YouTube and \Wikipedia,
+%respectively. Moreover, \Biased and \Biasedp perform consistently well on all networks (\ie more robust), unlike \RA which works well
+%on \Wikipedia but poorly on other datasets. This verifies the robustness of our bagging methods.
+
+
+The  efficiency results tell us that (a) \Biasedp is the fastest compared with
+\Biased, \NMF and \BIGCLAM, (b) the two bagging methods are much faster
+than \NMF and \BIGCLAM, and (c) the running time of \Aa and \RA increases
+rapidly with the increase of the network degree since their complexities
+are $O(nd^2\log(k))$. Indeed, the two bagging methods finished in 421 seconds on the three datasets.
+%This justifies the efficiency of our methods.
+
+
+\stitle{Exp-5.2: Impacts of network sizes}. Using the same setting as
+Exp-4.2, we evaluated the impacts of $k$ with different network sizes.
+The results of accuracy and  efficiency  are reported in Figures \ref{fig_exp_5_2_size_acc_digg} -- \ref{fig_exp_5_2_size_acc_wikipedia}
+and Figures \ref{fig_exp_5_2_size_time_digg} -- \ref{fig_exp_5_2_size_time_wikipedia} , respectively.
+
+The accuracy results tell us that (a) \Biased is more accurate
+than the other methods on most datasets, (b) \Biasedp performs
+as well as it counterpart \Biased, and (c) \NMF has a higher accuracy
+then \Aa, \RA and \BIGCLAM on most datasets. This justifies  the
+effectiveness of our methods.
+
+The running time results tell us that (a) \Biasedp is the fastest
+method compared with \Biased, \NMF and \BIGCLAM, (b) \Aa and \RA
+run fast on \Digg and \YouTube with small network degree but slow
+down on \Wikipedia with larger network degree, and (c) the running
+time of all methods increase with the increases of network sizes.
+This is consistent with the conclusion in Exp-2.2 and also justifies
+the efficiency of our methods.
+
+
+
+
+
+
+%\begin{table*}
+%\caption{Accuracy (\%) comparison with 95\% confidence intervals
+%when $k$ is the number of links in the ground truth data and fixed to the default value.}
+%\label{tab_accuracy_1}
+%\vspace{-2ex}
+%\centering
+%\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+%\begin{tabular}{l|c|c|c|c|c|c}
+%\hline \hline Algorithm  & Digg & YouTube & Wikipedia  & Digg & YouTube & Wikipedia \\
+%\hline \hline
+% & \multicolumn{3}{|c}{$k$ is the number of links in the ground truth data} & \multicolumn{3}{|c}{$k$ is fixed to the default value} \\
+%\hline
+%\Aa & 2.35 & 1.00 &	1.56 & 3.50 &	1.57 &	2.14   \\
+%\RA & 1.71 & 1.00 &	2.69 & 2.32 &	1.65 &	3.09  \\
+%\BIGCLAM & 2.61 $\pm$ (0.101) &	1.09 $\pm$ (0.107) &	1.16 $\pm$ (0.018) & 3.70 $\pm$ (0.256) &	1.56 $\pm$ (0.190) &	1.82 $\pm$ (0.100)   \\
+%\hline
+%\NMF  & 2.84 $\pm$ (0.056)	& 1.32 $\pm$ (0.059) 	& 1.18 $\pm$ (0.070) & 4.83 $\pm$ (0.072) 	&2.12 $\pm$ (0.090) 	&2.05 $\pm$ (0.109) \\
+%\hline
+%\Node & 2.91 $\pm$ (0.027)	& 1.34 $\pm$ (0.083)	& 1.29 $\pm$ (0.026) & 4.91 $\pm$ (0.059)	& 2.26 $\pm$ (0.124)	& 2.28 $\pm$ (0.056) \\
+%\Edge & 2.92 $\pm$ (0.025)	& 1.34 $\pm$ (0.038)	& 1.31 $\pm$ (0.023) & 4.94 $\pm$ (0.115)	& 2.27 $\pm$ (0.034)	& 2.28 $\pm$ (0.034) \\
+%\Biased & 2.94 $\pm$ (0.041) & 1.34 $\pm$ (0.059) & 1.31 $\pm$ (0.018) & 4.95 $\pm$ (0.076)	& 2.28 $\pm$ (0.159)	& 2.31 $\pm$ (0.038) \\
+%\hline
+%\Nodep & 2.86 $\pm$ (0.020)	& 1.34 $\pm$ (0.043)	& 1.30 $\pm$ (0.031) & 4.92 $\pm$ (0.058)	& 2.15 $\pm$ (0.074)	& 2.25 $\pm$ (0.062) \\
+%\Edgep & 2.89 $\pm$ (0.024)	& 1.38 $\pm$ (0.041)	& 1.30 $\pm$ (0.012) & 4.94 $\pm$ (0.047)	& 2.17 $\pm$ (0.078)	& 2.25 $\pm$ (0.014) \\
+%\Biasedp & 2.89 $\pm$ (0.041)	& 1.37 $\pm$ (0.062)	& 1.32 $\pm$ (0.022) & 4.95 $\pm$ (0.096)	& 2.25 $\pm$ (0.112)	& 2.33 $\pm$ (0.045) \\
+%\hline \hline
+%\end{tabular}
+%\vspace{-2ex}
+%\end{table*}
+
+
+\begin{table*}
+\caption{Accuracy (\%) comparison with 95\% confidence intervals in Exp-1.2.}
+\label{tab_accuracy_1}
+\vspace{-2ex}
+\centering
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+\begin{tabular}{c|c|c|c|c|c|c|c}
+\hline \hline Dataset  & $k$ & \Node & \Edge & \Biased & \Nodep & \Edgep & \Biasedp  \\
+\hline
+\multirow{10}{*}{\Digg}
+ & $1 \times 10^4 $ & 8.94 $\pm$ (0.147) & 8.86 $\pm$ (0.186) & 9.33 $\pm$ (0.343) & 9.21 $\pm$ (0.153) & 9.38 $\pm$ (0.120) & 9.59 $\pm$ (0.197) \\
+ & $2 \times 10^4 $ & 7.54 $\pm$ (0.156) & 7.62 $\pm$ (0.136) & 7.88 $\pm$ (0.304) & 7.74 $\pm$ (0.086) & 7.82 $\pm$ (0.111) & 8.00 $\pm$ (0.141)  \\
+ & $3 \times 10^4 $ & 6.84 $\pm$ (0.118) & 6.93 $\pm$ (0.111) & 7.07 $\pm$ (0.190) & 6.93 $\pm$ (0.114) & 7.05 $\pm$ (0.157) & 7.13 $\pm$ (0.108)  \\
+ & $4 \times 10^4 $ & 6.39 $\pm$ (0.107) & 6.43 $\pm$ (0.055) & 6.52 $\pm$ (0.162) & 6.46 $\pm$ (0.087) & 6.57 $\pm$ (0.119) & 6.59 $\pm$ (0.064) \\
+ & $5 \times 10^4 $ & 6.03 $\pm$ (0.089) & 6.07 $\pm$ (0.077) & 6.13 $\pm$ (0.083) & 6.07 $\pm$ (0.059) & 6.16 $\pm$ (0.055) & 6.17 $\pm$ (0.075)  \\
+ & $6 \times 10^4 $ & 5.72 $\pm$ (0.063) & 5.78 $\pm$ (0.066) & 5.79 $\pm$ (0.082) & 5.75 $\pm$ (0.034) & 5.81 $\pm$ (0.021) & 5.81 $\pm$ (0.082)  \\
+ & $7 \times 10^4 $ & 5.45 $\pm$ (0.070) & 5.51 $\pm$ (0.093) & 5.53 $\pm$ (0.101) & 5.47 $\pm$ (0.034) & 5.51 $\pm$ (0.041) & 5.55 $\pm$ (0.108)  \\
+ & $8 \times 10^4 $ & 5.23 $\pm$ (0.064) & 5.30 $\pm$ (0.139) & 5.32 $\pm$ (0.093) & 5.26 $\pm$ (0.059) & 5.28 $\pm$ (0.057) & 5.31 $\pm$ (0.097)  \\
+ & $9 \times 10^4 $ & 5.06 $\pm$ (0.065) & 5.11 $\pm$ (0.113) & 5.12 $\pm$ (0.062) & 5.08 $\pm$ (0.067) & 5.10 $\pm$ (0.036) & 5.11 $\pm$ (0.090)  \\
+ & $10 \times 10^4 $ & 4.91 $\pm$ (0.059) & 4.94 $\pm$ (0.115) & 4.95 $\pm$ (0.076) & 4.92 $\pm$ (0.058) & 4.94 $\pm$ (0.047) & 4.95 $\pm$ (0.096)  \\
+\hline
+\multirow{10}{*}{\YouTube}
+ & $1 \times 10^4 $ & 3.75 $\pm$ (0.162) & 3.71 $\pm$ (0.191) & 3.77 $\pm$ (0.373) & 3.59 $\pm$ (0.312) & 3.43 $\pm$ (0.169) & 3.90 $\pm$ (0.171)  \\
+ & $2 \times 10^4 $ & 3.16 $\pm$ (0.193) & 3.17 $\pm$ (0.105) & 3.24 $\pm$ (0.255) & 3.06 $\pm$ (0.188) & 2.94 $\pm$ (0.136) & 3.32 $\pm$ (0.107)  \\
+ & $3 \times 10^4 $ & 2.95 $\pm$ (0.204) & 2.93 $\pm$ (0.089) & 2.95 $\pm$ (0.226) & 2.82 $\pm$ (0.181) & 2.74 $\pm$ (0.102) & 3.01 $\pm$ (0.137)  \\
+ & $4 \times 10^4 $ & 2.78 $\pm$ (0.153) & 2.74 $\pm$ (0.078) & 2.77 $\pm$ (0.222) & 2.66 $\pm$ (0.133) & 2.62 $\pm$ (0.106) & 2.82 $\pm$ (0.126) \\
+ & $5 \times 10^4 $ & 2.64 $\pm$ (0.154) & 2.63 $\pm$ (0.059) & 2.65 $\pm$ (0.220) & 2.54 $\pm$ (0.123) & 2.53 $\pm$ (0.112) & 2.65 $\pm$ (0.100)  \\
+ & $6 \times 10^4 $ & 2.55 $\pm$ (0.144) & 2.54 $\pm$ (0.058) & 2.57 $\pm$ (0.206) & 2.43 $\pm$ (0.109) & 2.44 $\pm$ (0.096) & 2.55 $\pm$ (0.081)  \\
+ & $7 \times 10^4 $ & 2.45 $\pm$ (0.125) & 2.45 $\pm$ (0.062) & 2.48 $\pm$ (0.181) & 2.35 $\pm$ (0.091) & 2.36 $\pm$ (0.095) & 2.46 $\pm$ (0.090)  \\
+ & $8 \times 10^4 $ & 2.38 $\pm$ (0.129) & 2.38 $\pm$ (0.055) & 2.40 $\pm$ (0.168) & 2.29 $\pm$ (0.077) & 2.29 $\pm$ (0.087) & 2.38 $\pm$ (0.088)  \\
+ & $9 \times 10^4 $ & 2.32 $\pm$ (0.126) & 2.33 $\pm$ (0.034) & 2.35 $\pm$ (0.159) & 2.22 $\pm$ (0.081) & 2.23 $\pm$ (0.083) & 2.31 $\pm$ (0.098)  \\
+ & $10 \times 10^4 $ & 2.26 $\pm$ (0.124) & 2.27 $\pm$ (0.034) & 2.28 $\pm$ (0.159) & 2.15 $\pm$ (0.074) & 2.17 $\pm$ (0.078) & 2.25 $\pm$ (0.112)  \\
+\hline
+\multirow{10}{*}{\Wikipedia}
+ & $1 \times 10^5 $ & 4.19 $\pm$ (0.174) & 4.14 $\pm$ (0.201) & 4.35 $\pm$ (0.150) & 3.98 $\pm$ (0.190) & 4.02 $\pm$ (0.134) & 4.27 $\pm$ (0.149)  \\
+ & $2 \times 10^5 $ & 3.61 $\pm$ (0.149) & 3.56 $\pm$ (0.161) & 3.72 $\pm$ (0.101) & 3.51 $\pm$ (0.187) & 3.48 $\pm$ (0.070) & 3.73 $\pm$ (0.073)  \\
+ & $3 \times 10^5 $ & 3.22 $\pm$ (0.131) & 3.18 $\pm$ (0.155) & 3.26 $\pm$ (0.092) & 3.14 $\pm$ (0.095) & 3.11 $\pm$ (0.087) & 3.32 $\pm$ (0.053)  \\
+ & $4 \times 10^5 $ & 2.93 $\pm$ (0.110) & 2.92 $\pm$ (0.102) & 2.97 $\pm$ (0.083) & 2.89 $\pm$ (0.056) & 2.87 $\pm$ (0.081) & 3.04 $\pm$ (0.044) \\
+ & $5 \times 10^5 $ & 2.75 $\pm$ (0.082) & 2.75 $\pm$ (0.070) & 2.80 $\pm$ (0.064) & 2.71 $\pm$ (0.049) & 2.70 $\pm$ (0.056) & 2.84 $\pm$ (0.033)  \\
+ & $6 \times 10^5 $ & 2.63 $\pm$ (0.067) & 2.62 $\pm$ (0.052) & 2.66 $\pm$ (0.053) & 2.59 $\pm$ (0.056) & 2.58 $\pm$ (0.038) & 2.71 $\pm$ (0.020)  \\
+ & $7 \times 10^5 $ & 2.52 $\pm$ (0.060) & 2.52 $\pm$ (0.046) & 2.54 $\pm$ (0.044) & 2.48 $\pm$ (0.060) & 2.48 $\pm$ (0.029) & 2.60 $\pm$ (0.027)  \\
+ & $8 \times 10^5 $ & 2.43 $\pm$ (0.058) & 2.43 $\pm$ (0.046) & 2.45 $\pm$ (0.037) & 2.40 $\pm$ (0.064) & 2.40 $\pm$ (0.023) & 2.50 $\pm$ (0.040)  \\
+ & $9 \times 10^5 $ & 2.35 $\pm$ (0.057) & 2.35 $\pm$ (0.034) & 2.38 $\pm$ (0.037) & 2.32 $\pm$ (0.062) & 2.33 $\pm$ (0.023) & 2.41 $\pm$ (0.042)  \\
+ & $10 \times 10^5 $ & 2.28 $\pm$ (0.056) & 2.28 $\pm$ (0.034) & 2.31 $\pm$ (0.038) & 2.25 $\pm$ (0.062) & 2.26 $\pm$ (0.014) & 2.33 $\pm$ (0.045)  \\
+\hline \hline
+\end{tabular}
+\vspace{-2ex}
+\end{table*}
+
+\begin{table*}
+\caption{Accuracy (\%) comparison with 95\% confidence intervals in Exp-1.3.}
+\label{tab_accuracy_2}
+\vspace{-2ex}
+\centering
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+\begin{tabular}{c|r|c|c|c|c|c|c}
+\hline \hline Dataset  & Network Size &  \Node & \Edge & \Biased & \Nodep & \Edgep & \Biasedp   \\
+\hline
+\multirow{5}{*}{\Digg}
+ & $3 \times 10^4 $ & 4.19 $\pm$ (0.110) & 4.22 $\pm$ (0.138) & 4.07 $\pm$ (0.095) & 4.13 $\pm$ (0.069) & 4.14 $\pm$ (0.095) & 4.00 $\pm$ (0.069) \\
+ & $6 \times 10^4 $ & 4.85 $\pm$ (0.125) & 4.86 $\pm$ (0.104) & 4.81 $\pm$ (0.107) & 4.77 $\pm$ (0.073) & 4.78 $\pm$ (0.153) & 4.71 $\pm$ (0.101)  \\
+ & $9 \times 10^4 $ & 4.89 $\pm$ (0.076) & 4.88 $\pm$ (0.081) & 4.90 $\pm$ (0.087) & 4.86 $\pm$ (0.071) & 4.88 $\pm$ (0.124) & 4.83 $\pm$ (0.126)  \\
+ & $12 \times 10^4 $ & 4.89 $\pm$ (0.077) & 4.91 $\pm$ (0.107) & 4.87 $\pm$ (0.141) & 4.90 $\pm$ (0.060) & 4.93 $\pm$ (0.043) & 4.90 $\pm$ (0.056) \\
+ & $15 \times 10^4 $ & 4.95 $\pm$ (0.063) & 4.92 $\pm$ (0.077) & 4.96 $\pm$ (0.128) & 4.93 $\pm$ (0.063) & 4.95 $\pm$ (0.072) & 4.88 $\pm$ (0.076)  \\
+\hline
+\multirow{5}{*}{\YouTube}
+ & $3 \times 10^5 $ & 2.01 $\pm$ (0.038) & 2.07 $\pm$ (0.103) & 2.01 $\pm$ (0.058) & 2.04 $\pm$ (0.072) & 2.03 $\pm$ (0.044) & 1.99 $\pm$ (0.091)  \\
+ & $6 \times 10^5 $ & 2.17 $\pm$ (0.016) & 2.19 $\pm$ (0.084) & 2.22 $\pm$ (0.046) & 2.13 $\pm$ (0.104) & 2.13 $\pm$ (0.070) & 2.10 $\pm$ (0.069)  \\
+ & $9 \times 10^5 $ & 2.21 $\pm$ (0.147) & 2.25 $\pm$ (0.141) & 2.23 $\pm$ (0.110) & 2.13 $\pm$ (0.089) & 2.16 $\pm$ (0.059) & 2.17 $\pm$ (0.030)  \\
+ & $12 \times 10^5 $ & 2.31 $\pm$ (0.098) & 2.27 $\pm$ (0.087) & 2.32 $\pm$ (0.155) & 2.13 $\pm$ (0.066) & 2.15 $\pm$ (0.078) & 2.18 $\pm$ (0.059)  \\
+ & $15 \times 10^5 $ & 2.28 $\pm$ (0.186) & 2.29 $\pm$ (0.123) & 2.33 $\pm$ (0.093) & 2.17 $\pm$ (0.150) & 2.18 $\pm$ (0.050) & 2.22 $\pm$ (0.123)  \\
+\hline
+\multirow{5}{*}{\Wikipedia}
+ & $3 \times 10^5 $ & 2.07 $\pm$ (0.030) & 2.06 $\pm$ (0.037) & 2.12 $\pm$ (0.024) & 2.03 $\pm$ (0.037) & 2.03 $\pm$ (0.046) & 2.10 $\pm$ (0.014)  \\
+ & $6 \times 10^5 $ & 2.19 $\pm$ (0.041) & 2.21 $\pm$ (0.038) & 2.26 $\pm$ (0.041) & 2.17 $\pm$ (0.030) & 2.14 $\pm$ (0.041) & 2.18 $\pm$ (0.042)  \\
+ & $9 \times 10^5 $ & 2.23 $\pm$ (0.029) & 2.25 $\pm$ (0.027) & 2.27 $\pm$ (0.029) & 2.21 $\pm$ (0.042) & 2.20 $\pm$ (0.023) & 2.27 $\pm$ (0.020)  \\
+ & $12 \times 10^5 $ & 2.24 $\pm$ (0.036) & 2.26 $\pm$ (0.028) & 2.25 $\pm$ (0.043) & 2.17 $\pm$ (0.042) & 2.21 $\pm$ (0.044) & 2.28 $\pm$ (0.042)  \\
+ & $15 \times 10^5 $ & 2.29 $\pm$ (0.037) & 2.26 $\pm$ (0.057) & 2.30 $\pm$ (0.020) & 2.23 $\pm$ (0.030) & 2.24 $\pm$ (0.061) & 2.28 $\pm$ (0.024) \\
+\hline \hline
+\end{tabular}
+\vspace{-2ex}
+\end{table*}
+
+\begin{table*}
+\caption{Accuracy (\%) comparison with 95\% confidence intervals in Exp-2.1.}
+\label{tab_accuracy_3}
+\vspace{-2ex}
+\centering
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+\begin{tabular}{c|c|c|c|c|c|c|c}
+\hline \hline Dataset  & $k$ & \Aa & \RA & \BIGCLAM & \NMF & \Biased & \Biasedp  \\
+\hline
+\multirow{10}{*}{\Digg}
+ & $1 \times 10^4 $ & 7.58 & 3.63 & 5.64 $\pm$ (0.836) & 8.37 $\pm$ (0.361) & 9.33 $\pm$ (0.343) & 9.59 $\pm$ (0.197) \\
+ & $2 \times 10^4 $ & 6.19 & 3.18 & 5.08 $\pm$ (0.701) & 7.31 $\pm$ (0.194) & 7.88 $\pm$ (0.304) & 8.00 $\pm$ (0.141)  \\
+ & $3 \times 10^4 $ & 5.40 & 3.02 & 4.72 $\pm$ (0.507) & 6.61 $\pm$ (0.163) & 7.07 $\pm$ (0.190) & 7.13 $\pm$ (0.108)  \\
+ & $4 \times 10^4 $ & 4.87 & 2.86 & 4.46 $\pm$ (0.454) & 6.17 $\pm$ (0.152) & 6.52 $\pm$ (0.162) & 6.59 $\pm$ (0.064) \\
+ & $5 \times 10^4 $ & 4.50 & 2.69 & 4.26 $\pm$ (0.396) & 5.81 $\pm$ (0.104) & 6.13 $\pm$ (0.083) & 6.17 $\pm$ (0.075)  \\
+ & $6 \times 10^4 $ & 4.17 & 2.34 & 4.09 $\pm$ (0.368) & 5.53 $\pm$ (0.094) & 5.79 $\pm$ (0.082) & 5.81 $\pm$ (0.082)  \\
+ & $7 \times 10^4 $ & 3.94 & 2.30 & 3.98 $\pm$ (0.341) & 5.32 $\pm$ (0.079) & 5.53 $\pm$ (0.101) & 5.55 $\pm$ (0.108)  \\
+ & $8 \times 10^4 $ & 3.77 & 2.33 & 3.86 $\pm$ (0.304) & 5.13 $\pm$ (0.106) & 5.32 $\pm$ (0.093) & 5.31 $\pm$ (0.097)  \\
+ & $9 \times 10^4 $ & 3.62 & 2.32 & 3.77 $\pm$ (0.272) & 4.97 $\pm$ (0.079) & 5.12 $\pm$ (0.062) & 5.11 $\pm$ (0.090)  \\
+ & $10 \times 10^4 $ & 3.50 & 2.32 & 3.70 $\pm$ (0.256) & 4.83 $\pm$ (0.072) & 4.95 $\pm$ (0.076) & 4.95 $\pm$ (0.096)  \\
+\hline
+\multirow{10}{*}{\YouTube}
+ & $1 \times 10^4 $ & 2.10 & 2.16 & 1.93 $\pm$ (0.203) & 2.50 $\pm$ (0.233) & 3.77 $\pm$ (0.373) & 3.90 $\pm$ (0.171)  \\
+ & $2 \times 10^4 $ & 2.00 & 1.92 & 1.80 $\pm$ (0.242) & 2.51 $\pm$ (0.188) & 3.24 $\pm$ (0.255) & 3.32 $\pm$ (0.107)  \\
+ & $3 \times 10^4 $ & 1.88 & 1.75 & 1.78 $\pm$ (0.254) & 2.44 $\pm$ (0.097) & 2.95 $\pm$ (0.226) & 3.01 $\pm$ (0.137)  \\
+ & $4 \times 10^4 $ & 1.81 & 1.71 & 1.73 $\pm$ (0.250) & 2.41 $\pm$ (0.104) & 2.77 $\pm$ (0.222) & 2.82 $\pm$ (0.126) \\
+ & $5 \times 10^4 $ & 1.73 & 1.65 & 1.68 $\pm$ (0.215) & 2.38 $\pm$ (0.103) & 2.65 $\pm$ (0.220) & 2.65 $\pm$ (0.100)  \\
+ & $6 \times 10^4 $ & 1.73 & 1.68 & 1.64 $\pm$ (0.210) & 2.32 $\pm$ (0.097) & 2.57 $\pm$ (0.206) & 2.55 $\pm$ (0.081)  \\
+ & $7 \times 10^4 $ & 1.68 & 1.66 & 1.63 $\pm$ (0.213) & 2.26 $\pm$ (0.072) & 2.48 $\pm$ (0.181) & 2.46 $\pm$ (0.090)  \\
+ & $8 \times 10^4 $ & 1.65 & 1.65 & 1.60 $\pm$ (0.197) & 2.22 $\pm$ (0.062) & 2.40 $\pm$ (0.168) & 2.38 $\pm$ (0.088)  \\
+ & $9 \times 10^4 $ & 1.62 & 1.65 & 1.58 $\pm$ (0.193) & 2.18 $\pm$ (0.089) & 2.35 $\pm$ (0.159) & 2.31 $\pm$ (0.098)  \\
+ & $10 \times 10^4 $ & 1.57 & 1.65 & 1.56 $\pm$ (0.190) & 2.12 $\pm$ (0.090) & 2.28 $\pm$ (0.159) & 2.25 $\pm$ (0.112)  \\
+\hline
+\multirow{10}{*}{\Wikipedia}
+ & $1 \times 10^5 $ & 2.13 & 3.61 & 2.60 $\pm$ (0.146) & 3.67 $\pm$ (0.136) & 4.35 $\pm$ (0.150) & 4.27 $\pm$ (0.149)  \\
+ & $2 \times 10^5 $ & 2.24 & 3.40 & 2.42 $\pm$ (0.151) & 2.80 $\pm$ (0.071) & 3.72 $\pm$ (0.101) & 3.73 $\pm$ (0.073)  \\
+ & $3 \times 10^5 $ & 2.39 & 3.21 & 2.28 $\pm$ (0.190) & 2.53 $\pm$ (0.062) & 3.26 $\pm$ (0.092) & 3.32 $\pm$ (0.053)  \\
+ & $4 \times 10^5 $ & 2.38 & 3.10 & 2.17 $\pm$ (0.155) & 2.43 $\pm$ (0.114) & 2.97 $\pm$ (0.083) & 3.04 $\pm$ (0.044) \\
+ & $5 \times 10^5 $ & 2.33 & 3.10 & 2.08 $\pm$ (0.127) & 2.38 $\pm$ (0.152) & 2.80 $\pm$ (0.064) & 2.84 $\pm$ (0.033)  \\
+ & $6 \times 10^5 $ & 2.29 & 3.10 & 2.01 $\pm$ (0.127) & 2.30 $\pm$ (0.136) & 2.66 $\pm$ (0.053) & 2.71 $\pm$ (0.020)  \\
+ & $7 \times 10^5 $ & 2.25 & 3.10 & 1.95 $\pm$ (0.114) & 2.22 $\pm$ (0.125) & 2.54 $\pm$ (0.044) & 2.60 $\pm$ (0.027)  \\
+ & $8 \times 10^5 $ & 2.22 & 3.10 & 1.90 $\pm$ (0.090) & 2.16 $\pm$ (0.116) & 2.45 $\pm$ (0.037) & 2.50 $\pm$ (0.040)  \\
+ & $9 \times 10^5 $ & 2.18 & 3.10 & 1.85 $\pm$ (0.114) & 2.10 $\pm$ (0.115) & 2.38 $\pm$ (0.037) & 2.41 $\pm$ (0.042)  \\
+ & $10 \times 10^5 $ & 2.14 & 3.09 & 1.82 $\pm$ (0.100) & 2.05 $\pm$ (0.109) & 2.31 $\pm$ (0.038) & 2.33 $\pm$ (0.045)  \\
+\hline \hline
+\end{tabular}
+\vspace{-2ex}
+\end{table*}
+
+\begin{table*}
+\caption{Accuracy (\%) comparison with 95\% confidence intervals in Exp-2.2.}
+\label{tab_accuracy_4}
+\vspace{-2ex}
+\centering
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+\begin{tabular}{c|r|c|c|c|c|c|c}
+\hline \hline Dataset  & Network Size & \Aa & \RA & \BIGCLAM & \NMF & \Biased & \Biasedp  \\
+\hline
+\multirow{5}{*}{\Digg}
+ & $3 \times 10^4 $ & 3.39 & 2.84 & 3.87 $\pm$ (0.240) & 4.40 $\pm$ (0.095) & 4.07 $\pm$ (0.095) & 4.00 $\pm$ (0.069) \\
+ & $6 \times 10^4 $ & 3.50 & 2.54 & 3.08 $\pm$ (0.133) & 4.89 $\pm$ (0.154) & 4.81 $\pm$ (0.107) & 4.71 $\pm$ (0.101)  \\
+ & $9 \times 10^4 $ & 3.50 & 2.40 & 2.98 $\pm$ (0.219) & 4.81 $\pm$ (0.083) & 4.90 $\pm$ (0.087) & 4.83 $\pm$ (0.126)  \\
+ & $12 \times 10^4 $ & 3.50 & 2.37 & 3.08 $\pm$ (0.308) & 4.85 $\pm$ (0.132) & 4.87 $\pm$ (0.141) & 4.90 $\pm$ (0.056) \\
+ & $15 \times 10^4 $ & 3.50 & 2.31 & 2.82 $\pm$ (0.161) & 4.84 $\pm$ (0.278) & 4.96 $\pm$ (0.128) & 4.88 $\pm$ (0.076)  \\
+\hline
+\multirow{5}{*}{\YouTube}
+ & $3 \times 10^5 $ & 1.53 & 1.22 & 1.43 $\pm$ (0.052) & 1.87 $\pm$ (0.402) & 2.01 $\pm$ (0.058) & 1.99 $\pm$ (0.091)  \\
+ & $6 \times 10^5 $ & 1.58 & 1.53 & 1.67 $\pm$ (0.103) & 2.10 $\pm$ (0.725) & 2.22 $\pm$ (0.046) & 2.10 $\pm$ (0.069)  \\
+ & $9 \times 10^5 $ & 1.58 & 1.53 & 1.56 $\pm$ (0.080) & 1.91 $\pm$ (0.305) & 2.23 $\pm$ (0.110) & 2.17 $\pm$ (0.030)  \\
+ & $12 \times 10^5 $ & 1.57 & 1.55 & 1.35 $\pm$ (0.186) & 2.02 $\pm$ (0.390) & 2.32 $\pm$ (0.155) & 2.18 $\pm$ (0.059)  \\
+ & $15 \times 10^5 $ & 1.57 & 1.65 & 1.56 $\pm$ (0.076) & 2.18 $\pm$ (0.388) & 2.33 $\pm$ (0.093) & 2.22 $\pm$ (0.123)  \\
+\hline
+\multirow{5}{*}{\Wikipedia}
+ & $3 \times 10^5 $ & 1.71 & 2.48 & 1.01 $\pm$ (0.029) & 2.13 $\pm$ (0.065) & 2.12 $\pm$ (0.024) & 2.10 $\pm$ (0.014)  \\
+ & $6 \times 10^5 $ & 1.87 & 2.67 & 1.94 $\pm$ (0.063) & 2.05 $\pm$ (0.063) & 2.26 $\pm$ (0.041) & 2.18 $\pm$ (0.042)  \\
+ & $9 \times 10^5 $ & 2.04 & 2.77 & 1.92 $\pm$ (0.063) & 2.06 $\pm$ (0.059) & 2.27 $\pm$ (0.029) & 2.27 $\pm$ (0.020)  \\
+ & $12 \times 10^5 $ & 2.12 & 2.93 & 1.86 $\pm$ (0.043) & 2.15 $\pm$ (0.039) & 2.25 $\pm$ (0.043) & 2.28 $\pm$ (0.042)  \\
+ & $15 \times 10^5 $ & 2.14 & 3.06 & 1.79 $\pm$ (0.123) & 2.13 $\pm$ (0.122) & 2.30 $\pm$ (0.020) & 2.28 $\pm$ (0.024) \\
+\hline \hline
+\end{tabular}
+\vspace{-2ex}
+\end{table*}
+
+
+\begin{table*}
+\caption{Accuracy (\%) comparison with 95\% confidence intervals in Exp-4.1.}
+\label{tab_accuracy_5}
+\vspace{-2ex}
+\centering
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+\begin{tabular}{c|r|r|r|r|r|r|r}
+\hline \hline Dataset  & \hspace*{\stretch{1}} $k$ \hspace*{\stretch{1}} & \Node & \Edge & \Biased & \Nodep & \Edgep & \Biasedp  \\
+\hline
+\multirow{4}{*}{\Digg}
+ & 467     & 15.46 $\pm$ (1.503) & 14.18 $\pm$ (1.003) & 16.75 $\pm$ (0.927) & 18.33 $\pm$ (0.933) & 18.20 $\pm$ (1.176) & 18.76 $\pm$ (1.040) \\
+ & 4,678   & 10.69 $\pm$ (0.266) & 10.38 $\pm$ (0.414) & 11.55 $\pm$ (0.468) & 11.36 $\pm$ (0.322) & 11.03 $\pm$ (0.266) & 11.66 $\pm$ (0.415)  \\
+ & 46,781  & 6.19 $\pm$ (0.100) & 6.11 $\pm$ (0.133) & 6.32 $\pm$ (0.185) & 6.24 $\pm$ (0.111) & 6.22 $\pm$ (0.096) & 6.28 $\pm$ (0.112)  \\
+ & 467,816 & 2.91 $\pm$ (0.027) & 2.92 $\pm$ (0.025) & 2.94 $\pm$ (0.041) & 2.86 $\pm$ (0.044) & 2.89 $\pm$ (0.024) & 2.89 $\pm$ (0.041) \\
+\hline
+\multirow{4}{*}{\YouTube}
+ & 806     & 4.86 $\pm$ (0.295) & 4.76 $\pm$ (1.025) & 5.16 $\pm$ (0.929) & 5.33 $\pm$ (1.074) & 5.31 $\pm$ (0.482) & 5.68 $\pm$ (0.300)  \\
+ & 8,062   & 3.31 $\pm$ (0.229) & 3.34 $\pm$ (0.286) & 3.50 $\pm$ (0.181) & 3.51 $\pm$ (0.296) & 3.55 $\pm$ (0.086) & 3.66 $\pm$ (0.138)  \\
+ & 80,621  & 2.17 $\pm$ (0.121) & 2.22 $\pm$ (0.108) & 2.26 $\pm$ (0.122) & 2.35 $\pm$ (0.099) & 2.37 $\pm$ (0.111) & 2.33 $\pm$ (0.072)  \\
+ & 806,213 & 1.31 $\pm$ (0.043) & 1.34 $\pm$ (0.038) & 1.34 $\pm$ (0.059) & 1.34 $\pm$ (0.043) & 1.38 $\pm$ (0.052) & 1.37 $\pm$ (0.062) \\
+\hline
+\multirow{5}{*}{\Wikipedia}
+ & 585       & 3.59 $\pm$ (0.334) & 3.56 $\pm$ (0.690) & 3.76 $\pm$ (0.716) & 3.56 $\pm$ (0.406) & 3.69 $\pm$ (0.608) & 3.42 $\pm$ (0.395)  \\
+ & 5,856     & 4.70 $\pm$ (0.334) & 4.59 $\pm$ (0.305) & 4.47 $\pm$ (0.118) & 4.39 $\pm$ (0.236) & 4.38 $\pm$ (0.180) & 4.59 $\pm$ (0.277)  \\
+ & 58,565    & 4.05 $\pm$ (0.122) & 3.92 $\pm$ (0.142) & 3.99 $\pm$ (0.169) & 3.97 $\pm$ (0.271) & 3.84 $\pm$ (0.141) & 4.04 $\pm$ (0.162)  \\
+ & 585,659   & 2.74 $\pm$ (0.030) & 2.69 $\pm$ (0.044) & 2.74 $\pm$ (0.075) & 2.73 $\pm$ (0.057) & 2.70 $\pm$ (0.061) & 2.77 $\pm$ (0.056) \\
+ & 5,856,596 & 1.30 $\pm$ (0.012) & 1.30 $\pm$ (0.020) & 1.30 $\pm$ (0.029) & 1.30 $\pm$ (0.011) & 1.29 $\pm$ (0.021) & 1.32 $\pm$ (0.014)  \\
+\hline \hline
+\end{tabular}
+\vspace{-2ex}
+\end{table*}
+
+\begin{table*}
+\caption{Accuracy (\%) comparison with 95\% confidence intervals in Exp-4.2.}
+\label{tab_accuracy_6}
+\vspace{-2ex}
+\centering
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+\begin{tabular}{c|r|c|c|c|c|c|c}
+\hline \hline Dataset  & Network Size &  \Node & \Edge & \Biased & \Nodep & \Edgep & \Biasedp   \\
+\hline
+\multirow{5}{*}{\Digg}
+ & $3 \times 10^4 $  & 4.28 $\pm$ (0.099) & 4.27 $\pm$ (0.070) & 4.15 $\pm$ (0.126) & 4.22 $\pm$ (0.099) & 4.13 $\pm$ (0.112) & 3.98 $\pm$ (0.091) \\
+ & $6 \times 10^4 $  & 3.78 $\pm$ (0.075) & 3.73 $\pm$ (0.103) & 3.69 $\pm$ (0.060) & 3.68 $\pm$ (0.050) & 3.57 $\pm$ (0.117) & 3.53 $\pm$ (0.040)  \\
+ & $9 \times 10^4 $  & 3.49 $\pm$ (0.027) & 3.49 $\pm$ (0.067) & 3.43 $\pm$ (0.089) & 3.39 $\pm$ (0.025) & 3.39 $\pm$ (0.043) & 3.36 $\pm$ (0.063)  \\
+ & $12 \times 10^4 $ & 3.42 $\pm$ (0.044) & 3.36 $\pm$ (0.049) & 3.34 $\pm$ (0.066) & 3.33 $\pm$ (0.029) & 3.30 $\pm$ (0.030) & 3.25 $\pm$ (0.026) \\
+ & $15 \times 10^4 $ & 3.22 $\pm$ (0.026) & 3.15 $\pm$ (0.050) & 3.16 $\pm$ (0.047) & 3.12 $\pm$ (0.018) & 3.12 $\pm$ (0.019) & 3.04 $\pm$ (0.048)  \\
+\hline
+\multirow{5}{*}{\YouTube}
+ & $3 \times 10^5 $  & 1.72 $\pm$ (0.058) & 1.76 $\pm$ (0.034) & 1.67 $\pm$ (0.014) & 1.71 $\pm$ (0.037) & 1.73 $\pm$ (0.044) & 1.65 $\pm$ (0.026)  \\
+ & $6 \times 10^5 $  & 1.64 $\pm$ (0.084) & 1.58 $\pm$ (0.069) & 1.52 $\pm$ (0.097) & 1.54 $\pm$ (0.062) & 1.54 $\pm$ (0.070) & 1.49 $\pm$ (0.045)  \\
+ & $9 \times 10^5 $  & 1.45 $\pm$ (0.064) & 1.49 $\pm$ (0.079) & 1.40 $\pm$ (0.078) & 1.43 $\pm$ (0.022) & 1.46 $\pm$ (0.059) & 1.42 $\pm$ (0.044)  \\
+ & $12 \times 10^5 $ & 1.39 $\pm$ (0.022) & 1.49 $\pm$ (0.103) & 1.32 $\pm$ (0.035) & 1.40 $\pm$ (0.055) & 1.40 $\pm$ (0.078) & 1.36 $\pm$ (0.053)  \\
+ & $15 \times 10^5 $ & 1.34 $\pm$ (0.051) & 1.37 $\pm$ (0.051) & 1.34 $\pm$ (0.071) & 1.35 $\pm$ (0.042) & 1.38 $\pm$ (0.050) & 1.31 $\pm$ (0.040)  \\
+\hline
+\multirow{5}{*}{\Wikipedia}
+ & $3 \times 10^5 $  & 2.38 $\pm$ (0.042) & 2.35 $\pm$ (0.052) & 2.43 $\pm$ (0.023) & 2.37 $\pm$ (0.026) & 2.34 $\pm$ (0.032) & 2.43 $\pm$ (0.039)  \\
+ & $6 \times 10^5 $  & 1.94 $\pm$ (0.045) & 1.90 $\pm$ (0.050) & 1.93 $\pm$ (0.027) & 1.90 $\pm$ (0.029) & 1.90 $\pm$ (0.054) & 1.93 $\pm$ (0.034)  \\
+ & $9 \times 10^5 $  & 1.70 $\pm$ (0.032) & 1.70 $\pm$ (0.045) & 1.73 $\pm$ (0.020) & 1.70 $\pm$ (0.026) & 1.69 $\pm$ (0.024) & 1.73 $\pm$ (0.025)  \\
+ & $12 \times 10^5 $ & 1.53 $\pm$ (0.026) & 1.55 $\pm$ (0.020) & 1.56 $\pm$ (0.024) & 1.52 $\pm$ (0.022) & 1.52 $\pm$ (0.032) & 1.56 $\pm$ (0.018)  \\
+ & $15 \times 10^5 $ & 1.37 $\pm$ (0.018) & 1.38 $\pm$ (0.035) & 1.38 $\pm$ (0.021) & 1.38 $\pm$ (0.032) & 1.38 $\pm$ (0.010) & 1.39 $\pm$ (0.031) \\
+\hline \hline
+\end{tabular}
+\vspace{-2ex}
+\end{table*}
+
+
+\begin{table*}
+\caption{Accuracy (\%) comparison with 95\% confidence intervals in Exp-5.1.}
+\label{tab_accuracy_7}
+\vspace{-2ex}
+\centering
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+\begin{tabular}{c|r|c|c|r|r|r|r}
+\hline \hline Dataset  & \hspace*{\stretch{1}} $k$ \hspace*{\stretch{1}} & \Aa & \RA & \BIGCLAM & \hspace*{\stretch{1}} \NMF \hspace*{\stretch{1}}  & \Biased & \Biasedp  \\
+\hline
+\multirow{4}{*}{\Digg}
+ & 467     & 15.42 & 3.85 & 4.37 $\pm$ (1.393) & 12.16 $\pm$ (1.178) & 16.75 $\pm$ (0.927) & 18.76 $\pm$ (1.040) \\
+ & 4,678   & 9.66 & 4.10 & 6.40 $\pm$ (1.487) & 9.27 $\pm$ (0.631) & 11.55 $\pm$ (0.468) & 11.66 $\pm$ (0.415)  \\
+ & 46,781  & 4.59 & 2.77 & 4.30 $\pm$ (0.403) & 5.80 $\pm$ (0.312) & 6.32 $\pm$ (0.185) & 6.28 $\pm$ (0.112)  \\
+ & 467,816 & 2.35 & 1.71 & 2.61 $\pm$ (0.101) & 2.82 $\pm$ (0.121) & 2.94 $\pm$ (0.041) & 2.89 $\pm$ (0.041) \\
+\hline
+\multirow{4}{*}{\YouTube}
+ & 806     & 2.85  & 2.73 & 1.99 $\pm$ (0.391) & 2.66 $\pm$ (1.074) & 5.16 $\pm$ (0.929) & 5.68 $\pm$ (0.300)  \\
+ & 8,062   & 2.28  & 2.27 & 1.95 $\pm$ (0.241) & 2.46 $\pm$ (0.296) & 3.50 $\pm$ (0.181) & 3.66 $\pm$ (0.138)  \\
+ & 80,621  & 1.64  & 1.66 & 1.61 $\pm$ (0.201) & 2.21 $\pm$ (0.099) & 2.26 $\pm$ (0.122) & 2.33 $\pm$ (0.072)  \\
+ & 806,213 & 1.00  & 1.00 & 1.09 $\pm$ (0.107) & 1.32 $\pm$ (0.059) & 1.34 $\pm$ (0.059) & 1.37 $\pm$ (0.062) \\
+\hline
+\multirow{5}{*}{\Wikipedia}
+ & 585       & 3.76 & 3.93 & 4.03 $\pm$ (0.593) & 3.15 $\pm$ (0.411) & 3.76 $\pm$ (0.716) & 3.42 $\pm$ (0.395)  \\
+ & 5,856     & 3.50 & 3.40 & 3.60 $\pm$ (0.405) & 3.57 $\pm$ (0.383) & 4.47 $\pm$ (0.118) & 4.59 $\pm$ (0.277)  \\
+ & 58,565    & 2.70 & 3.63 & 2.82 $\pm$ (0.126) & 4.03 $\pm$ (0.275) & 3.99 $\pm$ (0.169) & 4.04 $\pm$ (0.162)  \\
+ & 585,659   & 2.29 & 3.10 & 2.02 $\pm$ (0.046) & 2.40 $\pm$ (0.082) & 2.74 $\pm$ (0.075) & 2.77 $\pm$ (0.056) \\
+ & 5,856,596 & 1.56 & 2.69 & 1.16 $\pm$ (0.018) & 1.20 $\pm$ (0.031) & 1.30 $\pm$ (0.029) & 1.32 $\pm$ (0.014)  \\
+\hline \hline
+\end{tabular}
+\vspace{0ex}
+\end{table*}
+
+\begin{table*}
+\caption{Accuracy (\%) comparison with 95\% confidence intervals in Exp-5.2.}
+\label{tab_accuracy_8}
+\vspace{-2ex}
+\centering
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+\begin{tabular}{c|r|c|c|c|c|c|c}
+\hline \hline Dataset  & Network Size & \Aa & \RA & \BIGCLAM & \NMF & \Biased & \Biasedp  \\
+\hline
+\multirow{5}{*}{\Digg}
+ & $3 \times 10^4 $  & 3.45 & 2.89 & 3.94 $\pm$ (0.238) & 4.39 $\pm$ (0.089) & 4.15 $\pm$ (0.126) & 3.98 $\pm$ (0.091) \\
+ & $6 \times 10^4 $  & 2.82 & 2.13 & 2.62 $\pm$ (0.112) & 3.73 $\pm$ (0.103) & 3.69 $\pm$ (0.060) & 3.53 $\pm$ (0.040)  \\
+ & $9 \times 10^4 $  & 2.67 & 1.97 & 2.43 $\pm$ (0.100) & 3.41 $\pm$ (0.128) & 3.43 $\pm$ (0.089) & 3.36 $\pm$ (0.063)  \\
+ & $12 \times 10^4 $ & 2.59 & 1.90 & 2.45 $\pm$ (0.178) & 3.33 $\pm$ (0.064) & 3.34 $\pm$ (0.066) & 3.25 $\pm$ (0.026) \\
+ & $15 \times 10^4 $ & 2.49 & 1.76 & 2.15 $\pm$ (0.103) & 3.10 $\pm$ (0.104) & 3.16 $\pm$ (0.047) & 3.04 $\pm$ (0.048)  \\
+\hline
+\multirow{5}{*}{\YouTube}
+ & $3 \times 10^5 $  & 1.32 & 1.01 & 1.23 $\pm$ (0.073) & 1.57 $\pm$ (0.098) & 1.67 $\pm$ (0.014) & 1.65 $\pm$ (0.026)  \\
+ & $6 \times 10^5 $  & 1.15 & 1.00 & 1.28 $\pm$ (0.021) & 1.37 $\pm$ (0.301) & 1.52 $\pm$ (0.097) & 1.49 $\pm$ (0.045)  \\
+ & $9 \times 10^5 $  & 1.08 & 0.89 & 1.14 $\pm$ (0.052) & 1.38 $\pm$ (0.151) & 1.40 $\pm$ (0.078) & 1.42 $\pm$ (0.044)  \\
+ & $12 \times 10^5 $ & 1.02 & 0.87 & 1.04 $\pm$ (0.072) & 1.39 $\pm$ (0.138) & 1.32 $\pm$ (0.035) & 1.36 $\pm$ (0.053)  \\
+ & $15 \times 10^5 $ & 1.00 & 1.00 & 1.06 $\pm$ (0.025) & 1.38 $\pm$ (0.086) & 1.34 $\pm$ (0.071) & 1.31 $\pm$ (0.040)  \\
+\hline
+\multirow{5}{*}{\Wikipedia}
+ & $3 \times 10^5 $  & 1.78 & 2.54 & 1.05 $\pm$ (0.014) & 2.25 $\pm$ (0.050) & 2.43 $\pm$ (0.023) & 2.43 $\pm$ (0.039)  \\
+ & $6 \times 10^5 $  & 1.68 & 2.50 & 1.64 $\pm$ (0.034) & 1.77 $\pm$ (0.074) & 1.93 $\pm$ (0.027) & 1.93 $\pm$ (0.034)  \\
+ & $9 \times 10^5 $  & 1.69 & 2.54 & 1.50 $\pm$ (0.027) & 1.49 $\pm$ (0.088) & 1.73 $\pm$ (0.020) & 1.73 $\pm$ (0.025)  \\
+ & $12 \times 10^5 $ & 1.69 & 2.64 & 1.34 $\pm$ (0.012) & 1.40 $\pm$ (0.053) & 1.56 $\pm$ (0.024) & 1.56 $\pm$ (0.018)  \\
+ & $15 \times 10^5 $ & 1.61 & 2.73 & 1.21 $\pm$ (0.029) & 1.25 $\pm$ (0.083) & 1.38 $\pm$ (0.021) & 1.39 $\pm$ (0.031) \\
+\hline \hline
+\end{tabular}
+\vspace{-2ex}
+\end{table*}
+
+
+\subsection{Impacts of Parameters}
+In the third set of tests, we evaluated the impacts of the parameter when $k$
+is the number of links in the ground truth data.
+Since the parameters $\mu$, $f$, $\rho$ and $\epsilon$ have similar impacts as
+shown in Section 4.2.3, we keep the default values for these parameters and
+report only the impacts of the parameter $r$ on
+the accuracy and  efficiency  of bagging+, bagging, \NMF and \BIGCLAM.
+
+\stitle{Exp-6: Impacts of $r$}. To evaluate the impacts of $r$, we varied
+$r$ from 10 to 50, fixed $k$ to the number of links in the ground truth data
+and fixed other parameters to their values. The accuracy and  efficiency  results
+are reported in Figures \ref{fig_exp_6_r_acc_digg}--\ref{fig_exp_6_r_acc_wikipedia}
+and Figures \ref{fig_exp_6_r_time_digg}--\ref{fig_exp_6_r_time_wikipedia}, respectively.
+
+The results tell us that (a) bagging+ and bagging methods are more accurate than
+the other methods, (b) the accuracy of bagging+ methods is very close to that of bagging methods,
+(c) the accuracy of the bagging+, bagging and \NMF increases with the increase of $r$,
+and (d) the running time of all methods increase with the increases of $r$ and \Biasedp
+is still the fastest one. To obtain the highest accuracy, we keep the default value of
+$r$ for \NMF and \BIGCLAM, and fixed $r = 30$ on \Digg and \YouTube and $r = 20$ on
+\Wikipedia for bagging+ and bagging methods.
+
+\stitle{Remarks}. From these experimental results, we find that $k$ has great
+impacts on predicting links:
+
+\sstab (1) The bagging+ and bagging methods are more accurate than the other
+methods when $k$ is varied from hundreds to the number of links in the ground
+truth data, except for \RA on \Wikipedia. Particularly, the bagging+ and bagging
+methods have significant improvements when $k$ is small, and also more accurate than
+the others when $k$ is even the number of links in the ground truth data.
+
+\sstab (2) \Biased is more accurate than \Node and \Edge when $k$ is small, and
+very close to the \Node and \Edge when $k$ is large, \eg $k$ is fixed to the
+number of links in the ground truth data. In this case, however, it also provides an efficiency
+advantage. Similar trends have been found for \Biasedp.
+
+\sstab (3) The accuracy of all methods decreases with the increase of $k$, and
+becomes very low when $k$ is very large. For instance, when $k$ is the number of
+links in the ground truth data, the accuracy of \Aa and \RA is only 1\% on \YouTube.
+Although our methods are more accurate than the other methods under this condition, we still
+keep the default value for $k$ since a higher accuracy would be more useful in
+practice.
+
+
+\section{Appendix B: Accuracy Results with Confidence Intervals}
+
+\begin{figure*}[tb!]
+  \centering
+  %\vspace{-2ex}
+  % Requires \usepackage{graphicx}
+  \subfigure[Digg]{\label{fig_exp_7_1_k_acc_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-a.eps} }
+  \quad\quad
+  \subfigure[YouTube]{\label{fig_exp_7_1_k_acc_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-b.eps} }
+  \quad\quad
+  \subfigure[Wikipedia]{\label{fig_exp_7_1_k_acc_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-c.eps} }
+  \subfigure[Digg]{\label{fig_exp_7_1_k_time_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-e.eps} }
+  \quad\quad
+  \subfigure[YouTube]{\label{fig_exp_7_1_k_time_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-f.eps} }
+  \quad\quad
+  \subfigure[Wikipedia]{\label{fig_exp_7_1_k_time_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-1-g.eps}}
+  \vspace{-1ex}
+  \caption{Ensemble-Enabled AA \& RA on accuracy and efficiency: with respect to the number $k$ of predicted links.}\label{fig_exp_7_1}
+  \vspace{-1ex}
+\end{figure*}
+
+
+\begin{figure*}[tb!]
+  \centering
+  %\vspace{-2ex}
+  % Requires \usepackage{graphicx}
+  \subfigure[Digg]{\label{fig_exp_7_2_size_acc_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-2-a.eps} }
+  \quad\quad
+  \subfigure[YouTube]{\label{fig_exp_7_2_size_acc_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-2-b.eps} }
+  \quad\quad
+  \subfigure[Wikipedia]{\label{fig_exp_7_2_size_acc_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-2-c.eps} }
+  \subfigure[Digg]{\label{fig_exp_7_2_size_time_digg}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-2-e.eps} }
+  \quad\quad
+  \subfigure[YouTube]{\label{fig_exp_7_2_size_time_youtube}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-2-f.eps} }
+  \quad\quad
+  \subfigure[Wikipedia]{\label{fig_exp_7_2_size_time_wikipedia}\includegraphics[width= 1.8in, height=1.2in]{eps-script/2-2-g.eps}}
+  \vspace{-1ex}
+  \caption{Ensemble-Enabled AA \& RA on accuracy and efficiency: with respect to the network sizes.}\label{fig_exp_7_2}
+  \vspace{-1ex}
+\end{figure*}
+
+
+
+
+
+
+We report the average of accuracy for comparison in Section 4, and here
+we further report the accuracy with 95\% confidence
+intervals.
+
+The confidence interval of accuracy is given by
+\[ (\overline{x} - t_{[n-1,\alpha/2]}\frac{s}{\sqrt{n}}, \overline{x} + t_{[n-1,\alpha/2]}\frac{s}{\sqrt{n}})  \]
+where $\overline{x}$ is the average of the accuracy, $\alpha$ is the significance level
+(we set $\alpha$ to 0.05 for the $1 - \alpha = 95\%$ confidence level),
+$s$ is the sample standard deviation, $n$ is the number of repeated
+times of our experiments and $t_{[n-1,\alpha/2]}$ is the ($\alpha/2$)-quantile
+of Student's $t$ distribution with $n - 1$ degrees of freedom \cite{stati}.
+The confidence interval gives an indication of how much uncertainty there is in
+the estimate of the accuracy. The narrower the interval, the more precise is the estimate.
+
+The accuracy results in Exp-1.2, Exp-1.3, Exp-2.1 and Exp-2.2 are shown in
+Table \ref{tab_accuracy_1} -- Table \ref{tab_accuracy_4}, respectively.
+Further, the accuracy results in Exp-4.1, Exp-4.2, Exp-5.1 and Exp-5.2 are shown in
+Table \ref{tab_accuracy_5} -- Table \ref{tab_accuracy_8}, respectively.
+
+
+\stitle{Remarks}. From the results of accuracy comparison with confidence intervals,
+we find the following.
+
+\sstab (1) \Biased and \Biasedp are more accurate than the other methods
+on most datasets. Even when $k$ is the number of the ground truth links (See in Table \ref{tab_accuracy_7}), \Biased improves
+the accuracy by $(2.8\%, 24.3\%, 70.8\%, 11.9\%)$ (\resp $(1.5\%, 34.0\%, 34.0\%, 22.9\%)$)
+over \NMF, \Aa, \RA and \BIGCLAM on \Digg and \YouTube, respectively.
+Moreover, bagging+ and bagging methods perform better than the other methods on most datasets.
+
+\sstab (2) The accuracy of all methods decreases with the increase of $k$,
+which is consistent with the previous experimental analysis.
+
+\sstab (3) The confidence intervals of all methods are narrow, which means that the accuracy estimate is reasonable.
+Thus, we only report the average accuracy for clarity.
+
+
+
+
+
+
+\section{Appendix C: Ensemble-Enabled AA \& RA}
+
+One interesting thing should be noted that our ensemble-enabled
+method is in principle a general method for decomposing the large network
+link prediction problem into smaller subproblems. It can not only
+be applied for \NMF, and may be applied to other prediction methods.
+Therefore, we implemented \AABiased and \AABiasedp
+(\resp \RABiased and \RABiasedp) by replacing \NMF with \Aa (\resp \RA) in
+\Biased and \Biasedp. Furthermore, we evaluated the effectiveness and efficiency
+of the ensemble-enabled approach with \Aa and \RA.
+
+
+\stitle{Exp-7.1: Impacts of $k$}. We varied $k$ from hundreds to the number of links in the ground truth data
+and fixed other parameters to their default values. The results of accuracy
+and  efficiency  are reported in Figures \ref{fig_exp_7_1_k_acc_digg}--\ref{fig_exp_7_1_k_acc_wikipedia}
+and Figures \ref{fig_exp_7_1_k_time_digg}--\ref{fig_exp_7_1_k_time_wikipedia}, respectively.
+
+
+The accuracy results tell us that (a) \AABiased and \AABiasedp (\resp \RABiased and \RABiasedp)
+are more accurate than \Aa (\resp \RA) on most datasets,
+(b) the accuracy of \AABiasedp (\resp \RABiasedp) is close to that of \AABiased (\resp \RABiased),
+and (c) the improvements of the ensemble-enabled methods are significant when $k$
+is small.
+
+Note that \AABiased and \AABiasedp (\resp \RABiasedp)
+perform worse than their counterpart \Aa (\resp \RA) on \Wikipedia because their diversities
+on this dataset are poor. For instance, the pairwise overlapping of predicted links of \AABiased
+(\resp \AABiasedp and \RABiasedp) is 0.62 (\resp 0.63 and 0.52). One reason for the decreasing
+of diversity may be that the dataset contains some extreme high degree nodes,
+\ie nodes with degree between $5 \times 10^4$ to $1.8 \times 10^5$ while the network contains
+only $1.6 \times 10^6$ nodes.
+
+The  efficiency  results tell us that \AABiased and \AABiasedp (\resp \RABiased and \RABiasedp)
+are faster than \Aa (\resp \RA) on \YouTube and \Wikipedia but
+slower on \Digg. This is consistent with the complexity analysis
+that the ensemble-enabled \Aa and \RA require $O(nd_{1}^{2}\log(k)\mu/f)$ time,
+where $d_1$ is the average degree of each ensemble component. It is means
+that the ensemble-enabled \Aa and \RA would be faster when $d_1$ is small.
+Indeed, $d_1$ of \AABiased is 9 and 56 on \YouTube and \Wikipedia while the average
+degree of these datasets is 5 and 33 respectively. However, $d_1$ of \AABiased is 30
+on \Digg  while the average degree of this datasets is 10.
+
+
+
+\stitle{Exp-7.2: Impacts of network sizes}. To evaluate the impacts of
+network sizes, we used networks with different sizes that used in Exp-1.3,
+fixed $k$ to the number of links in the ground truth data
+and fixed other parameters to their default values.
+The results of accuracy and  efficiency are reported in \ref{fig_exp_7_2_size_acc_digg}--\ref{fig_exp_7_2_size_acc_wikipedia}
+and Figures \ref{fig_exp_7_2_size_time_digg}--\ref{fig_exp_7_2_size_time_wikipedia}, respectively.
+
+The accuracy results tell us that (a) the ensemble-enabled methods are
+more accuracy than their counterparts \Aa and \RA  on most of the datasets,
+and (b) the improvements of \RABiased and \RABiasedp on \Digg and \YouTube are significant.
+This means that the ensemble-enabled methods are accurate and robust
+with the increase of network sizes.
+
+The  efficiency  results tell us that (a) the ensemble-enabled methods are
+faster than their counterparts \Aa and \RA  on most of the datasets,
+(b) the bagging+ methods are faster than their counterparts bagging methods,
+and (c) the running time of all methods increase nearly linearly with the
+increase of network sizes. Note that we also tested the ensemble-enabled approach
+with \Aa and \RA on the large networks \Twitter and \Friendster, and the average
+speedup of \AABiased and \AABiasedp (\resp \RABiased and \RABiasedp)
+are (5, 4) and (14, 5) (\resp (7, 5) and (20, 6)) on (\Twitter and \Friendster),
+which justifies the efficiency of our ensemble-enabled approach.
+
+\stitle{Remarks}. From these results, we find the following.
+
+\sstab (1) These results show that  ensemble-enabled \Aa and \RA  are very promising. The ensemble-enabled \Aa and \RA improve the accuracy
+compared with their counterparts \Aa and \RA on some networks; The ensemble-enabled \Aa and \RA have an efficiency
+advantage when the average degree of each ensemble component is small,
+\eg on \YouTube and \Wikipedia.
+
+\sstab (2)
+Although our ensemble-enabled approach is a general framework that may be applied to any link prediction
+methods, the  sampling techniques for generating ensembles should be redesigned for different link prediction
+methods, such as \Aa and \RA to fully employ the advantage of the framework.
+
+
+
+
+\begin{footnotesize}
+\bibliographystyle{abbrv}
+\bibliography{paper}
+\end{footnotesize}
+
+
+%\begin{table*}
+%\caption{Accuracy (\%) comparison for ensemble-enabled \Aa and \RA.}
+%\label{tab_accuracy_3}
+%\vspace{-2ex}
+%\centering
+%\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+%\begin{tabular}{l|c|c|c|c}
+%\hline \hline Algorithm  & Digg & YouTube & Wikipedia & Flickr  \\
+%\hline \hline
+%\Aa & 2.35 &	1.00 &	1.56 &  \\
+%\AABiased & 2.38 $\pm$ (0.020) &	1.09 $\pm$ (0.107) &	1.16 $\pm$ (0.018) & \\
+%\AABiasedp & 2.39 $\pm$ (0.007)	& 1.32 $\pm$ (0.059) 	& 1.18 $\pm$ (0.070) & \\
+%\hline
+%\RA & 1.71 &	1.00 &	\textbf{2.69} &  \\
+%\RABiased & 2.03 $\pm$ (0.027)	& 1.34 $\pm$ (0.059)	& 1.31 $\pm$ (0.018) & \\
+%\RABiasedp & 2.46 $\pm$ (0.034)	& \textbf{1.34 $\pm$ (0.044)}	& 1.30 $\pm$ (0.016) & \\
+%\hline \hline
+%\end{tabular}
+%\vspace{-2ex}
+%\end{table*}
+
+
+
+
+%\begin{table}
+%\caption{Accuracy (\%) comparison with \Aa, \RA and \BIGCLAM.}
+%\label{tab_accuracy}
+%\vspace{-2ex}
+%\centering
+%\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+%\begin{tabular}{l|c|c|c}
+%\hline \hline Algorithm  & Digg & YouTube & Wikipedia  \\
+%\hline \hline
+%\Aa & 2.35 &	1.00 &	1.56  \\
+%\RA & 1.71 &	1.00 &	\textbf{2.69}  \\
+%\BIGCLAM & 2.61 $\pm$ (0.101) &	1.09 $\pm$ (0.107) &	1.16 $\pm$ (0.018)  \\
+%\NMF & 2.84 $\pm$ (0.056)	& 1.32 $\pm$ (0.059) 	& 1.18 $\pm$ (0.070) \\
+%\Biased & \textbf{2.92 $\pm$ (0.020)}	& 1.34 $\pm$ (0.059)	& 1.31 $\pm$ (0.018)\\
+%\Biasedp & 2.88 $\pm$ (0.054)	& \textbf{1.34 $\pm$ (0.044)}	& 1.30 $\pm$ (0.016) \\
+%\hline \hline
+%\end{tabular}
+%\vspace{-2ex}
+%\end{table}
+
+
+%
+%\begin{table}
+%\caption{Running time (sec.) comparison with \Aa, \RA and \BIGCLAM.}
+%\label{tab_time2}
+%\vspace{-2ex}
+%\centering
+%\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+%\begin{tabular}{l|r|r|r}
+%\hline \hline Algorithm  & Digg & YouTube & Wikipedia  \\
+%\hline \hline
+%\Aa & 10.46 &	56.78 &	2557.63  \\
+%\RA & 7.74 &	39.12 &	2136.36  \\
+%\BIGCLAM & 70.34 &	598.06 &	5642.84  \\
+%\NMF & 417.33 	& 3695.67 	& 4690.71 \\
+%\hline
+%\Node & 74.62	& 431.52	& 403.51 \\
+%\Edge & 78.76	& 446.22	& 410.86 \\
+%\Biased & 64.58	& 420.21	& 393.26 \\
+%\hline
+%\Nodep & 65.95	& 405.29	& 356.77 \\
+%\Edgep & 68.26	& 415.26	& 374.73 \\
+%\Biasedp & 58.91	& 399.84	& 353.12 \\
+%\hline \hline
+%\end{tabular}
+%\vspace{-2ex}
+%\end{table}
+
+
+%\begin{table}
+%\caption{Running time (sec.) comparison with \Aa, \RA and \BIGCLAM.}
+%\label{tab_time}
+%\vspace{-2ex}
+%\centering
+%\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+%\begin{tabular}{l|r|r|r}
+%\hline \hline Algorithm  & Digg & YouTube & Wikipedia  \\
+%\hline \hline
+%\Aa & 10.46 &	56.78 &	2557.63  \\
+%\RA & \textbf{7.74} &	\textbf{39.12} &	2136.36  \\
+%\BIGCLAM & 70.34 &	598.06 &	5642.84  \\
+%\NMF & 441.81 	& 3500.68 	& 4038.13 \\
+%\Biased & 64.58	& 420.21	& 393.26 \\
+%\Biasedp & 58.91	& 399.84	& \textbf{352.76} \\
+%\hline \hline
+%\end{tabular}
+%\vspace{-2ex}
+%\end{table}
+
+
+\end{document}
