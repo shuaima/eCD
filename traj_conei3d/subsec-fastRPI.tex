@@ -11,7 +11,7 @@ Again edges $\vv{A}$ and $\vv{B}$ are moved counter-clockwise. Note that $\vv{A}
 %
 However, it is possible to advance $\vv{A}$ or $\vv{B}$ multiple steps each time.
 %
-For example, in Figure~\ref{fig:c-poly-inter}.(1)--(5), edge $\vv{A}$ successively moves four steps, each under the advance rule (1) ``($\vv{A} \times \vv{B} < 0$ and $P_{e_A} \not \in \mathcal{H}(\vv{B})$) or ($\vv{A} \times \vv{B} > 0$ and $P_{e_B} \in \mathcal{H}(\vv{A})$)'' of algorithm \cpia.
+For example, in Figure~\ref{fig:c-poly-inter}.(1)--(5), edge $\vv{A}$ successively moves four steps, each under the advance rule (1) ``($\vv{A} \times \vv{B} < 0$ and $P_{e_A} \not \in \mathcal{H}(\vv{B})$) or ($\vv{A} \times \vv{B} \ge 0$ and $P_{e_B} \in \mathcal{H}(\vv{A})$)'' of algorithm \cpia.
 Alternatively, we can directly move $A$ from Figure~\ref{fig:c-poly-inter}.(1) to Figure~\ref{fig:c-poly-inter}.(5), by reducing four steps to one step only.
 
 %%%%%%%%%%%%%%%%%%%%%example of intersection of regular polygons
@@ -29,7 +29,8 @@ Alternatively, we can directly move $A$ from Figure~\ref{fig:c-poly-inter}.(1) t
 
 \begin{prop}
 \label{prop-rule1}
-If either $(\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} < 0$ \And $P_{e_A} \not \in \mathcal{H}(\vv{B}))$ or $(\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} > 0$ \And $P_{e_B} \in \mathcal{H}(\vv{A}))$ holds, then $\vv{A}$ is moved forward $s$ steps such that
+If either $(\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} < 0$ \And $P_{e_A} \not \in \mathcal{H}(\vv{B}))$ or $(\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} \ge 0$ \And $P_{e_B} \in \mathcal{H}(\vv{A}))$ holds, then $\vv{A}$ advances $s$ steps such that
+
 %\vspace{-1ex}
 \begin{equation*}
 \label{equ-rule1}
@@ -48,14 +49,14 @@ in which $g(e)$ denotes the label of edge $e$.
 
 
 \begin{proof}
-We first explain how the edge $\vv{A}$ is moved forward.
+We first explain how the edge $\vv{A}$ advances.
 Indeed, $\vv{A}$ is moved from its original position to its symmetric edge on $\mathcal{G}_{s+l+1}$ \wrt the symmetric line that is perpendicular to $\vv{B}$  on $\mathcal{G}^*_{l}$.
-For example, in Figure~\ref{fig:r-poly-rule1}.(1), there is $\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} > 0$ \And $P_{e_B} \in \mathcal{H}(\vv{A})$, hence $\vv{A}$ moves on. As $g(\vv{B})=3 > 1=g(\vv{A})$, $\vv{A}$ moves forward $2\times(g(\vv{B}) - g(\vv{A})) = 2\times(3-1)= 4$ steps.
+For example, in Figure~\ref{fig:r-poly-rule1}.(1), there is $\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} \ge 0$ \And $P_{e_B} \in \mathcal{H}(\vv{A})$, hence $\vv{A}$ moves on. As $g(\vv{B})=3 > 1=g(\vv{A})$, $\vv{A}$ moves forward $2\times(g(\vv{B}) - g(\vv{A}))$ = $2\times(3-1)= 4$ steps.
 Here, the label of edge $\vv{A}$ is changed to $5$, its symmetric edge $1$ on $\mathcal{G}_{s+l+1}$ \wrt the symmetric line that is perpendicular to $\vv{B}$ labeled with $3$  on $\mathcal{G}^*_{l}$.
 
 
 We then present the proof.
-If ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} < 0$ \And $P_{e_A} \not \in \mathcal{H}(\vv{B})$) or ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} > 0$ \And $P_{e_B} \in \mathcal{H}(\vv{A})$), then as all edges in the same edge groups $E^j$ ($1\le j\le m$) are in parallel with each other, it is easy to find that, for each position of $\vv{A}$ between its original to its opposite positions, we have (1) $\vv{A} \bigsqcap \vv{B} = \emptyset$, and (2) either $P_{e_A} \not \in \mathcal{H}(\vv{B})$ or $P_{e_B} \in \mathcal{H}(\vv{A})$. Hence, by the advance rule (1) of algorithm \cpia in Section~\ref{subsec-cpi}, edge $\vv{A}$ is always moved forward until it reaches the opposite position of its original one. From this, we have the conclusion.
+If ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} < 0$ \And $P_{e_A} \not \in \mathcal{H}(\vv{B})$) or ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} \ge 0$ \And $P_{e_B} \in \mathcal{H}(\vv{A})$), then as all edges in the same edge groups $E^j$ ($1\le j\le m$) are in parallel with each other, it is easy to find that, for each position of $\vv{A}$ between its original to its opposite positions, we have (1) $\vv{A} \bigsqcap \vv{B} = \emptyset$, and (2) either $P_{e_A} \not \in \mathcal{H}(\vv{B})$ or $P_{e_B} \in \mathcal{H}(\vv{A})$. Hence, by the advance rule (1) of algorithm \cpia in Section~\ref{subsec-cpi}, edge $\vv{A}$ is always moved forward until it reaches the opposite position of its original one. From this, we have the conclusion.
 \end{proof}
 
 
@@ -66,7 +67,7 @@ If ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} < 0$ \And
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{prop}
 \label{prop-rule2}
-If either ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} > 0$ \And $P_{e_B} \not \in \mathcal{H}(\vv{A})$) or ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} < 0$ \And $P_{e_A} \in \mathcal{H}(\vv{B})$) holds, then $\vv{B}$ is directly moved to the edge after the one having the same edge group as $\vv{A}$.
+If either ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} \ge 0$ \And $P_{e_B} \not \in \mathcal{H}(\vv{A})$) or ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} < 0$ \And $P_{e_A} \in \mathcal{H}(\vv{B})$) holds, then $\vv{B}$ is directly moved to the edge after the one having the same edge group as $\vv{A}$.
 \end{prop}
 
 \begin{proof}
@@ -76,7 +77,7 @@ $\vv{B}$ moves to the edge labeled with 8 on $\mathcal{G}^*_{l}$, which is the n
 Note that if the edge labeled with 8 were not actually existing in the intersection polygon $\mathcal{G}^*_{l}$, then $\vv{B}$ should repeatedly move on until it reaches the first ``real" edge on $\mathcal{G}^*_{l}$.
 
 We then present the proof.
-If ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} > 0$ \And $P_{e_B} \not \in \mathcal{H}(\vv{A})$) or ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} < 0$ \And $P_{e_A} \in \mathcal{H}(\vv{B})$), then it is also easy to find that, for each position of $\vv{B}$ between its original to its target positions (\ie the edge after the one having the same edge group as $\vv{A}$), we have (1) $\vv{A} \bigsqcap \vv{B} = \emptyset$, and (2) either $P_{e_B} \not \in \mathcal{H}(\vv{A})$ or $P_{e_A} \in \mathcal{H}(\vv{B})$. Hence, by the advance rule (2) of algorithm \cpia in Section~\ref{subsec-cpi}, edge $\vv{B}$ is always moved forward until it reaches the target position. From this, we have the conclusion.
+If ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} \ge 0$ \And $P_{e_B} \not \in \mathcal{H}(\vv{A})$) or ($\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \And $\vv{A} \times \vv{B} < 0$ \And $P_{e_A} \in \mathcal{H}(\vv{B})$), then it is also easy to find that, for each position of $\vv{B}$ between its original to its target positions (\ie the edge after the one having the same edge group as $\vv{A}$), we have (1) $\vv{A} \bigsqcap \vv{B} = \emptyset$, and (2) either $P_{e_B} \not \in \mathcal{H}(\vv{A})$ or $P_{e_A} \in \mathcal{H}(\vv{B})$. Hence, by the advance rule (2) of algorithm \cpia in Section~\ref{subsec-cpi}, edge $\vv{B}$ is always moved forward until it reaches the target position. From this, we have the conclusion.
 \end{proof}
 
 
@@ -138,8 +139,8 @@ If $A \bigcap B = \phi$ and advances $B$, then moves $A$ and $B$ forward ``$a$ a
 
 
 \stitle{Algorithm \rpia}.
-The presented regular polygon intersection algorithm, \ie\ \rpia, is the optimized version  of the convex polygon intersection algorithm \cpia, by Propositions \ref{prop-rule1} and \ref{prop-rule2}. We also saves vertexes of a polygon in a fixed size array, which is different from \cpia  that saves polygons in linked lists.
-Considering the regular polygons each having a fixed number of vertexes/edges, marked from $1$ to $m$, this policy allow us to quickly address an edge or vertex by its label.
+The presented regular polygon intersection algorithm, \ie\ \rpia, is the optimized version  of the convex polygon intersection algorithm \cpia, by Propositions \ref{prop-rule1} and \ref{prop-rule2}. We also save vertexes of a polygon in a fixed size array, which is different from \cpia  that saves polygons in linked lists.
+Considering the regular polygons each having a fixed number of vertexes/edges, marked from $1$ to $m$, this policy allows us to quickly address an edge or vertex by its label.
 %, as well as avoid the creating and removing of link nodes.
 
 Given intersection polygon $\mathcal{G}^*_{l}$ of the preview $l$ polygons and the next approximate polygon $\mathcal{G}_{s+l+1}$, the algorithm \rpia returns $\mathcal{G}^*_{l+1}=\mathcal{G}^*_{l}  \bigsqcap \mathcal{G}_{s+l+1}$.
