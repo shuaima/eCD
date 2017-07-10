@@ -10,7 +10,7 @@ The main result here is stated as follows.
 
 \begin{theorem}
 \label{prop-cist-op}
-There exist one-pass error bounded trajectory simplification algorithms using \sed for both strong and weak trajectory simplifications.
+There exist one-pass error bounded  strong and weak trajectory simplification algorithms using \sed.
 \end{theorem}
 
 We shall prove this by providing such algorithms for both strong and weak trajectory simplifications, by employing the constant time synchronous distance checking technique developed in Section~\ref{sec-localcheck}.
@@ -157,17 +157,17 @@ We then present the one-pass error bounded {\em weak simplification} algorithm u
 
 \stitle{Algorithm \cista}.
 Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed
-regular polygons, it returns a simplified trajectory $\overline{\mathcal{T}}$,
+regular polygons, it returns a simplified trajectory,
 which may contain interpolated points.
 
 By Proposition~\ref{prop-circle-intersection}, algorithm \cista generates spatio-temporal cones whose bases are circles with a radius of $\epsilon$,
-and, hence, it replaces $\epsilon/2$ with $\epsilon$ (line 3 of \cist). It also generates new line segments with data points $Q$ which may be interpolated points, and,
+and, hence, it replaces $\epsilon/2$ with $\epsilon$ (line 3 of \cist). It also generates new line segments with data points $Q$ (may be interpolated points), and,
 hence, it replaces point $P_i$ and line segment $\vv{P_sP_i}$  (line 9 of \cist) with $Q$ and $\vv{P_sQ}$, respectively,  such that $Q$ is generated as follows.
 
 
 \begin{prop}
 \label{prop-cist-Q}
-Given a sub-trajectory \trajec{T}${[P_s, \ldots, P_{s+k}]}$ and an error bound $\epsilon$,  $t_c=P_{s+k}.t$ and $G^*_k$ be the intersection polygon of all polygons $G_{s+i}$ ($i\in[1,k]$) on the plane $P.t - t_c = 0$. If $G^*_k$ is not empty, then any point in the area of $G^*_k$ is feasible for $Q$.
+Given a sub-trajectory \trajec{T}${[P_s, \ldots, P_{s+k}]}$ and an error bound $\epsilon$,  $t_c=P_{s+k}.t$ and $G^*_k$ be the intersection of all polygons $G_{s+i}$ ($i\in[1,k]$) on the plane $P.t - t_c = 0$. If $G^*_k$ is not empty, then any point in the area of $G^*_k$ is feasible for $Q$.
 \end{prop}
 
 \begin{proof}
@@ -176,7 +176,7 @@ By Proposition~\ref{prop-circle-intersection} and the nature of inscribed regula
 
 The choice of $Q$ from $G^*_k$ may slightly affect the effectiveness (\eg average errors and compression ratios). However, the choice of an optimal $Q$ is non-trivial. For the benefit of efficiency, we apply the following strategies.
 
-\sstab (1) If $P_{s+k}$ is in the area of $G^*_k$ \wrt $t_c=P_{s+k}.t$, then $Q$ is simply $P_{s+k}$.
+\sstab (1) If $P_{s+k}$ is in the area of $G^*_k$ \wrt $t_c=P_{s+k}.t$, then $Q$ is simply chosen as $P_{s+k}$.
 %meaning the projection point of $P_e$ on the plane ``$t=t_c$", \ie $P^c_e$, is in the intersection polygon of regular polygons \{$\mathcal{G}_s, \dots, \mathcal{G}_e$\} of all projection circles \{$\mathcal{O}(P^c_s, \epsilon^c_s), \ldots, \mathcal{O}(P^c_e, \epsilon^c_e)$\},
 
 \sstab (2) If $G^*_k \ne \emptyset$ and $P_{s+k}$ is not in the area of $G^*_k$ \wrt $t_c=P_{s+k}.t$, then the central point of $G^*_k$ is chosen as $Q$.
@@ -189,7 +189,7 @@ The choice of $Q$ from $G^*_k$ may slightly affect the effectiveness (\eg averag
 Figure~\ref{fig:exm-consta}  shows a running example of algorithm \cista for compressing the trajectory \trajec{T} in Figure~\ref{fig:notations} again.
 
 
-\sstab (1) After initialization, the \cista algorithm reads point $P_1$ and builds an \emph{oblique circular cone} \cone{(P_0, \mathcal{O}(P_{1}, \epsilon))}, and projects it on the plane $P.t-P_1.t=0$. The inscribed regular polygon $\mathcal{G}_1$ of the projection circle is returned and the intersection polygon $\mathcal{G}^*$ is set to $\mathcal{G}_1$.
+\sstab (1) After initialization, the \cista algorithm reads point $P_1$ and builds an \emph{oblique circular cone} \cone{(P_0, \mathcal{O}(P_{1}, \epsilon))}, and projects it on the plane $P.t-P_1.t=0$. The inscribed regular polygon $\mathcal{G}_1$ of the projection circle is returned and the intersection $\mathcal{G}^*$ is set to $\mathcal{G}_1$.
 
 \sstab (2) $P_2$, $P_3$ and $P_4$ are processed in turn. The intersection polygons $\mathcal{G}^*$ are not empty.
 
