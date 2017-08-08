@@ -132,23 +132,23 @@ We then have $G_C$ = $G^+[\Delta V]$, $\Delta E$ = $E_C\cup E_{CB}$, $V$ = $V_A\
 \myhrule \vspace{-1.5ex}
 \mat{0ex}{
 %%%%%%%%%%%%%%%%%%%
-{\sl Input:\/} \= An update $\Delta$ = $\Delta V\cup\Delta E$, TWPageRank vector $PR$ of $G$,  and the   \\
-\hspace{6ex} topological order $O$ of the block-wise graph $G'$.\\
+{\sl Input:\/} \= An update $\Delta$ = $\Delta V\cup\Delta E$, TWPageRank vector $PR$ of $G$,\\
+\hspace{5ex}   and the  topological order $O$ of the block-wise graph $G'$.\\
 {\sl Output:\/} TWPageRank vector $PR^+$ of the updated graph $G^+$. \\
 \bcc \hspace{1.5ex}\=  $G_C'$ := the block-wise graph of $G_C$; \\
 %\ \  $E_{CB}'$ := edges from $G_C'$ to $G'$\\
 \icc\> $\Delta O$ := topological order of $G_C'$; \ \ $O^+$ := $\Delta O/O$; \\
-\icc\> label all \sccs of $G_C$ as $C$ and all \sccs of $G$ with outgoing edges having \\ \hspace{2.5ex} weight changes as $B$,  the remaining \sccs of $G$ as $A$\\
+\icc\> label \sccs of $G_C$ as $C$ and \sccs of $G$ with outgoing edges \\ \hspace{2.5ex}  having  weight changes as $B$,  the remaining \sccs of $G$ as $A$\\
 \icc\>  \For each node $v'$ following $O^+$ \Do\\
 \icc\>\hspace{2.5ex}\= $scc$ := the corresponding \scc of $v'$; \\
 %\icc\>\>\If impact weight of $(v,w)$ is changed where $v\in scc$ \Then \\
 %\icc\>\>\hspace{3ex}\= label $scc$ as $B$;\\
 %\icc\>\>\> label SCC $w'$ as $B$ such that $(v',w')\in E'$; \\
 \icc\>\> \If $scc$ is labeled as $C$ \Then \\
-\icc\>\>\hspace{3ex}\= update $PR^+(v)$ where $v\in scc$ following algorithm~\twprscc; \\
+\icc\>\>\hspace{3ex}\= update $PR^+(v)$ ($v\in scc$) following algorithm~\twprscc; \\
 \icc\>\>\> label \scc $w'$ as $B$ with $w'\in G'$ and $(v', w')\in E^+{'}$;\\
 \icc\>\> \Else \If $scc$ is labeled as $B$ \Then \\
-\icc\>\>\> update $PR^+(v)$ where $v\in scc$ with Eq.~(\ref{eq-inc-prscc}) until the sum of \\ \hspace{8ex} TWPageRank score changes is less than $\epsilon\cdot \frac{|scc|}{|V^+|}$; \\
+\icc\>\>\> update $PR^+(v)$ where $v\in scc$ with Eq.~(\ref{eq-inc-prscc}) until the \\ \hspace{8ex}  sum of TWPageRank score changes is less than $\epsilon\cdot \frac{|scc|}{|V^+|}$; \\
 \icc\>\>\> label \scc $w'$ as $B$ with $(v',w')\in E'$;\\
 \icc\>\> \Else $PR^+(v)$:=$PR(v)\cdot {n}/{n^+}$ where $v\in scc$; \\
 \icc\> \Return $PR^+$.
@@ -157,7 +157,7 @@ We then have $G_C$ = $G^+[\Delta V]$, $\Delta E$ = $E_C\cup E_{CB}$, $V$ = $V_A\
 \end{minipage}
 }
 \end{center}
-\vspace{-3ex}
+\vspace{-2ex}
 \caption{\small Algorithm~\inctwprscc for incremental TWPageRank} \label{alg-inctwprscc}
 \vspace{-4ex}
 \end{figure}
@@ -196,15 +196,6 @@ Figure~\ref{fig-inc-division} illustrates an example of affected and unaffected 
 \end{example}
 }
 
-\begin{figure}[tb!]
-\centering
-\includegraphics[scale=0.6]{fig/General_framework_peak.eps}
-\vspace{-2ex}
-\caption{\small An example of incremental TWPageRank computation}
-\label{fig-inc-division}
-\vspace{-3ex}
-\end{figure}
-
 
 \begin{example} \label{eg-layer-dag}
 Figure~\ref{fig-inc-division} illustrates an example of incremental TWPageRank computation. Consider an update $\Delta$ on the original graph $G$.
@@ -221,13 +212,22 @@ When updating the TWPageRank scores, following $O^+$, scores of nodes in $G_C$, 
 The TWPageRank vector $PR^+$ returned by~\inctwprscc converges such that $||PR^+-PR^{*}||_1 < \epsilon$, where $PR^{*}$ is the convergent TWPageRank vector.
 \end{theorem}
 
+\eat{
 \begin{proofSketch}
 Assume a topological order $v_1'/\dots/v_{l}'$ of block-wise graph $G^+{'}$ where $l=|O^+|$. It suffices to prove that the change sum of $PR^+(v)$ with $v\in scc_k$ is no more than $\epsilon\cdot |scc_k|/|V^+|$ for $scc_k$ corresponding to $v_k'$ ($k\in [1,l]$) by induction.
 %The conclusion follows combining Lemma~\ref{prop-prscc}
 (see \cite{SARank-full} for details).
 \end{proofSketch}
+}
 
-
+\begin{figure}[tb!]
+\centering
+\includegraphics[scale=0.6]{fig/General_framework_peak.eps}
+\vspace{-2ex}
+\caption{\small An example of incremental TWPageRank computation}
+\label{fig-inc-division}
+\vspace{-3ex}
+\end{figure}
 
 Observe that (a) a topological order of $G'_C$ can be computed in $O(|V_C|+|E_C|+|E_{CB}|)$ time,
 (b) updating the TWPageRank scores of nodes in subgraphs $G_B$ and $G_C$ costs $O(|V_B\cup V_C|+|E_{B,a}\cup E_{C,a}\cup E_{CB}|)+t^+|E_{B,i}\cup E_{C,i}|)$ time, and , finally, (c) updating the scores of nodes in $G_A$ costs $O(|V_A|)$ time. From these, the following holds.
@@ -259,7 +259,7 @@ All these make \inctwprscc faster than \twprscc even though they have very simil
 \stitle{Time \& space complexity analyses of the complete algorithm}.
 By the analyses above, the time complexity of \incensemble is the same as \batensemble, except that \incensemble saves $O(|E^c_A\cup E^c_{AB}|)$ and $O(|E^v_A\cup E^v_{AB}|)$ time on the updated citation graphs and venue graphs when updating scores. And its space complexity is also the same as \batensemble, except that it uses $(|V^c\cup\Delta V^c|+|V^v\cup\Delta V^v|)$ extra space to store the affected/unaffected areas and $(|E^c\cup \Delta E^c|+|E^v\cup \Delta E^v|)$ extra space to store the original edge weights.
 
-Despite of its similar time complexity to \batensemble, algorithm \incensemble typically achieves a substantial efficiency improvement over \batensemble, according to our statistics of affected/unaffected areas shown in Table 2.
+Despite of its similar time complexity to \batensemble, algorithm \incensemble typically achieves a substantial efficiency improvement over \batensemble, according to our statistics of affected/unaffected areas shown in Table~II.
 %
 (a) It saves $O(|V^c|+|E^c|)$ and $O(|V^v|+|E^v|)$ time when maintaining \sccs and the topological order based on $\Delta^c$ and $\Delta^v$ only, where ($|V^c|$, $|E^c|$, $|V^v|$, $|E^v|$) are more than (92\%, 89\%, 93\%, 89\%) of ($|V^{c,+}|$, $|E^{c,+}|$, $|V^{v,+}|$, $|E^{v,+}|$) on all tested graphs;
 (b) It saves $O(|E^c_A \cup E^c_{AB}|)$ time when updating scores on $V^c$, where edges in $E^c_A\cup E^c_{AB}$ account for more than 28\% of total edges;
@@ -307,37 +307,38 @@ And, finally, (4) It is likely to update TWPageRank scores on $V^c_B$ and $V^v_B
 \begin{small}
 \vspace{1ex}
 \eat{
-\begin{tabular}{|c|c c c|c c c|}
-\hline
-{\bf Graphs} & $|V_A|$ & $|V_B|$ & $|V_C|$ & $|E_A\cup E_{AB}|$ & $|E_B|$ & $|E_C\cup E_{CB}|$ \\
-\hline \hline
-% citation graphs
-\aan & $46.9\%$ & $47.3\%$ & $5.8\%$ & $28.8\%$ & $60.5\%$ & $10.7\%$ \\
-\aminer & $81.4\%$ & $10.7\%$ & $7.8\%$ & $71.2\%$ & $25.1\%$ & $3.7\%$ \\
-\magdata & $69.5\%$ & $25.9\%$ & $4.5\%$ & $28.4\%$ & $64.5\%$ & $7.1\%$ \\ \hline
-% venue graphs
-\aan & $2.1\%$ & $92.0\%$ & $5.8\%$ & $1.0\%$ & $88.8\%$ & $10.2\%$ \\
-\aminer & $45.8\%$ & $47.7\%$ & $6.4\%$ & $3.5\%$ & $95.4\%$ & $1.1\%$ \\
-\magdata & $12.4\%$ & $84.6\%$ & $3.0\%$ & $0.1\%$ & $92.6\%$ & $7.3\%$ \\ \hline
-}
-%\eat{
 \begin{tabular}{|c|c|c|}
 \hline
 {\bf Graphs} & $|V_A|$\hspace{2ex}$|V_B|$\hspace{3ex}$|V_C|$ & $|E_A|$\hspace{2ex}$|E_{AB}|$\hspace{2ex}$|E_B|$\hspace{2ex}$|E_{CB}|$\hspace{2ex}$|E_C|$ \\
 \hline \hline
 % citation graphs
-\aan & $46.9\%$ \hspace{1ex} $47.3\%$ \hspace{1ex} $5.8\%$ & \ $2.9\%$ \hspace{1ex} $25.9\%$ \hspace{1ex} $60.5\%$ \hspace{1ex} $10.4\%$ \hspace{1ex} $0.3\%$ \\
+\aan & $46.9\%$\ $47.3\%$\ $5.8\%$ & \ $2.9\%$\ $25.9\%$\ $60.5\%$\ $10.4\%$ \hspace{1ex} $0.3\%$ \\
 \aminer & $81.4\%$ \hspace{1ex} $10.7\%$ \hspace{1ex} $7.8\%$ & $18.0\%$ \hspace{1ex} $53.2\%$ \hspace{1ex} $25.1\%$ \hspace{1ex} \ $2.3\%$ \hspace{1ex} $1.4\%$ \\
 \magdata & $69.5\%$ \hspace{1ex} $25.9\%$ \hspace{1ex} $4.5\%$ & \ $1.0\%$ \hspace{1ex} $27.4\%$ \hspace{1ex} $64.5\%$ \hspace{1ex} \ $7.0\%$ \hspace{1ex} $0.1\%$ \\ \hline
 % venue graphs
 \aan & \ $2.1\%$ \hspace{1ex} $92.0\%$ \hspace{1ex} $5.8\%$ & \ $1.0\%$ \hspace{1ex} \ $1.0\%$ \hspace{1ex} $88.8\%$ \hspace{1ex} $10.0\%$ \hspace{1ex} $0.2\%$ \\
 \aminer & $45.8\%$ \hspace{1ex} $47.7\%$ \hspace{1ex} $6.4\%$ & \ $0.0\%$ \hspace{1ex} \ $3.2\%$ \hspace{1ex} $95.4\%$ \hspace{1ex} \ $1.0\%$ \hspace{1ex} $0.1\%$ \\
-\magdata & $12.4\%$ \hspace{1ex} $84.6\%$ \hspace{1ex} $3.0\%$ & \ $0.0\%$ \hspace{1ex} \ $0.1\%$ \hspace{1ex} $92.6\%$ \hspace{1ex} \ $7.1\%$ \hspace{1ex} $0.1\%$ \\ \hline
-%}
+\magdata & $12.4\%$ \hspace{1ex} $84.6\%$ \hspace{1ex} $3.0\%$ & \ $0.0\%$ \hspace{1ex} \ $0.1\%$ \hspace{1ex} $92.6\%$ \hspace{1ex} \ $7.1\%$ \hspace{1ex} $0.1\%$ \\
+ \hline
+\end{tabular}
+}
+\begin{tabular}{|c|c c c|c c c|}
+\hline
+{\bf Statis.} & \aan & \aminer & \magdata & \aan & \aminer & \magdata \\
+\hline \hline
+$|V_A|$ & 46.9\% & 81.4\% & 69.5\% & 2.1\% & 45.8\% & 12.4\% \\
+$|V_B|$ & 47.3\% & 10.7\% & 25.9\% & 92.0\% & 47.7\% & 84.6\% \\
+$|V_C|$ & \ 5.8\% & \ 7.8\% & \ 4.5\% & \ 5.8\% & \ 6.4\% & \ 3.0\% \\ \hline
+% venue graphs
+$|E_A|$ & \ 2.9\% & 18.0\% & \ 1.0\% & \ 1.0\% & \ 0.0\% & \ 0.0\% \\ 
+$|E_{AB}|$ & 25.9\% & 53.2\% & 27.4\% & \ 1.0\% & \ 3.2\% & \ 0.1\% \\ 
+$|E_B|$ & 60.5\% & 25.1\% & 64.5\% & 88.8\% & 95.4\% & 92.6\% \\ 
+$|E_{CB}|$ & 10.4\% & \ 2.3\% & \ 7.0\% & 10.0\% & \ 1.0\% & \ 7.1\% \\
+$|E_C|$ & \ 0.3\% & \ 1.4\% & \ 0.1\% & \ 0.2\% & \ 0.1\% & \ 0.1\% \\ \hline
 \end{tabular}
 \end{small}
 \end{center}
-\caption{\small Statistics of affected/unaffected areas on citation graphs (rows 2--4) and venue graphs (rows 5--7) given a yearly update, \ie articles of 2011 on \aan and 2015 on \aminer and \magdata, respectively.}
+\caption{\small Statistics of affected/unaffected areas on citation graphs (columns 2--4) and venue graphs (columns 5--7) given a yearly update, \ie articles of 2011 on \aan and 2015 on \aminer and \magdata, respectively.}
 \label{tab-inc}
 \vspace{-6ex}
 \end{table}
