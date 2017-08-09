@@ -11,7 +11,7 @@ model, referred to as \ensemblerank, that assembles the importance of articles, 
 \subsection{Time-Weighted PageRank}
 \label{subsec-twpr}
 
-We first present Time-Weighted PageRank (TWPageRank), as the direct use of PageRank for ranking scholarly articles is problematic.
+We first present Time-Weighted PageRank (TWPageRank), as the direct use of PageRank for ranking scholarly articles is problematic as discussed below.
 
 
 
@@ -25,7 +25,7 @@ We first present Time-Weighted PageRank (TWPageRank), as the direct use of PageR
 
 %, such that each article can distribute more of its authority to those that are more influential to it.
 
-\noindent(2)  Citation relationships are time-dependent, which has been successfully exploited for scholarly article ranking~\cite{Li08TSRanking,Wang13AAAI,WangSB13},
+\noindent(2) \marked{The semantics of citation relationships} are time-dependent, which has been successfully exploited for scholarly article ranking~\cite{Li08TSRanking,Wang13AAAI,WangSB13},
 while PageRank does not consider temporal information at all.
 
 
@@ -47,9 +47,10 @@ Moreover, considering that articles might reach their citation peaks in differen
 }
 
 
-Based on the above citation statistics, we propose TWPageRank that evaluates the prestige of nodes in a directed graph, such that each node is attached with time information. It differs from PageRank by weighting the influence propagation using the {\em impact weights on edges}, which represent the relative amounts of time-dependent prestige that should be propagated from the edge sources to targets.
+Based on the above statistics, we propose TWPageRank that evaluates the prestige of nodes in a directed graph, such that each node is attached with time information. It differs from PageRank by weighting the influence propagation using the {\em impact weights on edges}, which represent the relative amounts of time-dependent prestige that should be propagated from the edge sources to targets.
 %
 Formally, the impact weight on a directed edge $(u,v)$, \ie an edge from $u$ to $v$, is defined as:
+
 \begin{small}
 \begin{equation} \label{eq-infl-weights}
 w(u,v)  =  \begin{cases}  \hspace{7ex} 1 & T_u <  Peak_v \\
@@ -82,7 +83,7 @@ PR^{(t)}=d M^T  PR^{(t-1)} + (1-d)\cdot e/n.
 %
 \noindent
 Here $PR^{(t)}$ and $PR^{(t-1)}$ %, consisting of PageRank scores of all nodes,
-are two TWPageRank vectors after $t$ and $t-1$ iterations, respectively, $M$ is the transition matrix such that $M_{u,v}=w(u,v)/W(u)$ and $e$ is an $n$-dimensional vector $[1]_{n\times1}$.
+are two TWPageRank vectors after $t$ and $t-1$ iterations, respectively, $M$ is the transition matrix such that $M_{u,v}=w(u,v)/W(u)$ and $e$ is an $n$-dimensional all-one vector $[1]_{n\times1}$.
 
 %We next present the convergence  of TWPageRank as follows.
 The linear system in Eq.~(\ref{eq-twpr-update}) is equivalent to {\em irreducible} and {\em aperiodic} Markov chains~\cite{CorsoGR05}, which guarantees the following.
@@ -112,13 +113,13 @@ We then have $\rho(d\cdot M^T) \le ||d\cdot M^T||_1 \le d < 1$, as the spectral 
 
 %Observe that: (a) the importance of articles is typically evaluated according to many factors, and (b) using single factors fails to give a reasonable rank in some situation. Hence,
 
-Our ranking model \ensemblerank  shown in Fig.~\ref{fig-rankmodel} assembles the importance of articles, venues and authors for scholarly article ranking, computed by the citation, venue and author components, respectively.
+Our ranking model \ensemblerank,  illustrated in Fig.~\ref{fig-rankmodel}, assembles the importance of articles, venues and authors for scholarly article ranking, which is computed by the citation, venue and author components, respectively.
 %
-We next introduce the details of each component.
+We next introduce the details of the three components.
 
 %The importance in each component is defined as a combination of the prestige and popularity of its associated entities. Intuitively, prestige favors those with many citations soon after the publication of articles for citation component or associated articles for venue and author components, and popularity favors those with recent citations. Both prestige and popularity capture the evolving nature of entities.
 
-In our model, the importance of scholarly articles is defined as a combination of the prestige and popularity of its associated article, venue and author entities. Intuitively, prestige favors those with many citations soon after the publication of articles for citation component or associated articles for venue and author components, and popularity favors those with recent citations. Both prestige and popularity capture the temporal nature of entities.
+In our model, the importance of scholarly articles is defined as a combination of the prestige and popularity of its associated article, venue and author entities. Intuitively, prestige favors those with many citations soon after the publication of articles for citation component or associated articles for venue and author components, and popularity favors those with recent citations. Both prestige and popularity capture the temporal nature of entities in scholarly data.
 
 \eat{
 The prestige of articles and venues are computed by introducing a novel {\em Time-Weighted PageRank} with a time decaying factor (based on citation statistics), while the one of authors is the average prestige of their published articles.
@@ -155,7 +156,7 @@ The first component computes the importance of articles using the citation infor
 A {\em citation graph} $G^c(V^c, E^c)$ is firstly constructed using the citation information such that (a) a node in $V^c$ denotes an article, (b) a directed edge $(u,v)$ in $E^c$ denotes that $u$ cites $v$, and (c) each node is associated with two types of time information: the publication year and the latest year having the largest number of citations.
 
 
-\sstab(1) The prestige of articles is derived by TWPageRank on the citation graph $G^c$, and each article $v$ is assigned its prestige $Prs_c(v)$.
+\sstab(1) The prestige of articles is derived by applying TWPageRank on the citation graph $G^c$, and each article $v$ is assigned the corresponding TWPageRank score as its prestige $Prs_c(v)$.
 
 \sstab(2)  The popularity of an article is the sum of all its citations' freshness, \ie the closeness to the current year, as follows:
 \begin{small}
@@ -172,7 +173,8 @@ Intuitively, the more recent citations an article has, the higher its popularity
 %
 Note that the popularity is also normalized such that the sum of  all articles is equal to $1$, similar to the prestige produced by TWPageRank.
 
-\sstab(3) The prestige and popularity are finally combined to produce importance of an article. As important articles are both prestigious and popular, the {\em citation importance score} of an article is defined as a weighted combination of its prestige and popularity.
+\sstab(3) The prestige and popularity are finally combined to produce importance of an article. Intuitively, an important articles is both prestigious and popular, hence, the {\em citation importance score} of an article is defined as a weighted combination of its prestige and popularity.
+
 \begin{small}
 \begin{equation}\label{eq-imp}
 %Imp_c(v) = \sqrt{Prs_c(v) \cdot Pop_c(v)}.
@@ -189,7 +191,8 @@ The rationales behind Eq.~(\ref{eq-imp}) are as follows. (a) Prestigious article
 The second component computes the importance of venues with their associated articles. As venue importance evolves with time, we treat the venue in each year individually, and its importance is the sum of importance in all individual years.
 
 
-A {\em venue graph} $G^v(V^v, E^v)$ is firstly constructed using the citation information among venues such that (a) a node in $V^v$ represents a venue in a specific year, (b) a direct edge $(s,t)$ in $E^v$ denotes that there exist articles published in venue $s$ citing articles published in venue $t$, and (c) we use the {\em impact weight} to denote the weight $w_v(s,t)$ from venues $s$ to $t$, which is the sum of the impact weights from articles published in $s$ to $t$, \ie
+A {\em venue graph} $G^v(V^v, E^v)$ is firstly constructed using the citation information among venues such that (a) a node in $V^v$ represents a venue in a specific year, (b) a direct edge $(s,t)$ in $E^v$ denotes that there exist articles published in venue (in a specific year) $s$ citing articles published in venue (in a specific year) $t$, and (c) we use the {\em impact weight} to denote the weight $w_v(s,t)$ from venues $s$ to $t$, which is the sum of the impact weights from articles published in $s$ to $t$, \ie
+
 \begin{small}
 \begin{equation} \label{eq-infl-weights-v}
 w_v(s,t)  = \sum_{u\in C(s), v\in C(t)} w(u,v).
@@ -215,9 +218,9 @@ The prestige of a venue in a specific year is computed using the impact weights 
 \stitle{Author component}.
 The author component computes the importance of authors with their published articles.
 
-Similar to the venue component, we evaluate the importance of each author, and treat the average importance of the authors associated with an article as its {\em author importance score}.
+Similar to the venue component, we evaluate the importance of each author, and compute the average importance of the authors of an article as its {\em author importance score}.
 
-However, the resulting graph to compute the prestige is typically too large to handle. Hence, we evaluate the prestige of an author, by using the average prestige of all articles published by the author. Similar to the venue component, the popularity of an author is also defined as the average popularity of her/his published articles. Finally, the prestige and popularity are combined to derive the importance in the same way as the citation component.
+However, the resulting author citation graph to compute the prestige is typically too large to handle. Hence, we evaluate the prestige of an author, by using the average prestige of all articles published by the author. Similar to the venue component, the popularity of an author is also defined as the average popularity of her/his published articles. Finally, the prestige and popularity are combined to derive the importance in the same way as the citation component.
 
 %, which can be directly obtained from the citation component,
 %to evaluate the authority of that author.
@@ -235,12 +238,13 @@ Recall that articles in our data are also associated with affiliation informatio
 
 \stitle{Ranking with importance assembling}. The aforementioned importance is finally assembled to produce the final ranking, as illustrated in Fig.~\ref{fig-rankmodel}. Before assembling, each component is properly scaled such that the average citation importance score, venue importance score and author importance score
 are the same.  Let the scaled importance scores of article $v$ be $R_c(v)$, $R_v(v)$, and $R_a(v)$ from the citation, venue and author components, respectively. The final ranking score $R(v)$ of an article $v$ is aggregated as follows:
+
 \begin{small}
 \begin{equation} \label{eq-ensemble}
 R(v) =  \alpha R_c(v) + \beta R_v(v) + (1 - \alpha - \beta) R_a(v).
 \end{equation}
 \end{small}
-\noindent Here aggregating parameters $\alpha$ and $\beta$ are used to regularize the contributions of the citation, venue and author information. Intuitively, these values indicate the intensity of the correlation between the importance of scholarly articles and the specific information.
+\noindent Here aggregating parameters $\alpha$ and $\beta$ are used to regularize the contributions of the citation, venue and author information. Intuitively, these parameters indicate the intensity of the correlation between the importance of scholarly articles and the specific information.
 
 %\subsection{Framework}
 %\label{subsec-framework}
