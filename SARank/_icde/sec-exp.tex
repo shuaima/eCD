@@ -44,18 +44,18 @@ P-V      &  $45,783,880$       &  $45,290,168$ \\ \hline
 
 \noindent
 (1) \aan records the collection of computational linguistics articles published at ACL conferences from 1965 to 2011~\cite{Liang16AAAI}.
-It contains 18,041 articles, 14,386 authors, 273 venues and 82,944 citations.
+It contains 18,041 articles, 14,386 authors, 273 venues and 82,944 citations, respectively.
 
 \noindent
 (2) \aminer records articles in the computer science domain from 1936 to 2016~\cite{Tang:08KDD}.
-It contains around 3.14 million articles, 1.74 million authors, 11,619 venues and 6.38 million citations.
+It contains around 3.14 million articles, 1.74 million authors, 11,619 venues and 6.38 million citations, respectively.
 
 \noindent
 (3) \magdata records articles of various disciplines from 1800 to 2016~\cite{Sinha15:MAG}.
 It contains around 127 million articles, 115 million authors, 24,024 venues and 529 million citations.
 %Please refer to~\cite{Sinha15:MAG} for more details about \magdata.
 
-These datasets were further cleaned by deleting self-citations and citations from old  to new articles, which accounted for (0.1\%, 1.8\%, 0.4\%) of the total citations on (\aan, \aminer, \magdata).
+These datasets were further cleaned by deleting self-citations and citations from old articles to new ones, which accounted for (0.1\%, 1.8\%, 0.4\%) of the total citations on (\aan, \aminer, \magdata), respectively.
 %from old articles to more recent ones
 %These datasets were further cleaned by detecting citation cycles and removing those edges violating the temporal order if any.
 
@@ -68,16 +68,6 @@ These datasets were further cleaned by deleting self-citations and citations fro
 %(3) Delete all the edges in loops found in (1) only if all the edges in the loop haven't be deleted
 %(4) Repeat (1)-(3) until there is no loop in the network.
 
-
-
-%The original datasets does not strictly follow the temporal order due to the data quality problem. We hence dealt with the issue by repeatedly detecting cycles in citation graphs and removing edges that break temporal order, if existing, or all edges in cycles.
-
-
-%Actually, the citation networks of scholarly article in the three datasets are not DAG, since there are some mistaken citaions which can't be found in the references of articles. In order to delete these edges to make sure the citation network is a DAG, we do the followings:
-%(1) Detect possible loops in the network by depth-first-search
-%(2) Delete the edges with time error in loops found in (1) which are edges from earlier articles to later, only if all the edges in the loop haven't be deleted
-%(3) Delete all the edges in loops found in (1) only if all the edges in the loop haven't be deleted
-%(4) Repeat (1)-(3) until there is no loop in the network.
 
 \stitle{Accuracy metric and ground-truth}.
 We adopted the {\em pairwise accuracy} introduced by Microsoft~\cite{Richardson06:BPR,wsdmcup} to evaluate the ranking quality, \ie the fraction of times that a ranking agrees with the correct ranking orders of scholarly article pairs. We constructed two sets of ground-truth importance orders with \recom and \fcita.
@@ -249,6 +239,30 @@ When quantity measures are evaluated, the test was repeated over 5 times and the
 \label{fig-pairacc}
 \vspace{-2.5ex}
 \end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[tb!]
+%\vspace{1ex}
+\addtolength{\subfigcapskip}{-1ex}
+\begin{center}
+%\hspace{10ex}
+\subfigure[{\scriptsize TWPageRank (batch vs. inc.)}]{\label{fig-aminer-time1}
+\includegraphics[scale=\graphscale]{./exp/AMiner_time_twpr.eps}}
+\hspace{-.5ex}
+\subfigure[{\scriptsize Comparison of ranking algorithms}]{\label{fig-aminer-time2}
+\includegraphics[scale=\graphscale]{./exp/AMiner_time.eps}}
+\hspace{-.5ex}
+\subfigure[{\scriptsize TWPageRank (batch vs. inc.)}]{\label{fig-mag-time1}
+\includegraphics[scale=\graphscale]{./exp/MAG_time_twpr.eps}}
+\hspace{-.5ex}
+\subfigure[{\scriptsize Comparison of ranking algorithms}]{\label{fig-mag-time2}
+\includegraphics[scale=\graphscale]{./exp/MAG_time.eps}}
+\end{center}
+\vspace{-2.5ex}
+\caption{\small Efficiency tests on \aminer ((a)--(b)) and  \magdata ((c)--(d))}
+\label{fig-time}
+\vspace{-1ex}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Experimental Results}
 \label{subsec-expres}
@@ -275,69 +289,6 @@ To evaluate the effectiveness of ranking in different scenarios, we varied three
 %
 Given $Y_s$, $T_i$ and $dif$, we only used scholarly article pairs whose articles were published no earlier than $T_i$ years before $Y_s$ and the difference of future citation counts was equal to or larger than $dif$ to test the \PairAcc.
 
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure*}[tb!]
-%\vspace{1ex}
-\addtolength{\subfigcapskip}{-1ex}
-\begin{center}
-%\hspace{10ex}
-\subfigure[{\scriptsize TWPageRank (batch vs. inc.)}]{\label{fig-aminer-time1}
-\includegraphics[scale=\graphscale]{./exp/AMiner_time_twpr.eps}}
-\hspace{-.5ex}
-\subfigure[{\scriptsize Comparison of ranking algorithms}]{\label{fig-aminer-time2}
-\includegraphics[scale=\graphscale]{./exp/AMiner_time.eps}}
-\hspace{-.5ex}
-\subfigure[{\scriptsize TWPageRank (batch vs. inc.)}]{\label{fig-mag-time1}
-\includegraphics[scale=\graphscale]{./exp/MAG_time_twpr.eps}}
-\hspace{-.5ex}
-\subfigure[{\scriptsize Comparison of ranking algorithms}]{\label{fig-mag-time2}
-\includegraphics[scale=\graphscale]{./exp/MAG_time.eps}}
-\end{center}
-\vspace{-2.5ex}
-\caption{\small Efficiency tests on \aminer ((a)--(b)) and  \magdata ((c)--(d))}
-\label{fig-time}
-\vspace{-1ex}
-\end{figure*}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\graphscaleexpapp}{0.262}
-\newcommand{\graphmarginexpapp}{-2ex}
-%%% all in 1 Figure
-\begin{figure*}[tb!]
-\addtolength{\subfigcapskip}{-1ex}
-\begin{center}
-\subfigure[{\scriptsize \aan}]{\label{fig-aan-ab-recom}
-\includegraphics[scale=\graphscaleexpapp]{./exp/AAN-para-recm.eps}}
-%\quad\quad
-\hspace{\graphmarginexpapp}
-\subfigure[{\scriptsize \aminer}]{\label{fig-aminer-ab-recom}
-\includegraphics[scale=\graphscaleexpapp]{./exp/AMiner-para-recm.eps}}
-%\quad\quad
-\hspace{\graphmarginexpapp}
-\subfigure[{\scriptsize \magdata}]{\label{fig-mag-ab-recom}
-\includegraphics[scale=\graphscaleexpapp]{./exp/MAG-para-recm.eps}}
-\\ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\vspace{-2ex}
-%\hspace{-10ex}
-\subfigure[{\scriptsize \aan}]{\label{fig-aan-ab-fcita}
-\includegraphics[scale=\graphscaleexpapp]{./exp/AAN-para-fcita.eps}}
-%\quad\quad
-\hspace{\graphmarginexpapp}
-\subfigure[{\scriptsize \aminer}]{\label{fig-aminer-ab-fcita}
-\includegraphics[scale=\graphscaleexpapp]{./exp/AMiner-para-fcita.eps}}
-%\quad\quad
-\hspace{\graphmarginexpapp}
-\subfigure[{\scriptsize \magdata}]{\label{fig-mag-ab-fcita}
-\includegraphics[scale=\graphscaleexpapp]{./exp/MAG-para-fcita.eps}}
-\end{center}
-\vspace{-2ex}
-\caption{\small Accuracy tests with \recom ((a)--(c)) and \fcita ((d)--(f)): varying aggregating parameters $\alpha$ and $\beta$}
-\label{fig-ab}
-\vspace{-3ex}
-\end{figure*}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %varying number of years as future period
@@ -379,6 +330,44 @@ When varying $dif$, the \PairAcc of all algorithms increases with the increment 
 %The pair accuracy results tell us that (a) \ensemblerank outperforms other methods on all datasets with all difference of future citation count and obtains the highest accuracy when the difference is greater than 6, and (b) the accuracy of all method increases with the addition of difference of future citation count which means it is easier for all methods to evaluate the importance of two scholarly articles in one pair when there is a obvious different between them. Our algorithm \ensemblerank improves the pair accuracy over \pagerank, \futurerank and \hhgrank by $(15.7\%, 2.8\%, 3.9\%)$ on \aan, $(17.3\%, 7.6\%, 5.8\%)$ on \aminer, and $(10.3\%, 4.4\%, 1.6\%)$ on \magdata, when evaluate all the pairs which have difference of future citation count greater than 0, which means \ensemblerank can evaluate and distinguish the articles only have small difference better.
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\graphscaleexpapp}{0.262}
+\newcommand{\graphmarginexpapp}{-2ex}
+%%% all in 1 Figure
+\begin{figure*}[tb!]
+\addtolength{\subfigcapskip}{-1ex}
+\begin{center}
+\subfigure[{\scriptsize \aan}]{\label{fig-aan-ab-recom}
+\includegraphics[scale=\graphscaleexpapp]{./exp/AAN-para-recm.eps}}
+%\quad\quad
+\hspace{\graphmarginexpapp}
+\subfigure[{\scriptsize \aminer}]{\label{fig-aminer-ab-recom}
+\includegraphics[scale=\graphscaleexpapp]{./exp/AMiner-para-recm.eps}}
+%\quad\quad
+\hspace{\graphmarginexpapp}
+\subfigure[{\scriptsize \magdata}]{\label{fig-mag-ab-recom}
+\includegraphics[scale=\graphscaleexpapp]{./exp/MAG-para-recm.eps}}
+\\ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{-2ex}
+%\hspace{-10ex}
+\subfigure[{\scriptsize \aan}]{\label{fig-aan-ab-fcita}
+\includegraphics[scale=\graphscaleexpapp]{./exp/AAN-para-fcita.eps}}
+%\quad\quad
+\hspace{\graphmarginexpapp}
+\subfigure[{\scriptsize \aminer}]{\label{fig-aminer-ab-fcita}
+\includegraphics[scale=\graphscaleexpapp]{./exp/AMiner-para-fcita.eps}}
+%\quad\quad
+\hspace{\graphmarginexpapp}
+\subfigure[{\scriptsize \magdata}]{\label{fig-mag-ab-fcita}
+\includegraphics[scale=\graphscaleexpapp]{./exp/MAG-para-fcita.eps}}
+\end{center}
+\vspace{-2ex}
+\caption{\small Accuracy tests with \recom ((a)--(c)) and \fcita ((d)--(f)): varying aggregating parameters $\alpha$ and $\beta$}
+\label{fig-ab}
+\vspace{-3ex}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \stitle{Exp-3: Efficiency}.
 %\subsubsection{Exp-3: Efficiency}

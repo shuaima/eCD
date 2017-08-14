@@ -1,7 +1,7 @@
 \section{Dynamic Ranking Computation}
 \label{sec-incAlg}
 
-Scholarly articles are dynamic, and it is impractical to recompute ranking from scratch once they get updated. In this section, we present an incremental algorithm for our ranking model \ensemblerank.
+Scholarly articles are dynamic and continuously growing, and it is impractical to recompute ranking from scratch once they get updated. In this section, we present an incremental algorithm for our ranking model \ensemblerank.
 
 
 \subsection{Incremental Algorithm Framework}
@@ -13,7 +13,7 @@ Scholarly articles are dynamic, and it is impractical to recompute ranking from 
 Our incremental algorithm \incensemble incrementally computes the popularity and prestige of scholarly articles.
 We consider that an update $\Delta$ = $\Delta V\cup\Delta E$ is added to a   (citation or venue) graph $G(V, E)$,
 and the resulting graph is $G^+(V\cup\Delta V, E\cup\Delta E)$, where
-$\Delta V\cap V = \emptyset$ is a set of nodes, and $\Delta E$ is a set of directed edges on $\Delta V$ and from $\Delta V$ to $V$ only, as article citations obey a natural temporal order, \ie an article only cites those published earlier, and it is rare for the mutual citations between two articles published in the same time.
+$\Delta V$ is a set of nodes with $\Delta V\cap V = \emptyset$, and $\Delta E$ is a set of directed edges on $\Delta V$ and from $\Delta V$ to $V$ only, as article citation relationships obey a natural temporal order, \ie an article only cites those published earlier, and it is rare for the mutual citations between two articles published in the same time.
 
 
 \stitle{Incremental popularity computation}.
@@ -22,6 +22,7 @@ as almost all venues and authors are affected  by the definitions of the popular
 
 
 As the popularity of articles is defined as the freshness sum of all their citations, it is convenient to maintain. Consider an updated citation graph $G^{c,+}(V^c\cup\Delta V^c, E^c\cup\Delta E^c)$ of $G^c(V^c, E^c)$, and the updated popularity $pop_{c}^+(v)$ can be easily computed as:
+
 \begin{small}
 \begin{equation}\label{eq-inc-pop}
 pop_c^+(v) = pop_c(v) {e^{\sigma (T^+_0-T_0)}} + \sum_{(u,v)\in \Delta E^c} {e^{\sigma (T^+_0-T_u)}},
@@ -31,7 +32,7 @@ pop_c^+(v) = pop_c(v) {e^{\sigma (T^+_0-T_0)}} + \sum_{(u,v)\in \Delta E^c} {e^{
 where $pop_c(v)$ (resp. $pop_c^+(v)$) is the popularity of node $v$ on $G^c$ (resp. $G^{c,+}$), and
  $T_0$ (resp. $T^+_0$) is the current time in $G^c$ (resp. $G^{c,+}$).
 %
-By Eq.~(\ref{eq-inc-pop}), it is easy to see that it takes $O($ $|V^c|+|\Delta V^c|+|\Delta E^c|)$ time to update the popularity of articles.
+By Eq.~(\ref{eq-inc-pop}), it is easy to see that it takes $O($ $|V^c|+|\Delta V^c|+|\Delta E^c|)$ time to update the popularity.
 %This further shows that Eq.~(\ref{eq-inc-pop}) is a desired solution for popularity maintenance.
 
 
@@ -64,16 +65,16 @@ Consider a citation or venue graph $G(V, E)$, its TWPageRank vector $PR$ and the
 
 
 \stitle{Auxiliary data structure maintenance}.
-Two auxiliary data structures in the batch algorithm~\twprscc need to be maintained : (a) the block-wise graph,  a mapping that, given a node of graph $G$, returns the index of the \scc to which it belongs, and (b) the topological order of the nodes in the block-wise graph.
+Two auxiliary data structures in the batch algorithm~\twprscc need to be maintained : (a) on the block-wise graph,  a mapping that, given a node of graph $G$, returns the index of the \scc to which it belongs, and (b) the topological order of the nodes in the block-wise graph.
 %
 Observe that these auxiliary data structures can be easily maintained as follows.
 
 %the idea is to divide $G$ into affected and unaffected areas such that TWPageRank scores of nodes in affected and unaffected areas are updated accordingly.
 
 
-\sstab(1) The block-wise graph of $G^+$ needs to be computed, whose \sccs consist of the \sccs in $G$ and \sccs in the induced subgraph $G^+[\Delta V]$, as  the edges $\Delta E$ are  on $\Delta V$ and from $\Delta V$  to $V$ only. Hence, only those new \sccs in $G^+[\Delta V]$ need to be computed.
+\sstab(1) The block-wise graph of $G^+$ needs to be computed, whose \sccs consist of the \sccs in $G$ and \sccs in the induced subgraph $G^+[\Delta V]$, as  the edges of $\Delta E$ are  on nodes in $\Delta V$ and from $\Delta V$  to $V$ only. Hence, only those new \sccs in $G^+[\Delta V]$ need to be computed.
 
-\sstab(2) The updated topological order $O^+=\Delta O/O$, where $\Delta O$ is the topological order of the block-wise graph of $G^+[\Delta V]$. Hence, only $\Delta O$ needs to be computed. One can easily verify the following.
+\sstab(2) The updated topological order $O^+=\Delta O/O$, where $\Delta O$ is the topological order of the block-wise graph of induced subgraph $G^+[\Delta V]$. Hence, only $\Delta O$ needs to be computed. One can easily verify the following.
 
 
 \begin{prop} \label{lemma-inc-topo}
@@ -101,7 +102,7 @@ Then $V_B=V_{B,1}\cup V_{B,2}\cup V_{B,3}$ is obviously the set of nodes in $G$ 
 %
 As a result, TWPageRank scores on $V_B$ are incrementally re-iterated as follows.
 %using the existing TWPageRank vector scaled with constant ${n}/{n^+}$.
-%
+
 \begin{small}
 \begin{equation}\label{eq-inc-prscc}
 \begin{split}
@@ -163,7 +164,7 @@ We then have $G_C$ = $G^+[\Delta V]$, $\Delta E$ = $E_C\cup E_{CB}$, $V$ = $V_A\
 \end{figure}
 %%%%%%%%%%%%Algorithm
 
-\stitle{Incremental algorithm \inctwprscc}. We now present our algorithm for incremental TWPageRank  computation, shown in Fig.~\ref{alg-inctwprscc}.
+\stitle{Incremental algorithm \inctwprscc}. We now present our incremental algorithm for TWPageRank, shown in Fig.~\ref{alg-inctwprscc}.
 
 
 It takes as input an update $\Delta$ and the previous results on the original graph $G(V, E)$, and returns the TWPageRank vector of the updated graph $G^+$. It first incrementally computes the topological order $O^+$
@@ -263,8 +264,8 @@ Despite of its similar time complexity to \batensemble, algorithm \incensemble t
 %
 (a) It saves $O(|V^c|+|E^c|)$ and $O(|V^v|+|E^v|)$ time when maintaining \sccs and the topological order based on $\Delta^c$ and $\Delta^v$ only, where ($|V^c|$, $|E^c|$, $|V^v|$, $|E^v|$) are more than (92\%, 89\%, 93\%, 89\%) of ($|V^{c,+}|$, $|E^{c,+}|$, $|V^{v,+}|$, $|E^{v,+}|$) on all tested graphs;
 (b) It saves $O(|E^c_A \cup E^c_{AB}|)$ time when updating scores on $V^c$, where edges in $E^c_A\cup E^c_{AB}$ account for more than 28\% of total edges;
-(c) It saves $O(|E^c|)$ time when computing popularity of articles, \ie more than 89\% of $|E^{c,+}|$;
-Finally, (d) It is likely to compute TWPageRank scores on $V^c_B$ and $V^v_B$ with less iterations.
+(c) It saves $O(|E^c|)$ time when computing popularity of articles, which accounts for more than 89\% of $|E^{c,+}|$;
+And, finally, (d) It is likely to compute TWPageRank scores on $V^c_B$ and $V^v_B$ with less iterations.
 
 
 
@@ -324,7 +325,8 @@ And, finally, (4) It is likely to update TWPageRank scores on $V^c_B$ and $V^v_B
 }
 \begin{tabular}{|r|c c c|c c c|}
 \hline
-{\bf Statis.} & \aan & \aminer & \magdata & \aan & \aminer & \magdata \\
+ & \multicolumn{3}{c|}{\bf Citation graphs on}   & \multicolumn{3}{c|}{\bf Venue graphs on}    \\
+\raisebox{1ex}[0pt]{\bf Statis.} & \aan & \aminer & \magdata & \aan & \aminer & \magdata \\
 \hline \hline
 $|V_A|$ & 46.9\% & 81.4\% & 69.5\% & 2.1\% & 45.8\% & 12.4\% \\
 $|V_B|$ & 47.3\% & 10.7\% & 25.9\% & 92.0\% & 47.7\% & 84.6\% \\
@@ -338,7 +340,7 @@ $|E_C|$ & \ 0.3\% & \ 1.4\% & \ 0.1\% & \ 0.2\% & \ 0.1\% & \ 0.1\% \\ \hline
 \end{tabular}
 \end{small}
 \end{center}
-\caption{\small Statistics of affected/unaffected areas on citation graphs (columns 2--4) and venue graphs (columns 5--7) given a yearly update, \ie articles of 2011 on \aan and 2015 on \aminer and \magdata, respectively.}
+\caption{\small Statistics of affected/unaffected areas given a yearly update, \ie articles of 2011 on \aan and 2015 on \aminer and \magdata, respectively.}
 \label{tab-inc}
 \vspace{-6ex}
 \end{table}
