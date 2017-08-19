@@ -18,10 +18,11 @@ set xtics ("1" 0, "2" 1, "3" 2, "4" 3, "5" 4, "6" 5, "7" 6)
 set ylabel "PairAcc" offset 1.5
 set xlabel "difference of future citation counts" offset 0, 0.5
 
-set key horizontal samplen 1.7 spacing 1.2 at graph 1, 0.3
+set key vertical samplen 1.7 spacing 1.0 at graph 1, 0.53
 #set key horizontal font ",13" 
 plot "AMiner_PairAcc3.tab" using ($1):($4) title 'HRank' with linespoints linetype 1 pointtype 4 lc rgb "blue" lw 3,\
 "AMiner_PairAcc3.tab" using ($1):($3) title 'FRank' with linespoints linetype 1 pointtype 2 lc rgb "#228B22" lw 3,\
 "AMiner_PairAcc3.tab" using ($1):($2) title 'PRank' with linespoints linetype 1 pointtype 1 lc 1 lw 3,\
 "AMiner_PairAcc3.tab" using ($1):($5) title 'SARank' with linespoints linetype 1 pointtype 6 lc 7 lw 3,\
+"AMiner_PairAcc3.tab" using ($1):($6) title 'WPR' with linespoints linetype 1 pointtype 8 lc 4 lw 3
 
