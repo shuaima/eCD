@@ -24,5 +24,5 @@ plot "MAG_PairAcc2.tab" using ($1):($5) title 'HRank' with linespoints linetype 
 "MAG_PairAcc2.tab" using ($1):($3) title 'FRank' with linespoints linetype 1 pointtype 2 lc rgb "#228B22" lw 3,\
 "MAG_PairAcc2.tab" using ($1):($4) title 'PRank' with linespoints linetype 1 pointtype 1 lc 1 lw 3,\
  "MAG_PairAcc2.tab" using ($1):($2) title 'SARank' with linespoints linetype 1 pointtype 6 lc 7 lw 3,\
-"MAG_PairAcc2.tab" using ($1):($6) title 'WPR' with linespoints linetype 1 pointtype 8 lc 4 lw 3
+#"MAG_PairAcc2.tab" using ($1):($6) title 'WPR' with linespoints linetype 1 pointtype 8 lc 4 lw 3
 
