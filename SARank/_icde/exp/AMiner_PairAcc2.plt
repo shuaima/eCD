@@ -18,7 +18,7 @@ set xtics ("1" 1, "3" 2, "7" 3, "15" 4, "31" 5, "+{/Symbol \245}" 6)
 set ylabel "PairAcc" offset 1.5
 set xlabel "number of published years" offset 0, 0.5
 
-set key vertical samplen 1.8 spacing 1.0 at graph 1.02, 0.53
+set key vertical samplen 1.8 spacing 1.0 at graph 1.02, 0.45
 #set key horizontal font ",13" 
 plot "AMiner_PairAcc2.tab" using ($1):($5) title 'HRank' with linespoints linetype 1 pointtype 4 lc rgb "blue" lw 3,\
 "AMiner_PairAcc2.tab" using ($1):($3) title 'FRank' with linespoints linetype 1 pointtype 2 lc rgb "#228B22" lw 3,\

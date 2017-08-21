@@ -18,7 +18,7 @@ set xtics ("2010" 2010, "2011" 2011, "2012" 2012, "2013" 2013, "2014" 2014, "201
 set ylabel "PairAcc" offset 1.5
 set xlabel "splitting year" offset 0, 0.5
 
-set key vertical samplen 2 spacing 1.0 at graph 1.03, 0.53
+set key vertical samplen 2 spacing 1.0 at graph 1.03, 0.45
 #set key horizontal font ",13" 
 plot "MAG_PairAcc1_error.tab" using ($1):($2) title '' with linespoints linetype 0 pointtype 4 lc rgb "red" lw 5,\
 "MAG_PairAcc1.tab" using ($1):($6) title 'HRank' with linespoints linetype 1 pointtype 4 lc rgb "blue" lw 3,\
