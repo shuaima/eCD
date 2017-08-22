@@ -82,48 +82,17 @@ Observe that these auxiliary data structures can be easily maintained as follows
  $O^+=\Delta O/O$ is indeed a valid topological order of the block-wise graph of $G^+$.
 \end{prop}
 
-\eat{%%%%%%%%%%%
+\begin{proofSketch}
+We prove that for each edge $(u,v)$ in the block-wise graph of $G^+$, node $u$ comes before $v$ in $O^+$, and the conclusion follows by the definition of topological order.
+\end{proofSketch}
+
+\eat{
 \begin{proof}
 Let $E'_c$ denote the set of cross edges from $V'_\Delta$ to $V'$.
 It suffices to show that for each $(u,v)\in E'\cup E'_\Delta \cup E'_c$, $u$ comes before $v$ in $O^+$,
 which obviously holds (1) for  $E'\cup E'_\Delta$ as $O$ and $\Delta O$ are topological orders of $G'$ and $G'_\Delta$, respectively, and (2) for $E_{c}'$ as nodes in $G'_\Delta$ come before nodes in $G'$.
 \end{proof}
-}%%%%%%%%%%%%
-
-
-%%% affected/unaffected division
-\stitle{Analyses of affected and unaffected areas}.
-The TWPageRank vector $PR$ of graph $G$ is mainly affected in two ways.
-
-
-
-\sstab(1) Let $V_{B,1}\subseteq V$ be the set of nodes reachable from the newly added nodes $\Delta V$ in $G^+$, $V_{B,2}\subseteq V$ be the set of nodes with outgoing edges having weight changes, and $V_{B,3}\subseteq V$ be the set of nodes reachable from  $V_{B,2}$.
-%
-Then $V_B=V_{B,1}\cup V_{B,2}\cup V_{B,3}$ is obviously the set of nodes in $G$ affected by the update $\Delta$.
-%
-As a result, TWPageRank scores on $V_B$ are incrementally re-iterated as follows.
-%using the existing TWPageRank vector scaled with constant ${n}/{n^+}$.
-
-\vspace{-2ex}
-\begin{small}
-\begin{equation}\label{eq-inc-prscc}
-\begin{split}
-PR^+(v) \ = \ &  d \sum_{(u,v)\in E^+_i} M^+_{u,v} PR^+(u) + d \sum_{(u,v)\in E^+_a} M^+_{u,v} PR^+(u)  \\
- + \frac{n}{n^+} \Big( PR(v) &  - d \sum_{(u,v)\in E_i} M_{u,v} PR(u) - d\sum_{(u,v)\in E_a} M_{u,v} PR(u)\Big).
-\end{split}
-\end{equation}
-\vspace{-2ex}
-\end{small}
-Here notations with superscript `$+$' are defined on  $G^+$.
-
-\sstab(2) Let $V_A = V\setminus V_B$. Since nodes in $V_A$ are not reachable from newly added or affected nodes, $V_A$ is essentially not affected by the update $\Delta$. And TWPageRank scores on $V_A$ can be simply adjusted by scaling existing results with constant ${n}/{n^+}$.
-
-Let $G_A=(V_A,E_A)$, $G_B=(V_B,E_B)$ and $G_C=(V_C,E_C)$, respectively, and
-let $E_{AB}$ and $E_{CB}$  be the sets of edges from $G_A$ to $G_B$ and from $G_C$ to $G_B$, respectively.
-In this way, graph $G^+$ is divided into subgraphs $\{G_A$, $G_B$, $G_C\}$ and edge sets $\{E_{AB}, E_{CB}\}$.
-%
-We then have $G_C$ = $G^+[\Delta V]$, $\Delta E$ = $E_C\cup E_{CB}$, $V$ = $V_A\cup V_B$ and $E$ = $E_A\cup E_B\cup E_{AB}$.
-
+} %%%%%%%%%% for eat
 
 
 %%%%%%%%%%%%%%%%%%%%%Algorithm
@@ -165,6 +134,41 @@ We then have $G_C$ = $G^+[\Delta V]$, $\Delta E$ = $E_C\cup E_{CB}$, $V$ = $V_A\
 \vspace{-4ex}
 \end{figure}
 %%%%%%%%%%%%Algorithm
+
+%%% affected/unaffected division
+\stitle{Analyses of affected and unaffected areas}.
+The TWPageRank vector $PR$ of graph $G$ is mainly affected in two ways.
+
+
+
+\sstab(1) Let $V_{B,1}\subseteq V$ be the set of nodes reachable from the newly added nodes $\Delta V$ in $G^+$, $V_{B,2}\subseteq V$ be the set of nodes with outgoing edges having weight changes, and $V_{B,3}\subseteq V$ be the set of nodes reachable from  $V_{B,2}$.
+%
+Then $V_B=V_{B,1}\cup V_{B,2}\cup V_{B,3}$ is obviously the set of nodes in $G$ affected by the update $\Delta$.
+%
+As a result, TWPageRank scores on $V_B$ are incrementally re-iterated as follows.
+%using the existing TWPageRank vector scaled with constant ${n}/{n^+}$.
+
+\vspace{-2ex}
+\begin{small}
+\begin{equation}\label{eq-inc-prscc}
+\begin{split}
+PR^+(v) \ = \ &  d \sum_{(u,v)\in E^+_i} M^+_{u,v} PR^+(u) + d \sum_{(u,v)\in E^+_a} M^+_{u,v} PR^+(u)  \\
+ + \frac{n}{n^+} \Big( PR(v) &  - d \sum_{(u,v)\in E_i} M_{u,v} PR(u) - d\sum_{(u,v)\in E_a} M_{u,v} PR(u)\Big).
+\end{split}
+\end{equation}
+\vspace{-2ex}
+\end{small}
+Here notations with superscript `$+$' are defined on  $G^+$.
+
+\sstab(2) Let $V_A = V\setminus V_B$. Since nodes in $V_A$ are not reachable from newly added or affected nodes, $V_A$ is essentially not affected by the update $\Delta$. And TWPageRank scores on $V_A$ can be simply adjusted by scaling existing results with constant ${n}/{n^+}$.
+
+Let $G_A=(V_A,E_A)$, $G_B=(V_B,E_B)$ and $G_C=(V_C,E_C)$, respectively, and
+let $E_{AB}$ and $E_{CB}$  be the sets of edges from $G_A$ to $G_B$ and from $G_C$ to $G_B$, respectively.
+In this way, graph $G^+$ is divided into subgraphs $\{G_A$, $G_B$, $G_C\}$ and edge sets $\{E_{AB}, E_{CB}\}$.
+%
+We then have $G_C$ = $G^+[\Delta V]$, $\Delta E$ = $E_C\cup E_{CB}$, $V$ = $V_A\cup V_B$ and $E$ = $E_A\cup E_B\cup E_{AB}$.
+
+
 
 \stitle{Incremental algorithm \inctwprscc}. We now present our incremental algorithm for TWPageRank, shown in Fig.~\ref{alg-inctwprscc}.
 
@@ -215,13 +219,13 @@ When updating the TWPageRank scores, following $O^+$, scores of nodes in $G_C$, 
 The TWPageRank vector $PR^+$ returned by~\inctwprscc converges such that $||PR^+-PR^{*}||_1 < \epsilon$, where $PR^{*}$ is the convergent TWPageRank vector.
 \end{theorem}
 
-\eat{
+
 \begin{proofSketch}
 Assume a topological order $v_1'/\dots/v_{l}'$ of block-wise graph $G^+{'}$ where $l=|O^+|$. It suffices to prove that the change sum of $PR^+(v)$ with $v\in scc_k$ is no more than $\epsilon\cdot |scc_k|/|V^+|$ for $scc_k$ corresponding to $v_k'$ ($k\in [1,l]$) by induction.
 %The conclusion follows combining Lemma~\ref{prop-prscc}
-(see \cite{SARank-full} for details).
+%(see \cite{SARank-full} for details).
 \end{proofSketch}
-}
+
 
 \begin{figure}[tb!]
 \centering
