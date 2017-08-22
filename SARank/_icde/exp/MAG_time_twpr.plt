@@ -18,7 +18,7 @@ set xtics ("09" 2009, "10" 2010, "11" 2011, "12" 2012, "13" 2013, "14" 2014, "15
 set logscale y
 set ylabel "time (sec.)" offset 1.5
 set xlabel "splitting year" offset 0, 0.5
-set key vertical samplen 2 spacing 1 at graph 0.97, 0.4
+set key vertical samplen 2 spacing 1 at graph 0.97, 0.35
 #set key horizontal font ",13" 
 plot "MAG_time_twpr.tab" using ($1):($3) title '{/=13 incTWPR}' with linespoints linetype 1 pointtype 3 lc rgb "orchid4" lw 3,\
 "MAG_time_twpr.tab" using ($1):($2) title '{/=13 batTWPR}' with linespoints linetype 1 pointtype 6 lc 7 lw 3,\
