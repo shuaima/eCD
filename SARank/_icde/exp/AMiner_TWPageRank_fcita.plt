@@ -23,16 +23,16 @@ set style fill pattern 2 border -1
 #set style fill solid 0.5 border
 
 #set label 1 "0.0%" at -0.25,0.88 font "Times-Roman,13" rotate by 40
-set label 2 "-0.02%" at -0.35,0.86 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
-set label 3 "-0.08%" at 0.65,0.86 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
-set label 4 "-0.11%" at 1.65,0.86 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
-set label 5 "-0.15%" at 2.65,0.86 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
-set label 6 "-0.18%" at 3.65,0.86 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
-set label 7 "-0.19%" at 4.65,0.86 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
+set label 2 "-0.02%" at -0.35,0.865 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
+set label 3 "-0.08%" at 0.65,0.865 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
+set label 4 "-0.11%" at 1.65,0.865 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
+set label 5 "-0.15%" at 2.65,0.865 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
+set label 6 "-0.18%" at 3.65,0.865 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
+set label 7 "-0.19%" at 4.65,0.865 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
 set label 8 "-0.16%" at 5.65,0.855 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
 set label 9 "-0.02%" at 6.65,0.85 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
-set label 10 "+0.21%" at 7.65,0.835 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
-set label 11 "+0.05%" at 8.65,0.76 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
+set label 10 "+0.21%" at 7.65,0.845 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
+set label 11 "+0.05%" at 8.65,0.77 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
 
 
 plot "AMiner_TWPageRank.tab" using 5:xticlabels(1) title 'TWPRank',''using 4:xticlabels(1) title 'SARank'
