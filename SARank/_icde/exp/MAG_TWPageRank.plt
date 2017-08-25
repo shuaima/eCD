@@ -16,10 +16,12 @@ set ytics ("0.54" 0.54, "0.60" 0.6, "0.66" 0.66, "0.72" 0.72, "0.78" 0.78, "0.84
 #set logscale y
 set ylabel "PairAcc" offset 1.5
 set xlabel "importance weighting factor" offset 0,0.5
-set key vertical samplen 3.3 spacing 1.2 at graph 0.97, 0.65
+set key vertical samplen 2 spacing 1.1 at graph 0.8, 0.7
 #set key horizontal font ",13" 
 plot "MAG_TWPageRank.tab" using ($1):($4) title 'SARank(FCita)'  with linespoints linetype 1 pointtype 2 lc 7 lw 3,\
 "MAG_TWPageRank.tab" using ($1):($5) title 'SARank(FCita)'  with linespoints linetype 4 pointtype 3 lc rgb "orchid4" lw 3,\
+"MAG_TWPageRank.tab" using ($1):($2) title ' ' with linespoints linetype 0 pointtype 6 lc rgb "white" lw 3 ,\
+"MAG_TWPageRank.tab" using ($1):($2) title ' ' with linespoints linetype 0 pointtype 6 lc rgb "white" lw 3 ,\
 "MAG_TWPageRank.tab" using ($1):($2) title 'SARank(Recom)' with linespoints linetype 0 pointtype 6 lc 7 lw 3 ,\
 "MAG_TWPageRank.tab" using ($1):($3) title 'SARank(Recom)' with linespoints linetype 0 pointtype 1 lc rgb "orchid4" lw 3 
 
