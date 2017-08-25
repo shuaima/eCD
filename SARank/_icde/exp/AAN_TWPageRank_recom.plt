@@ -7,8 +7,8 @@ set style histogram clustered gap 1
 #set noy2tics
 #set nox2tics
 set xr [-0.6:9.6]
-set yr [0.65:0.9]  
-set ytics ("0.65" 0.65, "0.7" 0.7, "0.75" 0.75, "0.8" 0.8, "0.85" 0.85, "0.9" 0.9)
+set yr [0.66:0.90]  
+set ytics ("0.66" 0.66, "0.72" 0.72, "0.78" 0.78, "0.84" 0.84, "0.90" 0.90)
 #set xtics ("0" 0, "0.2" 0.2, "0.4" 0.4, "0.6" 0.6, "0.8" 0.8, "1" 1) 
 #set x2tics ("" 2.5, "" 7.5, "" 12.5,"" 17.5) 
 #set ytics scale 0.05
@@ -17,6 +17,7 @@ set ytics ("0.65" 0.65, "0.7" 0.7, "0.75" 0.75, "0.8" 0.8, "0.85" 0.85, "0.9" 0.
 #set xtics rotate by -45
 set ylabel "PairAcc" offset 1.5
 set xlabel "importance weighting factor" offset 0, 0.5
+set key horizontal at graph 0.84, 0.95
 
 set boxwidth 1
 set style fill pattern 2 border -1
@@ -35,4 +36,5 @@ set label 10 "+2.16%" at 7.65,0.73 font "Times-Roman,13" rotate by 40 textcolor 
 set label 11 "+2.20%" at 8.65,0.705 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
 
 
-plot "AAN_TWPageRank.tab" using 3:xticlabels(1) title 'TWPRank',''using 2:xticlabels(1) title 'SARank'
+plot "AAN_TWPageRank.tab" using 3:xticlabels(1) title 'DRank' lw 1.5,\
+''using 2:xticlabels(1) title 'SARank'
