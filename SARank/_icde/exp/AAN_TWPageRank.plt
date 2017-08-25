@@ -21,6 +21,6 @@ set key vertical samplen 2 spacing 1 at graph 0.83, 0.47
 plot "AAN_TWPageRank.tab" using ($1):($4) title 'SARank(FCita)'  with linespoints linetype 1 pointtype 2 lc 7 lw 3,\
 "AAN_TWPageRank.tab" using ($1):($5) title 'TWPRank(FCita)'  with linespoints linetype 4 pointtype 3 lc rgb "orchid4" lw 3,\
 "AAN_TWPageRank.tab" using ($1):($2) title 'SARank(Recom)' with linespoints linetype 0 pointtype 6 lc 7 lw 3 ,\
-"AAN_TWPageRank.tab" using ($1):($3) title 'TWPRank(Recom)' with linespoints linetype 0 pointtype 1 lc rgb "orchid4" lw 3 
+"AAN_TWPageRank.tab" using ($1):($3) title 'TWPRank(Recom)' with linespoints linetype 0 pointtype 8 lc rgb "orchid4" lw 3 
 
 #lc rgb "#D2691E"   {/Symbol l}
