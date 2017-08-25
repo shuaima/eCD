@@ -3,10 +3,10 @@ set output "AAN_TWPageRank_fcita.eps"
 set size 0.9, 0.3
 
 set style data histograms
-set style histogram clustered gap 1
+set style histogram clustered gap 1.2
 #set noy2tics
 #set nox2tics
-#set xr [0:1]
+set xr [-0.6:9.6]
 set yr [0.65:0.9]  
 set ytics ("0.65" 0.65, "0.7" 0.7, "0.75" 0.75, "0.8" 0.8, "0.85" 0.85, "0.9" 0.9)
 #set xtics ("0" 0, "0.2" 0.2, "0.4" 0.4, "0.6" 0.6, "0.8" 0.8, "1" 1) 
@@ -23,16 +23,16 @@ set style fill pattern 2 border -1
 #set style fill solid 0.5 border
 
 #set label 1 "0.0%" at -0.25,0.85 font "Times-Roman,13" rotate by 320
-set label 2 "-0.10%" at -0.35,0.84 font "Times-Roman,13" rotate by 320
-set label 3 "-0.07%" at 0.65,0.84 font "Times-Roman,13" rotate by 320
-set label 4 "+0.08%" at 1.65,0.84 font "Times-Roman,13" rotate by 320
-set label 5 "-0.03%" at 2.65,0.84 font "Times-Roman,13" rotate by 320
-set label 6 "+0.08%" at 3.65,0.84 font "Times-Roman,13" rotate by 320
-set label 7 "+0.30%" at 4.65,0.84 font "Times-Roman,13" rotate by 320
-set label 8 "+0.41%" at 5.65,0.835 font "Times-Roman,13" rotate by 320
-set label 9 "+0.44%" at 6.65,0.835 font "Times-Roman,13" rotate by 320
-set label 10 "+0.85%" at 7.65,0.825 font "Times-Roman,13" rotate by 320
-set label 11 "+0.55%" at 8.65,0.805 font "Times-Roman,13" rotate by 320
+set label 2 "-0.10%" at -0.35,0.805 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
+set label 3 "-0.07%" at 0.65,0.805 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
+set label 4 "+0.08%" at 1.65,0.805 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
+set label 5 "-0.03%" at 2.65,0.805 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
+set label 6 "+0.08%" at 3.65,0.805 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
+set label 7 "+0.30%" at 4.65,0.805 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
+set label 8 "+0.41%" at 5.65,0.8 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
+set label 9 "+0.44%" at 6.65,0.795 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
+set label 10 "+0.85%" at 7.65,0.785 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
+set label 11 "+0.55%" at 8.65,0.765 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
 
 
-plot "AAN_TWPageRank.tab" using 4:xticlabels(1) title 'SARank(FCita)',''using 5:xticlabels(1) title 'TWPRank(FCita)'
+plot "AAN_TWPageRank.tab" using 5:xticlabels(1) title 'TWPRank',''using 4:xticlabels(1) title 'SARank'
