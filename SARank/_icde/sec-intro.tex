@@ -5,7 +5,7 @@ Query independent ranking of scholarly articles has drawn significant attentions
 \marked{
 In the academic community, the most popular approaches to scholarly article ranking have witnessed a shift from citation count analysis~\cite{Garfield471,Hirsch15112005} to graph analysis~\cite{ChenXMR07,Zhou07-CoRank,Jiang12-MRank,Waltman2014}. These graph-based methods leverage the global structure of the bibliographic networks and the interactions of heterogeneous entities within them, and, hence, are usually better than those based on citation counts only.
 %
-Besides, efforts have also been made from the industry, \eg Microsoft Academic~\cite{ms-academic}, Google Scholar~\cite{g-scholar}  and Semantic Scholar~\cite{sem-scholar}. More specifically, Google Scholar aims to rank articles in the way researchers do, weighing the full text, where they were published, who they were written by, as well as how often and how recently they have been cited.
+Besides, efforts have also been made from the industry, \eg Google Scholar~\cite{g-scholar}, Semantic Scholar~\cite{sem-scholar} and Microsoft Academic~\cite{Sinha15:MAG}. More specifically, Google Scholar aims to rank articles in the way researchers do, weighing the full text, where they were published, who they were written by, as well as how often and how recently they have been cited.
 %Microsoft Academic considers how often and to which a publication is cited to determine the ranking.
 On the other hand, Semantic Scholar proposes to use the citation velocity feature, which is a weighted average number of the publication's citations for the last three years.
 }
@@ -29,7 +29,7 @@ First, even if we are only to rank one type of entities (\ie scholarly articles)
 %Newly published articles are very likely to have increasing impacts in the next few years, and those published many years ago tend to have decreasing impacts, as researchers potentially have more interests in recently reported results. Indeed, as shown by the statistics of three scholarly datasets (\aan, \aminer and \magdata) in Fig.~\ref{fig-citation}, the citation numbers of articles in general reach the peak in the first 1 or 2 years after their publication, and then decrease accordingly. % Note that we do not plot the proportion of citations at $x=0$ on \aminer, which is an impractical value of 23.6\%. The above citation pattern is described as a complex log-normal probability in~\cite{WangSB13}.
 Newly published articles are very likely to have increasing impacts in the next few years, and those published many years ago tend to have decreasing impacts, which conform to the universal pattern of citation profiles such that the number of citation generally grows in the first two to three years, remains at a steady peak of one to two years, and then declines over the rest of time~\cite{Chakraborty15}. Moreover, Chakraborty et al. discuss in~\cite{Chakraborty15} that individual articles indeed follow a remarkably diverse set of patterns (instead of the general one), and categorize all articles into six patterns featured by the time when the numbers of citations reaches the peaks.
 }
-Finally, academic data is dynamic and continuously growing. Indeed, the number of articles in \magdata has exceeded 126 million, and keeps increasing at around 5.7 million per year~\cite{Sinha15:MAG}. \marked{Such dynamism may possibly cause certain long-term biases into data, \eg the number of citations produced by scholarly articles published in each year increases significantly over time, which should be properly considered. }
+Finally, academic data is dynamic and continuously growing. Indeed, the number of articles in \magdata has exceeded 126 million, and keeps increasing at around 5.7 million per year~\cite{Sinha15:MAG}. \marked{Such dynamism may possibly cause certain long-term biases into data, \eg the number of citations increases significantly over time~\cite{BornmannM15}, which should be properly considered for scholarly article ranking. }
 
 
 Query independent ranking of scholarly articles is challenging~\cite{wsdmcup}, although there exists quite a bit of work on scholarly article ranking, \eg~\cite{Garfield471,ChenXMR07,Zhou07-CoRank,ShenAAAI16,Liang16AAAI,Jiang12-MRank,Waltman2014}.
@@ -58,13 +58,13 @@ To this end, we propose an effective and efficient approach for query independen
 %
 The importance is a combination of {\em prestige} and {\em popularity} to capture the evolving nature of entities.
 %
-To compute the prestige of articles and venues, we propose a novel {\em Time-Weighted PageRank} with a time decaying factor (based on citation statistics), and the prestige of authors is the average prestige of all their published articles.
+To compute the prestige of articles and venues, we propose a novel {\em Time-Weighted PageRank} with a time decaying factor based on citation statistics (instead of simply exponential decay), and the prestige of authors is the average prestige of all their published articles.
 %
 The popularity of an article is the sum of all its citations' freshness (how close to the current year), while the one of venues and authors is the average popularity of their associated articles.
 %
 %Observe that (a), intuitively, prestige favors articles with many citations soon after their publication, and popularity favors those with recent citations, and (b) both prestige and popularity capture the evolving nature of entities.
 %
-\marked{To the best our knowledge, the Time-Weighted PageRank in this work is among the first to incorporate both the diverse citation patterns of individual articles and the bias caused by the dynamism of data to better model the evolving prestige.}
+\marked{To the best of our knowledge, the Time-Weighted PageRank in this work is among the first to incorporate both the diverse citation patterns of individual articles and the long-term bias caused by the dynamism of data to better model the evolving prestige.}
 
 
 \sstab(2)  We then develop  a batch algorithm for scholarly article ranking (Section \ref{sec-alg}), in which we propose a block-wise method for Time-Weighted PageRank in terms of an analysis of the citation characteristics of scholarly articles.
