@@ -1,23 +1,25 @@
 \section{Introduction}
 \label{sec-intro}
 
-Query independent ranking of scholarly articles has drawn significant attentions from both academia~\cite{Garfield471,ChenXMR07,Zhou07-CoRank,ShenAAAI16,Liang16AAAI,Jiang12-MRank,Waltman2014,TanLMGSW16} and industry~\cite{sem-scholar,g-scholar,Sinha15:MAG}.
-\marked{
+\marked{Evaluating the query independent ranking of scholarly articles is an important problem for both research and practice.} Generally speaking, a ranking is {\em a function that assigns each entity a numerical score}. Query independent ranking aims to give a static ranking based on the scholarly article data only, and is independent of how well articles match a specific query. Such a ranking plays a key role in literature recommendation systems, especially in the {\em cold start} scenario.
+
+%Query independent ranking of scholarly articles has drawn significant attentions from both academia~\cite{Garfield471,ChenXMR07,Zhou07-CoRank,ShenAAAI16,Liang16AAAI,Jiang12-MRank,Waltman2014,TanLMGSW16} and industry~\cite{sem-scholar,g-scholar,Sinha15:MAG}.
+
+\marked{Due to its importance, the problem has drawn significant attentions from both academia~\cite{Garfield471,ChenXMR07,Zhou07-CoRank,ShenAAAI16,Liang16AAAI,Jiang12-MRank,Waltman2014,TanLMGSW16} and industry~\cite{sem-scholar,g-scholar,Sinha15:MAG}.
+%
 In the academic community, the most popular approaches to scholarly article ranking have witnessed a shift from citation count analysis~\cite{Garfield471,Hirsch15112005} to graph analysis~\cite{ChenXMR07,Zhou07-CoRank,Jiang12-MRank,Waltman2014}. These graph-based methods leverage the global structure of the bibliographic networks and the interactions of heterogeneous entities within them, and, hence, are usually better than those based on citation counts only.
 %
-Besides, efforts have also been made from the industry, \eg Google Scholar~\cite{g-scholar}, Semantic Scholar~\cite{sem-scholar} and Microsoft Academic~\cite{Sinha15:MAG}. More specifically, Google Scholar aims to rank articles in the way researchers do, weighing the full text, where they were published, who they were written by, as well as how often and how recently they have been cited.
+Besides, efforts have also been made from the industry. For instance, Google Scholar~\cite{g-scholar} aims to rank articles in the way researchers do, weighing the full text, where they were published, who they were written by, as well as how often and how recently they have been cited.
 %Microsoft Academic considers how often and to which a publication is cited to determine the ranking.
-On the other hand, Semantic Scholar proposes to use the citation velocity feature, which is a weighted average number of the publication's citations for the last three years.
+On the other hand, Semantic Scholar~\cite{sem-scholar} proposes to use the citation velocity feature, which is a weighted average number of the publication's citations for the last three years.
 }
 
+%, \eg Google Scholar~\cite{g-scholar}, Semantic Scholar~\cite{sem-scholar} and Microsoft Academic~\cite{Sinha15:MAG}
 % https://scholar.google.com/intl/zh-CN/scholar/about.html
 % http://academic.research.microsoft.com/About/Help.htm
 % https://www.semanticscholar.org/faq#citation-velocity
 
-
-Generally speaking, a ranking is {\em a function that assigns each entity a numerical score}. Query independent ranking aims to give a static ranking based on the scholarly article data only, and is independent of how well articles match a specific query. Such a ranking plays a key role in literature recommendation systems, especially in the {\em cold start} scenario.
-
-Scholarly articles are involved with multiple entities such as authors, venues, dates and references. Hence, scholarly article ranking is essentially a problem of assessing the importance of nodes in a heterogeneous network.
+Scholarly articles are involved with multiple entities such as authors, venues, dates and references. \marked{Following the popular graph-based formalization}, scholarly article ranking is essentially a problem of assessing the importance of nodes in a heterogeneous network.
 However, effective and efficient ranking of nodes in such a large complex network is a challenging task since the involved entities
 are heterogeneous, evolving and dynamic~\cite{AggarwalS14-survey,fcs-biggraph}.
 
@@ -58,7 +60,7 @@ To this end, we propose an effective and efficient approach for query independen
 %
 The importance is a combination of {\em prestige} and {\em popularity} to capture the evolving nature of entities.
 %
-To compute the prestige of articles and venues, we propose a novel {\em Time-Weighted PageRank} with a time decaying factor based on citation statistics (instead of simply exponential decay), and the prestige of authors is the average prestige of all their published articles.
+To compute the prestige of articles and venues, we propose a novel {\em Time-Weighted PageRank} with a time decaying factor based on citation statistics (instead of simple exponential decay), and the prestige of authors is the average prestige of all their published articles.
 %
 The popularity of an article is the sum of all its citations' freshness (how close to the current year), while the one of venues and authors is the average popularity of their associated articles.
 %
