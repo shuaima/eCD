@@ -12,11 +12,15 @@ Finally, it combines the  prestige and popularity of the three components to pro
 
 
 
-\stitle{Popularity computation}. It is easy to see that (a) the popularity of articles can be computed by scanning through all citations once and adding the freshness of citations to their corresponding articles, by Eq.~(\ref{eq-pop}), and (b) the popularity of venues in a specific year or authors is computed by averaging the popularity of the articles published in the venues or by the authors.
+%\stitle{Popularity computation}. It is easy to see that
+For popularity computation, it is easy to see that 
+(a) the popularity of articles can be computed by scanning through all citations once and adding the freshness of citations to their corresponding articles, by Eq.~(\ref{eq-pop}), and (b) the popularity of venues in a specific year or authors is computed by averaging the popularity of the articles published in the venues or by the authors.
 That is, the popularity computation can be done by scanning through all citations once.
 
 
-\stitle{Prestige computation}. As the prestige of authors is defined as the average prestige of their published articles, it suffices to scan through all author-article  relationships for computing the prestige of authors. The prestige of  articles and venues in a specific year is computed by TWPageRank on citation graphs and venue graphs, which is usually computed in an iterative manner~\cite{Brin98:PageRank} and is the most expensive computation for ranking. Hence, the key of the computation of our approach is a good solution for computing TWPageRank.
+%\stitle{Prestige computation}. As the prestige of authors is defined as the average prestige of their published articles,
+For prestige computation, as the one of authors is defined as the average prestige of their published articles, 
+it suffices to scan through all author-article  relationships for computing the prestige of authors. The prestige of  articles and venues in a specific year is computed by TWPageRank on citation graphs and venue graphs, which is usually computed in an iterative manner~\cite{Brin98:PageRank} and is the most expensive computation for ranking. Hence, the key of the computation of our approach is a good solution for computing TWPageRank.
 
 
 %While graphs derived from scholarly data is a special class of graphs in the sense that edges strictly follow {\em temporal order}, \eg an article can only cite others that are published earlier. In this section, we exploit this temporal order of scholarly data in ensemble computation, which significantly speeds up the efficiency.
@@ -103,7 +107,7 @@ The vector $PR$ returned by~\twprscc converges such that $||PR-PR^*||_1 < \epsil
 \end{cor}
 
 \begin{proofSketch}
-We first prove that the sum of changes after another iteration from $PR$, \ie $||d M^T PR + \frac{1-d}{n} e-PR||_1$, is smaller than $\epsilon$, and then prove that $||PR^*-PR||_1$ is smaller than the sum of changes. %(see~\cite {ERank-full} for details). % since $\epsilon > ||PR^+-PR||_1 = ||d\cdot M^T \cdot (PR-PR^*)||_1 + ||PR-PR^*||_1$.
+We first prove that the sum of changes after another iteration from $PR$, \ie $||d M^T PR + (1-d)e/n-PR||_1$, is smaller than $\epsilon$, and then prove that $||PR^*-PR||_1$ is smaller than the sum of changes. %(see~\cite {ERank-full} for details). % since $\epsilon > ||PR^+-PR||_1 = ||d\cdot M^T \cdot (PR-PR^*)||_1 + ||PR-PR^*||_1$.
 \end{proofSketch}
 
 
@@ -119,7 +123,8 @@ We first prove that the sum of changes after another iteration from $PR$, \ie $|
 
 \stitle{Analysis of the block-wise algorithm}. While similar block-wise algorithms were originally proposed for Web graphs~\cite{Berkhin05}, we next show that they are even better for the TWPageRank computation associated with scholarly data.
 %
-The block-wise graph and its topological order can be done in $O(|V|+|E|)$ time~\cite{CormenLRS01}, and updating TWPageRank scores takes $O(|V|+|E_a|+t|E_i|)$ time as the edges in $E_a$ are only scanned once. From these, we have the following.
+The block-wise graph and its topological order can be done in $O(|V|+|E|)$ time~\cite{CormenLRS01}, and updating TWPageRank scores takes $O(|V|+|E_a|+t|E_i|)$ time as the edges in $E_a$ are only scanned once. 
+From these, we have the following.
 
 
 
@@ -207,7 +212,7 @@ Indeed, on (\aan, \aminer, \magdata), the nodes in the largest SCC amount to (0.
 
 %\subsection{Time \& Space Complexity Analyses}
 
-\stitle{Time \& space complexity analyses of the complete algorithm}.
+\stitle{Time \& space complexity analyses of the batch algorithm}.
 %
 By Lemma~\ref{prop-venue-time-complexity} and the analyses in Section~\ref{subsec-bat-alg}, one can verify that algorithm \batensemble takes $O(|V^c|+|V^v|+|E^c_a|+|E^v_a|+t|E^c_i|+t|E^v_i|+|PA|)$ time, where $|PA|$ is the total number of author-article relationships, and takes $O(7|V^c|+2|V^c{'}|+4|V^v|+2|V^v{'}|+|E^c|+|E^c{'}|+|E^v|+|E^v{'}|+2|A|+|D|)$ space, where $|A|$ is the number of authors and $|D|$ is the size of academic graph data $D$.
 % TWPageRank on V^c: 3|V^c| + |E^c| + 2|V^c{'}| + |E^c{'}|
