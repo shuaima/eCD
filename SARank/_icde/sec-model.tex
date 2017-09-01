@@ -11,7 +11,7 @@ model, referred to as \ensemblerank, that assembles the importance of articles, 
 \subsection{Time-Weighted PageRank}
 \label{subsec-twpr}
 
-We first present Time-Weighted PageRank (TWPageRank), as the direct use of PageRank for ranking scholarly articles is problematic as discussed below.
+We first present Time-Weighted PageRank (TWPageRank) \marked{based on citation statistics}, as the direct use of PageRank for ranking scholarly articles is problematic as discussed below.
 
 
 
@@ -25,8 +25,7 @@ We first present Time-Weighted PageRank (TWPageRank), as the direct use of PageR
 
 %, such that each article can distribute more of its authority to those that are more influential to it.
 
-\noindent(2) \marked{The semantics of citation relationships are time-dependent, which means that citations at different periods of time potentially reveal different information. This has already been  exploited for scholarly article ranking~\cite{Li08TSRanking,Wang13AAAI,WalkerXKM07}, while PageRank does not consider temporal information at all.}
-
+\noindent(2) \marked{The semantics of citation relationships are time-dependent, which means that citations at different periods of time potentially reveal different information and each individual article reaches their periods in different time. This has already been  exploited for scholarly article ranking~\cite{Li08TSRanking,Wang13AAAI,WalkerXKM07}, while PageRank does not consider temporal information at all. }
 
 
 \stitle{Time-Weighted PageRank (TWPageRank)}. Most previous work simply exploits temporal information in the form of exponential decay~\cite{Li08TSRanking,Wang13AAAI,sayyadi09,WalkerXKM07}. We rethink the usage of time information in terms of the impacts of scholarly articles.
@@ -64,7 +63,7 @@ w(u,v)  =  \begin{cases}  \hspace{7ex} 1 & T_u <  Peak_v \\
 %
 \noindent where $T_u$ is the time of node $u$, $Peak_v$ is the peak time of node $v$ after which the impact weights of edges to $v$ decay with time, and $\sigma$ is a negative number controlling the decaying speed of the impacts.
 By default, Eq.~(\ref{eq-infl-weights}) uses years as its time granularity. Note that the time decaying factor $\sigma$ is introduced to provide flexibility for TWPageRank in various applications, and its value is typically within a small interval, \eg $[-2,0]$, such that $w(u,v)$ does not decay when $\sigma=0$ and already decays more than a half per year when $\sigma=-1$.
-For the sake of completeness, we further set $w(u,v)$ to $0$ if these does not exist an edge from $u$ to $v$ in the graph.
+For the sake of completeness, we further set $w(u,v)$ to $0$ if there does not exist an edge from $u$ to $v$ in the graph.
 
 \begin{figure}
 \centering
