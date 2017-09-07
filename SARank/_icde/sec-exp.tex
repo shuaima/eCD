@@ -70,10 +70,11 @@ These datasets were further cleaned by deleting self-citations and citations fro
 
 
 \stitle{Accuracy metric and ground-truth}.
-We adopted the {\em pairwise accuracy} introduced by Microsoft~\cite{Richardson06:BPR,wsdmcup} to evaluate the ranking quality, \ie the fraction of times that a ranking agrees with the correct ranking orders of scholarly article pairs:
+We adopted the {\em pairwise accuracy} introduced by Microsoft~\cite{Richardson06:BPR,wsdmcup} to evaluate the ranking quality, \ie the fraction of times that a ranking agrees with the correct ranking orders of scholarly article pairs.
+We constructed two sets of ground-truth importance orders of article pairs with \recom and \fcita.
 
+\eat{
 \vspace{-1ex}
-
 \begin{small}
 \begin{equation}
 \label{eq-metric}
@@ -82,8 +83,8 @@ We adopted the {\em pairwise accuracy} introduced by Microsoft~\cite{Richardson0
 \end{equation}
 \end{small}
 \vspace{-3ex}
+}
 
-We constructed two sets of ground-truth importance orders of article pairs with \recom and \fcita.
 
 \noindent
 (1) \recom~\cite{Liang16AAAI} assumes that scholarly articles with more recommendations are of higher importance.
@@ -144,8 +145,9 @@ When quantity measures are evaluated, the test was repeated over 5 times and the
 %\vspace{-2ex}
 \label{tab-result}
 \begin{center}
+\caption{\small Accuracy tests with \recom}
 \begin{small}
-\vspace{1ex}
+\vspace{-.5ex}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 {\bf Datasets}   &  \hspace{1ex}\pagerank\hspace{1ex}     & \hspace{1ex}\futurerank\hspace{1ex}  &  \hspace{1ex}\hhgrank\hspace{1ex}  &   \hspace{1ex}\ensemblerank\hspace{1ex}    \\
@@ -157,7 +159,6 @@ When quantity measures are evaluated, the test was repeated over 5 times and the
 \vspace{-.5ex}
 \end{small}
 \end{center}
-\caption{\small Accuracy tests with \recom}
 \vspace{-5ex}
 \end{table}
 %%%%%%%%%%%%%%%%%%%
@@ -263,7 +264,7 @@ When quantity measures are evaluated, the test was repeated over 5 times and the
 \vspace{-2.5ex}
 \caption{\small Efficiency tests on \aminer ((a)--(b)) and  \magdata ((c)--(d))}
 \label{exp-time}
-\vspace{-2ex}
+\vspace{-3ex}
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -309,7 +310,7 @@ The results of \PairAcc are reported in Figs.~\ref{exp-aan-futureyear}, \ref{exp
 
 When varying $Y_s$, the \PairAcc of all algorithms increases with the increment of $Y_s$ on both \aminer and \magdata, indicating that it is easier to assess short-term (large $Y_s$) than long-term (small $Y_s$) importance. While the results on \aan do not follow this trend, possibly because \aan does not record the complete articles of 2007 and 2009.
 Moreover, \ensemblerank consistently ranks better than all competitors, regardless of assessing short-term or long-term importance.
-Indeed, \ensemblerank improves the \PairAcc over (\pagerank, \futurerank, \hhgrank) by (15.9\%, 3.8\%, 4.8\%) on \aan, (19.4\%, 7.7\%, 6.0\%) on \aminer, and  (11.7\%, 4.4\%, 1.5\%) on \magdata, on average, respectively.
+Indeed, \ensemblerank improves the \PairAcc over (\pagerank, \futurerank, \hhgrank) by (15.9\%, 3.8\%, 4.8\%) on \aan, (19.4\%, 7.7\%, 6.0\%) on \aminer, and  (11.7\%, 4.4\%, 1.5\%) on \magdata, respectively.
 
 
 
@@ -356,14 +357,14 @@ For TWPageRank computation, algorithm \inctwprscc is on average (2.4, 4.4) and (
 %
 For scholarly article ranking, algorithm \incensemble is on average (1.8, 3.0, 3.1, 79) and (2.0, 3.0, 4.4, 245) times faster than (\batensemble, \powensemble, \futurerank, \hhgrank) on \aminer and \magdata, respectively.
 
-\etitle{Remarks}.
+%\etitle{Remarks}.
 In our tests we adopted a yearly update policy due the limitation of  available time information. In practice our algorithms may bring more efficiency benefits since the ranking is usually more frequent, such that the data updates are smaller and the unaffected area is very likely much larger.
 
 %algorithm \batensemble is on average (1.3, 2.5, 348) times faster than (\powensemble, \futurerank, \hhgrank), respectively. And algorithm \incensemble further improves the efficiency by 22\% on average, compared with \batensemble.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\graphscaleexpapp}{0.28}
+\newcommand{\graphscaleexpapp}{0.25}
 \newcommand{\graphmarginexpapp}{-2ex}
 %%% all in 1 Figure
 \begin{figure*}[tb!]
@@ -372,13 +373,13 @@ In our tests we adopted a yearly update policy due the limitation of  available 
 \subfigure[{\scriptsize \aan}]{\label{exp-aan-ab-recom}
 \includegraphics[scale=\graphscaleexpapp]{./exp/AAN-para-recm.eps}}
 %\quad\quad
-\hspace{\graphmarginexpapp}
-%\hfill
+%\hspace{\graphmarginexpapp}
+\hfill
 \subfigure[{\scriptsize \aminer}]{\label{exp-aminer-ab-recom}
 \includegraphics[scale=\graphscaleexpapp]{./exp/AMiner-para-recm.eps}}
 %\quad\quad
-\hspace{\graphmarginexpapp}
-%\hfill
+%\hspace{\graphmarginexpapp}
+\hfill
 \subfigure[{\scriptsize \magdata}]{\label{exp-mag-ab-recom}
 \includegraphics[scale=\graphscaleexpapp]{./exp/MAG-para-recm.eps}}
 \\ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -387,20 +388,20 @@ In our tests we adopted a yearly update policy due the limitation of  available 
 \subfigure[{\scriptsize \aan}]{\label{exp-aan-ab-fcita}
 \includegraphics[scale=\graphscaleexpapp]{./exp/AAN-para-fcita.eps}}
 %\quad\quad
-\hspace{\graphmarginexpapp}
-%\hfill
+%\hspace{\graphmarginexpapp}
+\hfill
 \subfigure[{\scriptsize \aminer}]{\label{exp-aminer-ab-fcita}
 \includegraphics[scale=\graphscaleexpapp]{./exp/AMiner-para-fcita.eps}}
 %\quad\quad
-\hspace{\graphmarginexpapp}
-%\hfill
+%\hspace{\graphmarginexpapp}
+\hfill
 \subfigure[{\scriptsize \magdata}]{\label{exp-mag-ab-fcita}
 \includegraphics[scale=\graphscaleexpapp]{./exp/MAG-para-fcita.eps}}
 \end{center}
-\vspace{-2ex}
+\vspace{-2.5ex}
 \caption{\small Accuracy tests with \recom ((a)--(c)) and \fcita ((d)--(f)): varying aggregating parameters $\alpha$ and $\beta$}
 \label{exp-ab}
-\vspace{-2ex}
+\vspace{-3ex}
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -440,7 +441,7 @@ The results of \PairAcc are reported in Figs.~\ref{exp-aan-lambda}, \ref{exp-ami
 %with both sets of ground-truth
 
 When varying $\lambda$, the \PairAcc of \ensemblerank first increases and then decreases on all datasets with both \fcita and \recom, except on \aminer with \recom.
-\marked{The value of $\lambda$ for \ensemblerank to achieve the best effectiveness is (0.6, 0, 0.2) and (0.6, 0.4, 0.1) on (\aan, \aminer, \magdata) with \recom and \fcita, respectively.}
+%\marked{The value of $\lambda$ for \ensemblerank to achieve the best effectiveness is (0.6, 0, 0.2) and (0.6, 0.4, 0.1) on (\aan, \aminer, \magdata) with \recom and \fcita, respectively.}
 This result indicates that combining prestige and popularity generally produces more robust results than using either of prestige and popularity.
 Indeed, with \recom and \fcita, the \PairAcc of combining prestige and popularity is (10.2\%, 12.1\%, 5.5\%) and (3.7\%, 9.6\%, 7.6\%) higher than using prestige alone, and is (1.2\%, -0.73\%, 1.0\%) and (0.19\%, 0.45\%, 0.06\%) higher than using popularity alone on (\aan, \aminer, \magdata), respectively.
 
@@ -454,8 +455,10 @@ Indeed, with \recom and \fcita, the \PairAcc of combining prestige and popularit
 \begin{table}[tb!]
 %\vspace{-2ex}
 \begin{center}
+\caption{\small Accuracy tests using different components with \recom (rows 2--4) and \fcita (rows 5--7).}
+\label{tab-recom}
 \begin{small}
-\vspace{1ex}
+\vspace{-.5ex}
 \begin{tabular}{|c| c |c | c|}
 \hline
 {\bf Datasets} & {\bf C}\hspace{5ex}{\bf V}\hspace{5ex}{\bf A} & {\bf CV}\hspace{3ex}{\bf CA}\hspace{3ex}{\bf VA} & {\bf CVA} \\
@@ -472,8 +475,6 @@ Indeed, with \recom and \fcita, the \PairAcc of combining prestige and popularit
 \end{tabular}
 \end{small}
 \end{center}
-\caption{\small Accuracy tests using different components with \recom (rows 2--4) and \fcita (rows 5--7).}
-\label{tab-recom}
 \vspace{-6ex}
 \end{table}
 %%%%%%%%%%%%%%%%%%%
@@ -512,35 +513,34 @@ of  parameters $\alpha$ and $\beta$.
 %\vspace{1ex}
 \addtolength{\subfigcapskip}{-1ex}
 \begin{center}
-%\hspace{10ex}
 \subfigure[{\scriptsize \aan with \recom}]{\label{exp-aan-recom-drank}
-\includegraphics[scale=0.37]{./exp/AAN_TWPageRank_recom.eps}}
-%\hfill
-\hspace{\graphmarginexpapp}
+\includegraphics[scale=0.35]{./exp/AAN_TWPageRank_recom.eps}}
+\hfill
+%\hspace{\graphmarginexpapp}
 \subfigure[{\scriptsize \aminer with \recom}]{\label{exp-aminer-recom-drank}
-\includegraphics[scale=0.37]{./exp/AMiner_TWPageRank_recom.eps}}
-%\hfill
-\hspace{\graphmarginexpapp}
+\includegraphics[scale=0.35]{./exp/AMiner_TWPageRank_recom.eps}}
+\hfill
+%\hspace{\graphmarginexpapp}
 \subfigure[{\scriptsize \magdata with \recom}]{\label{exp-mag-recom-drank}
-\includegraphics[scale=0.37]{./exp/MAG_TWPageRank_recom.eps}}
+\includegraphics[scale=0.35]{./exp/MAG_TWPageRank_recom.eps}}
 \\%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{-1.5ex}
 \subfigure[{\scriptsize \aan with \fcita}]{\label{exp-aan-fcita-drank}
-\includegraphics[scale=0.37]{./exp/AAN_TWPageRank_fcita.eps}}
-%\hfill
-\hspace{\graphmarginexpapp}
+\includegraphics[scale=0.35]{./exp/AAN_TWPageRank_fcita.eps}}
+\hfill
+%\hspace{\graphmarginexpapp}
 \subfigure[{\scriptsize \aminer with \fcita}]{\label{exp-aminer-fcita-drank}
-\includegraphics[scale=0.37]{./exp/AMiner_TWPageRank_fcita.eps}}
-%\hfill
-\hspace{\graphmarginexpapp}
+\includegraphics[scale=0.35]{./exp/AMiner_TWPageRank_fcita.eps}}
+\hfill
+%\hspace{\graphmarginexpapp}
 \subfigure[{\scriptsize \magdata with \fcita}]{\label{exp-mag-fcita-drank}
-\includegraphics[scale=0.37]{./exp/MAG_TWPageRank_fcita.eps}}
+\includegraphics[scale=0.35]{./exp/MAG_TWPageRank_fcita.eps}}
 \end{center}
 \vspace{-2.5ex}
 \caption{\small Impacts of the TWPageRank on accuracy: varying importance weighting
 factor $\lambda$}
 \label{exp-drank}
-\vspace{-2ex}
+\vspace{-3ex}
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -553,7 +553,7 @@ factor $\lambda$}
 To better understand the impacts, we varied the importance weighting factor $\lambda$ from 0.1 to 1. Note that the ranking results are the same when $\lambda=0$ due to the same popularity computation. The results are reported in Fig.~\ref{exp-drank}, where the numbers represent the improvement of \PairAcc by \ensemblerank over the one by \drank.}
 
 \marked{
-When varying $\lambda$, the \PairAcc of \ensemblerank is better than the one of \drank in most cases, except on \aminer with \fcita, which shows the superiority of the TWPageRank than exploiting exponentially decayed weights as most previous work does.
+When varying $\lambda$, the \PairAcc of \ensemblerank is better than the one of \drank in most cases, except on \aminer with \fcita, which shows the superiority of the TWPageRank than exploiting exponentially decayed weights.
 The difference of \PairAcc by the two algorithms is higher with \recom than with \fcita, since the two algorithms are using citation information to predict future citations with \fcita.
 Moreover, algorithm \ensemblerank is consistently better than \drank when $\lambda \ge 0.9$, which, with \recom and \fcita, improves the \PairAcc by (2.18\%, 6.94\%, 5.02\%) and (0.70\%, 0.13\%, 0.27\%) on (\aan, \aminer, \magdata) on average, respectively. The region of $\lambda$ when \ensemblerank outperforms \drank is even larger if considering \aan and \magdata only.
 The improvement decreases with the decrease of $\lambda$ as the popularity dominates the ranking with small $\lambda$, and in some cases, \drank outperforms \ensemblerank as the prestige and popularity orders of article pairs are more diverse for \drank than \ensemblerank.

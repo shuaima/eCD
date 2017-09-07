@@ -1,8 +1,7 @@
 \section{Ranking Model}
 \label{sec-model}
 
-In this section, we first present Time-Weighted PageRank for evaluating  the importance, defined as a combination of the prestige and popularity, of scholarly articles, and then introduce our ranking
-model, referred to as \ensemblerank, that assembles the importance of articles, venues and authors involved in scholarly articles.
+In this section, we first present Time-Weighted PageRank for evaluating  the importance of entities, defined as a combination of the prestige and popularity, and then introduce our ranking model \ensemblerank that assembles the importance of articles, venues and authors involved in scholarly articles.
 
 %It further assembles the importance of heterogeneous entities involved to rank scholarly articles.
 %The model is based on PageRank~\cite{Brin98:PageRank}, which was initially designed for web pages and widely applied to many other tasks, including article ranking~\cite{Li08TSRanking,Richardson06:BPR,sayyadi09,Zhou07-CoRank}.
@@ -20,12 +19,12 @@ We first present Time-Weighted PageRank (TWPageRank) \marked{based on citation s
 
 
 
-\sstab(1) Scholarly articles typically have different impacts in practice, and there is a need to differentiate the impacts of different articles, while
+\noindent(1) Scholarly articles typically have different impacts in practice, and there is a need to differentiate the impacts of different articles, while
  PageRank essentially assumes equal impacts.
 
 %, such that each article can distribute more of its authority to those that are more influential to it.
 
-\sstab(2) \marked{The semantics of citation relationships are time-dependent, which means that citations at different periods of time potentially reveal different information. This has already been  exploited for scholarly article ranking~\cite{Li08TSRanking,Wang13AAAI,WalkerXKM07}, while PageRank does not consider temporal information at all. }
+\noindent(2) \marked{The semantics of citation relationships are time-dependent, which means that citations at different periods of time potentially reveal different information. This has already been  exploited for scholarly article ranking~\cite{Li08TSRanking,Wang13AAAI,WalkerXKM07}, while PageRank does not consider temporal information at all. }
 % and each individual article reaches their periods in different time
 
 \stitle{Time-Weighted PageRank (TWPageRank)}. Most previous work simply exploits temporal information in the form of exponential decay~\cite{Li08TSRanking,Wang13AAAI,sayyadi09,WalkerXKM07}. We rethink the usage of time information in terms of the impacts of scholarly articles.
@@ -52,7 +51,7 @@ Based on the above discussion, we propose TWPageRank that evaluates the prestige
 %
 Formally, the impact weight on a directed edge $(u,v)$, \ie an edge from $u$ to $v$, is defined as:
 
-\vspace{-2ex}
+\vspace{-1ex}
 \begin{small}
 \begin{equation} \label{eq-infl-weights}
 w(u,v)  =  \begin{cases}  \hspace{7ex} 1 & T_u <  Peak_v \\
@@ -65,22 +64,26 @@ w(u,v)  =  \begin{cases}  \hspace{7ex} 1 & T_u <  Peak_v \\
 By default, Eq.~(\ref{eq-infl-weights}) uses years as its time granularity. Note that the time decaying factor $\sigma$ is introduced to provide flexibility for TWPageRank in various applications, and its value is typically within a small interval, \eg $[-2,0]$, such that $w(u,v)$ does not decay when $\sigma=0$ and already decays more than a half per year when $\sigma=-1$.
 For the sake of completeness, we further set $w(u,v)$ to $0$ if there does not exist an edge from $u$ to $v$ in the graph.
 
-\begin{figure}
-\centering
-\includegraphics[scale=0.5]{fig/yearly-references.eps}
-\vspace{-2ex}
-\caption{\small Citation statistics of scholarly articles}
-\label{fig-reference}
-\vspace{-3ex}
-\end{figure}
+
 
 \marked{
-For scholarly article ranking, $T_u$ is the publication time of article $u$ and $Peak_v$ should be ideally set to the time when article $v$ has the highest impacts on others. Basically, it can be the year when the article obtains the largest number of citations. However, this will let $Peak_v$ bias to recent years. It has been observed that the volume of scientific publications doubled every 12 years between 1900 and 2015~\cite{Dong2017KDD}. And, as a result, the number of references also grows exponentially with time~\cite{BornmannM15}. To verify this, we plot the fraction of references of each year on three real-life scholarly datasets in Fig.~\ref{fig-reference}, where the y-axis is log-scaled and an exponential distribution of the number of yearly references can also be observed. To handle this, we compute the scaled number of citations $\Psi_v^{(t)}=\Phi_v^{(t)} / \log Z^{(t)}$ where $\Phi_v^{(t)}$ and $Z^{(t)}$ are the numbers of citations of article $v$ at year $t$ and the total number of references at year $t$, respectively, and set $Peak_v$ to the year that maximizes $\Psi_v^{(t)}$.}
+For scholarly article ranking, $T_u$ is the publication time of article $u$ and $Peak_v$ should be ideally set to the time when article $v$ has the highest impacts. Basically, it could be the year when article $v$ obtains the largest number of citations. However, this will let $Peak_v$ bias to recent years. A recent work~\cite{Dong2017KDD} observes that the volume of scientific publications doubled every 12 years between 1900 and 2015. It is not surprising that the number of references also grows exponentially~\cite{BornmannM15}. We verify this by collecting the statistics of references on three scholarly datasets, shown in Fig.~\ref{fig-reference}, where an exponential distribution can be observed. Hence, we compute the scaled number of citations $\Psi_v^{(t)}=\Phi_v^{(t)} / \log Z^{(t)}$ where $\Phi_v^{(t)}$ and $Z^{(t)}$ are the number of citations of article $v$ at year $t$ and the total number of references at year $t$, respectively, and set $Peak_v$ to the year that maximizes $\Psi_v^{(t)}$.}
 %(\aan, \aminer and \magdata)
 % since scholarly data is dynamic and continuously growing
 %, and the increased number of references of each article over time
 
+\begin{figure}
+\centering
+\includegraphics[scale=0.45]{fig/yearly-references.eps}
+\vspace{-2ex}
+\caption{\small Reference statistics of scholarly articles}
+\label{fig-reference}
+\vspace{-3ex}
+\end{figure}
+
 The update rule of TWPageRank is:
+
+\vspace{-1ex}
 \begin{small}
 \begin{equation}\label{eq-twpr}
 PR(v)=d\sum_{(u,v)\in E} \frac{w(u,v)PR(u)}{W(u)}+\frac{1-d}{n},
@@ -91,6 +94,8 @@ PR(v)=d\sum_{(u,v)\in E} \frac{w(u,v)PR(u)}{W(u)}+\frac{1-d}{n},
 
 % in Eq.~(\ref{eq-twpr}) into
 Correspondingly, the matrix form of the update rule is:
+
+\vspace{-1ex}
 \begin{small}
 \begin{equation}
 \label{eq-twpr-update}
@@ -99,8 +104,7 @@ PR^{(t)}=d M^T  PR^{(t-1)} + (1-d) e/n.
 \end{small}
 %
 \noindent
-Here vectors $PR^{(t)}$ and $PR^{(t-1)}$ %, consisting of PageRank scores of all nodes,
-are two TWPageRank vectors after $t$ and $t-1$ iterations, respectively, matrix $M$ is the transition matrix such that $M_{u,v}=w(u,v)/W(u)$ and vector $e$ is an $n$-dimensional all-one vector $[1]_{n\times1}$.
+Here $PR^{(k)}$ is the TWPageRank vectors after $k$ iterations,  $M$ is the transition matrix such that $M_{u,v}=w(u,v)/W(u)$ and  $e$ is an $n$-dimensional all-one vector $[1]_{n\times1}$.
 
 %We next present the convergence  of TWPageRank as follows.
 The linear system in Eq.~(\ref{eq-twpr-update}) is equivalent to {\em irreducible} and {\em aperiodic} Markov chains~\cite{CorsoGR05}, which guarantees the following.
@@ -120,51 +124,21 @@ We then have $\rho(d\cdot M^T) \le ||d\cdot M^T||_1 \le d < 1$, as the spectral 
 \end{proof}
 }
 
-%\stitle{Remarks}. Note that here Eq.~(\ref{eq-twpr}) is indeed a more general update rule than Weighted PageRank~\cite{Xing04:WPR}, and the name of Time-Weighted PageRank comes from the use of time information in the initial impact weight  $w(u,v)$ of Eq.~(\ref{eq-infl-weights}).
-\stitle{Remarks}. Note that Eq.~(\ref{eq-twpr}) is indeed a general update rule of Weighted PageRank~\cite{Xing04:WPR,Ding11}, and the name of Time-Weighted PageRank comes from the use of time information of citations in the initial impact weight  $w(u,v)$ of Eq.~(\ref{eq-infl-weights}).
+%\stitle{Remarks}. Note that Eq.~(\ref{eq-twpr}) is indeed a general update rule of Weighted PageRank~\cite{Xing04:WPR,Ding11}, and the name of Time-Weighted PageRank comes from the use of time information of citations in the initial impact weight  $w(u,v)$ of Eq.~(\ref{eq-infl-weights}).
 
 
 
+\vspace{-1ex}
 \subsection{Ranking with Importance Assembling}
 \label{subsec-ensemble}
 
-%Observe that: (a) the importance of articles is typically evaluated according to many factors, and (b) using single factors fails to give a reasonable rank in some situation. Hence,
 
-Our ranking model \ensemblerank,  illustrated in Fig.~\ref{fig-rankmodel}, assembles the importance of articles, venues and authors for scholarly article ranking, which is computed by the citation, venue and author components, respectively.
+%In our model, the importance of scholarly articles is defined as a combination of the prestige and popularity of its associated articles, venues and authors. Intuitively, prestige favors those with many citations soon after the publication of articles for citation component or associated articles for venue and author components, and popularity favors those with recent citations. Both prestige and popularity capture the temporal nature of entities in scholarly data.
+In our model, the importance is defined as a combination of the prestige and popularity. Intuitively, prestige favors those with many citations soon after the publication of articles or associated articles of venues and authors, and popularity favors those with recent citations. Both prestige and popularity capture the temporal nature of entities. %in scholarly data.
+
+Our ranking model \ensemblerank,  illustrated in Fig.~\ref{fig-rankmodel}, assembles the importance of article, venue and author entities for scholarly article ranking, which is computed by the citation, venue and author components, respectively.
 %
 We next introduce the details of the three components.
-
-%The importance in each component is defined as a combination of the prestige and popularity of its associated entities. Intuitively, prestige favors those with many citations soon after the publication of articles for citation component or associated articles for venue and author components, and popularity favors those with recent citations. Both prestige and popularity capture the evolving nature of entities.
-
-In our model, the importance of scholarly articles is defined as a combination of the prestige and popularity of its associated article, venue and author entities. Intuitively, prestige favors those with many citations soon after the publication of articles for citation component or associated articles for venue and author components, and popularity favors those with recent citations. Both prestige and popularity capture the temporal nature of entities in scholarly data.
-
-\eat{
-The prestige of articles and venues are computed by introducing a novel {\em Time-Weighted PageRank} with a time decaying factor (based on citation statistics), while the one of authors is the average prestige of their published articles.
-%
-The popularity of article is the sum of all its citation' freshness (how close to the current year), while the one of venues and authors is the average popularity of their associated articles.
-%
-Observer that (a), intuitively, prestige favors articles with many citations soon after their publication, and popularity favors those with recently citations, and (b) both prestige and popularity capture the the evolving nature of entities.
-}
-
-%We start this part by thinking about how people evaluate the importance of scholarly articles. In practice, the importance of an article can be evaluated according to many factors such as citations, venues and authors. Only focusing on the citation information limits the accuracy of the results. Consider the case when we are to evaluate a newly published article whose citations are not currently available. In this case citation information fails to give a reasonable rank, but other information such as venues and authors could be used instead to refine the rank. Hence, we propose the use of an ensemble model, in which each ensemble is essentially a ranking based on the importance of one type of heterogeneous entities, and these ensembles are assembled to produce the final ranking.
-
-
-%{\bf motivate importance = prestige + popularity}.
-%Moreover, most existing methods, \eg~\cite{ChenXMR07,Zhou07-CoRank,Liang16AAAI,Jiang12-MRank}, simply model importance of articles and other heterogeneous entities as prestige. However, prestige alone cannot meet the expectation of human for important scholarly articles.
-%Essentially, people are more interest in scholarly articles that are influential in the present and the near future. For instance, Google Scholar~\cite{g-scholar} and Semantic Scholar~\cite{sem-scholar} consider recent citations of articles to distinguish articles that are currently popular from non-popular ones. Inspired by these, we model the importance from both the prestige and the popularity dimensions.
-%Intuitively, the prestige dimension favors ones that have been widely recognized, and the popularity dimension favors ones that are recently referred to.
-%Note that the importance decays with time by taking popularity into account.
-
-%Prestige, popularity and importance of other entities are defined in similar ways.
-
-%the prestige of articles is given by TWPageRank on the citation network. And the popularity of articles counts how recently they are cited, which sums up citations such that recent citations have a higher contribution than old ones.
-%the prestige dimension considers how often and where an entity is cited, and the popularity dimension considers how recently an entity is cited.
-
-
-
-
-
-
 
 
 \stitle{Citation component}.
@@ -175,7 +149,9 @@ A {\em citation graph} $G^c(V^c, E^c)$ is firstly constructed using the citation
 
 \sstab(1) The prestige of articles is derived by applying TWPageRank on the citation graph $G^c$, and each article $v$ is assigned the corresponding TWPageRank score as its prestige $Prs_c(v)$.
 
-\sstab(2)  The popularity of an article is the sum of all its citations' freshness, \ie the closeness to the current year, as follows:
+\sstab(2)  The popularity of an article is the sum of all its citations' freshness, \ie the closeness to the current year:
+
+\vspace{-1ex}
 \begin{small}
 \begin{equation}\label{eq-pop}
 Pop_c(v) = \sum_{{(u,v)\in E^c}} {e^{\sigma (T_0-T_u)}}.
@@ -188,13 +164,13 @@ Here $T_0$ is the current year, \ie the latest $T_u$ among all articles in $V^c$
 
 Intuitively, the more recent citations an article has, the higher its popularity is, no matter how long it has been published.
 %
-\marked{Different from $Peak_v$ in Eq.~(\ref{eq-infl-weights}), the popularity of an articles is a weighted sum of all its citations, and the number of references by year has little impacts on it. Moreover, the motivation of popularity is to assign higher ranks to articles of recent attention, which is somehow biased to recent articles. Considering these, we do not explicitly handle the bias for popularity computation.}
+\marked{Different from $Peak_v$ in Eq.~(\ref{eq-infl-weights}), the bias of references has little impacts on the popularity. Moreover, the motivation of popularity is to assign higher ranks to articles of recent attention, which is somehow biased to recent articles. Hence, we do not explicitly handle the bias for popularity computation.}
 %
 Note that the popularity is also normalized such that the sum of  all articles is equal to $1$, similar to the prestige produced by TWPageRank.
 
-\sstab(3) The prestige and popularity are finally combined to produce importance of an article. Intuitively, an important articles is both prestigious and popular, hence, the {\em citation importance score} of an article is defined as a weighted combination of its prestige and popularity.
+\sstab(3) The prestige and popularity are finally combined to produce the importance of articles. Intuitively, an important article is both prestigious and popular. Hence, the {\em citation importance score} $Imp_c(v)$ of an article is defined as a weighted combination of its prestige and popularity:
 
-\vspace{-2ex}
+\vspace{-1ex}
 \begin{small}
 \begin{equation}\label{eq-imp}
 %Imp_c(v) = \sqrt{Prs_c(v) \cdot Pop_c(v)}.
@@ -202,10 +178,19 @@ Imp_c(v) = Prs_c(v)^\lambda Pop_c(v)^{1-\lambda},
 \end{equation}
 \end{small}
 \noindent where $\lambda \in [0,1]$ is the importance weighting factor.
-The rationales behind Eq.~(\ref{eq-imp}) are as follows. (a) Prestigious articles with many recent citations are ranked at the top, as researchers are very willing to find these articles; (b) Prestigious articles with rare current citations are ranked lower, as researchers may lose interests in these old articles; And (c) articles with many recent citations are ranked higher, as researchers have potential interests in those of recent attention.
+The rationales behind Eq.~(\ref{eq-imp}) are as follows. (a) Prestigious articles with many recent citations are ranked at the top, as researchers are very willing to find them; (b) Prestigious articles with rare current citations are ranked lower, as researchers may lose interests in these old articles; And (c) articles with many recent citations are ranked higher, as researchers have potential interests in those of recent attention.
 
 %Here the prestige and popularity are equally weighted to produce the importance of an article, as we focus on query independent ranking. They may be properly weighted when the query information is available, which is beyond the scope of this work.
 
+
+\begin{figure}[tb!]
+\centering
+%\includegraphics[scale=0.15]{fig/framework.eps}
+\includegraphics[scale=0.15]{fig/framework-lite-2.eps}
+\vspace{-2ex}
+\caption{\small Ranking model \ensemblerank} \label{fig-rankmodel}
+\vspace{-4ex}
+\end{figure}
 
 \stitle{Venue component}.
 The second component computes the importance of venues with their associated articles. As the importance of a venue  evolves with time, we treat the venue in each year individually, and its importance is the sum of importance in all individual years.
@@ -213,32 +198,25 @@ The second component computes the importance of venues with their associated art
 
 A {\em venue graph} $G^v(V^v, E^v)$ is firstly constructed using the citation information among venues such that (a) a node in $V^v$ represents a venue in a specific year, (b) a direct edge $(s,t)$ in $E^v$ denotes that there exist articles published in venue (in a specific year) $s$ citing articles published in venue (in a specific year) $t$, and (c) we use the {\em impact weight} to denote the weight $w_v(s,t)$ from venues $s$ to $t$, which is the sum of the impact weights from articles published in $s$ to $t$, \ie
 
-\vspace{-2ex}
+\vspace{-1ex}
 \begin{small}
 \begin{equation} \label{eq-infl-weights-v}
 w_v(s,t)  = \sum_{u\in C(s), v\in C(t)} w(u,v).
 \end{equation}
 \end{small}
 \noindent
-Here, $C(s)$ and $C(t)$ are the collections of articles published in $s$ and $t$, respectively, and $w(u,v)$ is the impact weight of edge $(u, v)$ produced in the citation component.
+Here, $C(s)$ and $C(t)$ are the sets of articles published in $s$ and $t$, respectively, and $w(u,v)$ is the impact weight of edge $(u, v)$ produced in the citation component.
 
 The prestige of a venue in a specific year is computed using the impact weights and the update rule in Eq.~(\ref{eq-twpr}), and the popularity of a venue in a specific year is defined as the average popularity of its articles. The prestige and popularity are combined to derive the importance of a venue in a specific year in the same way as the citation component. Finally, the importance of a venue is treated as the {\em venue importance score} for all articles published in this venue.
 
 
-\begin{figure}[tb!]
-\centering
-%\includegraphics[scale=0.15]{fig/framework.eps}
-\includegraphics[scale=0.15]{fig/framework-lite-2.eps}
-\vspace{-1ex}
-\caption{\small Ranking model \ensemblerank} \label{fig-rankmodel}
-\vspace{-2ex}
-\end{figure}
+
 
 
 
 \stitle{Author component}.
 The author component computes the importance of authors with their published articles.
-
+%
 Similar to the venue component, we evaluate the importance of each author, and compute the average importance of the authors of an article as its {\em author importance score}.
 
 However, the resulting author citation graph to compute the prestige is typically too large to handle. Hence, we evaluate the prestige of an author, by using the average prestige of all articles published by the author. Similar to the venue component, the popularity of an author is also defined as the average popularity of her/his published articles. Finally, the prestige and popularity are combined to derive the importance in the same way as the citation component.
@@ -260,13 +238,13 @@ Recall that articles in our data are also associated with affiliation informatio
 \stitle{Ranking with importance assembling}. The aforementioned importance is finally assembled to produce the final ranking, as illustrated in Fig.~\ref{fig-rankmodel}. Before assembling, each component is properly scaled such that the average citation importance score, venue importance score and author importance score
 are the same.  Let the scaled importance scores of article $v$ be $R_c(v)$, $R_v(v)$, and $R_a(v)$ from the citation, venue and author components, respectively. The final ranking score $R(v)$ of an article $v$ is aggregated as follows:
 
-\vspace{-2ex}
+\vspace{-1ex}
 \begin{small}
 \begin{equation} \label{eq-ensemble}
 R(v) =  \alpha R_c(v) + \beta R_v(v) + (1 - \alpha - \beta) R_a(v).
 \end{equation}
 \end{small}
-\noindent Here aggregating parameters $\alpha$ and $\beta$ and value $(1 - \alpha - \beta)$ are used to regularize the contributions of the citation, venue and author information. Intuitively, these parameters indicate the intensity of the correlation between the importance of scholarly articles and the specific information.
+\noindent Here aggregating parameters $\alpha$ and $\beta$ and value $(1 - \alpha - \beta)$ regularize the contributions of the citation, venue and author information. Intuitively, these parameters indicate the intensity of the correlation between the importance of scholarly articles and the specific information.
 
 
 \stitle{Remarks}.

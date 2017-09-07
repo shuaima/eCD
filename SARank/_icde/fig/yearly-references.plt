@@ -19,7 +19,7 @@ set logscale y
 
 #set ylabel "(log) # of yearly-references" offset 1.3
 set ylabel "% of references by year" offset 1.3
-set xlabel "year"
+#set xlabel "year"
 set key at graph 0.27, 0.95
 plot "yearly-references.tab" using ($1):($4) title 'AAN' with linespoints linetype 1 pointtype 6 lc rgb '#d95319' lw 3,\
 "yearly-references.tab" using ($1):($3) title 'DBLP' with linespoints linetype 1 pointtype 4 lc rgb "#228B22"  lw 3,\
