@@ -1,11 +1,5 @@
 %%
-%% IEEEtran.cls 2011/11/03 version V1.8 based on
 %% IEEEtran.cls 2007/03/05 version V1.7a
-%% The changes in V1.8 are made with a single goal in mind:
-%% to change the look of the output using the [conference] option
-%% and the default font size (10pt) to match the Word template more closely.
-%% These changes may well have undesired side effects when other options
-%% are in force!
 %% 
 %% 
 %% This is the official IEEE LaTeX class for authors of the Institute of 
@@ -197,8 +191,7 @@
 
 
 
-\ProvidesClass{IEEEtran}[2012/11/21 V1.8c by Harald Hanche-Olsen and Anders Christensen]
-\typeout{-- Based on V1.7a by Michael Shell}
+\ProvidesClass{IEEEtran}[2007/03/05 V1.7a by Michael Shell]
 \typeout{-- See the "IEEEtran_HOWTO" manual for usage information.}
 \typeout{-- http://www.michaelshell.org/tex/ieeetran/}
 \NeedsTeXFormat{LaTeX2e}
@@ -496,8 +489,8 @@
 % Check if we have selected 10 points
 \ifx\CLASSOPTIONpt\@IEEEptsizeten
 \typeout{-- This is a 10 point document.}
-\def\normalsize{\@setfontsize{\normalsize}{10}{11}}%
-\setlength{\@IEEEnormalsizeunitybaselineskip}{11pt}%
+\def\normalsize{\@setfontsize{\normalsize}{10}{12.00pt}}%
+\setlength{\@IEEEnormalsizeunitybaselineskip}{12pt}%
 \normalsize
 \abovedisplayskip 1.5ex plus4pt minus2pt%
 \belowdisplayskip \abovedisplayskip%
@@ -775,14 +768,8 @@
 % normally zero, should be relative to font height.
 % put in a little rubber to help stop some bad breaks (underfull vboxes)
 \parskip 0ex plus 0.2ex minus 0.1ex
-\ifCLASSOPTIONconference
-\parskip 6pt plus 2pt minus 1pt
-\fi
 
 \parindent    1.0em
-\ifCLASSOPTIONconference
-\parindent 14.45pt
-\fi
 
 \topmargin    -49.0pt
 \headheight   12pt
@@ -801,8 +788,8 @@
 \ifx\CLASSOPTIONpt\@IEEEptsizetwelve\textheight=50\@IEEEnormalsizeunitybaselineskip\fi    % 50 lines/page
 
 
-\columnsep       1.5pc
-\textwidth       184.2mm
+\columnsep         1pc
+\textwidth        43pc   % 2 x 21pc + 1pc = 43pc
  
 
 % the default side margins are equal
@@ -828,7 +815,7 @@
  \textheight        9.25in % The standard for conferences (668.4975pt)
  % Tweak textheight to a perfect integer number of lines/page.
  \ifx\CLASSOPTIONpt\@IEEEptsizenine\textheight=61\@IEEEnormalsizeunitybaselineskip\fi      % 61 lines/page
- \ifx\CLASSOPTIONpt\@IEEEptsizeten\textheight=62\@IEEEnormalsizeunitybaselineskip\fi       % 62 lines/page
+ \ifx\CLASSOPTIONpt\@IEEEptsizeten\textheight=56\@IEEEnormalsizeunitybaselineskip\fi       % 56 lines/page
  \ifx\CLASSOPTIONpt\@IEEEptsizeeleven\textheight=50\@IEEEnormalsizeunitybaselineskip\fi    % 50 lines/page
  \ifx\CLASSOPTIONpt\@IEEEptsizetwelve\textheight=48\@IEEEnormalsizeunitybaselineskip\fi    % 48 lines/page
 \fi
@@ -1061,10 +1048,10 @@
 \def\p@enumiv{\p@enumiii\theenumiii}
 
 % itemized list label styles
-\def\labelitemi{$\bullet$}
-\def\labelitemii{$\circ$}
-\def\labelitemiii{\vrule height 0.8ex depth -0.2ex width 0.6ex}
-\def\labelitemiv{$\ast$}
+\def\labelitemi{$\scriptstyle\bullet$}
+\def\labelitemii{\textbf{--}}
+\def\labelitemiii{$\ast$}
+\def\labelitemiv{$\cdot$}
 
 
 
@@ -1141,7 +1128,7 @@
 % list labels and the list text, when normal text is used for
 % the labels.
 \newdimen\IEEEiednormlabelsep
-\IEEEiednormlabelsep \parindent
+\IEEEiednormlabelsep 0.6em
 
 % This controls the default spacing between the end of the IED
 % list labels and the list text, when math symbols are used for
@@ -1329,7 +1316,7 @@
                 \labelsep\IEEEiednormlabelsep%
                 \partopsep 0ex%
                 \parsep 0ex%
-                \itemsep \parskip%
+                \itemsep 0ex%
                 \rightmargin 0em%
                 \listparindent 0em%
                 \itemindent 0em%
@@ -1521,27 +1508,22 @@
 {\footnotesize
 \global\footnotesep 0.8\baselineskip}
 
-\def\unnumberedfootnote{\gdef\@thefnmark{\quad}\@footnotetext}
 
-\skip\@mpfootins 0.3\baselineskip
+\skip\@mpfootins = \skip\footins
 \fboxsep = 3pt
 \fboxrule = .4pt
 % V1.6 use 1em, then use LaTeX2e's \@makefnmark
 % Note that IEEE normally *left* aligns the footnote marks, so we don't need
 % box resizing tricks here.
-%\long\def\@makefnmark{\scriptsize\normalfont\@thefnmark}
 \long\def\@makefntext#1{\parindent 1em\indent\hbox{\@makefnmark}#1}% V1.6 use 1em
-\long\def\@maketablefntext#1{\raggedleft\leavevmode\hbox{\@makefnmark}#1}
 % V1.7 compsoc does not use superscipts for footnote marks
 \ifCLASSOPTIONcompsoc
 \def\@IEEEcompsocmakefnmark{\hbox{\normalfont\@thefnmark.\ }}
 \long\def\@makefntext#1{\parindent 1em\indent\hbox{\@IEEEcompsocmakefnmark}#1}
 \fi
 
-% IEEE does not use footnote rules. Or do they?
-\def\footnoterule{\vskip-2pt \hrule height 0.6pt depth \z@ \vskip1.6pt\relax}
-\toks@\expandafter{\@setminipage\let\footnoterule\relax\footnotesep\z@}
-\edef\@setminipage{\the\toks@}
+% IEEE does not use footnote rules
+\def\footnoterule{}
 
 % V1.7 for compsoc, IEEE uses a footnote rule only for \thanks. We devise a "one-shot"
 % system to implement this.
@@ -1657,7 +1639,7 @@
 \def\appendixname{Appendix}
 \def\abstractname{Abstract}
 % IEEE specific names
-\def\IEEEkeywordsname{Keywords}
+\def\IEEEkeywordsname{Index Terms}
 \def\IEEEproofname{Proof}
 
 
@@ -1738,12 +1720,12 @@
 \newlength\belowcaptionskip
 % but only \abovecaptionskip is used above figure captions and *below* table
 % captions
-\setlength\abovecaptionskip{0.65\baselineskip}
-\setlength\belowcaptionskip{0.75\baselineskip}
+\setlength\abovecaptionskip{0.5\baselineskip}
+\setlength\belowcaptionskip{0pt}
 % V1.6 create hooks in case the caption spacing ever needs to be
 % overridden by a user
 \def\@IEEEfigurecaptionsepspace{\vskip\abovecaptionskip\relax}%
-\def\@IEEEtablecaptionsepspace{\vskip\belowcaptionskip\relax}%
+\def\@IEEEtablecaptionsepspace{\vskip\abovecaptionskip\relax}%
 
 
 % 1.6b revise caption system so that \@makecaption uses two arguments
@@ -1797,7 +1779,7 @@
 % test if is a for a figure or table
 \ifx\@captype\@IEEEtablestring%
 % if a table, do table caption
-\footnotesize{\centering\normalfont\footnotesize#1.\qquad\scshape #2\par}%
+\footnotesize\begin{center}{\normalfont\footnotesize #1}\\{\normalfont\footnotesize\scshape #2}\end{center}%
 \@IEEEtablecaptionsepspace
 % if not a table, format it as a figure
 \else
@@ -1810,7 +1792,7 @@
 \parbox[t]{\hsize}{\normalfont\footnotesize\noindent\unhbox\@tempboxa#2}%
 % if caption is shorter than a line, center if conference, left justify otherwise
 \else%
-\ifCLASSOPTIONconference \hbox to\hsize{\normalfont\footnotesize\box\@tempboxa\hfil}%
+\ifCLASSOPTIONconference \hbox to\hsize{\normalfont\footnotesize\hfil\box\@tempboxa\hfil}%
 \else \hbox to\hsize{\normalfont\footnotesize\box\@tempboxa\hfil}%
 \fi\fi\fi}
 \fi
@@ -1854,12 +1836,10 @@
 \def\fnum@table{\tablename~\thetable}
 % V1.6 IEEE uses 8pt text for tables
 % to default to footnotesize, we hack into LaTeX2e's \@floatboxreset and pray
-\def\table{\def\@floatboxreset{\reset@font\scriptsize\@setminipage}%
-  \let\@makefntext\@maketablefntext
-  \@float{table}}
+\def\table{\def\@floatboxreset{\reset@font\footnotesize\@setminipage}\@float{table}}
 \def\endtable{\end@float}
 % v1.6b double column tables need to default to footnotesize as well.
-\@namedef{table*}{\def\@floatboxreset{\reset@font\scriptsize\@setminipage}\@dblfloat{table}}
+\@namedef{table*}{\def\@floatboxreset{\reset@font\footnotesize\@setminipage}\@dblfloat{table}}
 \@namedef{endtable*}{\end@dblfloat}
 
 
@@ -3166,7 +3146,7 @@ between column types.}%
 \@IEEEcompsocnotconfonly{\def\@biblabel#1{[#1]\hfill}}
 
 % controls bib item spacing
-\def\IEEEbibitemsep{2.5pt plus .5pt}
+\def\IEEEbibitemsep{0pt plus .5pt}
 
 \@IEEEcompsocconfonly{\def\IEEEbibitemsep{1\baselineskip plus 0.25\baselineskip minus 0.25\baselineskip}}
 
@@ -3178,7 +3158,6 @@ between column types.}%
     \list{\@biblabel{\@arabic\c@enumiv}}%
     {\settowidth\labelwidth{\@biblabel{#1}}%
     \leftmargin\labelwidth
-    \labelsep 1em
     \advance\leftmargin\labelsep\relax
     \itemsep \IEEEbibitemsep\relax
     \usecounter{enumiv}%
@@ -3240,7 +3219,6 @@ between column types.}%
 \def\@IEEEauthorblockconfadjspace{-0.25em}
 % compsoc conferences need more space here
 \@IEEEcompsocconfonly{\def\@IEEEauthorblockconfadjspace{0.75\@IEEEnormalsizeunitybaselineskip}}
-\ifCLASSOPTIONconference\def\@IEEEauthorblockconfadjspace{20pt}\fi
 
 % spacing between name and affiliation blocks (confmode)
 % This can be negative.
@@ -3434,7 +3412,7 @@ between column types.}%
         \ifCLASSOPTIONtechnote%
            \newpage\global\@topnum\z@ \@maketitle\@IEEEstatictitlevskip\@IEEEaftertitletext%
         \else
-           \twocolumn[\@maketitle\@IEEEstatictitlevskip\@IEEEaftertitletext]%
+           \twocolumn[\@maketitle\@IEEEdynamictitlevspace\@IEEEaftertitletext]%
         \fi
      \else
         \newpage\global\@topnum\z@ \@maketitle\@IEEEstatictitlevskip\@IEEEaftertitletext%
@@ -3461,7 +3439,7 @@ between column types.}%
 % THIS IS A CONTROLLED SPACING COMMAND! Do not allow blank lines or unintentional
 % spaces to enter the definition - use % at the end of each line
 \def\@maketitle{\newpage
-\begingroup\centering
+\begin{center}%
 \ifCLASSOPTIONtechnote% technotes
    {\bfseries\large\@IEEEcompsoconly{\sffamily}\@title\par}\vskip 1.3em{\lineskip .5em\@IEEEcompsoconly{\sffamily}\@author
    \@IEEEspecialpapernotice\par{\@IEEEcompsoconly{\vskip 1.5em\relax
@@ -3489,7 +3467,7 @@ between column types.}%
            \@IEEEcompsocdiamondline\hfill\hbox{}\par}}}\relax
       \fi
    \fi
-\fi\par\endgroup}
+\fi\end{center}}
 
 
 
@@ -3578,7 +3556,7 @@ between column types.}%
    \vskip 1\baselineskip plus 0.375\baselineskip minus 0.1875\baselineskip
 \else
    \ifCLASSOPTIONconference% conference
-      \vskip 0.6\baselineskip
+      \vskip 1\baselineskip plus 0.375\baselineskip minus 0.1875\baselineskip%
    \else%
       \ifCLASSOPTIONtechnote% technote
          \vskip 1\baselineskip plus 0.375\baselineskip minus 0.1875\baselineskip%
@@ -3730,7 +3708,7 @@ between column types.}%
 % so that spacing is more tightly controlled.
 \def\abstract{\normalfont
     \if@twocolumn
-      \par\@IEEEabskeysecsize\bfseries\leavevmode\kern-1pt\textit{\abstractname}---\relax
+      \@IEEEabskeysecsize\bfseries\textit{\abstractname}---\relax
     \else
       \begin{center}\vspace{-1.78ex}\@IEEEabskeysecsize\textbf{\abstractname}\end{center}\quotation\@IEEEabskeysecsize
     \fi\@IEEEgobbleleadPARNLSP}
@@ -3741,11 +3719,11 @@ between column types.}%
 
 \def\IEEEkeywords{\normalfont
     \if@twocolumn
-      \@IEEEabskeysecsize\bfseries\leavevmode\kern-1pt\textit{\IEEEkeywordsname}---\relax
+      \@IEEEabskeysecsize\bfseries\textit{\IEEEkeywordsname}---\relax
     \else
       \begin{center}\@IEEEabskeysecsize\textbf{\IEEEkeywordsname}\end{center}\quotation\@IEEEabskeysecsize
-    \fi\itshape\@IEEEgobbleleadPARNLSP}
-\def\endIEEEkeywords{\relax\ifCLASSOPTIONtechnote\vspace{1.34ex}\else\vspace{0.5ex}\fi
+    \fi\@IEEEgobbleleadPARNLSP}
+\def\endIEEEkeywords{\relax\ifCLASSOPTIONtechnote\vspace{1.34ex}\else\vspace{0.67ex}\fi
     \par\if@twocolumn\else\endquotation\fi%
     \normalfont\normalsize}
 
@@ -3824,9 +3802,8 @@ between column types.}%
 \def\@IEEEsectpunct{.\ }
 \fi\fi
 
-\def\@seccntformat#1{\hb@xt@ 1.4em{\csname the#1dis\endcsname\hss\relax}}
-\def\@seccntformatinl#1{\hb@xt@ 1.1em{\csname the#1dis\endcsname\hss\relax}}
-\def\@seccntformatch#1{\csname the#1dis\endcsname\hskip 1em\relax}
+
+\def\@seccntformat#1{\csname the#1dis\endcsname\hskip 0.5em\relax}
 
 \ifCLASSOPTIONcompsoc
 % compsoc journals need extra spacing
@@ -3842,15 +3819,7 @@ between column types.}%
   \else
      \refstepcounter{#1}%
      % load section label and spacer into \@svsec
-     \ifnum #2=1
-        \protected@edef\@svsec{\@seccntformatch{#1}\relax}%
-     \else
-        \ifnum #2>2
-           \protected@edef\@svsec{\@seccntformatinl{#1}\relax}%
-        \else
-           \protected@edef\@svsec{\@seccntformat{#1}\relax}%
-        \fi
-     \fi
+     \protected@edef\@svsec{\@seccntformat{#1}\relax}%
   \fi%
   \@tempskipa #5\relax
   \ifdim \@tempskipa>\z@% tempskipa determines whether is treated as a high
@@ -3905,9 +3874,9 @@ between column types.}%
 \ifCLASSOPTIONconference%
 % IEEE wants section heading spacing to decrease for conference mode
 \def\section{\@startsection{section}{1}{\z@}{1.5ex plus 1.5ex minus 0.5ex}%
-{1sp}{\normalfont\normalsize\centering\scshape}}%
+{0.7ex plus 1ex minus 0ex}{\normalfont\normalsize\centering\scshape}}%
 \def\subsection{\@startsection{subsection}{2}{\z@}{1.5ex plus 1.5ex minus 0.5ex}%
-{1sp}{\normalfont\normalsize\itshape}}%
+{0.7ex plus .5ex minus 0ex}{\normalfont\normalsize\itshape}}%
 \else % for journals
 \def\section{\@startsection{section}{1}{\z@}{3.0ex plus 1.5ex minus 1.5ex}% V1.6 3.0ex from 3.5ex
 {0.7ex plus 1ex minus 0ex}{\normalfont\normalsize\centering\scshape}}%
@@ -4485,7 +4454,7 @@ between column types.}%
 % for special papers, like invited papers, the user can do:
 % \IEEEspecialpapernotice{(Invited Paper)} before \maketitle
 \def\IEEEspecialpapernotice#1{\ifCLASSOPTIONconference%
-\def\@IEEEspecialpapernotice{{\Large#1\vspace*{1em}}}%
+\def\@IEEEspecialpapernotice{{\sublargesize\textit{#1}\vspace*{1em}}}%
 \else%
 \def\@IEEEspecialpapernotice{{\\*[1.5ex]\sublargesize\textit{#1}}\vspace*{-2ex}}%
 \fi}
