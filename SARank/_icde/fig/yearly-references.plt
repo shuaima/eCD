@@ -1,6 +1,6 @@
 set terminal postscript portrait enhanced color "Times-Roman" 14
 set output "yearly-references.eps"
-set size 0.9, 0.25
+set size 0.9, 0.22
 set grid
 set grid noxtics back linewidth 0.1
 set border
@@ -8,8 +8,8 @@ set noy2tics
 set nox2tics
 set xtic scale 0.5
 set ytic scale 0.8
-set xr [1996:2015]
-set xtics ("1996" 1996, "1998" 1998, "2000" 2000, "2002" 2002, "2004" 2004, "2006" 2006, "2008" 2008, "2010" 2010, "2012" 2012, "2014" 2014, "2016" 2016)
+set xr [1996:2012]
+set xtics ("1996" 1996, "1998" 1998, "2000" 2000, "2002" 2002, "2004" 2004, "2006" 2006, "2008" 2008, "2010" 2010, "2012" 2012)
 
 #set yr [0:16]
 #set ytics ("0" 0, "4" 4, "8" 8, "12" 12, "16" 16)
