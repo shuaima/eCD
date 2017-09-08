@@ -102,6 +102,8 @@ We first divided each dataset into ranking part and evaluation part by a splitti
 %
 Moreover, articles in the same pair were required to be in similar research fields, by utilizing the Fields-Of-Study information on \magdata~\cite{Sinha15:MAG}, and published in the same year, similar to~\cite{Wang16TIST}.
 We used all pairs (around 25,000) for \aan, and randomly chose 300,000 pairs for both \aminer and \magdata.
+%
+\marked{Due to the sparse citations on \aminer, the two articles in 50\% pairs have 0 and 1 future citation, which is a very weak evidence for importance order. Hence, we further required articles in pairs must have at least 1 future citation on \aminer.}
 %Finally, we generated  26,987 article pairs for \aan, and randomly selected 300,000 article pairs for both \aminer and \magdata.
 
 
@@ -555,7 +557,7 @@ To better understand the impacts, we varied the importance weighting factor $\la
 \marked{
 When varying $\lambda$, the \PairAcc of \ensemblerank is better than the one of \drank in most cases, except on \aminer with \fcita, which shows the superiority of the TWPageRank than exploiting exponentially decayed weights.
 The difference of \PairAcc by the two algorithms is higher with \recom than with \fcita, since the two algorithms are using citation information to predict future citations with \fcita.
-Moreover, algorithm \ensemblerank is consistently better than \drank when $\lambda \ge 0.9$, which, with \recom and \fcita, improves the \PairAcc by (2.18\%, 6.94\%, 5.02\%) and (0.70\%, 0.13\%, 0.27\%) on (\aan, \aminer, \magdata) on average, respectively. The region of $\lambda$ when \ensemblerank outperforms \drank is even larger if considering \aan and \magdata only.
+Moreover, algorithm \ensemblerank is consistently better than \drank when $\lambda \ge 0.6$, which, with \recom and \fcita, improves the \PairAcc by (0.xx\%, 0.xx\%, 0.xx\%) and (0.yy\%, 0.yy\%, 0.yy\%) on (\aan, \aminer, \magdata) on average, respectively. 
 The improvement decreases with the decrease of $\lambda$ as the popularity dominates the ranking with small $\lambda$, and in some cases, \drank outperforms \ensemblerank as the prestige and popularity orders of article pairs are more diverse for \drank than \ensemblerank.
 Overall, with \recom and \fcita, \ensemblerank improves the \PairAcc over \drank by (1.78\%, 3.33\%, 3.20\%) and (0.25\%, -0.07\%, 0.16\%) on (\aan, \aminer, \magdata) on average, respectively.
 }
