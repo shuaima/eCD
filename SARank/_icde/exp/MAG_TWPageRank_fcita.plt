@@ -24,16 +24,16 @@ set style fill pattern 2 border -1
 #set style fill solid 0.5 border
 
 #set label 1 "0.0%" at -0.25,0.885 font "Times-Roman,13" rotate by 320
-set label 2 "-0.01%" at -0.35,0.855 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
-set label 3 "+0.00%" at 0.65,0.855 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
-set label 4 "+0.03%" at 1.65,0.855 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
-set label 5 "+0.11%" at 2.65,0.855 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
-set label 6 "+0.10%" at 3.65,0.845 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
-set label 7 "+0.22%" at 4.65,0.84 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
-set label 8 "+0.28%" at 5.65,0.83 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
-set label 9 "+0.35%" at 6.65,0.825 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
-set label 10 "+0.45%" at 7.65,0.815 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
-set label 11 "+0.08%" at 8.65,0.775 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
+set label 2 "-0.03%" at -0.35,0.873 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
+set label 3 "-0.03%" at 0.65,0.873 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
+set label 4 "-0.01%" at 1.65,0.873 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
+set label 5 "+0.02%" at 2.65,0.873 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
+set label 6 "+0.06%" at 3.65,0.87 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
+set label 7 "+0.15%" at 4.65,0.862 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
+set label 8 "+0.27%" at 5.65,0.855 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
+set label 9 "+0.32%" at 6.65,0.845 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
+set label 10 "+0.29%" at 7.65,0.83 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
+set label 11 "-0.35%" at 8.65,0.79 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
 
 
 plot "MAG_TWPageRank.tab" using 5:xticlabels(1) title 'DRank' lw 1.5,\
