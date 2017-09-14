@@ -8,8 +8,8 @@ set border
 set noy2tics
 set nox2tics
 set xr [2010:2015]
-set yr [0.45:0.8]  
-set ytics ("0.45" 0.45, "0.52" 0.52, "0.59" 0.59, "0.66" 0.66, "0.73" 0.73, "0.80" 0.8)
+set yr [0.45:0.95]  
+set ytics ("0.45" 0.45, "0.55" 0.55, "0.65" 0.65, "0.75" 0.75, "0.85" 0.85, "0.95" 0.95)
 set xtics ("2010" 2010, "2011" 2011, "2012" 2012, "2013" 2013, "2014" 2014, "2015" 2015) 
 #set x2tics ("" 2.5, "" 7.5, "" 12.5,"" 17.5) 
 #set ytics scale 0.05
@@ -18,7 +18,7 @@ set xtics ("2010" 2010, "2011" 2011, "2012" 2012, "2013" 2013, "2014" 2014, "201
 set ylabel "PairAcc" offset 1.5
 set xlabel "splitting year" offset 0, 0.5
 
-set key vertical samplen 1.5 spacing 1.0 at graph 1, 0.45
+set key horizontal samplen 1.5 spacing 1.0 at graph 1, 0.25
 #set key horizontal font ",13" 
 plot "AMiner_PairAcc1.tab" using ($1):($4) title 'HRank' with linespoints linetype 1 pointtype 4 lc rgb "blue" lw 3,\
 "AMiner_PairAcc1.tab" using ($1):($3) title 'FRank' with linespoints linetype 1 pointtype 2 lc rgb "#228B22" lw 3,\

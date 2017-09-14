@@ -8,8 +8,8 @@ set border
 set noy2tics
 set nox2tics
 set xr [1:6]
-set yr [0.3:0.8]  
-set ytics ("0.30" 0.3, "0.40" 0.4, "0.50" 0.5, "0.60" 0.6, "0.70" 0.7, "0.80" 0.8)
+set yr [0.2:0.9]  
+set ytics ("0.20" 0.2, "0.34" 0.34, "0.48" 0.48, "0.62" 0.62, "0.76" 0.76, "0.90" 0.9)
 set xtics ("1" 1, "3" 2, "7" 3, "15" 4, "31" 5, "+{/Symbol \245}" 6) 
 #set x2tics ("" 2.5, "" 7.5, "" 12.5,"" 17.5) 
 #set ytics scale 0.05
@@ -18,7 +18,7 @@ set xtics ("1" 1, "3" 2, "7" 3, "15" 4, "31" 5, "+{/Symbol \245}" 6)
 set ylabel "PairAcc" offset 1.5
 set xlabel "number of published years" offset 0, 0.5
 
-set key vertical samplen 1.8 spacing 1.0 at graph 1.02, 0.45
+set key vertical samplen 1.8 spacing 1.0 at graph 1, 0.45
 #set key horizontal font ",13" 
 plot "AMiner_PairAcc2.tab" using ($1):($5) title 'HRank' with linespoints linetype 1 pointtype 4 lc rgb "blue" lw 3,\
 "AMiner_PairAcc2.tab" using ($1):($3) title 'FRank' with linespoints linetype 1 pointtype 2 lc rgb "#228B22" lw 3,\
