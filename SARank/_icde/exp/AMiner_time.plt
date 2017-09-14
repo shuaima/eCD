@@ -8,15 +8,15 @@ set border
 set noy2tics
 set nox2tics
 set xr [2009:2016]
-set yr [1:500]  
-set ytics ("1" 1, "10" 10, "100" 100, "500" 500)
+set yr [1:1200]  
+set ytics ("1" 1, "10" 10, "10^2" 100, "10^3" 1000)
 set xtics ("09" 2009, "10" 2010, "11" 2011, "12" 2012, "13" 2013, "14" 2014, "15" 2015,  "16" 2016)
 #set xtics ("2008\n(0.12)" 2008, "2009\n(0.25)" 2009, "2010\n(0.39)" 2010, "2011\n(0.55)" 2011, "2012\n(0.73)" 2012, "2013\n(0.93)" 2013, "2014\n(1.14)" 2014, "2015\n(1.29)" 2015) 
 #set x2tics ("" 2.5, "" 7.5, "" 12.5,"" 17.5) 
 #set ytics scale 0.05
 #set logscale x
 set logscale y
-set ylabel "time (sec.)" offset 1.5
+set ylabel "time (sec.)" 
 set xlabel "splitting year" offset 0,0.5
 set key horizontal samplen 1.2 spacing 1 at graph 1, 0.7
 set key font ",14"
