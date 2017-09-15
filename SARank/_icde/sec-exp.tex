@@ -55,6 +55,7 @@ It contains 3.14 million articles, 1.74 million authors, 11,619 venues and 6.38 
 It contains around 127 million articles, 115 million authors, 24,024 venues and 529 million citations.
 %Please refer to~\cite{Sinha15:MAG} for more details about \magdata.
 
+\marked{The average number of citations on \aminer is much less than the other two, we hence added part of the missing citations by title matching on \magdata, and, finally, the number increased to X.YY million.}
 These datasets were further cleaned by deleting self-citations and citations from old articles to new ones, which accounted for (0.1\%, 1.8\%, 0.4\%) of the total citations on (\aan, \aminer, \magdata), respectively.
 %from old articles to more recent ones
 %These datasets were further cleaned by detecting citation cycles and removing those edges violating the temporal order if any.
@@ -87,15 +88,26 @@ We constructed two sets of ground-truth importance orders of article pairs with 
 
 
 \noindent
-(1) \recom~\cite{Liang16AAAI} assumes that scholarly articles with more recommendations are of higher importance.
+(1) \recom assumes that scholarly articles with more recommendations are of higher importance.
+%
 %evaluates the importance of scholarly articles by the numbers of recommendations (from textbooks and/or university course reading lists).
 We used the numbers of recommendations of 93 articles on \aan~\cite{Liang16AAAI}, %which are recommended by 2 to 10 times,
-and, finally, %then matched articles in \aminer and \magdata with titles.  Finally, we
-generated (2,133, 966, 1,972) scholarly article pairs on (\aan, \aminer, \magdata), respectively.
+and, by exact title matching, %then matched articles in \aminer and \magdata with titles.  Finally, we
+generated (2133, 966, 1972) scholarly article pairs on (\aan, \aminer, \magdata), respectively.
 %These articles were further matched into \aminer and \magdata through titles, which generated 966 and 1,972 article pairs for \aminer and \magdata, respectively.
 
-%To generate the pairs base on recommendation, we have selected two articles from gold standard set GoldP which consists of 93 scholarly articles that are recommended by the course reading lists or textbooks of 15 famous universities at least twice, and evaluate the article which has been recommended more frequency more importance than the other. In that case, we have generate 2,133, 1,972 and 966 pairs as recommendation based ground truth on \aan, \magdata and \aminer, respectively. Note that all the scholarly articles from recommendation based ground truth is published before or in 2011.
 
+\noindent \marked{
+(2) \fcita assumes that scholarly articles with more citations are of higher importance.
+%
+However, the number of all citations is obviously biased to old articles. Some work adopts the number of future citations~\cite{Wang13AAAI,Wang16TIST,Li08TSRanking}, which is also not appropriate since this gives an estimation of impacts of articles in the near future, not at the query time. Differently, we propose to use the number of past and future citations, where past and future periods span the same length of time such that the number of citations within the two periods reveals the importance of articles at the query time.
+%
+We hence divided each dataset into two parts by a splitting year where the data before the splitting year (exclusive) were used for ranking and the remaining data as well as the most recent part of ranking data which spans the same time as the remaining data were used to count the numbers of past and future citations.
+%
+Moreover, articles in the same pair were required to be in similar research fields, by utilizing the Fields-Of-Study information on \magdata~\cite{Sinha15:MAG}, and published in the same year, similar to~\cite{Wang16TIST}.
+We used all pairs (around 25,000) for \aan, and randomly chose 300,000 pairs for both \aminer and \magdata.}
+
+\eat{
 \noindent
 (2) \fcita assumes that scholarly articles with more future citations are of higher importance~\cite{Wang13AAAI,Wang16TIST,Li08TSRanking}.
 We first divided each dataset into ranking part and evaluation part by a splitting year such that data before the splitting year were used for ranking and the remaining data were used to count the numbers of future citations for articles in the ranking part.
@@ -105,10 +117,7 @@ We used all pairs (around 25,000) for \aan, and randomly chose 300,000 pairs for
 %
 \marked{Due to the sparse citations on \aminer, the two articles in 50\% pairs have 0 and 1 future citation, which is a very weak evidence for importance order. Hence, we further required articles in pairs must have at least 1 future citation on \aminer.}
 %Finally, we generated  26,987 article pairs for \aan, and randomly selected 300,000 article pairs for both \aminer and \magdata.
-
-
-%It is obviously that the significant article will be cited more than those papers which are less important in the future. Due to the fact, we choose a year to divide the dataset into two parts, the query data and the future data. The query data includes articles which is published before the year, and the future data contains all papers published in or after the year. To evaluate the importance of scholarly articles, we can use the frequency of papers' citation in the future. Furthermore, to generate the orders of importance of article pairs, we need to make sure that the two articles in one pair are comparable and it is reasonable to evaluate their importance with future citation count. For this purpose, we have chosen two scholarly articles which belong to the same fields of study and published in the same year, and evaluate the article which has more future citation more importance than the other. In that case, we have generate and pick up 300,000 pairs randomly as future citation based ground truth for each datasets, respectively. Note that the boundary year is set to 2008 on \aan and 2013 on both \aminer and \magdata as default, and the evaluate period is set to all remaining data as default, since it will make 20\% data on each dataset be the future period.
-
+}%% eat
 
 
 \stitle{Algorithms}.
