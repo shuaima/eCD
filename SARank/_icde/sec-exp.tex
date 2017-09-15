@@ -55,8 +55,8 @@ It contains 3.14 million articles, 1.74 million authors, 11,619 venues and 6.38 
 It contains around 127 million articles, 115 million authors, 24,024 venues and 529 million citations.
 %Please refer to~\cite{Sinha15:MAG} for more details about \magdata.
 
-\marked{The average number of citations on \aminer is much less than the other two, we hence added part of the missing citations by title matching on \magdata, and, finally, the number increased to X.YY million.}
-These datasets were further cleaned by deleting self-citations and citations from old articles to new ones, which accounted for (0.1\%, 1.8\%, 0.4\%) of the total citations on (\aan, \aminer, \magdata), respectively.
+\marked{The average number of citations on \aminer is much less than the other two, we hence added part of the missing citations by title matching on \magdata, and, finally, the total number increased to 14.26 million.}
+These datasets were further cleaned by deleting self-citations and citations from old articles to new ones, which accounted for (0.1\%, 0.8\%, 0.4\%) of the total citations on (\aan, \aminer, \magdata), respectively.
 %from old articles to more recent ones
 %These datasets were further cleaned by detecting citation cycles and removing those edges violating the temporal order if any.
 
@@ -105,7 +105,7 @@ However, the number of all citations is obviously biased to old articles. Some w
 We hence divided each dataset into two parts by a splitting year where the data before the splitting year (exclusive) were used for ranking and the remaining data as well as the most recent part of ranking data which spans the same time as the remaining data were used to count the numbers of past and future citations.
 %
 Moreover, articles in the same pair were required to be in similar research fields, by utilizing the Fields-Of-Study information on \magdata~\cite{Sinha15:MAG}, and published in the same year, similar to~\cite{Wang16TIST}.
-We used all pairs (around 25,000) for \aan, and randomly chose 300,000 pairs for both \aminer and \magdata.}
+We used all pairs (around 50,000) for \aan, and randomly chose 300,000 pairs for both \aminer and \magdata.}
 
 \eat{
 \noindent
@@ -143,7 +143,7 @@ We compared our approach with three competitive methods: \pagerank~\cite{Brin98:
 All algorithms were implemented with Microsoft Visual C++.
 %Parameters.
 For all algorithms, (a) the damping parameter $d$ and the iteration threshold $\epsilon$ were fixed to 0.85 and $10^{-8}$, respectively,
-(b) the default splitting years were selected such that the data in evaluation part accounted for around 20\% of all, which were 2008 on \aan and 2013 on both \aminer and \magdata, and,
+(b) \marked{the default splitting years were selected such that the data in evaluation part accounted for 4 years, which were 2008 on \aan and 2012 on both \aminer and \magdata since the data missing of 2016,} and,
 (c) for the sake of fairness, aggregating parameters of \futurerank, \hhgrank and \ensemblerank were tuned at the granularity of 0.1 and the best results were reported.
 %
 Moreover, $\rho$ was set to -0.2 for \futurerank following~\cite{sayyadi09}, and the time decaying factor $\sigma$ and the importance weighting factor $\lambda$ were set to -1 and 0.5  by default for \ensemblerank.
@@ -311,7 +311,7 @@ Given $Y_s$, $T_p$ and $dif$, we only used article pairs whose articles were pub
 \etitle{Exp-2.1}.
 %\stitle{Exp-2.1}.
 To evaluate the effectiveness of ranking \wrt\ {\em short-term and long-term importance},
-we varied the splitting year $Y_s$ from 2005 to 2010 on \aan and from 2010 to 2015 on both \aminer and \magdata, while fixed $T_p$ = $+\infty$ and $dif$ = $1$, \ie using all scholarly article pairs.
+we varied the splitting year $Y_s$ from 2006 to 2011 on \aan and from 2010 to 2015 on both \aminer and \magdata, while fixed $T_p$ = $+\infty$ and $dif$ = $1$, \ie using all scholarly article pairs.
 %
 Intuitively, large and small $Y_s$ correspond to short-term and long-term importance, respectively.
 The results of \PairAcc are reported in Figs.~\ref{exp-aan-futureyear}, \ref{exp-aminer-futureyear} and \ref{exp-mag-futureyear}, in which the red markers $\Box$ in dashed lines mean that \hhgrank ran out of memory.
@@ -366,7 +366,7 @@ consistently run faster than all competitors, especially with less update data.
 %
 For TWPageRank computation, algorithm \inctwprscc is on average (1.9, 3.8) and (2.5, 4.1) times faster than (\twprscc, \powtwprscc) on \aminer and \magdata, respectively.
 %
-For scholarly article ranking, algorithm \incensemble is on average (1.7, 3.0, 2.9, 123) and (2.0, 3.0, 4.4, 245) times faster than (\batensemble, \powensemble, \futurerank, \hhgrank) on \aminer and \magdata, respectively.
+For scholarly article ranking, algorithm \incensemble is on average (1.7, 3.0, 2.9, 128) and (2.0, 3.0, 4.4, 245) times faster than (\batensemble, \powensemble, \futurerank, \hhgrank) on \aminer and \magdata, respectively.
 
 %\etitle{Remarks}.
 In our tests we adopted a yearly update policy due the limitation of  available time information. In practice our algorithms may bring more efficiency benefits since the ranking is usually more frequent, such that the data updates are smaller and the unaffected area is very likely much larger.
@@ -476,7 +476,7 @@ Indeed, with \recom and \fcita, the \PairAcc of combining prestige and popularit
 \hline \hline
 % \recom
 \aan & 0.752 \ 0.616 \ 0.649 & 0.809 \ 0.764 \ 0.747 & {\bf 0.810} \\
-\aminer & 0.795 \  0.581 \  0.640 & 0.784 \ 0.749 \ 0.729 & {\bf 0.785} \\
+\aminer & 0.735 \  0.581 \  0.640 & 0.784 \ 0.749 \ 0.729 & {\bf 0.785} \\
 \magdata & 0.635 \ 0.534 \ 0.553 & 0.697 \ 0.673 \  0.648 & {\bf 0.698} \\ \hline
 % \ficta
 \aan & 0.785 \ 0.557 \ 0.761 & 0.849 \ 0.866 \ 0.771 & {\bf 0.870} \\
@@ -589,15 +589,15 @@ From these tests we find the followings.
 
 
 \sstab(1) Our model \ensemblerank is effective for ranking scholarly articles, which is consistently better than competitive methods in all tests. With \recom and \fcita, \ensemblerank improves \PairAcc over (\pagerank, \futurerank, \hhgrank) by
-(13.5\%, 6.8\%, 4.8\%) and (11.2\%, 1.8\%, 3.0\%) on \aan,
-(6.8\%, 1.8\%, 1.2\%) and (9.6\%, 3.7\%, 3.0\%) on \aminer, and
-(6.5\%, 2.5\%, 2.2\%) and (6.8\%, 4.0\%, 1.2\%) on \magdata, on average, respectively.
+(13.5\%, 6.8\%, 4.8\%) and (12.0\%, 3.0\%, 3.2\%) on \aan,
+(12.7\%, 5.0\%, 4.9\%) and (14.0\%, 6.5\%, 4.6\%) on \aminer, and
+(6.5\%, 2.5\%, 2.2\%) and (13.4\%, 6.0\%, 2.4\%) on \magdata, on average, respectively.
 %, and it has a great advantage in evaluating the importance in a long term. Furthermore, it is more accurate evaluating articles which have just published and is in lack of citations, since it uses both venue network and author information besides of citation network. Indeed, it improves the accuracy by $(7.9\%, 3.2\%, 2.3\%)$ and $(14.4\%, 5.0\%, 3.8\%)$ over \pagerank, \futurerank and \hhgrank on average of three datasets with recommendation based ground truth and future citation ground truth, respectively.
 
 
 \sstab(2) Our batch algorithm \batensemble and incremental algorithm \incensemble are also efficient.
 %
-Our incremental algorithm \incensemble is on average (1.7, 3.0, 2.9, 123) and (2.0, 3.0, 4.4, 245) times faster than (\batensemble, \powensemble, \futurerank, \hhgrank)  on the large \aminer and \magdata, respectively.
+Our incremental algorithm \incensemble is on average (1.7, 3.0, 2.9, 128) and (2.0, 3.0, 4.4, 245) times faster than (\batensemble, \powensemble, \futurerank, \hhgrank)  on the large \aminer and \magdata, respectively.
 
 %The batch algorithm \batensemble is on average (1.3, 2.5, 348) times faster than (\powensemble, \futurerank, \hhgrank)  on the largest \magdata, respectively.
 
