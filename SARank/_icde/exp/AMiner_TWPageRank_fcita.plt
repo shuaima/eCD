@@ -7,8 +7,8 @@ set style histogram clustered gap 1
 #set noy2tics
 #set nox2tics
 set xr [-0.6:9.6]
-set yr [0.67:0.95]  
-set ytics ("0.67" 0.67, "0.74" 0.74, "0.81" 0.81, "0.88" 0.88, "0.95" 0.95)
+set yr [0.68:0.96]  
+set ytics ("0.68" 0.68, "0.75" 0.75, "0.82" 0.82, "0.89" 0.89, "0.96" 0.96)
 #set xtics ("0" 0, "0.2" 0.2, "0.4" 0.4, "0.6" 0.6, "0.8" 0.8, "1" 1) 
 #set x2tics ("" 2.5, "" 7.5, "" 12.5,"" 17.5) 
 #set ytics scale 0.05
