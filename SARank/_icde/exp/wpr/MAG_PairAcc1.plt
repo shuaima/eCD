@@ -8,8 +8,8 @@ set border
 set noy2tics
 set nox2tics
 set xr [2010:2015]
-set yr [0.55:0.9]  
-set ytics ("0.55" 0.55, "0.62" 0.62, "0.69" 0.69, "0.76" 0.76, "0.83" 0.83, "0.90" 0.9)
+set yr [0.5:0.95]  
+set ytics ("0.50" 0.5, "0.59" 0.59, "0.68" 0.68, "0.77" 0.77, "0.86" 0.86, "0.95" 0.95)
 set xtics ("2010" 2010, "2011" 2011, "2012" 2012, "2013" 2013, "2014" 2014, "2015" 2015) 
 #set x2tics ("" 2.5, "" 7.5, "" 12.5,"" 17.5) 
 #set ytics scale 0.05
@@ -18,7 +18,7 @@ set xtics ("2010" 2010, "2011" 2011, "2012" 2012, "2013" 2013, "2014" 2014, "201
 set ylabel "PairAcc" offset 1.5
 set xlabel "splitting year" offset 0, 0.5
 
-set key vertical samplen 2 spacing 1.0 at graph 1.03, 0.53
+set key horizontal samplen 2 spacing 1.0 at graph 1, 0.33
 #set key horizontal font ",13" 
 plot "MAG_PairAcc1_error.tab" using ($1):($2) title '' with linespoints linetype 0 pointtype 4 lc rgb "red" lw 5,\
 "MAG_PairAcc1.tab" using ($1):($6) title 'HRank' with linespoints linetype 1 pointtype 4 lc rgb "blue" lw 3,\
