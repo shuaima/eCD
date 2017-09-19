@@ -14,9 +14,8 @@ set xtics ("1995" 1995, "1997" 1997, "1999" 1999, "2001" 2001, "2003" 2003, "200
 
 #set yr [0:16]
 #set ytics ("0" 0, "4" 4, "8" 8, "12" 12, "16" 16)
-set yr [0.3:27]
-#set yr [1:27]
-set ytics ("0.3" 0.3, "1.0" 1, "3.0" 3, "9.0" 9, "27" 27)
+set yr [0.33:27]
+set ytics ("0.33" 0.33, "1.0" 1, "3.0" 3, "9.0" 9, "27" 27)
 set logscale y 3
 
 #set ylabel "(log) # of yearly-references" offset 1.3
