@@ -20,7 +20,7 @@ set ytics ("0.3" 0.3, "1.0" 1, "3.0" 3, "9.0" 9, "27" 27)
 set logscale y 3
 
 #set ylabel "(log) # of yearly-references" offset 1.3
-set ylabel "% of references by year" offset 1.3
+set ylabel "% of citations by year" offset 1.3
 #set xlabel "year"
 set key at graph 0.27, 0.95
 
