@@ -10,7 +10,7 @@ In this section, we first present Time-Weighted PageRank for evaluating  the imp
 \subsection{Time-Weighted PageRank}
 \label{subsec-twpr}
 
-We first present Time-Weighted PageRank (TWPageRank) \marked{based on citation statistics}, as the direct use of PageRank for ranking scholarly articles is problematic as discussed below.
+We first present Time-Weighted PageRank (TWPageRank) based on citation statistics, as the direct use of PageRank for ranking scholarly articles is problematic as discussed below.
 
 
 
@@ -19,11 +19,11 @@ We first present Time-Weighted PageRank (TWPageRank) \marked{based on citation s
 
 
 
-\noindent(1) Different articles typically have different impacts in practice, on which there is a need to differentiate, while PageRank essentially assumes equal impacts.
+\noindent(1) Different articles typically have different impacts in practice, and there is a need to differentiate, while PageRank essentially assumes equal impacts.
 
 %, such that each article can distribute more of its authority to those that are more influential to it.
 
-\noindent(2) \marked{The semantics of citation relationships are time-dependent, which means that citations at different periods of time potentially reveal different information. This has already been  exploited for scholarly article ranking~\cite{Li08TSRanking,Wang13AAAI,WalkerXKM07}, while PageRank does not consider temporal information at all. }
+\noindent(2) The semantics of citation relationships are time-dependent, which means that citations at different periods of time may reveal different information. Note that this has already been exploited for scholarly article ranking~\cite{Li08TSRanking,Wang13AAAI,WalkerXKM07}, while PageRank does not consider this temporal factor at all.
 % and each individual article reaches their periods in different time
 
 \stitle{Time-Weighted PageRank (TWPageRank)}. Most previous work simply exploits temporal information in the form of exponential decay~\cite{Li08TSRanking,Wang13AAAI,sayyadi09,WalkerXKM07}. We rethink the usage of time information in terms of the impacts of scholarly articles.
@@ -44,6 +44,15 @@ According to Fig.~\ref{fig-citation}, the impact of an article does depend on ti
 Moreover, considering that articles might reach their citation peaks in different time, we compute {\em the peak time for each individual article}, rather than using the same citation peak for all articles.
 %using the peak year in Fig.~\ref{fig-citation} is not appropriate for all articles. On the contrary, we compute a peak year for each article.
 }
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.45]{fig/yearly-references.eps}
+\vspace{-2ex}
+\caption{\small Citation statistics of scholarly articles of \aan, \aminer and \magdata, which reports the number of citations in each year.}
+\label{fig-reference}
+\vspace{-3ex}
+\end{figure}
 
 
 Based on the above discussion, we propose TWPageRank that evaluates the prestige of nodes (\eg scholarly articles) in a directed graph, such that each node is attached with time information. It differs from PageRank by weighting the influence propagation using the {\em impact weights on edges}, which represent the relative amounts of time-dependent prestige that should be propagated from the edge sources to targets.
@@ -72,14 +81,7 @@ For scholarly article ranking, $T_u$ is the publication time of article $u$ and 
 %, and the increased number of references of each article over time
 %Recent work observes that the volume of scientific publications doubled every 12 years between 1900 and 2015~\cite{Dong2017KDD}. It is not surprising that the number of references also grows exponentially~\cite{BornmannM15}.
 
-\begin{figure}
-\centering
-\includegraphics[scale=0.45]{fig/yearly-references.eps}
-\vspace{-2ex}
-\caption{\small Reference statistics of scholarly articles}
-\label{fig-reference}
-\vspace{-3ex}
-\end{figure}
+
 
 The update rule of TWPageRank is:
 
