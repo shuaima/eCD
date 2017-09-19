@@ -1,0 +1,90 @@
+\section{Introduction}
+\label{sec-intro}
+
+\marked{Query independent ranking of scholarly articles is an important problem for both research and practice.}
+Generally speaking, a ranking is {\em a function that assigns each item a numerical score}. Query independent ranking aims to give a static ranking based on the scholarly  data only, and is independent of how well articles match a specific query. Such a ranking plays a key role in literature recommendation systems, especially in the {\em cold start} scenario.
+
+%Query independent ranking of scholarly articles has drawn significant attentions from both academia~\cite{Garfield471,ChenXMR07,Zhou07-CoRank,ShenAAAI16,Liang16AAAI,Jiang12-MRank,Waltman2014,TanLMGSW16} and industry~\cite{sem-scholar,g-scholar,Sinha15:MAG}.
+
+\marked{Due to its importance, the problem has drawn significant attentions from both academia~\cite{Garfield471,ChenXMR07,Zhou07-CoRank,ShenAAAI16,Liang16AAAI,Jiang12-MRank,Waltman2014,TanLMGSW16} and industry~\cite{sem-scholar,g-scholar,Sinha15:MAG}.
+%
+In the academic community, the most popular approaches have witnessed a shift from citation-count analysis~\cite{Garfield471,Hirsch15112005} to graph analysis~\cite{ChenXMR07,Zhou07-CoRank,Jiang12-MRank,Waltman2014}. Graph-based methods leverage the global structure of bibliographic networks and the interactions between heterogeneous entities, and, hence, are usually better than those based on citation-counts only.
+%
+Efforts have also been made from the industry. For instance, Google Scholar~\cite{g-scholar} aims to rank articles in the way researchers do, weighing the full text, where they were published, who they were written by, as well as how often and how recently they have been cited.
+%Microsoft Academic considers how often and to which a publication is cited to determine the ranking.
+Besides, Semantic Scholar~\cite{sem-scholar} proposes to use the citation velocity, which is a weighted average number of articles' citations in the last three years.
+}
+
+%, \eg Google Scholar~\cite{g-scholar}, Semantic Scholar~\cite{sem-scholar} and Microsoft Academic~\cite{Sinha15:MAG}
+% https://scholar.google.com/intl/zh-CN/scholar/about.html
+% http://academic.research.microsoft.com/About/Help.htm
+% https://www.semanticscholar.org/faq#citation-velocity
+
+Scholarly articles are involved with multiple entities such as authors, venues, dates and references. \marked{Following the graph-based formalization}, scholarly article ranking is essentially a problem of assessing the importance of nodes in a heterogeneous network.
+However, effective and efficient ranking of nodes in such a large complex network is a challenging task due to the heterogeneous, evolving and dynamic natures of involved entities~\cite{AggarwalS14-survey,fcs-biggraph}.
+
+First, even if we are only to rank one type of entities (\ie scholarly articles), the other types of entities (\eg venues and authors) are closely involved, and, moreover, different types of entities may have different impacts on the ranking of scholarly articles.
+%
+\marked{Second, the importance of articles evolve with time in a complex way~\cite{WangSB13,Chakraborty15}.
+%Newly published articles are very likely to have increasing impacts in the next few years, and those published many years ago tend to have decreasing impacts, as researchers potentially have more interests in recently reported results. Indeed, as shown by the statistics of three scholarly datasets (\aan, \aminer and \magdata) in Fig.~\ref{fig-citation}, the citation numbers of articles in general reach the peak in the first 1 or 2 years after their publication, and then decrease accordingly. % Note that we do not plot the proportion of citations at $x=0$ on \aminer, which is an impractical value of 23.6\%. The above citation pattern is described as a complex log-normal probability in~\cite{WangSB13}.
+Newly published articles are very likely to have increasing impacts in the next few years, and those published many years ago tend to have decreasing impacts, which conforms to the universal citation pattern of articles such that the number of citations generally grows in the first two to three years, and then declines over the rest of time~\cite{Chakraborty15}. Moreover, instead of the universal one, individual articles indeed follow a remarkably diverse set of patterns featured by the time when the number of citations reaches the peaks~\cite{Chakraborty15}.}
+Finally, academic data is dynamic and continuously growing. Indeed, the number of articles in \magdata has exceeded 126 million, and keeps increasing at around 5.7 million per year~\cite{Sinha15:MAG}. \marked{This may possibly cause certain long-term biases into data, \eg the number of citations increases significantly over time~\cite{BornmannM15}, which should be properly considered for scholarly article ranking. }
+
+
+Query independent ranking of scholarly articles is challenging~\cite{wsdmcup}, although there exists quite a bit of work on scholarly article ranking, \eg~\cite{Garfield471,ChenXMR07,Zhou07-CoRank,ShenAAAI16,Liang16AAAI,Jiang12-MRank,Waltman2014}.
+\marked{Most previous work exploits the time-dependent information of scholarly data in the form of exponential decay~\cite{Li08TSRanking,Wang13AAAI,sayyadi09,WalkerXKM07}, which fails to fit to the diverse citation patterns of individual articles~\cite{Chakraborty15}.}
+Further, to our knowledge, little concern has been paid to dynamic scholarly article ranking except \cite{GhoshKHLL11} with a strong and impractical assumption that there are no citations between papers published in the same years.
+%\marked{Finally, the bias caused by the dynamic nature of data has never been exploited in scholarly article ranking}.
+
+
+
+
+\eat{
+\begin{figure}
+\vspace{1ex}
+\includegraphics[scale=0.45]{fig/citation.eps}
+\vspace{-2ex}
+\caption{\small Citation statistics of scholarly articles}
+\label{fig-citation}
+\vspace{-3ex}
+\end{figure}
+}
+
+\stitle{Contributions \& Roadmap}.
+To this end, we propose an effective and efficient approach for query independent scholarly article ranking in a dynamic environment.
+
+\sstab(1) We first  propose a \underline{S}cholarly \underline{A}rticle \underline{Rank}ing model, referred to as \ensemblerank, by assembling the importance of three classes of entities (articles, venues and authors) for scholarly article ranking (Section \ref{sec-model}).
+%
+The importance is a combination of {\em prestige} and {\em popularity} to capture the evolving nature of entities.
+%
+To compute the prestige of articles and venues, we propose a novel {\em Time-Weighted PageRank} with a time decaying factor based on citation statistics (instead of simple exponential decay), and the prestige of authors is the average prestige of all their published articles.
+%
+The popularity of an article is the sum of all its citations' freshness (how close to the current year), while the one of venues and authors is the average popularity of their associated articles.
+%
+%Observe that (a), intuitively, prestige favors articles with many citations soon after their publication, and popularity favors those with recent citations, and (b) both prestige and popularity capture the evolving nature of entities.
+%
+\marked{To the best of our knowledge, the Time-Weighted PageRank is among the first to incorporate the diverse citation patterns of individual articles for scholarly article ranking.}
+%and the long-term bias caused by the dynamic nature of data
+
+\sstab(2)  We then develop  a batch algorithm for scholarly article ranking (Section \ref{sec-alg}), in which we propose a block-wise method for Time-Weighted PageRank in terms of an analysis of the citation characteristics of scholarly articles.
+%
+We further develop an incremental algorithm for dynamic scholarly article ranking (Section~\ref{sec-incAlg}), which partitions graphs into  {\em affected and unaffected areas}, and employs different updating strategies for nodes in affected and unaffected areas.
+
+
+\sstab(3) Using three real-life scholarly datasets (\aan, \aminer and \magdata) and two sets of ground-truth (\recom and \fcita), we finally conduct an extensive experimental study (Section~\ref{sec-exp}).
+(a) We find that, with \recom and \fcita, our model \ensemblerank improves the pairwise accuracy \cite{Richardson06:BPR} over (\pagerank \cite{Brin98:PageRank}, \futurerank \cite{sayyadi09}, \hhgrank \cite{Liang16AAAI}) by
+(13.5\%, 6.8\%, 4.8\%) and (12.0\%, 3.0\%, 3.2\%) on \aan,
+(12.7\%, 5.0\%, 4.9\%) and (14.0\%, 6.5\%, 4.6\%) on \aminer, and
+(6.5\%, 2.5\%, 2.2\%) and (13.4\%, 6.0\%, 2.4\%) on \magdata, on average, respectively.
+%
+(b) Our batch algorithm \batensemble and incremental algorithm \incensemble are also efficient. Indeed, \incensemble is on average (1.7, 2.8, 116) and (2.0, 4.4, 245) times faster than (\batensemble, \futurerank, \hhgrank)  on the large \aminer and \magdata, respectively.
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\eat{
+\stitle{Organization}. The rest of our paper is organized as follows. The latter part of Section~\ref{sec-intro} summarizes related work. Section~\ref{sec-model} introduces the ranking model. Section~\ref{sec-alg} .... Section~\ref{sec-incAlg} .... Experimental results are reported in Section~\ref{sec-exp}, followed by conclusions in Section~\ref{sec-conc}.
+}
+
+
+
