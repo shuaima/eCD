@@ -29,10 +29,10 @@ set label 3 "-0.03%" at 0.65,0.873 font "Times-Roman,13" rotate by 40 textcolor 
 set label 4 "-0.01%" at 1.65,0.873 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
 set label 5 "+0.02%" at 2.65,0.873 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
 set label 6 "+0.06%" at 3.65,0.87 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
-set label 7 "+0.15%" at 4.65,0.862 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
-set label 8 "+0.27%" at 5.65,0.855 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
-set label 9 "+0.32%" at 6.65,0.845 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
-set label 10 "+0.29%" at 7.65,0.83 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
+set label 7 "+0.15%" at 4.65,0.87 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
+set label 8 "+0.27%" at 5.65,0.86 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
+set label 9 "+0.32%" at 6.65,0.85 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
+set label 10 "+0.29%" at 7.65,0.835 font "Times-Roman,13" rotate by 40 textcolor rgb "#FF0000"
 set label 11 "-0.35%" at 8.65,0.79 font "Times-Roman,13" rotate by 40 textcolor rgb "#0000FF"
 
 
