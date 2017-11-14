@@ -42,12 +42,26 @@ Line simplification algorithms using \ped have good compression ratios~ \cite{Do
 
 
 The \emph{synchronous Euclidean distance} (\sed) was then introduced for trajectory compression to support the above spatio-temporal queries \cite{Meratnia:Spatiotemporal}. \sed is the Euclidean distance of a data point to its \emph{approximate temporally synchronized data point \cite{Meratnia:Spatiotemporal}} on the corresponding line segment. For instance, $P'_4$ and $P'_7$ are the \emph{synchronized data points} of points $P_4$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$ and $\vv{P_4P_{10}}$, respectively, in Figure~\ref{fig:notations} (right).
-Line simplification algorithms using \sed may produce more line segments. However, the use of \sed ensures that the Euclidean distance between a data point and its  synchronized point \wrt the corresponding line segment is bounded. Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the synchronized point $P'$ of a data point $P$ within a bounded distance.
+Line simplification algorithms using \sed may produce more line segments. However, the use of \sed ensures that the Euclidean distance between a data point and its  synchronized point \wrt the corresponding line segment is bounded \textcolor{blue}{by an user specified parameter $\epsilon$}. Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the synchronized point $P'$ of a data point $P$ within the bounded distance $\epsilon$.
 
+\textcolor{blue}{The time complexity of the optimal algorithm using \ped is higher than using \sed.
+	The authors of \cite{Imai:Optimal} showed that the optimal \ped equipping algorithm can be found in $O(n^3)$ time, where $n$ is the number of the original points.
+	Next, the authors of \cite{Chan:Optimal} proved that the algorithm could further be implemented in $O(n^2)$ time with the help of the sector intersection mechanism. 
+	It is worth pointing out that, though \cite{Chan:Optimal} did not discuss the \sed metric, it is clear that the time complexity of that \sed enabled optimal algorithm remains $O(n^3)$ as the sector intersection mechanism does not work for \sed. }
+%
 Line simplification methods using \sed have been developed for batch algorithms (\eg Douglas-Peucker based algorithm \dpsed \cite{Meratnia:Spatiotemporal}) and online algorithms (\eg\ \squishe \cite{Muckell:Compression}).
 However, these methods still have a high time and/or space complexity, which hinders their utility in resource-constrained devices. %\cite{Lin:Operb}
-On the other hand, there are one-pass algorithms \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve, Lin:Operb}  that are more appropriate for resource-constrained devices.  However, to our knowledge, all these existing one-pass algorithms are using \ped, and cannot be directly applied for \sed.
+On the other hand, there are a number of \textcolor{blue}{\ped equipped, linear complexity algorithms} \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve, Lin:Operb} that are more appropriate for resource-constrained devices. 
+%
+\textcolor{blue}{These algorithms apply optimization strategies, \ie the sector intersection mechanism of \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} and the fitting function in our preview work \cite {Lin:Operb}, to fast the process of simplification so as to save resources. 
+Yet, these algorithms are applicable for \ped only as the core optimization strategies they applied are \ped specific, which means they would not work correctly if the error metric \ped is roughly replaced by other metrics, such as \sed.} 
+%
 
+%
+\textcolor{blue}{Thus, to the best of our knowledge, there is no near-optimal, linear complexity and \sed enabled line simplification algorithm.}
+\textcolor{blue}{And, it is non-trival to develop such an \sed enabled linear complexity algorithm. }
+
+%\textcolor{blue}{Hence, it is more challenging to implement such an \sed enabled, linear complexity line simplification algorithm than that a \ped enabled algorithm.}
 
 
 \stitle{{Contributions}}.
