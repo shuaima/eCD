@@ -15,7 +15,7 @@ Transmitting and storing raw trajectory data consumes too much network bandwidth
 %A large number of trajectory compression techniques have been developed,
 % among which the piece-wise line {simplification}  technique is widely used \cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Muckell:Compression, Chen:Trajectory, Chen:Fast, Cao:Spatio, Shi:Survey}, due to its distinct advantages: (a) simple and easy to implement, (b) no need of extra knowledge and suitable for freely  moving  objects \cite{Popa:Spatio}, and (c) bounded errors with good compression ratios.
 %
-It is known that these issues can be resolved or greatly alleviated by trajectory compression techniques via removing redundant data points of trajectories \cite{Douglas:Peucker, Hershberger:Speeding, Meratnia:Spatiotemporal, Liu:BQS, Muckell:survey, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey, Nibali:Trajic, Long:Direction, Popa:Spatio, Han:Compress, Chen:Fast}, among which the piece-wise line {simplification} technique is widely used \cite{Douglas:Peucker, Meratnia:Spatiotemporal, Muckell:survey, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey, Liu:BQS, Lin:Operb, Chen:Fast}, due to its distinct advantages: (a) simple and easy to implement, (b) no need of extra knowledge and suitable for freely  moving  objects, and (c) bounded errors with good compression ratios \cite{Popa:Spatio,Lin:Operb}.
+It is known that these issues can be resolved or greatly alleviated by trajectory compression techniques via removing redundant data points of trajectories \cite{Douglas:Peucker, Hershberger:Speeding, Meratnia:Spatiotemporal, Liu:BQS, Muckell:survey, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey, Nibali:Trajic, Long:Direction, Popa:Spatio, Han:Compress, Chen:Fast}, among which the piece-wise line simplification technique is widely used \cite{Douglas:Peucker, Meratnia:Spatiotemporal, Muckell:survey, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey, Liu:BQS, Lin:Operb, Chen:Fast}, due to its distinct advantages: (a) simple and easy to implement, (b) no need of extra knowledge and suitable for freely  moving  objects, and (c) bounded errors with good compression ratios \cite{Popa:Spatio,Lin:Operb}.
 
 \begin{figure*}[tb!]
 \centering
@@ -29,9 +29,9 @@ It is known that these issues can be resolved or greatly alleviated by trajector
 \end{figure*}
 
 
-Originally, line simplification algorithms adopt the \emph{perpendicular Euclidean distance} (\ped) as a metric to compute the errors,
+Originally, line simplification (\lsa) algorithms adopt the \emph{perpendicular Euclidean distance} (\ped) as a metric to compute the errors,
 \eg $|\vv{P_4P^*_4}|$ is the \ped of data point $P_4$ to the line $\overline{P_0P_{10}}$ in Figure~\ref{fig:notations} (left).
-Line simplification algorithms using \ped have good compression ratios~ \cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey}.  However, when using \ped, the temporal information is lost. Thus, a spatio-temporal query, \eg ``\emph{the position of a moving object at time $t$}", on the compressed trajectories by line simplification algorithms using \ped may return an approximate point $P'$ whose distance to the actual position $P$ of the moving object at time $t$ is unbounded. %For example, a query for the position of $P_7$ at time $t_7$ may return an approximate data point $P'_7$ whose distance to $P_7$ is great than the  bound $\epsilon$ in Figure~\ref{fig:notations} (left).
+Line simplification algorithms using \ped have good compression ratios~ \cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey}.  However, when using \ped, the temporal information is lost. Thus, a spatio-temporal query, \eg ``\emph{the position of a moving object at time $t$}", on the compressed trajectories by \lsa algorithms using \ped may return an approximate point $P'$ whose distance to the actual position $P$ of the moving object at time $t$ is unbounded. %For example, a query for the position of $P_7$ at time $t_7$ may return an approximate data point $P'_7$ whose distance to $P_7$ is great than the  bound $\epsilon$ in Figure~\ref{fig:notations} (left).
 
 
 \eat{, of a data point to a proposed generalized line (\eg in Figure~\ref{fig:notations} (left), $|P_4P^*_4|$ is the \ped of $P_4$ to the line $\overline{P_0P_{10}}$) as the condition to discard or retain that data point.
@@ -42,30 +42,32 @@ Line simplification algorithms using \ped have good compression ratios~ \cite{Do
 
 
 The \emph{synchronous Euclidean distance} (\sed) was then introduced for trajectory compression to support the above spatio-temporal queries \cite{Meratnia:Spatiotemporal}. \sed is the Euclidean distance of a data point to its \emph{approximate temporally synchronized data point \cite{Meratnia:Spatiotemporal}} on the corresponding line segment. For instance, $P'_4$ and $P'_7$ are the \emph{synchronized data points} of points $P_4$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$ and $\vv{P_4P_{10}}$, respectively, in Figure~\ref{fig:notations} (right).
-Line simplification algorithms using \sed may produce more line segments. However, the use of \sed ensures that the Euclidean distance between a data point and its  synchronized point \wrt the corresponding line segment is bounded \textcolor{blue}{by an user specified parameter $\epsilon$}. Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the synchronized point $P'$ of a data point $P$ within the bounded distance $\epsilon$.
+\lsa algorithms using \sed may produce more line segments. However, the use of \sed ensures that the Euclidean distance between a data point and its  synchronized point \wrt the corresponding line segment is bounded \textcolor{blue}{by an user specified parameter $\epsilon$}. Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the synchronized point $P'$ of a data point $P$ within the bounded distance $\epsilon$.
 
-\textcolor{blue}{The time complexity of the optimal algorithm using \ped is higher than using \sed.
-	The authors of \cite{Imai:Optimal} showed that the optimal \ped equipping algorithm can be found in $O(n^3)$ time, where $n$ is the number of the original points.
-	Next, the authors of \cite{Chan:Optimal} proved that the algorithm could further be implemented in $O(n^2)$ time with the help of the sector intersection mechanism. 
-	It is worth pointing out that, though \cite{Chan:Optimal} did not discuss the \sed metric, it is clear that the time complexity of that \sed enabled optimal algorithm remains $O(n^3)$ as the sector intersection mechanism does not work for \sed. }
-%
-Line simplification methods using \sed have been developed for batch algorithms (\eg Douglas-Peucker based algorithm \dpsed \cite{Meratnia:Spatiotemporal}) and online algorithms (\eg\ \squishe \cite{Muckell:Compression}).
+
+\lsa methods using \sed have been developed for batch algorithms (\eg Douglas-Peucker based algorithm \dpsed \cite{Meratnia:Spatiotemporal}) and online algorithms (\eg\ \squishe \cite{Muckell:Compression}).
 However, these methods still have a high time and/or space complexity, which hinders their utility in resource-constrained devices. %\cite{Lin:Operb}
-On the other hand, there are a number of \textcolor{blue}{\ped equipped, linear complexity algorithms} \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve, Lin:Operb} that are more appropriate for resource-constrained devices. 
 %
-\textcolor{blue}{These algorithms apply optimization strategies, \ie the sector intersection mechanism of \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} and the fitting function in our preview work \cite {Lin:Operb}, to fast the process of simplification so as to save resources. 
-Yet, these algorithms are applicable for \ped only as the core optimization strategies they applied are \ped specific, which means they would not work correctly if the error metric \ped is roughly replaced by other metrics, such as \sed.} 
+On the other hand, there are a number of \textcolor{blue}{linear complexity and \ped equiping \lsa algorithms} \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve, Lin:Operb} that are more efficient for resource-constrained devices. 
 %
+\textcolor{blue}{The key behind these algorithms is that they apply optimization strategies, \eg the \textit{sector intersection} mechanism of \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} and the \textit{fitting function} in our preview work \cite {Lin:Operb}, to fast the process of simplification so as to save resources. 
+Yet, these algorithms are only applicable for \ped because the core optimization strategies they applied are \ped specific, which means they would not work correctly if the metric \ped is roughly replaced by other metrics, such as \sed.} 
+%
+\textcolor{blue}{It is also worth pointing out that the time complexity of the optimal \lsa algorithm using \sed is higher than using \ped.
+In \cite{Imai:Optimal}, the authors showed that the optimal \ped equipping \lsa algorithm can be found in $O(n^3)$ time, where $n$ is the number of the original points. Next, the authors of \cite{Chan:Optimal} proved that the algorithm could further be implemented in $O(n^2)$ time with the help of the \textit{sector intersection} mechanism. 
+Though \cite{Chan:Optimal} did not discuss the \sed metric, it is clear that the time complexity of the optimal \sed enabled \lsa algorithm remains $O(n^3)$ as the \textit{sector intersection} mechanism can not work with \sed. }
+%
+\textcolor{blue}{Hence, \textit{the developing of an efficient \lsa algorithm using \sed is more challenging than using \ped}.}
+\textcolor{blue}{And, to the best of our knowledge, there is no \sed enabled \lsa algorithm that has a linear time complexity.}
 
 %
-\textcolor{blue}{Thus, to the best of our knowledge, there is no near-optimal, linear complexity and \sed enabled line simplification algorithm.}
-\textcolor{blue}{And, it is non-trival to develop such an \sed enabled linear complexity algorithm. }
+
 
 %\textcolor{blue}{Hence, it is more challenging to implement such an \sed enabled, linear complexity line simplification algorithm than that a \ped enabled algorithm.}
 
 
 \stitle{{Contributions}}.
-To this end, we propose two one-pass error bounded line simplification algorithms using \sed for compressing trajectories in an efficient and effective way.
+To this end, we propose two one-pass error bounded \lsa algorithms using \sed for compressing trajectories in an efficient and effective way.
 
 \sstab {(1)} We first develop a novel local synchronous distance checking approach, \ie spatio-temporal \underline{C}one \underline{I}ntersection using the \underline{S}ynchronous \underline{E}uclidean \underline{D}istance (CISED), by extending the sector intersection method \cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve} (Section~\ref{sec-localcheck}). We also approximate the intersection of spatio-temporal cones with the intersection of regular polygons, and develop a fast regular polygon intersection algorithm, such that each data point in a trajectory is checked in $O(1)$ time during the entire process of trajectory simplification.
 

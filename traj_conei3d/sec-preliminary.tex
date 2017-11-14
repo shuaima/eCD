@@ -22,6 +22,7 @@ In this section, we introduce basic concepts and techniques for trajectory compr
 We first introduce basic notations.
 
 
+
 \stitle{Points ($P$)}. A data point is defined as a triple $P(x, y, t)$, which represents that a moving object is located at {\em longitude} $x$ and {\em latitude} $y$ at {\em time} $t$. Note that data points can be viewed as points in a three-dimension Euclidean space.
 
 \stitle{Trajectories ($\dddot{\mathcal{T}}$)}. A trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is a sequence of data points in a monotonically increasing order of their associated time values (\ie $P_i.t < P_j.t$ for any $0\le i<j\le n$). Intuitively, a trajectory is the path (or track) that a moving object follows through space as a function of time~\cite{physics-trajectory}.
@@ -61,6 +62,61 @@ However, for trajectory simplification, the distance based metrics are definitel
 \stitle{Synchronous Euclidean Distance (\sed) \cite{Meratnia:Spatiotemporal}}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the synchronous Euclidean distance (or simply synchronous distance) $sed(P, \mathcal{L})$ of $P$ to $\mathcal{L}$ is $|\vv{PP'}|$ that is the Euclidean distance from $P$ to its synchronized data point $P'$ \wrt $\mathcal{L}$. %, adopted by recent trajectory simplification methods~\cite{Meratnia:Spatiotemporal, Potamias:Sampling, Chen:Fast, Muckell:Compression, Popa:Spatio}.
 
 
+\begin{table}
+	\renewcommand{\arraystretch}{1.35}
+	\caption{\small Summary of notations}
+	\vspace{-2ex}
+	\centering
+	\footnotesize
+	%\scriptsize
+	\begin{tabular}{|c|l|}
+		\hline
+		{\bf Notations}& {\bf Semantics}   \\
+		\hline %\hline
+		$P$ & a data point \\
+		\hline
+		$\dddot{\mathcal{T}}$ & a trajectory $\dddot{\mathcal{T}}$ is a sequence of data points\\
+		\hline
+		$\mathcal{L}$ & a directed line segment  \\
+		\hline
+		$\overline{\mathcal{T}}$&  \scriptsize {a piece-wise line representation of a trajectory}\\
+		\hline
+		$ped(P, \mathcal{L})$ & \scriptsize {the perpendicular Euclidean distance of $P$ to $\mathcal{L}$}\\
+		\hline
+		$sed(P, \mathcal{L})$ & \scriptsize {the synchronous Euclidean distance of $P$ to $\mathcal{L}$}\\
+		\hline
+		$\epsilon$ & the error bound \\
+		\hline
+		\sector{} & a sector\\
+		\hline
+		$\vv{A} \times \vv{B}$ & the cross product of (vectors) $\vv{A}$ and $\vv{B}$\\
+		\hline
+		$\mathcal{H}(\mathcal{L})$ & The open half-plane to the left of $\mathcal{L}$ \\
+		\hline
+		$\mathcal{G}$& a convex polygon \\
+		\hline
+		$\mathcal{G}^*$ & the intersection of convex polygons \\
+		\hline
+		$m$ & the maximum number of edges of a polygon\\
+		\hline
+		$E^j$ & a group of edges labeled with $j$\\
+		\hline
+		$g(e)$ & the label of an edge $e$ of polygons \\
+		\hline
+		\circle{} & a synchronous circle\\
+		\hline
+		\cone{} & a spatio-temporal cone \\
+		\hline
+		\pcircle{} & a cone projection circle \\
+		\hline
+		$\bigsqcap$ & intersection of geometries\\
+		\hline
+	\end{tabular}
+	\label{tab:notations}
+	\vspace{-3ex}
+\end{table}
+
+
 We illustrate these notations with examples.
 
 
@@ -85,59 +141,6 @@ we say that algorithm $\mathcal{A}$ is error bounded by $\epsilon$ if  for each 
 
 We summarize notations used in Table~\ref{tab:notations}.
 
-\begin{table}
-\renewcommand{\arraystretch}{1.35}
-\caption{\small Summary of notations}
-\vspace{-2ex}
-\centering
-\footnotesize
-%\scriptsize
-\begin{tabular}{|c|l|}
-\hline
-{\bf Notations}& {\bf Semantics}   \\
-\hline %\hline
- $P$ & a data point \\
-\hline
- $\dddot{\mathcal{T}}$ & a trajectory $\dddot{\mathcal{T}}$ is a sequence of data points\\
-\hline
-$\mathcal{L}$ & a directed line segment  \\
-\hline
-$\overline{\mathcal{T}}$&  \scriptsize {a piece-wise line representation of a trajectory}\\
-\hline
-$ped(P, \mathcal{L})$ & \scriptsize {the perpendicular Euclidean distance of $P$ to $\mathcal{L}$}\\
-\hline
-$sed(P, \mathcal{L})$ & \scriptsize {the synchronous Euclidean distance of $P$ to $\mathcal{L}$}\\
-\hline
-$\epsilon$ & the error bound \\
-\hline
-\sector{} & a sector\\
-\hline
-$\vv{A} \times \vv{B}$ & the cross product of (vectors) $\vv{A}$ and $\vv{B}$\\
-\hline
-$\mathcal{H}(\mathcal{L})$ & The open half-plane to the left of $\mathcal{L}$ \\
-\hline
-$\mathcal{G}$& a convex polygon \\
-\hline
-$\mathcal{G}^*$ & the intersection of convex polygons \\
-\hline
-$m$ & the maximum number of edges of a polygon\\
-\hline
-$E^j$ & a group of edges labeled with $j$\\
-\hline
-$g(e)$ & the label of an edge $e$ of polygons \\
-\hline
-\circle{} & a synchronous circle\\
-\hline
-\cone{} & a spatio-temporal cone \\
-\hline
-\pcircle{} & a cone projection circle \\
-\hline
-$\bigsqcap$ & intersection of geometries\\
-\hline
-\end{tabular}
-\label{tab:notations}
-\vspace{-3ex}
-\end{table}
 
 
 
