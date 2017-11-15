@@ -161,14 +161,14 @@ Further, \cite{Dunham:Cone}  optimized algorithm \cia by considering the distanc
 
 Given a sequence of data points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$, the \cia based algorithms process the input points one by one in order, and produce a simplified polyline.  Instead of using the distance threshold $\epsilon$ directly, the \cia based algorithms convert the distance tolerance into a variable angle tolerance for testing the \textcolor{blue}{successive data} points.
 
-For the start point $P_s$, any point $P_{s+i}$ and $|\vv{P_sP_{s+i}}|>\epsilon$ ($i\in[1, k]$), there are two different lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ such that $ped(P_i, \vv{P_sP^u_{s+i}})$ $=$ $ped(P_i, \vv{P_sP^l_{s+i}}) = \epsilon$ and either ($\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta ~and~\vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta <\pi$) or ($\vv{P_sP^l_{s+i}}.\theta > \vv{P_sP^u_{s+i}}.\theta ~and~ \vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta < -\pi)$. Indeed, they forms a \emph{sector} \sector{(P_s, P_{s+i}, \epsilon)} that takes $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the border lines.
+For the start data point $P_s$, any point $P_{s+i}$ and $|\vv{P_sP_{s+i}}|>\epsilon$ ($i\in[1, k]$), there are two directed lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ such that $ped(P_i, \vv{P_sP^u_{s+i}})$ $=$ $ped(P_i, \vv{P_sP^l_{s+i}}) = \epsilon$ and either ($\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta ~and~\vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta <\pi$) or ($\vv{P_sP^l_{s+i}}.\theta > \vv{P_sP^u_{s+i}}.\theta ~and~ \vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta < -\pi)$. Indeed, they forms a \emph{sector} \sector{(P_s, P_{s+i}, \epsilon)} that takes $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the border lines.
 % , where $P_s$ is the center point, and $\vv{P_sP^l_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ are two bound lines.
-Then there exists a data point $Q$ such that for any data point $P_{s+i}$ ($i \in [1, ... k]$), its \ped to
-line $\overline{P_sQ}$ is no greater than the error bound $\epsilon$ if and only if the $k$ sectors \sector{(P_s, P_{s+i}, \epsilon)} ($i\in[1,k]$) share common data points other than $P_s$, \ie $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon)} $\ne \{P_s\}$ \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}.
+Then there exists a data point $Q$ such that for any data point $P_{s+i}$ ($i \in [1, ... k]$), its perpendicular Euclidean distance to
+directed line $\overline{P_sQ}$ is no greater than the error bound $\epsilon$ if and only if the $k$ sectors \sector{(P_s, P_{s+i}, \epsilon)} ($i\in[1,k]$) share common data points other than $P_s$, \ie $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon)} $\ne \{P_s\}$ \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}.
 
 The point $Q$ may not belong to $\{P_{s}, P_{s+1},$ $\ldots, P_{s+k}\}$.
 However, if $P_{s+i}$ ($1\le i\le k$) is chosen as $Q$, then
-for any data point $P_{s+j}$ ($j \in [1, ... i]$), its \ped to
+for any data point $P_{s+j}$ ($j \in [1, ... i]$), its perpendicular Euclidean distance to
 line segment $\overline{P_sP_{s+i}}$ is no greater than the error bound $\epsilon$ if and only if $\bigsqcap_{j=1}^{i}$\sector{(P_s, P_{s+j}, \epsilon/2)} $\ne \{P_s\}$, as pointed out in \cite{Zhao:Sleeve}.
 
 That is, {\em these \cia based algorithms can be easily adopted for trajectory compression using \ped although they have been overlooked by existing trajectory simplification studies}.  
@@ -229,13 +229,13 @@ For example, in Figure~\ref{fig:c-poly-inter}.(6) and ~\ref{fig:c-poly-inter}.(7
 
 
 \stitle{Algorithm \cpia}. The complete algorithm is shown in Figure~\ref{alg:c-poly-inter}.
-Given polygons $\mathcal{G}_1$ and $\mathcal{G}_2$, algorithm \cpia first arbitrarily sets $\vv{A}$ on $\mathcal{G}_2$ and $\vv{B}$ on $\mathcal{G}_1$, respectively (line 1).
+Given two convex polygons $\mathcal{G}_1$ and $\mathcal{G}_2$, algorithm \cpia first arbitrarily sets directed edge $\vv{A}$ on $\mathcal{G}_2$ and directed edge $\vv{B}$ on $\mathcal{G}_1$, respectively (line 1).
 %
-It then checks the intersection of $\vv{A}$ and $\vv{B}$. If $\vv{A}$ intersects $\vv{B}$ (line 3), then the algorithm checks for some special termination conditions (\eg if $\vv{A}$ and $\vv{B}$ are overlapped and, at the same time, $\mathcal{G}_1$ and $\mathcal{G}_2$ are on the opposite sides of the overlapped edges, then the process is terminated) (line 4), and records the inner edge, which is a boundary segment of the intersection polygon (line 5).
+It then checks the intersection of edges $\vv{A}$ and $\vv{B}$. If $\vv{A}$ intersects $\vv{B}$ (line 3), then the algorithm checks for some special termination conditions (\eg if $\vv{A}$ and $\vv{B}$ are overlapped and, at the same time, polygons $\mathcal{G}_1$ and $\mathcal{G}_2$ are on the opposite sides of the overlapped edges, then the process is terminated) (line 4), and records the inner edge, which is a boundary segment of the intersection polygon (line 5).
 After that, the algorithm moves on $\vv{A}$ or $\vv{B}$ one step under the advance rules (lines 6--11).
 The above processes repeated, until both $\vv{A}$ and $\vv{B}$ cycle their polygons (line 12).
 %
-Next, the algorithm handles three special cases of the two polygons, \ie $\mathcal{G}_1$ is inside of $\mathcal{G}_2$, $\mathcal{G}_2$ is inside of $\mathcal{G}_1$, and $\mathcal{G}_1 \bigsqcap \mathcal{G}_2 = \emptyset$ (line 13).
+Next, the algorithm handles three special cases of the polygons $\mathcal{G}_1$ and $\mathcal{G}_2$, \ie $\mathcal{G}_1$ is inside of $\mathcal{G}_2$, $\mathcal{G}_2$ is inside of $\mathcal{G}_1$, and $\mathcal{G}_1 \bigsqcap \mathcal{G}_2 = \emptyset$ (line 13).
 %
 At last, it returns the intersection polygon (line 14).
 
