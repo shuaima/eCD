@@ -17,63 +17,27 @@ We first present the spatio-temporal cone intersection method in a 3D Cartesian 
 
 
 
-\stitle{Synchronous Circles (\circle{})}. The synchronous circle of a data point $P_{s+i}$ ($1\le i\le k$) in $\dddot{\mathcal{T}}_s$, denoted as \circle{(P_{s+i}, \epsilon)}, or \circle{_{s+i}} in short, is a circle on the plane $P.t-P_{s+i}.t = 0$ such that $P_{s+i}$ is its center and $\epsilon$ is its radius.
+\stitle{Synchronous Circles (\circle{})}. The synchronous circle of a data point $P_{s+i}$ ($1\le i\le k$) in $\dddot{\mathcal{T}}_s$ \textcolor{blue}{\wrt an error bound $\epsilon$}, denoted as \circle{(P_{s+i}, \epsilon)}, or \circle{_{s+i}} in short, is a circle on the plane $P.t-P_{s+i}.t = 0$ such that $P_{s+i}$ is its center and $\epsilon$ is its radius.
 
-
+Figure~\ref{fig:cis} shows two synchronous circles, \circle{(P_{s+i}, \epsilon)} of point $P_{s+i}$ and \circle{(P_{s+k}, \epsilon)} of point $P_{s+k}$.
 It is easy to know that for any point in the area of a circle \circle{(P_{s+i}, \epsilon)}, its distance to $P_{s+i}$ is no greater than $\epsilon$.
-Figure~\ref{fig:cis} shows two synchronous circles \circle{(P_{s+i}, \epsilon)} of point $P_{s+i}$ and \circle{(P_{s+i+1}, \epsilon)} of point $P_{s+i+1}$.
+
 
 %Note that in this definition, a \emph{synchronous circle} $\mathcal{O}(P_i, \epsilon)$ is only defined by a central point $P_i$ and a constant $\epsilon$. Indeed, it is nothing to do with any start point $P_s$ or end point $P_e$.
 
 
-\eat{%%%%%%%%%%%%%%%%EAT
-With Lemma~\ref{prop-3d-syn-point} and the notion of \emph{synchronous circle}, and from the geometrical perspective, we have Theorem~\ref{prop-3d-sed-sim}.
+
+\stitle{Spatio-temporal cones (\cone{})}. The spatio-temporal cone (or simply \textit{cone}) of \textcolor{blue}{a data} point $P_{s+i}$ \textcolor{blue}{($1\le i\le k$) in $\dddot{\mathcal{T}}_s$} \wrt a point $P_s$ and \textcolor{blue}{an error bound $\epsilon$}, denoted as \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))}, or \cone{_{s+i}} in short, is an oblique circular cone such that point $P_s$ is its apex and the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$ of point $P_{s+i}$ is its base.
+
+Two example spatio-temporal cones \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} {(purple)} and \cone{(P_s, \mathcal{O}(P_{s+k}, \epsilon))} \textcolor{blue}{(red) with the same apex $P_s$ and error bound $\epsilon$ are also} illustrated in Figure~\ref{fig:cis}.
 
 
-
-\begin{theorem}
-\label{prop-3d-sed-sim}
-Given a sub-trajectory $[P_s, \ldots, P_e]$ and an error bound $\epsilon$, the sub-trajectory can be represented by the line segment $\vv{P_sP_e}$ if and only if the line segment passes through all synchronous circles $\mathcal{O}(P_i, \epsilon)$ for each $i \in (s, e]$.
-\end{theorem}
-
-\begin{proof}
-As shown in Figure~\ref{fig:sed3d}, let $P'_i$ be the intersection point of line segment $\vv{P_sP_e}$ and plane $t=t_i$.
-By Lemma~\ref{prop-3d-syn-point}, point $P'_i$ is the synchronized point of $P_i$ \wrt line segment $\vv{P_sP_e}$.
-
-\ni (1) If the line segment $\vv{P_sP_e}$ passes through all synchronous circles $\mathcal{O}(P_i, \epsilon)$ for $i \in (s, e)$, then by the definition of synchronous circle, it must pass through the circle which is on the plane $t=t_i$ and around point $P_i$, and has a radius of $\epsilon$, thus, $|P'_iP_i| <\epsilon$. Furthermore, the property is hold for each $i \in (s, e)$, hence, the sub trajectory $[P_s, \ldots, P_e]$ can be represented by the line segment $\vv{P_sP_e}$.
-
-\ni (2) If the sub trajectory $[P_s, \ldots, P_e]$ can be represented by the line segment $\vv{P_sP_e}$, then $|P'_iP_i| <\epsilon$ for each $i \in (s, e)$, \ie $P'_i$ is in the synchronous circles $\mathcal{O}(P_i, \epsilon)$. Thus, the line segment $\vv{P_sP_e}$ passes through all synchronous circles $\mathcal{O}(P_i, \epsilon)$ for $i \in (s, e)$.
-
-We have the conclusion.
-\end{proof}
-}%%%%%%%%%%%%%%%%%%EAT%
-
-
-
-
-
-\stitle{Spatio-temporal cones (\cone{})}. The spatio-temporal cone (or simply cone) of point $P_{s+i}$ \wrt point $P_s$, denoted as \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))}, or \cone{_{s+i}} in short, is an oblique circular cone such that point $P_s$ is its apex and the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$ is its base.
-
-Two example spatio-temporal cones \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} and \cone{(P_s, \mathcal{O}(P_{s+i+1}, \epsilon))} are illustrated in Figure~\ref{fig:cis}.
-
-\stitle{Cone projection circles}. The projection of a cone \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} on a plane $P.t- t_c = 0$ ($t_c > P_s.t$) is a circle \pcircle{(P^c_{s+i}, r^c_{s+i})}, or \pcircle{_{s+i}} in short, such that
-%
-(1) $P^c_{s+i}.x = P_s.x +  c\cdot(P_{s+i}.x- P_{s}.x)$,
-%
-(2) $P^c_{s+i}.y = P_s.y +  c\cdot(P_{s+i}.y- P_{s}.y)$,
-%
-(3) $P^c_{s+i}.t = t_c$ and
-%
-(4) $r^c_{s+i} =c\cdot\epsilon$, where $c=\frac{t_c - P_s.t}{P_{s+i}.t - P_s.t}$.
-
-
-The red dashed circle \pcircle{(P^c_{s+i+1}, r^c_{s+i+1})} on plane ``$P.t-P_{s+i}.t=0$" in Figure~\ref{fig:cis} is the projection circle of cone \cone{(P_s, \mathcal{O}(P_{s+i+1}, \epsilon))} on the plane.
 
 \begin{figure}[tb!]
 	\centering
 	\includegraphics[scale=0.66]{figures/Fig-cis.png}
 %	\vspace{-1ex}
-	\caption{\small Examples of spatio-temporal cones. }
+	\caption{\small Examples of spatio-temporal cones in a 3D Cartesian coordinate system, where (1) $P_s$, $P_{s+i}$ and $P_{s+i+1}$ are three points, (2) \circle{_{s+i}} and \circle{_{s+k}} are two synchronous circles, (3) \cone{_{s+i}} and \cone{_{s+k}} are two spatio-temporal cones, (4) $Q$ is a point in synchronous circle \circle{_{s+k}}, and (5) $P'_{s+i}$ is the intersection point of line $\overline{P_sQ}$ and synchronous circle \circle{_{s+i}}.}
 	\vspace{-2ex}
 	\label{fig:cis}
 \end{figure}
@@ -129,9 +93,26 @@ We also have $sed(P_{s+i}, \vv{P_sQ}) = |\vv{P'_{s+i}P_{s+i}}| \le \epsilon$ for
 Conversely, assume that there exists a point $Q$ such that $Q.t = P_{s+k}.t$ and $sed(P_{s+i}, \vv{P_sQ})\le\epsilon$ for all $P_{s+i}$ ($i \in [1,k]$). Then $|\vv{P'_{s+i}P_{s+i}}| \le \epsilon$ for all $i \in [1, k]$. Hence, we have  $\bigsqcap_{i=1}^{k}$\cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} $\ne \{P_s\}$.
 \end{proof}
 
-By Proposition~\ref{prop-3d-ci}, we now have a spatio-temporal cone intersection method in a 3D Cartesian coordinate system, which extends the sector intersection method~\cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve}.
+By Proposition~\ref{prop-3d-ci}, we now have a spatio-temporal cone intersection method in a 3D Cartesian coordinate system, which extends the sector intersection method~\cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve} {from a x-y 2D space to a Spatio-Temporal 3D space}.
 
 
+\subsection{Circle Intersection}
+\label{subsec-ProjectionCircle}
+
+\textcolor{blue}{For spatio-temporal cones have the same apex $P_s$, the checking of intersection of these cones can be enforced by a simpler way, \ie the checking of intersection of \textit{cone projection circle}s on a plane, as follows.}
+
+\stitle{Cone projection circles}. The projection of a cone \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} on a plane $P.t- t_c = 0$ ($t_c > P_s.t$) is a circle \pcircle{(P^c_{s+i}, r^c_{s+i})}, or \pcircle{_{s+i}} in short, such that
+%
+(1) $P^c_{s+i}.x = P_s.x +  c\cdot(P_{s+i}.x- P_{s}.x)$,
+%
+(2) $P^c_{s+i}.y = P_s.y +  c\cdot(P_{s+i}.y- P_{s}.y)$,
+%
+(3) $P^c_{s+i}.t = t_c$ and
+%
+(4) $r^c_{s+i} =c\cdot\epsilon$, where $c=\frac{t_c - P_s.t}{P_{s+i}.t - P_s.t}$.
+
+
+The red dashed circle \pcircle{(P^c_{s+i+1}, r^c_{s+i+1})} on plane ``$P.t-P_{s+i}.t=0$" in Figure~\ref{fig:cis} is the projection circle of cone \cone{(P_s, \mathcal{O}(P_{s+i+1}, \epsilon))} on the plane.
 
 %\vspace{1ex}
 
@@ -280,3 +261,30 @@ And, a larger $M$ would lead to a better compression ratio and a poorer efficien
 
 
 
+
+
+
+
+
+
+\eat{%%%%%%%%%%%%%%%%EAT
+	With Lemma~\ref{prop-3d-syn-point} and the notion of \emph{synchronous circle}, and from the geometrical perspective, we have Theorem~\ref{prop-3d-sed-sim}.
+	
+	
+	
+	\begin{theorem}
+		\label{prop-3d-sed-sim}
+		Given a sub-trajectory $[P_s, \ldots, P_e]$ and an error bound $\epsilon$, the sub-trajectory can be represented by the line segment $\vv{P_sP_e}$ if and only if the line segment passes through all synchronous circles $\mathcal{O}(P_i, \epsilon)$ for each $i \in (s, e]$.
+	\end{theorem}
+	
+	\begin{proof}
+		As shown in Figure~\ref{fig:sed3d}, let $P'_i$ be the intersection point of line segment $\vv{P_sP_e}$ and plane $t=t_i$.
+		By Lemma~\ref{prop-3d-syn-point}, point $P'_i$ is the synchronized point of $P_i$ \wrt line segment $\vv{P_sP_e}$.
+		
+		\ni (1) If the line segment $\vv{P_sP_e}$ passes through all synchronous circles $\mathcal{O}(P_i, \epsilon)$ for $i \in (s, e)$, then by the definition of synchronous circle, it must pass through the circle which is on the plane $t=t_i$ and around point $P_i$, and has a radius of $\epsilon$, thus, $|P'_iP_i| <\epsilon$. Furthermore, the property is hold for each $i \in (s, e)$, hence, the sub trajectory $[P_s, \ldots, P_e]$ can be represented by the line segment $\vv{P_sP_e}$.
+		
+		\ni (2) If the sub trajectory $[P_s, \ldots, P_e]$ can be represented by the line segment $\vv{P_sP_e}$, then $|P'_iP_i| <\epsilon$ for each $i \in (s, e)$, \ie $P'_i$ is in the synchronous circles $\mathcal{O}(P_i, \epsilon)$. Thus, the line segment $\vv{P_sP_e}$ passes through all synchronous circles $\mathcal{O}(P_i, \epsilon)$ for $i \in (s, e)$.
+		
+		We have the conclusion.
+	\end{proof}
+}%%%%%%%%%%%%%%%%%%EAT%
