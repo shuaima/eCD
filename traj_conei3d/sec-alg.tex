@@ -1,10 +1,12 @@
 %\section{One-Pass Trajectory Simplification}
-\section{Trajectory Simplification Algorithms}
+\section{Fast Trajectory Simplification}
 
 \label{sec-alg}
-\textcolor{blue}{Based on the Spatio-temporal cone method, we develop a near optimal algorithm and two one-pass sub-optimal algorithms using \sed. For sub-optimal algorithms,} following \cite{Trajcevski:DDR,Lin:Operb}, we further consider two classes of trajectory simplification.
+\textcolor{blue}{Based on the Spatio-temporal cone method, we develop two one-pass sub-optimal algorithms and a fast near optimal algorithm using \sed. For sub-optimal algorithms,} following \cite{Trajcevski:DDR,Lin:Operb}, we further consider two classes of trajectory simplification.
 The first one, referred to as \emph{strong simplification}, that takes as input a trajectory \trajec{T}, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and produces a simplified trajectory \trajec{T'} such that all data points in \trajec{T'} belongs to \trajec{T}.
-The second one, referred to as \emph{weak simplification}, that takes as input a trajectory \trajec{T}, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and produces a simplified trajectory \trajec{T'} such that some data points in \trajec{T'} may not belong to \trajec{T}. That is,  weak simplification allows data interpolation. %,commonly used in polygonal curve approximation \cite{Williams:Bounded, Heckbert:Survey, Zhao:Sleeve}, time series approximation \cite{ORourke:Fitting, Elmeleegy:Stream, Xie:Stream, Luo:Streaming} and trajectory simplification \cite{Lin:Operb}.
+The second one, referred to as \emph{weak simplification}, that takes as input a trajectory \trajec{T}, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and produces a simplified trajectory \trajec{T'} such that some data points in \trajec{T'} may not belong to \trajec{T}. That is, weak simplification allows data interpolation. 
+\textcolor{blue}{For (near) optimal algorithm, it does not allow data interpolation too, thus, it also belongs to strong simplification.}
+%,commonly used in polygonal curve approximation \cite{Williams:Bounded, Heckbert:Survey, Zhao:Sleeve}, time series approximation \cite{ORourke:Fitting, Elmeleegy:Stream, Xie:Stream, Luo:Streaming} and trajectory simplification \cite{Lin:Operb}.
 
 \eat{
 The main result here is stated as follows.
@@ -17,11 +19,9 @@ There exist \textcolor{blue}{sub optimal,} one-pass, error bounded and strong an
 We shall prove this by providing such algorithms for both strong and weak trajectory simplifications, by employing the constant time synchronous distance checking technique developed in Section~\ref{sec-localcheck}.
 }
 
-\subsection{Near Optimal Trajectory Simplification}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Strong Sub-optimal Trajectory Simplification}
+\subsection{One-pass Strong Trajectory Simplification}
 Recall that in Propositions~\ref{prop-3d-ci} and~\ref{prop-circle-intersection}, the point $Q$ may not be in the input sub-trajectory $[P_s,...,P_{s+k}]$.
 If we restrict $Q=P_{s+k}$, the end point of the sub-trajectory, then the narrow cones whose base circles with a radius of $\epsilon/2$ suffice.
 
@@ -152,7 +152,7 @@ Figure~\ref{fig:exm-const} shows an example of algorithm \cist for compressing t
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Weak Sub-optimal Trajectory Simplification}
+\subsection{One-pass Weak Trajectory Simplification}
 
 We then present the one-pass error bounded {\em weak simplification} algorithm using \sed.
 
@@ -253,7 +253,7 @@ Figure~\ref{fig:exm-consta}  shows a running example of algorithm \cista for com
 }%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-
+\subsection{\textcolor{blue}{Near Optimal Trajectory Simplification}}
 
 
 
@@ -267,7 +267,7 @@ It is easy to verify that each data point in a trajectory is only processed once
 as both procedures  $\kw{getRegularPolygon}$ and $\rpia$ can be done in $O(1)$ time.
 Hence, these algorithms are both one-pass error bounded trajectory simplification algorithms.
 It is also easy to see that these algorithms take $O(1)$ space.
-These together also complete the proof of Theorem~\ref{prop-cist-op}.
+%These together also complete the proof of Theorem~\ref{prop-cist-op}.
 
 
 
