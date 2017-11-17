@@ -40,7 +40,7 @@ If $\bigsqcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_{s+i}, \epsilon/2)} \ne \{P_s\}$, t
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%example of Algorithm CISED
 \begin{figure*}[tb!]
 	\centering
-	\includegraphics[scale=0.8]{figures/Fig-ex-conest.png}
+	\includegraphics[scale=0.8]{figures/Fig-Ex-Conest.png}
 	%\vspace{-2ex}
 	\caption{\small A running example of the \cist algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed into four line segments.}
 	\vspace{-1ex}
@@ -124,7 +124,7 @@ After the  final new line segment $\vv{P_sP_{n}}$ is generated (line 11), it ret
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}[tb!]
 \centering
-\includegraphics[scale=0.79]{figures/Fig-conesta.png}
+\includegraphics[scale=0.79]{figures/Fig-Conesta.png}
 %\vspace{-1ex}
 \caption{\small A running example of the \cista algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed into three line segments.}
 \vspace{-2ex}
@@ -272,4 +272,96 @@ It is also easy to see that these algorithms take $O(1)$ space.
 
 
 
+\subsection{Near Optimal Simplification}
+{\color{blue}
+We then present the Near-Optimal error bounded {\em simplification} algorithm using \sed.
 
+%, based on Proposition~\ref{prop-circle-intersection}.
+
+
+
+\stitle{Algorithm \nopt}.
+Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed
+regular polygons, it returns a simplified trajectory,
+
+By Proposition~\ref{prop-circle-intersection}, algorithm \cista generates spatio-temporal cones whose bases are circles with a radius of $\epsilon$,
+and, hence, it replaces $\epsilon/2$ with $\epsilon$ (line 3 of \cist). It also generates new line segments with data points $Q$ (may be interpolated points), and,
+hence, it replaces point $P_i$ and line segment $\vv{P_sP_i}$  (line 9 of \cist) with $Q$ and $\vv{P_sQ}$, respectively,  such that $Q$ is generated as follows.
+
+Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ ,
+the  \textcolor{blue}{min-\#}  problem can be solved in two steps.The first step
+is to construct a directed graph G = {V,E}, where each vertex in V represents a
+point t in \trajec{T} and each edge $(v_r,v_s)$ is in E if and only if the error
+of the line segment is within $\epsilon$, i.e., $V = {v_0,v_1,...,v_{n-1}}$ and
+$E = {(v_r,v_s) | r < s and e(\bar{p_rp_s) \le \epsilon})}$. we shall call G the
+$\epsilon - graph$ of \trajec{T}. The second step is to find the shortest path
+in G from $v_0$ to $v_{n-1}$ with each edge of unit length. Thus, the path
+length will correspond to the number of line segments in the approximation
+curve. Moreover, the shortest path also reveals the subset of points of
+\trajec{T} used in the approximate curve.
+
+
+The brute-force algorithm of constructing G is to check for each pair of points.
+This method takes $O(n^3)$ time.
+
+The crutial part of of the algorithm is the construction of G. In the following,
+we shall discuss how G can be constructed in $O(n^2)$ time.
+
+%%%%%%%%%%%%%%%%%%%%% Algorithm
+\begin{figure}[tb!]
+\begin{center}
+{\small
+\begin{minipage}{3.36in}
+\myhrule
+\vspace{-1ex}
+\mat{0ex}{
+	{\bf Algorithm} ~$\cista(\dddot{\mathcal{T}}[P_0,\ldots,P_n], ~\epsilon, ~M, ~t_c)$\\
+%	\sstab
+	\bcc \hspace{1ex}\= $P_s := P_0$;  ~$P_e := P_0$;  ~$\overline{\mathcal{T}} := \phi$;  ~$\mathcal{G}^* := \phi$;  ~$i := 1$\\
+%         \hspace{2ex}     $intersection = \emptyset$;   \\
+	\icc \hspace{1ex}\= \While $i \le n$ \Do \\
+	\icc \>\hspace{3ex} $\mathcal{G} := {getRegularPolygon}$($P_s$, $P_i$, $\epsilon$, $M$, $t_c$) \\
+	\icc \>\hspace{3ex} \If $\mathcal{G}^* = \phi$ \Then \\
+	\icc \>\hspace{6ex} $\mathcal{G}^* :=\mathcal{G}$ \\
+	\icc \>\hspace{3ex} \Else \\
+	\icc \>\hspace{6ex} $\mathcal{G}^* := {\rpia}(\mathcal{G}^*, ~\mathcal{G})$ \\
+	\icc \>\hspace{3ex} \If $\mathcal{G}^* \ne \phi$ \Then \\
+	\icc \> \hspace{6ex} $P_e := P_i$ \\
+	\icc \> \hspace{6ex} $i := i+1$ \\
+	\icc \>\hspace{3ex} \Else\\
+	\icc \> \hspace{6ex} $\overline{\mathcal{T}} := \overline{\mathcal{T}}\cup \{\mathcal{L}(P_s,Q)\}$ \\
+	\icc \> \hspace{6ex} $P_s := Q$;  ~~$\mathcal{G}^* := \phi$ \\
+	\icc \hspace{1ex}\Return $\overline{\mathcal{T}}$
+%
+%	{\bf procedure} $getPolygon$($P_s$, $P_i$, $\epsilon/2$) \\
+%
+%	{\bf procedure} $getIntersection(ipolygon, \mathcal{G})$ \\
+}
+\vspace{-2ex}
+\myhrule
+\end{minipage}
+}
+\end{center}
+\vspace{-2ex}
+\caption{\small Aggressive spatio-temporal cone intersection algorithm (\cista).}
+\label{alg:ciseda}
+\vspace{-2ex}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+\stitle{Correctness and complexity analyses}.
+%
+The correctness of algorithms \cist and \cista follows from Propositions~\ref{prop-circle-intersection} and~\ref{prop-3d-ci-half}, and Propositions~\ref{prop-circle-intersection} and~\ref{prop-cist-Q}, respectively.
+%
+It is easy to verify that each data point in a trajectory is only processed once, and each can be done in $O(1)$ time,
+as both procedures  $\kw{getRegularPolygon}$ and $\rpia$ can be done in $O(1)$ time.
+Hence, these algorithms are both one-pass error bounded trajectory simplification algorithms.
+It is also easy to see that these algorithms take $O(1)$ space.
+These together also complete the proof of Theorem~\ref{prop-cist-op}.
+
+}
