@@ -23,8 +23,14 @@ We next introduce the related work on lossy trajectory compression  from two asp
 %Line simplification (\lsa) methods use a set of continuous line segments to represent a compressed trajectory (Fig.\ref{fig:notations}).
 The idea of piece-wise line simplification comes from computational geometry.
 Its target is to approximate a given finer piece-wise linear curve by another coarser piece-wise linear curve, which is typically a subset of the former, such that the maximum distance of the former to the later is bounded by a user specified bound $\epsilon$.
-The optimal methods that find the minimal number of points or segments have the time complexity of $O(n^2)$ where $n$ is the number of the original points \cite{Chan:Optimal}.
-They are time-consuming and impractical for large inputs~\cite{Heckbert:Survey}. Hence, many studies have been targeting at finding the sub-optimal results.
+
+\textcolor{blue}{Initially, line simplification (\lsa) algorithms use perpendicular Euclidean distances (\ped) as the distance metric. 
+Then a new distance metric, the synchronous Euclidean distances (\sed), was developed after the \lsa algorithms were introduced to compress trajectory.}
+\sed was first introduced in the name of \emph{time-ratio distance} in~\cite{Meratnia:Spatiotemporal}, and formally presented in~\cite{Potamias:Sampling} as the \emph{synchronous Euclidean distance}. 
+
+\textcolor{blue}{For time complexity of \lsa algorithms, the optimal methods that find the minimal number of points or segments have a time complexity of $O(n^3)$ where $n$ is the number of the original points \cite{Imai:Optimal}. When using \ped as the error metric, the authors of \cite{Chan:Optimal} proved that the optimal algorithm could be implemented in $O(n^2)$ time with the help of the \textit{sector intersection} mechanism. Yet the time complexity of the optimal \lsa algorithm using \sed remains $O(n^3)$ as the \textit{sector intersection} mechanism can not work with \sed. Anyway,}
+they are time-consuming and impractical for large inputs~\cite{Heckbert:Survey}. Hence, many studies have been targeting at finding the sub-optimal results.
+%
 \eat{
 The distinct Douglas-Peucker (\dpa) algorithm \cite{Douglas:Peucker} (see Figure~\ref{fig:notations}) is invented in 1970s, for reducing the number of points required to represent a digitized line or its caricature in the context of computer graphics and image processing.
 The basic \dpa is a batch approach with a time complexity of $O(n^2)$.
@@ -32,14 +38,10 @@ The basic \dpa is a batch approach with a time complexity of $O(n^2)$.
 Some online \lsa algorithms were further developed by combining batch algorithms (\eg \dpa) with sliding/open windows \cite{Meratnia:Spatiotemporal, Liu:BQS}.
 Recently, the authors of this paper developed a one-pass trajectory simplification algorithm (\operb) \cite{Lin:Operb}, which runs great fast and also has comparable compression ratio comparing with batch algorithms. Moreover, the ``cone intersection'' algorithm \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} is another notable one-pass \lsa algorithm.
 }
+
 %In this section, we focus on the piece-wise line simplification based methods for trajectory data.
-In particular, the state-of-the-art sub-optimal line simplification approaches fall into three categories, \ie batch, online and one-pass algorithms.
-
-For trajectory compression, there are two types of widely used distance metrics: perpendicular Euclidean distances (\ped) and synchronous Euclidean distances (\sed).
-Mostly existing line simplification algorithms use \ped, and more attentions are needed to be paid on \sed.
-\sed was first introduced in the name of \emph{time-ratio distance} in~\cite{Meratnia:Spatiotemporal}, and formally presented in~\cite{Potamias:Sampling} as the \emph{synchronous Euclidean distance}. %It is a specific distance metric for trajectory data, and is normally enabled in some batch and online algorithms.
-
-We next introduce these line simplification  algorithms from the aspect of the three categories.
+In particular, the state-of-the-art \textcolor{blue}{of the} sub-optimal \lsa approaches fall into three categories, \ie batch, online and one-pass algorithms.
+We next introduce these \lsa \textcolor{blue}{based trajectory compression} algorithms from the aspect of the three categories.
 
 \stitle{Batch algorithms.}
 The batch algorithms adopt a global distance checking policy that requires all trajectory points are loaded before compressing starts.
