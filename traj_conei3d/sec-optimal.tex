@@ -1,0 +1,167 @@
+\section{\textcolor{blue}{Near Optimal Trajectory Simplification}}
+\label{sec-optimal}
+
+Based on the Spatio-temporal cone technique, we develop a fast near optimal algorithm using \sed. Our near optimal algorithm achieves a $O(N^2)$ time which is much faster than the optimal algorithm using \sed having a time complexity of $O(N^3)$.
+
+
+\subsection{Optimal algorithm using \sed}
+
+Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ and an error bound $\epsilon$ ,
+the optimal trajectory simplification problem can be solved in two steps.
+%
+The first step is to construct a directed graph $G$ of \trajec{T}. 
+
+\stitle{Directed Graph ($Graph$)}. The directed graph of a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ \wrt an error bound $\epsilon$ is $G
+= \{V,E\}$, where each vertex $v$ in $V$ represents a point in \trajec{T} and each edge $(v_r,v_s)$ is in $E$ if and only if the error of the line segment is within
+$\epsilon$, i.e., $V= \{v_0,v_1,...,v_{n-1}\}$ and  $E = \{(v_r,v_s) | r < s \ and \ e(\bar{p_rp_s) \le \epsilon})\}$. 
+
+
+
+The second step is to find the shortest path
+in G from $v_0$ to $v_{n-1}$ with each edge of unit length. Thus, the path
+length will correspond to the number of line segments in the approximation
+curve. Moreover, the shortest path also reveals the subset of points of
+\trajec{T} used in the approximate curve.
+
+
+The brute-force algorithm of constructing G is to check for each pair of points
+$p_r,p_s$,whether the error of $\bar{p_rp_s}$ is within $\epsilon$, i.e.,
+$(v_r,v_s \in  E)$. There are $O(n^2)$ pairs of points and checking the error of
+a line segment, corresponding to a pair of points, takes $O(n)$ time. Thus,this
+method takes $O(n^3)$ time. Since finding the shortest path takes no more than
+$O(n^2)$ time, the brute-force algorithm takes $O(n^3)$ time.
+
+The crutial part of of the algorithm is the construction of $G$. 
+In the following, we shall discuss how a near optimal $G$ can be constructed in $O(n^2)$ time.
+
+
+\subsection{Speedup graph constructing by using spatio-temporal cones.}
+In \cite{Chan:Optimal} the author proposed a speed-up method of constructing the
+$\epsilon$ graph using PED as distance metric.
+The key of their method is to leverage the Sector Intersection method.
+The intersection of previous sector bounds stores the information of restriction
+imposed by all the previous points. 
+A new coming point can form a edge with the starting point in the $\epsilon$
+graph if and only if it resides within the intersection.
+Since checking whether a point is in a sector bound and updating the sector bound can be done in
+constant time. The time complexity of this algorithm is $O(n^2)$.
+
+Extending their method to $3-D$ spatio temporal space, we can get an optimal
+algorithm using SED for the $min-\#$ problem with time complexity of $O(n^2)$.
+
+%\textcolor{blue}{Theorem and proof}
+
+Firstly, we give the necessary condition for the inclusion of an edge to the $\epsilon - graph$.
+
+\begin{prop}
+\label{prop-edge-check}
+Edge $(v_s,v_r)$ can be included in the $\epsilon - graph$ if and only if the ray
+$\vv{P_sP_r}$ lies inside the common intersection of previous cones, i.e.,
+$\vv{P_sP_r} \in $ $\bigsqcap_{i=1}^{r - 1}$\cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))}  and
+$\bigsqcap_{i=1}^{r - 1}$\cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} $\ne \{P_s\}$. 
+\end{prop}
+
+\begin{proof}
+If the directed line segment $\vv{P_sP_r} \in$ $\bigsqcap_{i=1}^{r-1}$\cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))}, the
+intersection point $P'_{s+i}$ of the directed line segment $\vv{P_sP_r}$ and the
+plane $P.t - P_{s+i}.t = 0$  is  in the area of the  synchronous circle
+\circle{(P_{s+i}, \epsilon)} for each $i \in [1,r - 1]$ . By Proposition~\ref{prop-3d-syn-point}, the
+synchronous distance of $P_{s+i}$ to $\vv{P_sP_r}$ is error bouned for each $i \in [1,r - 1]$ . Thus,Edge
+$(v_s,v_r)$ can be included in the $\epsilon - graph$  
+\end{proof}
+
+
+%\textcolor{blue}{How?}
+Then we propose the speedup graph constructing by using spatio-temporal cones.
+
+From Proposition~\ref{prop-edge-check}, we can determine whether $(v_s,v_r) \in
+G$ by testing whether $\vv{P_sP_r} \in $ $\bigsqcap_{i=1}^{r - 1}$\cone{(P_s,
+  \mathcal{O}(P_{s+i}, \epsilon))}. For any r, the algorithm would consider all
+pairs of vertices  $(v_s,v_r)$ with  r ranging from s + 1 to n.  
+
+The checking of whether a line segment lies inside a spatio-temporal cone can be
+reduced to checking whether its projection point lies inside the projection
+circle on a plane which can be done in constant time. Furthermore, as we have
+proposed before, the compution of intersection of spatio-temporal cones can be
+done in constant time. Thus, checking for each pair of vertices can be done in
+constant time.
+
+Since we use inscribed regular polygon to approximate the projection circle,
+this method is near optimal.
+
+\subsection{Near Optimal algorithm using \sed.}
+
+%\textcolor{blue}{code, algorithm desc and example.}
+
+We now present algorithm \cisto. It takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and returns a simplified  trajectory $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$.
+
+The algorithm first  constructs the $\epsilon graph$ for the trajectory. It
+checks for each point $P_s$, whether the points ``after'' it , i.e., $P_r,r > s$
+can form an edge in the graph with the starting point. 
+
+Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed
+regular polygons, it returns a simplified trajectory,
+
+
+%%%%%%%%%%%%%%%%%%%%% Algorithm
+\begin{figure}[tb!]
+	\begin{center}
+		{\small
+			\begin{minipage}{3.36in}
+				\myhrule
+				\vspace{-1ex}
+				\mat{0ex}{
+					{\bf Algorithm} ~$\cisto(\dddot{\mathcal{T}}[P_0,\ldots,P_n], ~\epsilon, ~M, ~t_c)$\\
+					%	\sstab
+					\bcc \hspace{1ex}\= $P_s := P_0$;  ~$P_e := P_0$; ~$E = \phi$;
+          ~$\overline{\mathcal{T}} := \phi$;\\
+					%         \hspace{2ex}     $intersection = \emptyset$;   \\
+					\icc \hspace{1ex}\= \For $s = 0$  \To $n - 2$ \Do \\
+          \icc \>\hspace{3ex}\= $\mathcal{G}^* := {getRegularPolygon}$($P_s$, $P_{s+1}$, $\epsilon$, $M$, $t_c$) \\
+					\icc \>\hspace{3ex}\= \For $r = s + 2$  \To $n$ \Do \\
+					\icc \>\hspace{6ex} \If ${isInside}$($\mathcal{G}^*$, $P_r$) \Then \\
+					\icc \>\hspace{9ex} ${addEdge}$($P_s$,$P_r$,$E$) \\
+					\icc \>\hspace{6ex} $\mathcal{G} := {getRegularPolygon}$($P_s$, $P_r$, $\epsilon$, $M$, $t_c$) \\
+					\icc \>\hspace{6ex} $\mathcal{G}^* := {\rpia}(\mathcal{G}^*, ~\mathcal{G})$ \\
+
+					\icc \>\hspace{6ex} \If $\mathcal{G}^* = \phi$ \Then \\
+					\icc \>\hspace{9ex} \Break \\
+					% \icc \>\hspace{3ex} \Else \\
+					% \icc \>\hspace{3ex} \If $\mathcal{G}^* \ne \phi$ \Then \\
+					% \icc \> \hspace{6ex} $P_e := P_i$ \\
+					% \icc \> \hspace{6ex} $i := i+1$ \\
+					% \icc \>\hspace{3ex} \Else\\
+					% \icc \> \hspace{6ex} $\overline{\mathcal{T}} := \overline{\mathcal{T}}\cup \{\mathcal{L}(P_s,Q)\}$ \\
+					% \icc \> \hspace{6ex} $P_s := Q$;  ~~$\mathcal{G}^* := \phi$ \\
+
+					\icc \hspace{1ex} $\overline{\mathcal{T}} = {Dijkstra}(E)$\\
+					\icc \hspace{1ex}\Return $\overline{\mathcal{T}}$
+					%
+					%	{\bf procedure} $getPolygon$($P_s$, $P_i$, $\epsilon/2$) \\
+					%
+					%	{\bf procedure} $getIntersection(ipolygon, \mathcal{G})$ \\
+				}
+				\vspace{-2ex}
+				\myhrule
+			\end{minipage}
+		}
+	\end{center}
+	\vspace{-2ex}
+	\caption{\small Aggressive spatio-temporal cone intersection algorithm (\cista).}
+	\label{alg:ciseda}
+	\vspace{-2ex}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%example of Algorithm CISED-O
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.8]{figures/Fig-CISED-O.png}
+	%\vspace{-2ex}
+	\caption{\small A running example of the \cisto algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed into four line segments.}
+	\vspace{-1ex}
+	\label{fig:exm-const}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
