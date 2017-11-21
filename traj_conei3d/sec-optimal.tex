@@ -6,8 +6,8 @@ Based on the Spatio-temporal cone technique, we develop a fast near optimal algo
 
 \subsection{Optimal algorithm using \sed}
 
-Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ and an error bound $\epsilon$, the optimal trajectory simplification problem can be solved in two steps.
-The first step is to construct a reachability graph $G$ of \trajec{T} and the second step is to find the shortest path in $G$ from $P_0$ to $P_{n}$.
+Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ and an error bound $\epsilon$, the optimal trajectory simplification problem can be solved in two steps. 
+The first step is to construct a reachability graph $G$ of \trajec{T} and the second step is to find the shortest path in $G$ from $P_0$ to $P_{n}$ \cite{Imai:Optimal, Chan:Optimal}.
 
 \stitle{Reachability Graph ($G$)}. The reachability graph of a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ \wrt an error bound $\epsilon$ is $G$
 = \{\trajec{T}, $E\}$, where, for vertexes $P_i$ and $P_k \in$ \trajec{T} $(0 \le i<k\le n)$, edge $e_{ik}=(P_i, P_k) \in E$ if and only if the \sed of each point $P_j (i<j<k)$, to line segment $\vv{P_iP_k}$ is no great than $\epsilon$, i.e., $sed(P_j, \vv{P_iP_k}) \le \epsilon$.
@@ -19,12 +19,12 @@ Then, the shortest path in $G$ from point $P_0$ to point $P_{n}$ is the optimal 
 
 The brute-force algorithm of constructing reachability graph $G$ is to check for each pair of points $P_i$ and $P_k$ whether $sed(P_j, \vv{P_iP_k}) \le \epsilon$. 
 There are $O(n^2)$ pairs of points in the trajectory and checking the error of data points to a line segment takes $O(n)$ time. 
-Thus,this method takes $O(n^3)$ time. 
+Thus,this method takes $O(n^3)$ time \cite{Imai:Optimal}. 
 Since finding the shortest path takes no more than $O(n^2)$ time, the brute-force algorithm takes $O(n^3)$ time.
 %
 Though the authors of \cite{Chan:Optimal} proved that the construction of a reachability graph $G$ using \ped could further be implemented in $O(n^2)$ time with the help of the \textit{sector intersection} mechanism, the \textit{sector intersection} mechanism can not work with \sed (see Section \ref{sub-ci-ped}), hence, the construction of a graph  $G$ using \sed remains $O(n^3)$.
 
-Thus, the crucial part of of the algorithm is the construction of $G$. 
+Thus, the crucial part of of the algorithm is still the construction of $G$. 
 In the following, we shall discuss how a near optimal $G$ can be constructed in $O(n^2)$ time.
 
 
