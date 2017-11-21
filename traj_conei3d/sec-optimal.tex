@@ -10,7 +10,7 @@ Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ and an error bound $\epsilon
 The first step is to construct a reachability graph $G$ of \trajec{T} and the second step is to find the shortest path in $G$ from $P_0$ to $P_{n}$ \cite{Imai:Optimal, Chan:Optimal}.
 
 \stitle{Reachability Graph ($G$)}. The reachability graph of a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ \wrt an error bound $\epsilon$ is $G$
-= \{\trajec{T}, $E\}$, where, for vertexes $P_i$ and $P_k \in$ \trajec{T} $(0 \le i<k\le n)$, edge $e_{ik}=(P_i, P_k) \in E$ if and only if the distance of each point $P_j (i<j<k)$ to line segment $\vv{P_iP_k}$ is no great than $\epsilon$.
+= (\trajec{T}, $E)$, where, for vertexes $P_i$ and $P_k \in$ \trajec{T} $(0 \le i<k\le n)$, edge $e_{ik}=(P_i, P_k) \in E$ if and only if the distance of each point $P_j (i<j<k)$ to line segment $\vv{P_iP_k}$ is no great than $\epsilon$.
 %, i.e., $sed(P_j, \vv{P_iP_k}) \le \epsilon$.
 %, and (2) $w$ is a weighting function such that $w(e_{ik}) = k-i$.
 
@@ -51,11 +51,37 @@ This proposition is a directed result of Proposition \ref{prop-3d-ci}, where poi
 From Proposition~\ref{prop-edge-check}, we can determine whether edge $(P_s, P_{s+k}) \in E$ by testing whether the intersection of $\vv{P_sP_{s+k}}$ and $\bigsqcap_{i=1}^{k - 1}$\cone{(P_s,  \mathcal{O}(P_{s+i}, \epsilon))} is $\{P_i\}$. 
 
 
-For any r, the algorithm would consider all pairs of vertices  $(v_s,v_r)$ with  r ranging from s + 1 to n.
+As mentioned above, the checking of intersection of cones could be approximately replaced by the checking of intersection of regular polygons. 
+If we use the regular polygon intersection method, then we get another reachability graph $G'=$ (\trajec{T}, $E')$.
+
+\begin{prop}
+	\label{prop-near-opt-graph}
+	Reachability graph $G'=$ (\trajec{T}, $E')$ is a sub-graph of $G=$(\trajec{T}, $E)$ and $\lim_{m \to \infty}{G'=G}$, where $m$ is the number of edges of a regular polygon.
+\end{prop}
+
+\begin{proof}
+	to do...
+\end{proof}
+
+
+\begin{prop}
+	\label{prop-near-opt-graph-construction}
+	The near optimal reachability graph $G'$ can be constructed in $O(n^2)$ time.
+\end{prop}
+
+\begin{proof}
+For any $s (0\le s \le n)$, the construction of graph $G'$ would consider all pairs of vertices $(P_s,P_{s+k}) (1\le k \le n)$ and compute the intersection of $\vv{P_sP_{s+k}}$ and $\bigsqcap_{i=1}^{k - 1}$\cone{(P_s,  \mathcal{O}(P_{s+i}, \epsilon))}. 
+The computing of intersection of $\bigsqcap_{i=1}^{k - 1}$\cone{(P_s,  \mathcal{O}(P_{s+i}, \epsilon))} could be implement in an incremental way, and each approximate intersection of two cones could be checked by the intersection of two polygons, which can be achieved in a constant time, hence, it needs $O(n)$ time to check all edges for each $s$. 
+
+There are $n$ points in the trajectory, thus, the construction of near optimal graph $G'$ needs $O(N^2)$ time.
+\end{proof}
+
+%Proposition~\ref{{prop-near-opt-graph}} and Proposition~\ref{prop-near-opt-graph-construction} tell us we can construct a near optimal reacha
 
 %From Proposition~\ref{prop-edge-check}, we can determine whether $(v_s,v_r) \in G$ by testing whether $\vv{P_sP_r} \in $ $\bigsqcap_{i=1}^{r - 1}$\cone{(P_s,  \mathcal{O}(P_{s+i}, \epsilon))}. For any r, the algorithm would consider all pairs of vertices  $(v_s,v_r)$ with  r ranging from s + 1 to n.  
 
-%The checking of whether a line segment lies inside a spatio-temporal cone can be reduced to checking whether its projection point lies inside the projection circle on a plane which can be done in constant time. Furthermore, as we have proposed before, the compution of intersection of spatio-temporal cones can be done in constant time. Thus, checking for each pair of vertices can be done in constant time.
+%The checking of whether a line segment lies inside a spatio-temporal cone can be reduced to checking whether its projection point lies inside the projection circle on a plane which can be done in constant time. 
+%Furthermore, as we have proposed before, the compution of intersection of spatio-temporal cones can be done in constant time. Thus, checking for each pair of vertices can be done in constant time.
 
 %Since we use inscribed regular polygon to approximate the projection circle, this method is near optimal.
 
