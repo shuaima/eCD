@@ -28,31 +28,19 @@ Thus, the crucial part of of the algorithm is still the construction of $G$.
 In the following, we shall discuss how a near optimal $G$ can be constructed in $O(n^2)$ time.
 
 
-\subsection{Speedup graph constructing by using spatio-temporal cones.}
-In \cite{Chan:Optimal} the author proposed a speed-up method of constructing the
-$\epsilon$ graph using PED as distance metric.
-The key of their method is to leverage the Sector Intersection method.
-The intersection of previous sector bounds stores the information of restriction
-imposed by all the previous points. 
-A new coming point can form a edge with the starting point in the $\epsilon$
-graph if and only if it resides within the intersection.
-Since checking whether a point is in a sector bound and updating the sector bound can be done in
-constant time. The time complexity of this algorithm is $O(n^2)$.
+\subsection{Speed up graph constructing.} % by using spatio-temporal cones
+In this section, we speed up the construction of reachability graph $G$ by using the spatio-temporal cone.
 
-Extending their method to $3-D$ spatio temporal space, we can get an optimal
-algorithm using SED for the $min-\#$ problem with time complexity of $O(n^2)$.
-
-%\textcolor{blue}{Theorem and proof}
-
-Firstly, we give the necessary condition for the inclusion of an edge to the $\epsilon - graph$.
+Firstly, we give the necessary condition for the inclusion of an edge to the reachability graph $G$.
 
 \begin{prop}
 \label{prop-edge-check}
-Edge $(v_s,v_r)$ can be included in the $\epsilon - graph$ if and only if the ray
-$\vv{P_sP_r}$ lies inside the common intersection of previous cones, i.e.,
-$\vv{P_sP_r} \in $ $\bigsqcap_{i=1}^{r - 1}$\cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))}  and
-$\bigsqcap_{i=1}^{r - 1}$\cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} $\ne \{P_s\}$. 
+Edge $(P_i, P_k)$ can be included in reachability graph $G$ if and only if the intersection of line segment $\vv{P_iP_k}$ and 
+the intersection of preview spatio-temporal cones $\bigsqcap_{j=i+1}^{k-1}$ \cone{(P_i, \mathcal{O}(P_{j}, \epsilon))} is not $\{P_i\}$.
+% and $\bigsqcap_{j=i+1}^{k-1}$\cone{(P_i, \mathcal{O}(P_{j}, \epsilon))} $\ne \{P_i\}$. 
 \end{prop}
+
+\textcolor{red}{todo...}
 
 \begin{proof}
 If the directed line segment $\vv{P_sP_r} \in$ $\bigsqcap_{i=1}^{r-1}$\cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))}, the
