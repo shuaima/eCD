@@ -10,7 +10,7 @@ Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ and an error bound $\epsilon
 The first step is to construct a reachability graph $G$ of \trajec{T} and the second step is to find the shortest path in $G$ from $P_0$ to $P_{n}$ \cite{Imai:Optimal, Chan:Optimal}.
 
 \stitle{Reachability Graph ($G$)}. The reachability graph of a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ \wrt an error bound $\epsilon$ is $G$
-= (\trajec{T}, $E)$, where, for vertexes $P_i$ and $P_k \in$ \trajec{T} $(0 \le i<k\le n)$, edge $e_{ik}=(P_i, P_k) \in E$ if and only if the distance of each point $P_j (i<j<k)$ to line segment $\vv{P_iP_k}$ is no great than $\epsilon$.
+= (\trajec{T}, $E)$, where, for vertexes $P_s$ and $P_{s+k} \in$ \trajec{T} $(k>0)$, edge $(P_s, P_{s+k}) \in E$ if and only if the distance of each point $P_{s+i} (0<i<k)$ to line segment $\vv{P_sP_{s+k}}$ is no great than $\epsilon$.
 %, i.e., $sed(P_j, \vv{P_iP_k}) \le \epsilon$.
 %, and (2) $w$ is a weighting function such that $w(e_{ik}) = k-i$.
 
@@ -18,12 +18,12 @@ Then, the shortest path in $G$ from point $P_0$ to point $P_{n}$ is the optimal 
 %Moreover, the shortest path also reveals the subset of points of \trajec{T} used in the approximate trajectory.
 
 
-The brute-force algorithm of constructing reachability graph $G$ using \sed is to check for each pair of points $P_i$ and $P_k$ whether $sed(P_j, \vv{P_iP_k}) \le \epsilon$. 
-There are $O(n^2)$ pairs of points in the trajectory and checking the error of data points to a line segment takes $O(n)$ time. 
-Thus,this method takes $O(n^3)$ time \cite{Imai:Optimal}. 
+The brute-force algorithm of constructing reachability graph $G$ using \sed is to check for each pair of points $P_s$ and $P_{s+k}$ whether $sed(P_{s+i}, \vv{P_sP_{s+k}}) \le \epsilon$. 
+There are $O(n^2)$ pairs of points in the trajectory and checking the error of all data points $P_{s+i}$ to a line segment $\vv{P_sP_{s+k}}$ takes $O(n)$ time. 
+Thus, this method takes $O(n^3)$ time \cite{Imai:Optimal}. 
 Since finding the shortest path takes no more than $O(n^2)$ time, the brute-force algorithm takes $O(n^3)$ time.
 %
-Note though the authors of \cite{Chan:Optimal} proved that the construction of a reachability graph $G$ using \ped could further be implemented in $O(n^2)$ time with the help of the \textit{sector intersection} mechanism, the \textit{sector intersection} mechanism can not work with \sed (see Section \ref{sub-ci-ped}), hence, the construction of a graph  $G$ using \sed remains $O(n^3)$.
+Note though the authors of \cite{Chan:Optimal} proved that the construction of a reachability graph $G$ using \ped could further be implemented in $O(n^2)$ time with the help of the \textit{sector intersection} mechanism, the \textit{sector intersection} mechanism can not work with \sed (see Section \ref{sub-ci-ped}), hence, the construction of a graph  $G$ using \sed remains $O(n^3)$ time.
 
 Thus, the crucial part of of the algorithm is still the construction of $G$. 
 In the following, we shall discuss how a near optimal $G$ can be constructed in $O(n^2)$ time.
@@ -31,13 +31,12 @@ In the following, we shall discuss how a near optimal $G$ can be constructed in 
 
 \subsection{Speed up graph constructing.} % by using spatio-temporal cones
 In this section, we speed up the construction of reachability graph $G$ by using the spatio-temporal cone.
-
 Firstly, we give the necessary and sufficient condition for the inclusion of an edge to the reachability graph $G$.
 
 \begin{prop}
 \label{prop-edge-check}
 Edge $(P_{s}, P_{s+k})$ can be included in reachability graph $G$ if and only if the intersection of line segment $\vv{P_{s}P_{s+k}}$ and 
-the intersection of preview spatio-temporal cones $\bigsqcap_{i=1}^{k-1}$ \cone{(P_{s}, \mathcal{O}(P_{s+i}, \epsilon))} is not $\{P_s\}$.
+the common area of preview spatio-temporal cones, \ie $\bigsqcap_{i=1}^{k-1}$ \cone{(P_{s}, \mathcal{O}(P_{s+i}, \epsilon))}, is not $\{P_s\}$.
 % and $\bigsqcap_{j=i+1}^{k-1}$\cone{(P_i, \mathcal{O}(P_{j}, \epsilon))} $\ne \{P_i\}$. 
 \end{prop}
 
