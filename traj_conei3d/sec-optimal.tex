@@ -94,14 +94,33 @@ There are $n$ points in the trajectory, thus, the construction of a near optimal
 
 %\textcolor{blue}{code, algorithm desc and example.}
 
-We now present algorithm \cisto. It takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and returns a simplified  trajectory $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$.
+We now present algorithm \cisto, as shown in Figure~\ref{alg:cisedo}.
 
-The algorithm first  constructs the $\epsilon graph$ for the trajectory. It
-checks for each point $P_s$, whether the points ``after'' it , i.e., $P_r,r > s$
-can form an edge in the graph with the starting point. 
+\stitle{Procedure \kw{getRegularPolygon}}.
+We first present procedure \kw{getRegularPolygon} that, given a cone projection circle, generates its inscribed $m$-edge regular polygon,  following the definition in Section~\ref{subsec-RPI}.
 
-Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed
-regular polygons, it returns a simplified trajectory,
+The parameters $P_s$, $P_i$, $r$ and $t_c$ together form the projection circle \pcircle{(P^c_i, r^c_i)} of the spatio-temporal cone \cone{(P_s, \mathcal{O}(P_{i}, r))} of point $P_{i}$ \wrt point $P_s$ on the plane $P.t - t_c$ = $0$. Firstly, $P^c_i.x$ and $P^c_i.y$ are computed (lines 1--3), and $r^c_i = c\cdot r$.
+Then it builds and returns an $m$-edge inscribed regular polygon $\mathcal{G}$ of \pcircle{(P^c_i, r^c_i)} (lines 4--8), by transforming a polar coordinate system
+into a Cartesian one. Note that here $\theta$, $r\cdot\sin\theta$ and $r\cdot\cos\theta$ only need to be computed once during the entire processing of a trajectory.
+
+\stitle{Algorithm \cist}. We now present algorithm \cisto. It takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and returns a simplified  trajectory $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$.
+
+
+The algorithm first initializes the start point $P_s$ to $P_0$, the edge set of
+the reachability graph $G$ to $\emptyset$, the output $\overline{\mathcal{T}}$ to $\emptyset$, and $t_c$ to $P_1.t$, respectively (line 1).
+%
+
+The algorithm considers each data points of the trajectory  as the
+start point.(line 2). For each start point $P_{s}$, it initializes
+the intersection of regular polygons as the $m$-inscribed regular polygon \wrt the next point $P_{s+1}$  by calling
+procedure $\kw{getRegularPolygon}$(line 3).
+Then, it checks for every following points $P_{r}$ in the trajectory whether the edge
+($P_{s}$,$P_{r}$) can be included into the reachability graph and updates the
+intersection by calling procedure $\rpia()$ introduced in Section~\ref{subsec-fastRPI}.(lines 4--10).
+When $\mathcal{G}^* = \emptyset$, the checking for current start point is terminated immediately (lines
+9--10).
+After the construction of the reachability graph, it computes the shortest path
+from point $P_{0}$ to point $P_{n}$(line 11), and returns the simplified  piece-wise line representation $\overline{\mathcal{T}}$ (line 12).
 
 
 %%%%%%%%%%%%%%%%%%%%% Algorithm
@@ -114,14 +133,15 @@ regular polygons, it returns a simplified trajectory,
 				\mat{0ex}{
 					{\bf Algorithm} ~$\cisto(\dddot{\mathcal{T}}[P_0,\ldots,P_n], ~\epsilon, ~M, ~t_c)$\\
 					%	\sstab
-					\bcc \hspace{1ex}\= $P_s := P_0$;  ~$P_e := P_0$; ~$E = \phi$;
+					\bcc \hspace{1ex}\= $P_s := P_0$;  ~$G := (\dddot{\mathcal{T}},\phi)$;
           ~$\overline{\mathcal{T}} := \phi$;\\
 					%         \hspace{2ex}     $intersection = \emptyset$;   \\
 					\icc \hspace{1ex}\= \For $s = 0$  \To $n - 2$ \Do \\
           \icc \>\hspace{3ex}\= $\mathcal{G}^* := {getRegularPolygon}$($P_s$, $P_{s+1}$, $\epsilon$, $M$, $t_c$) \\
+					\icc \>\hspace{3ex} ${addEdge}$($P_s$,$P_{s+1}$,$G$) \\
 					\icc \>\hspace{3ex}\= \For $r = s + 2$  \To $n$ \Do \\
 					\icc \>\hspace{6ex} \If ${isInside}$($\mathcal{G}^*$, $P_r$) \Then \\
-					\icc \>\hspace{9ex} ${addEdge}$($P_s$,$P_r$,$E$) \\
+					\icc \>\hspace{9ex} ${addEdge}$($P_s$,$P_r$,$G$) \\
 					\icc \>\hspace{6ex} $\mathcal{G} := {getRegularPolygon}$($P_s$, $P_r$, $\epsilon$, $M$, $t_c$) \\
 					\icc \>\hspace{6ex} $\mathcal{G}^* := {\rpia}(\mathcal{G}^*, ~\mathcal{G})$ \\
 
@@ -135,7 +155,7 @@ regular polygons, it returns a simplified trajectory,
 					% \icc \> \hspace{6ex} $\overline{\mathcal{T}} := \overline{\mathcal{T}}\cup \{\mathcal{L}(P_s,Q)\}$ \\
 					% \icc \> \hspace{6ex} $P_s := Q$;  ~~$\mathcal{G}^* := \phi$ \\
 
-					\icc \hspace{1ex} $\overline{\mathcal{T}} = {Dijkstra}(E)$\\
+					\icc \hspace{1ex} $\overline{\mathcal{T}} = {Dijkstra}(G)$\\
 					\icc \hspace{1ex}\Return $\overline{\mathcal{T}}$
 					%
 					%	{\bf procedure} $getPolygon$($P_s$, $P_i$, $\epsilon/2$) \\
@@ -148,11 +168,38 @@ regular polygons, it returns a simplified trajectory,
 		}
 	\end{center}
 	\vspace{-2ex}
-	\caption{\small Aggressive spatio-temporal cone intersection algorithm (\cista).}
-	\label{alg:ciseda}
+	\caption{\small Near optimal spatio-temporal cone intersection algorithm (\cisto).}
+	\label{alg:cisedo}
 	\vspace{-2ex}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{example}
+\label{exm-alg-conesto}
+Figure~\ref{fig:exm-consto}  shows a running example of algorithm \cisto for compressing the trajectory \trajec{T} in Figure~\ref{fig:notations} again.
+
+
+\sstab (1) After initialization, the \cisto algorithm reads point $P_1$ and
+builds an \emph{oblique circular cone} \cone{(P_0, \mathcal{O}(P_{1},
+  \epsilon))},  and projects it on the plane $P.t-P_1.t=0$. The inscribed
+regular polygon $\mathcal{G}_1$ of the projection circle  is returned and the intersection $\mathcal{G}^*$ is set to $\mathcal{G}_1$.
+Since the intersection of $\vv{P_0P_{1}}$ and \cone{(P_0,  \mathcal{O}(P_{1}, \epsilon))} is not $\{P_0\}$, edge
+$(P_0P_{1})$ is added to the graph $G$. 
+
+
+\sstab (2) $P_2$, $P_3$ and $P_4$ are processed in turn. The intersection
+polygons $\mathcal{G}^*$ are not empty and edges $(P_0P_{2})$,$(P_0P_{3})$,$(P_0P_{4})$ are added to the graph $G$. 
+
+
+\sstab (3) For point $P_5$, the intersection of $\vv{P_0P_{5}}$ and $\bigsqcap_{i=1}^{
+  4}$\cone{(P_0,  \mathcal{O}(P_{i}, \epsilon))} is $\{P_0\}$, edge
+$(P_0P_{5})$ is not added to the graph $G$. 
+And the intersection of $\mathcal{G}_5$ and $\mathcal{G}^*$ is $\emptyset$.
+Thus, the checking from point $P_0$ is terminated and  a new  checking cycle is started such that $Q=P_1$ is the new start point and plane $P.t-P_2.t=0$ is the new projection plane.
+
+\sstab (4) At last, the algorithm outputs 3 continuous line segments, \ie $\vv{P_0P'_4}$, $\vv{P'_4P_7}$ and $\vv{P_7P_{10}}$, in which $P'_4$ is an interpolated data points not in \trajec{T}.
+\end{example}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%example of Algorithm CISED-O
@@ -160,9 +207,9 @@ regular polygons, it returns a simplified trajectory,
 	\centering
 	\includegraphics[scale=0.8]{figures/Fig-CISED-O.png}
 	%\vspace{-2ex}
-	\caption{\small A running example of the \cisto algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed into four line segments.}
+	\caption{\small A running example of the \cisto algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed into three line segments.}
 	\vspace{-1ex}
-	\label{fig:exm-const}
+	\label{fig:exm-consto}
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
