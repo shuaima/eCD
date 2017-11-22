@@ -78,7 +78,7 @@ Proposition~\ref{prop-near-opt-graph} tells us that a reachability graph $G'$ ca
 For any $P_s (0\le s \le n)$, the construction of a reachability graph $G'$ need consider all pairs of vertices $(P_s,P_{s+k}) (1\le k \le n)$ and compute the intersection of $\vv{P_sP_{s+k}}$ and $\bigsqcap_{i=1}^{k - 1}$\cone{(P_s,  \mathcal{O}(P_{s+i}, \epsilon))}. 
 The computing of the common area of cones, \ie $\bigsqcap_{i=1}^{k - 1}$\cone{(P_s,  \mathcal{O}(P_{s+i}, \epsilon))}, could be implement in an incremental way, and each approximate intersection of two cones could be checked by the intersection of two polygons, which can be achieved in a constant time, hence, it needs $O(n)$ time to check all edges $(P_s,P_{s+k})$ start form point $P_s$. 
 
-There are $n$ points in the trajectory, thus, the construction of a near optimal graph $G'$ needs $O(N^2)$ time.
+There are $n$ points in the trajectory, thus, the construction of a near optimal graph $G'$ needs $O(n^2)$ time.
 \end{proof}
 
 %Proposition~\ref{{prop-near-opt-graph}} and Proposition~\ref{prop-near-opt-graph-construction} tell us we can construct a near optimal reacha
@@ -103,7 +103,7 @@ The parameters $P_s$, $P_i$, $r$ and $t_c$ together form the projection circle \
 Then it builds and returns an $m$-edge inscribed regular polygon $\mathcal{G}$ of \pcircle{(P^c_i, r^c_i)} (lines 4--8), by transforming a polar coordinate system
 into a Cartesian one. Note that here $\theta$, $r\cdot\sin\theta$ and $r\cdot\cos\theta$ only need to be computed once during the entire processing of a trajectory.
 
-\stitle{Algorithm \cist}. We now present algorithm \cisto. It takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and returns a simplified  trajectory $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$.
+\stitle{Algorithm \cisto}. We now present algorithm \cisto. It takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and returns a simplified  trajectory $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$.
 
 
 The algorithm first initializes the start point $P_s$ to $P_0$, the edge set of
@@ -155,8 +155,8 @@ from point $P_{0}$ to point $P_{n}$(line 11), and returns the simplified  piece-
 					% \icc \> \hspace{6ex} $\overline{\mathcal{T}} := \overline{\mathcal{T}}\cup \{\mathcal{L}(P_s,Q)\}$ \\
 					% \icc \> \hspace{6ex} $P_s := Q$;  ~~$\mathcal{G}^* := \phi$ \\
 
-					\icc \hspace{1ex} $\overline{\mathcal{T}} = {Dijkstra}(G)$\\
-					\icc \hspace{1ex}\Return $\overline{\mathcal{T}}$
+					\icc \hspace{0ex} $\overline{\mathcal{T}} = {Dijkstra}(G)$\\
+					\icc \hspace{0ex} \Return $\overline{\mathcal{T}}$
 					%
 					%	{\bf procedure} $getPolygon$($P_s$, $P_i$, $\epsilon/2$) \\
 					%
@@ -173,6 +173,17 @@ from point $P_{0}$ to point $P_{n}$(line 11), and returns the simplified  piece-
 	\vspace{-2ex}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%example of Algorithm CISED-O
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.8]{figures/Fig-CISED-O.png}
+	%\vspace{-2ex}
+	\caption{\small A running example of the \cisto algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed into three line segments.}
+	\vspace{-1ex}
+	\label{fig:exm-consto}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \begin{example}
@@ -202,14 +213,7 @@ Thus, the checking from point $P_0$ is terminated and  a new  checking cycle is 
 \end{example}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%example of Algorithm CISED-O
-\begin{figure*}[tb!]
-	\centering
-	\includegraphics[scale=0.8]{figures/Fig-CISED-O.png}
-	%\vspace{-2ex}
-	\caption{\small A running example of the \cisto algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed into three line segments.}
-	\vspace{-1ex}
-	\label{fig:exm-consto}
-\end{figure*}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\stitle{Correctness and complexity analyses}.
+The correctness of algorithm \cisto follows from Propositions~\ref{prop-circle-intersection}, ~\ref{prop-edge-check} and~\ref{prop-near-opt-graph}.
+It is also easy to see that this algorithm takes $O(n^2)$ time and $O(n^2)$ space.
