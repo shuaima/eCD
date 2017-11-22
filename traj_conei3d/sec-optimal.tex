@@ -1,7 +1,7 @@
 \section{\textcolor{blue}{Near Optimal Trajectory Simplification}}
 \label{sec-optimal}
 
-Based on the Spatio-temporal cone technique, we develop a fast near optimal algorithm using \sed. Our near optimal algorithm achieves a $O(n^2)$ time which is much faster than the optimal algorithm using \sed having a time complexity of $O(n^3)$ \cite{Imai:Optimal}.
+Based on the Spatio-temporal cone technique, we develop a fast near optimal algorithm using \sed. Our near optimal algorithm achieves a $O(n^2)$ time which is much faster than the optimal algorithm \cite{Imai:Optimal} using \sed having a time complexity of $O(n^3)$.
 
 
 \subsection{Optimal algorithm using \sed}
@@ -23,7 +23,7 @@ There are $O(n^2)$ pairs of points in the trajectory and checking the error of a
 Thus, this method takes $O(n^3)$ time \cite{Imai:Optimal}. 
 Since finding the shortest path takes no more than $O(n^2)$ time, the brute-force algorithm takes $O(n^3)$ time.
 %
-Note though the authors of \cite{Chan:Optimal} proved that the construction of a reachability graph $G$ using \ped could further be implemented in $O(n^2)$ time with the help of the \textit{sector intersection} mechanism, the \textit{sector intersection} mechanism can not work with \sed (see Section \ref{sub-ci-ped}), hence, the construction of a graph  $G$ using \sed remains $O(n^3)$ time.
+Though the authors of \cite{Chan:Optimal} proved that the construction of a reachability graph $G$ using \ped could further be implemented in $O(n^2)$ time with the help of the \textit{sector intersection} mechanism, the \textit{sector intersection} mechanism can not work with \sed (see Section \ref{sub-ci-ped}), hence, the construction of a graph  $G$ using \sed remains $O(n^3)$ time.
 
 Thus, the crucial part of of the algorithm is still the construction of $G$. 
 In the following, we shall discuss how a near optimal $G$ can be constructed in $O(n^2)$ time.
@@ -45,10 +45,9 @@ This proposition is a directed result of Proposition \ref{prop-3d-ci}, where poi
 %Hence, edge $(P_{s}, P_{s+k})$ can be included in reachability graph $G$.
 \end{proof}
 
-%Then we propose the speedup graph constructing by using spatio-temporal cones.
 
 From Proposition~\ref{prop-edge-check}, we can determine whether edge $(P_s, P_{s+k}) \in E$ by testing whether the intersection of $\vv{P_sP_{s+k}}$ and $\bigsqcap_{i=1}^{k - 1}$\cone{(P_s,  \mathcal{O}(P_{s+i}, \epsilon))} is $\{P_i\}$. 
-
+It must be noted that, even if edge $(P_s, P_{s+k})$ is not in $E$, edge $(P_s, P_{s+k+1})$ is still possible in $E$ as long as $\bigsqcap_{i=1}^{k}$ \cone{(P_{s}, \mathcal{O}(P_{s+i}, \epsilon))}$\ne \{P_s\}$.
 
 As mentioned above, the checking of intersection of cones could be approximately replaced by the checking of intersection of regular polygons. 
 If we use the regular polygon intersection method, then we get another reachability graph $G'=$ (\trajec{T}, $E')$.
@@ -94,7 +93,7 @@ There are $n$ points in the trajectory, thus, the construction of a near optimal
 
 %\textcolor{blue}{code, algorithm desc and example.}
 
-We now present algorithm \cisto, as shown in Figure~\ref{alg:cisedo}.
+We now present algorithm \cisto. The full algorithm is shown in Figure~\ref{alg:cisedo}.
 
 \stitle{Procedure \kw{getRegularPolygon}}.
 We first present procedure \kw{getRegularPolygon} that, given a cone projection circle, generates its inscribed $m$-edge regular polygon,  following the definition in Section~\ref{subsec-RPI}.
@@ -103,7 +102,9 @@ The parameters $P_s$, $P_i$, $r$ and $t_c$ together form the projection circle \
 Then it builds and returns an $m$-edge inscribed regular polygon $\mathcal{G}$ of \pcircle{(P^c_i, r^c_i)} (lines 4--8), by transforming a polar coordinate system
 into a Cartesian one. Note that here $\theta$, $r\cdot\sin\theta$ and $r\cdot\cos\theta$ only need to be computed once during the entire processing of a trajectory.
 
-\stitle{Algorithm \cisto}. We now present algorithm \cisto. It takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and returns a simplified  trajectory $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$.
+\stitle{Algorithm \cisto}. 
+We then present algorithm \cisto. 
+It takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and returns a simplified  trajectory $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$.
 
 
 The algorithm first initializes the start point $P_s$ to $P_0$, the edge set of
@@ -139,8 +140,8 @@ from point $P_{0}$ to point $P_{n}$ (line 11), and returns the simplified  piece
           ~$\overline{\mathcal{T}} := \phi$;\\
 					%         \hspace{2ex}     $intersection = \emptyset$;   \/
 					\icc \hspace{1ex}\= \For $s = 0$  \To $n - 2$ \Do \\
-          \icc \>\hspace{3ex}\= $\mathcal{G}^* := {getRegularPolygon}$($P_s$, $P_{s+1}$, $\epsilon$, $M$, $t_c$) \\
-					\icc \>\hspace{3ex} $E = E \cup (P_s,P_{s+1}) $ \\
+					\icc \>\hspace{3ex}\= $\mathcal{G}^* := {getRegularPolygon}$($P_s$, $P_{s+1}$, $\epsilon$, $M$, $t_c$) \\
+					\icc \>\hspace{3ex}\= $E = E \cup (P_s,P_{s+1}) $ \\
 					\icc \>\hspace{3ex}\= \For $k = s + 2$  \To $n$ \Do \\
 					\icc \>\hspace{6ex} \If ${isInside}$($\mathcal{G}^*$, $P_k$) \Then \\
 					\icc \>\hspace{9ex} $E = E \cup (P_s,P_k) $ \\
@@ -192,7 +193,7 @@ from point $P_{0}$ to point $P_{n}$ (line 11), and returns the simplified  piece
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%example of Algorithm CISED-O
 \begin{figure*}[tb!]
 	\centering
-	\includegraphics[scale=0.8]{figures/Fig-CISED-O.png}
+	\includegraphics[scale=0.75]{figures/Fig-CISED-O.png}
 	%\vspace{-2ex}
 	\caption{\small A running example of the \cisto algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed into three line segments.}
 	\vspace{-1ex}
