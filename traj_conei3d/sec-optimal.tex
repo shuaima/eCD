@@ -106,22 +106,6 @@ We then present algorithm \cisto.
 It takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and returns a simplified  trajectory $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$.
 
 
-The algorithm first initializes the start point $P_s$ to $P_0$, the edge set of
-the reachability graph $G'$ to $\emptyset$, the output $\overline{\mathcal{T}}$ to $\emptyset$, and $t_c$ to $P_1.t$, respectively (line 1).
-%
-
-The algorithm considers each data point of the trajectory as the start point (line 2). 
-For each start point $P_{s}$, it initializes the intersection of regular polygons as the $m$-inscribed regular polygon \wrt the next point $P_{s+1}$  by calling procedure $\kw{getRegularPolygon}$ (line 3).
-Then, it checks for every following points $P_{k}$ in the trajectory whether the edge
-($P_{s}$,$P_{k}$) can be included into the reachability graph and updates the
-intersection by calling procedure $\rpia()$ introduced in
-Section~\ref{subsec-fastRPI} (lines 4--10).
-When $\mathcal{R}^* = \emptyset$, the checking for current start point is terminated immediately (lines
-10--11).
-After the construction of the reachability graph, it computes the shortest path
-from point $P_{0}$ to point $P_{n}$ (line 12), and returns the simplified  piece-wise line representation $\overline{\mathcal{T}}$ (line 13).
-
-
 %%%%%%%%%%%%%%%%%%%%% Algorithm
 \begin{figure}[tb!]
 	\begin{center}
@@ -132,19 +116,16 @@ from point $P_{0}$ to point $P_{n}$ (line 12), and returns the simplified  piece
 				\mat{0ex}{
 					{\bf Algorithm} ~\cisto$(\dddot{\mathcal{T}}[P_0,\ldots,P_n], ~\epsilon, ~m)$\\
 					%	\sstab
-					\bcc \hspace{1ex}\= $P_s := P_0$;  ~$G' := (\dddot{\mathcal{T}},E)$;  ~$E := \phi$;
-          ~$\overline{\mathcal{T}} := \phi$;  ~$t_c$ := $P_{s+1}.t$; \\
-					%         \hspace{2ex}     $intersection = \emptyset$;   \/
+					\bcc \hspace{1ex}\= $E' := \phi$;   ~$\overline{\mathcal{T}} := \phi$;   \\
 					\icc \hspace{1ex}\= \For $s = 0$  \To $n - 2$ \Do \\
+					\icc \>\hspace{3ex}\= $t_c$ := $P_{s+1}.t$;	\\
 					\icc \>\hspace{3ex}\= $\mathcal{R}^* := {getRegularPolygon}$($P_s$, $P_{s+1}$, $\epsilon$, $m$, $t_c$); \\
-					\icc \>\hspace{3ex}\= $E = E \cup (P_s,P_{s+1})$; \\
+					\icc \>\hspace{3ex}\= $E' = E' \cup (P_s,P_{s+1})$; \\
 					\icc \>\hspace{3ex}\= \For $k = s + 2$  \To $n$ \Do \\
-					\icc \>\hspace{6ex} \If ${isInside}$($\mathcal{R}^*$, $P_k$) \Then \\
-					\icc \>\hspace{9ex} $E = E \cup (P_s, P_k)$; \\
+					\icc \>\hspace{6ex} \If ${\textcolor{red}{isInside}}$($\mathcal{R}^*$, $P_k$) \Then $E' = E' \cup (P_s, P_k)$; \\
 					\icc \>\hspace{6ex} $\mathcal{R} := {getRegularPolygon}$($P_s$, $P_k$, $\epsilon$, $m$, $t_c$); \\
 					\icc \>\hspace{6ex} $\mathcal{R}^* := {\rpia}(\mathcal{R}^*, ~\mathcal{R})$; \\
-					\icc \>\hspace{6ex} \If $\mathcal{R}^* = \phi$ \Then \\
-					\icc \>\hspace{9ex}  ~$t_c$ := $P_{s+1}.t$; \Break; \\
+					\icc \>\hspace{6ex} \If $\mathcal{R}^* = \phi$ \Then \Break; \\
 					\icc \hspace{0ex} $\overline{\mathcal{T}} = {shortestPath}(G')$;\\
 					\icc \hspace{0ex} \Return $\overline{\mathcal{T}}$; \\
 					%
@@ -169,9 +150,26 @@ from point $P_{0}$ to point $P_{n}$ (line 12), and returns the simplified  piece
 	\vspace{-2ex}
 	\caption{\small Near optimal spatio-temporal cone intersection algorithm (\cisto).}
 	\label{alg:cisedo}
-	\vspace{-2ex}
+	\vspace{-1.5ex}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The algorithm first initializes the start point $P_s$ to $P_0$, the edge set $E$ of
+the reachability graph $G'$ to $\emptyset$ and the result trajectory $\overline{\mathcal{T}}$ to $\emptyset$, respectively (line 1).
+%
+Then the algorithm takes each data point of the trajectory as a start point $P_s$ (line 2). 
+For each start point $P_{s}$, it initializes $t_c$ (line 3), sets the intersection of regular polygons $\mathcal{R}^*$ to the $m$-inscribed regular polygon \wrt the next point $P_{s+1}$ by calling procedure $\kw{getRegularPolygon}$ (line 4) and includes the edge $(P_s, P_{s+1})$ to $E$ (line 5).
+%
+Next, it checks for each point $P_{k} (k>s+1)$ in the trajectory whether the edge ($P_{s}, P_{k}$) can be included into the edge set $E'$ by calling procedure \textit{isInside}() (lines 6--7). %of reachability graph $G'$
+It gets the regular polygon $\mathcal{R}$ of $P_{k}$ by calling procedure \textit{getRegularPolygon}()
+and updates the intersection $\mathcal{R}^*$ by calling procedure $\rpia()$ introduced in Section~\ref{subsec-fastRPI} (lines 8--9).
+If $\mathcal{R}^* = \emptyset$, the checking for the current start point $P_s$ is terminated (line 10) and the process goes on to $P_{s+1}$.
+This process repeats until all possible edges have been included.
+%
+Finally, it computes the shortest path from point $P_{0}$ to point $P_{n}$ (line 11), and returns an optimal  piece-wise line representation $\overline{\mathcal{T}}$ of trajectory \trajec{T}${[P_0, \ldots, P_n]}$ (line 12).
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%example of Algorithm CISED-O
 \begin{figure*}[tb!]
