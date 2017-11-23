@@ -61,9 +61,9 @@ We first introduce basic notations.
 		\hline
 		$\mathcal{H}(\mathcal{L})$ & The open half-plane to the left of $\mathcal{L}$ \\
 		\hline
-		$\mathcal{G}$& a convex polygon \\
+		$\mathcal{R}$& a convex polygon \\
 		\hline
-		$\mathcal{G}^*$ & the intersection of convex polygons \\
+		$\mathcal{R}^*$ & the intersection of convex polygons \\
 		\hline
 		$m$ & the maximum number of edges of a polygon\\
 		\hline
@@ -205,7 +205,7 @@ Similarly, points $P_3$ and $P_4$ are processed, as shown in Figures~\ref{fig:sl
 \label{subsec-cpi}
 
 We also employ \textcolor{blue}{and customize} a convex polygon intersection algorithm \textcolor{blue}{presented} in~\cite{ORourke:Intersection}, whose basic idea is straightforward.
-Assume \kwlog that the edges of polygons $\mathcal{G}_1$ and $\mathcal{G}_2$ are oriented counterclockwise, and $\vv{A} = (P_{s_A}, P_{e_A})$ and $\vv{B} = (P_{s_B}, P_{e_B})$ are two (directed) edges on $\mathcal{G}_2$ and $\mathcal{G}_1$, repectively (see Figure~\ref{fig:c-poly-inter}).
+Assume \kwlog that the edges of polygons $\mathcal{R}_1$ and $\mathcal{R}_2$ are oriented counterclockwise, and $\vv{A} = (P_{s_A}, P_{e_A})$ and $\vv{B} = (P_{s_B}, P_{e_B})$ are two (directed) edges on $\mathcal{R}_2$ and $\mathcal{R}_1$, repectively (see Figure~\ref{fig:c-poly-inter}).
 
 \begin{figure}[tb!]
 	\centering
@@ -216,7 +216,7 @@ Assume \kwlog that the edges of polygons $\mathcal{G}_1$ and $\mathcal{G}_2$ are
 	\label{fig:c-poly-inter}
 \end{figure}
 
-The algorithm has $\vv{A}$ and $\vv{B}$ ``chasing'' one another, \ie moves $\vv{A}$ on $\mathcal{G}_2$ and $\vv{B}$ on $\mathcal{G}_1$ counter-clockwise step by step under certain rules, so that they meet at every crossing of $\mathcal{G}_1$ and $\mathcal{G}_2$.
+The algorithm has $\vv{A}$ and $\vv{B}$ ``chasing'' one another, \ie moves $\vv{A}$ on $\mathcal{R}_2$ and $\vv{B}$ on $\mathcal{R}_1$ counter-clockwise step by step under certain rules, so that they meet at every crossing of $\mathcal{R}_1$ and $\mathcal{R}_2$.
 %
 The rules, called \emph{advance rules}, are carefully designed depending on geometric conditions of $\vv{A}$ and $\vv{B}$.
 %If $\vv{B}$ ``aims toward" the line containing $\vv{A}$, but does not cross it, then we want to advance $\vv{B}$ in order to ``close in" on a possible intersection with A.
@@ -233,19 +233,19 @@ For example, in Figure~\ref{fig:c-poly-inter}.(6) and ~\ref{fig:c-poly-inter}.(7
 
 
 \stitle{Algorithm \cpia}. The complete algorithm is shown in Figure~\ref{alg:c-poly-inter}.
-Given two convex polygons $\mathcal{G}_1$ and $\mathcal{G}_2$, algorithm \cpia first arbitrarily sets directed edge $\vv{A}$ on $\mathcal{G}_2$ and directed edge $\vv{B}$ on $\mathcal{G}_1$, respectively (line 1).
+Given two convex polygons $\mathcal{R}_1$ and $\mathcal{R}_2$, algorithm \cpia first arbitrarily sets directed edge $\vv{A}$ on $\mathcal{R}_2$ and directed edge $\vv{B}$ on $\mathcal{R}_1$, respectively (line 1).
 %
-It then checks the intersection of edges $\vv{A}$ and $\vv{B}$. If $\vv{A}$ intersects $\vv{B}$ (line 3), then the algorithm checks for some special termination conditions (\eg if $\vv{A}$ and $\vv{B}$ are overlapped and, at the same time, polygons $\mathcal{G}_1$ and $\mathcal{G}_2$ are on the opposite sides of the overlapped edges, then the process is terminated) (line 4), and records the inner edge, which is a boundary segment of the intersection polygon (line 5).
+It then checks the intersection of edges $\vv{A}$ and $\vv{B}$. If $\vv{A}$ intersects $\vv{B}$ (line 3), then the algorithm checks for some special termination conditions (\eg if $\vv{A}$ and $\vv{B}$ are overlapped and, at the same time, polygons $\mathcal{R}_1$ and $\mathcal{R}_2$ are on the opposite sides of the overlapped edges, then the process is terminated) (line 4), and records the inner edge, which is a boundary segment of the intersection polygon (line 5).
 After that, the algorithm moves on $\vv{A}$ or $\vv{B}$ one step under the advance rules (lines 6--11).
 The above processes repeated, until both $\vv{A}$ and $\vv{B}$ cycle their polygons (line 12).
 %
-Next, the algorithm handles three special cases of the polygons $\mathcal{G}_1$ and $\mathcal{G}_2$, \ie $\mathcal{G}_1$ is inside of $\mathcal{G}_2$, $\mathcal{G}_2$ is inside of $\mathcal{G}_1$, and $\mathcal{G}_1 \bigsqcap \mathcal{G}_2 = \emptyset$ (line 13).
+Next, the algorithm handles three special cases of the polygons $\mathcal{R}_1$ and $\mathcal{R}_2$, \ie $\mathcal{R}_1$ is inside of $\mathcal{R}_2$, $\mathcal{R}_2$ is inside of $\mathcal{R}_1$, and $\mathcal{R}_1 \bigsqcap \mathcal{R}_2 = \emptyset$ (line 13).
 %
 At last, it returns the intersection polygon (line 14).
 
 
-The algorithm has a time complexity of $O(|\mathcal{G}_1| + |\mathcal{G}_2|)$, where $|\mathcal{G}|$ is the number of edges of polygon $\mathcal{G}$.
-It is worth pointing out that $|\mathcal{G}_1 \bigsqcap \mathcal{G}_2| \le (|\mathcal{G}_1| + |\mathcal{G}_2|)$.
+The algorithm has a time complexity of $O(|\mathcal{R}_1| + |\mathcal{R}_2|)$, where $|\mathcal{R}|$ is the number of edges of polygon $\mathcal{R}$.
+It is worth pointing out that $|\mathcal{R}_1 \bigsqcap \mathcal{R}_2| \le (|\mathcal{R}_1| + |\mathcal{R}_2|)$.
 
 
 %%%%%%%%%%%%%%%%%%%%%Baseline Algorithm
@@ -256,8 +256,8 @@ It is worth pointing out that $|\mathcal{G}_1 \bigsqcap \mathcal{G}_2| \le (|\ma
 				\myhrule
 				\vspace{-1ex}
 				\mat{0ex}{
-					{\bf Algorithm} ~\cpia($\mathcal{G}_1$, $\mathcal{G}_2$) \\
-					\bcc \hspace{1ex}\=  \SET $\vv{A}$ and $\vv{B}$ {arbitrarily} on $\mathcal{G}_2$ and $\mathcal{G}_1$, respectively;\\
+					{\bf Algorithm} ~\cpia($\mathcal{R}_1$, $\mathcal{R}_2$) \\
+					\bcc \hspace{1ex}\=  \SET $\vv{A}$ and $\vv{B}$ {arbitrarily} on $\mathcal{R}_2$ and $\mathcal{R}_1$, respectively;\\
 					\icc \hspace{1ex}\= \Repeat \\
 					\icc \>\hspace{2ex} \If $\vv{A} \bigsqcap \vv{B} \ne \emptyset$ \Then \\
 					\icc \>\hspace{4ex} {Check for termination;} \\
@@ -269,8 +269,8 @@ It is worth pointing out that $|\mathcal{G}_1 \bigsqcap \mathcal{G}_2| \le (|\ma
 					\icc \> \hspace{4ex}  ($\vv{A} \times \vv{B} < 0$ \And $P_{e_A} \in \mathcal{H}(\vv{B})$) \Then \\
 					\icc \> \hspace{4ex} advance $\vv{B}$ one step; \\
 					\icc \hspace{0ex} \Until both $\vv{A}$ and $\vv{B}$ cycle their polygons \\
-					\icc \hspace{0ex} \Handle $\mathcal{G}_1 \subset \mathcal{G}_2$ and $\mathcal{G}_2 \subset \mathcal{G}_1$ and $\mathcal{G}_1 \bigsqcap \mathcal{G}_2 = \emptyset$ cases; \\
-					\icc \hspace{0ex} \Return $\mathcal{G}_1 \bigsqcap \mathcal{G}_2$.
+					\icc \hspace{0ex} \Handle $\mathcal{R}_1 \subset \mathcal{R}_2$ and $\mathcal{R}_2 \subset \mathcal{R}_1$ and $\mathcal{R}_1 \bigsqcap \mathcal{R}_2 = \emptyset$ cases; \\
+					\icc \hspace{0ex} \Return $\mathcal{R}_1 \bigsqcap \mathcal{R}_2$.
 				}
 				\vspace{-2ex}
 				\myhrule
@@ -288,7 +288,7 @@ It is worth pointing out that $|\mathcal{G}_1 \bigsqcap \mathcal{G}_2| \le (|\ma
 \begin{example}
 Figure~\ref{fig:c-poly-inter} shows a running example of the convex polygon intersection algorithm \cpia.
 
-\sstab(1) Initially, directed edges $\vv{A}$ and $\vv{B}$ are on polygons $\mathcal{G}_2$ and $\mathcal{G}_1$, respectively, such that $\vv{A} \bigsqcap \vv{B} = \{P_1\}$, \ie $\vv{A}$ and $\vv{B}$ intersect on point $P_1$, as shown in Figure~\ref{fig:c-poly-inter}.(1).
+\sstab(1) Initially, directed edges $\vv{A}$ and $\vv{B}$ are on polygons $\mathcal{R}_2$ and $\mathcal{R}_1$, respectively, such that $\vv{A} \bigsqcap \vv{B} = \{P_1\}$, \ie $\vv{A}$ and $\vv{B}$ intersect on point $P_1$, as shown in Figure~\ref{fig:c-poly-inter}.(1).
 
 \sstab(2) Then, by advance rule (1), edge $\vv{A}$ moves on a step and makes $\vv{A} \bigsqcap \vv{B} = \emptyset$ as shown in Figure~\ref{fig:c-poly-inter}.(2).
 After 7 steps of moving of edge $\vv{A}$ or $\vv{B}$, each by an advance rule, edges $\vv{A}$ and $\vv{B}$ intersect on point $P_2$, as shown in Figure~\ref{fig:c-poly-inter}.(6).
