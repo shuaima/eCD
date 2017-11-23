@@ -126,7 +126,7 @@ It takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound 
 					\icc \>\hspace{6ex} $\mathcal{R} := {getRegularPolygon}$($P_s$, $P_k$, $\epsilon$, $m$, $t_c$); \\
 					\icc \>\hspace{6ex} $\mathcal{R}^* := {\rpia}(\mathcal{R}^*, ~\mathcal{R})$; \\
 					\icc \>\hspace{6ex} \If $\mathcal{R}^* = \phi$ \Then \Break; \\
-					\icc \hspace{0ex} $\overline{\mathcal{T}} = {shortestPath}(G')$;\\
+					\icc \hspace{0ex} $\overline{\mathcal{T}} = {shortestPath}(\dddot{\mathcal{T}}, E')$;\\
 					\icc \hspace{0ex} \Return $\overline{\mathcal{T}}$; \\
 					%
 					\\
@@ -188,25 +188,24 @@ Finally, it computes the shortest path from point $P_{0}$ to point $P_{n}$ (line
 Figure~\ref{fig:exm-consto}  shows a running example of algorithm \cisto for compressing the trajectory \trajec{T} in Figure~\ref{fig:notations} again.
 
 
-\sstab (1) After initialization, the \cisto algorithm reads point $P_1$ and
-builds an \emph{oblique circular cone} \cone{(P_0, \mathcal{O}(P_{1},
+\sstab (1) After initialization, the \cisto algorithm takes $P_0$ as the first start point, it then reads point $P_1$ and builds an \emph{oblique circular cone} \cone{(P_0, \mathcal{O}(P_{1},
   \epsilon))},  and projects it on the plane $P.t-P_1.t=0$. The inscribed
-regular polygon $\mathcal{R}_1$ of the projection circle  is returned and the intersection $\mathcal{R}^*$ is set to $\mathcal{R}_1$.
-Since the intersection of $\vv{P_0P_{1}}$ and \cone{(P_0,  \mathcal{O}(P_{1}, \epsilon))} is not $\{P_0\}$, edge
-$(P_0,P_{1})$ is added to the graph $G$. 
+regular polygon $\mathcal{R}_1$ of the projection circle is returned and the intersection $\mathcal{R}^*$ is set to $\mathcal{R}_1$.
+Edge $(P_0,P_{1})$ is also added to graph $G'(\dddot{\mathcal{T}},E')$. 
+
+\sstab (2) For point $P_2$, the preview intersection
+polygons $\mathcal{R}^*=\mathcal{R}_1 \ne \phi$ and the projection point of $P_2$ on the plane ``$P.t = P_1.t$" is inside of polygon $R^*$, hence, edge $(P_0,P_{2})$ is added to the graph $G'$. 
+
+\sstab (3) Points $P_3$ and $P_4$ are processed in turn. Their projection points are inside of $\mathcal{R}^*$ respectively, thus, edges $(P_0,P_{3})$ and $(P_0,P_{4})$ are added to the graph $G'$. 
 
 
-\sstab (2) $P_2$, $P_3$ and $P_4$ are processed in turn. The intersection
-polygons $\mathcal{R}^*$ are not empty and edges $(P_0,P_{2})$,$(P_0,P_{3})$,$(P_0,P_{4})$ are added to the graph $G$. 
-
-
-\sstab (3) For point $P_5$, the intersection of $\vv{P_0P_{5}}$ and $\bigsqcap_{i=1}^{
+\sstab (4) For point $P_5$, the intersection of $\vv{P_0P_{5}}$ and $\bigsqcap_{i=1}^{
   4}$\cone{(P_0,  \mathcal{O}(P_{i}, \epsilon))} is $\{P_0\}$, edge
-$(P_0,P_{5})$ is not added to the graph $G$. 
-And the intersection of $\mathcal{R}_5$ and $\mathcal{R}^*$ is $\emptyset$.
-Thus, the checking from point $P_0$ is terminated and  a new  checking cycle is started such that $Q=P_1$ is the new start point and plane $P.t-P_2.t=0$ is the new projection plane.
+$(P_0,P_{5})$ is not added to the graph $G'$. 
+Moreover, the intersection of polygons $\mathcal{R}_5$ and $\mathcal{R}^*$ is $\emptyset$, 
+thus, the checking of edges start from point $P_0$ is terminated and a new checking process is started such that $P_1$ is the new start point and plane $P.t-P_2.t=0$ is the new projection plane.
 
-\sstab (4) At last, the algorithm outputs 3 continuous line segments, \ie $\vv{P_0P'_4}$, $\vv{P'_4P_7}$ and $\vv{P_7P_{10}}$, in which $P'_4$ is an interpolated data points not in \trajec{T}.
+\sstab (5) At last, the shortest path $(P_0, P_4, P_7, P_{10})$ is found, and the algorithm outputs 3 continuous line segments, \ie $\vv{P_0P_4}$, $\vv{P_4P_7}$ and $\vv{P_7P_{10}}$.
 \end{example}
 
 

@@ -2,9 +2,11 @@
 \section{One-pass Trajectory Simplification}
 \label{sec-alg}
 
-Following \cite{Trajcevski:DDR,Lin:Operb}, we further consider two classes of trajectory simplification.
+\textcolor{blue}{In this section, we further develop two one-pass sub optimal trajectory simplification algorithms.}
+Following \cite{Trajcevski:DDR,Lin:Operb}, we consider two classes of trajectory simplification.
 The first one, referred to as \emph{strong simplification}, that takes as input a trajectory \trajec{T}, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and produces a simplified trajectory \trajec{T'} such that all data points in \trajec{T'} belongs to \trajec{T}.
 The second one, referred to as \emph{weak simplification}, that takes as input a trajectory \trajec{T}, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and produces a simplified trajectory \trajec{T'} such that some data points in \trajec{T'} may not belong to \trajec{T}. That is, weak simplification allows data interpolation. 
+%
 \textcolor{blue}{In addition, the above (near) optimal algorithm does not allow data interpolation, thus, it also belongs to strong simplification.}
 %,commonly used in polygonal curve approximation \cite{Williams:Bounded, Heckbert:Survey, Zhao:Sleeve}, time series approximation \cite{ORourke:Fitting, Elmeleegy:Stream, Xie:Stream, Luo:Streaming} and trajectory simplification \cite{Lin:Operb}.
 
@@ -22,6 +24,19 @@ We shall prove this by providing such algorithms for both strong and weak trajec
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Strong Trajectory Simplification}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%example of Algorithm CISED
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.8]{figures/Fig-Ex-Conest.png}
+	%\vspace{-2ex}
+	\caption{\small A running example of the \cist algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed into four line segments.}
+	\vspace{-1ex}
+	\label{fig:exm-const}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 Recall that in Propositions~\ref{prop-3d-ci} and~\ref{prop-circle-intersection}, the point $Q$ may not be in the input sub-trajectory $[P_s,...,P_{s+k}]$.
 If we restrict $Q=P_{s+k}$, the end point of the sub-trajectory, then the narrow cones whose base circles with a radius of $\epsilon/2$ suffice.
 
@@ -35,18 +50,6 @@ Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P
 If $\bigsqcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_{s+i}, \epsilon/2)} \ne \{P_s\}$, then by Proposition~\ref{prop-3d-ci}, there exists a point $Q$, $Q.t = P_{s+k}.t$, such that $sed(P_{s+i}, \vv{P_sQ})\le \epsilon/2$ for all $i \in [1,k]$. By the triangle inequality essentially, $sed(P_{s+i}, \vv{P_sP_{s+k}})\le  sed(P_{s+i}, \vv{P_sQ}) + |\vv{QP_{s+k}}| \le  \epsilon/2+\epsilon/2 = \epsilon$.
 \end{proof}
 
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%example of Algorithm CISED
-\begin{figure*}[tb!]
-	\centering
-	\includegraphics[scale=0.8]{figures/Fig-Ex-Conest.png}
-	%\vspace{-2ex}
-	\caption{\small A running example of the \cist algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed into four line segments.}
-	\vspace{-1ex}
-	\label{fig:exm-const}
-\end{figure*}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
  We first present the  one-pass error bounded {\em strong trajectory simplification} algorithm using \sed, as shown in Figure~\ref{alg:CI3d}.
 
@@ -62,7 +65,18 @@ If $\bigsqcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_{s+i}, \epsilon/2)} \ne \{P_s\}$, t
 %We now present algorithm \cist. 
 It takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and returns a simplified  trajectory $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$.
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%A running example of the \cista algorithm
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.79]{figures/Fig-Conesta.png}
+	%\vspace{-1ex}
+	\caption{\small A running example of the \cista algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed into three line segments.}
+	\vspace{-2ex}
+	\label{fig:exm-consta}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The algorithm first initializes the start point $P_s$ to $P_0$, the index $i$ of the current data point to $1$, the intersection polygon $\mathcal{R}^*$ to $\emptyset$, the output $\overline{\mathcal{T}}$ to $\emptyset$, and $t_c$ to $P_1.t$, respectively (line 1).
 %
@@ -110,18 +124,7 @@ After the  final new line segment $\vv{P_sP_{n}}$ is generated (line 11), it ret
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%A running example of the \cista algorithm
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure*}[tb!]
-\centering
-\includegraphics[scale=0.79]{figures/Fig-Conesta.png}
-%\vspace{-1ex}
-\caption{\small A running example of the \cista algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed into three line segments.}
-\vspace{-2ex}
-\label{fig:exm-consta}
-\end{figure*}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 
 \begin{example}
