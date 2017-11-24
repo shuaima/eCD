@@ -80,7 +80,7 @@ It takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound 
 
 The algorithm first initializes the start point $P_s$ to $P_0$, the index $i$ of the current data point to $1$, the intersection polygon $\mathcal{R}^*$ to $\emptyset$, the output $\overline{\mathcal{T}}$ to $\emptyset$, and $t_c$ to $P_1.t$, respectively (line 1).
 %
-The algorithm sequentially processes the data points of the trajectory one by one  (lines 2--10). It gets the $m$-inscribed regular polygon \wrt the current point $P_i$ (line 3) by calling procedure $\kw{getRegularPolygon}$. When $\mathcal{R}^* = \emptyset$, $\mathcal{R}^*$ is simply initialized as $\mathcal{R}$ (lines 4, 5). Otherwise,
+The algorithm sequentially processes the data points of the trajectory one by one  (lines 2--10). It gets the $m$-inscribed regular polygon \wrt the current point $P_i$ (line 3) by calling procedure $\kw{getRegularPolygon}$. When $\mathcal{R}^* = \emptyset$, the intersection polygon $\mathcal{R}^*$ is simply initialized as $\mathcal{R}$ (lines 4, 5). Otherwise,
 $\mathcal{R}^*$ is  the intersection of the current regular polygon $\mathcal{R}$ with $\mathcal{R}^*$ by calling procedure $\rpia()$ introduced in Section~\ref{subsec-fastRPI} (line 7). If the resulting intersection $\mathcal{R}^*$ is empty, then a new line segment $\vv{P_sP_{i-1}}$ is generated (lines 8--10).
 After the  final new line segment $\vv{P_sP_{n}}$ is generated (line 11), it returns the simplified  piece-wise line representation $\overline{\mathcal{T}}$ (line 12).
 
@@ -143,15 +143,12 @@ Figure~\ref{fig:exm-const} shows an example of algorithm \cist for compressing t
 
 
 
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Weak Trajectory Simplification}
 
 We then present the one-pass error bounded {\em weak simplification} algorithm using \sed.
 
 %, based on Proposition~\ref{prop-circle-intersection}.
-
 
 
 \stitle{Algorithm \cista}.
@@ -170,7 +167,7 @@ Given a sub-trajectory \trajec{T}${[P_s, \ldots, P_{s+k}]}$ and an error bound $
 \end{prop}
 
 \begin{proof}
-By Proposition~\ref{prop-circle-intersection} and the nature of inscribed regular polygon, it is easy to find that for any $Q \in \mathcal{R}^*_k$  \wrt $t_c=P_{s+k}.t$, there is $sed(P_{s+i}, \vv{P_sQ})\le \epsilon$ for all points $P_{s+i}$ ($i \in [1,k]$). From this, we have the conclusion.
+By Proposition~\ref{prop-circle-intersection} and the nature of inscribed regular polygon, it is easy to find that for any point $Q \in \mathcal{R}^*_k$  \wrt plane $t_c=P_{s+k}.t$, there is $sed(P_{s+i}, \vv{P_sQ})\le \epsilon$ for all points $P_{s+i}$ ($i \in [1,k]$). From this, we have the conclusion.
 \end{proof}
 
 The choice of a point $Q$ from $\mathcal{R}^*_k$ may slightly affect the effectiveness (\eg average errors and compression ratios). However, the choice of an optimal $Q$ is non-trivial. For the benefit of efficiency, we apply the following strategies.
@@ -192,7 +189,7 @@ Figure~\ref{fig:exm-consta}  shows a running example of algorithm \cista for com
 
 \sstab (2) $P_2$, $P_3$ and $P_4$ are processed in turn. The intersection polygons $\mathcal{R}^*$ are not empty.
 
-\sstab (3) For point $P_5$, the intersection of $\mathcal{R}_5$ and $\mathcal{R}^*$ is $\emptyset$. Thus, line segment $\vv{P_0Q} =\vv{P_0P'_4}$ is output, and a new line segment is started such that $Q=P'_4$ is the new start point and plane $P.t-P_5.t=0$ is the new projection plane.
+\sstab (3) For point $P_5$, the intersection of polygons $\mathcal{R}_5$ and $\mathcal{R}^*$ is $\emptyset$. Thus, line segment $\vv{P_0Q} =\vv{P_0P'_4}$ is output, and a new line segment is started such that point $Q=P'_4$ is the new start point and plane $P.t-P_5.t=0$ is the new projection plane.
 
 \sstab (4) At last, the algorithm outputs 3 continuous line segments, \ie $\vv{P_0P'_4}$, $\vv{P'_4P_8}$ and $\vv{P_8P_{10}}$, in which $P'_4$ is an interpolated data points not in \trajec{T}.
 \end{example}

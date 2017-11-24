@@ -57,10 +57,10 @@ If we use the regular polygon intersection method, then we get another reachabil
 \end{prop}
 
 \begin{proof}
-	Firstly, we show that any reachability graph $G'=$ (\trajec{T}, $E')$ is a sub-graph of its corresponding $G=$(\trajec{T}, $E)$.
-	For a edge $(P_s, P_{s+k}) \in E'$, we have $sed(P_{s+i}, \vv{P_sP_{s+k}}) \le \epsilon$ for all $0<i<k$ when using the intersection of regular polygons. 
-	Because a regular polygon is a subset of of a projection circle, we also have $sed(P_{s+i}, \vv{P_sP_{s+k}}) \le \epsilon$ for all $0<i<k$ when using the intersection of projection circles.
-	Thus, edge $(P_s, P_{s+k}) \in E$ and reachability graph $G'=$ (\trajec{T}, $E'$) is a sub-graph of $G=$(\trajec{T}, $E$).
+	Firstly, we show that a reachability graph $G'=$ (\trajec{T}, $E')$ is a sub-graph of its corresponding $G=$(\trajec{T}, $E)$.
+	For an edge $(P_s, P_{s+k}) \in E'$, we have $sed(P_{s+i}, \vv{P_sP_{s+k}}) \le \epsilon$ for all $0<i<k$ using the intersection of regular polygons. 
+	Because a regular polygon is a subset of a projection circle, we also have $sed(P_{s+i}, \vv{P_sP_{s+k}}) \le \epsilon$ for all $0<i<k$ using the intersection of projection circles.
+	Thus, edge $(P_s, P_{s+k}) \in E$ and reachability graph $G'$ is a sub-graph of graph $G$.
 	
 	Secondly, when $m \to \infty$, then the regular polygon is infinitely close to its projection circle, thus, for any edge $(P_s, P_{s+k}) \in E$, it is in $E'$ with an infinite possibility. In the other word, $\lim_{m \to \infty}{G'=G}$.
 \end{proof}
@@ -71,6 +71,7 @@ Proposition~\ref{prop-near-opt-graph} tells us that a reachability graph $G'$ ca
 	\label{prop-near-opt-graph-construction}
 	A near optimal reachability graph $G'$ can be constructed in $O(n^2)$ time.
 \end{prop}
+
 
 \begin{proof}
 For any $P_s (0\le s \le n)$, the construction of a reachability graph $G'$ need consider all pairs of vertices $(P_s,P_{s+k}) (1\le k \le n)$ and compute the intersection of $\vv{P_sP_{s+k}}$ and $\bigsqcap_{i=1}^{k - 1}$\cone{(P_s,  \mathcal{O}(P_{s+i}, \epsilon))}. 
@@ -88,6 +89,7 @@ There are $n$ points in the trajectory, thus, the construction of a near optimal
 
 %Since we use inscribed regular polygon to approximate the projection circle, this method is near optimal.
 
+
 \subsection{Near Optimal Algorithm Using \sed.}
 
 %\textcolor{blue}{code, algorithm desc and example.}
@@ -99,7 +101,7 @@ We first present procedure \kw{getRegularPolygon} that, given a cone projection 
 
 The parameters $P_s$, $P_i$, $r$ and $t_c$ together form the projection circle \pcircle{(P^c_i, r^c_i)} of the spatio-temporal cone \cone{(P_s, \mathcal{O}(P_{i}, r))} of point $P_{i}$ \wrt point $P_s$ on the plane $P.t - t_c$ = $0$. Firstly, $P^c_i.x$ and $P^c_i.y$ are computed (lines 1--3), and $r^c_i = c\cdot r$.
 Then it builds and returns an $m$-edge inscribed regular polygon $\mathcal{R}$ of \pcircle{(P^c_i, r^c_i)} (lines 4--8), by transforming a polar coordinate system
-into a Cartesian one. Note that here $\theta$, $r\cdot\sin\theta$ and $r\cdot\cos\theta$ only need to be computed once during the entire processing of a trajectory.
+into a Cartesian one. Note here $\theta$, $r\cdot\sin\theta$ and $r\cdot\cos\theta$ only need to be computed once during the entire processing of a trajectory.
 
 \stitle{Algorithm \cisto}. 
 We then present algorithm \cisto. 
@@ -122,7 +124,7 @@ It takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound 
 					\icc \>\hspace{3ex}\= $\mathcal{R}^* := {getRegularPolygon}$($P_s$, $P_{s+1}$, $\epsilon$, $m$, $t_c$); \\
 					\icc \>\hspace{3ex}\= $E' = E' \cup (P_s,P_{s+1})$; \\
 					\icc \>\hspace{3ex}\= \For $k = s + 2$  \To $n$ \Do \\
-					\icc \>\hspace{6ex} \If ${\textcolor{red}{isInside}}$($\mathcal{R}^*$, $P_k$) \Then $E' = E' \cup (P_s, P_k)$; \\
+					\icc \>\hspace{6ex} \If ${{isInside}}$($\mathcal{R}^*$, $P_k$) \Then $E' = E' \cup (P_s, P_k)$; \\
 					\icc \>\hspace{6ex} $\mathcal{R} := {getRegularPolygon}$($P_s$, $P_k$, $\epsilon$, $m$, $t_c$); \\
 					\icc \>\hspace{6ex} $\mathcal{R}^* := {\rpia}(\mathcal{R}^*, ~\mathcal{R})$; \\
 					\icc \>\hspace{6ex} \If $\mathcal{R}^* = \phi$ \Then \Break; \\
@@ -142,7 +144,7 @@ It takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound 
 					\icc \hspace{1ex} \Return $\mathcal{R}$.
 
 				}
-				\vspace{-2ex}
+				\vspace{-3ex}
 				\myhrule
 			\end{minipage}
 		}
@@ -150,7 +152,7 @@ It takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound 
 	\vspace{-2ex}
 	\caption{\small Near optimal spatio-temporal cone intersection algorithm (\cisto).}
 	\label{alg:cisedo}
-	\vspace{-1.5ex}
+	\vspace{-3ex}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -160,13 +162,14 @@ the reachability graph $G'$ to $\emptyset$ and the result trajectory $\overline{
 Then the algorithm takes each data point of the trajectory as a start point $P_s$ (line 2). 
 For each start point $P_{s}$, it initializes $t_c$ (line 3), sets the intersection of regular polygons $\mathcal{R}^*$ to the $m$-inscribed regular polygon \wrt the next point $P_{s+1}$ by calling procedure $\kw{getRegularPolygon}$ (line 4) and includes the edge $(P_s, P_{s+1})$ to $E$ (line 5).
 %
-Next, it checks for each point $P_{k} (k>s+1)$ in the trajectory whether the edge ($P_{s}, P_{k}$) can be included into the edge set $E'$ by calling procedure \textit{isInside}() (lines 6--7). %of reachability graph $G'$
-It gets the regular polygon $\mathcal{R}$ of $P_{k}$ by calling procedure \textit{getRegularPolygon}()
-and updates the intersection $\mathcal{R}^*$ by calling procedure $\rpia()$ introduced in Section~\ref{subsec-fastRPI} (lines 8--9).
-If $\mathcal{R}^* = \emptyset$, the checking for the current start point $P_s$ is terminated (line 10) and the process goes on to $P_{s+1}$.
-This process repeats until all possible edges have been included.
+Next, it checks for each point $P_{k} (k>s+1)$ in the trajectory whether the edge ($P_{s}, P_{k}$) can be included into the edge set $E'$ by calling procedure \textit{isInside}(), which projects point $P_k$ on the plane ``$P.t = P_{s+1}.t$" and checks whether it is inside of polygon $R^*$ (lines 6--7).
 %
-Finally, it computes the shortest path from point $P_{0}$ to point $P_{n}$ (line 11), and returns an optimal  piece-wise line representation $\overline{\mathcal{T}}$ of trajectory \trajec{T}${[P_0, \ldots, P_n]}$ (line 12).
+It gets the regular polygon $\mathcal{R}$ of point $P_{k}$ by calling procedure \textit{getRegularPolygon}()
+and updates the intersection polygon $\mathcal{R}^*$ by calling procedure $\rpia()$ introduced in Section~\ref{subsec-fastRPI} (lines 8--9).
+If $\mathcal{R}^* = \emptyset$, the checking for the current start point $P_s$ is terminated (line 10) and the process goes on to point $P_{s+1}$.
+This process repeats until all edges have been checked.
+%
+Finally, it computes the shortest path from point $P_{0}$ to point $P_{n}$ (line 11), and returns an optimal piece-wise line representation $\overline{\mathcal{T}}$ of trajectory \trajec{T}${[P_0, \ldots, P_n]}$ (line 12).
 
 
 
