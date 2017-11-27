@@ -17,7 +17,8 @@
 		\bf{ Data Sets}& \bf{Number\ of Trajectories}     &\bf {Sampling Rates\ (s)}   &\bf{Points Per Trajectory\ (K)}    &\bf {Total points} \\
 		\hline
 		%\truck	&10,368	    &1-60	    &$\sim71.9$     &746M \\
-		\truck	&1,000	    &1-60	    &$\sim132.7$     &132.7M \\
+		% \truck	&1,000	    &1-60	    &$\sim132.7$     &132.7M \\
+		\mopsi	&1,000	    &2	    &$\sim132.7$     &132.7M \\
 		\hline
 		%\sercar	&11,000	    &3-5	    &$\sim119.1$   &1.31G\\
 		\sercar	&1,000	    &3-5	    &$\sim114.1$   &114M\\
@@ -71,7 +72,7 @@ each trajectory has around $114.1K$ points.
 %The details of these datasets are shown in Table~\ref{tab:dataset}.
 
 \stitle{Algorithms and implementation}.
-We implement four line simplification algorithms, \ie our \cist and \cista, \dps~\cite{Meratnia:Spatiotemporal} (the most effective existing \lsa algorithm using \sed), and \squishe~\cite{Muckell:Compression} (the most efficient existing \lsa algorithm using \sed).
+We implement five line simplification algorithms, \ie our \cist ,\cista and \cisto, \dps~\cite{Meratnia:Spatiotemporal} (the most effective existing \lsa algorithm using \sed), and \squishe~\cite{Muckell:Compression} (the most efficient existing \lsa algorithm using \sed).
 We also implement the polygon intersection algorithms, \cpia and our \rpia.
 All algorithms were implemented with Java.
 All tests were run on an {x64-based  PC with 8 Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz and 8GB of memory, and each test was repeated
@@ -92,7 +93,8 @@ over 3 times and the average is reported here}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-In the first set of tests, we evaluate the impacts of parameter $m$ on the compression ratios of our algorithms \cist and \cista, and compare the compression ratios of \cist and \cista with \dps and \squishe.
+In the first set of tests, we evaluate the impacts of parameter $m$ on the
+compression ratios of our algorithms \cist, \cista and \cisto, and compare the compression ratios of \cist and \cista with \dps and \squishe.
 
 The compression ratio is defined as follows: Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations $\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$, the compression ratio of an algorithm is $(\sum_{j=1}^{M} |\overline{\mathcal{T}}_j |)/(\sum_{j=1}^{M} |\dddot{\mathcal{T}}_j |)$.
 By the definition, \emph{algorithms with lower compression ratios are better}.
@@ -107,10 +109,10 @@ By the definition, \emph{algorithms with lower compression ratios are better}.
 
 \begin{figure*}[tb!]
 \centering
-\includegraphics[scale = 0.240]{figures/Exp-M-e-60-CR-truck.png}
-\includegraphics[scale = 0.240]{figures/Exp-M-e-60-CR-service.png}
-\includegraphics[scale = 0.240]{figures/Exp-M-e-60-CR-geolife.png}
-\includegraphics[scale = 0.240]{figures/Exp-M-e-60-CR-private.png}
+\includegraphics[scale = 0.28]{figures/Exp-M-e-60-CR-service.png}
+\includegraphics[scale = 0.28]{figures/Exp-M-e-60-CR-geolife.png}
+\includegraphics[scale = 0.28]{figures/Exp-M-e-60-CR-mopsi.png}
+\includegraphics[scale = 0.28]{figures/Exp-M-e-60-CR-private.png}
 \vspace{-1ex}
 \caption{\small Evaluation of compression ratios: fixed error bound with $\epsilon=60$ meters and varying $m$.}
 \label{fig:m-cr-e60}
@@ -120,10 +122,10 @@ By the definition, \emph{algorithms with lower compression ratios are better}.
 
 \begin{figure*}[tb!]
 \centering
-\includegraphics[scale = 0.240]{figures/Exp-CR-epsilon-truck.png}
-\includegraphics[scale = 0.240]{figures/Exp-CR-epsilon-service.png}
-\includegraphics[scale = 0.240]{figures/Exp-CR-epsilon-geolife.png}
-\includegraphics[scale = 0.240]{figures/Exp-CR-epsilon-private.png}
+\includegraphics[scale = 0.3]{figures/Exp-CR-epsilon-service.png}
+\includegraphics[scale = 0.3]{figures/Exp-CR-epsilon-geolife.png}
+\includegraphics[scale = 0.3]{figures/Exp-CR-epsilon-mopsi.png}
+\includegraphics[scale = 0.3]{figures/Exp-CR-epsilon-private.png}
 \vspace{-1ex}
 \caption{\small Evaluation of compression ratios: fixed with $m=16$ and varying error bound $\epsilon$.}
 \label{fig:cr-m16}
@@ -215,10 +217,10 @@ then the average error is $\sum_{j=1}^{M}\sum_{i=0}^{M} d(P_{j,i},
 
 \begin{figure*}[tb!]
 \centering
-\includegraphics[scale = 0.240]{figures/Exp-M-e-60-error-truck.png}
-\includegraphics[scale = 0.240]{figures/Exp-M-e-60-error-service.png}
-\includegraphics[scale = 0.240]{figures/Exp-M-e-60-error-geolife.png}
-\includegraphics[scale = 0.240]{figures/Exp-M-e-60-error-private.png}
+\includegraphics[scale = 0.280]{figures/Exp-M-e-60-error-service.png}
+\includegraphics[scale = 0.280]{figures/Exp-M-e-60-error-geolife.png}
+\includegraphics[scale = 0.280]{figures/Exp-M-e-60-error-mopsi.png}
+\includegraphics[scale = 0.280]{figures/Exp-M-e-60-error-private.png}
 \vspace{-1ex}
 \caption{\small Evaluation of average errors: fixed error bound with $\epsilon = 60$ meters and varying $m$.}
 \label{fig:m-error-e60}
@@ -228,10 +230,10 @@ then the average error is $\sum_{j=1}^{M}\sum_{i=0}^{M} d(P_{j,i},
 
 \begin{figure*}[tb]
 \centering
-\includegraphics[scale = 0.240]{figures/Exp-error-epsilon-truck.png}
-\includegraphics[scale = 0.240]{figures/Exp-error-epsilon-service.png}
-\includegraphics[scale = 0.240]{figures/Exp-error-epsilon-geolife.png}
-\includegraphics[scale = 0.240]{figures/Exp-error-epsilon-private.png}
+\includegraphics[scale = 0.30]{figures/Exp-error-epsilon-service.png}
+\includegraphics[scale = 0.30]{figures/Exp-error-epsilon-geolife.png}
+\includegraphics[scale = 0.30]{figures/Exp-error-epsilon-mopsi.png}
+\includegraphics[scale = 0.30]{figures/Exp-error-epsilon-private.png}
 \vspace{-1ex}
 \caption{\small Evaluation of average errors: fixed with $m=16$ and varying error bound $\epsilon$.}
 \label{fig:ae-m16}
@@ -329,9 +331,9 @@ In the last set of tests, we evaluate the impacts of parameter $m$ on the effici
 
 \begin{figure*}[tb!]
 \centering
-\includegraphics[scale = 0.240]{figures/Exp-M-e-60-time-truck.png}
 \includegraphics[scale = 0.240]{figures/Exp-M-e-60-time-service.png}
 \includegraphics[scale = 0.240]{figures/Exp-M-e-60-time-geolife.png}
+\includegraphics[scale = 0.240]{figures/Exp-M-e-60-time-mopsi.png}
 \includegraphics[scale = 0.240]{figures/Exp-M-e-60-time-private.png}
 \vspace{-1ex}
 \caption{\small Evaluation of running time: fixed error bound with $\epsilon=60$ meters, and varying $m$. }
@@ -344,9 +346,9 @@ In the last set of tests, we evaluate the impacts of parameter $m$ on the effici
 
 \begin{figure*}[tb!]
 \centering
-\includegraphics[scale = 0.240]{figures/Exp-time-epsilon-truck.png}
 \includegraphics[scale = 0.240]{figures/Exp-time-epsilon-service.png}
 \includegraphics[scale = 0.240]{figures/Exp-time-epsilon-geolife.png}
+\includegraphics[scale = 0.240]{figures/Exp-time-epsilon-mopsi.png}
 \includegraphics[scale = 0.240]{figures/Exp-time-epsilon-private.png}
 \vspace{-1ex}
 \caption{\small Evaluation of running time: fixed with $m=16$ and varying error bounds $\epsilon$.}
