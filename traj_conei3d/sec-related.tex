@@ -14,7 +14,7 @@ They focus on good compression ratios with acceptable errors.
 %, and a large number of lossy trajectory compression techniques have been developed.
 %
 %In this work we focus on lossy compression of trajectory data,
-We next introduce the related work on lossy trajectory compression  from two aspects: line simplification based methods and semantics based methods.
+We next introduce the related work on lossy trajectory compression from two aspects: line simplification based methods and semantics based methods.
 
 \subsection{Line simplification based methods}
 }%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -25,11 +25,21 @@ The idea of piece-wise line simplification comes from computational geometry.
 Its target is to approximate a given finer piece-wise linear curve by another coarser piece-wise linear curve, which is typically a subset of the former, such that the maximum distance of the former to the later is bounded by a user specified bound $\epsilon$.
 %
 \textcolor{blue}{Initially, line simplification (\lsa) algorithms use perpendicular Euclidean distances (\ped) as the distance metric. 
-Then a new distance metric, the synchronous Euclidean distances (\sed), was developed after the \lsa algorithms were introduced to compress trajectory.}
+Then a new distance metric, the synchronous Euclidean distances (\sed), was developed after the \lsa algorithms were introduced to compress trajectories.}
 \sed was first introduced in the name of \emph{time-ratio distance} in~\cite{Meratnia:Spatiotemporal}, and formally presented in~\cite{Potamias:Sampling} as the \emph{synchronous Euclidean distance}. 
 
-\textcolor{blue}{For time complexities of \lsa algorithms, the optimal methods that find the minimal number of points or segments have a time complexity of $O(n^3)$ where $n$ is the number of the original points \cite{Imai:Optimal}. When using \ped as the error metric, the authors of \cite{Chan:Optimal} proved that the optimal algorithm could be implemented in $O(n^2)$ time with the help of the \textit{sector intersection} mechanism. Yet the time complexity of the optimal \lsa algorithm using \sed remains $O(n^3)$ as the \textit{sector intersection} mechanism can not work with \sed. Anyway,}
-they are time-consuming and impractical for large inputs~\cite{Heckbert:Survey}. Hence, many studies have been targeting at finding the sub-optimal results.
+\textcolor{blue}{We next introduce the related work on line simplification based trajectory compression from two aspects: optimal methods and sub-optimal methods.}
+
+
+\subsection{\textcolor{blue}{Optimal Algorithms}}
+For the problem that finds out the minimal number of points or segments to represent the original polygonal lines \wrt an error bound $\epsilon$, Imai and Iri  first formulated it as a graph problem and showed that it can be solved in  $O(n^3)$ time, where $n$ is the number of the original points\cite{Imai:Optimal}.
+When using \ped as the error metric, the authors of \cite{Chan:Optimal} proved that the optimal algorithm could be implemented in $O(n^2)$ time with the help of the \textit{sector intersection} mechanism. 
+When using \sed as the error metric, the time complexity remains $O(n^3)$ as the \textit{sector intersection} mechanism can not work with \sed. Anyway
+they are time-consuming and impractical for large inputs~\cite{Heckbert:Survey}. 
+
+Authors of \cite{Chen:Fast} use alternative error metrics, \ie the local integral square synchronous Euclidean distance (LISSED) and the integral square synchronous Euclidean distance (ISSED), to fast the construction of reachability graphs, and \cite{Wu:Graph} follows the ideas of \cite{Chen:Fast}. 
+\textcolor{red}{However, both LISSED and ISSED are cumulative errors which may lead to the original and simplified trajectories having large distances.}
+
 %
 \eat{
 The distinct Douglas-Peucker (\dpa) algorithm \cite{Douglas:Peucker} (see Figure~\ref{fig:notations}) is invented in 1970s, for reducing the number of points required to represent a digitized line or its caricature in the context of computer graphics and image processing.
@@ -39,6 +49,8 @@ Some online \lsa algorithms were further developed by combining batch algorithms
 Recently, the authors of this paper developed a one-pass trajectory simplification algorithm (\operb) \cite{Lin:Operb}, which runs great fast and also has comparable compression ratio comparing with batch algorithms. Moreover, the ``cone intersection'' algorithm \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} is another notable one-pass \lsa algorithm.
 }
 
+\subsection{Sub-optimal Algorithms}
+Many studies have been targeting at finding the sub-optimal results.
 %In this section, we focus on the piece-wise line simplification based methods for trajectory data.
 In particular, the state-of-the-art \textcolor{blue}{of the} sub-optimal \lsa approaches fall into three categories, \ie batch, online and one-pass algorithms.
 We next introduce these \lsa \textcolor{blue}{based trajectory compression} algorithms from the aspect of the three categories.
@@ -99,9 +111,9 @@ The authors of this article also developed an One-Pass ERror Bounded (\operb) al
 %
 However, all existing one-pass algorithms  use \ped \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve,Liu:BQS,Lin:Operb}, while this study focuses on \sed.
 
+\textcolor{blue}{
+	There are also semantics based trajectory compression methods that are orthogonal to \lsa based methods (see~\cite{Zuo:Road, Han:Compress} for more details), and these methods may be combined with each other to further improve the effectiveness of trajectory compression.}
 
-\textcolor{blue}{There are other error metrics, \eg local integral square synchronous Euclidean distance (LISSED) and integral square synchronous Euclidean distance (ISSED) in \cite{Chen:Fast}.
-There are also semantics based trajectory compression methods that are orthogonal to \lsa based methods (see~\cite{Lin:Operb, Han:Compress} for more details), and these methods may be combined with each other to further improve the effectiveness of trajectory compression.}
 
 \eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Semantics based methods}.
