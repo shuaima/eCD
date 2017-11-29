@@ -7,7 +7,7 @@ Following \cite{Trajcevski:DDR,Lin:Operb}, we consider two classes of trajectory
 The first one, referred to as \emph{strong simplification}, that takes as input a trajectory \trajec{T}, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and produces a simplified trajectory \trajec{T'} such that all data points in \trajec{T'} belongs to \trajec{T}.
 The second one, referred to as \emph{weak simplification}, that takes as input a trajectory \trajec{T}, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and produces a simplified trajectory \trajec{T'} such that some data points in \trajec{T'} may not belong to \trajec{T}. That is, weak simplification allows data interpolation. 
 %
-\textcolor{blue}{In addition, the above (near) optimal algorithm does not allow data interpolation, thus, it also belongs to strong simplification.}
+\textcolor{blue}{In addition, the above (near) optimal algorithm also belongs to strong simplification.}
 %,commonly used in polygonal curve approximation \cite{Williams:Bounded, Heckbert:Survey, Zhao:Sleeve}, time series approximation \cite{ORourke:Fitting, Elmeleegy:Stream, Xie:Stream, Luo:Streaming} and trajectory simplification \cite{Lin:Operb}.
 
 \eat{
@@ -81,8 +81,8 @@ It takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound 
 The algorithm first initializes the start point $P_s$ to $P_0$, the index $i$ of the current data point to $1$, the intersection polygon $\mathcal{R}^*$ to $\emptyset$, the output $\overline{\mathcal{T}}$ to $\emptyset$, and $t_c$ to $P_1.t$, respectively (line 1).
 %
 The algorithm sequentially processes the data points of the trajectory one by one  (lines 2--10). It gets the $m$-inscribed regular polygon \wrt the current point $P_i$ (line 3) by calling procedure $\kw{getRegularPolygon}$. When $\mathcal{R}^* = \emptyset$, the intersection polygon $\mathcal{R}^*$ is simply initialized as $\mathcal{R}$ (lines 4, 5). Otherwise,
-$\mathcal{R}^*$ is  the intersection of the current regular polygon $\mathcal{R}$ with $\mathcal{R}^*$ by calling procedure $\rpia()$ introduced in Section~\ref{subsec-fastRPI} (line 7). If the resulting intersection $\mathcal{R}^*$ is empty, then a new line segment $\vv{P_sP_{i-1}}$ is generated (lines 8--10).
-After the  final new line segment $\vv{P_sP_{n}}$ is generated (line 11), it returns the simplified  piece-wise line representation $\overline{\mathcal{T}}$ (line 12).
+$\mathcal{R}^*$ is  the intersection of the current regular polygon $\mathcal{R}$ with $\mathcal{R}^*$ by calling procedure $\rpia()$ introduced in Section~\ref{subsec-fastRPI} (line 7). If the resulting intersection $\mathcal{R}^*$ is empty, then a new line segment $\vv{P_sP_{i-1}}$ is generated (lines 8--10). \textcolor{blue}{The process repeats until all points have been processed (line 11).}
+After the  final new line segment $\vv{P_sP_{n}}$ is generated (line 12), it returns the simplified  piece-wise line representation $\overline{\mathcal{T}}$ (line 13).
 
 
 
@@ -92,21 +92,22 @@ After the  final new line segment $\vv{P_sP_{n}}$ is generated (line 11), it ret
 \begin{figure}[tb!]
 	\begin{center}
 		{\small
-			\begin{minipage}{3.36in}
+			\begin{minipage}{3.3in}
 				\myhrule
-				\vspace{-1ex}
+				%\vspace{-1ex}
 				\mat{0ex}{
 					{\bf Algorithm} ~\cist$(\dddot{\mathcal{T}}[P_0,\ldots,P_n],~\epsilon,~m)$\\
 					%	\sstab
 					\bcc \hspace{1ex}\= $P_s := P_0$; ~$i := 1$;  ~$\mathcal{R}^* := \emptyset$;  ~$\overline{\mathcal{T}} := \emptyset$; ~$t_c$ := $P_1.t$;\\
 					\icc \hspace{1ex}\= \While $i \le n$ \Do \\
 					\icc \>\hspace{2ex} $\mathcal{R}$ := \kw{getRegularPolygon}($P_s$, $P_i$, $\epsilon/2$, $m$, $t_c$); \\
-					\icc \>\hspace{2ex} \If $\mathcal{R}^* = \emptyset$  \Then \hspace{4ex} /* $\mathcal{R}^*$ needs to be initialized */\\
+					\icc \>\hspace{2ex} \If $\mathcal{R}^* = \emptyset$  \Then \hspace{3ex} /* $\mathcal{R}^*$ needs to be initialized */\\
 					\icc \>\hspace{2ex} \ \ \ $\mathcal{R}^* :=\mathcal{R};$ \\
 					\icc \>\hspace{2ex} \Else \\
 					\icc \>\hspace{2ex}\ \ \ \ $\mathcal{R}^* := {\rpia}(\mathcal{R}^*, ~\mathcal{R})$; \\
-					\icc \>\hspace{4ex} \If $\mathcal{R}^* = \emptyset$ \Then \hspace{2ex} /* generate a new line segment */\\
-					\icc \> \hspace{4ex} \ \ \ $i$ := $i - 1$;\ \ $\overline{\mathcal{T}} := \overline{\mathcal{T}}\cup \{\vv{P_sP_{i}}\}$;\ \ $P_s := P_{i}$; \ \ $t_c$ := $P_{i+1}.t$\\
+					\icc \>\hspace{4ex} \If $\mathcal{R}^* = \emptyset$ \Then \hspace{1ex} /* generate a new line segment */\\
+					\icc \> \hspace{4ex} \ \ \ $i$ := $i - 1$;\ \ $\overline{\mathcal{T}} := \overline{\mathcal{T}}\cup \{\vv{P_sP_{i}}\}$; \\
+					\icc \> \hspace{4ex} \ \ \ $P_s := P_{i}$; \ \ $t_c$ := $P_{i+1}.t$;\\
 					\icc \>\hspace{2ex} $i$ := $i +1$;\\
 					\icc \> \hspace{0ex} $\overline{\mathcal{T}}$ := $\overline{\mathcal{T}}\cup \{\vv{P_sP_{n}}\}$; \\
 					\icc \hspace{1ex}\Return $\overline{\mathcal{T}}$.
@@ -129,7 +130,7 @@ After the  final new line segment $\vv{P_sP_{n}}$ is generated (line 11), it ret
 
 \begin{example}
 \label{exm-alg-conest}
-Figure~\ref{fig:exm-const} shows an example of algorithm \cist for compressing the trajectory \trajec{T} in Figure~\ref{fig:notations}.
+Figure~\ref{fig:exm-const} shows a running example of algorithm \cist for compressing the trajectory \trajec{T} in Figure~\ref{fig:notations}.
 %For convenience, here, we project the points and the oblique circular cones on a x-y space.
 
 \sstab (1) After initialization, the \cist algorithm reads point $P_1$ and builds a narrow \emph{oblique circular cone} \cone{(P_0, \mathcal{O}(P_{1}, \epsilon/2))}, taking $P_0$ as its apex and \circle{(P_1, \epsilon/2)} as its base (green dash). The \emph{circular cone} is projected on the plane $P.t-P_1.t=0$, and the inscribe regular polygon $\mathcal{R}_1$ of the projection circle is returned. As $\mathcal{R}^*$ is empty, $\mathcal{R}^*$ is set to $\mathcal{R}_1$.
@@ -158,7 +159,7 @@ which may contain interpolated points.
 
 By Proposition~\ref{prop-circle-intersection}, algorithm \cista generates spatio-temporal cones whose bases are circles with a radius of $\epsilon$,
 and, hence, it replaces $\epsilon/2$ with $\epsilon$ (line 3 of \cist). It also generates new line segments with data points $Q$ (may be interpolated points), and,
-hence, it replaces point $P_i$ and line segment $\vv{P_sP_i}$  (line 9 of \cist) with $Q$ and $\vv{P_sQ}$, respectively,  such that $Q$ is generated as follows.
+hence, it replaces point $P_i$ and line segment $\vv{P_sP_i}$  (lines 9 and 10 of algorithm \cist) with $Q$ and $\vv{P_sQ}$, respectively,  such that $Q$ is generated as follows.
 
 
 \begin{prop}
