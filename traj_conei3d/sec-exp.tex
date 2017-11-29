@@ -5,11 +5,9 @@
 
 \begin{table*}[bt!]
 	\caption{\small Real-life trajectory datasets}
-	\vspace{-1ex}
+	%\vspace{-1ex}
 	\centering
 	\small
-	%\footnotesize
-	%\scriptsize
 	\begin{tabular}{|l|c|c|c|r|}
 		\hline
 		%\bf{ Data}& \bf{Number\ of}     &\bf {Sampling}   &\bf{Points Per}    &\bf {Total} \\
@@ -23,7 +21,7 @@
 		\hline
 		\geolife &182	    &1-5	    &$\sim131.4$   &24.2M\\
 		\hline
-		\mopsi	&1,000	    &2	    &$\sim2.1$     &2.1M \\
+		\mopsi	&51	    	&2	    &$\sim153.9$     &7.9M\\
 		\hline
 		\pricar	& 10	    &1	        &$\sim11.8$      &112.8K \\
 		\hline
@@ -47,24 +45,23 @@ Using four real-life trajectory datasets, we conducted three sets of experiments
 \stitle{Real-life Trajectory Datasets}.
 We use four real-life datasets shown in Table~\ref{tab:datasets} to test our solutions.
 
-\vspace{0.5ex}
-\ni \emph{(1) Mopsi trajectory data} (\mopsi) is a subset of all routes from
-Mopsi~\cite{Mopsi}. It contains 6,779 routes (7,850,387 points) recorded by 51 users. Routes
-exist on every continent. Most routes are in Finland, in Joensuu region.
-%Trajectories mostly have around $50$ to $90$ thousand data points.
-
 % \ni \emph{(1) Truck trajectory data} (\truck) is the GPS trajectories collected by \eat{10,368} trucks equipped with GPS sensors in China
 % during a period from Mar. 2015 to Oct. 2015. The sampling rate varied from 1s to 60s.
 %Trajectories mostly have around $50$ to $90$ thousand data points.
 
 \vspace{0.5ex}
-\ni \emph{(2) Service car trajectory data} (\sercar) is the GPS trajectories collected by a car rental company during Apr. 2015 to Nov. 2015. The sampling rate was one point per $3$--$5$ seconds, and
+\ni \emph{(1) Service car trajectory data} (\sercar) is the GPS trajectories collected by a Chinese car rental company during Apr. 2015 to Nov. 2015. The sampling rate was one point per $3$--$5$ seconds, and
 each trajectory has around $114.1K$ points.
 %.We randomly chose $1,000$ cars from them
 
 \vspace{0.5ex}
-\ni \emph{(3) GeoLife trajectory data} (\geolife) is the GPS trajectories collected in GeoLife project~\cite{Zheng:GeoLife} by 182 users in a period from Apr. 2007 to Oct. 2011. These trajectories have a variety of sampling rates, among which 91\% are logged in each 1-5 seconds or each 5-10 meters per point.
+\ni \emph{(2) GeoLife trajectory data} (\geolife) is the GPS trajectories collected in GeoLife project~\cite{Zheng:GeoLife} by 182 users in a period from Apr. 2007 to Oct. 2011. These trajectories have a variety of sampling rates, among which 91\% are logged in each 1-5 seconds per point. %or each 5-10 meters
 %The longest trajectory has 2,156,994 points.
+
+\vspace{0.5ex}
+\ni \emph{(3) Mopsi trajectory data} \textcolor{blue}{(\mopsi) is the GPS trajectories collected in Mopsi project~\cite{Mopsi} by 51 users in a period from 2008 to 2014. Most routes are in Joensuu region, Finland. 
+The sampling rate was one point per $2$ seconds, and each trajectory has around $153.9K$ points.}
+%exist on every continent. 
 
 \vspace{0.5ex}
 \ni \emph{(4) Private car trajectory data} (\pricar) is a small set GPS trajectories  collected with a high sampling rate of one point per second by our team members in 2017. There are 10 trajectories and each trajectory has around 11.8K points.
@@ -77,22 +74,19 @@ each trajectory has around $114.1K$ points.
 %The details of these datasets are shown in Table~\ref{tab:dataset}.
 
 \stitle{Algorithms and implementation}.
-We implement five line simplification algorithms, \ie our \cist ,\cista and \cisto, \dps~\cite{Meratnia:Spatiotemporal} (the most effective existing \lsa algorithm using \sed), and \squishe~\cite{Muckell:Compression} (the most efficient existing \lsa algorithm using \sed).
+We implement five \lsa algorithms, \ie our \cist ,\cista and \cisto, \dps~\cite{Meratnia:Spatiotemporal} (the most effective existing \lsa algorithm using \sed), and \squishe~\cite{Muckell:Compression} (the most efficient existing \lsa algorithm using \sed).
 We also implement the polygon intersection algorithms, \cpia and our \rpia.
 All algorithms were implemented with Java.
 All tests were run on an {x64-based  PC with 8 Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz and 8GB of memory, and each test was repeated
 over 3 times and the average is reported here}.
+%
+%\textcolor{blue}{
+%In the comparation of compression ratio and average error, we selected a subset from the datasets subject to the limit of memory space and time. Concretely, we selected ($100$, $95$, $1000$, $10$) trajectories from datasets {\sercar, \geolife, \mopsi, \pricar} respectively.
+%}
+%\textcolor{blue}{
+%As for efficiency, we use the full dataset, and exclude algorithm \cisto.
+%}
 
-\textcolor{blue}{
-In the comparation of compression ratio and average error, we selected a subset
-from the datasets subject to the limit of memory space and time.
-Concretely, we selected ($100$, $95$, $1000$, $10$) trajectories from datasets
-{\sercar, \geolife, \mopsi, \pricar} respectively.
-}
-
-\textcolor{blue}{
-As for efficiency, we use the full dataset, and exclude algorithm \cisto.
-}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Experimental Results}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -105,10 +99,10 @@ As for efficiency, we use the full dataset, and exclude algorithm \cisto.
 
 
 In the first set of tests, we evaluate the impacts of parameter $m$ on the
-compression ratios of our algorithms \cist, \cista and \cisto, and compare the compression ratios of \cist and \cista with \dps and \squishe.
+compression ratios of our algorithms \cisto, \cist and \cista, and compare the compression ratios of \cisto, \cist and \cista with \dps and \squishe.
 
 The compression ratio is defined as follows: Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations $\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$, the compression ratio of an algorithm is $(\sum_{j=1}^{M} |\overline{\mathcal{T}}_j |)/(\sum_{j=1}^{M} |\dddot{\mathcal{T}}_j |)$.
-By the definition, \emph{algorithms with lower compression ratios are better}.
+Note by the definition, \emph{algorithms with lower compression ratios are better}.
 
 
 
@@ -127,7 +121,7 @@ By the definition, \emph{algorithms with lower compression ratios are better}.
 \vspace{-1ex}
 \caption{\small Evaluation of compression ratios: fixed error bound with $\epsilon=60$ meters and varying $m$.}
 \label{fig:m-cr-e60}
-\vspace{-1ex}
+%\vspace{-1ex}
 \end{figure*}
 
 
@@ -140,7 +134,7 @@ By the definition, \emph{algorithms with lower compression ratios are better}.
 \vspace{-1ex}
 \caption{\small Evaluation of compression ratios: fixed with $m=16$ and varying error bound $\epsilon$.}
 \label{fig:cr-m16}
-\vspace{-1.0ex}
+%\vspace{-1.0ex}
 \end{figure*}
 
 
@@ -153,15 +147,15 @@ By the definition, \emph{algorithms with lower compression ratios are better}.
 \vspace{-1ex}
 \caption{\small Evaluation of compression ratios: fixed with $m=16$ and $\epsilon=60$ meters, and varying the size of trajectories.}
 \label{fig:cr-size}
-\vspace{-1ex}
+%\vspace{-1ex}
 \end{figure*}
 
 %\vspace{0.5ex}
 \stitle{Exp-1.1: Impacts of parameter $m$ on compression ratios}.
-To evaluate the impacts of   the number $m$ of edges of polygons on the
-compression ratios of algorithms \textcolor{blue}{\cist ,\cista and \cisto}, we fixed the error bounds {$\epsilon =60$ meters}, and varied $m$ from $4$ to $40$. The results are reported in Figure~\ref{fig:m-cr-e60}.
+To evaluate the impacts of the number $m$ of edges of polygons on the
+compression ratios of algorithms \cisto, \cist and \cista, we fixed the error bounds {$\epsilon =60$ meters}, and varied $m$ from $4$ to $40$. The results are reported in Figure~\ref{fig:m-cr-e60}.
 
-\ni(1) Algorithms \textcolor{blue}{\cist ,\cista and \cisto} using \rpia have the same compression ratios as their counterparts using \cpia for all cases.
+\ni(1) Algorithms \cisto, \cist and \cista using \rpia have the same compression ratios as their counterparts using \cpia for all cases.
 
 \ni(2) When varying $m$, the compression ratios of algorithms
 {\cisto, \cist and \cista} decrease with the increase of $m$ on all datasets.
@@ -186,26 +180,28 @@ The results are reported in Figure~\ref{fig:cr-m16} .
 \ni (2) \textcolor{blue}{Dataset} \pricar has the lowest compression ratios, compared with \textcolor{blue}{datasets} \mopsi, \sercar and \geolife, due to its highest sampling rate,
 \textcolor{blue}{\sercar} has the highest compression ratios due to its lowest sampling rate, and \textcolor{blue}{\geolife and \mopsi} have the compression ratios in the middle accordingly.
 
-\ni {(3)} Algorithm \cist has better compression ratios than \squishe, and is {comparable} with \dps, on all datasets and for all $\epsilon$.
-The compression ratios of \cist are on average {($79.5\%$, $79.5\%$, $66.0\%$,
-$72.7\%$)  and ($109.1\%$, $109.7\%$, $113.5\%$, $109.2\%$)} of \squishe and
-\dps on {datasets (\sercar, \geolife, \mopsi, \pricar)}, respectively.
-For example, when $\epsilon$ = $40$ meters, the compression ratios of algorithms
-\squishe, \cist and \dps are {($19.8\%$, $13.2\%$, $5.4\%$, $4.9\%$), ($15.9\%$,
-$10.6\%$, $3.5\%$, $3.6\%$) and ($14.6\%$, $9.7\%$, $3.1\%$, $3.4\%$)} on  {datasets (\sercar, \geolife, \mopsi, \pricar)}, respectively.
 
-\ni {(4)} Algorithm \cista has {the best} compression ratios on all datasets and for all $\epsilon$.
+\ni {(3)} \textcolor{blue}{Algorithm \cisto has better compression ratios than other algorithms except \cista.}
+
+\ni {(4)} Algorithm \cist has better compression ratios than \squishe, is {comparable} with \dps and is worse than \cisto, on all datasets and for all $\epsilon$.
+The compression ratios of \cist are on average {($79.5\%$, $79.5\%$, $66.0\%$,
+$72.7\%$), ($109.1\%$, $109.7\%$, $113.5\%$, $109.2\%$)} and \textcolor{red}{($109.1\%$, $109.7\%$, $113.5\%$, $109.2\%$)} of \squishe,
+\dps and \cisto on {datasets (\sercar, \geolife, \mopsi, \pricar)}, respectively.
+For example, when $\epsilon$ = $40$ meters, the compression ratios of algorithms
+\squishe, \cist, \dps and \cisto are 
+{($19.8\%$, $13.2\%$, $5.4\%$, $4.9\%$), ($15.9\%$,
+$10.6\%$, $3.5\%$, $3.6\%$), ($14.6\%$, $9.7\%$, $3.1\%$, $3.4\%$)} and \textcolor{red}{($109.1\%$, $109.7\%$, $113.5\%$, $109.2\%$)}
+ on  {datasets (\sercar, \geolife, \mopsi, \pricar)}, respectively.
+
+\ni {(5)} Algorithm \cista has better compression ratios than \dpa, \squishe and \cist, and is comparable with \cisto on all datasets and for all $\epsilon$.
 The compression ratios of \cista are on average ($57.9\%$, $58.8\%$, $48.4\%$,
-$54.6\%$) and ($79.6\%$, $81.2\%$, $83.3\%$, $82.1\%$) of algorithms
-\squishe and \dps  on {datasets (\sercar, \geolife, \mopsi, \pricar)}, respectively.
+$54.6\%$), ($79.6\%$, $81.2\%$, $83.3\%$, $82.1\%$),\textcolor{red}{($57.9\%$, $58.8\%$, $48.4\%$,
+$54.6\%$) and ($79.6\%$, $81.2\%$, $83.3\%$, $82.1\%$)} of algorithms
+\squishe, \dps, \cist and \cisto on {datasets (\sercar, \geolife, \mopsi, \pricar)}, respectively.
 For example, when $\epsilon$ = $40$ meters, the compression ratios of algorithm
 \cista are ($11.4\%$, $7.8\%$, $2.5\%$, $2.7\%$) on datasets (\sercar, \geolife,\mopsi, \pricar), respectively.
 
-\textcolor{blue}{
-\ni {(5)} Algorithm \cista has {comparable} compression ratios with \cisto.
-The compression ratios of \cista are on average ($98.1\%$, $98.7\%$, $108.9\%$, $101.7\%$)  
-of algorithm \cisto on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
-}
+
 
 %The results also show that \cist has better compression ratios than \squishe on datasets with higher sampling rates.
 %\vspace{0.5ex}
@@ -216,7 +212,7 @@ fixed {$m$=$16$} and $\epsilon$=$60$ meters, and varied the size \trajec{|T|} of
 %
 The results are reported in Figure~\ref{fig:cr-size}.
 
-\ni(1) The compression ratios of these algorithms from the best to the worst are \cista, \dps, \cist and \squishe, on all datasets and for all sizes of trajectories. %, which is consistent with Figure~\ref{fig:cr-m16}.
+\ni(1) The compression ratios of these algorithms from the best to the worst are \cista and \cisto, \dps, \cist and \squishe, on all datasets and for \textcolor{blue}{nearly} all sizes of trajectories. %, which is consistent with Figure~\ref{fig:cr-m16}.
 
 \ni(2) The size of input trajectories has few impacts on the compression ratios of \lsa algorithms on all datasets.
 
@@ -249,7 +245,7 @@ then the average error is $\sum_{j=1}^{M}\sum_{i=0}^{M} d(P_{j,i},
 \vspace{-1ex}
 \caption{\small Evaluation of average errors: fixed error bound with $\epsilon = 60$ meters and varying $m$.}
 \label{fig:m-error-e60}
-\vspace{-1ex}
+%\vspace{-1ex}
 \end{figure*}
 
 
@@ -262,7 +258,7 @@ then the average error is $\sum_{j=1}^{M}\sum_{i=0}^{M} d(P_{j,i},
 \vspace{-1ex}
 \caption{\small Evaluation of average errors: fixed with $m=16$ and varying error bound $\epsilon$.}
 \label{fig:ae-m16}
-\vspace{-1ex}
+%\vspace{-1ex}
 \end{figure*}
 
 
@@ -276,7 +272,7 @@ then the average error is $\sum_{j=1}^{M}\sum_{i=0}^{M} d(P_{j,i},
 \vspace{-1ex}
 \caption{\small Evaluation of average errors: fixed with $m=16$ and $\epsilon=60$ meters, and varying the size of trajectories.}
 \label{fig:ae-size}
-\vspace{-1ex}
+%\vspace{-1ex}
 \end{figure*}
 
 
@@ -312,14 +308,15 @@ The results are reported in Figure~\ref{fig:ae-m16}.
 
 \ni(1) Average errors increase with the increase of $\epsilon$.
 
-\ni(2) Algorithms \cisto, \cist and \cista have lager average errors compared with \dps and \squishe.
-The average errors of algorithms \cisto, \cist and \cista are on average
-($156.4\%$, $146.9\%$, $158.7\%$, $165.3\%$),($119.8\%$, $112.7\%$, $126.9\%$,
-$136.4\%$)
+\ni(2) Algorithms \cist,\cisto and \cista have lager average errors compared with \dps and \squishe.
+The average errors of algorithms \cist,\cisto and \cista are on average
+($119.8\%$, $112.7\%$, $126.9\%$, $136.4\%$), 
+($156.4\%$, $146.9\%$, $158.7\%$, $165.3\%$)
 and ($210.3\%$, $204.5\%$, $206.0\%$, $213.4\%$)
-of \dps and ($246.0\%$, $236.8\%$, $285.2\%$, $259.7\%$),($188.5\%$, $181.7\%$,
-$228.1\%$, $214.3\%$)  and ($330.7\%$, $329.5\%$, $370.3\%$, $335.2\%$) of \squishe on
-{datasets} ( \sercar, \geolife, \mopsi, \pricar), respectively.
+of \dps and ($188.5\%$, $181.7\%$, $228.1\%$, $214.3\%$),
+($246.0\%$, $236.8\%$, $285.2\%$, $259.7\%$) and 
+($330.7\%$, $329.5\%$, $370.3\%$, $335.2\%$)
+ of \squishe on {datasets} (\sercar, \geolife, \mopsi, \pricar), respectively.
 
 \ni(3) When the error bound of algorithm \cista is set as the half of \cist, the
 average errors of \cista are on average \textcolor{blue}{($93.8\%$, $86.0\%$, $81.4\%$, {$79.4\%$})} of \cist on {datasets} (\sercar, \geolife,\mopsi, \pricar), respectively, meaning that the large average errors of algorithm \cista are caused by its cone \wrt $\epsilon$ compared with the narrow cone \wrt $\epsilon/2$ of \cist.
@@ -336,9 +333,10 @@ We fixed {$m$=$16$} and $\epsilon = 60$ meters, and varied the size \trajec{|T|}
 %
 The results are reported in Figure~\ref{fig:ae-size}.
 
-\ni(1) The average errors of these algorithms from the smallest to the largest are \squishe, \dps, \cist and \cista, on all datasets and for all trajectory sizes. %, which is consistent with Figure~\ref{fig:ae-m16}.
+\ni(1) The average errors of these algorithms from the smallest to the largest are \squishe, \dps, \cist, \cisto and \cista, on all datasets and for all trajectory sizes. %, which is consistent with Figure~\ref{fig:ae-m16}.
 
 \ni(2) The size of input trajectories has few impacts on the average errors of \lsa algorithms on all datasets.
+
 
 
 
@@ -347,39 +345,40 @@ The results are reported in Figure~\ref{fig:ae-size}.
 \subsubsection{Evaluation of Efficiency}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
 In the last set of tests, we evaluate the impacts of parameter $m$ on the efficiency of algorithms \cist and \cista, and compare the efficiency of our approaches \cist and \cista with algorithms \dps and \squishe.
+\textcolor{blue}{Algorithm \cisto is more than ten times slower than other algorithms including \dpa. It is not necessary to report its detailed running time.}
 %\ie the edge number of a regular polygon,
 %
 %The execution time is the running time of the compressing process.
 %For a small size trajectory, we repeat compress it tens of times and accumulation the total running time so as to get the average compression time.
 
 
+
+
 \begin{figure*}[tb!]
-\centering
-\includegraphics[scale = 0.28]{Figures/Exp-M-poly-time-ratio-service.png}
-\includegraphics[scale = 0.28]{Figures/Exp-M-poly-time-ratio-geolife.png}
-\includegraphics[scale = 0.28]{Figures/Exp-M-poly-time-ratio-mopsi.png}
-\includegraphics[scale = 0.28]{Figures/Exp-M-poly-time-ratio-private.png}
-\vspace{-1ex}
-\caption{\small Evaluation of running time of polygon intersection algorithms: fixed error bound with $\epsilon=60$ meters, and varying $m$. Here ``R'' denotes our fast regular polygon intersection algorithm \rpia, and ``C'' denotes \cpia, respectively.}
-\label{fig:m-poly-time}
-\vspace{-1ex}
+	\centering
+	\includegraphics[scale = 0.28]{Figures/Exp-M-poly-time-ratio-service.png}
+	\includegraphics[scale = 0.28]{Figures/Exp-M-poly-time-ratio-geolife.png}
+	\includegraphics[scale = 0.28]{Figures/Exp-M-poly-time-ratio-mopsi.png}
+	\includegraphics[scale = 0.28]{Figures/Exp-M-poly-time-ratio-private.png}
+	\vspace{-1ex}
+	\caption{\small Evaluation of running time of polygon intersection algorithms: fixed error bound with $\epsilon=60$ meters, and varying $m$. Here ``R'' denotes our fast regular polygon intersection algorithm \rpia, and ``C'' denotes \cpia, respectively.}
+	\label{fig:m-poly-time}
+%	\vspace{-1ex}
 \end{figure*}
 
 
 \begin{figure*}[tb!]
-\centering
-\includegraphics[scale = 0.280]{Figures/Exp-M-e-60-time-service.png}
-\includegraphics[scale = 0.280]{Figures/Exp-M-e-60-time-geolife.png}
-\includegraphics[scale = 0.280]{Figures/Exp-M-e-60-time-mopsi.png}
-\includegraphics[scale = 0.280]{Figures/Exp-M-e-60-time-private.png}
-\vspace{-1ex}
-\caption{\small Evaluation of running time: fixed error bound with $\epsilon=60$ meters, and varying $m$. }
-\label{fig:m-time-e60}
-\vspace{-1ex}
+	\centering
+	\includegraphics[scale = 0.280]{Figures/Exp-M-e-60-time-service.png}
+	\includegraphics[scale = 0.280]{Figures/Exp-M-e-60-time-geolife.png}
+	\includegraphics[scale = 0.280]{Figures/Exp-M-e-60-time-mopsi.png}
+	\includegraphics[scale = 0.280]{Figures/Exp-M-e-60-time-private.png}
+	\vspace{-1ex}
+	\caption{\small Evaluation of running time: fixed error bound with $\epsilon=60$ meters, and varying $m$. }
+	\label{fig:m-time-e60}
+%	\vspace{-1ex}
 \end{figure*}
-
 
 
 
@@ -392,7 +391,7 @@ In the last set of tests, we evaluate the impacts of parameter $m$ on the effici
 \vspace{-1ex}
 \caption{\small Evaluation of running time: fixed with $m=16$ and varying error bounds $\epsilon$.}
 \label{fig:time-epsilon}
-\vspace{-1ex}
+%\vspace{-1ex}
 \end{figure*}
 
 
@@ -406,7 +405,7 @@ In the last set of tests, we evaluate the impacts of parameter $m$ on the effici
 \vspace{-1ex}
 \caption{\small Evaluation of running time: fixed with $m=16$ and $\epsilon=60$ meters, and varying the size of trajectories. }
 \label{fig:time-size}
-\vspace{-1ex}
+%\vspace{-1ex}
 \end{figure*}
 
 
@@ -497,11 +496,13 @@ and ($109.1\%$, $109.7\%$, $113.5\%$, $109.2\%$) and
 %And They have a better performance on trajectories with higher sampling rates.
 
 
-\sstab\emph{(4) Average errors}. {Algorithms \cist and \cista both have higher average errors than the other algorithms for the benefit of efficiency, and algorithm \cista has obvious higher average errors than \cist as the former essentially forms spatio-temporal cones with a radius of $\epsilon$.}
+%\sstab\emph{(4) Average errors}. {Algorithms \cist,\cisto and \cista all have higher average errors than the other algorithms for the benefit of efficiency, and algorithm \cista has obvious higher average errors than \cist as the former essentially forms spatio-temporal cones with a radius of $\epsilon$.}
 
-\sstab\emph{(5) Running time}. Algorithms \cist and \cista are on average
-($14.21$, $18.19$, $4.47$, $9.98$) and ($2.84$, $3.45$, $2.65$, $2.86$) times faster
-than algorithms \dps and \squishe on {datasets} (\sercar, {\geolife},\mopsi,\pricar), respectively.
+\sstab\emph{(4) Average errors}. \textcolor{blue}{The average errors of these algorithms from the smallest to the largest are \squishe, \dps, \cist, \cisto and \cista. Algorithm \cista has obvious higher average errors than \cist as the former essentially forms spatio-temporal cones with a radius of $\epsilon$.}
+
+
+\sstab\emph{(5) Running time}. \textcolor{blue}{Algorithm \cisto is the slowest while algorithms \cist and \cista are the fast.} Algorithms \cist and \cista are on average
+($14.21$, $18.19$, $4.47$, $9.98$) and ($2.84$, $3.45$, $2.65$, $2.86$) times faster than algorithms \dps and \squishe on {datasets} (\sercar, {\geolife},\mopsi,\pricar), respectively.
 The efficiency advantage of algorithms \cist and \cista also increases  with the increase of the trajectory size.
 
 
