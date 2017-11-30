@@ -22,9 +22,8 @@ There are $O(n^2)$ pairs of points in the trajectory and checking the error of a
 Thus, this method takes $O(n^3)$ time \cite{Imai:Optimal}. 
 Since finding the shortest path takes no more than $O(n^2)$ time, the brute-force algorithm takes $O(n^3)$ time.
 %
-Though the authors of \cite{Chan:Optimal} proved that the construction of a reachability graph $G$ using \ped could further be implemented in $O(n^2)$ time with the help of the \textit{sector intersection} mechanism, the \textit{sector intersection} mechanism can not work with \sed (see Section \ref{sub-ci-ped}), hence, the construction of a graph  $G$ using \sed \textcolor{red}{remains $O(n^3)$ time}.
-
-Thus, the crucial part of of the algorithm is still the construction of $G$. 
+Though the authors of \cite{Chan:Optimal} proved that the construction of a reachability graph $G$ using \ped could further be implemented in $O(n^2)$ time with the help of the \textit{sector intersection} mechanism, the \textit{sector intersection} mechanism can not work with \sed (see Section \ref{sub-ci-ped}), hence, the construction of a graph  $G$ using \sed \textcolor{red} is still the crucial part of of the algorithm
+. 
 In the following, we shall discuss how a near optimal $G$ can be constructed in $O(n^2)$ time.
 
 
@@ -48,8 +47,9 @@ This proposition is a directed result of Proposition \ref{prop-3d-ci}, where poi
 From Proposition~\ref{prop-edge-check}, we can determine whether edge $(P_s, P_{s+k}) \in E$ by testing whether the intersection of $\vv{P_sP_{s+k}}$ and $\bigsqcap_{i=1}^{k - 1}$\cone{(P_s,  \mathcal{O}(P_{s+i}, \epsilon))} is $\{P_i\}$. 
 It must be noted that, even if edge $(P_s, P_{s+k})$ is not in $E$, edge $(P_s, P_{s+k+1})$ is still possible in $E$ as long as $\bigsqcap_{i=1}^{k}$ \cone{(P_{s}, \mathcal{O}(P_{s+i}, \epsilon))}$\ne \{P_s\}$.
 
-As mentioned above, the checking of intersection of cones could be approximately replaced by the checking of intersection of regular polygons. 
-If we use the regular polygon intersection method, then we get another reachability graph $G'=$ (\trajec{T}, $E')$.
+
+%
+If the checking of intersection of circles are approximately replaced by the checking of intersection of regular polygons, we get another reachability graph $G'=$ (\trajec{T}, $E')$.
 
 \begin{prop}
 	\label{prop-near-opt-graph}
@@ -70,15 +70,19 @@ Proposition~\ref{prop-near-opt-graph} tells us that a reachability graph $G'$ ca
 
 \begin{prop}
 	\label{prop-near-opt-graph-construction}
-	A near optimal reachability graph $G'$ can be constructed in $O(n^2)$ time.
+	An optimal reachability graph $G$ can be constructed in $O(n^2\log n)$ time while
+	a near optimal reachability graph $G'$ needs $O(n^2)$ time.
 \end{prop}
 
-
+	%As mentioned above, the checking of intersection of circles has a time complexity of $O(n\log n)$, thus, the construction of a reachability graph $G$ achieves $O(n^2\log n)$ time.
+	
 \begin{proof}
-For any $P_s (0\le s \le n)$, the construction of a reachability graph $G'$ need consider all pairs of vertices $(P_s,P_{s+k}) (1\le k \le n)$ and compute the intersection of $\vv{P_sP_{s+k}}$ and $\bigsqcap_{i=1}^{k - 1}$\cone{(P_s,  \mathcal{O}(P_{s+i}, \epsilon))}. 
-The computing of the common area of cones, \ie $\bigsqcap_{i=1}^{k - 1}$\cone{(P_s,  \mathcal{O}(P_{s+i}, \epsilon))}, could be implement in an incremental way, and each approximate intersection of two cones could be checked by the intersection of two polygons, which can be achieved in a constant time, hence, it needs $O(n)$ time to check all edges $(P_s,P_{s+k})$ start form point $P_s$. 
+For any $P_s (0\le s \le n)$, the construction of a reachability graph $G'$ need consider all pairs of vertices $(P_s,P_{s+k}) (1\le k \le n)$ and compute the intersection of $\vv{P_sP_{s+k}}$ and $\bigsqcap_{i=1}^{k - 1}$ \pcircle{_{s+i}}.
 
-There are $n$ points in the trajectory, thus, the construction of a near optimal graph $G'$ needs $O(n^2)$ time.
+The computing of the common area of circles could be implement in an incremental way, \ie each time we checking the intersection of a circle with the preview common intersection of circles. Each checking needs $O(\log n)$ time, hence, it needs $O(n\log n)$ time to check all edges $(P_s,P_{s+k})$, $1\le k \le n$, start from point $P_s$. 
+If we use the approximate (regular polygon) method, then each checking needs a constant time and the checking for edges start from $P_s$ needs $O(n)$ time.
+%
+There are $n$ points in the trajectory, thus, the construction of an optimal graph $G$ and a near optimal graph $G'$ need $O(n^2 \log n)$ and $O(n^2)$ time, respectively.
 \end{proof}
 
 %Proposition~\ref{{prop-near-opt-graph}} and Proposition~\ref{prop-near-opt-graph-construction} tell us we can construct a near optimal reacha
@@ -98,7 +102,7 @@ There are $n$ points in the trajectory, thus, the construction of a near optimal
 
 %\textcolor{blue}{code, algorithm desc and example.}
 
-We now present algorithm \cisto. The full algorithm is shown in Figure~\ref{alg:cisedo}.
+We now present a near optimal algorithm \cisto. The full algorithm is shown in Figure~\ref{alg:cisedo}.
 
 \stitle{Procedure \kw{getRegularPolygon}}.
 We first present procedure \kw{getRegularPolygon} that, given a cone projection circle, generates its inscribed $m$-edge regular polygon,  following the definition in Section~\ref{subsec-RPI}.
