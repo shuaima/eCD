@@ -48,8 +48,11 @@ The \emph{synchronous Euclidean distance} (\sed) was then introduced for traject
 \textcolor{blue}{The problem targeting at finding out the minimal number of line segments to represent the original polygonal lines \wrt an error bound $\epsilon$ is also known as the ``min-\#" problem\cite{Imai:Optimal,Chan:Optimal}. For this problem, 
 	%there exists the optimal \lsa algorithm using \sed whose time complexity is $O(n^3)$.
 	the authors of \cite{Imai:Optimal} showed that the optimal \lsa algorithm using \ped can be found in $O(n^3)$ time, where $n$ is the number of the original points. 
+	%
+	Authors of 
+	%
 	Later, the authors of \cite{Chan:Optimal} proved that the optimal algorithm using \ped could further be implemented in $O(n^2)$ time with the help of \textit{sector intersection} mechanism. 
-	Though \cite{Chan:Optimal} did not discuss the \sed metric, it is clear that the time complexity of the optimal \lsa algorithm using \sed remains as the \textit{sector intersection} mechanism can not work with \sed. 
+	Though \cite{Chan:Optimal} did not discuss the \sed metric, it is obviously that the time complexity of the optimal \lsa algorithm using \sed remains $O(n^3)$ as the \textit{sector intersection} mechanism are based on \ped and can not work correctly with \sed. 
 	The high time complexity of the optimal \lsa algorithm using \sed makes it impractical.
 }
 
@@ -60,7 +63,7 @@ However, these methods still have a high time and/or space complexity, which hin
 On the other hand, there are \textcolor{blue}{linear complexity \lsa algorithms using \ped} \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve, Lin:Operb} that are more efficient for resource-constrained devices. 
 %
 \textcolor{blue}{The key idea of them to achieve a linear time complexity is they apply optimization strategies, \eg the \textit{sector intersection} mechanism in \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} and the \textit{fitting function} approach in our preview work \cite {Lin:Operb}, to fast the process of simplification and save resources. 
-As mentioned above, these algorithms are only applicable for \ped because the core optimization strategies they applied are still \ped specific, which means they would not work correctly if the \ped metric is replaced by other metrics, such as \sed.} 
+As mentioned above, these algorithms are only applicable for \ped because the core optimization strategies they applied would not work correctly if the \ped metric is replaced by other metrics, such as \sed.} 
 \textcolor{blue}{Indeed, {the developing of an efficient \lsa algorithm using \sed is more challenging than using \ped}.}
 \textcolor{blue}{And, to the best of our knowledge, there is no \lsa algorithm using \sed that has a linear time complexity.}
 
@@ -75,11 +78,13 @@ To this end, we propose \textcolor{blue}{ a fast near optimal and} two one-pass 
 %, by extending the sector intersection method \cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve}\eat{(Section~\ref{sec-localcheck})}. 
 We also approximate the intersection of spatio-temporal cones with the intersection of regular polygons, and develop a fast regular polygon intersection algorithm, such that each data point in a trajectory is checked in $O(1)$ time during the entire process of trajectory simplification.
 
-\sstab {(2)} We then develop \textcolor{blue}{a fast near optimal trajectory simplification algorithm \cisto and} two one-pass \textcolor{blue}{sub-optimal} trajectory simplification algorithms \cist and \cista based on our local synchronous distance checking technique\eat{ (Section~\ref{sec-alg})}. 
-Algorithms \textcolor{blue}{\cisto and} \cist belong to strong simplification that only have original points in their outputs, while algorithm \cista belongs to weak simplification that allows interpolated data points in its output.
+\sstab {(2)} \textcolor{blue}{We then show that an optimal trajectory simplification algorithm using \sed can achieve $O(n^2 \log n)$ time by using our local synchronous distance checking technique, and provide a fast near optimal trajectory simplification algorithm \cisto that achieves $O(n^2)$ time and $O(n)$ space.}
+
+\sstab {(3)} We next develop two one-pass \textcolor{blue}{sub-optimal} trajectory simplification algorithms \cist and \cista, \textcolor{blue}{achieving $O(n)$ time and $O(1)$ space}, based on our local synchronous distance checking technique\eat{ (Section~\ref{sec-alg})}. 
+Algorithms \cist belongs to strong simplification that only has original points in its outputs, while algorithm \cista belongs to weak simplification that allows interpolated data points in its output.
 
 
-\sstab (3) Using four real-life trajectory datasets (\truck, \sercar, \geolife, \pricar),
+\sstab (4) Using four real-life trajectory datasets (\truck, \sercar, \geolife, \pricar),
 we finally conduct an extensive experimental study\eat{ (Section~\ref{sec-exp})}, by comparing our methods \textcolor{blue}{and \cisto,} \cist and \cista  with algorithms \dps~\cite{Meratnia:Spatiotemporal} (the most effective existing \lsa algorithm using \sed) and \squishe \cite{Muckell:Compression} (the most efficient existing \lsa algorithm using \sed).
 
 {For execution time,} algorithms \cist and \cista are on average ($14.21$, $18.19$, $17.06$, $9.98$) and ($2.84$, $3.45$, $3.69$, $2.86$) times faster than \dps and \squishe on (\sercar, \geolife, \mopsi, \pricar), respectively.
