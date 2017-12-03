@@ -1,10 +1,10 @@
-\section{\textcolor{blue}{Near Optimal Trajectory Simplification}}
+\section{\textcolor{blue}{Optimal Trajectory Simplification}}
 \label{sec-optimal}
 
 Based on the Spatio-temporal cones and their fast intersection techniques, we first show an optimal algorithm using \sed can be implemented in $O(n^2\log n)$ time, then we develop a fast near optimal algorithm using \sed achieving $O(n^2)$ time and $O(n)$ space.
 % which is much faster than the optimal algorithm using \sed having a time complexity of $O(nn^3)$
 
-\subsection{The Optimal Algorithm Using \sed}
+\subsection{Naive Optimal Algorithm Using \sed}
 
 Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ and an error bound $\epsilon$, the optimal trajectory simplification problem, as formulated by Imai and Iri in \cite{Imai:Optimal}, can be solved in two steps: (1) construct a reachability graph $G$ of \trajec{T} and (2) search a shortest path from $P_0$ to $P_{n}$ in graph $G$.
 
@@ -13,7 +13,7 @@ Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ and an error bound $\epsilon
 %, i.e., $sed(P_j, \vv{P_iP_k}) \le \epsilon$.
 %, and (2) $w$ is a weighting function such that $w(e_{ik}) = k-i$.
 
-Then, the shortest path in $G$ from point $P_0$ to point $P_{n}$ is the optimal representation of trajectory \trajec{T}, and the path length will correspond to the number of line segments in the approximation trajectory. 
+Then, the shortest path in $G$ from point $P_0$ to point $P_{n}$ is the optimal representation of trajectory \trajec{T}, and the path length will correspond to the number of line segments in the approximation trajectory\cite{Imai:Optimal}. 
 %Moreover, the shortest path also reveals the subset of points of \trajec{T} used in the approximate trajectory.
 
 
@@ -22,13 +22,13 @@ There are $O(n^2)$ pairs of points in the trajectory and checking the error of a
 Thus, this method takes $O(n^3)$ time \cite{Imai:Optimal}. 
 Since finding the shortest path takes no more than $O(n^2)$ time, the brute-force algorithm takes $O(n^3)$ time.
 %
-Though the authors of \cite{Chan:Optimal} proved that the construction of a reachability graph $G$ using \ped could further be implemented in $O(n^2)$ time with the help of the \textit{sector intersection} mechanism, the \textit{sector intersection} mechanism can not work with \sed (see Section \ref{sub-ci-ped}), hence, the construction of a graph  $G$ using \sed \textcolor{red} is still the crucial part of of the algorithm
-. 
-In the following, we shall discuss how a near optimal $G$ can be constructed in $O(n^2)$ time.
+Though the authors of \cite{Chan:Optimal} proved that the construction of a reachability graph $G$ using \ped could further be implemented in $O(n^2)$ time with the help of the \textit{sector intersection} mechanism, the \textit{sector intersection} mechanism can not work with \sed (see Section \ref{sub-ci-ped}), hence, the construction of a graph  $G$ using \sed is still the crucial part of of the algorithm.
+ 
+In the following, we shall discuss how an optimal graph $G$ and a near optimal graph $G'$ can be constructed in $O(n^2\log n)$ and $O(n^2)$ time, respectively.
 
 
 \subsection{Speed Up Graph Constructing} % by using spatio-temporal cones
-In this section, we speed up the construction of reachability graph $G$ by using the spatio-temporal cone.
+We speed up the construction of reachability graph $G$ by using the spatio-temporal cone.
 Firstly, we give the necessary and sufficient condition for the inclusion of an edge to the reachability graph $G$.
 
 \begin{prop}
