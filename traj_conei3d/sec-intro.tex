@@ -45,12 +45,12 @@ The \emph{synchronous Euclidean distance} (\sed) was then introduced for traject
 \lsa algorithms using \sed may produce more line segments. However, the use of \sed ensures that the Euclidean distance between a data point and its  synchronized point \wrt the corresponding line segment is bounded \textcolor{blue}{by an user specified parameter $\epsilon$}. Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the synchronized point $P'$ of a data point $P$ within the bounded distance $\epsilon$.
 
 
-\textcolor{blue}{The problem targeting at finding out the minimal number of line segments to represent the original polygonal lines \wrt an error bound $\epsilon$ is also known as the ``min-\#" problem\cite{Imai:Optimal,Chan:Optimal}. For this problem, 
+\textcolor{blue}{No matter using \ped or \sed metric, the problem targeting at finding out the minimal number of line segments to represent the original polygonal lines \wrt an error bound $\epsilon$ is known as the ``min-\#" problem\cite{Imai:Optimal,Chan:Optimal}. For this problem, 
 	%there exists the optimal \lsa algorithm using \sed whose time complexity is $O(n^3)$.
-	the authors of \cite{Imai:Optimal} showed that the optimal \lsa algorithm using \ped can be found in $O(n^3)$ time, where $n$ is the number of the original points. 
+	the authors of \cite{Imai:Optimal} showed that an optimal \lsa algorithm using \ped can be found in $O(n^3)$ time, where $n$ is the number of the original points. 
 	%
-	Later, the authors of \cite{Chan:Optimal} proved that the optimal algorithm using \ped could further be implemented in $O(n^2)$ time with the help of \textit{sector intersection} mechanism. 
-	Though \cite{Chan:Optimal} did not discuss the \sed metric, it is obviously that the time complexity of the optimal \lsa algorithm using \sed can not be $O(n^2)$ as those optimization mechanisms are \ped specific and can not work correctly with \sed. 
+	Later, the authors of \cite{Chan:Optimal} proved that an optimal algorithm using \ped could be implemented in $O(n^2)$ time with the help of \textit{sector intersection} mechanism. 
+	Though \cite{Chan:Optimal} did not discuss the \sed metric, it is obviously that the time complexity of the optimal \lsa algorithm using \sed can not be $O(n^2)$ as those optimization mechanisms are \ped specific and could not work with \sed. 
 	The high time complexities of the optimal \lsa algorithms using \sed make them impractical.
 }
 
@@ -60,23 +60,23 @@ However, these methods still have a high time and/or space complexity, which hin
 %
 On the other hand, there are \textcolor{blue}{linear complexity \lsa algorithms using \ped} \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve, Lin:Operb} that are more efficient for resource-constrained devices. 
 %
-\textcolor{blue}{The key idea of them to achieve a linear time complexity is they apply optimization strategies, \eg the \textit{sector intersection} mechanism in \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} and the \textit{fitting function} approach in our preview work \cite {Lin:Operb}, to fast the process of simplification and save resources. 
+\textcolor{blue}{The key idea of them to achieve a linear time complexity is that they apply optimization strategies, \eg the \textit{sector intersection} mechanism in \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} and the \textit{fitting function} approach in our preview work \cite {Lin:Operb}, to fast the process of simplification and save resources. 
 As mentioned above, these algorithms are only applicable for \ped because the core optimization strategies they applied would not work correctly if the \ped metric is replaced by other metrics, such as \sed.} 
 \textcolor{blue}{Indeed, {the developing of an efficient \lsa algorithm using \sed is more challenging than using \ped}.}
-\textcolor{blue}{And, to the best of our knowledge, there is no \lsa algorithm using \sed that has a linear time complexity.}
+\textcolor{blue}{And, to our knowledge, there is no effective \lsa algorithm using \sed that has a linear time complexity.}
 
 
 
 
 
 \stitle{{Contributions}}.
-To this end, we propose \textcolor{blue}{ a fast near optimal and} two one-pass \textcolor{blue}{sub-optimal} error bounded \lsa algorithms using \sed for compressing trajectories in an efficient and effective way. % error bounded
+To this end, we propose \textcolor{blue}{ a near optimal and} two one-pass \textcolor{blue}{sub-optimal} error bounded \lsa algorithms using \sed for compressing trajectories. % in an efficient and effective way. % error bounded
 
 \sstab {(1)} We first develop a novel local synchronous distance checking approach, \ie spatio-temporal \underline{C}one \underline{I}ntersection using the \underline{S}ynchronous \underline{E}uclidean \underline{D}istance (CISED).
 %, by extending the sector intersection method \cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve}\eat{(Section~\ref{sec-localcheck})}. 
 We also approximate the intersection of spatio-temporal cones with the intersection of regular polygons, and develop a fast regular polygon intersection algorithm, such that each data point in a trajectory is checked in $O(1)$ time during the entire process of trajectory simplification.
 
-\sstab {(2)} \textcolor{blue}{We then show that an optimal trajectory simplification algorithm using \sed can achieve $O(n^2 \log n)$ time by using our local synchronous distance checking technique, and provide a fast \textit{near optimal} trajectory simplification algorithm \cisto that achieves $O(n^2)$ time and $O(n)$ space.}
+\sstab {(2)} \textcolor{blue}{We then show that an optimal trajectory simplification algorithm using \sed can achieve $O(n^2 \log n)$ time by using our local synchronous distance checking technique, and provide a \textit{near optimal} trajectory simplification algorithm \cisto that achieves $O(n^2)$ time and $O(n)$ space.}
 
 \sstab {(3)} We next develop two one-pass \textcolor{blue}{\textit{sub-optimal}} trajectory simplification algorithms \cist and \cista, \textcolor{blue}{achieving $O(n)$ time and $O(1)$ space}, based on our local synchronous distance checking technique\eat{ (Section~\ref{sec-alg})}. 
 Algorithms \cist belongs to strong simplification that only has original points in its outputs, while algorithm \cista belongs to weak simplification that allows interpolated data points in its output.
