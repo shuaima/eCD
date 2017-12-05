@@ -3,7 +3,7 @@
 
 \textcolor{blue}{
 In this section, we first introduce basic concepts and techniques for trajectory compression.
-Then we describe the sector intersection mechanism and show how this mechanism can be used to fast the \lsa algorithms using \ped and why it can not work with \sed.
+We then describe the optimal algorithm and the sector intersection mechanism, and show how this mechanism can be used to fast the \lsa algorithms using \ped and why it can not work with \sed.
 Finally, we illustrate a convex polygon intersection algorithm which serves as one of the fundamental components of our local synchronous distance checking method.
 }
 
@@ -151,6 +151,24 @@ where points $P'_4$, $P'_2$ and $P'_7$ are the synchronized points of $P_4$, $P_
 we say that algorithm $\mathcal{A}$ is error bounded by $\epsilon$ if  for each point $P$ in \trajec{T}, there exist points $P_j$ and $P_{j+1}$ in \trajec{T'} such that $sed(P, \mathcal{L}(P_j,P_{j+1}))\le \epsilon$ (respectively $ped(P, \mathcal{L}(P_j,P_{j+1}))\le \epsilon$).
 
 
+
+\subsection{The Optimal \lsa Algorithm}
+
+Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ and an error bound $\epsilon$, the optimal trajectory simplification problem, as formulated by Imai and Iri in \cite{Imai:Optimal}, can be solved in two steps: (1) construct a reachability graph $G$ of \trajec{T} and (2) search a shortest path from $P_0$ to $P_{n}$ in graph $G$.
+
+The reachability graph of a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ \wrt an error bound $\epsilon$ is $G$ = (\trajec{T}, $E)$, where, for vertexes $P_s$ and $P_{s+k} \in$ \trajec{T} $(k>0)$, edge $(P_s, P_{s+k}) \in E$ if and only if the distance of each point $P_{s+i} (0<i<k)$ to line segment $\vv{P_sP_{s+k}}$ is no great than $\epsilon$.
+%
+Then, the shortest path in $G$ from point $P_0$ to point $P_{n}$ is the optimal representation of trajectory \trajec{T}, and the path length will correspond to the number of line segments in the approximation trajectory. 
+Moreover, the shortest path also reveals the subset of points of \trajec{T} used in the approximate trajectory.
+
+The brute-force algorithm of constructing the reachability graph $G$ is to check for each pair of points $P_s$ and $P_{s+k}$ whether the distance of  each $P_{s+i}$, $0<i<k$, to $\vv{P_sP_{s+k}})$ is less than $\epsilon$. 
+There are $O(n^2)$ pairs of points in the trajectory and checking the error of all data points $P_{s+i}$ to a line segment $\vv{P_sP_{s+k}}$ takes $O(n)$ time. 
+Thus, this method takes $O(n^3)$ time \cite{Imai:Optimal}. 
+Since finding the shortest path takes no more than $O(n^2)$ time, the brute-force algorithm takes $O(n^3)$ time.
+
+%
+Though the optimal algorithm is develop using \ped, it is also suitable for \sed. 
+More specifically, the authors of \cite{Chan:Optimal} proved that the construction of the reachability graph $G$ using \ped could further be implemented in $O(n^2)$ time with the help of the \textit{sector intersection} mechanism (see Section \ref{sub-ci-ped}), however, the \textit{sector intersection} mechanism can not work with \sed, hence, currently the construction of the graph $G$ using \sed still needs $O(n^3)$ time.
 
 
 \subsection{Sector Intersection based Algorithms using \ped}

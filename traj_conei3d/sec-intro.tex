@@ -20,7 +20,7 @@ It is known that these issues can be resolved or greatly alleviated by trajector
 \begin{figure*}[tb!]
 \centering
 %\vspace{-1ex}
-\includegraphics[scale=0.76]{figures/Fig-DP.png}
+\includegraphics[scale=0.78]{figures/Fig-DP.png}
 %\vspace{-1ex}
 \caption{\small A trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$  with eleven points is represented by two (left) and four (right) continuous line segments (solid blue), compressed by the Douglas--Peucker algorithm \cite{Douglas:Peucker} using \ped and \sed, respectively. The Douglas--Peucker algorithm firstly creates line segment $\protect\vv{P_0P_{10}}$, then it calculates the distance of each point in the trajectory to $\protect\vv{P_{0}P_{10}}$. It finds that point $P_{4}$ has the maximum distance to $\protect\vv{P_{0}P_{10}}$, and is greater than the user defined threshold $\epsilon$. Then it goes to compress sub-trajectories $[P_0, \ldots, P_{4}]$ and $[P_{4}, \ldots, P_{10}]$, separately.
 }
@@ -50,7 +50,7 @@ The \emph{synchronous Euclidean distance} (\sed) was then introduced for traject
 	the authors of \cite{Imai:Optimal} showed that an optimal \lsa algorithm using \ped can be found in $O(n^3)$ time, where $n$ is the number of the original points. 
 	%
 	Later, the authors of \cite{Chan:Optimal} proved that an optimal algorithm using \ped could be implemented in $O(n^2)$ time with the help of \textit{sector intersection} mechanism. 
-	Though \cite{Chan:Optimal} did not discuss the \sed metric, it is obviously that the time complexity of the optimal \lsa algorithm using \sed currently is still $O(n^3)$ as those optimization mechanisms are \ped specific and could not work with \sed. 
+	However, currently the time complexity of the optimal \lsa algorithm using \sed is still $O(n^3)$ as those optimization mechanisms are \ped specific and could not work with \sed.
 	The high time complexities of the optimal \lsa algorithms using \sed make them impractical.}
 
 
@@ -69,39 +69,37 @@ As mentioned above, these algorithms are only applicable for \ped because the co
 
 
 \stitle{{Contributions}}.
-To this end, we propose \textcolor{blue}{ a near optimal and} two one-pass \textcolor{blue}{sub-optimal} error bounded \lsa algorithms using \sed for compressing trajectories. % in an efficient and effective way. % error bounded
+To this end, we propose two one-pass error bounded \lsa algorithms using \sed for compressing trajectories in an efficient and effective way. % error bounded
 
 \sstab {(1)} We first develop a novel local synchronous distance checking approach, \ie spatio-temporal \underline{C}one \underline{I}ntersection using the \underline{S}ynchronous \underline{E}uclidean \underline{D}istance (CISED).
 %, by extending the sector intersection method \cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve}\eat{(Section~\ref{sec-localcheck})}. 
 We also approximate the intersection of spatio-temporal cones with the intersection of regular polygons, and develop a fast regular polygon intersection algorithm, such that each data point in a trajectory is checked in $O(1)$ time during the entire process of trajectory simplification.
 
-\sstab {(2)} \textcolor{blue}{We then show that an optimal trajectory simplification algorithm using \sed can achieve $O(n^2 \log n)$ time by using our local synchronous distance checking technique, and provide a \textit{near optimal} trajectory simplification algorithm \cisto that achieves $O(n^2)$ time and $O(n)$ space.}
+%\sstab {(2)} \textcolor{blue}{We then show that an optimal trajectory simplification algorithm using \sed can achieve $O(n^2 \log n)$ time by using our local synchronous distance checking technique, and provide a \textit{near optimal} trajectory simplification algorithm \cisto that achieves $O(n^2)$ time and $O(n)$ space.}
 
-\sstab {(3)} We next develop two one-pass \textcolor{blue}{\textit{sub-optimal}} trajectory simplification algorithms \cist and \cista, \textcolor{blue}{achieving $O(n)$ time and $O(1)$ space}, based on our local synchronous distance checking technique\eat{ (Section~\ref{sec-alg})}. 
+\sstab {(2)} We next develop two one-pass trajectory simplification algorithms \cist and \cista, \textcolor{blue}{achieving $O(n)$ time and $O(1)$ space}, based on our local synchronous distance checking technique. 
 Algorithms \cist belongs to strong simplification that only has original points in its outputs, while algorithm \cista belongs to weak simplification that allows interpolated data points in its output.
 
 
-\sstab (4) Using four real-life trajectory datasets (\truck, \sercar, \geolife, \pricar),
-we finally conduct an extensive experimental study\eat{ (Section~\ref{sec-exp})}, by comparing our methods \textcolor{blue}{and \cisto,} \cist and \cista  with algorithms \dps~\cite{Meratnia:Spatiotemporal} (the most effective existing \lsa algorithm using \sed) and \squishe \cite{Muckell:Compression} (the most efficient existing \lsa algorithm using \sed).
+\sstab (3) Using four real-life trajectory datasets (\truck, \sercar, \geolife, \pricar),
+we finally conduct an extensive experimental study, by comparing our methods \cist and \cista  with algorithms \osed~(the optimal algorithm using \sed) \dps~\cite{Meratnia:Spatiotemporal} (the most effective existing \lsa algorithm using \sed) and \squishe \cite{Muckell:Compression} (the most efficient existing \lsa algorithm using \sed).
 
-{For execution time,} algorithms \cist and \cista are on average ($14.21$, $18.19$, $17.06$, $9.98$) and ($2.84$, $3.45$, $3.69$, $2.86$) times faster than \dps and \squishe on (\sercar, \geolife, \mopsi, \pricar), respectively.
-%
-For compression ratios, algorithm \cisto has the best compression ratios among all strong simplification algorithms.
-Algorithm \cist is better than \squishe and comparable with \dps. The sizes of
-the outputs of \cist are on average ($79.5\%$, $79.5\%$, $66.0\%$, $72.7\%$),
+%{For execution time,} 
+Algorithms \cist and \cista are on average ($14.21$, $18.19$, $17.06$, $9.98$) and ($2.84$, $3.45$, $3.69$, $2.86$) times faster than \dps and \squishe on (\sercar, \geolife, \mopsi, \pricar), respectively.
+
+For compression ratios, algorithm \cist is better than \squishe and comparable with \dps. The output sizes of \cist are on average ($79.5\%$, $79.5\%$, $66.0\%$, $72.7\%$),
 ($109.1\%$, $109.7\%$, $113.5\%$, $109.2\%$) and {($134.3\%$, $133.3\%$,
-  $148.4\%$, $135.4\%$)} of \squishe, \dps and \cisto on ( \sercar, \geolife, \mopsi, \pricar), respectively. 
-Moreover, algorithm \cista is comparable with \cisto and better than \squishe
-and \dps  that are on average ($57.9\%$, $58.8\%$, $48.4\%$, $54.6\%$),
+  $148.4\%$, $135.4\%$)} of \squishe, \dps and \osed on ( \sercar, \geolife, \mopsi, \pricar), respectively. 
+Moreover, algorithm \cista is comparable with the optimal algorithm and better than \squishe and \dps  that are on average ($57.9\%$, $58.8\%$, $48.4\%$, $54.6\%$),
 ($79.6\%$, $81.2\%$, $83.3\%$, $82.1\%$) and {($98.1\%$, $98.7\%$, $108.9\%$,
-  $101.7\%$)} of \squishe, \dps and \cisto on (\sercar, \geolife, \mopsi, \pricar), respectively.
+  $101.7\%$)} of \squishe, \dps and the optimal algorithm on (\sercar, \geolife, \mopsi, \pricar), respectively.
 
 
 \stitle{{Organization}}.
 The remainder of the article is organized as follows.
 Section \ref{sec-preliminary} introduces the basic concepts and techniques.
 Section \ref{sec-localcheck} presents our local synchronous distance checking method.
-Section \ref{sec-optimal} and Section \ref{sec-alg} present our near optimal trajectory simplification algorithm and one-pass trajectory simplification algorithms, respectively.
+Section \ref{sec-alg} presents our one-pass trajectory simplification algorithms.
 Section \ref{sec-exp} reports the experimental results, followed by related work in
 Section \ref{sec-related} and conclusion in Section \ref{sec-conclusion}.
 %The appendix covers additional related work and experimental results.
