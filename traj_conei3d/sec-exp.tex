@@ -42,7 +42,7 @@ The sampling rate was one point per $2$ seconds, and each trajectory has around 
 %{This dataset contains 182 trajectories, one trajectory for each user, with a total distance of about 1.2 million kilometers. }
 
 
-\textcolor{blue}{For the optimal algorithm, because it has both high time and space complexities, \ie $O(n^3)$ time and $O(n^2)$ space, it is just impossible to run it on the entire datasets (causes out of memory error or runs many days for a given $\epsilon$ on a dataset). Hence, we also build four small datasets for it, each includes ten  trajectories selected from the corresponding dataset.}
+\textcolor{blue}{For the optimal algorithm, because it has both high time and space complexities, \ie $O(n^3)$ time and $O(n^2)$ space, it is just impossible to run it on the entire datasets (causes out of memory). Hence, we also build four small datasets for it, each includes ten  trajectories selected from the corresponding dataset.}
 
 %The details of these datasets are shown in Table~\ref{tab:dataset}.
 
@@ -181,7 +181,7 @@ For example, when $\epsilon$ = $40$ meters, the compression ratios of algorithm
 
 %\vspace{0.5ex}
 \stitle{Exp-1.3: Impacts of the error bound $\epsilon$ on compression ratios (VS. the optimal algorithm).}
-To evaluate the impacts of error bound $\epsilon$ on compression ratios, we fixed {$m$=$16$}, the middle of $[12, 20]$, and varied $\epsilon$ from $10$ meters to $200$ meters on the selected small size trajectories on four datasets, respectively.
+To evaluate the impacts of error bound $\epsilon$ on compression ratios, we fixed {$m$=$16$}, the middle of $[12, 20]$, and varied $\epsilon$ from $10$ to $200$ meters on the first $1K$ points of a trajectory of the selected 10 trajectories on four datasets, respectively.
 The results are reported in Figure~\ref{fig:cr-optimal-m16} .
 %Figure~\ref{fig:cr-m10}.  and
 
@@ -197,9 +197,9 @@ The compression ratios of \cista are on average  ($94.8\%$, $115.5\%$, $119.7\%$
 For example, when $\epsilon$ = $40$ meters, the compression ratios of algorithm
 \cista are ($14.6\%$, $4.6\%$, $1.2\%$, $2.5\%$) on datasets (\sercar, \geolife,\mopsi, \pricar), respectively.
 
-\stitle{Exp-1.4: Impacts of trajectory sizes on compression ratios (VS. \dps and \squishe)}.
+\stitle{Exp-1.4: Impacts of trajectory sizes on compression ratios}.
 To evaluate the impacts of trajectory size, \ie the number of data points in a trajectory, on compression ratios,
-we chose {$10$} trajectories from {datasets \sercar, \geolife, \mopsi and \pricar}, respectively,
+we chose the same {$10$} trajectories from {datasets \sercar, \geolife, \mopsi and \pricar}, respectively,
 fixed {$m$=$16$} and $\epsilon$=$60$ meters, and varied the size \trajec{|T|} of trajectories from $1K$ points to $10K$ points.
 %
 The results are reported in Figure~\ref{fig:cr-size}.
@@ -333,7 +333,7 @@ average errors of \cista are on average \textcolor{blue}{($93.8\%$, $86.0\%$, $8
 %\vspace{0.5ex}
 \stitle{Exp-2.3: Impacts of the error bound $\epsilon$ on average errors (VS. The optimal algorithm)}.
 To evaluate the average errors of these algorithms, we fixed {$m$=$16$}, and
-varied $\epsilon$ from $10$ meters to $200$ meters on on the selected small size trajectories on four datasets \sercar, \geolife, \mopsi and \pricar, respectively.
+varied $\epsilon$ from $10$ meters to $200$ meters on the first $1K$ points of a trajectory of the selected trajectories on four datasets, respectively. 
 The results are reported in Figure~\ref{fig:ae-optimal-m16}.
 
 \ni(1) The average errors of these algorithms from the largest to the smallest are \cista, the optimal algorithm and \cist, on all datasets and for all $\epsilon$.
@@ -344,7 +344,7 @@ of the optimal algorithm on {datasets} (\sercar, \geolife, \mopsi, \pricar), res
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\vspace{0.5ex}
-\stitle{Exp-2.4: Impacts of trajectory sizes on average errors (VS. \dps and \squishe)}.
+\stitle{Exp-2.4: Impacts of trajectory sizes on average errors}.
 To evaluate the impacts of trajectory sizes on average errors, we chose the same
 {$10$} trajectories from  {datasets}  \sercar, \geolife, \mopsi and \pricar, respectively.
 We fixed {$m$=$16$} and $\epsilon = 60$ meters, and varied the size \trajec{|T|} of trajectories from $1K$ points to $10K$ points.
@@ -363,7 +363,7 @@ The results are reported in Figure~\ref{fig:ae-size}.
 \subsubsection{Evaluation of Efficiency}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-In the last set of tests, we evaluate the impacts of parameter $m$ on the efficiency of algorithms \cist and \cista, and compare the efficiency of our approaches \cist and \cista with algorithms \dps and \squishe.
+In the last set of tests, we evaluate the impacts of parameter $m$ on the efficiency of algorithms \cist and \cista, and compare the efficiency of our approaches \cist and \cista with the optimal algorithm and algorithms \dps and \squishe.
 
 %\ie the edge number of a regular polygon,
 %
@@ -488,8 +488,7 @@ and ($2.84$, $3.45$, $3.69$, $2.86$) times faster than \squishe on
 %\vspace{0.5ex}
 \stitle{{Exp-3.3}: Impacts of the error bound $\epsilon$ on efficiency (VS. The optimal algorithm).}
 To evaluate the impacts of $\epsilon$ on efficiency, we fixed $m$ = $16$,
-and varied $\epsilon$  from $10$ meters to $200$ meters on
-the small datasets \sercar, \geolife, \mopsi and \pricar, respectively.
+and varied $\epsilon$ from $10$ meters to $200$ meters on the first $1K$ points of a trajectory of the selected 10 trajectories on four datasets, respectively.
 The results are reported in Figure~\ref{fig:time-optimal-epsilon}.
 
 \ni(2) Algorithms \cist and \cista are obviously faster than the optimal algorithm for all cases.
@@ -498,7 +497,7 @@ They are on average ($925.25$, $7888.26$, $40041.59$, $8528.76$) times faster th
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\vspace{0.5ex}
-\stitle{{Exp-3.4}: Impacts of trajectory sizes on efficiency (VS. \dps and \squishe)}.
+\stitle{{Exp-3.4}: Impacts of trajectory sizes on efficiency}.
 To evaluate the impacts of trajectory sizes on execution time,
 we chose the same {$10$} trajectories, from {datasets} \sercar, \geolife, \mopsi and \pricar, respectively,
 fixed $m$ = $16$ and $\epsilon = 60$ meters, and varied the size \trajec{|T|} of trajectories from $1K$ points to $10K$ points.
