@@ -32,17 +32,18 @@ each trajectory has around $114.1K$ points.
 %The longest trajectory has 2,156,994 points.
 
 \vspace{0.5ex}
-\ni \emph{(3) Mopsi trajectory data} \textcolor{blue}{(\mopsi) is the GPS trajectories collected in Mopsi project~\cite{Mopsi} by 51 users in a period from 2008 to 2014. Most routes are in Joensuu region, Finland. 
-The sampling rate was one point per $2$ seconds, and each trajectory has around $153.9K$ points.}
-%exist on every continent. 
+\ni \emph{(3) Mopsi trajectory data} (\mopsi) is the GPS trajectories collected in Mopsi project~\cite{Mopsi} by 51 users in a period from 2008 to 2014. Most routes are in Joensuu region, Finland.
+The sampling rate was one point per $2$ seconds, and each trajectory has around $153.9K$ points.
+%exist on every continent.
 
 \vspace{0.5ex}
 \ni \emph{(4) Private car trajectory data} (\pricar) is a small set GPS trajectories collected with a high sampling rate of one point per second by our team members in 2017. There are 10 trajectories and each trajectory has around 11.8K points.
 
 %{This dataset contains 182 trajectories, one trajectory for each user, with a total distance of about 1.2 million kilometers. }
 
-
-\textcolor{blue}{For the optimal \lsa algorithm, because it has both high time and space complexities, \ie $O(n^3)$ time and $O(n^2)$ space, it is just impossible to run it on the entire datasets (resulting in out of memory). Hence, we also build four \textit{small datasets} for it, each dataset includes 10 middle-size ($10K$ points per trajectory) trajectories selected from the corresponding dataset.}
+\vspace{0.5ex}
+\ni \emph{(5) Small trajectory data}. 
+As the optimal \lsa algorithm~\cite{Imai:Optimal} it has both high time and space complexities, \ie $O(n^3)$ time and $O(n^2)$ space, it is impossible to compress the entire datasets (too slow and out of memory). Hence, we further build four \textit{small datasets}, each dataset includes 10 middle-size ($10K$ points per trajectory) trajectories selected from \sercar, \geolife, \mopsi and \pricar, respectively.
 
 %The details of these datasets are shown in Table~\ref{tab:dataset}.
 
@@ -51,7 +52,7 @@ We implement five \lsa algorithms, \ie our \cist and \cista, \dps~\cite{Meratnia
 We also implement the polygon intersection algorithms, \cpia and our \rpia.
 All algorithms were implemented with Java.
 All tests were run on an {x64-based  PC with 8 Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz and 8GB of memory, and each test was repeated
-over 3 times and the average is reported here}.
+over 3 times and the average is reported here.
 
 %
 %\textcolor{blue}{
@@ -65,7 +66,7 @@ over 3 times and the average is reported here}.
 \subsection{Experimental Results}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%We next present our findings.
+We next present our findings.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Evaluation of Compression Ratios}
@@ -171,7 +172,7 @@ The results are reported in Figure~\ref{fig:cr-m16} .
 The compression ratios of \cist are on average {($79.3\%$, $71.9\%$, $67.3\%$, $72.7\%$) and ($109.2\%$, $108.0\%$, $111.7\%$, $109.1\%$)} of \squishe and
 \dps on {datasets (\sercar, \geolife, \mopsi, \pricar)}, respectively.
 For example, when $\epsilon$ = $40$ meters, the compression ratios of algorithms
-\squishe, \cist and \dps are 
+\squishe, \cist and \dps are
 {($20.0\%$, $8.0\%$, $5.7\%$, $4.9\%$), ($16.1\%$, $5.8\%$, $3.9\%$, $3.6\%$) and ($14.8\%$, $5.4\%$, $3.4\%$, $3.4\%$)} on  {datasets (\sercar, \geolife, \mopsi, \pricar)}, respectively.
 
 \ni {(4)} Algorithm \cista has better compression ratios than \dpa, \squishe and \cist on all datasets and for all $\epsilon$.
@@ -188,7 +189,7 @@ The results are reported in Figure~\ref{fig:cr-optimal-m16} .
 
 \ni {(1)} Algorithm \cist is poorer than the optimal algorithm on all datasets and for all $\epsilon$.
 More specifically, the compression ratios of \cist are on average ($134.6\%$, $150.7\%$, $155.5\%$, $138.5\%$) of the optimal algorithm on {datasets (\sercar, \geolife, \mopsi, \pricar)}, respectively.
-For example, when $\epsilon$ = $40$ meters, the compression ratios of \cist and the optimal algorithm are 
+For example, when $\epsilon$ = $40$ meters, the compression ratios of \cist and the optimal algorithm are
 ($22.0\%$, $5.9\%$, $1.9\%$, $3.3\%$) and {($16.4\%$, $4.2\%$, $0.9\%$, $2.4\%$)}
 on  {datasets (\sercar, \geolife, \mopsi, \pricar)}, respectively.
 
@@ -205,7 +206,7 @@ fixed {$m$=$16$} and $\epsilon$=$60$ meters, and varied the size \trajec{|T|} of
 %
 The results are reported in Figure~\ref{fig:cr-size}.
 
-\ni(1) The compression ratios of these algorithms from the best to the worst are \cista, \dps, \cist and \squishe, on all datasets and for all sizes of trajectories. 
+\ni(1) The compression ratios of these algorithms from the best to the worst are \cista, \dps, \cist and \squishe, on all datasets and for all sizes of trajectories.
 
 \ni(2) The size of input trajectories has few impacts on the compression ratios of \lsa algorithms on all datasets.
 
@@ -320,7 +321,7 @@ The results are reported in Figure~\ref{fig:ae-m16}.
 The average errors of algorithms \cist and \cista are on average
 ($119.3\%$, $127.7\%$, $119.9\%$, $138.0\%$)
 and ($210.1\%$, $207.5\%$, $200.9\%$, $217.5\%$)
-of \dps and ($188.2\%$, $215.2\%$, $212.8\%$, $180.3\%$) and 
+of \dps and ($188.2\%$, $215.2\%$, $212.8\%$, $180.3\%$) and
 ($331.1\%$, $349.7\%$, $356.7\%$, $284.2\%$)
  of \squishe on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
 
@@ -333,7 +334,7 @@ average errors of \cista are on average \textcolor{blue}{($93.8\%$, $86.0\%$, $8
 %\vspace{0.5ex}
 \stitle{\textcolor{blue}{Exp-2.3: Impacts of the error bound $\epsilon$ on average errors (VS. The optimal algorithm)}.}
 To evaluate the average errors of these algorithms, we once again fixed {$m$=$16$}, and
-varied $\epsilon$ from $10$ meters to $200$ meters on the first $1K$ points of each trajectory of the selected \textit{small datasets}, respectively. 
+varied $\epsilon$ from $10$ meters to $200$ meters on the first $1K$ points of each trajectory of the selected \textit{small datasets}, respectively.
 The results are reported in Figure~\ref{fig:ae-optimal-m16}.
 
 \ni(1) The average errors of these algorithms from the largest to the smallest are \cista, the optimal algorithm and \cist, on all datasets and for all $\epsilon$.
