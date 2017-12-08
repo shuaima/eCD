@@ -4,49 +4,45 @@
 \label{sec-related}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Trajectory compression algorithms are normally classified into two categories, namely lossless compression and lossy compression\cite{Muckell:Compression}.
 (1) Lossless compression methods enable exact reconstruction of the original data from the compressed data without information loss.
 %For example, delta compression \cite{Nibali:Trajic} is a lossless compression technique, which has zero error and a time complexity of $O(n)$, where $n$ is the number of data points in a trajectory. The limitation of lossless compression lies in that its compression ratio is relatively poor \cite{Nibali:Trajic}.
 (2) In contrast, lossy compression methods allow errors or derivations, compared with the original trajectories.
-These techniques typically identify important data points, and remove statistical redundant data points from a trajectory, or replace original data points in a trajectory with other places of interests, such as roads and shops.
-They focus on good compression ratios with acceptable errors.
+These techniques typically identify important data points, and remove statistical redundant data points from a trajectory, or replace original data points in a trajectory with other places of interests, such as roads and shops. They focus on good compression ratios with acceptable errors. 
 %, and a large number of lossy trajectory compression techniques have been developed.
 %
-%In this work we focus on lossy compression of trajectory data,
-We next introduce the related work on lossy trajectory compression from two aspects: line simplification based methods and semantics based methods.
+In this work, we focus on lossy compression of trajectory data, and  we next introduce the related work on lossy trajectory compression  from two aspects: line simplification based methods and semantics based methods.
 
 \subsection{Line simplification based methods}
-}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %Line simplification (\lsa) methods use a set of continuous line segments to represent a compressed trajectory (Fig.\ref{fig:notations}).
 The idea of piece-wise line simplification comes from computational geometry.
 Its target is to approximate a given finer piece-wise linear curve by another coarser piece-wise linear curve, which is typically a subset of the former, such that the maximum distance of the former to the later is bounded by a user specified bound $\epsilon$.
 %
-\textcolor{blue}{Initially, line simplification (\lsa) algorithms use perpendicular Euclidean distances (\ped) as the distance metric.
-Then a new distance metric, the synchronous Euclidean distances (\sed), was developed after the \lsa algorithms were introduced to compress trajectories.}
+Initially, line simplification (\lsa) algorithms use perpendicular Euclidean distances (\ped) as the distance metric.
+Then a new distance metric, the synchronous Euclidean distances (\sed), was developed after the \lsa algorithms were introduced to compress trajectories.
 \sed was first introduced in the name of \emph{time-ratio distance} in~\cite{Meratnia:Spatiotemporal}, and formally presented in~\cite{Potamias:Sampling} as the \emph{synchronous Euclidean distance}.
-\textcolor{blue}{\ped and \sed are the most commonly used metric in trajectory simplification. The former usually brings better compression ratios while the later reserves temporal information in the result trajectories.}
+\ped and \sed are two common  metrics adopted in trajectory simplification. The former usually brings better compression ratios while the later reserves temporal information in the result trajectories.
 
-\textcolor{blue}{We next introduce the related work on piece-wise line based trajectory compression from two aspects: optimal methods and sub-optimal methods}.
+Piece-wise line based trajectory compression can be classified into two aspects: optimal methods and sub-optimal methods.
 
-\vspace{-1ex}
-\subsection{\textcolor{blue}{Optimal Algorithms}}
-For the ``min-\#" problem that finds out the minimal number of points or segments to represent the original polygonal lines \wrt an error bound $\epsilon$, Imai and Iri \cite{Imai:Optimal} first formulated it as a graph problem and showed that it can be solved in  $O(n^3)$ time, where $n$ is the number of the original points.
+
+\subsubsection{Optimal Algorithms}
+For the ``min-\#" problem that finds out the minimal number of points or segments to represent the original polygonal lines \wrt an error bound $\epsilon$, Imai and Iri \cite{Imai:Optimal} first formulated it as a graph problem, and showed that it could be solved in  $O(n^3)$ time, where $n$ is the number of the original points.
 %
 Toussaint of \cite{Toussaint:Optimal} and Melkman and O'Rourke of \cite{Melkman:Optimal} improved the time complexity to $O(n^2 \log n)$ by using either convex hull or sector intersection methods.
 %
 The authors of \cite{Chan:Optimal} further proved that the optimal algorithm using \ped could be implemented in $O(n^2)$ time by using the \textit{sector intersection} mechanism.
 Because the \textit{sector intersection} and the convex hull mechanisms can not work with \sed, hence, currently the time complexity of the optimal algorithm using \sed remains $O(n^3)$.
-It is time-consuming and impractical for large inputs~\cite{Heckbert:Survey}.
+It is time-consuming and impractical for large trajectory data~\cite{Heckbert:Survey}.
 
 
-A number of algorithms \cite{Agarwal:Metric, Chen:Fast, Wu:Graph} have been developed to solve the ``min-\#" problem under alternative error metrics.
-\cite{Agarwal:Metric} studies the problem under the $L_1$ and uniform (also known as Chebyshev) metric. % while this study focuses on the $L_2$ metric.
-Authors of \cite{Chen:Fast} define the local integral square synchronous Euclidean distance (LISSED) and the integral square synchronous Euclidean distance (ISSED), and use them to fast the construction of reachability graphs, and \cite{Wu:Graph} follows the ideas of \cite{Chen:Fast}.
-{However, both LISSED and ISSED are cumulative errors which have different effectiveness compared with \sed.}
-
+\eat{A number of algorithms \cite{Agarwal:Metric, Chen:Fast, Wu:Graph} have been developed to solve the ``min-\#" problem under alternative error metrics.
+\cite{Agarwal:Metric} studied the problem under the $L_1$ and uniform (also known as Chebyshev) metric. % while this study focuses on the $L_2$ metric.
+ \cite{Chen:Fast} defined the local integral square synchronous Euclidean distance (LISSED) and the integral square synchronous Euclidean distance (ISSED), and used them to fast the construction of reachability graphs, and \cite{Wu:Graph} followed the ideas of \cite{Chen:Fast}.
+{However, both LISSED and ISSED cumulative errors that leads to varied effectiveness compared with \sed.}
+}
 %
 \eat{
 The distinct Douglas-Peucker (\dpa) algorithm \cite{Douglas:Peucker} (see Figure~\ref{fig:notations}) is invented in 1970s, for reducing the number of points required to represent a digitized line or its caricature in the context of computer graphics and image processing.
@@ -57,12 +53,11 @@ Recently, the authors of this paper developed a one-pass trajectory simplificati
 }
 
 
-\vspace{-1ex}
-\subsection{Sub-optimal Algorithms}
+\subsubsection{Sub-optimal Algorithms}
 Many studies have been targeting at finding the sub-optimal results.
 %In this section, we focus on the piece-wise line simplification based methods for trajectory data.
-In particular, the state-of-the-art \textcolor{blue}{of the} sub-optimal \lsa approaches fall into three categories, \ie batch, online and one-pass algorithms.
-We next introduce these \lsa \textcolor{blue}{based trajectory compression} algorithms from the aspect of the three categories.
+In particular, the state-of-the-art of sub-optimal \lsa approaches fall into three categories, \ie batch, online and one-pass algorithms.
+We next introduce these \lsa  based trajectory compression algorithms from the aspect of the three categories.
 
 \stitle{Batch algorithms.}
 The batch algorithms adopt a global distance checking policy that requires all trajectory points are loaded before compressing starts.
@@ -120,18 +115,16 @@ The authors of this article also developed an One-Pass ERror Bounded (\operb) al
 %
 However, all existing one-pass algorithms  use \ped \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve,Liu:BQS,Lin:Operb}, while this study focuses on \sed.
 
-\textcolor{blue}{
-	There are also semantics based trajectory compression methods that are orthogonal to \lsa based methods (see~\cite{Han:Compress} for more details), and these methods may be combined with each other to further improve the effectiveness of trajectory compression.}
+%\textcolor{blue}{
+%	There are also semantics based trajectory compression methods that are orthogonal to \lsa based methods (see~\cite{Han:Compress} for more details), and these methods % may be combined with each other to further improve the effectiveness of trajectory compression.}
 
 
-\eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Semantics based methods}.
+\subsection{Semantics based methods}
 The trajectories of certain moving objects such as cars and trucks are constrained by road networks. These moving objects typically travel along road networks, instead of the line segment between two points. Trajectory compression methods based on road networks \cite{Chen:Trajectory, Popa:Spatio,Civilis:Techniques,Hung:Clustering, Gotsman:Compaction, Song:PRESS}  project trajectory points onto roads (also known as Map-Matching). Moreover, \cite{Gotsman:Compaction, Song:PRESS} mines and uses high frequency patterns of compressed trajectories, instead of roads, to further improve compression effectiveness.
 %
 Some methods \cite{Schmid:Semantic, Richter:Semantic} compress trajectories beyond the use of road networks, which further make use
 of other user specified domain knowledge, such as places of interests along the trajectories \cite{Richter:Semantic}.
 %
-There are also compression algorithms preserving the direction of the trajectory \cite{Long:Direction, Long:Trajectory}. %As it mentions that the trajectory of a moving object contains a large amount of semantic information that could be used to compress the trajectory. For example, the driving direction of a moving object implies the information of the next direction.
+There are also compression algorithms preserving the direction of the trajectory \cite{Long:Direction}. %As it mentions that the trajectory of a moving object contains a large amount of semantic information that could be used to compress the trajectory. For example, the driving direction of a moving object implies the information of the next direction.
 
 These approaches are orthogonal to line simplification based methods, and may be combined with each other to further improve the effectiveness of trajectory compression.
-}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
