@@ -1,5 +1,5 @@
 %\section{One-Pass Trajectory Simplification}
-\section{One-pass Trajectory Simplification}
+\section{One-Pass Trajectory Simplification}
 \label{sec-alg}
 
 
@@ -17,7 +17,7 @@
 
 Following \cite{Trajcevski:DDR,Lin:Operb}, we consider two classes of trajectory simplification.
 The first one, referred to as \emph{strong simplification}, that takes as input a trajectory \trajec{T}, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and produces a simplified trajectory \trajec{T'} such that all data points in \trajec{T'} belongs to \trajec{T}.
-The second one, referred to as \emph{weak simplification}, that takes as input a trajectory \trajec{T}, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and produces a simplified trajectory \trajec{T'} such that some data points in \trajec{T'} may not belong to \trajec{T}. That is, weak simplification allows data interpolation. 
+The second one, referred to as \emph{weak simplification}, that takes as input a trajectory \trajec{T}, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and produces a simplified trajectory \trajec{T'} such that some data points in \trajec{T'} may not belong to \trajec{T}. That is, weak simplification allows data interpolation.
 
 The main result here is stated as follows.
 
@@ -45,8 +45,8 @@ Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P
 \end{prop}
 
 
-\begin{proof}
-If $\bigsqcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_{s+i}, \epsilon/2)} \ne \{P_s\}$, then by Proposition~\ref{prop-3d-ci}, there exists a point $Q$, $Q.t = P_{s+k}.t$, such that $sed(P_{s+i}, \vv{P_sQ})\le \epsilon/2$ for all $i \in [1,k]$. By the triangle inequality essentially, $sed(P_{s+i}, \vv{P_sP_{s+k}})\le  sed(P_{s+i}, \vv{P_sQ}) + |\vv{QP_{s+k}}| \le  \epsilon/2+\epsilon/2 = \epsilon$.
+\begin{proof}\ 
+If $\bigsqcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_{s+i}, \epsilon/2)} \ne \{P_s\}$, then by Proposition~\ref{prop-3d-ci}, there exists a point $Q$, $Q.t = P_{s+k}.t$, such that $sed(P_{s+i}, \vv{P_sQ})\le \epsilon/2$ for all $i \in [1,k]$. By the triangle inequality essentially, $sed(P_{s+i}, \vv{P_sP_{s+k}})\le  sed(P_{s+i}, \vv{P_sQ}) + |\vv{QP_{s+k}}| \le  \epsilon/2+\epsilon/2 = \epsilon$. \eop
 \end{proof}
 
 
@@ -67,8 +67,8 @@ Then it builds and returns an $m$-edge inscribed regular polygon $\mathcal{R}$ o
 into a Cartesian one. Note here $\theta$, $r\cdot\sin\theta$ and $r\cdot\cos\theta$ only need to be computed once during the entire processing of a trajectory.
 
 
-\stitle{Algorithm \cist}. 
-%We now present algorithm \cist. 
+\stitle{Algorithm \cist}.
+%We now present algorithm \cist.
 It takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and returns a simplified  trajectory $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -185,8 +185,10 @@ hence, it replaces point $P_i$ and line segment $\vv{P_sP_i}$  (lines 9 and 10 o
 Given a sub-trajectory \trajec{T}${[P_s, \ldots, P_{s+k}]}$ and an error bound $\epsilon$,  $t_c=P_{s+k}.t$ and $\mathcal{R}^*_k$ be the intersection of all polygons $\mathcal{R}_{s+i}$ ($i\in[1,k]$) on the plane $P.t - t_c = 0$. If $\mathcal{R}^*_k$ is not empty, then any point in the area of $\mathcal{R}^*_k$ is feasible for $Q$.
 \end{prop}
 
-\begin{proof}
-By Proposition~\ref{prop-circle-intersection} and the nature of inscribed regular polygon, it is easy to find that for any point $Q \in \mathcal{R}^*_k$  \wrt plane $t_c=P_{s+k}.t$, there is $sed(P_{s+i}, \vv{P_sQ})\le \epsilon$ for all points $P_{s+i}$ ($i \in [1,k]$). From this, we have the conclusion.
+\begin{proof}\ 
+By Proposition~\ref{prop-circle-intersection} and the nature of inscribed regular polygon, it is easy to find that for any point $Q \in \mathcal{R}^*_k$  \wrt plane $t_c=P_{s+k}.t$, there is $sed(P_{s+i}, \vv{P_sQ})\le \epsilon$ for all points $P_{s+i}$ ($i \in [1,k]$). 
+
+From this, we have the conclusion. \eop
 \end{proof}
 
 The choice of a point $Q$ from $\mathcal{R}^*_k$ may slightly affect the effectiveness (\eg average errors and compression ratios). However, the choice of an optimal $Q$ is non-trivial. For the benefit of efficiency, we apply the following strategies.
@@ -215,7 +217,7 @@ Figure~\ref{fig:exm-consta}  shows a running example of algorithm \cista for com
 
 
 
-\begin{table*}[bt!] 
+\begin{table*}[bt!]
 	%\renewcommand{\arraystretch}{1.2}
 	\vspace{-1ex}
 	\caption{\small Real-life trajectory datasets}

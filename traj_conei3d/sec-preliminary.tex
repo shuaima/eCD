@@ -1,11 +1,15 @@
 \section{Preliminaries}
 \label{sec-preliminary}
 
-\textcolor{blue}{
 In this section, we first introduce basic concepts for piece-wise line based trajectory compression.
-We then describe the optimal \lsa algorithm and the sector intersection mechanism, and show how this mechanism can be used to fast the \lsa algorithms using \ped and why it can not work with \sed.
-Finally, we illustrate a convex polygon intersection algorithm which serves as one of the fundamental components of our local synchronous distance checking method.
-}
+We then describe the optimal \lsa algorithm and the sector intersection mechanism, and show how this mechanism can be used to fast the \lsa algorithms using \ped and why it cannot work with \sed.
+Finally, we illustrate a convex polygon intersection algorithm, which serves as one of the fundamental components of our local synchronous distance checking method.
+
+
+
+Notations used are summarized in Table~\ref{tab:notations}.
+
+
 
 %\textcolor[rgb]{1.00,0.00,0.00}{A discussion and summary is presented in the last.}
 
@@ -15,9 +19,9 @@ Finally, we illustrate a convex polygon intersection algorithm which serves as o
 \begin{figure*}[tb!]
 \centering
 \includegraphics[scale=0.78]{figures/Fig-sleeve.png}
-\vspace{-2ex}
+%\vspace{-1ex}
 \caption{\small Trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ in Figure~\ref{fig:notations} is compressed into two line segments by the Sector Intersection algorithm  \cite{Williams:Longest, Sklansky:Cone}.}
-\vspace{-2ex}
+\vspace{-1ex}
 \label{fig:sleeve}
 \end{figure*}
 
@@ -25,9 +29,7 @@ Finally, we illustrate a convex polygon intersection algorithm which serves as o
 
 \subsection{Basic Notations}
 \label{subsec-notation}
-We first introduce basic notations. 
-\textcolor{blue}{More notations used in the paper are summarized in Table~\ref{tab:notations}.}
-
+We first introduce basic notations.
 \begin{table}
 	\renewcommand{\arraystretch}{1.35}
 	\caption{\small Summary of notations}
@@ -84,7 +86,7 @@ We first introduce basic notations.
 		\hline
 	\end{tabular}
 	\label{tab:notations}
-	\vspace{-2ex}
+	\vspace{-1ex}
 \end{table}
 
 
@@ -118,7 +120,7 @@ However, for trajectory simplification, the distance based metrics are definitel
 %\stitle{Perpendicular Euclidean Distance (\ped)}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the perpendicular Euclidean distance (or simply perpendicular distance) $ped(P, \mathcal{L})$ of $P$ to $\mathcal{L}$ is the Euclidean distance of $P$ to line $\overline{P_{s}P_{e}}$, adopted by many trajectory simplification methods, \eg~\cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve, Lin:Operb}.
 
 
-\stitle{Perpendicular Euclidean Distance (\ped)}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the perpendicular Euclidean distance (or simply perpendicular distance) $ped(P, \mathcal{L})$ of point $P$ to line segment $\mathcal{L}$ \textcolor{blue}{is $min\{|PQ|\}$ for any $Q\in \vv{P_{s}P_{e}}$.}
+\stitle{Perpendicular Euclidean Distance (\ped)}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the perpendicular Euclidean distance (or simply perpendicular distance) $ped(P, \mathcal{L})$ of point $P$ to line segment $\mathcal{L}$ is $\min\{|PQ|\}$ for any point $Q$ on $\vv{P_{s}P_{e}}$.
 
 \stitle{Synchronized points \cite{Meratnia:Spatiotemporal}}. Given a sub-trajectory $\dddot{\mathcal{T}}_s[P_s$, $\ldots, P_e]$, the synchronized point $P'$ of a data point  $P \in \dddot{\mathcal{T}}_s$, ~\wrt line segment $\vv{P_sP_e}$ is defined as follows:
 (1) $P'.x$ = $P_s.x +  c\cdot(P_e.x - P_s.x)$,
@@ -153,24 +155,24 @@ we say that algorithm $\mathcal{A}$ is error bounded by $\epsilon$ if  for each 
 
 
 
-\subsection{\textcolor{blue}{The Optimal \lsa Algorithm}}
+\subsection{The Optimal \lsa Algorithm}
 \label{subsec-optimal}
 
 Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ and an error bound $\epsilon$, the optimal trajectory simplification problem, as formulated by Imai and Iri in \cite{Imai:Optimal}, can be solved in two steps: (1) construct a reachability graph $G$ of \trajec{T} and (2) search a shortest path from $P_0$ to $P_{n}$ in graph $G$.
 
-The reachability graph of a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ \wrt an error bound $\epsilon$ is $G$ = (\trajec{T}, $E)$, where, for vertexes $P_s$ and $P_{s+k} \in$ \trajec{T} $(k>0)$, edge $(P_s, P_{s+k}) \in E$ if and only if the distance of each point $P_{s+i} (0<i<k)$ to line segment $\vv{P_sP_{s+k}}$ is no great than $\epsilon$.
-%
-Then in the reachability graph $G$, a path from point $P_0$ to point $P_{n}$ is a representation of trajectory \trajec{T}. The path also reveals the subset of points of \trajec{T} used in the approximate trajectory and the path length will correspond to the number of line segments in the approximation trajectory. 
-Meanwhile, a shortest path is an optimal representation of trajectory \trajec{T}.
+The reachability graph of a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ \wrt an error bound $\epsilon$ is $G$ = ($V$, $E)$, where (1) $V = \{P_0, \ldots, P_n\}$, and (2) for any nodes $P_s$ and $P_{s+k} \in V$ ($s\ge 0, k>0, s+k\le n$), edge $(P_s, P_{s+k}) \in E$ if and only if the distance of each point $P_{s+i} (0<i<k)$ to line segment $\vv{P_sP_{s+k}}$ is no greater than $\epsilon$.
 
-The brute-force algorithm of constructing the reachability graph $G$ is to check for each pair of points $P_s$ and $P_{s+k}$ whether the distance of each point $P_{s+i}$, $0<i<k$, to the line segment $\vv{P_sP_{s+k}}$ is less than $\epsilon$. 
-There are $O(n^2)$ pairs of points in the trajectory and checking the error of all points $P_{s+i}$ to a line segment $\vv{P_sP_{s+k}}$ takes $O(n)$ time. 
-Thus, this method takes $O(n^3)$ time. 
-Since finding a shortest path takes no more than $O(n^2)$ time, the brute-force algorithm takes $O(n^3)$ time.
+Observe that in the reachability graph $G$, (1) a path from nodes $P_0$ to $P_{n}$ is a representation of trajectory \trajec{T}. The path also reveals the subset of points of \trajec{T} used in the approximate trajectory, (2) the path length corresponds to the number of line segments in the approximation trajectory, and 
+(3) a shortest path is an optimal representation of trajectory \trajec{T}.
+
+Constructing the reachability graph $G$ needs to check for all pair of points $P_s$ and $P_{s+k}$ whether the distances of all points ($P_{s+i}$, $0<i<k$) to the line segment $\vv{P_sP_{s+k}}$ are less than $\epsilon$.
+There are $O(n^2)$ pairs of points in the trajectory and checking the error of all points $P_{s+i}$ to a line segment $\vv{P_sP_{s+k}}$ takes $O(n)$ time.
+Thus, the construction step takes $O(n^3)$ time.
+Finding a shortest path takes $O(n)$ time in this case. Hence, the brute-force algorithm takes $O(n^3)$ time in total.
 
 %
-The brute-force algorithm is initially developed using \ped, but it is also suitable for \sed. 
-More specifically, the authors of \cite{Chan:Optimal} proved that the construction of the reachability graph $G$ using \ped could further be implemented in $O(n^2)$ time with the help of the \textit{sector intersection} mechanism (see Section \ref{sub-ci-ped}), however, the \textit{sector intersection} mechanism can not work with \sed, hence, currently the construction of the graph $G$ using \sed still needs $O(n^3)$ time.
+The brute-force algorithm is initially developed using \ped, and can be used for \sed as well.
+As pointed out in \cite{Chan:Optimal}, the construction of the reachability graph $G$ using \ped can be implemented in $O(n^2)$ time with the help of the \textit{sector intersection} mechanism (see Section \ref{sub-ci-ped}). However, the sector intersection mechanism cannot work with \sed, hence, the construction of the reachability graph $G$ using \sed remains in $O(n^3)$ time.
 
 
 \subsection{Sector Intersection based Algorithms using \ped}
@@ -183,7 +185,7 @@ Further, \cite{Dunham:Cone}  optimized algorithm \cia by considering the distanc
 %Note that these notable algorithms are not introduced to the discipline of trajectory compression.
 %though these notable algorithms are famous in disciplines of graphic and pattern recognition,
 
-Given a sequence of data points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$, the \cia based algorithms process the input points one by one in order, and produce a simplified polyline.  Instead of using the distance threshold $\epsilon$ directly, the \cia based algorithms convert the distance tolerance into a variable angle tolerance for testing the \textcolor{blue}{successive data} points.
+Given a sequence of data points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$, the \cia based algorithms process the input points one by one in order, and produce a simplified polyline.  Instead of using the distance threshold $\epsilon$ directly, the \cia based algorithms convert the distance tolerance into a variable angle tolerance for testing the successive data points.
 
 For the start data point $P_s$, any point $P_{s+i}$ and $|\vv{P_sP_{s+i}}|>\epsilon$ ($i\in[1, k]$), there are two directed lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ such that $ped(P_{s+i}, \vv{P_sP^u_{s+i}})$ $=$ $ped(P_{s+i}, \vv{P_sP^l_{s+i}}) = \epsilon$ and either ($\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta ~and~\vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta <\pi$) or ($\vv{P_sP^l_{s+i}}.\theta > \vv{P_sP^u_{s+i}}.\theta ~and~ \vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta < -\pi)$. Indeed, they forms a \emph{sector} \sector{(P_s, P_{s+i}, \epsilon)} that takes $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the border lines.
 % , where $P_s$ is the center point, and $\vv{P_sP^l_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ are two bound lines.
@@ -195,14 +197,14 @@ However, if $P_{s+i}$ ($1\le i\le k$) is chosen as $Q$, then
 for any data point $P_{s+j}$ ($j \in [1, ... i]$), its perpendicular Euclidean distance to
 line segment $\overline{P_sP_{s+i}}$ is no greater than the error bound $\epsilon$ if and only if $\bigsqcap_{j=1}^{i}$\sector{(P_s, P_{s+j}, \epsilon/2)} $\ne \{P_s\}$, as pointed out in \cite{Zhao:Sleeve}.
 
-That is, {\em these \cia based algorithms can be easily adopted for trajectory compression using \ped although they have been overlooked by existing trajectory simplification studies}.  
+That is, {\em these \cia based algorithms can be easily adopted for trajectory compression using \ped although they have been overlooked by existing trajectory simplification studies}.
 The \cia based algorithms run in $O(n)$ time and $O(1)$ space and are one-pass algorithms.
-%
-\textcolor{blue}{It is also worth pointing out that if we use \sed instead of \ped then  ``the $k$ sectors \sector{(P_s, P_{s+i}, \epsilon)} ($i\in[1,k]$) sharing common data points other than $P_s$" would not anymore ensure ``there exists a data point $Q$ such that for any data point $P_{s+i}$ ($i \in [1, ... k]$), its synchronized Euclidean distance to directed line $\overline{P_sQ}$ is no greater than the error bound $\epsilon$". 
-Hence, the \cia mechanism is \ped specific and it is not applicable for \sed.}
- 
 
-We next illustrate how the \cia based algorithms can be used for trajectory compression \textcolor{blue}{through an example}.
+However, if we use \sed instead of \ped, then  ``the $k$ sectors \sector{(P_s, P_{s+i}, \epsilon)} ($i\in[1,k]$) sharing common data points other than $P_s$" cannot ensure ``there exists a data point $Q$ such that for any data point $P_{s+i}$ ($i \in [1, ... k]$), its synchronized Euclidean distance to directed line $\overline{P_sQ}$ is no greater than the error bound $\epsilon$''.
+Hence, the \cia mechanism is \ped specific, and not applicable for \sed.
+
+
+We next illustrate how the \cia based algorithms can be used for trajectory compression with an example.
 
 %Note that it runs in a 2D plane, and the \sed is not supported in the algorithm.
 
@@ -228,7 +230,7 @@ Similarly, points $P_3$ and $P_4$ are processed, as shown in Figures~\ref{fig:sl
 \subsection{Intersection Computation of Convex Polygons}
 \label{subsec-cpi}
 
-We also employ \textcolor{blue}{and customize} a convex polygon intersection algorithm \textcolor{blue}{presented} in~\cite{ORourke:Intersection}, whose basic idea is straightforward.
+We also employ and revise a convex polygon intersection algorithm developed in~\cite{ORourke:Intersection}, whose basic idea is straightforward.
 Assume \kwlog that the edges of polygons $\mathcal{R}_1$ and $\mathcal{R}_2$ are oriented counterclockwise, and $\vv{A} = (P_{s_A}, P_{e_A})$ and $\vv{B} = (P_{s_B}, P_{e_B})$ are two (directed) edges on $\mathcal{R}_2$ and $\mathcal{R}_1$, repectively (see Figure~\ref{fig:c-poly-inter}).
 
 \begin{figure}[tb!]
@@ -301,10 +303,10 @@ It is worth pointing out that $|\mathcal{R}_1 \bigsqcap \mathcal{R}_2| \le (|\ma
 			\end{minipage}
 		}
 	\end{center}
-	\vspace{-2ex}
+	\vspace{-1ex}
 	\caption{\small Algorithm for convex polygons intersection~\cite{ORourke:Intersection}.}
 	\label{alg:c-poly-inter}
-	\vspace{-2ex}
+	\vspace{-1ex}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

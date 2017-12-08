@@ -24,7 +24,7 @@ It is known that these issues can be resolved or greatly alleviated by trajector
 %\vspace{-1ex}
 \caption{\small A trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$  with eleven points is represented by two (left) and four (right) continuous line segments (solid blue), compressed by the Douglas--Peucker algorithm \cite{Douglas:Peucker} using \ped and \sed, respectively. The Douglas--Peucker algorithm firstly creates line segment $\protect\vv{P_0P_{10}}$, then it calculates the distance of each point in the trajectory to $\protect\vv{P_{0}P_{10}}$. It finds that point $P_{4}$ has the maximum distance to $\protect\vv{P_{0}P_{10}}$, and is greater than the user defined threshold $\epsilon$. Then it goes to compress sub-trajectories $[P_0, \ldots, P_{4}]$ and $[P_{4}, \ldots, P_{10}]$, separately.
 }
-\vspace{-2ex}
+\vspace{-1ex}
 \label{fig:notations}
 \end{figure*}
 
@@ -42,27 +42,31 @@ Line simplification algorithms using \ped have good compression ratios~ \cite{Do
 
 
 The \emph{synchronous Euclidean distance} (\sed) was then introduced for trajectory compression to support the above spatio-temporal queries \cite{Meratnia:Spatiotemporal}. \sed is the Euclidean distance of a data point to its \emph{approximate temporally synchronized data point \cite{Meratnia:Spatiotemporal}} on the corresponding line segment. For instance, $P'_4$ and $P'_7$ are the \emph{synchronized data points} of points $P_4$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$ and $\vv{P_4P_{10}}$, respectively, in Figure~\ref{fig:notations} (right).
-\lsa algorithms using \sed may produce more line segments. However, the use of \sed ensures that the Euclidean distance between a data point and its  synchronized point \wrt the corresponding line segment is bounded \textcolor{blue}{by an user specified parameter $\epsilon$}. Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the synchronized point $P'$ of a data point $P$ within the bounded distance $\epsilon$.
+\lsa algorithms using \sed may produce more line segments. However, the use of \sed ensures that the Euclidean distance between a data point and its  synchronized point \wrt the corresponding line segment is limited within by a distance bound $\epsilon$. Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the synchronized point $P'$ of a data point $P$ within the bound $\epsilon$.
 
 
-\textcolor{blue}{No matter using \ped or \sed, the problem targeting at finding out the minimal number of line segments to represent the original polygonal lines \wrt an error bound $\epsilon$ is known as the ``min-\#" problem\cite{Imai:Optimal,Chan:Optimal}. For this problem, 
-	%there exists the optimal \lsa algorithm using \sed whose time complexity is $O(n^3)$.
-	the authors of \cite{Imai:Optimal} showed that an optimal \lsa algorithm using \ped can be found in $O(n^3)$ time, where $n$ is the number of the original points. 
+%No matter using \ped or \sed, 
+
+The problem of finding the minimal number of line segments to represent the original polygonal lines \wrt an error bound $\epsilon$ is known as the ``min-\#" problem\cite{Imai:Optimal,Chan:Optimal}. 
+	% For this problem, there exists the optimal \lsa algorithm using \sed whose time complexity is $O(n^3)$.
+An optimal $O(n^3)$  \lsa algorithm using \ped was firstly developed in \cite{Imai:Optimal},  where $n$ is the number of the original points.
 	%
-	Later, the authors of \cite{Chan:Optimal} proved that an optimal algorithm using \ped could be implemented in $O(n^2)$ time with the help of \textit{sector intersection} mechanism. 
-	However, currently the time complexity of the optimal \lsa algorithm using \sed is still $O(n^3)$ as those optimization mechanisms are \ped specific and could not work with \sed.
-	The high time complexities of the optimal \lsa algorithms using \sed make them impractical.}
+	Later, an improved optimal  $O(n^2)$  algorithm using \ped was designed in \cite{Chan:Optimal}, with the help of \textit{sector intersection} mechanism.
+	However, the time complexity of the optimal \lsa algorithm using \sed remains in $O(n^3)$, as the optimization mechanisms are \ped specific, and cannot work with \sed.
 
-
-\textcolor{blue}{Sub-optimal \lsa algorithms} using \sed have been developed for \textcolor{blue}{trajectory compression, including} batch algorithms (\eg Douglas-Peucker based algorithm \dpsed \cite{Meratnia:Spatiotemporal}) and online algorithms (\eg\ \squishe \cite{Muckell:Compression}).
+ %	The high time complexities of the optimal \lsa algorithms using \sed make them impractical.
+Due to the high time complexities of optimal \lsa algorithms using \sed, sub-optimal \lsa algorithms using \sed have been developed for trajectory compression, including batch algorithms (\eg Douglas-Peucker based algorithm \dpsed \cite{Meratnia:Spatiotemporal}) and online algorithms (\eg\ \squishe \cite{Muckell:Compression}).
 However, these methods still have a high time and/or space complexity, which hinders their utility in resource-constrained devices. %\cite{Lin:Operb}
+
+
+Observe that linear time \lsa algorithms using \ped \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve, Lin:Operb} have been develped, and they are more efficient for resource-constrained devices.
 %
-On the other hand, there are \textcolor{blue}{linear complexity \lsa algorithms using \ped} \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve, Lin:Operb} that are more efficient for resource-constrained devices. 
-%
-\textcolor{blue}{The key idea of them to achieve a linear time complexity is that they apply optimization strategies, \eg the \textit{sector intersection} mechanism in \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} and the \textit{fitting function} approach in our preview work \cite {Lin:Operb}, to fast the process of simplification and save resources. 
-As mentioned above, these algorithms are only applicable for \ped because the core optimization strategies they applied would not work correctly if the \ped metric is replaced by other metrics, such as \sed.} 
-\textcolor{blue}{Indeed, {the developing of an efficient \lsa algorithm using \sed is more challenging than using \ped}.}
-\textcolor{blue}{And, to our knowledge, there is no effective \lsa algorithm using \sed that has a linear time complexity.}
+The key idea to achieve a linear time complexity is by local distance checking in constant time, \eg \textit{sector intersection} mechanism used in \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} and the \textit{fitting function} approach used in our preview work \cite {Lin:Operb}.
+Unfortunately, these techinques are designed specifically for \ped, and cannot be applied for \sed.
+
+
+Indeed, it is even more challenging to design an one-pass \lsa algorithm using \sed than using \ped.
+To our knowledge,  no one-pass \lsa algorithms using \sed have been develoed in the community.
 
 
 
@@ -72,27 +76,27 @@ As mentioned above, these algorithms are only applicable for \ped because the co
 To this end, we propose two one-pass error bounded \lsa algorithms using \sed for compressing trajectories in an efficient and effective way. % error bounded
 
 \sstab {(1)} We first develop a novel local synchronous distance checking approach, \ie spatio-temporal \underline{C}one \underline{I}ntersection using the \underline{S}ynchronous \underline{E}uclidean \underline{D}istance (CISED).
-%, by extending the sector intersection method \cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve}\eat{(Section~\ref{sec-localcheck})}. 
-We also approximate the intersection of spatio-temporal cones with the intersection of regular polygons, and develop a fast regular polygon intersection algorithm, such that each data point in a trajectory is checked in $O(1)$ time during the entire process of trajectory simplification.
+%, by extending the sector intersection method \cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve}\eat{(Section~\ref{sec-localcheck})}.
+We further approximate the intersection of spatio-temporal cones with the intersection of regular polygons, and develop a fast regular polygon intersection algorithm, such that each data point in a trajectory is checked in $O(1)$ time during the entire process of trajectory simplification.
 
 %\sstab {(2)} \textcolor{blue}{We then show that an optimal trajectory simplification algorithm using \sed can achieve $O(n^2 \log n)$ time by using our local synchronous distance checking technique, and provide a \textit{near optimal} trajectory simplification algorithm \cisto that achieves $O(n^2)$ time and $O(n)$ space.}
 
-\sstab {(2)} We next develop two one-pass trajectory simplification algorithms \cist and \cista, \textcolor{blue}{achieving $O(n)$ time and $O(1)$ space}, based on our local synchronous distance checking technique. 
+\sstab {(2)} We next develop two one-pass trajectory simplification algorithms \cist and \cista, achieving $O(n)$ time complexity and $O(1)$ space complexity, based on our local synchronous distance checking technique.
 Algorithms \cist belongs to strong simplification that only has original points in its outputs, while algorithm \cista belongs to weak simplification that allows interpolated data points in its output.
 
 
 \sstab (3) Using four real-life trajectory datasets (\truck, \sercar, \geolife, \pricar),
-we finally conduct an extensive experimental study, by comparing our methods \cist and \cista  with \textcolor{blue}{the optimal \lsa algorithm using \sed}, \dps~\cite{Meratnia:Spatiotemporal} (the most effective existing \lsa algorithm using \sed) and \squishe \cite{Muckell:Compression} (the most efficient existing \lsa algorithm using \sed).
+we finally conduct an extensive experimental study, by comparing our methods \cist and \cista  with the optimal \lsa algorithm using \sed, \dps~\cite{Meratnia:Spatiotemporal} (the most effective existing \lsa algorithm using \sed) and \squishe \cite{Muckell:Compression} (the most efficient existing \lsa algorithm using \sed).
 
-%{For execution time,} 
-Algorithms \cist and \cista are on average ($14.21$, $18.19$, $17.06$, $9.98$), ($2.84$, $3.45$, $3.69$, $2.86$) and \textcolor{blue}{($925.25$, $7888.26$, $40041.59$, $8528.76$)} times faster than \dps, \squishe and \textcolor{blue}{the optimal \lsa algorithm} on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
+For running time,
+algorithms \cist and \cista are on average ($14.21$, $18.19$, $17.06$, $9.98$), ($2.84$, $3.45$, $3.69$, $2.86$) and ($925.25$, $7888.26$, $40041.59$, $8528.76$) times faster than \dps, \squishe and the optimal \lsa algorithm on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
 
 For compression ratios, algorithm \cist is better than \squishe and comparable with \dps. The output sizes of \cist are on average ($79.5\%$, $79.5\%$, $66.0\%$, $72.7\%$),
-($109.1\%$, $109.7\%$, $113.5\%$, $109.2\%$) and \textcolor{blue}{($134.3\%$, $133.3\%$,
-  $148.4\%$, $135.4\%$)} of \squishe, \dps and \textcolor{blue}{the optimal \lsa algorithm} on datasets (\sercar, \geolife, \mopsi, \pricar), respectively. 
-Moreover, algorithm \cista is comparable with \textcolor{blue}{the optimal \lsa algorithm} and better than \squishe and \dps that are on average ($57.9\%$, $58.8\%$, $48.4\%$, $54.6\%$),
-($79.6\%$, $81.2\%$, $83.3\%$, $82.1\%$) and \textcolor{blue}{($98.1\%$, $98.7\%$, $108.9\%$,
-  $101.7\%$)} of \squishe, \dps and \textcolor{blue}{the optimal \lsa algorithm} on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
+($109.1\%$, $109.7\%$, $113.5\%$, $109.2\%$) and ($134.3\%$, $133.3\%$,
+  $148.4\%$, $135.4\%$) of \squishe, \dps and the optimal \lsa algorithm on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
+Moreover, algorithm \cista is comparable with the optimal \lsa algorithm and better than \squishe and \dps that are on average ($57.9\%$, $58.8\%$, $48.4\%$, $54.6\%$),
+($79.6\%$, $81.2\%$, $83.3\%$, $82.1\%$) and ($98.1\%$, $98.7\%$, $108.9\%$,
+  $101.7\%$) of \squishe, \dps and the optimal \lsa algorithm on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
 
 
 \stitle{{Organization}}.
