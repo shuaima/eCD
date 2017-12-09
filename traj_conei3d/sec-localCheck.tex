@@ -4,13 +4,13 @@
 %In this section, we first analyze the properties of synchronized points and synchronous Euclidean distances, then we present a local one-pass \sed checking method by extending the cone intersection for \ped checking in Section~\ref{sub-ci-ped}.
 %Finally, we provide a one-pass, error-bounded and \sed enabled trajectory simplification algorithm.
 
-In this section, we develop a local synchronous distance checking approach such that each point in a trajectory is checked only once in $O(1)$ time during the entire process of trajectory simplification, by substantially extending the sector intersection method in Section~\ref{sub-ci-ped} from a 2D space to a Spatio-Temporal 3D space, which lays down the key for the one-pass trajectory simplification algorithms using \sed (Section~\ref{sec-alg}).
+In this section, we develop a local synchronous distance checking approach such that each point in a trajectory is checked only once in $O(1)$ time during the entire process of trajectory simplification, by substantially extending the \textit{sector intersection} method in Section~\ref{sub-ci-ped} from a 2D space to a Spatio-Temporal 3D space, which lays down the key for the one-pass trajectory simplification algorithms using \sed (Section~\ref{sec-alg}).
 
 We consider a sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, P_{s+k}]$, an error bound $\epsilon$, and a 3D Cartesian coordinate system whose origin, $x$-axis, $y$-axis and $t$-axis  are $P_s$, longitude, latitude and time, respectively.
 
 \subsection{Spatio-Temporal Cone Intersection}
 
-We first present the spatio-temporal cone intersection method in a 3D Cartesian coordinate system, which extends the sector intersection method~\cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve}. %in a 2D Cartesian coordinate system.
+We first present the \textit{spatio-temporal cone intersection} method in a 3D Cartesian coordinate system, which extends the \textit{sector intersection} method~\cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve}. %in a 2D Cartesian coordinate system.
 
 %Recall that the \sed of point $P_i$ to a directed line segment $\mathcal{L} = \vv{P_{s}P_{e}}$, denoted as $sed(P_i, \mathcal{L})$, is $|P_iP_i'|$, the distance from $P_i$ to its synchronized point $P_i' (x_i', y_i', t_i)$ \wrt $\mathcal{L}$.
 
@@ -99,7 +99,7 @@ By Proposition~\ref{prop-3d-ci}, we now have a spatio-temporal cone intersection
 \subsection{Circle Intersection}
 \label{subsec-ProjectionCircle}
 
-For spatio-temporal cones with the same apex $P_s$, the checking of their intersection can be computed by a much simpler way, \ie the checking of intersection of \textit{cone projection circle}s on a plane, as follows.
+For spatio-temporal cones with the same apex $P_s$, the checking of their intersection can be computed by a much simpler way, \ie the checking of intersection of cone projection circles on a plane, as follows.
 
 \stitle{Cone projection circles}. The projection of a cone \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} on a plane $P.t- t_c = 0$ ($t_c > P_s.t$) is a circle \pcircle{(P^c_{s+i}, r^c_{s+i})}, or \pcircle{_{s+i}} in short, such that
 %
@@ -238,57 +238,9 @@ As the intersection of two $m$-edge convex polygons can be computed in $O(m)$ ti
 
 
 
-
-\eat{%%%%%%%%%%%%%%%%
-
-Based on the notion of spatio-temporal cone, we further check the intersection of 3D cones, similar as the checking of intersection of 2D cones, to find whether there exists a line starting from $P_s$ and approximating these points.
-
-
-Let $P_s$ be the original of coordination, we demonstrate the \sed and the synchronized points in the spatio-temporal space, as shown in Figure~\ref{fig:sed3d}.
-From the spatio-temporal space, we have the following findings.
-
-
-
-we further replace a circle $\mathcal{O}(P, r)$ to a specially designed $M$-edges inscribed regular polygon,
-then we check the intersection of the regular polygons instead of the checking of circles intersection.
-Obviously, the intersection of regular polygons is only a sufficient condition of the intersection of the corresponding circles , and
-algorithms employ this policy may loss some compression ratio.
-And, a larger $M$ would lead to a better compression ratio and a poorer efficiency.
-\textcolor[rgb]{0.00,0.07,1.00}{The setting of $M$ is studied in Section 4.}
-% In a summary, region $[12, 20]$ are the candidate selections of $M$.
-
-}%%%%%%%%%%%%%%%%
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{subsec-fastRPI}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
-
-
-
-
-
-
-\eat{%%%%%%%%%%%%%%%%EAT
-	With Lemma~\ref{prop-3d-syn-point} and the notion of \emph{synchronous circle}, and from the geometrical perspective, we have Theorem~\ref{prop-3d-sed-sim}.
-	
-	
-	
-	\begin{theorem}
-		\label{prop-3d-sed-sim}
-		Given a sub-trajectory $[P_s, \ldots, P_e]$ and an error bound $\epsilon$, the sub-trajectory can be represented by the line segment $\vv{P_sP_e}$ if and only if the line segment passes through all synchronous circles $\mathcal{O}(P_i, \epsilon)$ for each $i \in (s, e]$.
-	\end{theorem}
-	
-	\begin{proof}
-		As shown in Figure~\ref{fig:sed3d}, let $P'_i$ be the intersection point of line segment $\vv{P_sP_e}$ and plane $t=t_i$.
-		By Lemma~\ref{prop-3d-syn-point}, point $P'_i$ is the synchronized point of $P_i$ \wrt line segment $\vv{P_sP_e}$.
-		
-		\ni (1) If the line segment $\vv{P_sP_e}$ passes through all synchronous circles $\mathcal{O}(P_i, \epsilon)$ for $i \in (s, e)$, then by the definition of synchronous circle, it must pass through the circle which is on the plane $t=t_i$ and around point $P_i$, and has a radius of $\epsilon$, thus, $|P'_iP_i| <\epsilon$. Furthermore, the property is hold for each $i \in (s, e)$, hence, the sub trajectory $[P_s, \ldots, P_e]$ can be represented by the line segment $\vv{P_sP_e}$.
-		
-		\ni (2) If the sub trajectory $[P_s, \ldots, P_e]$ can be represented by the line segment $\vv{P_sP_e}$, then $|P'_iP_i| <\epsilon$ for each $i \in (s, e)$, \ie $P'_i$ is in the synchronous circles $\mathcal{O}(P_i, \epsilon)$. Thus, the line segment $\vv{P_sP_e}$ passes through all synchronous circles $\mathcal{O}(P_i, \epsilon)$ for $i \in (s, e)$.
-		
-		We have the conclusion.
-	\end{proof}
-}%%%%%%%%%%%%%%%%%%EAT%
