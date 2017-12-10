@@ -7,14 +7,76 @@
 \vspace{-1ex}
 \includegraphics[scale=0.66]{figures/Fig-DP.png}
 \vspace{-1ex}
-\caption{\small A trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{8}]$  with nine points is represented by two (left) and four (right) continuous line segments (solid blue), compressed by the Douglas--Peucker algorithm \cite{Douglas:Peucker} with error metrics \ped and \sed, respectively.}
+\caption{\small A trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$  with 11 points is represented by two (left) and four (right) continuous line segments (solid blue), compressed by the Douglas--Peucker algorithm \cite{Douglas:Peucker} with error metrics \ped and \sed, respectively.}
 \vspace{-2ex}
 \label{fig:notations}
 \end{figure*}
 
-\subsection{Notations}
+
+\subsection{Basic Notations}
+\label{subsec-notation}
 
 We first introduce basic notations.
+
+\begin{table}
+	\renewcommand{\arraystretch}{1.35}
+	\caption{\small Summary of notations}
+	%	\vspace{-1ex}
+	\centering
+	\footnotesize
+	%\scriptsize
+	\begin{tabular}{|c|l|}
+		\hline
+		{\bf Notations}& {\bf Semantics}   \\
+		\hline %\hline
+		$P$ & a data point \\
+		\hline
+		$\dddot{\mathcal{T}}$ & a trajectory $\dddot{\mathcal{T}}$ is a sequence of data points\\
+		\hline
+		$\overline{\mathcal{T}}$&  {a piece-wise line representation of a }	\\
+		& trajectory $\dddot{\mathcal{T}}$		\\
+		\hline
+		$\mathcal{L}$ & a directed line segment  \\
+		\hline
+		$ped(P, \mathcal{L})$ &  {the perpendicular Euclidean distance of }	\\
+		& point $P$ to line segment $\mathcal{L}$	\\
+		\hline
+		$sed(P, \mathcal{L})$ & {the synchronous Euclidean distance of }	\\
+		& point $P$ to line segment $\mathcal{L}$	\\
+		\hline
+		$\epsilon$ & the error bound \\
+		\hline
+		\sector{} & a sector \\
+		\hline
+%		$\vv{A} \times \vv{B}$ & the cross product of (vectors) $\vv{A}$ and $\vv{B}$\\
+%		\hline
+%		$\mathcal{H}(\mathcal{L})$ & The open half-plane to the left of $\mathcal{L}$ \\
+%		\hline
+%		$\mathcal{R}$& a convex polygon \\
+%		\hline
+%		$\mathcal{R}^*$ & the intersection of convex polygons \\
+%		\hline
+		$m$ & the maximum number of edges of a polygon\\
+		\hline
+%		$E^j$ & a group of edges labeled with $j$\\
+%		\hline
+%		$g(e)$ & the label of an edge $e$ of polygons \\
+%		\hline
+		\circle{} & a synchronous circle\\
+		\hline
+		\cone{} & a spatio-temporal cone \\
+		\hline
+		\pcircle{} & a cone projection circle \\
+		\hline
+		$\bigsqcap$ & intersection of geometries\\
+		\hline
+		$G$ &	the reachability graph of a trajectory\\
+		\hline
+	\end{tabular}
+	\label{tab:notations}
+	\vspace{-1ex}
+\end{table}
+
 
 \stitle{Points ($P$)}. A data point is defined as a triple $P(x, y, t)$, which represents that a moving object is located at {\em longitude} $x$ and {\em latitude} $y$ at {\em time} $t$. Note that data points can be viewed as points in a three-dimension Euclidean space.
 
@@ -22,48 +84,53 @@ We first introduce basic notations.
 
 
 \stitle{Directed line segments ($\mathcal{L}$)}. A directed line segment (or line segment for simplicity) $\mathcal{L}$ is defined as $\vv{P_{s}P_{e}}$, which represents the closed line segment that connects the start point $P_s$ and the end point $P_e$.
-Note that here $P_s$ or $P_e$ may not be a point in a trajectory $\dddot{\mathcal{T}}$, and hence, we also use notation $\mathcal{R}$ instead of $\mathcal{L}$ when both $P_s$ and $P_e$ belong to $\dddot{\mathcal{T}}$.
+Note that here $P_s$ or $P_e$ may not be a point in a trajectory $\dddot{\mathcal{T}}$.
+
+%, and hence, we also use notation $\mathcal{R}$ instead of $\mathcal{L}$ when both $P_s$ and $P_e$ belong to $\dddot{\mathcal{T}}$.
 
 We also use $|\mathcal{L}|$ and $\mathcal{L}.\theta\in [0, 2\pi)$ to denote the length of a directed line segment $\mathcal{L}$, and its angle with the $x$-axis of the coordinate system $(x, y)$, where $x$ and $y$ are the longitude and latitude, respectively.
 That is, a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$ can be treated as a triple $(P_s, |\mathcal{L}|, \mathcal{L}.\theta)$.
 
-\stitle{Piecewise line representation ($\overline{\mathcal{T}}$)}. A piece-wise line representation of a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$), a sequence of continuous directed line segments $\mathcal{L}_{i}$ = $\vv{P_{s_i}P_{e_i}}$ of $\dddot{\mathcal{T}}$ ($i\in[0,m]$)  such that $\mathcal{L}_{0}.P_{s_0} = P_0$, $\mathcal{L}_{m}.P_{e_m} = P_n$ and  $\mathcal{L}_{i}.P_{e_i}$ = $\mathcal{L}_{i+1}.P_{s_{i+1}}$ for all $i\in[0, m-1]$. Note that each directed line segment in $\overline{\mathcal{T}}$ essentially represents a continuous sequence of data points in $\dddot{\mathcal{T}}$.
+\stitle{Piecewise line representation ($\overline{\mathcal{T}}$)}. A piece-wise line representation $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$) of a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is a sequence of continuous directed line segments $\mathcal{L}_{i}$ = $\vv{P_{s_i}P_{e_i}}$ ($i\in[0,m]$) of $\dddot{\mathcal{T}}$  such that $\mathcal{L}_{0}.P_{s_0} = P_0$, $\mathcal{L}_{m}.P_{e_m} = P_n$ and  $\mathcal{L}_{i}.P_{e_i}$ = $\mathcal{L}_{i+1}.P_{s_{i+1}}$ for all $i\in[0, m-1]$. Note that each directed line segment in $\overline{\mathcal{T}}$ essentially represents a continuous sequence of data points in $\dddot{\mathcal{T}}$.
 
 
-\subsubsection{Notations of error metrics}
 
-{For line simplification, there are distance based and shape based error metrics\cite{Shi:Survey} that measure the errors between the original trajectory and the simplified trajectory.
-However, for trajectory simplification, the distance based metrics are definitely the distinct metrics.}
-
-\stitle{Included angles ($\angle$)}. Given two directed line segments $\mathcal{L}_1$ = $\vv{P_{s}P_{e_1}}$ and $\mathcal{L}_2$ = $\vv{P_{s}P_{e_2}}$ with the same start point $P_s$, the included angle from $\mathcal{L}_1$ to $\mathcal{L}_2$, denoted as $\angle(\mathcal{L}_1, \mathcal{L}_2)$,  is $\mathcal{L}_2.\theta - \mathcal{L}_1.\theta$. For convenience, we also represent the included angle  $\angle(\mathcal{L}_1, \mathcal{L}_2)$ as $\angle{P_{e_1}P_sP_{e_2}}$.
-
-\stitle{Perpendicular points ($P^*$)}. Given a sub trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, P_e]$ and a point $P \in \dddot{\mathcal{T}}_s$, the perpendicular point $P^* = (x^*, y^*, t)$ of point $P$ \wrt directed line segment $\vv{P_sP_e}$ is the intersection point of line $\vv{P_sP_e}$ and its perpendicular line pass the point $P$. %Note that $|PP^*|=|P_sP|*\sin\angle{P_eP_sP}$.
-
-\stitle{Perpendicular Euclidean Distances ($\ped$)}. Given a point $P_i$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the distance of $P_i$ to $\mathcal{L}$, denoted as $ped(P_i, \mathcal{L})$ ={$|P_iP_i^*|$}, is the Euclidean distance from $P_i$ to $\vv{P_sP_e}$, commonly adopted by most existing trajectory simplification methods, \eg~\cite{Douglas:Peucker, Hershberger:Speeding, Keogh:online, Chen:Fast, Liu:BQS}.
+%comments: 20171126
+%\stitle{Perpendicular Euclidean Distance (\ped)}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the perpendicular Euclidean distance (or simply perpendicular distance) $ped(P, \mathcal{L})$ of $P$ to $\mathcal{L}$ is the Euclidean distance of $P$ to line $\overline{P_{s}P_{e}}$, adopted by many trajectory simplification methods, \eg~\cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve, Lin:Operb}.
 
 
-\stitle{Synchronized points ($P'$)}. Given a sub trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, P_e]$, the synchronized point $P'$ of point $P$, $P \in \dddot{\mathcal{T}}_s$, ~\wrt line $\vv{P_sP_e}$ is $(x', y', t)$, satisfying $x' = P_s.x +  \frac{P.t-P_s.t}{P_e.t-P_s.t}(P_e.x - P_s.x)$ and $y' = P_s.y +  \frac{P.t-P_s.t}{P_e.t-P_s.t}(P_e.y - P_s.y)$.
+\stitle{Perpendicular Euclidean Distance (\ped)}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the perpendicular Euclidean distance (or simply perpendicular distance) $ped(P, \mathcal{L})$ of point $P$ to line segment $\mathcal{L}$ is $\min\{|PQ|\}$ for any point $Q$ on $\vv{P_{s}P_{e}}$.
+
+\stitle{Synchronized points \cite{Meratnia:Spatiotemporal}}. Given a sub-trajectory $\dddot{\mathcal{T}}_s[P_s$, $\ldots, P_e]$, the synchronized point $P'$ of a data point  $P \in \dddot{\mathcal{T}}_s$,~\wrt line segment $\vv{P_sP_e}$ is defined as follows:
+(1) $P'.x$ = $P_s.x +  c\cdot(P_e.x - P_s.x)$,
+(2) $P'.y$ = $P_s.y +  c\cdot(P_e.y - P_s.y)$ and
+(3) $P'.t$ = $P.t$, where $c= \frac{P.t-P_s.t}{P_e.t-P_s.t}$.
 
 
-\stitle{Synchronized Euclidean Distances ($\sed$)}. The \sed of point $P_i$ to directed line segment $\mathcal{L} = \vv{P_{s}P_{e}}$, denoted as $sed(P_i, \mathcal{L})$, is $|P_iP_i'|$, the distance from $P_i$ to the synchronized data point $P_i'$ \wrt $\mathcal{L}$, adopted by recent trajectory simplification methods~\cite{Meratnia:Spatiotemporal, Chen:Fast, Muckell:Compression, Popa:Spatio}.
-
-%\stitle{Radial Euclidean Distances ($\red$)}. The \red of $P$ \wrt $\mathcal{L}$, denoted as $red(P, \mathcal{L})$, is the distance from the perpendicular point $P^*$ of $P$ to the synchronized point $P'$ of $P$.
+\stitle{Synchronous Euclidean Distance (\sed) \cite{Meratnia:Spatiotemporal}}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the synchronous Euclidean distance (or simply synchronous distance) $sed(P, \mathcal{L})$ of $P$ to $\mathcal{L}$ is $|\vv{PP'}|$ that is the Euclidean distance from $P$ to its synchronized data point $P'$ \wrt $\mathcal{L}$. %, adopted by recent trajectory simplification methods~\cite{Meratnia:Spatiotemporal, Potamias:Sampling, Chen:Fast, Muckell:Compression, Popa:Spatio}.
 
 
-%\stitle{Dual Euclidean distances $(\ped, ~\red)$}. A \ded is a two-tuples $(\ped, ~\red)$, whereas, \ped and \red either has its error bound ($\epsilon_p$ of \ped and $\epsilon_r$ of \red), and is checked separately. Note that the distance checking approach of the original \lsa algorithms, whose \red error bound $\epsilon_r$ is fixed with $\infty$, is a special case of \ded.
+
+
+We illustrate these notations with examples.
 
 
 \begin{example}
-\label{exm-notations}
-Figure~\ref{fig:notations} is examples of these notations:
-(1) a trajectory $\dddot{\mathcal{T}}[P_0$, $\ldots, P_{10}]$ having eleven data points;
-(2) the set of two continuous line segments $\{\vv{P_0P_4}$, $\vv{P_4P_{10}}$\} (Left) and the set of four continuous line segments $\{\vv{P_0P_2}$, $\vv{P_2P_4}$, $\vv{P_4P_7}$, $\vv{P_7P_{10}}$\} (Right) in the figure are two piecewise line representations of the trajectory $\dddot{\mathcal{T}}$;
-(3) $P^*_4$ is the perpendicular point of $P_4$ \wrt line segment $\vv{P_0P_{10}}$;
-(4) $ped(P_4, \vv{P_0P_{10}})=|P_4P^*_4|$;
-(5) $P'_4$, $P'_2$ and $P'_7$ are the synchronized points of points $P_4$, $P_2$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$, $\vv{P_0P_{4}}$ and $\vv{P_4P_{10}}$, respectively;
-(6) $sed(P_4, \vv{P_0P_{10}})= |P_4P'_4|$, $sed(P_2, \vv{P_0P_{4}})= |P_2P'_2|$ and $sed(P_7, \vv{P_4P_{10}}) = |P_7P'_7|$;
-%(7) $red(P_7, \vv{P_4P_8})= |P^*_7P'_7|$.
+	\label{exm-notations}
+	Consider Figure~\ref{fig:notations}, in which
+	
+	\sstab(1) $\dddot{\mathcal{T}}[P_0$, $\ldots, P_{10}]$ is a trajectory having 11 data points,
+	
+	\sstab (2) the set of two continuous line segments $\{\vv{P_0P_4}$, $\vv{P_4P_{10}}$\} (Left) and the set of four continuous line segments $\{\vv{P_0P_2}$, $\vv{P_2P_4}$, $\vv{P_4P_7}$, $\vv{P_7P_{10}}$\} (Right) are two piecewise line representations of trajectory $\dddot{\mathcal{T}}$,
+	
+	\sstab(3) $ped(P_4, \vv{P_0P_{10}})=|\vv{P_4P^*_4}|$, where $P^*_4$ is the perpendicular point of $P_4$ \wrt line segment $\vv{P_0P_{10}}$, and
+	
+	\sstab (4) $sed(P_4, \vv{P_0P_{10}})= |\vv{P_4P'_4}|$, $sed(P_2, \vv{P_0P_{4}})= |\vv{P_2P'_2}|$ and $sed(P_7, \vv{P_4P_{10}})$ $=$ $|\vv{P_7P'_7}|$,
+	where points $P'_4$, $P'_2$ and $P'_7$ are the synchronized points of $P_4$, $P_2$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$, $\vv{P_0P_{4}}$ and $\vv{P_4P_{10}}$, respectively.
 \end{example}
+
+\stitle{Error bounded algorithms}. Given a trajectory \trajec{T} and its compression  algorithm $\mathcal{A}$ using \sed (respectively \ped) that produces another trajectory \trajec{T'},
+we say that algorithm $\mathcal{A}$ is error bounded by $\epsilon$ if  for each point $P$ in \trajec{T}, there exist points $P_j$ and $P_{j+1}$ in \trajec{T'} such that $sed(P, \mathcal{L}(P_j,P_{j+1}))\le \epsilon$ (respectively $ped(P, \mathcal{L}(P_j,P_{j+1}))\le \epsilon$).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -72,21 +139,11 @@ Figure~\ref{fig:notations} is examples of these notations:
 This paper focus on the \emph{min-$\#$ problem} \cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment} of trajectory simplification.
 Given a trajectory \trajec{T}$[P_0, \dots, P_n]$ and a pre-specified constant $\epsilon$, a trajectory simplification algorithm $\mathcal{A}$ approximates \trajec{T} by $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$), where on
 each of them the data points $[P_{s_i}, \dots, P_{e_i}]$ are approximated by a line segment $\mathcal{L}_i = \vv{P_{s_i}P_{e_i}}$ with the maximum error of  $ped(P_j, \mathcal{L}_i)$ or $sed(P_j, \mathcal{L}_i)$, $s_i < j<e_i$,  less than $\epsilon$.
+
+This paper evaluates the optimal and sub-optimal methods using \ped and \sed.
+
+\eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%EAT
 The optimal methods that find the minimal $m$, having the time complexity of $O(n^2)$\cite{Chan:Optimal},
 making it impractical for large inputs\cite{Heckbert:Survey}.
 Hence, this paper evaluates the distinct sub-optimal methods.
-
-\eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{figure}[tb!]
-\label{fig:scope}
-\centering
-\includegraphics[scale=0.8]{figures/Fig-scope.png}
-\vspace{-1ex}
-\caption{Example \emph{scopes} of synchronized points. The synchronized point $P'$ has (1) a circle scope  when using \sed, and (2) a rectangle scope when using \ded.}
-
-\vspace{-2ex}
-\end{figure}
-
-%Given a line $\overline{P_sP_e}$, a synchronized point $P'$ on line $\overline{P_sP_e}$ and a error bound $\epsilon_s$ of ~\sed (or error bounds $\epsilon_p$ and $\epsilon_r$ of \ded), all points potentially be compressed to a synchronized point $P'$ forms a \emph{scope} of $P'$ (Fig.\ref{fig:scope}). The \emph{scope} of $P'$ in \sed is a circle around $P'$ whose radius is less than the \sed error bound $\epsilon_s$, and the \emph{scope} of $P'$ in \ded is a rectangle, paralleling to the line $\overline{P_sP_e}$, taking $P'$ as the central point and whose height and width are less than the \ded error bounds $\epsilon_p$ and $\epsilon_r$ respectively. With he help of \ded, one can set the value of $\epsilon_p$ and $\epsilon_r$ separately according to varied application requirements, \eg a smaller $\epsilon_p$ to limit the perpendicular deviation of the car to the road while a bigger $\epsilon_r$ to ensure a better compression ratio.
-}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%EAT End
