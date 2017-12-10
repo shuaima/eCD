@@ -59,8 +59,82 @@ In Figure~\ref{fig:ldr}, the trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}
 
 }%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%End of Eat
 
+\subsubsection{\operb Using \ped}
+\label{sec-operb}
+
+\operb\cite{Lin:Operb} is essentially the angle-adjustable strip\cite{Reumann:Strip}.
+%Algorithm \operb, after initializing, repeatedly processes the data points in $\dddot{\mathcal{T}}[P_0,$ $\ldots, P_{n}]$ one by one until that all data points have been considered.
+Consider an error bound $\epsilon$ and a sub-trajectory $\dddot{\mathcal{T}_s}[P_s,$ $\ldots, P_{s+k}]$.
+\operb dynamically maintains a directed line segment $\mathcal{L}_i$ ($i\in[1,k]$), whose start point is fixed with $P_s$ and its end point is identified (may not in $\{P_s, \ldots, P_{s+i}\}$) to {\em fit} all the previously processed points $\{P_s, \ldots, P_{s+i}\}$.
+The directed line segment $\mathcal{L}_i$ is built by a function named \emph{fitting function $\mathbb{F}$}, such that when a new point $P_{s+i+1}$ is considered, only its distance to the directed line segment $\mathcal{L}_i$ is checked, instead of checking the distances of all or a subset of data points of $\{P_{s}, \ldots, P_{s+i}\}$ to $\mathcal{R}_{i+1}$ = $\vv{P_sP_{s+i+1}}$ as the global distance checking does.
+During processing, if the distance of point $P_{s+i}$ to the directed line segment $\mathcal{L}_{i-1}$ is larger than the threshold, then a directed line segment, start from $P_s$, is generated and output;
+otherwise, the directed line segment $\mathcal{L}_i$ is updated by the fitting function $\mathbb{F}$, as follows.
+
+\begin{small}
+	\vspace{-2ex}
+	\begin{equation*}
+	\label{equ-function}
+	\hspace{-1.5ex}\left\{
+	\begin{aligned}
+	&\hspace{-1.5ex}\left[
+	\begin{aligned}
+	% & |\mathcal{L}_{i}| = |\mathcal{R}_{i-1}|    \\
+	% & \mathcal{L}_{i}.\theta = \mathcal{R}_{i-1}.\theta\\
+	& \mathcal{L}_{i} = \mathcal{L}_{i-1}\\
+	\end{aligned}
+	\right]\hspace{12.5ex}~when~(|\mathcal{R}_{i}| - |\mathcal{L}_{i-1}|) \le \frac{\epsilon}{4}   \\
+	&\hspace{-1.5ex}\left[
+	\begin{aligned}
+	& |\mathcal{L}_{i}|  = j*{\epsilon}/{2} \\
+	& \mathcal{L}_{i}.\theta = \mathcal{R}_{i}.\theta    \\
+	\end{aligned}
+	\right]\hspace{8.5ex}~when~|\mathcal{R}_{i}| >  \frac{\epsilon}{4}~\And~|\mathcal{L}_{i-1}|=0    \\
+	&\hspace{-1.5ex}\left[
+	\begin{aligned}
+	& |\mathcal{L}_{i}|  = j*{\epsilon}/{2}\\
+	& \mathcal{L}_{i}.\theta = \mathcal{L}_{i-1}.\theta + f(\mathcal{R}_i,\mathcal{L}_{i-1})*\arcsin(\frac{ped(P_{s+i}, \mathcal{L}_{i-1})}{j*\epsilon/2})/j \\	
+	% & \theta^- = \mathcal{L}_{i-1}.\theta - \arcsin(\frac{d(P_i, \mathcal{L}_{i-1})}{j*\epsilon/2})/j \\	
+	% & \mathcal{L}_{i}.\theta = \arg_{\mathcal{L}_{i}.\theta}\min({d(P_{i+1}, \mathcal{L}_{i}}), \mathcal{L}_{i}.\theta \in\{\theta^+,\theta^-\})\\	
+	\end{aligned}
+	\right]\hspace{0ex}else\\
+	\end{aligned}
+	\right.
+	\end{equation*}
+	\vspace{-2ex}
+\end{small}
+
+
+\ni where (a) $1 \le i \le k+1$; (b) $\mathcal{R}_{i-1}$ = $\vv{P_sP_{s+i-1}}$, is the directed line segment whose end point $P_{s+i-1}$ is in $\dddot{\mathcal{T}_s}[P_s, \ldots, P_{s+k}]$; (c) $\mathcal{L}_{i}$ is the directed line segment built by fitting function $\mathbb{F}$ to fit sub-trajectory $\dddot{\mathcal{T}_s}[P_s, \ldots, P_{s+i}]$ and $\mathcal{L}_{0}$ = $\mathcal{R}_{0}$; (d) $j = \lceil(|\mathcal{R}_{i}|*2/\epsilon - 0.5)\rceil$; (e) $f()$ is a sign function such that $ f(\mathcal{R}_i,\mathcal{L}_{i-1})$ = $1$ if the included angle $\angle(\mathcal{R}_{i-1}, \mathcal{R}_{i})$ = $(\mathcal{R}_i.\theta - \mathcal{L}_{i-1}.\theta)$ falls in the range of $(-2\pi, -\frac{3\pi}{2}]$, $[-\pi, -\frac{\pi}{2}]$, $[0, \frac{\pi}{2}]$ and $[\pi, \frac{3\pi}{2})$, and $f(\mathcal{R}_i,\mathcal{L}_{i-1})$ = $-1$, otherwise; (f) $\epsilon/2$ is a step length to control the increment of $|\mathcal{L}|$.
+
+Optimization techniques are equipped to achieve a better compression ratio\cite{Lin:Operb}.
+Algorithm \operb runs in $O(n)$ time and takes $O(1)$ space.
+Note \operb only supports \ped.
+
+
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.66]{figures/Fig-oper.png}
+	\vspace{-1ex}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the \operb algorithm to two line segments.}
+	\vspace{-2ex}
+	\label{fig:operb}
+\end{figure}
+
+
+\begin{example}
+	\label{exm-alg-operb}
+	Figure~\ref{fig:operb} is a running example of the \operb algorithm.
+	(1) It takes $P_0$ as the start point, reads $P_1$ and sets $\mathcal{L}_1$ = $\vv{P_0P_1}$.
+	(2) It reads $P_2$. The distance from $P_2$ to $\mathcal{L}_1$ is less than the threshold, thus, it updates $\mathcal{L}_1$  to $\mathcal{L}_2$ by the fitting function $\mathbb{F}$.
+	(3) It reads $P_3$ and $P_4$, and updates $\mathcal{L}_2$ to $\mathcal{L}_3$ and $\mathcal{L}_3$ to $\mathcal{L}_4$, respectively.
+	(4) It reads $P_5$. The distance from $P_5$ to $\mathcal{L}_4$ is larger than the threshold, thus, it outputs $\vv{P_0P_4}$ and start the next section taking $P_4$ as the new start point.
+	(5) The process continues until all points have been processed. At last, the algorithm outputs two continuous line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.
+\end{example}
+
+
 
 \subsubsection {Sector Intersection Using \ped}
+\label{sec-siped}
 
 The Sector Intersection algorithms using \ped (\sia) \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone}, also named \sleeve in \cite{Zhao:Sleeve}, are {the angle-adjustable strips too}.
 %Note that the ``cone intersection" algorithms, developed in fields of graphic, cartographic and pattern recognition, are still not familiar to researchers of trajectory compression.
@@ -95,83 +169,13 @@ Algorithm \cia runs in $O(n)$ time and takes $O(1)$ space.
 	At last, the algorithm outputs two continuous line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.
 \end{example}
 
-\subsubsection{\operb Using \ped}
-\operb\cite{Lin:Operb} is essentially the angle-adjustable strip\cite{Reumann:Strip}.
-%Algorithm \operb, after initializing, repeatedly processes the data points in $\dddot{\mathcal{T}}[P_0,$ $\ldots, P_{n}]$ one by one until that all data points have been considered.
-Consider an error bound $\epsilon$ and a sub-trajectory $\dddot{\mathcal{T}_s}[P_s,$ $\ldots, P_{s+k}]$.
-\operb dynamically maintains a directed line segment $\mathcal{L}_i$ ($i\in[1,k]$), whose start point is fixed with $P_s$ and its end point is identified (may not in $\{P_s, \ldots, P_{s+i}\}$) to {\em fit} all the previously processed points $\{P_s, \ldots, P_{s+i}\}$.
-The directed line segment $\mathcal{L}_i$ is built by a function named \emph{fitting function $\mathbb{F}$}, such that when a new point $P_{s+i+1}$ is considered, only its distance to the directed line segment $\mathcal{L}_i$ is checked, instead of checking the distances of all or a subset of data points of $\{P_{s}, \ldots, P_{s+i}\}$ to $\mathcal{R}_{i+1}$ = $\vv{P_sP_{s+i+1}}$ as the global distance checking does.
-During processing, if the distance of point $P_{s+i}$ to the directed line segment $\mathcal{L}_{i-1}$ is larger than the threshold, then a directed line segment, start from $P_s$, is generated and output;
-otherwise, the directed line segment $\mathcal{L}_i$ is updated by the fitting function $\mathbb{F}$, as follows.
-
-\begin{small}
-\vspace{-2ex}
-\begin{equation*}
-\label{equ-function}
-\hspace{-1.5ex}\left\{
-    \begin{aligned}
-        &\hspace{-1.5ex}\left[
-            \begin{aligned}
-           % & |\mathcal{L}_{i}| = |\mathcal{R}_{i-1}|    \\
-           % & \mathcal{L}_{i}.\theta = \mathcal{R}_{i-1}.\theta\\
-            & \mathcal{L}_{i} = \mathcal{L}_{i-1}\\
-            \end{aligned}
-        \right]\hspace{12.5ex}~when~(|\mathcal{R}_{i}| - |\mathcal{L}_{i-1}|) \le \frac{\epsilon}{4}   \\
-        &\hspace{-1.5ex}\left[
-            \begin{aligned}
-            & |\mathcal{L}_{i}|  = j*{\epsilon}/{2} \\
-            & \mathcal{L}_{i}.\theta = \mathcal{R}_{i}.\theta    \\
-            \end{aligned}
-        \right]\hspace{8.5ex}~when~|\mathcal{R}_{i}| >  \frac{\epsilon}{4}~\And~|\mathcal{L}_{i-1}|=0    \\
-        &\hspace{-1.5ex}\left[
-            \begin{aligned}
-            & |\mathcal{L}_{i}|  = j*{\epsilon}/{2}\\
-            & \mathcal{L}_{i}.\theta = \mathcal{L}_{i-1}.\theta + f(\mathcal{R}_i,\mathcal{L}_{i-1})*\arcsin(\frac{ped(P_{s+i}, \mathcal{L}_{i-1})}{j*\epsilon/2})/j \\	
-           % & \theta^- = \mathcal{L}_{i-1}.\theta - \arcsin(\frac{d(P_i, \mathcal{L}_{i-1})}{j*\epsilon/2})/j \\	
-           % & \mathcal{L}_{i}.\theta = \arg_{\mathcal{L}_{i}.\theta}\min({d(P_{i+1}, \mathcal{L}_{i}}), \mathcal{L}_{i}.\theta \in\{\theta^+,\theta^-\})\\	
-            \end{aligned}
-        \right]\hspace{0ex}else\\
-    \end{aligned}
-    \right.
-\end{equation*}
-\vspace{-2ex}
-\end{small}
-
-
-\ni where (a) $1 \le i \le k+1$; (b) $\mathcal{R}_{i-1}$ = $\vv{P_sP_{s+i-1}}$, is the directed line segment whose end point $P_{s+i-1}$ is in $\dddot{\mathcal{T}_s}[P_s, \ldots, P_{s+k}]$; (c) $\mathcal{L}_{i}$ is the directed line segment built by fitting function $\mathbb{F}$ to fit sub-trajectory $\dddot{\mathcal{T}_s}[P_s, \ldots, P_{s+i}]$ and $\mathcal{L}_{0}$ = $\mathcal{R}_{0}$; (d) $j = \lceil(|\mathcal{R}_{i}|*2/\epsilon - 0.5)\rceil$; (e) $f()$ is a sign function such that $ f(\mathcal{R}_i,\mathcal{L}_{i-1})$ = $1$ if the included angle $\angle(\mathcal{R}_{i-1}, \mathcal{R}_{i})$ = $(\mathcal{R}_i.\theta - \mathcal{L}_{i-1}.\theta)$ falls in the range of $(-2\pi, -\frac{3\pi}{2}]$, $[-\pi, -\frac{\pi}{2}]$, $[0, \frac{\pi}{2}]$ and $[\pi, \frac{3\pi}{2})$, and $f(\mathcal{R}_i,\mathcal{L}_{i-1})$ = $-1$, otherwise; (f) $\epsilon/2$ is a step length to control the increment of $|\mathcal{L}|$.
-
-Optimization techniques are equipped to achieve a better compression ratio\cite{Lin:Operb}.
-Algorithm \operb runs in $O(n)$ time and takes $O(1)$ space.
-Note \operb only supports \ped.
-
-
-\begin{figure}[tb!]
-\centering
-\includegraphics[scale=0.66]{figures/Fig-oper.png}
-\vspace{-1ex}
-\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the \operb algorithm to two line segments.}
-\vspace{-2ex}
-\label{fig:operb}
-\end{figure}
-
-
-\begin{example}
-\label{exm-alg-operb}
-Figure~\ref{fig:operb} is a running example of the \operb algorithm.
-(1) It takes $P_0$ as the start point, reads $P_1$ and sets $\mathcal{L}_1$ = $\vv{P_0P_1}$.
-(2) It reads $P_2$. The distance from $P_2$ to $\mathcal{L}_1$ is less than the threshold, thus, it updates $\mathcal{L}_1$  to $\mathcal{L}_2$ by the fitting function $\mathbb{F}$.
-(3) It reads $P_3$ and $P_4$, and updates $\mathcal{L}_2$ to $\mathcal{L}_3$ and $\mathcal{L}_3$ to $\mathcal{L}_4$, respectively.
-(4) It reads $P_5$. The distance from $P_5$ to $\mathcal{L}_4$ is larger than the threshold, thus, it outputs $\vv{P_0P_4}$ and start the next section taking $P_4$ as the new start point.
-(5) The process continues until all points have been processed. At last, the algorithm outputs two continuous line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.
-\end{example}
-
-
 
 
 
 \subsubsection {Cone Intersection Using \sed}
+\label{sec-cised}
 
-The \cia extends the \textit{sector intersection} method in Section~\ref{sub-ci-ped} from a 2D space to a Spatio-Temporal 3D space.
+The \cia extends the \textit{sector intersection} method in Section~\ref{sec-siped} from a 2D space to a Spatio-Temporal 3D space.
 
 \stitle{Synchronous Circles (\circle{})}. The synchronous circle of a data point $P_{s+i}$ ($1\le i\le k$) in $\dddot{\mathcal{T}}_s$ \wrt an error bound $\epsilon$, denoted as \circle{(P_{s+i}, \epsilon)}, or \circle{_{s+i}} in short, is a circle on the plane $P.t-P_{s+i}.t = 0$ such that $P_{s+i}$ is its center and $\epsilon$ is its radius.
 
