@@ -1,0 +1,292 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Evaluation} %Experimental Study
+\label{sec-exp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+In this section, we present an extensive experimental study of the six line simplification algorithms listed in Table~\ref{tab:summary-lsa} on trajectory data sets.
+Using four real-life datasets, we conducted three sets of experiments to evaluate:
+(1) the compression ratios of these algorithms, and the impacts of distance metrics,\ie \sed and \ped, to the compression ratios, 
+(2) the execution time of these algorithms, and
+(3) the average errors of these algorithms.
+
+
+
+\subsection{Experimental Setting}
+%We first introduce the settings of our experimental study.
+
+\stitle{Real-life Trajectory Datasets}.
+We use four real-life datasets shown in Table~\ref{tab:dataset} to test our solutions.
+
+\sstab{\bf(1) Taxi trajectory data}, referred to as \taxi, is the GPS trajectories collected by $12,727$ taxies equipped with GPS sensors in Beijing during a period
+from Nov. 1, 2010 to Nov. 30, 2010. The sampling rate was one point  per 60s, and \taxi has $39,100$ data points on average per trajectory.
+
+\sstab{\bf(2) Truck trajectory data}, referred to as \truck, is the GPS trajectories collected by 10,368 trucks equipped with GPS sensors in China
+during a period from Mar. 2015 to Oct. 2015. The sampling rate varied from 1s to 60s. Trajectories mostly have around $50$ to $90$ thousand data points.
+
+\sstab{\bf(3) Service car trajectory data}, referred to as \sercar,  is the GPS trajectories collected by a car rental company.
+We chose $11,000$ cars from them, during Apr. 2015 to Nov. 2015. The sampling rate was one point per $3$--$5$ seconds, and
+each trajectory has around $119.1K$ data points.
+
+{\sstab{\bf(4) GeoLife trajectory data}, refered to as \geolife, is the GPS trajectories collected in GeoLife project~\cite{Zheng:GeoLife} by 182 users in a period from Apr. 2007 to Oct. 2011. These trajectories have a variety of sampling rates, among which 91\% are logged in each 1-5 seconds or each 5-10 meters per point. The longest trajectory has 2,156,994 points.}
+
+\eat{This dataset contains 182 trajectories, one trajectory for each user, with a total distance of about 1.2 million kilometers. }
+
+\begin{table}
+\vspace{1ex}
+\centering
+\small
+\begin{tabular}{|l|c|c|c|r|}
+\hline
+\kw{Data}& \kw{Number\ of}     &\kw{Sampling}   &\kw{Points Per}    &\kw{Total} \\
+\kw{Sets} & \kw{Trajectories}   &\kw{Rates (s)}  &\kw{Trajectory (K)}&\kw{points}\\
+\hline\hline
+\taxi	&12,727	    &60	        &$\sim39.1$      &498M \\
+\hline
+\truck	&10,368	    &1-60	    &$\sim71.9$     &746M \\
+\hline
+\sercar	&11,000	    &3-5	    &$\sim119.1$   &1.31G\\
+\hline
+\geolife &182	    &1-5	    &$\sim132.8$   &24.2M\\
+\hline
+\end{tabular}
+\vspace{-2ex}
+\caption{\small Real-life trajectory datasets}\label{tab:dataset}
+\vspace{-3ex}
+\end{table}
+
+%The details of these datasets are shown in Table~\ref{tab:dataset}.
+
+\stitle{Algorithms and implementation}.
+We implement the six algorithms listed in Table~\ref{tab:summary-lsa}.
+All algorithms were implemented with Java.
+All tests were run on an x64-based  PC with 4 Intel(R) Core(TM) i5-4570 CPU @ 3.20GHz  and 16GB of memory, and each test was repeated
+over 3 times and the average is reported here.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Experimental Results}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%We next present our findings.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Evaluation of Compression Effectiveness}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In the second set of tests, we compare the compression ratios of our algorithms \operb and \operba with \dpa and \fbqsa
+and with \kw{Raw}-\operb and \kw{Raw}-\operba, respectively.
+Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations
+$\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$,
+ the compression ratio is $(\sum_{j=1}^{M} |\overline{\mathcal{T}}_j |)/(\sum_{j=1}^{M} |\dddot{\mathcal{T}}_j |)$.
+ Note that by the definition, algorithms with lower compression ratios are better.
+
+
+
+
+\stitle{Exp-2.1: Impacts of the error bound $\zeta$}.
+To evaluate the impacts of $\zeta$ on compression ratios of these algorithms, we varied $\zeta$ from $5m$ to $100m$ on
+ the entire four datasets, respectively.
+The results are reported in Figure~\ref{fig:cr}.
+
+\sstab (1) When increasing $\zeta$, the compression ratios decrease. For example, in \sercar,
+the compression ratios are greater than $28.7\%$ when $\zeta$ = $5m$, but are less than $6.6\%$ when $\zeta$ = $100m$.
+
+\sstab (2) \geolife has the lowest compression ratios, compared with \taxi, \truck and \sercar,
+due to its highest sampling rate, \taxi has the highest compression ratios due to its lowest sampling rate, and \truck and \sercar have the compression ratios in the middle accordingly.
+
+\sstab (3) {First, algorithm \operb has comparable compression ratios with \fbqsa and \dpa.
+For example, when $\zeta = 40m$, the compression ratios are ($20.9\%$, $20.4\%$, $11.1\%$, $3.1\%$) of \fbqsa, ($20.7\%$, $18.7\%$, $8.9\%$, $2.6\%$) of \dpa and ($22.3\%$, $20.3\%$, $10.0\%$, $2.6\%$) of \operb on (\taxi, \truck, \sercar, \geolife), respectively.
+For all $\zeta$, the compression ratios of \operb are on average ($107.2\%$, $98.3\%$, $92.9\%$, {$85.1\%$}) of \fbqsa and ($107.7\%$, $106.6\%$, $113.5\%$, $99.6\%$) of \dpa on (\taxi, \truck, \sercar, \geolife), respectively.
+\operb is better than  \fbqsa on \truck, \sercar and \geolife, while a little worse on \taxi. The results also show that \operb has a better performance than \fbqsa on datasets with high sampling rates.}
+
+\ni Second, algorithm \operba achieves the best compression ratios on all datasets and nearly all $\zeta$ values.
+Its compression ratios are on average ($83.7\%$, $79.5\%$, $79.7\%$, $81.0\%$) of \fbqsa and ($84.2\%$, $86.4\%$, $97.1\%$, $94.7\%$) of \dpa on (\taxi, \truck, \sercar, \geolife), respectively.
+Similar to \operb, \operba has advantages on datasets with high sampling rates.
+%Moreover, for low sampling rate trajectories, it also shows the distinct performance (the benefit of trajectory interpolation policy).
+
+
+\begin{figure*}[tb!]
+\centering
+\includegraphics[scale=0.465]{figures/exp-CompressionRatio.png}
+\vspace{-2.5ex}
+\caption{\small Effectiveness evaluation: varying the error bound $\zeta$.}
+\label{fig:cr}
+\vspace{-.5ex}
+\end{figure*}
+
+
+
+
+
+\stitle{{Exp-2.2}: Impacts of the optimization techniques}.
+%To evaluate the impacts of the optimization techniques (see Section~\ref{subsec-optimizations}),
+We compared algorithms \operb and \operba with \kw{Raw}-\operb and \kw{Raw}-\operba, respectively.
+We varied $\zeta$ from $5m$ to $100m$ on the entire \taxi, \truck, \sercar and \geolife, respectively.
+The results are reported in Figure~\ref{fig:optim}.
+
+\sstab(1) The optimizations have great impacts on the compression ratios of \operb and \operba. Indeed,
+\operb is  on average {($87.9\%$, ${71.8\%}$, $61.8\%$, $58.0\%$)} of \kw{Raw}-\operb, and \operba is  on average {($93.1\%$, ${88.5\%}$, $77.1\%$, $78.5\%$)} of \kw{Raw}-\operba
+on (\taxi, \truck, \sercar, \geolife), respectively. Note that the optimization techniques  have a better impact on datasets with high sampling rates.
+
+\sstab(2) The impacts of the optimization techniques increase with the increase of $\zeta$ on \taxi and \truck.
+For example, \operb is {($92.1\%$, ${87.3\%}$, $82.6\%$)} of \kw{Raw}-\operb on \taxi, and {($78.5\%$, $70.9\%$, $63.7\%$)} of \kw{Raw}-\operb on \truck
+when $\zeta$ = ($10$, $40$, $100$), respectively. It is similar for algorithm \operba.
+
+
+\stitle{{Exp-2.3}: Distribution of line segments}.
+To further evaluate the difference of the compression results of these algorithms, we chose $100$ trajectories from each of (\taxi, \truck, \sercar, \geolife),
+while fixed $\zeta=40m$.
+For a $\overline{\mathcal{T}}$ = $(\mathcal{L}_1, \mathcal{L}_2, \cdots , \mathcal{L}_M)$ derived
+from trajectories by a compression algorithm, we count the number of points, $C_i$, included in each $\mathcal{L}_i$,
+then let $\mathcal{Z}(k) = |\{ C_i | C_i =k\}|$, \ie $\mathcal{Z}(5)$ means the number of all $\mathcal{L}_i$ containing 5 data points.
+Note that the start/end points are repeatedly counted for adjacent line segments, and, hence, there may be some lines having only one point.
+The results are reported in Figure~\ref{fig:dop}.
+
+%\sstab(1) \taxi and \truck has many light line segments (a line segment including few points) while \sercar has many heavy line segments (a line segment including many points). The distributions of lines of \sercar are likely subjected to $log-normal$ distributions. Most line segments have 3-6 points in \sercar. These distributions have relative long tails. The longest line of \sercar includes more than $200$ points when {$\zeta = 40$}.
+
+\sstab(1) Algorithms \operba and \dpa produce more line segments containing large number of points (heavy line segments) than \fbqsa and \operb.
+Heavy line segments are closely related to compression ratios, and help to decrease compression ratios.
+The distribution of line segments is consistent with the compression ratios shown above.
+
+\sstab(2) {Algorithm \operb has the largest number of line segments containing only one point. However, they are reduced by \operba to a large extent.}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Evaluation of Compression Efficiency}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure*}[tb!]
+\centering
+\includegraphics[scale = 0.465]{figures/Exp-time-size.png}
+\vspace{-2.5ex}
+\caption{\small Efficiency evaluation: varying the size of trajectories.}\label{fig:time-size}
+\vspace{-1ex}
+\end{figure*}
+
+
+In the first set of tests, we compare the efficiency (execution time) of our approaches \operb and \operba with algorithms \dpa and \fbqsa
+and with algorithms \kw{Raw}-\operb and \kw{Raw}-\operba.
+For fairness, we load and compress trajectories one by one, and only count the running time of the compressing process.
+%For a small size trajectory, we repeat compress it tens of times and accumulation the total running time so as  to get the average compression time.
+
+
+\stitle{{Exp-1.1}: Impacts of the sizes of trajectories}.
+To evaluate the impacts of the number of data points in a trajectory (\ie the size of a trajectory),
+we chose $100$ trajectories from \taxi, \truck, \sercar and \geolife, respectively,
+and varied the size \trajec{|T|} of trajectories from $2,000$ to $10,000$, while fixed $\zeta = 40$ meters (m).
+The results are reported in Figure~\ref{fig:time-size}.
+
+\sstab(1) Algorithms \operb, \operba and \fbqsa  scale well with the increase of the size of trajectories on all datasets,
+and show a linear running time, while algorithm \dpa does not.
+This is consistent with their time complexity analyses.
+
+\sstab(2) Algorithms \operb and \operba are the fastest \lsa algorithms, and are {($3.8$--$5.3$, $3.5$--$4.8$, $4.6$--$7.2$, $6.2$--$8.4$)} times faster than \fbqsa,
+and {($9.6$--$17.6$, $8.8$--$15.4$, $8.4$--$16.3$, $9.0$--$14.4$)} times faster than \dpa on (\taxi, \truck, \sercar, \geolife), respectively. The running time of \operb and \operba is similar, and the difference is below 10\%.
+\eat{Moreover, \operba is a bit faster than \operb,
+especially when there are more than $1,000$ data points in  trajectories.}
+
+\stitle{{Exp-1.2}:  Impacts of the error bound $\zeta$}.
+To evaluate the impacts of $\zeta$, we varied $\zeta$ from $10m$ to $100m$ on the entire \taxi, \truck, \sercar and \geolife, respectively.
+The results are reported in Figure~\ref{fig:time-zeta}.
+
+%(1) \dpa is slower than \fbqsa, \operb and \operba in all data sets.
+
+\sstab(1) All algorithms are not very sensitive to $\zeta$, but their running time all decreases a little bit with the increase of $\zeta$,
+as the increment of $\zeta$ decreases the number of directed line segments in the output.
+Further, algorithm \dpa is more sensitive to $\zeta$ than the other three algorithms.
+
+\sstab(2) Algorithms \operb and \operba are obviously faster than \dpa and \fbqsa in all cases.
+\operb is on average ($13.9$, $17.4$, $14.7$, {$20.6$}) times faster than \dpa, and ($4.1$, $4.1$, $5.4$, {$5.2$}) times faster than \fbqsa on (\taxi, \truck, \sercar, {\geolife}), respectively. Algorithm \operba is as fast as \operb because trajectory interpolation is a light weight operation.
+
+\stitle{Exp-1.3: Impacts of optimization techniques}.
+To evaluate the impacts of our optimization techniques (see Section~\ref{subsec-optimizations}),
+we compared algorithms \operb and \operba with \kw{Raw}-\operb and \kw{Raw}-\operba, respectively.
+We chose $500$, $1000$ and $500$ trajectories from \taxi, \truck, \sercar and \geolife, respectively, and varied $\zeta$ from 10m to 100m.
+The results are reported in Figure~\ref{fig:time-opt}.
+
+\sstab(1) The running time of all algorithms slightly decreases with the increase of $\zeta$, consistent with {Exp-1.2}.
+
+\sstab(2) The running time of \kw{Raw}-\operb is {$(85.0\%$, $79.6\%$, $90.4\%$, $100.4\%$)} of \operb on average on ($\taxi$, $\truck$, $\sercar$, $\geolife$), respectively,
+and the running time of \kw{Raw}-\operba is {$(91.3\%$, $90.1\%$, $91.6\%$, $101.5\%$) }of \operba on average on ($\taxi$, $\truck$, $\sercar$, $\geolife$), respectively.
+This shows that the optimization techniques have a limited impact on the efficiency of \operb and \operba.
+However, as will be shown immediately, the benefits of compression ratios are highly appreciated.
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[tb]
+\centering
+\includegraphics[scale = 0.465]{figures/exp-averageerror.png}
+\vspace{-2ex}
+\caption{\small Evaluation of average errors: varying the error bound $\zeta$.}
+\label{fig:ae}
+\vspace{-2ex}
+\end{figure*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{-0.5ex}
+\subsubsection{Evaluation of Average Errors}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+In the third set of tests, we evaluate the average errors of these algorithms.
+We varied $\zeta$ from $5m$ to $100m$ on the entire \taxi, \truck, \sercar and \geolife, respectively.
+Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations
+$\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$, and point $P_{j,i}$ denoting
+a point in trajectory $\dddot{\mathcal{T}}_j$ contained in a line segment $\mathcal{L}_{l,i}\in\overline{\mathcal{T}_l}$ ($l\in[1,M]$),
+then the average error is $\sum_{j=1}^{M}\sum_{i=0}^{M} d(P_{j,i},
+\mathcal{L}_{l,i})/\sum_{j=1}^{M}{|\dddot{\mathcal{T}}_j |}$.
+The results are reported in Figure~\ref{fig:ae}.
+
+\sstab(1) Average errors obviously increase with the increase of $\zeta$. \taxi also has the lowest average errors than \truck and \sercar for all algorithms,
+as it has the highest compression ratios, and \sercar has the highest average errors, as it has the lowest compression ratios among the three datasets.
+
+\sstab(2) Algorithm \dpa not only has better compression ratios, but also has lower average errors than algorithm \fbqsa on all datasets and most $\zeta$ values.
+
+\sstab(3) Algorithms \operb and \operba have similar average errors with each other. Meanwhile, \operba does not introduce extra error. Compared with \dpa and \fbqsa, their errors are a litter smaller on \taxi and a little larger on \sercar.
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\stitle{Summary}.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+From these tests we find the following.
+
+
+\emph{\sstab{(1) Efficiency}}. \operb and \operba are the fastest algorithms, which are on average $(13.9, ~17.4, ~14.7, {~20.6})$ times faster than \dpa, and $(4.1,~4.1,~5.4, {~5.2})$
+times faster than \fbqsa on (\taxi, \truck, \sercar, \geolife), respectively.
+
+\emph{\sstab{(2) Compression ratios}}. (a) \operb is comparable {with \fbqsa and \dpa}. Its compression ratios are on average $(107.2\%, ~98.3\%, ~92.9\%, ~85.1\%)$ of \fbqsa and ($107.7\%$, $106.6\%$, $113.5\%$, $99.6\%$) of \dpa on (\taxi, \truck, \sercar, \geolife), respectively, and \operb has a better performance on trajectories with higher sampling rates.
+(b) \operba has the best compression ratios on all datasets and nearly all $\zeta$ values.
+Its compression ratios are on average {($83.7\%$, $79.5\%$, $79.7\%$, $81.0\%$)} of \fbqsa and {($84.2\%$, $86.4\%$, $97.1\%$, $94.7\%$)} of \dpa on (\taxi, \truck, \sercar, \geolife), respectively.
+It shows its advantage on trajectories with both high and low sampling rates.
+(c) The optimization techniques are effective for algorithms \operb and \operba on all datasets.
+
+\emph{\sstab{(3) Average errors}}. {Algorithm \operb has similar average errors with \operba. They have lower average errors than the other algorithms on \taxi while higher on \sercar.}
+
+\emph{\sstab{(4) Patching ratios}}. \operba  successfully eliminates more than a half of anomalous line segments by patching data points,
+which improves the compression ratio, and indeed makes it achieve the best compression ratio.
+
+
+\em
+@Todo...
+
+bottom-up algorithms runs the slowest in high sampling trajectories. even slower than DP.
+
+\em
+
+
+%%********************************* The End **********************************
+
+

@@ -1,0 +1,150 @@
+
+\subsection{Online Algorithms}
+
+
+
+\emph{online algorithms enforces the constrained global checking policy}.
+The \emph{constrained global checking} algorithms restrict the checking within a window, sliding or opening, hence, they are online algorithms.
+Constrained global checking algorithms need not have the entire trajectory ready before they start compressing, and are appropriate for compressing trajectories on sensors of mobile devices.
+%Moreover, the existing constrained global checking algorithms~\cite{Keogh:online,Meratnia:Spatiotemporal,Muckell:Compression} usually use a sliding or opening window and compress sub-trajectories in the window.
+Several line simplification algorithms have been developed \eg by combining \dpa or \pavlidis with sliding or opening windows for online processing\cite{Meratnia:Spatiotemporal, Keogh:online}.
+\cite{Meratnia:Spatiotemporal} is a combination of Top-down and opening window while \cite{Keogh:online} is a combination of Bottom-up and sliding window.
+These methods still have a high time and/or space complexity, which significantly hinders their utility in resource-constrained mobile devices \cite{Liu:BQS}.
+%
+\bqsa \cite{Liu:BQS} and \squishe\cite{Muckell:Compression} further optimize these online algorithms.
+\bqsa \cite{Liu:BQS} uses a new distance checking method by picking out at most eight special points from an open window based on a convex hull. The time complexity of \bqsa is $O(n^2)$ in the worst case.
+
+
+\eat{
+Recently, \bqsa \cite{Liu:BQS} has been proposed, using a new distance checking method by picking out at most eight special points from an open window based on a convex hull, \eg a rectangular bounding box with two bounding lines, so that when a new point is added to a window, it only needs to calculate the distances of the  special points to a line, instead of all data points in the window, in many cases.
+The time complexity of \bqsa remains $O(n^2)$ in the worst case, as \bqsa falls back to \dpa when the eight special points cannot be used. However, its simplified version, \fbqsa directly outputs a line segment, and starts a new window when the eight special points cannot bound all the points considered so far. Indeed, \fbqsa has a linear time complexity, and is the fastest \lsa based solution for trajectory compression.
+}
+
+\begin{figure}[tb!]
+\centering
+\includegraphics[scale = 0.66]{figures/Fig-BQS.png}
+\vspace{-2ex}
+\caption{{\small Examples for algorithm \bqsa.}}
+\label{fig:bqs}
+\vspace{-3ex}
+\end{figure}
+
+
+\begin{figure*}[tb!]
+\centering
+\includegraphics[scale=0.66]{figures/Fig-Squishe.png}
+\vspace{-1ex}
+\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the \squishe algorithm using \sed to five line segments. The size of Q is 6, and the data structure after point $P$ is a tuple $(pred, succ, mmprio, prio)$. }
+\vspace{-2ex}
+\label{fig:squishe}
+\end{figure*}
+
+\subsubsection{Bounded Quadrant System Using \ped}
+The \bqsa algorithm \cite{Liu:BQS} is essentially an opening window and top-down algorithm\cite{Meratnia:Spatiotemporal}. It further reduces the compression time by introducing a convex hull that bounds a certain number of points. For a buffered sub trajectory $[P_s, \ldots, P_k]$, it splits the space into four quadrants. For each quadrant, a rectangular bounding box is firstly created using the least and highest $x$ values and the least and highest $y$ values among points $P_s,\ldots,P_k$. Then another two bounding lines connecting points $P_s$ and $P_{h}$ and points $P_s$ and $P_{l}$ are created such that lines $\vv{P_sP_{h}}$ and $\vv{P_sP_{l}}$ have the largest and smallest angles with the $x$-axis, respectively.
+Here $P_{h},P_{l} \in\{P_s,\ldots,P_k\}$. The bounding box and the two lines together form a convex hull.
+A buffer here is similar to the window in algorithm \opwa.
+Each time a new point is added to the buffer, \bqsa first picks out at most eight significant points in a quadrant. It calculates the distances of the significant points to line $\vv{P_sP_e}$, among which the largest distance $d_{u}$ and the smallest distance $d_l$ are an upper bound and  a lower bound of the distances of all points in $[P_s, \ldots, P_k]$ to line $\vv{P_sP_e}$.
+(1) If $d_l\ge \epsilon$, it produces a new line segment $\mathcal{L}(P_{s}, P_{k})$, and replaces $W$ with a new window $[P_{k},\ldots,P_{k+1}]$.
+(2) If $d_u < \epsilon$, it simply expands the buffer to $[P_s, \ldots, P_k, P_{k+1}]$ $(k+1\le n)$ by adding a new point $P_{k+1}$.
+(3) Otherwise, it computes all distances $d(P_i, {\mathcal{L}(P_s,P_k)})$ ($i\in[s, k]$) as algorithm \dpa.
+%It does the same as (2) if the largest distances is less than $\epsilon$, and does the same as (1), otherwise.
+The time complexity of \bqsa remains $O(n^2)$.
+Its simplified version \fbqsa essentially avoids case (3) to achieve an $O(n)$ time complexity.
+Note \bqsa and \fbqsa only support \ped.
+
+\begin{example}
+\label{exm-alg-bqs}
+In Figure~\ref{fig:bqs}, the bounding box $c_1c_2c_3c_4$ and the two lines $\vv{P_sP_{h}} = \vv{P_0P_1}$ and $\vv{P_sP_{l}} = \vv{P_0P_2}$ form a convex hull $u_1u_2c_2l_2l_1c_4$. \bqsa computes the distances of $u_1,u_2,c_2,l_2,l_1$ and $c_4$ to line $\vv{P_0P_6}$ when $k=6$ or to line $\vv{P_0P_7}$ when $k=7$.
+
+When $k=6$, all these distances to $\vv{P_0P_6}$  are less than $\epsilon$, hence \bqsa goes on to the next point (case 1); When $k=7$,
+the max and min distances to $\vv{P_0P_7}$ are larger and less than $\epsilon$, respectively, and \bqsa needs to compress sub-trajectory $[P_0, \ldots, P_7]$ along the same line as \dpa (case 2).
+\end{example}
+
+
+
+
+%However, these existing online algorithms are not one-pass.  In this study, we propose a novel local distance checking method, based on which we develop one-pass online algorithms that are totally different from the window based algorithms. Further, as shown in the experimental study, our approaches are clearly superior to the existing online algorithms, in terms of both efficiency and effectiveness.
+
+\subsubsection{SQUISH-E Using \sed}
+
+
+
+The \squishe algorithm~\cite{Muckell:Compression} is an {opening} window and Bottom-up algorithm, taking as input a trajectory \trajec{T} and two additional parameters $\lambda$ and $\epsilon$.
+It compresses trajectory \trajec{T} while striving to minimize \sed error and achieving the compression ratio of $\lambda$. Then, it further compresses \trajec{T} as long as this compression will not increase the max \sed error beyond $\epsilon$.
+
+\eat{%%%%%%%%%%%%%%%%
+Meanwhile, \squishe($\lambda$) is the case where $\epsilon$ is set to $0$ and therefore it minimizes \sed error ensuring the compression ratio of $\lambda$, and
+\squishe($\epsilon$) denotes another case, \ie the \emph{min-$\#$ problem}, where $\lambda$ is set to $1$ and therefore it maximizes compression ratio while keeping \sed error under $\epsilon$.
+In this paper, we only discuss \squishe($\epsilon$).
+}%%%%%%%%%%%%%%%%%%%%
+
+The \squishe algorithm optimizes the \pavlidis by using a doubly linked list $Q$. Each node in the list is a tuple, \ie $P(pred, succ, mnprio, prio)$, where $P$ is a trajectory data point (for convenience, we also refer $P$ to the node), $pred$ refers to its predecessor node/point, $succ$ refers to its successor node/point, $prio$ is the priority of the point, which is defined as an upper bound on the \sed error that the removal of that point would introduce, and $mnprio$ is the max priority of its predecessor and successor points that have ever been removed from the list.
+%
+Initially, trajectory points are loaded to the list $Q$ one by one.
+At the same time, $mnprio$ of each point is set to $0$ as no node has been removed from the list.
+Moreover, the priorities of points $P_0$ and $P_{|Q|-1}$ are set to $\infty$, and the priority of point $P_i$, $0<i<|Q|-1$, is set to $sed(P_i, \vv{pred(P_{i})succ(P_{i})})$.
+%
+Then, \squishe finds and removes a point $P_j$ from $Q$ that has the lowest priority and $prio(P_j)<\epsilon$.
+And, the properties $mnprio$ of predecessor point $pred(P_j)$ and successor point $succ(P_j)$ are updated to $max\{mnprio(pred(P_j)), ~prio(P_j)\}$ and $max\{mnprio(succ(P_j)), ~prio(P_j)\}$ , respectively.
+Next, the properties $prio$ of points $pred(P_j)$ and $succ(P_j)$ are further updated to $mnprio(pred(P_j)) + sed(pred(P_j), \vv{pred(pred(P_{j}))succ(P_{j})})$ and $mnprio(succ(P_j)) + sed(succ(P_j),\vv{pred(P_{j})succ(succ(P_{j}))})$, respectively.
+%
+After that, a new point is read to the list and the information of its predecessor point in the list is updated.
+%
+The above process repeated until that no point has the priority smaller than $\epsilon$. % \ie  the \sed up bound
+
+\squishe finds and removes a point from $Q$ that has the lowest priority in $O(\log |Q|)$ time, where $|Q|$ denotes the number of points stored in $Q$.
+Thus, \squishe runs in $O(n\log |Q|)$ time and $O(|Q|)$ space. Note \squishe does not support \ped.
+
+\begin{example}
+\label{exm-alg-squishe}
+Figure~\ref{fig:squishe} is a running example of \squishe.
+(1) Initially, $|Q| = 6$ points are read to the list. The tuple $(pred, succ, mmprio, prio)$ for each point is initialized. For example, the tuple of $P_1$ is set to $(0, 2, 0, 0.42\epsilon)$, where $0.42\epsilon$ is the \sed from $P_1$ to $\vv{P_0P_2}$.
+(2) The priority of $P_3$ has the minimal value, thus, it is removed from the list.
+The $mnprio$ properties of $P_2$ and $P_4$ are updated to $max\{mnprio(pred(P_3)), prio(P_3)\}$ = $max\{mnprio(P_2), prio(P_3)\}$ = $max\{0, 0.39\epsilon\}$ = $0.39\epsilon$, and $max\{mnprio(P_4), ~prio(P_3)\}$ = $0.39\epsilon$, respectively.
+Furthermore, the $prio$ property of $P_4$ is updated to $mnprio(succ(P_j)) + sed(succ(P_j),\vv{pred(P_{j})succ(succ(P_{j}))})$ = $mnprio(P_4) + sed(P_4,\vv{P_2P_5})$ = $0.39\epsilon + 2.50\epsilon$ = $2.89\epsilon$, and the $prio$ property of $P_2$ is updated to $mnprio(P_2) + sed(P_2,\vv{P_1P_4})$ = $0.39\epsilon + 2.12\epsilon$ = $2.51\epsilon$.
+Then, $P_6$ is read, and the information of $P_5$ is updated.
+(3) $P_5$ is removed and $P_7$ is read to the list.
+(4) Finally, the algorithm outputs 5 line segments $\vv{P_0P_2},\vv{P_2P_4},\vv{P_4P_7},\vv{P_7P_9}$ and $\vv{P_9P_{10}}$.
+\end{example}
+
+
+
+
+
+
+\eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Opening Window and Top-down}
+
+The \opwa algorithm~\cite{Meratnia:Spatiotemporal} combines the Top-down and opening window strategies, and enforces the constrained global checking in the window.
+
+Given a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ and an error bound $\epsilon$, algorithm \opwa~\cite{Meratnia:Spatiotemporal} maintains a window $W[P_s, \ldots, P_k]$, where $P_s$ and $P_k$ are the start and end points, respectively. Initially, $P_s$ = $P_0$ and $P_k$ = $P_1$, and the window $W$ is gradually expanded by adding new points one by one. \opwa tries to compress all points in $W[P_s, \ldots, P_k]$ to a single line segment $\mathcal{L}(P_{s}, P_{k})$. If the distances $ped(P_i, {\mathcal{L}})\le \epsilon$ for all points $P_i$ ($i\in[s, k]$), it simply expands $W$ to $[P_s, \ldots, P_k, P_{k+1}]$ $(k+1\le n)$ by adding a new point $P_{k+1}$. Otherwise, it produces a new line segment $\mathcal{L}(P_{s}, P_{k-1})$, and replaces $W$ with a new window $[P_{k-1},\ldots,P_{k+1}]$. The above process repeats until all points in $\dddot{\mathcal{T}}$ have been considered.
+
+%\textcolor[rgb]{0.00,0.07,1.00}{According to the different methods of selecting the end points of a line segment, Open Window can further be divided into Normal Penning Window and Before Opening Window~\cite{Meratnia:Spatiotemporal}. When the distance of the point to compressed trajectory exceeds a certain threshold, Normal Opening Window algorithm select that point as the end point, while Before Opening Window select the last point within the window as the end point of the current trajectory.}
+
+Algorithm \opwa is not efficient enough for compressing long trajectories as it remains in $O(n^2)$ time, the same as the \dpa algorithm.
+Also, \ped and \sed are both supported in \opwa as the algorithm \dpa does.
+
+
+\begin{example}
+\label{exm-alg-opw}
+\end{example}
+
+
+\textcolor[rgb]{1.00,0.00,0.00}{\subsubsection{Sliding Window and Bottom-up}}
+
+The \swab algorithm~\cite{Keogh:online} is essentially the combination of the Sliding Window mechanism and the Bottom-up algorithm.
+It keeps a window, $w[P_s, \ldots, P_{s+k-1}]$, of a fixed size of $k$.
+The window size $k$ should be carefully chosen so that there are enough data points in the window to create about 5 or 6 line segments \cite{Keogh:online}.
+Initially, $P_s=P_0$.
+Next, the Bottom-Up algorithm, \eg \pavlidis algorithm, is applied to the points in the window, which merges the points into segments with the left-most segment being $\vv{P_sP_{s+i}}$, $i<k$.
+Then $\vv{P_sP_{s+i}}$ is output, the window slides to right taking $P_{s+i+1}$ as the new start point of the window, and the Bottom-Up algorithm is applied again.
+This process repeated until all points have been merged to segments.
+
+The time complexity of \swab is a small constant factor worse than that of the standard Bottom-Up algorithm~\cite{Keogh:online}.
+Also, it supports \sed. % as the standard Bottom-Up algorithm does.
+
+\textcolor[rgb]{1.00,0.00,0.00}{Todo...dis-continuous line segments.}
+
+} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% End of eat
+
