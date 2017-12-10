@@ -1,4 +1,4 @@
-\subsection{The Optimal Algorithms}
+\section{The Optimal Algorithms}
 \label{subsec-optimal}
 
 Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ and an error bound $\epsilon$, the optimal trajectory simplification problem, as formulated by Imai and Iri in \cite{Imai:Optimal}, can be solved in two steps: (1) construct a reachability graph $G$ of \trajec{T} and (2) search a shortest path from $P_0$ to $P_{n}$ in graph $G$.
@@ -8,11 +8,17 @@ The reachability graph of a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ \wrt an 
 Observe that in the reachability graph $G$, (1) a path from nodes $P_0$ to $P_{n}$ is a representation of trajectory \trajec{T}. The path also reveals the subset of points of \trajec{T} used in the approximate trajectory, (2) the path length corresponds to the number of line segments in the approximation trajectory, and 
 (3) a shortest path is an optimal representation of trajectory \trajec{T}.
 
-Constructing the reachability graph $G$ needs to check for all pair of points $P_s$ and $P_{s+k}$ whether the distances of all points ($P_{s+i}$, $0<i<k$) to the line segment $\vv{P_sP_{s+k}}$ are less than $\epsilon$.
+A straightforward way of constructing the reachability graph $G$ needs to check for all pair of points $P_s$ and $P_{s+k}$ whether the distances of all points ($P_{s+i}$, $0<i<k$) to the line segment $\vv{P_sP_{s+k}}$ are less than $\epsilon$.
 There are $O(n^2)$ pairs of points in the trajectory and checking the error of all points $P_{s+i}$ to a line segment $\vv{P_sP_{s+k}}$ takes $O(n)$ time.
 Thus, the construction step takes $O(n^3)$ time.
 Finding a shortest path takes no more than $O(n^2)$ time. Hence, the brute-force algorithm takes $O(n^3)$ time in total.
 
-%
-Though the brute-force algorithm was initially developed using \ped, it can be used for \sed.
-As pointed out in \cite{Chan:Optimal}, the construction of the reachability graph $G$ using \ped can be implemented in $O(n^2)$ time using the \textit{sector intersection} mechanism (see Section \ref{sub-ci-ped}). However, the \textit{sector intersection} mechanism cannot work with \sed.  Hence, the construction of the reachability graph $G$ using \sed remains in $O(n^3)$ time, and the brute-force algorithm using \sed remains in  $O(n^3)$ time.
+%Though the brute-force algorithm was initially developed using \ped, it can be used for \sed.
+
+\subsection{The Optimal Algorithm using \ped}
+As pointed out in \cite{Chan:Optimal}, the construction of the reachability graph $G$ using \ped can be implemented in $O(n^2)$ time using the \textit{sector intersection} mechanism (see Section \ref{sub-ci-ped}). 
+
+
+
+\subsection{The Optimal Algorithm using \sed}
+%The \textit{sector intersection} mechanism cannot work with \sed.  Hence, the construction of the reachability graph $G$ using \sed remains in $O(n^3)$ time, and the brute-force algorithm using \sed remains in  $O(n^3)$ time.
