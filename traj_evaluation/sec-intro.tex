@@ -20,7 +20,7 @@ These techniques focus on good compression ratios with acceptable errors. For tr
 %, or replace original data points in a trajectory with other places of interests, such as roads and shops.
 A large number of lossy trajectory compression techniques, \eg the piece-wise line {simplification/approximation} \cite{Douglas:Peucker, Hershberger:Speeding, Keogh:online,Liu:BQS, Muckell:Compression, Chen:Trajectory, Chen:Fast, Cao:Spatio, Shi:Survey}, have been developed.
 The idea of piece-wise line simplification comes from computational geometry, whose target is to approximate a given finer piece-wise linear curve by another coarser piece-wise linear curve (a sub set of the former), such that the maximum distance of the former from the later is bounded by a user specified constant. 
-It is widely used due to it distinct advantages: (a) simple and easy to implement, (b) no need of extra knowledge and suitable for freely  moving  objects \cite{Popa:Spatio}, and (c) bounded errors with good compression ratios.
+The piece-wise line simplification (\lsa) method is widely used due to its distinct advantages: (a) simple and easy to implement, (b) no need of extra knowledge and suitable for freely  moving  objects \cite{Popa:Spatio}, and (c) bounded errors with good compression ratios.
 
 %In this work, we focus on the piece-wise line simplification (\lsa) based methods for trajectory data.
 \lsa algorithms commonly use two distance metrics of \lsa algorithms, \ie the \emph{perpendicular Euclidean distances} (\ped) and the \emph{synchronous Euclidean distances} (\sed).
@@ -32,15 +32,15 @@ Line simplification algorithms using \ped have good compression ratios~ \cite{Do
 The \emph{synchronous Euclidean distances} (\sed) was then introduced for trajectory compression to support the above spatio-temporal queries \cite{Meratnia:Spatiotemporal}. \sed is the Euclidean distance of a data point to its \emph{approximate temporally synchronized data point \cite{Meratnia:Spatiotemporal}} on the corresponding line segment. For instance, $P'_4$ and $P'_7$ are the \emph{synchronized data points} of points $P_4$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$ and $\vv{P_4P_{10}}$, respectively, in Figure~\ref{fig:notations} (right).
 Line simplification algorithms using \sed may produce more line segments. However, the use of \sed ensures that the Euclidean distance between a data point and its  synchronized point \wrt the corresponding line segment is bounded. Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the synchronized point $P'$ of a data point $P$ within a bounded distance.
 
-\lsa algorithms can be optimal or sub-optimal.
-The optimal methods, targeting the ``min-\#" problem\cite{Imai:Optimal,Chan:Optimal}, are to find the minimal number of points or segments to represent the original polygonal lines \wrt an error bound $\epsilon$.
-An optimal $O(n^3)$  \lsa algorithm using \ped was firstly developed in \cite{Imai:Optimal},  where $n$ is the number of the original points.
+\lsa algorithms can be optimal or sub-optimal. %targeting the ``min-\#" problem\cite{Imai:Optimal,Chan:Optimal},
+The optimal methods are to find the minimal number of points or segments to represent the original polygonal lines \wrt an error bound $\epsilon$.
+An optimal $O(n^3)$ \lsa algorithm using \ped was firstly developed in \cite{Imai:Optimal},  where $n$ is the number of the original points.
 %
 Later, an improved optimal  $O(n^2)$  algorithm using \ped was designed in \cite{Chan:Optimal}, with the help of \textit{sector intersection} mechanism.
 However, the time complexity of the optimal \lsa algorithm using \sed remains in $O(n^3)$, as the optimization mechanisms are \ped specific, and cannot work with \sed.
 %	The high time complexities of the optimal \lsa algorithms using \sed make them impractical.
 
-Due to the high time complexities of optimal \lsa algorithms, sub-optimal \lsa algorithms have been developed for trajectory compression, including batch algorithms (\eg Douglas-Peucker based algorithm \dpsed \cite{Meratnia:Spatiotemporal}), online algorithms (\eg\ \squishe \cite{Muckell:Compression}) and one-pass algorithms \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve, Lin:Operb, Lin:Cised}. The online algorithms and one-pass algorithms are more efficient by using some optimization strategies, such as convex hull in \cite{Liu:BQS}, priority queue in \cite{Muckell:Compression}, \textit{sector intersection} mechanism in \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} and \textit{fitting function} and spatio-temporal cone intersection approaches in our preview works \cite {Lin:Operb} and \cite {Lin:Cised}. Some sub-optimal algorithms are \ped specific while others are \sed specific, depending on the optimization techniques they applied.
+Due to the high time complexities of optimal \lsa algorithms, sub-optimal \lsa algorithms have been developed for trajectory compression, including batch algorithms (\eg Douglas-Peucker \cite{Douglas:Peucker, Meratnia:Spatiotemporal} and Theo~Pavlidis \cite{Pavlidis:Segment}), online algorithms (\eg~\bqsa\cite{Liu:BQS} \squishe \cite{Muckell:Compression}) and one-pass algorithms (\eg~\operb \cite{Lin:Operb} and \cised \cite{Lin:Cised}). The online algorithms and one-pass algorithms are more efficient by using some optimization strategies, such as convex hull in \bqsa~\cite{Liu:BQS}, priority queue in \squishe \cite{Muckell:Compression}, and \textit{fitting function} and spatio-temporal cone intersection approaches in our preview works \operb \cite {Lin:Operb} and \cia \cite {Lin:Cised}, respectively. Some sub-optimal algorithms, \eg ~\bqsa and \operb, are \ped specific while others, \eg algorithm \squishe and \cia, are \sed specific, depending on the optimization techniques they applied.
 
 
 \stitle{Motivations}. The motivations of this work are 3 folds.
@@ -50,7 +50,11 @@ Due to the high time complexities of optimal \lsa algorithms, sub-optimal \lsa a
 
 \ni (2) The effectiveness and efficiency of sub optimal algorithms vs. optimal algorithms on trajectories are not comprehensively studied.
 
-\ni (3) The recent important progresses in the trajectory simplification, \ie \squish~\cite{Muckell:SQUISH}, \bqsa~\cite{Liu:BQS}, \operb~\cite{Lin:Operb} and \cia~\cite{Lin:Cised} are not systematically evaluated for trajectory data. Moreover, the ``sector intersection" algorithms\cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} developed in fields of graphic, cartographic and pattern recognition, which run fast as well as have good performance, are still not introduced to the field of trajectory compression.
+\ni (3) The ``sector intersection" algorithms\cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} developed in fields of graphic, cartographic and pattern recognition, which run fast as well as have good performance, are still not introduced to the field of trajectory compression.
+
+\ni (4) The recent important progresses in the trajectory simplification, \ie \squish~\cite{Muckell:Compression}, \bqsa~\cite{Liu:BQS}, \operb~\cite{Lin:Operb} and \cia~\cite{Lin:Cised}, are not systematically evaluated for trajectory data. 
+
+
 
 
 %\end{enumerate}
@@ -59,20 +63,21 @@ Due to the high time complexities of optimal \lsa algorithms, sub-optimal \lsa a
 These issues call for a more comprehensive evaluation of the existing line simplification techniques on trajectory data.
 
 \stitle{\textcolor[rgb]{0.00,0.07,1.00}{Contributions \& Roadmap}}.
-This paper presents an experimental comparison of the state-of-the-art piece-wise line simplification based algorithms, namely,
-(i) Douglas-Peucker\cite{Douglas:Peucker} and \pavlidis~\cite{Pavlidis:Segment}, two distinct \emph{global checking} algorithms;
-(ii) \bqsa\cite{Liu:BQS} and \squishe~\cite{Muckell:SQUISH}, the famous \emph{constrained global checking} methods for trajectories,
-and (iii) \operb\cite{Lin:Operb} and Cone-Intersection\cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}, the \emph{local checking} algorithms.
+This paper presents an experimental comparison of the state-of-the-art piece-wise line simplification based algorithms for trajectory compression, namely,
+(i) Douglas-Peucker\cite{Douglas:Peucker,Meratnia:Spatiotemporal} and \pavlidis~\cite{Pavlidis:Segment}, two distinct batch algorithms using the \emph{global checking} policy,
+(ii) \bqsa\cite{Liu:BQS} and \squishe~\cite{Muckell:SQUISH}, famous online algorithms using the \emph{constrained global checking} policy,
+(iii) \operb\cite{Lin:Operb}, Sector intersection\cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve} and \cised \cite{Lin:Cised}, one-pass algorithms using the \emph{local checking} policy, and
+(iv) \oped\cite{Chan:Optimal} and \osed, two optimal algorithms based on graph, respectively.
 %
-Using a variety of real trajectory datasets with up to $2.5$ billion data points, we evaluated the performance of each technique in terms of its processing time, compression ratio and average error.
+Using a variety of real trajectory datasets with up to \textcolor{red}{$2.5$} billion data points, we evaluated the performance of each technique in terms of its processing time, compression ratio and average error.
 %
 Our experimental results reveal the characteristics of different techniques, based on which we provide guidelines on selecting appropriate methods and distance metrics for various scenarios.
 
 The remainder of the paper is organized as follows.
 Section 2 introduces the concepts and notations frequently used in the paper.
-Section 3 reviews the techniques that we evaluated.
-Section 4 reports the experimental results.
-Section 5 concludes this paper.
+Section 3 and Section 4 review the sub optimal and optimal methods that we evaluated.
+Section 5 reports the experimental results.
+Section 6 concludes this paper.
 The appendix covers additional related work and experimental results.
 
 
