@@ -1,5 +1,5 @@
-\section{Line Simplification Problem}
-%In this section, we introduce some basic concepts and existing line simplification based algorithms for trajectory compression.
+\section{Trajectory Simplification Problem}
+In this section, we introduce basic concepts and statement the problem of piece-wise line based trajectory simplification.
 %\textcolor[rgb]{1.00,0.00,0.00}{A discussion and summary is presented in the last.}
 
 \begin{figure*}[tb!]
@@ -20,8 +20,8 @@ We first introduce basic notations.
 
 \begin{table}
 	\renewcommand{\arraystretch}{1.35}
+	\vspace{-1ex}
 	\caption{\small Summary of notations}
-	%	\vspace{-1ex}
 	\centering
 	\footnotesize
 	%\scriptsize
@@ -56,18 +56,18 @@ We first introduce basic notations.
 %		\hline
 %		$\mathcal{R}^*$ & the intersection of convex polygons \\
 %		\hline
-		$m$ & the maximum number of edges of a polygon\\
-		\hline
+%		$m$ & the maximum number of edges of a polygon\\
+%		\hline
 %		$E^j$ & a group of edges labeled with $j$\\
 %		\hline
 %		$g(e)$ & the label of an edge $e$ of polygons \\
 %		\hline
-		\circle{} & a synchronous circle\\
-		\hline
+%		\circle{} & a synchronous circle\\
+%		\hline
 		\cone{} & a spatio-temporal cone \\
 		\hline
-		\pcircle{} & a cone projection circle \\
-		\hline
+%		\pcircle{} & a cone projection circle \\
+%		\hline
 		$\bigsqcap$ & intersection of geometries\\
 		\hline
 		$G$ &	the reachability graph of a trajectory\\
@@ -129,9 +129,11 @@ We illustrate these notations with examples.
 	where points $P'_4$, $P'_2$ and $P'_7$ are the synchronized points of $P_4$, $P_2$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$, $\vv{P_0P_{4}}$ and $\vv{P_4P_{10}}$, respectively.
 \end{example}
 
+
+\eat{%%%%%%%%%%
 \stitle{Error bounded algorithms}. Given a trajectory \trajec{T} and its compression  algorithm $\mathcal{A}$ using \sed (respectively \ped) that produces another trajectory \trajec{T'},
 we say that algorithm $\mathcal{A}$ is error bounded by $\epsilon$ if  for each point $P$ in \trajec{T}, there exist points $P_j$ and $P_{j+1}$ in \trajec{T'} such that $sed(P, \mathcal{L}(P_j,P_{j+1}))\le \epsilon$ (respectively $ped(P, \mathcal{L}(P_j,P_{j+1}))\le \epsilon$).
-
+}%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\vspace{-3ex}
@@ -145,8 +147,31 @@ Table~\ref{tab:summary-lsa} is a summary of these algorithms.
 Interested readers are referred to Appendix A for a summary of other existing work on trajectory compression.
 
 
-\eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%EAT
-The optimal methods that find the minimal $m$, having the time complexity of $O(n^2)$\cite{Chan:Optimal},
-making it impractical for large inputs\cite{Heckbert:Survey}.
-Hence, this paper evaluates the distinct sub-optimal methods.
-}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%EAT End
+
+\begin{table*}
+	\vspace{1ex}
+	\caption{\small Summary of line simplification algorithms. }
+	\label{tab:summary-lsa}
+	\centering
+	\small
+	\begin{tabular}{|l|c|c|c|c|c|c|c|}
+		\hline
+		\kw{Short}  & \kw{Key~Ideas}    & \kw{Type}  &\multicolumn{2}{|c|}{\kw{Error~Metrics}} &\multicolumn{2}{|c|}{ \kw{Time~Complexity}} & \kw{Space} \\		\cline{4-7}
+		\kw{Name}   & \kw{}    			&            &\kw{\ped} &\kw{\sed} 		& \kw{Best}& \kw{Worst}		& \kw{Complexity}\\		\hline\hline
+		DP~\cite{Douglas:Peucker, Meratnia:Spatiotemporal}	&Top-down   &batch  &Y &Y   & $\Omega(n)$ & $O(n^2)$ & O(n)  \\		\hline
+		TP~\cite{Pavlidis:Segment}	&Bottom-up   &batch    &Y &Y   & $\Omega(n\log n)$ & $O(n^2/K)$ & O(n)  \\		\hline
+		BQS~\cite{Liu:BQS}	&Top-down and Convex hull &online   &Y   & N &$\Omega(n)$ & $O(n^2)$  & $O(|Q|)$   \\		\hline
+		\squishe~\cite{Muckell:SQUISH}	& Bottom-up and Priority queue   &{online}    & N &Y   & $\Omega(n\log|Q|)$ & $O(n\log|Q|)$ & $O(|Q|)$ \\		\hline
+		%swab	&   &online   &Y &Y  & $\Omega(n)$ & $O(n^2)$ & O(w) &\textcolor[rgb]{1.00,0.00,0.00}{} \\		\hline
+		%owtd	&   &online    &Y &Y   & $\Omega(n)$ & $O(n^2)$ & O(n) &\textcolor[rgb]{1.00,0.00,0.00}{} \\ 	\hline
+		%ddr	    &       &one-pass    &Y  &Y  & $\Omega(n)$ & $O(n)$ & O(n) &\textcolor[rgb]{1.00,0.00,0.00}{} \\  \hline
+		\operb~\cite{Lin:Operb}	& Fitting function  & one-pass  &Y & N &   $\Omega(n)$ & $O(n)$ & O(1)  \\		\hline
+		\sia~\cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}	& Sector      &one-pass   &Y & N &   $\Omega(n)$ & $O(n)$ & O(1) \\		\hline
+		\cia~\cite{Lin:Cised}	& Spatio-temporal Cone      &one-pass   &N & Y &   $\Omega(n)$ & $O(n)$ & O(1) \\		\hline
+		OptimalPED~\cite{Chan:Optimal}	& Graph and Sector  &optimal   &Y & N &   $\Omega(n)$ & $O(n^2)$ & O(n) \\		\hline
+		OptimalSED~	& Graph and Spatio-temporal Cone      &optimal   &N & Y &   $\Omega(n\log n)$ & $O(n^2 \log n)$ & O(n) \\		\hline
+	\end{tabular}
+	{\\ \small Note: $K$ is the number of the final segments and $|Q|$ is the buffer size.}
+	%\vspace{-3ex}
+\end{table*}
+
