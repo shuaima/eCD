@@ -144,10 +144,10 @@ The Sector intersection algorithms using \ped (\siped) \cite{Williams:Longest,Sk
 %Note that the ``cone intersection" algorithms, developed in fields of graphic, cartographic and pattern recognition, are still not familiar to researchers of trajectory compression.
 Given a sequence of points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$, the \siped approach processes the input points in order and produces a simplified poly-line.  Moreover, instead of using the distance tolerance $\epsilon$ directly as the distance threshold, \siped converts the distance tolerance into a variable angle tolerance for testing the points.
 %
-For the start point $P_s$ and any point $P_{s+i}$, $1\le i\le k$, there are two different lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$, satisfying $ped(P_i, \vv{P_sP^u_{s+i}}) = \epsilon$, $ped(P_i, \vv{P_sP^l_{s+i}}) = \epsilon$ and $\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta$. Indeed, they forms a \emph{cone} $\mathcal{C}$($P_s$, $P_{s+i}$, $\epsilon$) taking $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the border lines.
+For the start point $P_s$ and any point $P_{s+i}$, $1\le i\le k$, there are two different lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$, satisfying $ped(P_i, \vv{P_sP^u_{s+i}}) = \epsilon$, $ped(P_i, \vv{P_sP^l_{s+i}}) = \epsilon$ and $\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta$. Indeed, they forms a \emph{sector} $\mathcal{S}$($P_s$, $P_{s+i}$, $\epsilon$) taking $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the border lines.
 % , where $P_s$ is the center point, and $\vv{P_sP^l_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ are two bound lines.
 Then there exists a point $Q$ such that all points $P_{s+i}$, $i \in [1, ... k]$, have perpendicular distances to
-line $\mathcal{L}(P_s,Q)$ within the given \ped tolerance $\epsilon$ if and only if $\bigcap_{i=1}^{k}\mathcal{C}(P_s, P_{s+i}, \epsilon) \ne \phi$.
+line $\mathcal{L}(P_s,Q)$ within the given \ped tolerance $\epsilon$ if and only if $\bigcap_{i=1}^{k}\mathcal{S}(P_s, P_{s+i}, \epsilon) \ne \phi$.
 Note that in this case, point $Q$ may not belong to $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$.
 However, if the last point $P_{s+k}$ is chosen as the end point $Q$ of the approximating line segment, then a narrow \emph{sector} with a distance tolerance $\epsilon/2$ could be employed to ensure the algorithm be \ped error bounded by $\epsilon$\cite{Zhao:Sleeve}.
 
@@ -167,9 +167,9 @@ Algorithm \siped runs in $O(n)$ time and takes $O(1)$ space.
 
 \begin{example}
 	\label{exm-alg-sleeve}
-	Figure~\ref{fig:sleeve} is a running example of narrow \emph{cone} taking a distance tolerance $\epsilon/2$. At the beginning, $P_0$ is the first start point, $P_1$, $P_2$, $P_3$ and so on, each has a narrow \emph{cone}.
-	For example, the narrow \emph{cone} $\mathcal{C}$($P_0$, $P_{3}$, $\epsilon/2$) takes $P_0$ as the center point and $\vv{P_0P^u_{3}}$ and $\vv{P_0P^l_{3}}$ as the border lines.
-	Because $\bigcap_{i=1}^{4}\mathcal{C}(P_0, P_{s+i}, \epsilon/2) \ne \phi$ and $\bigcap_{i=1}^{5}\mathcal{C}(P_0, P_{s+i}, \epsilon/2) = \phi$, $\vv{P_0P_4}$ is output and $P_4$ becomes the start point of the next section.
+	Figure~\ref{fig:sleeve} is a running example of narrow \emph{cone} taking a distance tolerance $\epsilon/2$. At the beginning, $P_0$ is the first start point, $P_1$, $P_2$, $P_3$ and so on, each has a narrow \emph{sector}.
+	For example, the narrow \emph{sector} $\mathcal{S}$($P_0$, $P_{3}$, $\epsilon/2$) takes $P_0$ as the center point and $\vv{P_0P^u_{3}}$ and $\vv{P_0P^l_{3}}$ as the border lines.
+	Because $\bigcap_{i=1}^{4}\mathcal{S}(P_0, P_{s+i}, \epsilon/2) \ne \phi$ and $\bigcap_{i=1}^{5}\mathcal{S}(P_0, P_{s+i}, \epsilon/2) = \phi$, $\vv{P_0P_4}$ is output and $P_4$ becomes the start point of the next section.
 	At last, the algorithm outputs two continuous line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.
 \end{example}
 
