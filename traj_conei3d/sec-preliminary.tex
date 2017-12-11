@@ -150,15 +150,15 @@ we say that algorithm $\mathcal{A}$ is error bounded by $\epsilon$ if  for each 
 
 Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ and an error bound $\epsilon$, the optimal trajectory simplification problem, as formulated by Imai and Iri in \cite{Imai:Optimal}, can be solved in two steps: (1) construct a reachability graph $G$ of \trajec{T} and (2) search a shortest path from $P_0$ to $P_{n}$ in graph $G$.
 
-The reachability graph of a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ \wrt an error bound $\epsilon$ is $G$ = ($V$, $E)$, where (1) $V = \{P_0, \ldots, P_n\}$, and (2) for any nodes $P_s$ and $P_{s+k} \in V$ ($s\ge 0, k>0, s+k\le n$), edge $(P_s, P_{s+k}) \in E$ if and only if the distance of each point $P_{s+i} (0<i<k)$ to line segment $\vv{P_sP_{s+k}}$ is no greater than $\epsilon$.
+The reachability graph of a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ \wrt a bound $\epsilon$ is an unweighted graph $G(V, E)$, where (1) $V = \{P_0, \ldots, P_n\}$, and (2) for any nodes $P_s$ and $P_{s+k} \in V$ ($s\ge 0, k>0, s+k\le n$), edge $(P_s, P_{s+k}) \in E$ if and only if the distance of each point $P_{s+i}$ $(i\in[0,k])$ to line segment $\vv{P_sP_{s+k}}$ is no greater than $\epsilon$.
 
-Observe that in the reachability graph $G$, (1) a path from nodes $P_0$ to $P_{n}$ is a representation of trajectory \trajec{T}. The path also reveals the subset of points of \trajec{T} used in the approximate trajectory, (2) the path length corresponds to the number of line segments in the approximation trajectory, and 
+Observe that in the reachability graph $G$, (1) a path from nodes $P_0$ to $P_{n}$ is a representation of trajectory \trajec{T}. The path also reveals the subset of points of \trajec{T} used in the approximate trajectory, (2) the path length corresponds to the number of line segments in the approximation trajectory, and
 (3) a shortest path is an optimal representation of trajectory \trajec{T}.
 
 Constructing the reachability graph $G$ needs to check for all pair of points $P_s$ and $P_{s+k}$ whether the distances of all points ($P_{s+i}$, $0<i<k$) to the line segment $\vv{P_sP_{s+k}}$ are less than $\epsilon$.
 There are $O(n^2)$ pairs of points in the trajectory and checking the error of all points $P_{s+i}$ to a line segment $\vv{P_sP_{s+k}}$ takes $O(n)$ time.
 Thus, the construction step takes $O(n^3)$ time.
-Finding a shortest path takes no more than $O(n^2)$ time. Hence, the brute-force algorithm takes $O(n^3)$ time in total.
+Finding shortest paths on unweighted graphs can be done in linear time. Hence, the brute-force algorithm takes $O(n^3)$ time in total.
 
 %
 Though the brute-force algorithm was initially developed using \ped, it can be used for \sed.
@@ -236,14 +236,6 @@ Similarly, points $P_3$ and $P_4$ are processed, as shown in Figures~\ref{fig:sl
 We also employ and revise a convex polygon intersection algorithm developed in~\cite{ORourke:Intersection}, whose basic idea is straightforward.
 Assume \kwlog that the edges of polygons $\mathcal{R}_1$ and $\mathcal{R}_2$ are oriented counterclockwise, and $\vv{A} = (P_{s_A}, P_{e_A})$ and $\vv{B} = (P_{s_B}, P_{e_B})$ are two (directed) edges on $\mathcal{R}_2$ and $\mathcal{R}_1$, repectively (see Figure~\ref{fig:c-poly-inter}).
 
-\begin{figure}[tb!]
-	\centering
-	\includegraphics[scale=0.92]{figures/Fig-convex-poly-inter.png}
-%	\vspace{-1ex}
-	\caption{\small A running example of convex polygons intersection.}
-	\vspace{-1ex}
-	\label{fig:c-poly-inter}
-\end{figure}
 
 The algorithm has $\vv{A}$ and $\vv{B}$ ``chasing'' one another, \ie moves $\vv{A}$ on $\mathcal{R}_2$ and $\vv{B}$ on $\mathcal{R}_1$ counter-clockwise step by step under certain rules, so that they meet at every crossing of $\mathcal{R}_1$ and $\mathcal{R}_2$.
 %
@@ -331,6 +323,14 @@ After 7 steps of moving of edge $\vv{A}$ or $\vv{B}$, each by an advance rule, $
 
 
 
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.92]{figures/Fig-convex-poly-inter.png}
+%	\vspace{-1ex}
+	\caption{\small A running example of convex polygons intersection.}
+	\vspace{-1ex}
+	\label{fig:c-poly-inter}
+\end{figure}
 
 
 
