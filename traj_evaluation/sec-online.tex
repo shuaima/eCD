@@ -7,13 +7,13 @@
 The \emph{constrained global checking} algorithms restrict the checking within a window, sliding or opening, hence, they are online algorithms.
 Constrained global checking algorithms need not have the entire trajectory ready before they start compressing, and are appropriate for compressing trajectories on sensors of mobile devices.
 %Moreover, the existing constrained global checking algorithms~\cite{Keogh:online,Meratnia:Spatiotemporal,Muckell:Compression} usually use a sliding or opening window and compress sub-trajectories in the window.
-Several line simplification algorithms have been developed \eg by combining \dpa or \pavlidis with sliding or opening windows for online processing\cite{Meratnia:Spatiotemporal, Keogh:online}.
+Several line simplification algorithms have been developed \eg by combining \dpa or \tpa with sliding or opening windows for online processing\cite{Meratnia:Spatiotemporal, Keogh:online}.
 \cite{Meratnia:Spatiotemporal} is a combination of Top-down and opening window while \cite{Keogh:online} is a combination of Bottom-up and sliding window.
 These methods still have a high time and/or space complexity, which significantly hinders their utility in resource-constrained mobile devices \cite{Liu:BQS}.
 %
 \bqsa \cite{Liu:BQS} and \squishe\cite{Muckell:Compression} further optimize these online algorithms.
-\bqsa \cite{Liu:BQS} uses a new distance checking method by picking out at most eight special points from an open window based on a convex hull. The time complexity of \bqsa is $O(n^2)$ in the worst case.
-
+\bqsa \cite{Liu:BQS} fasts the process by using a convex hull while \squishe\cite{Muckell:Compression} uses a data structure named priority queue.
+%uses a new distance checking method by picking out at most eight special points from an open window based on
 
 \eat{
 Recently, \bqsa \cite{Liu:BQS} has been proposed, using a new distance checking method by picking out at most eight special points from an open window based on a convex hull, \eg a rectangular bounding box with two bounding lines, so that when a new point is added to a window, it only needs to calculate the distances of the  special points to a line, instead of all data points in the window, in many cases.
@@ -30,14 +30,7 @@ The time complexity of \bqsa remains $O(n^2)$ in the worst case, as \bqsa falls 
 \end{figure}
 
 
-\begin{figure*}[tb!]
-\centering
-\includegraphics[scale=0.66]{figures/Fig-Squishe.png}
-\vspace{-1ex}
-\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the \squishe algorithm using \sed to five line segments. The size of Q is 6, and the data structure after point $P$ is a tuple $(pred, succ, mmprio, prio)$. }
-\vspace{-2ex}
-\label{fig:squishe}
-\end{figure*}
+
 
 \subsubsection{Bounded Quadrant System Using \ped}
 The \bqsa algorithm \cite{Liu:BQS} is essentially an opening window and top-down algorithm\cite{Meratnia:Spatiotemporal}. It further reduces the compression time by introducing a convex hull that bounds a certain number of points. For a buffered sub trajectory $[P_s, \ldots, P_k]$, it splits the space into four quadrants. For each quadrant, a rectangular bounding box is firstly created using the least and highest $x$ values and the least and highest $y$ values among points $P_s,\ldots,P_k$. Then another two bounding lines connecting points $P_s$ and $P_{h}$ and points $P_s$ and $P_{l}$ are created such that lines $\vv{P_sP_{h}}$ and $\vv{P_sP_{l}}$ have the largest and smallest angles with the $x$-axis, respectively.
@@ -49,8 +42,8 @@ Each time a new point is added to the buffer, \bqsa first picks out at most eigh
 (3) Otherwise, it computes all distances $d(P_i, {\mathcal{L}(P_s,P_k)})$ ($i\in[s, k]$) as algorithm \dpa.
 %It does the same as (2) if the largest distances is less than $\epsilon$, and does the same as (1), otherwise.
 The time complexity of \bqsa remains $O(n^2)$.
-Its simplified version \fbqsa essentially avoids case (3) to achieve an $O(n)$ time complexity.
-Note \bqsa and \fbqsa only support \ped.
+%Its simplified version \fbqsa essentially avoids case (3) to achieve an $O(n)$ time complexity.
+Note \bqsa only support \ped.
 
 \begin{example}
 \label{exm-alg-bqs}
@@ -67,7 +60,14 @@ the max and min distances to $\vv{P_0P_7}$ are larger and less than $\epsilon$, 
 
 \subsubsection{SQUISH-E Using \sed}
 
-
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.55]{figures/Fig-Squishe.png}
+	\vspace{-1ex}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the \squishe algorithm using \sed to five line segments. The size of Q is 6, and the data structure after point $P$ is a tuple $(pred, succ, mmprio, prio)$. }
+	\vspace{-2ex}
+	\label{fig:squishe}
+\end{figure*}
 
 The \squishe algorithm~\cite{Muckell:Compression} is an {opening} window and Bottom-up algorithm, taking as input a trajectory \trajec{T} and two additional parameters $\lambda$ and $\epsilon$.
 It compresses trajectory \trajec{T} while striving to minimize \sed error and achieving the compression ratio of $\lambda$. Then, it further compresses \trajec{T} as long as this compression will not increase the max \sed error beyond $\epsilon$.
@@ -78,7 +78,7 @@ Meanwhile, \squishe($\lambda$) is the case where $\epsilon$ is set to $0$ and th
 In this paper, we only discuss \squishe($\epsilon$).
 }%%%%%%%%%%%%%%%%%%%%
 
-The \squishe algorithm optimizes the \pavlidis by using a doubly linked list $Q$. Each node in the list is a tuple, \ie $P(pred, succ, mnprio, prio)$, where $P$ is a trajectory data point (for convenience, we also refer $P$ to the node), $pred$ refers to its predecessor node/point, $succ$ refers to its successor node/point, $prio$ is the priority of the point, which is defined as an upper bound on the \sed error that the removal of that point would introduce, and $mnprio$ is the max priority of its predecessor and successor points that have ever been removed from the list.
+The \squishe algorithm optimizes the \dpa~by using a doubly linked list $Q$. Each node in the list is a tuple, \ie $P(pred, succ, mnprio, prio)$, where $P$ is a trajectory data point (for convenience, we also refer $P$ to the node), $pred$ refers to its predecessor node/point, $succ$ refers to its successor node/point, $prio$ is the priority of the point, which is defined as an upper bound on the \sed error that the removal of that point would introduce, and $mnprio$ is the max priority of its predecessor and successor points that have ever been removed from the list.
 %
 Initially, trajectory points are loaded to the list $Q$ one by one.
 At the same time, $mnprio$ of each point is set to $0$ as no node has been removed from the list.

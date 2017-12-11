@@ -62,6 +62,17 @@ In Figure~\ref{fig:ldr}, the trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}
 \subsubsection{\operb Using \ped}
 \label{sec-operb}
 
+
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.66]{figures/Fig-oper.png}
+	\vspace{-1ex}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the \operb algorithm using \ped to two line segments.}
+	\vspace{-2ex}
+	\label{fig:operb}
+\end{figure}
+
+
 \operb\cite{Lin:Operb} is essentially the angle-adjustable strip\cite{Reumann:Strip}.
 %Algorithm \operb, after initializing, repeatedly processes the data points in $\dddot{\mathcal{T}}[P_0,$ $\ldots, P_{n}]$ one by one until that all data points have been considered.
 Consider an error bound $\epsilon$ and a sub-trajectory $\dddot{\mathcal{T}_s}[P_s,$ $\ldots, P_{s+k}]$.
@@ -111,14 +122,7 @@ Algorithm \operb runs in $O(n)$ time and takes $O(1)$ space.
 Note \operb only supports \ped.
 
 
-\begin{figure}[tb!]
-	\centering
-	\includegraphics[scale=0.66]{figures/Fig-oper.png}
-	\vspace{-1ex}
-	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the \operb algorithm to two line segments.}
-	\vspace{-2ex}
-	\label{fig:operb}
-\end{figure}
+
 
 
 \begin{example}
@@ -136,26 +140,26 @@ Note \operb only supports \ped.
 \subsubsection {Sector Intersection Using \ped}
 \label{sec-siped}
 
-The Sector Intersection algorithms using \ped (\sia) \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone}, also named \sleeve in \cite{Zhao:Sleeve}, are {the angle-adjustable strips too}.
+The Sector intersection algorithms using \ped (\siped) \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone}, also named \sleeve in \cite{Zhao:Sleeve}, are {the angle-adjustable strips too}.
 %Note that the ``cone intersection" algorithms, developed in fields of graphic, cartographic and pattern recognition, are still not familiar to researchers of trajectory compression.
-Given a sequence of points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$, the \cia approach processes the input points in order and produces a simplified poly-line.  Moreover, instead of using the distance tolerance $\epsilon$ directly as the distance threshold, \cia converts the distance tolerance into a variable angle tolerance for testing the points.
+Given a sequence of points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$, the \siped approach processes the input points in order and produces a simplified poly-line.  Moreover, instead of using the distance tolerance $\epsilon$ directly as the distance threshold, \siped converts the distance tolerance into a variable angle tolerance for testing the points.
 %
 For the start point $P_s$ and any point $P_{s+i}$, $1\le i\le k$, there are two different lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$, satisfying $ped(P_i, \vv{P_sP^u_{s+i}}) = \epsilon$, $ped(P_i, \vv{P_sP^l_{s+i}}) = \epsilon$ and $\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta$. Indeed, they forms a \emph{cone} $\mathcal{C}$($P_s$, $P_{s+i}$, $\epsilon$) taking $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the border lines.
 % , where $P_s$ is the center point, and $\vv{P_sP^l_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ are two bound lines.
 Then there exists a point $Q$ such that all points $P_{s+i}$, $i \in [1, ... k]$, have perpendicular distances to
 line $\mathcal{L}(P_s,Q)$ within the given \ped tolerance $\epsilon$ if and only if $\bigcap_{i=1}^{k}\mathcal{C}(P_s, P_{s+i}, \epsilon) \ne \phi$.
 Note that in this case, point $Q$ may not belong to $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$.
-However, if the last point $P_{s+k}$ is chosen as the end point $Q$ of the approximating line segment, then a narrow \emph{cone} with a distance tolerance $\epsilon/2$ could be employed to ensure the algorithm be \ped error bounded by $\epsilon$\cite{Zhao:Sleeve}.
+However, if the last point $P_{s+k}$ is chosen as the end point $Q$ of the approximating line segment, then a narrow \emph{sector} with a distance tolerance $\epsilon/2$ could be employed to ensure the algorithm be \ped error bounded by $\epsilon$\cite{Zhao:Sleeve}.
 
-Algorithm \cia runs in $O(n)$ time and takes $O(1)$ space.
-\cia also only supports \ped.
+Algorithm \siped runs in $O(n)$ time and takes $O(1)$ space.
+\siped also only supports \ped.
 
 
 \begin{figure}[tb!]
 	\centering
 	\includegraphics[scale=0.66]{figures/Fig-sleeve.png}
 	\vspace{-1ex}
-	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the \conei algorithm to two line segments.}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}$ is compressed by the sector intersection algorithm using \ped to two line segments.}
 	\vspace{-2ex}
 	\label{fig:sleeve}
 \end{figure}
@@ -175,7 +179,7 @@ Algorithm \cia runs in $O(n)$ time and takes $O(1)$ space.
 \subsubsection {Cone Intersection Using \sed}
 \label{sec-cised}
 
-The \cia extends the \textit{sector intersection} method in Section~\ref{sec-siped} from a 2D space to a Spatio-Temporal 3D space.
+The \cised extends the \textit{sector intersection} method in Section~\ref{sec-siped} from a 2D space to a Spatio-Temporal 3D space.
 
 \stitle{Synchronous Circles (\circle{})}. The synchronous circle of a data point $P_{s+i}$ ($1\le i\le k$) in $\dddot{\mathcal{T}}_s$ \wrt an error bound $\epsilon$, denoted as \circle{(P_{s+i}, \epsilon)}, or \circle{_{s+i}} in short, is a circle on the plane $P.t-P_{s+i}.t = 0$ such that $P_{s+i}$ is its center and $\epsilon$ is its radius.
 
@@ -192,11 +196,11 @@ Figure~\ref{fig:cis} also illustrates two example spatio-temporal cones: \cone{(
 	\centering
 	\includegraphics[scale=0.66]{figures/Fig-CIS.png}
 	%	\vspace{-1ex}
-	\caption{\small Examples of spatio-temporal cones in a 3D Cartesian coordinate system, where (1) $P_s$, $P_{s+i}$ and $P_{s+k}$ are three points, (2) \circle{_{s+i}} and \circle{_{s+k}} are two synchronous circles, (3) \cone{_{s+i}} and \cone{_{s+k}} are two spatio-temporal cones, (4) $Q$ is a point in synchronous circle \circle{_{s+k}}, and (5) $P'_{s+i}$ is the intersection point of line $\overline{P_sQ}$ and synchronous circle \circle{_{s+i}}.}
+	\caption{\small Examples of spatio-temporal cones in a 3D Cartesian coordinate system.}
+%, where (1) $P_s$, $P_{s+i}$ and $P_{s+k}$ are three points, (2) \circle{_{s+i}} and \circle{_{s+k}} are two synchronous circles, (3) \cone{_{s+i}} and \cone{_{s+k}} are two spatio-temporal cones, (4) $Q$ is a point in synchronous circle \circle{_{s+k}}, and (5) $P'_{s+i}$ is the intersection point of line $\overline{P_sQ}$ and synchronous circle \circle{_{s+i}}
 	%\vspace{-1ex}
 	\label{fig:cis}
 \end{figure}
-
 
 
 	Given a sub-trajectory $[P_s, \ldots, P_{s+k}]$ and a point $Q$ in the area of synchronous circle \circle{(P_{s+k}, \epsilon)}, the intersection point $P'_{s+i}$ of the directed line segment $\vv{P_sQ}$ and the plane $P.t - P_{s+i}.t = 0$ is the synchronized point of $P_{s+i}$ ($1\le i\le k$) \wrt  $\vv{P_sQ}$, and the distance $|\vv{P_{s+i}P'_{s+i}}|$ from $P_{s+i}$ to $P'_{s+i}$ is the synchronous distance of $P_{s+i}$ to $\vv{P_sQ}$.
