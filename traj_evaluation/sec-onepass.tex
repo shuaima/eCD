@@ -7,21 +7,29 @@
 The local checking policy, the key to achieve the \emph{one-pass} processing, does not need a window to buffer the preview read points.
 %Meanwhile, a trajectory compression algorithm is {\em one-pass} if it processes each point in a trajectory once and only once when compressing the trajectory.
 Obviously, the one-pass algorithms have linear time complexity.
-%
+
 The $n^{th}$ point routine and the routine of random-selection of points \cite{Shi:Survey} are two naive one-pass algorithms.
 In these routines, for every fixed number of consecutive points along the line, the $n^{th}$ point and one random point among them are retained, respectively.
 They run fast, however, they are not error bounded.
 %
-In Reumann-Witkam routine\cite{Reumann:Strip}, it builds a strip paralleling to the line connecting the first two points, then the points within this strip compose one section of the line.
-The Reumann-Witkam routine also runs fast but it is limited in compression ratio.
+In Reumann-Witkam routine (\rwa)\cite{Reumann:Strip}, it builds a strip paralleling to the line connecting the first two points, then the points within this strip compose one section of the line.
+\rwa also runs fast but it is limited in compression ratio.
 %
-Williams~\cite{Williams:Longest} and Sklansky and Gonzalez \cite{Sklansky:Cone} proposed linear time algorithms based one the idea of ``cone intersection", Dunham \cite{Dunham:Cone} and Zhao \cite{Zhao:Sleeve} further extend these algorithms.
-These algorithms run fast as well as have comparable compression ratio with the \dpa and \pavlidis algorithms.
+The Linear Dead Reckoning (\ldr) method \cite{Lange:Tracking} for position tracking follows the similar routine as \rwa except that it uses \sed and assumes a velocity ${\vv{v}}$ for each section. In addition, the authors of \cite{Trajcevski:DDR} proved that \ldr is also suitable for online spatio-temporal compression. % as long as the tolerance threshold is set to $\epsilon/2$.
+However, its compression ratios are poor because both the value and the direction of velocity ${\vv{v}}$ are pre-defined and fixed between two updates.
 %
-Moreover, {fast \bqsa \cite{Liu:BQS} (\fbqsa in short), the simplified version of \bqsa, has a linear time complexity.}
-%
-The authors of this paper have also developed the One-Pass ERror Bounded (\operb) algorithm\cite{Lin:Operb}.
+The authors of this paper improved the \rwa by essentially allow the angle of a strip be dynamically adjustable, and developed the One-Pass ERror Bounded (\operb) algorithm~\cite{Lin:Operb}.
 
+There are also \textit{sector intersection (SI)} based algorithms using PED that can be easily adopted for trajectory compression although
+\textit{they have been overlooked by existing trajectory simplification studies}.
+Williams~\cite{Williams:Longest} and Sklansky and Gonzalez \cite{Sklansky:Cone} proposed linear time algorithms based on the idea of ``sector intersection", Dunham \cite{Dunham:Cone} extend these algorithms, and the Sleeve algorithm \cite{Zhao:Sleeve} in the cartographic discipline
+essentially applies the same idea as the SI algorithm.
+These \ped specific SI algorithms run fast as well as have comparable compression ratios with the \dpa algorithm using \ped.
+%
+%Moreover, {fast \bqsa \cite{Liu:BQS} (\fbqsa in short), the simplified version of \bqsa, has a linear time complexity.}
+%
+
+In addition, the authors of this paper recently extends the \textit{sector intersection} method from a 2D space to a Spatio-Temporal 3D space, and develop a new one-pass and \sed enabled algorithm \cised that runs fast as well as has comparable compression ratio with the \dpa algorithm using \sed.
 
 We next review \operb, Sector intersection method and \cised evaluated in out experiments.
 
@@ -63,17 +71,6 @@ In Figure~\ref{fig:ldr}, the trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}
 \label{sec-operb}
 
 
-\begin{figure}[tb!]
-	\centering
-	\includegraphics[scale=0.66]{figures/Fig-oper.png}
-	\vspace{-1ex}
-	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the \operb algorithm using \ped to two line segments.}
-	\vspace{-2ex}
-	\label{fig:operb}
-\end{figure}
-
-
-\operb\cite{Lin:Operb} is essentially the angle-adjustable strip\cite{Reumann:Strip}.
 %Algorithm \operb, after initializing, repeatedly processes the data points in $\dddot{\mathcal{T}}[P_0,$ $\ldots, P_{n}]$ one by one until that all data points have been considered.
 Consider an error bound $\epsilon$ and a sub-trajectory $\dddot{\mathcal{T}_s}[P_s,$ $\ldots, P_{s+k}]$.
 \operb dynamically maintains a directed line segment $\mathcal{L}_i$ ($i\in[1,k]$), whose start point is fixed with $P_s$ and its end point is identified (may not in $\{P_s, \ldots, P_{s+i}\}$) to {\em fit} all the previously processed points $\{P_s, \ldots, P_{s+i}\}$.
@@ -122,12 +119,20 @@ Algorithm \operb runs in $O(n)$ time and takes $O(1)$ space.
 Note \operb only supports \ped.
 
 
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.66]{figures/Fig-oper.png}
+	\vspace{-1ex}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the \operb algorithm using \ped to two line segments.}
+	\vspace{-2ex}
+	\label{fig:operb}
+\end{figure}
 
 
 
 \begin{example}
 	\label{exm-alg-operb}
-	Figure~\ref{fig:operb} is a running example of the \operb algorithm.
+	Figure~\ref{fig:operb} is a running example of the \operb algorithm compressing the same trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$.
 	(1) It takes $P_0$ as the start point, reads $P_1$ and sets $\mathcal{L}_1$ = $\vv{P_0P_1}$.
 	(2) It reads $P_2$. The distance from $P_2$ to $\mathcal{L}_1$ is less than the threshold, thus, it updates $\mathcal{L}_1$  to $\mathcal{L}_2$ by the fitting function $\mathbb{F}$.
 	(3) It reads $P_3$ and $P_4$, and updates $\mathcal{L}_2$ to $\mathcal{L}_3$ and $\mathcal{L}_3$ to $\mathcal{L}_4$, respectively.
@@ -158,7 +163,7 @@ Algorithm \siped runs in $O(n)$ time and takes $O(1)$ space.
 \begin{figure}[tb!]
 	\centering
 	\includegraphics[scale=0.66]{figures/Fig-sleeve.png}
-	\vspace{-1ex}
+	\vspace{-3ex}
 	\caption{\small The trajectory $\dddot{\mathcal{T}}$ is compressed by the sector intersection algorithm using \ped to two line segments.}
 	\vspace{-2ex}
 	\label{fig:sleeve}
@@ -167,7 +172,7 @@ Algorithm \siped runs in $O(n)$ time and takes $O(1)$ space.
 
 \begin{example}
 	\label{exm-alg-sleeve}
-	Figure~\ref{fig:sleeve} is a running example of narrow \emph{cone} taking a distance tolerance $\epsilon/2$. At the beginning, $P_0$ is the first start point, $P_1$, $P_2$, $P_3$ and so on, each has a narrow \emph{sector}.
+	Figure~\ref{fig:sleeve} is a running example of the narrow \emph{sector} method taking as input the same trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$. At the beginning, $P_0$ is the first start point, and points $P_1$, $P_2$, $P_3$, etc., each has a narrow \emph{sector}.
 	For example, the narrow \emph{sector} $\mathcal{S}$($P_0$, $P_{3}$, $\epsilon/2$) takes $P_0$ as the center point and $\vv{P_0P^u_{3}}$ and $\vv{P_0P^l_{3}}$ as the border lines.
 	Because $\bigcap_{i=1}^{4}\mathcal{S}(P_0, P_{s+i}, \epsilon/2) \ne \phi$ and $\bigcap_{i=1}^{5}\mathcal{S}(P_0, P_{s+i}, \epsilon/2) = \phi$, $\vv{P_0P_4}$ is output and $P_4$ becomes the start point of the next section.
 	At last, the algorithm outputs two continuous line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.
@@ -179,26 +184,24 @@ Algorithm \siped runs in $O(n)$ time and takes $O(1)$ space.
 \subsubsection {Cone Intersection Using \sed}
 \label{sec-cised}
 
-The \cised extends the \textit{sector intersection} method in Section~\ref{sec-siped} from a 2D space to a Spatio-Temporal 3D space.
-
 Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, any point $P'_{s+i}$, $0< i \le k$, on the plane $P.t-P_{s+i}.t = 0$ is a synchronized data point of $P_{s+i}$. For all $P'_{s+i}$ in the plane satisfying $|P_{s+i}P'_{s+i}| \le \epsilon$, they form a \textit{synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$} of $P_{s+i}$ with $P_{s+i}$ as its center and $\epsilon$ as its radius.
 %
 A spatio-temporal cone (or simply \textit{cone}) of a data point $P_{s+i}$ ($1\le i\le k$) in $\dddot{\mathcal{T}}_s$ \wrt a point $P_s$ and an error bound $\epsilon$, denoted as \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))}, or \cone{_{s+i}} in short, is an oblique circular cone such that point $P_s$ is its apex and the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$ is its base (Figure~\ref{fig:cis}).
 %
 Then, there exists a point $Q$ such that $Q.t = P_{s+k}.t$ and $sed(P_{s+i}, \vv{P_sQ})\le \epsilon$ for each $i \in [1,k]$ if and only if $\bigsqcap_{i=1}^{k}$\cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} $\ne \{P_s\}$.
 %
-Next, algorithm \cised runs in the similar route as \siped, and its strong simplification version also applies the half $epsilon$ in building a cone.
+Algorithm \cised applies the idea of spatio-temporal cone intersection and runs in the similar routine as \siped. And its strong simplification version also applies the half $\epsilon$ in building a cone.
 
-Furthermore, because these spatio-temporal cones have the same apex $P_s$, the checking of their intersection can be computed by a much simpler way, \ie the checking of intersection of cone projection circles on a plane (Figure~\ref{fig:cis}). A circle is also approximated with its $m$-edge inscribed regular polygon, whose intersection can be computed more efficiently.
+In addition, because these spatio-temporal cones have the same apex $P_s$, the checking of their intersection can be computed by a much simpler way, \ie the checking of intersection of cone projection circles on a plane (Figure~\ref{fig:cis}). A circle is also approximated with its $m$-edge inscribed regular polygon, whose intersection can be computed more efficiently.
 Finally, \cised achieves $O(n)$ time and $O(1)$ space. 
 
 	
 \begin{figure}[tb!]
 	\centering
 	\includegraphics[scale=0.66]{figures/Fig-CIS.png}
-	%	\vspace{-1ex}
+	\vspace{-1ex}
 	\caption{\small Examples of spatio-temporal cones in a 3D Cartesian coordinate system.}
-	%\vspace{-1ex}
+	\vspace{-1ex}
 	\label{fig:cis}
 \end{figure}
 
@@ -206,10 +209,10 @@ Finally, \cised achieves $O(n)$ time and $O(1)$ space.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%example of Algorithm CISED
 \begin{figure}[tb!]
 	\centering
-	\includegraphics[scale=0.8]{figures/Fig-Conest.png}
-	%\vspace{-2ex}
+	\includegraphics[scale=0.66]{figures/Fig-Conest.png}
+	\vspace{-2ex}
 	\caption{\small A running example of the \cised algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed into four line segments.}
-	%	\vspace{-1ex}
+	\vspace{-1ex}
 	\label{fig:exm-const}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

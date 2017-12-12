@@ -85,7 +85,6 @@ $\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$,
 
 
 
-
 \stitle{Exp-2.1: Impacts of the error bound $\zeta$}.
 To evaluate the impacts of $\zeta$ on compression ratios of these algorithms, we varied $\zeta$ from $5m$ to $100m$ on
  the entire four datasets, respectively.
@@ -116,43 +115,6 @@ Similar to \operb, \operba has advantages on datasets with high sampling rates.
 \label{fig:cr}
 \vspace{-.5ex}
 \end{figure*}
-
-
-
-
-
-\stitle{{Exp-2.2}: Impacts of the optimization techniques}.
-%To evaluate the impacts of the optimization techniques (see Section~\ref{subsec-optimizations}),
-We compared algorithms \operb and \operba with \kw{Raw}-\operb and \kw{Raw}-\operba, respectively.
-We varied $\zeta$ from $5m$ to $100m$ on the entire \taxi, \truck, \sercar and \geolife, respectively.
-The results are reported in Figure~\ref{fig:optim}.
-
-\sstab(1) The optimizations have great impacts on the compression ratios of \operb and \operba. Indeed,
-\operb is  on average {($87.9\%$, ${71.8\%}$, $61.8\%$, $58.0\%$)} of \kw{Raw}-\operb, and \operba is  on average {($93.1\%$, ${88.5\%}$, $77.1\%$, $78.5\%$)} of \kw{Raw}-\operba
-on (\taxi, \truck, \sercar, \geolife), respectively. Note that the optimization techniques  have a better impact on datasets with high sampling rates.
-
-\sstab(2) The impacts of the optimization techniques increase with the increase of $\zeta$ on \taxi and \truck.
-For example, \operb is {($92.1\%$, ${87.3\%}$, $82.6\%$)} of \kw{Raw}-\operb on \taxi, and {($78.5\%$, $70.9\%$, $63.7\%$)} of \kw{Raw}-\operb on \truck
-when $\zeta$ = ($10$, $40$, $100$), respectively. It is similar for algorithm \operba.
-
-
-\stitle{{Exp-2.3}: Distribution of line segments}.
-To further evaluate the difference of the compression results of these algorithms, we chose $100$ trajectories from each of (\taxi, \truck, \sercar, \geolife),
-while fixed $\zeta=40m$.
-For a $\overline{\mathcal{T}}$ = $(\mathcal{L}_1, \mathcal{L}_2, \cdots , \mathcal{L}_M)$ derived
-from trajectories by a compression algorithm, we count the number of points, $C_i$, included in each $\mathcal{L}_i$,
-then let $\mathcal{Z}(k) = |\{ C_i | C_i =k\}|$, \ie $\mathcal{Z}(5)$ means the number of all $\mathcal{L}_i$ containing 5 data points.
-Note that the start/end points are repeatedly counted for adjacent line segments, and, hence, there may be some lines having only one point.
-The results are reported in Figure~\ref{fig:dop}.
-
-%\sstab(1) \taxi and \truck has many light line segments (a line segment including few points) while \sercar has many heavy line segments (a line segment including many points). The distributions of lines of \sercar are likely subjected to $log-normal$ distributions. Most line segments have 3-6 points in \sercar. These distributions have relative long tails. The longest line of \sercar includes more than $200$ points when {$\zeta = 40$}.
-
-\sstab(1) Algorithms \operba and \dpa produce more line segments containing large number of points (heavy line segments) than \fbqsa and \operb.
-Heavy line segments are closely related to compression ratios, and help to decrease compression ratios.
-The distribution of line segments is consistent with the compression ratios shown above.
-
-\sstab(2) {Algorithm \operb has the largest number of line segments containing only one point. However, they are reduced by \operba to a large extent.}
-
 
 
 
@@ -204,18 +166,7 @@ Further, algorithm \dpa is more sensitive to $\zeta$ than the other three algori
 \sstab(2) Algorithms \operb and \operba are obviously faster than \dpa and \fbqsa in all cases.
 \operb is on average ($13.9$, $17.4$, $14.7$, {$20.6$}) times faster than \dpa, and ($4.1$, $4.1$, $5.4$, {$5.2$}) times faster than \fbqsa on (\taxi, \truck, \sercar, {\geolife}), respectively. Algorithm \operba is as fast as \operb because trajectory interpolation is a light weight operation.
 
-\stitle{Exp-1.3: Impacts of optimization techniques}.
-To evaluate the impacts of our optimization techniques (see Section~\ref{subsec-optimizations}),
-we compared algorithms \operb and \operba with \kw{Raw}-\operb and \kw{Raw}-\operba, respectively.
-We chose $500$, $1000$ and $500$ trajectories from \taxi, \truck, \sercar and \geolife, respectively, and varied $\zeta$ from 10m to 100m.
-The results are reported in Figure~\ref{fig:time-opt}.
 
-\sstab(1) The running time of all algorithms slightly decreases with the increase of $\zeta$, consistent with {Exp-1.2}.
-
-\sstab(2) The running time of \kw{Raw}-\operb is {$(85.0\%$, $79.6\%$, $90.4\%$, $100.4\%$)} of \operb on average on ($\taxi$, $\truck$, $\sercar$, $\geolife$), respectively,
-and the running time of \kw{Raw}-\operba is {$(91.3\%$, $90.1\%$, $91.6\%$, $101.5\%$) }of \operba on average on ($\taxi$, $\truck$, $\sercar$, $\geolife$), respectively.
-This shows that the optimization techniques have a limited impact on the efficiency of \operb and \operba.
-However, as will be shown immediately, the benefits of compression ratios are highly appreciated.
 
 
 
