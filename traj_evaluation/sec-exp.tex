@@ -14,6 +14,60 @@ Using four real-life datasets, we conducted three sets of experiments to evaluat
 %We first introduce the settings of our experimental study.
 
 \stitle{Real-life Trajectory Datasets}.
+We use four real-life datasets \sercar, \geolife, \mopsi and \pricar shown in Table~\ref{tab:datasets} to evaluate those \lsa algorithms.
+
+\begin{table}
+	%\vspace{-2ex}
+	\caption{\small Real-life trajectory datasets}
+	\centering
+	\small
+	\begin{tabular}{|l|c|c|c|r|}
+		\hline
+		\kw{Data}& \kw{Number\ of}     &\kw{Sampling}   &\kw{Points Per}    &\kw{Total} \\
+		\kw{Sets} & \kw{Trajectories}   &\kw{Rates (s)}  &\kw{Trajectory (K)}&\kw{points}\\
+		\hline\hline
+		%\taxi	&12,727	    &60	        &$\sim39.1$      &498M \\	\hline
+		%\truck	&10,368	    &1-60	    &$\sim71.9$     &746M \\	\hline
+		%\sercar	&11,000	    &3-5	    &$\sim119.1$   &1.31G\\		\hline
+		%
+		\sercar	&1,000	    &3-5	&$\sim114.0$   &114M 	\\	\hline
+		\geolife &182	    &1-5	&$\sim131.4$   &24.2M	\\	\hline
+		\mopsi	&51	    	&2	    &$\sim153.9$   &7.9M	\\	\hline
+		\pricar	& 10	    &1	    &$\sim11.8$    &112.8K	\\	\hline
+	\end{tabular}
+	\label{tab:datasets}
+	\vspace{-3ex}
+\end{table}
+
+
+% \ni \emph{(1) Truck trajectory data} (\truck) is the GPS trajectories collected by \eat{10,368} trucks equipped with GPS sensors in China
+% during a period from Mar. 2015 to Oct. 2015. The sampling rate varied from 1s to 60s.
+%Trajectories mostly have around $50$ to $90$ thousand data points.
+
+\vspace{0.5ex}
+\ni \emph{(1) Service car trajectory data} (\sercar) is the GPS trajectories collected by a Chinese car rental company during Apr. 2015 to Nov. 2015. The sampling rate was one point per $3$--$5$ seconds, and each trajectory has around $114.1K$ points.
+%.We randomly chose $1,000$ cars from them
+
+\vspace{0.5ex}
+\ni \emph{(2) GeoLife trajectory data} (\geolife) is the GPS trajectories collected in GeoLife project~\cite{Web:Geolife} by 182 users in a period from Apr. 2007 to Oct. 2011. These trajectories have a variety of sampling rates, among which 91\% are logged in each 1-5 seconds per point. %or each 5-10 meters
+%The longest trajectory has 2,156,994 points.
+
+\vspace{0.5ex}
+\ni \emph{(3) Mopsi trajectory data} (\mopsi) is the GPS trajectories collected in Mopsi project~\cite{Web:Mopsi} by 51 users in a period from 2008 to 2014. Most routes are in Joensuu region, Finland.
+The sampling rate was one point per $2$ seconds, and each trajectory has around $153.9K$ points.
+%exist on every continent.
+
+\vspace{0.5ex}
+\ni \emph{(4) Private car trajectory data} (\pricar) is a small set GPS trajectories collected with a high sampling rate of one point per second by our team members in 2017. There are 10 trajectories and each trajectory has around 11.8K points.
+
+%{This dataset contains 182 trajectories, one trajectory for each user, with a total distance of about 1.2 million kilometers. }
+
+\vspace{0.5ex}
+\ni \emph{(5) Small trajectory data}.
+As the optimal \lsa algorithm~\cite{Imai:Optimal} it has both high time and space complexities, \ie $O(n^3)$ time and $O(n^2)$ space, it is impossible to compress the entire datasets (too slow and out of memory). Hence, we further build four \textit{small datasets}, each dataset includes 10 middle-size ($10K$ points per trajectory) trajectories selected from \sercar, \geolife, \mopsi and \pricar, respectively.
+
+\eat{%%%%%%%%%%%%%%%%%%%
+\stitle{Real-life Trajectory Datasets}.
 We use four real-life datasets shown in Table~\ref{tab:dataset} to test our solutions.
 
 \sstab{\bf(1) Taxi trajectory data}, referred to as \taxi, is the GPS trajectories collected by $12,727$ taxies equipped with GPS sensors in Beijing during a period
@@ -27,31 +81,10 @@ We chose $11,000$ cars from them, during Apr. 2015 to Nov. 2015. The sampling ra
 each trajectory has around $119.1K$ data points.
 
 {\sstab{\bf(4) GeoLife trajectory data}, refered to as \geolife, is the GPS trajectories collected in GeoLife project~\cite{Zheng:GeoLife} by 182 users in a period from Apr. 2007 to Oct. 2011. These trajectories have a variety of sampling rates, among which 91\% are logged in each 1-5 seconds or each 5-10 meters per point. The longest trajectory has 2,156,994 points.}
+%This dataset contains 182 trajectories, one trajectory for each user, with a total distance of about 1.2 million kilometers. 
+}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\eat{This dataset contains 182 trajectories, one trajectory for each user, with a total distance of about 1.2 million kilometers. }
 
-\begin{table}
-\vspace{1ex}
-\centering
-\small
-\begin{tabular}{|l|c|c|c|r|}
-\hline
-\kw{Data}& \kw{Number\ of}     &\kw{Sampling}   &\kw{Points Per}    &\kw{Total} \\
-\kw{Sets} & \kw{Trajectories}   &\kw{Rates (s)}  &\kw{Trajectory (K)}&\kw{points}\\
-\hline\hline
-\taxi	&12,727	    &60	        &$\sim39.1$      &498M \\
-\hline
-\truck	&10,368	    &1-60	    &$\sim71.9$     &746M \\
-\hline
-\sercar	&11,000	    &3-5	    &$\sim119.1$   &1.31G\\
-\hline
-\geolife &182	    &1-5	    &$\sim132.8$   &24.2M\\
-\hline
-\end{tabular}
-\vspace{-2ex}
-\caption{\small Real-life trajectory datasets}\label{tab:dataset}
-\vspace{-3ex}
-\end{table}
 
 %The details of these datasets are shown in Table~\ref{tab:dataset}.
 
