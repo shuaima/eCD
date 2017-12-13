@@ -6,12 +6,10 @@ Online algorithms enforces the constrained global checking policy that need not 
 %Moreover, the existing constrained global checking algorithms~\cite{Keogh:online,Meratnia:Spatiotemporal,Muckell:Compression} usually use a sliding or opening window and compress sub-trajectories in the window.
 
 Several line simplification algorithms have been developed \eg by combining \dpa or \tpa with sliding or opening windows for online processing\cite{Meratnia:Spatiotemporal, Keogh:online}.
-\cite{Meratnia:Spatiotemporal} is a combination of Top-down and opening window while \cite{Keogh:online} is a combination of Bottom-up and sliding window.
+Algorithm \opwa \cite{Meratnia:Spatiotemporal} is a combination of \textit{Top-down} and \textit{opening window} while \cite{Keogh:online} is a combination of \textit{Bottom-up} and \textit{sliding window}.
 These methods still have a high time and/or space complexity, which significantly hinders their utility in resource-constrained mobile devices \cite{Liu:BQS}.
 %
-\bqsa \cite{Liu:BQS} and \squishe\cite{Muckell:Compression} further optimize these online algorithms.
-\bqsa \cite{Liu:BQS} fasts the process by using a convex hull while \squishe\cite{Muckell:Compression} uses a data structure named priority queue.
-%uses a new distance checking method by picking out at most eight special points from an open window based on
+\bqsa \cite{Liu:BQS} and \squishe\cite{Muckell:Compression} further optimize these online algorithms, respectively. Where \bqsa \cite{Liu:BQS} fasts the process by using a \textit{convex hull} and \squishe\cite{Muckell:Compression} uses a data structure named priority queue.
 
 \eat{
 Recently, \bqsa \cite{Liu:BQS} has been proposed, using a new distance checking method by picking out at most eight special points from an open window based on a convex hull, \eg a rectangular bounding box with two bounding lines, so that when a new point is added to a window, it only needs to calculate the distances of the  special points to a line, instead of all data points in the window, in many cases.
@@ -31,9 +29,11 @@ The time complexity of \bqsa remains $O(n^2)$ in the worst case, as \bqsa falls 
 We next review algorithms \bqsa and \squishe evaluated in out experiments.
 
 \subsubsection{Bounded Quadrant System Using \ped}
-The \bqsa algorithm \cite{Liu:BQS} is essentially an opening window and top-down algorithm\cite{Meratnia:Spatiotemporal}. It further reduces the compression time by introducing a convex hull that bounds a certain number of points. For a buffered sub trajectory $[P_s, \ldots, P_k]$, it splits the space into four quadrants. For each quadrant, a rectangular bounding box is firstly created using the least and highest $x$ values and the least and highest $y$ values among points $P_s,\ldots,P_k$. Then another two bounding lines connecting points $P_s$ and $P_{h}$ and points $P_s$ and $P_{l}$ are created such that lines $\vv{P_sP_{h}}$ and $\vv{P_sP_{l}}$ have the largest and smallest angles with the $x$-axis, respectively.
+The \bqsa algorithm \cite{Liu:BQS} is essentially an opening window and top-down algorithm\cite{Meratnia:Spatiotemporal}. It further reduces the compression time by introducing a \textit{convex hull} that bounds a certain number of points. 
+
+For a buffered sub trajectory $[P_s, \ldots, P_k]$, it splits the space into four quadrants. For each quadrant, a rectangular bounding box is firstly created using the least and highest $x$ values and the least and highest $y$ values among points $P_s,\ldots,P_k$. Then another two bounding lines connecting points $P_s$ and $P_{h}$ and points $P_s$ and $P_{l}$ are created such that lines $\vv{P_sP_{h}}$ and $\vv{P_sP_{l}}$ have the largest and smallest angles with the $x$-axis, respectively.
 Here $P_{h},P_{l} \in\{P_s,\ldots,P_k\}$. The bounding box and the two lines together form a convex hull.
-A buffer here is similar to the window in algorithm \opwa.
+A buffer here is similar to the window in algorithm \opwa\cite{Meratnia:Spatiotemporal}.
 Each time a new point is added to the buffer, \bqsa first picks out at most eight significant points in a quadrant. It calculates the distances of the significant points to line $\vv{P_sP_e}$, among which the largest distance $d_{u}$ and the smallest distance $d_l$ are an upper bound and  a lower bound of the distances of all points in $[P_s, \ldots, P_k]$ to line $\vv{P_sP_e}$.
 (1) If $d_l\ge \epsilon$, it produces a new line segment $\mathcal{L}(P_{s}, P_{k})$, and replaces $W$ with a new window $[P_{k},\ldots,P_{k+1}]$.
 (2) If $d_u < \epsilon$, it simply expands the buffer to $[P_s, \ldots, P_k, P_{k+1}]$ $(k+1\le n)$ by adding a new point $P_{k+1}$.
