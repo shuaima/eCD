@@ -8,31 +8,34 @@ The local checking policy, the key to achieve the \emph{one-pass} processing, do
 %Meanwhile, a trajectory compression algorithm is {\em one-pass} if it processes each point in a trajectory once and only once when compressing the trajectory.
 Obviously, the one-pass algorithms have linear time complexity.
 
-The $n^{th}$ point routine and the routine of random-selection of points \cite{Shi:Survey} are two naive one-pass algorithms.
-In these routines, for every fixed number of consecutive points along the line, the $n^{th}$ point and one random point among them are retained, respectively.
-They run fast, however, they are not error bounded.
-%
-In Reumann-Witkam routine (\rwa)\cite{Reumann:Strip}, it builds a strip paralleling to the line connecting the first two points, then the points within this strip compose one section of the line. \rwa also runs fast, but it is limited in compression ratio.
+Reumann-Witkam (\rwa) routine \cite{Reumann:Strip} is a straightforward one-pass algorithm that builds a strip paralleling to the line connecting the first two points, then the points within this strip compose one section of the line. \rwa also runs fast, but it is limited in compression ratio.
 %
 The Linear Dead Reckoning (\ldr) method \cite{Lange:Tracking} for position tracking follows the similar routine as \rwa except that it uses \sed and assumes a velocity ${\vv{v}}$ for each section. In addition, the authors of \cite{Trajcevski:DDR} proved that \ldr is also suitable for online spatio-temporal compression. % as long as the tolerance threshold is set to $\epsilon/2$.
 However, its compression ratios are poor because both the value and the direction of velocity ${\vv{v}}$ are pre-defined and fixed between two updates.
 %
-The authors of this paper improved the \rwa by essentially allow the angle of a strip be dynamically adjustable, and developed the One-Pass ERror Bounded (\operb) algorithm~\cite{Lin:Operb}.
+The authors of this paper improved the \rwa routine by essentially allow the angle of a strip be dynamically adjustable, and developed the One-Pass ERror Bounded (\operb) algorithm~\cite{Lin:Operb}.
 
-There are also \textit{sector intersection (SI)} based algorithms using PED that can be easily adopted for trajectory compression although
+There are also {sector intersection (SI)} based algorithms using PED that can be easily adopted for trajectory compression although
 \textit{they have been overlooked by existing trajectory simplification studies}.
 Williams~\cite{Williams:Longest} and Sklansky and Gonzalez \cite{Sklansky:Cone} proposed linear time algorithms based on the idea of ``sector intersection", Dunham \cite{Dunham:Cone} extend these algorithms, and the Sleeve algorithm \cite{Zhao:Sleeve} in the cartographic discipline
 essentially applies the same idea as the SI algorithm.
-These \ped specific SI algorithms run fast as well as have comparable compression ratios with the \dpa algorithm using \ped.
+These \SI algorithms ped specific, and run fast as well as have comparable compression ratios in comparing with the \dpa algorithm using \ped.
 %
 %Moreover, {fast \bqsa \cite{Liu:BQS} (\fbqsa in short), the simplified version of \bqsa, has a linear time complexity.}
 %
 
 In addition, the authors of this paper recently extends the \textit{sector intersection} method from a 2D space to a Spatio-Temporal 3D space, and develop a new one-pass and \sed enabled algorithm \cised that runs fast as well as has comparable compression ratio with the \dpa algorithm using \sed.
 
-We next review \operb, Sector intersection method and \cised evaluated in out experiments.
+We next review \operb, sector intersection method and \cised evaluated in out experiments.
+
+
 
 \eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+The $n^{th}$ point routine and the routine of random-selection of points \cite{Shi:Survey} are two naive one-pass algorithms.
+In these routines, for every fixed number of consecutive points along the line, the $n^{th}$ point and one random point among them are retained, respectively.
+They run fast, however, they are not error bounded.
+	
 \subsubsection{Reumann-Witkam and LDR}
 
 \begin{figure*}[tb!]
