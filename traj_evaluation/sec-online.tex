@@ -1,5 +1,16 @@
 
 \subsection{Online Algorithms}
+
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.55]{figures/Fig-Squishe.png}
+	\vspace{-1ex}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the \squishe algorithm using \sed to five line segments. The size of Q is 6, and the data structure after point $P$ is a tuple $(pre, suc, mmprio, prio)$. }
+	\vspace{-1ex}
+	\label{fig:squishe}
+\end{figure*}
+
+
 Online algorithms enforces the constrained global checking policy that need not have the entire trajectory ready before they start compressing, instead, they restrict the checking within a window, sliding or opening.
 %, hence, they are online algorithms.
 %Constrained global checking algorithms need not have the entire trajectory ready before they start compressing, and are appropriate for compressing trajectories on sensors of mobile devices.
@@ -58,33 +69,26 @@ the max and min distances to $\vv{P_0P_7}$ are larger and less than $\epsilon$, 
 
 \subsubsection{SQUISH-E Using \sed}
 
-\begin{figure*}[tb!]
-	\centering
-	\includegraphics[scale=0.55]{figures/Fig-Squishe.png}
-	\vspace{-1ex}
-	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the \squishe algorithm using \sed to five line segments. The size of Q is 6, and the data structure after point $P$ is a tuple $(pred, succ, mmprio, prio)$. }
-	\vspace{-2ex}
-	\label{fig:squishe}
-\end{figure*}
-
-The \squishe algorithm~\cite{Muckell:Compression} is an {opening} window and Bottom-up algorithm, taking as input a trajectory \trajec{T} and two additional parameters $\lambda$ and $\epsilon$.
-It compresses trajectory \trajec{T} while striving to minimize \sed error and achieving the compression ratio of $\lambda$. Then, it further compresses \trajec{T} as long as this compression will not increase the max \sed error beyond $\epsilon$.
+The \squishe algorithm~\cite{Muckell:Compression} is a bottom-up algorithm running in a window. It has two forms, \ie~\squishe($\lambda$) that it minimizes \sed error ensuring the compression ratio of $\lambda$, and \squishe($\epsilon$) that maximizes compression ratio while keeping \sed error under $\epsilon$. In this paper, we refer to \squishe($\epsilon$).
 
 \eat{%%%%%%%%%%%%%%%%
+taking as input a trajectory \trajec{T} and two additional parameters $\lambda$ and $\epsilon$.
+It first compresses trajectory \trajec{T} while striving to minimize \sed error and achieving the compression ratio of $\lambda$. Then, it further compresses \trajec{T} as long as this compression will not increase the max \sed error beyond $\epsilon$.
+
 Meanwhile, \squishe($\lambda$) is the case where $\epsilon$ is set to $0$ and therefore it minimizes \sed error ensuring the compression ratio of $\lambda$, and
 \squishe($\epsilon$) denotes another case, \ie the \emph{min-$\#$ problem}, where $\lambda$ is set to $1$ and therefore it maximizes compression ratio while keeping \sed error under $\epsilon$.
 In this paper, we only discuss \squishe($\epsilon$).
 }%%%%%%%%%%%%%%%%%%%%
 
-The \squishe algorithm optimizes the \dpa~by using a doubly linked list $Q$. Each node in the list is a tuple, \ie $P(pred, succ, mnprio, prio)$, where $P$ is a trajectory data point (for convenience, we also refer $P$ to the node), $pred$ refers to its predecessor node/point, $succ$ refers to its successor node/point, $prio$ is the priority of the point, which is defined as an upper bound on the \sed error that the removal of that point would introduce, and $mnprio$ is the max priority of its predecessor and successor points that have ever been removed from the list.
+The \squishe algorithm optimizes the \tpa algorithm by using a doubly linked list $Q$. Each node in the list is a tuple, \ie $P(pre, suc, mnprio, prio)$, where $P$ is a trajectory data point (for convenience, we also refer $P$ to the node), $pre$ refers to its predecessor node/point, $suc$ refers to its successor node/point, $prio$ is the priority of the point, which is defined as an upper bound on the \sed error that the removal of that point would introduce, and $mnprio$ is the max priority of its predecessor and successor points that have ever been removed from the list.
 %
 Initially, trajectory points are loaded to the list $Q$ one by one.
 At the same time, $mnprio$ of each point is set to $0$ as no node has been removed from the list.
-Moreover, the priorities of points $P_0$ and $P_{|Q|-1}$ are set to $\infty$, and the priority of point $P_i$, $0<i<|Q|-1$, is set to $sed(P_i, \vv{pred(P_{i})succ(P_{i})})$.
+Moreover, the priorities of points $P_0$ and $P_{|Q|-1}$ are set to $\infty$, and the priority of point $P_i$, $0<i<|Q|-1$, is set to $sed(P_i, \vv{pre(P_{i})suc(P_{i})})$.
 %
 Then, \squishe finds and removes a point $P_j$ from $Q$ that has the lowest priority and $prio(P_j)<\epsilon$.
-And, the properties $mnprio$ of predecessor point $pred(P_j)$ and successor point $succ(P_j)$ are updated to $max\{mnprio(pred(P_j)), ~prio(P_j)\}$ and $max\{mnprio(succ(P_j)), ~prio(P_j)\}$ , respectively.
-Next, the properties $prio$ of points $pred(P_j)$ and $succ(P_j)$ are further updated to $mnprio(pred(P_j)) + sed(pred(P_j), \vv{pred(pred(P_{j}))succ(P_{j})})$ and $mnprio(succ(P_j)) + sed(succ(P_j),\vv{pred(P_{j})succ(succ(P_{j}))})$, respectively.
+And, the properties $mnprio$ of predecessor point $pre(P_j)$ and successor point $suc(P_j)$ are updated to $max\{mnprio(pre(P_j)), ~prio(P_j)\}$ and $max\{mnprio(suc(P_j)), ~prio(P_j)\}$ , respectively.
+Next, the properties $prio$ of points $pre(P_j)$ and $suc(P_j)$ are further updated to $mnprio(pre(P_j))$ + $sed(pre(P_j), \vv{pre(pre(P_{j}))suc(P_{j})})$ and $mnprio(suc(P_j))$ + $sed(suc(P_j),\vv{pre(P_{j})suc(suc(P_{j}))})$, respectively.
 %
 After that, a new point is read to the list and the information of its predecessor point in the list is updated.
 %
@@ -96,13 +100,17 @@ Thus, \squishe runs in $O(n\log |Q|)$ time and $O(|Q|)$ space. Note \squishe doe
 \begin{example}
 \label{exm-alg-squishe}
 Figure~\ref{fig:squishe} is a running example of \squishe.
-(1) Initially, $|Q| = 6$ points are read to the list. The tuple $(pred, succ, mmprio, prio)$ for each point is initialized. For example, the tuple of $P_1$ is set to $(0, 2, 0, 0.42\epsilon)$, where $0.42\epsilon$ is the \sed from $P_1$ to $\vv{P_0P_2}$.
-(2) The priority of $P_3$ has the minimal value, thus, it is removed from the list.
-The $mnprio$ properties of $P_2$ and $P_4$ are updated to $max\{mnprio(pred(P_3)), prio(P_3)\}$ = $max\{mnprio(P_2), prio(P_3)\}$ = $max\{0, 0.39\epsilon\}$ = $0.39\epsilon$, and $max\{mnprio(P_4), ~prio(P_3)\}$ = $0.39\epsilon$, respectively.
-Furthermore, the $prio$ property of $P_4$ is updated to $mnprio(succ(P_j)) + sed(succ(P_j),\vv{pred(P_{j})succ(succ(P_{j}))})$ = $mnprio(P_4) + sed(P_4,\vv{P_2P_5})$ = $0.39\epsilon + 2.50\epsilon$ = $2.89\epsilon$, and the $prio$ property of $P_2$ is updated to $mnprio(P_2) + sed(P_2,\vv{P_1P_4})$ = $0.39\epsilon + 2.12\epsilon$ = $2.51\epsilon$.
+
+\ni (1) Initially, $|Q| = 6$ points are read to the list. The tuple $(pre, suc, mmprio, prio)$ for each point is initialized. For example, the tuple of $P_1$ is set to $(0, 2, 0, 0.42\epsilon)$, where $0.42\epsilon$ is the \sed from $P_1$ to $\vv{P_0P_2}$.
+
+\ni (2) The priority of $P_3$ has the minimal value, thus, it is removed from the list.
+The $mnprio$ properties of $P_2$ and $P_4$ are updated to $max\{mnprio(pre(P_3)), prio(P_3)\}$ = $max\{mnprio(P_2), prio(P_3)\}$ = $max\{0, 0.39\epsilon\}$ = $0.39\epsilon$, and $max\{mnprio(P_4), ~prio(P_3)\}$ = $0.39\epsilon$, respectively.
+Furthermore, the $prio$ property of $P_4$ is updated to $mnprio(suc(P_j)) + sed(suc(P_j),\vv{pre(P_{j})suc(suc(P_{j}))})$ = $mnprio(P_4) + sed(P_4,\vv{P_2P_5})$ = $0.39\epsilon + 2.50\epsilon$ = $2.89\epsilon$, and the $prio$ property of $P_2$ is updated to $mnprio(P_2) + sed(P_2,\vv{P_1P_4})$ = $0.39\epsilon + 2.12\epsilon$ = $2.51\epsilon$.
 Then, $P_6$ is read, and the information of $P_5$ is updated.
-(3) $P_5$ is removed and $P_7$ is read to the list.
-(4) Finally, the algorithm outputs 5 line segments $\vv{P_0P_2},\vv{P_2P_4},\vv{P_4P_7},\vv{P_7P_9}$ and $\vv{P_9P_{10}}$.
+
+\ni (3) $P_5$ is removed and $P_7$ is read to the list.
+
+\ni (4) Finally, the algorithm outputs 5 line segments $\vv{P_0P_2},\vv{P_2P_4},\vv{P_4P_7},\vv{P_7P_9}$ and $\vv{P_9P_{10}}$.
 \end{example}
 
 

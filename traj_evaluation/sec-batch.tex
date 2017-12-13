@@ -1,5 +1,15 @@
 \subsection{Batch Algorithms}
 
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.55]{figures/Fig-Pavlidis.png}
+	\vspace{-3ex}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{8}]$ is compressed by the \pavlidis~algorithm using \ped to two line segments. The triple $(i, j, cost)$ is the $cost$ of merging the line segments $\overline{P_iP_t}$ and $\overline{P_tP_j}$.} % The algorithm finally outputs $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$ 
+	\vspace{-2ex}
+	\label{fig:pavlidis}
+\end{figure*}
+
+
 Batch algorithms enforce the global checking policy that requires all trajectory points be loaded before they start compressing. %, hence they run in batch.
 Batch algorithms can be either top-down or bottom-up.
 
@@ -72,15 +82,6 @@ Finally, the algorithm outputs two continuous directed line segments $\vv{P_0P_4
 
 \subsubsection{Theo Pavlidis Algorithm}
 
-\begin{figure*}[tb!]
-\centering
-\includegraphics[scale=0.55]{figures/Fig-Pavlidis.png}
-\vspace{-3ex}
-\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{8}]$ is compressed by the \pavlidis~algorithm using \ped to two line segments. The triple $(i, j, cost)$ is the $cost$ of merging the line segments $\overline{P_iP_t}$ and $\overline{P_tP_j}$.} % The algorithm finally outputs $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$ 
-\vspace{-2ex}
-\label{fig:pavlidis}
-\end{figure*}
-
 The {\pavlidis~(\tpa) algorithm}~\cite{Pavlidis:Segment}, invented in 1974, is known as the Bottom-up algorithm. It also employs the global checking policy, and hence, it is a batch algorithm. Note that the original \tpa algorithm outputs disjoint line segments. We slightly modify the algorithm to output the continuous line segments.
 
 Given a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ and an error bound $\epsilon$,
@@ -100,10 +101,14 @@ The \tpa algorithm like \dpa algorithm originally only support \ped, but is also
 
 \begin{example}
 \label{exm-alg-squishe}
-Figure~\ref{fig:pavlidis} is a running example of the \tpa algorithm.
-(1) Initially, the $10$ segments are created, and for each pair of adjacent segments, the costs of merging them are calculated and saved. For example, the cost of merging $\vv{P_0P_1}$ and $\vv{P_1P_2}$ is $ped(P_{1}, \vv{P_0P_{2}}) = 0.32\epsilon$.
-(2) The cost of merging $\vv{P_6P_7}$ and $\vv{P_7P_8}$ is $0.02\epsilon$, which is the minimal value among all costs. Hence, $\vv{P_6P_7}$ and $\vv{P_7P_8}$ are merged to $\vv{P_6P_8}$. The cost of merging $\vv{P_5P_6}$ and $\vv{P_6P_8}$, and the cost of merging $\vv{P_6P_8}$ and $\vv{P_8P_9}$ are also updated to $0.37\epsilon$ and $0.11\epsilon$, respectively.
-(3) $\vv{P_2P_3}$ and $\vv{P_3P_4}$ are merged to $\vv{P_2P_4}$. The cost merging $\vv{P_2P_4}$ and $\vv{P_4P_5}$, and the cost of merging $\vv{P_1P_2}$ and $\vv{P_2P_4}$ are also updated.
-(4) At last, the algorithm outputs two line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.
+Figure~\ref{fig:pavlidis} is an example of the \tpa algorithm.
+
+\ni (1) Initially, the $10$ segments are created, and for each pair of adjacent segments, the costs of merging them are calculated and saved. For example, the cost of merging $\vv{P_0P_1}$ and $\vv{P_1P_2}$ is $ped(P_{1}, \vv{P_0P_{2}}) = 0.32\epsilon$.
+
+\ni (2) The cost of merging $\vv{P_6P_7}$ and $\vv{P_7P_8}$ is $0.02\epsilon$, which is the minimal value among all costs. Hence, $\vv{P_6P_7}$ and $\vv{P_7P_8}$ are merged to $\vv{P_6P_8}$. The cost of merging $\vv{P_5P_6}$ and $\vv{P_6P_8}$, and the cost of merging $\vv{P_6P_8}$ and $\vv{P_8P_9}$ are also updated to $0.37\epsilon$ and $0.11\epsilon$, respectively.
+
+\ni (3) $\vv{P_2P_3}$ and $\vv{P_3P_4}$ are merged to $\vv{P_2P_4}$. The cost merging $\vv{P_2P_4}$ and $\vv{P_4P_5}$, and the cost of merging $\vv{P_1P_2}$ and $\vv{P_2P_4}$ are also updated.
+
+\ni (4) At last, the algorithm outputs two line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.
 \end{example}
 
