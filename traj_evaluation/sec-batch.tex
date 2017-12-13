@@ -16,7 +16,7 @@ We next review algorithms Douglas-Peucker and Theo Pavlidis evaluated in out exp
 The Douglas-Peucker (\dpa) algorithm \cite{Douglas:Peucker} was invented in 1973, for reducing the number of points required to represent a digitized line or its caricature in the context of computer graphics and image processing.
 The \dpa algorithm employ the Top-down and the global checking policy and it is clearly a batch algorithm, hence, the entire raw trajectory is needed at the beginning \cite{Meratnia:Spatiotemporal}.
 
-The basic \dpa is shown in Figure~\ref{alg:dp}.
+The basic \dpa uses \ped, as shown in Figure~\ref{alg:dp}.
 Given a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ and an error bound $\epsilon$, the algorithm uses the first point $P_0$ and the last point $P_n$ of \trajec{T} as the start point $P_s$ and the end point $P_e$ of the first line segment $\mathcal{L}(P_0, P_n)$, then it calculates the distance $ped(P_i, {\mathcal{L}})$ for each point $P_i$ ($i\in[0,n]$) (lines 1--2). If $ped(P_k, {\mathcal{L}})$ = $\max \{ped(P_0, {\mathcal{L}}), \ldots, ped(P_n, {\mathcal{L}}) \} \le \epsilon$, then it returns $\{\mathcal{L}(P_0,P_n)\}$ (lines 3--5). Otherwise, it divides \trajec{T} into two sub-trajectories \trajec{T}$[P_0, \ldots, P_k]$ and \trajec{T}$[P_{k}, \ldots, P_n]$, and recursively compresses these sub-trajectories until the entire trajectory has been considered (lines 6--7).
 
 In the best case, the time complexity of \dpa is $\Omega(n)$; in the worst case, the time complexity of \dpa is $O(n^2)$.
