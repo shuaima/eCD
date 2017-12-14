@@ -18,7 +18,7 @@ The authors of this paper improved the \rwa routine by essentially allow the ang
 There are also {sector intersection (SI)} based algorithms, developed in fields of graphic, cartographic and pattern recognition, that can be easily adopted for trajectory compression although \textit{they have been overlooked by existing trajectory simplification studies}.
 Williams~\cite{Williams:Longest} and Sklansky and Gonzalez \cite{Sklansky:Cone} proposed linear time algorithms based on the idea of ``sector intersection", Dunham \cite{Dunham:Cone} extend these algorithms, and the Sleeve algorithm \cite{Zhao:Sleeve} in the cartographic discipline
 essentially applies the same idea as the SI algorithm.
-These SI algorithms are ped specific, and run fast as well as have comparable compression ratios in comparing with the \dpa algorithm using \ped.
+These SI algorithms are \ped specific, and run fast as well as have comparable compression ratios in comparing with the \dpa algorithm using \ped.
 %
 %Moreover, {fast \bqsa \cite{Liu:BQS} (\fbqsa in short), the simplified version of \bqsa, has a linear time complexity.}
 %
@@ -117,7 +117,7 @@ otherwise, the directed line segment $\mathcal{L}_i$ is updated by the fitting f
 
 Optimization techniques are equipped to achieve a better compression ratio\cite{Lin:Operb}.
 Algorithm \operb runs in $O(n)$ time and takes $O(1)$ space.
-Note \operb only supports \ped.
+And \operb only supports \ped.
 
 
 \begin{figure}[tb!]
@@ -207,7 +207,7 @@ Finally, \cised achieves $O(n)$ time and $O(1)$ space.
 \end{figure}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%example of Algorithm CISED
+%%%%%%%%%%%%%%% example of Algorithm CISED
 \begin{figure}[tb!]
 	\centering
 	\includegraphics[scale=0.66]{figures/Fig-Conest.png}
@@ -216,21 +216,21 @@ Finally, \cised achieves $O(n)$ time and $O(1)$ space.
 	\vspace{-1ex}
 	\label{fig:exm-const}
 \end{figure}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%
 
 
 \begin{example}
 	\label{exm-alg-conest}
 	Figure~\ref{fig:exm-const} shows a running example of \cised for compressing the trajectory \trajec{T} in Figure~\ref{fig:notations}.% in strong simplification.
 	%For convenience, here, we project the points and the oblique circular cones on a x-y space.
-	
-	\sstab (1) After initialization, the \cised algorithm reads point $P_1$ and builds a narrow \emph{oblique circular cone} \cone{(P_0, \mathcal{O}(P_{1}, \epsilon/2))}, taking $P_0$ as its apex and \circle{(P_1, \epsilon/2)} as its base (green dash). The \emph{circular cone} is projected on the plane $P.t-P_1.t=0$, and the inscribe regular polygon $\mathcal{R}_1$ of the projection circle is returned. As $\mathcal{R}^*$ is empty, $\mathcal{R}^*$ is set to $\mathcal{R}_1$.
-	
-	\sstab(2) The algorithm reads $P_2$ and builds \cone{(P_0, \mathcal{O}(P_{2}, \epsilon/2))} (red dash). The \emph{circular cone} is also projected on the plane $P.t-P_1.t=0$ and the inscribe regular polygon $\mathcal{R}_2$ of the projection circle is returned. As $\mathcal{R}^*=\mathcal{R}_1$ is not empty, $\mathcal{R}^*$ is set to the intersection of $\mathcal{R}_2$ and $\mathcal{R}^*$, which is $\mathcal{R}_1 \bigsqcap \mathcal{R}_2 \ne \emptyset$.
-	
-	\sstab (3) For point $P_3$, the algorithm runs the same routine as $P_2$ until the intersection of $\mathcal{R}_3$ and $\mathcal{R}^*$ is $\emptyset$. Thus, a line segment $\vv{P_0P_2}$ is generated, and the process of a new line segment is started, taking $P_2$ as the new start point and $P.t-P_3.t=0$ as the new projection plane.
-	
-	\sstab (4) At last, the algorithm outputs four continuous line segments, \ie $\{\vv{P_0P_2}$, $\vv{P_2P_4}$, $\vv{P_4P_{7}}$, $\vv{P_7P_{10}}\}$. %\eop
+%	
+	(1) After initialization, the \cised algorithm reads point $P_1$ and builds a narrow \emph{oblique circular cone} \cone{(P_0, \mathcal{O}(P_{1}, \epsilon/2))}, taking $P_0$ as its apex and \circle{(P_1, \epsilon/2)} as its base (green dash). The \emph{circular cone} is projected on the plane $P.t-P_1.t=0$, and the inscribe regular polygon $\mathcal{R}_1$ of the projection circle is returned. As $\mathcal{R}^*$ is empty, $\mathcal{R}^*$ is set to $\mathcal{R}_1$.
+%	
+	(2) The algorithm reads $P_2$ and builds \cone{(P_0, \mathcal{O}(P_{2}, \epsilon/2))} (red dash). The \emph{circular cone} is also projected on the plane $P.t-P_1.t=0$ and the inscribe regular polygon $\mathcal{R}_2$ of the projection circle is returned. As $\mathcal{R}^*=\mathcal{R}_1$ is not empty, $\mathcal{R}^*$ is set to the intersection of $\mathcal{R}_2$ and $\mathcal{R}^*$, which is $\mathcal{R}_1 \bigsqcap \mathcal{R}_2 \ne \emptyset$.
+%	
+	(3) For point $P_3$, the algorithm runs the same routine as $P_2$ until the intersection of $\mathcal{R}_3$ and $\mathcal{R}^*$ is $\emptyset$. Thus, a line segment $\vv{P_0P_2}$ is generated, and the process of a new line segment is started, taking $P_2$ as the new start point and $P.t-P_3.t=0$ as the new projection plane.
+%	
+	(4) At last, the algorithm outputs four continuous line segments, \ie $\{\vv{P_0P_2}$, $\vv{P_2P_4}$, $\vv{P_4P_{7}}$, $\vv{P_7P_{10}}\}$. %\eop
 \end{example}
 
 
