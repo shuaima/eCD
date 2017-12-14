@@ -26,7 +26,7 @@ Observe that in the reachability graph $G$, (1) a path from nodes $P_0$ to $P_{n
 A straightforward way of constructing the reachability graph $G$ needs to check for all pair of points $P_s$ and $P_{s+k}$ whether the distances of all points ($P_{s+i}$, $0<i<k$) to the line segment $\vv{P_sP_{s+k}}$ are less than $\epsilon$.
 There are $O(n^2)$ pairs of points in the trajectory and checking the error of all points $P_{s+i}$ to a line segment $\vv{P_sP_{s+k}}$ takes $O(n)$ time.
 Thus, the construction step takes $O(n^3)$ time.
-Finding a shortest path takes no more than $O(n^2)$ time. Hence, the brute-force algorithm takes $O(n^3)$ time in total.
+Finding a shortest path takes no more than $O(n^2)$ time. Hence, the straightforward algorithm takes $O(n^3)$ time in total.
 For space complexity, this algorithm needs $O(n^2)$ space.
 
 \begin{figure}[tb!]
@@ -50,9 +50,9 @@ We next introduce two improved optimal \lsa algorithms using \ped and \sed that 
 \subsection{The Optimal Algorithm using \ped}
 Authors of \cite{Chan:Optimal} provide \oped that constructs the reachability graph $G$ using \ped in $O(n^2)$ time, by using the \textit{sector intersection} mechanism (See Section~\ref{sec-siped}). 
 
-Given a point $P_s$, $0 \le s < n$, \oped builds a sector taking $P_s$ as the start point and checks for all points $P_{s+k}$, $k>0 ~and~ s+k \le n$, whether $(P_s, P_k)$ can be included in graph $G$. It can be added to the graph if and only if $(\bigcap_{i=1}^{k-1}\mathcal{S}(P_s, P_{s+i}, \epsilon)) \bigcap \vv{P_sP_{s+k}} \ne \phi$, \ie line segment $\vv{P_sP_{s+k}}$ ~passing through the common intersection area of sectors $\mathcal{S}(P_s, P_{s+i}, \epsilon))$, $0<i<k$. 
+Given a point $P_s$, $0 \le s < n$, \oped builds a sector taking $P_s$ as the start point and checks for all points $P_{s+k}$, $k>0 ~and~ s+k \le n$, whether $(P_s, P_k)$ can be included in graph $G$. It can be added to the graph if and only if $(\bigsqcap_{i=1}^{k-1}\mathcal{S}(P_s, P_{s+i}, \epsilon)) \bigsqcap \vv{P_sP_{s+k}} \ne \{P_s\}$, \ie line segment $\vv{P_sP_{s+k}}$ ~passing through the common intersection area of sectors $\mathcal{S}(P_s, P_{s+i}, \epsilon))$, $0<i<k$. 
 
-There are $n$ points of $P_s$ in the trajectory and the checking of $(\bigcap_{i=1}^{k-1}\mathcal{S}(P_s, P_{s+i}, \epsilon)) \bigcap \vv{P_sP_{s+k}} \ne \phi$ for one $P_s$ takes $O(n)$ time.
+There are $n$ points of $P_s$ in the trajectory and the checking of $(\bigsqcap_{i=1}^{k-1}\mathcal{S}(P_s, P_{s+i}, \epsilon)) \bigsqcap \vv{P_sP_{s+k}} \ne \{P_s\}$ for one $P_s$ takes $O(n)$ time.
 Thus, the construction step takes $O(n^2)$ time and the algorithm \oped takes $O(n^2)$ time in total.
 For space complexity, this algorithm takes $O(n^2)$ space. However, it could be optimized to $O(n)$ space by the approach presented in \cite{Chen:Space}, whose fundamental idea is that it computes a shortest path in graph $G$ without having to maintain $G$ explicitly.
 
@@ -60,7 +60,7 @@ For space complexity, this algorithm takes $O(n^2)$ space. However, it could be 
 \subsection{The Optimal Algorithm using \sed}
 The \osed constructs the reachability graph $G$ using \sed in $O(n^2 \log n)$ time, by using the \textit{spatio-temporal cone intersection} mechanism (See Section~\ref{sec-siped}). 
 
-Given a point $P_s$, $0 \le s < n$, \osed builds a cone taking $P_s$ as the start point and checks for all points $P_{s+k}$, $k>0 ~and~ s+k \le n$, whether $(P_s, P_k)$ can be included in graph $G$ by checking $(\bigsqcap_{i=1}^{k-1}\mathcal{C}(P_s, P_{s+i}, \epsilon)) \bigsqcap \vv{P_sP_{s+k}} \ne \phi$, \ie line segment $\vv{P_sP_{s+k}}$ ~passing through the common intersection area of cones $\mathcal{C}(P_s, P_{s+i}, \epsilon))$, $0<i<k$. Note that the checking of intersection of cones is equal to check the intersection of circles on a plane \cite{Lin:Cised}, which can be achieved in $O(n \log n)$ time for $n$ circles~\cite{Shamos:Circle}. 
+Given a point $P_s$, $0 \le s < n$, \osed builds a cone taking $P_s$ as the start point and checks for all points $P_{s+k}$, $k>0 ~and~ s+k \le n$, whether $(P_s, P_k)$ can be included in graph $G$ by checking $(\bigsqcap_{i=1}^{k-1}\mathcal{C}(P_s, P_{s+i}, \epsilon)) \bigsqcap \vv{P_sP_{s+k}} \ne \{P_s\}$, \ie line segment $\vv{P_sP_{s+k}}$ ~passing through the common intersection area of cones $\mathcal{C}(P_s, P_{s+i}, \epsilon))$, $0<i<k$. Note that the checking of intersection of cones is equal to check the intersection of circles on a plane \cite{Lin:Cised}, which can be achieved in $O(n \log n)$ time for $n$ circles~\cite{Shamos:Circle}. 
 
 There are $n$ points of $P_s$ in the trajectory and the checking for one $P_s$ takes $O(n \log n)$ time.
 Thus, the construction step takes $O(n^2 \log n)$ time and the algorithm \osed takes $O(n^2 \log n)$ time in total.

@@ -153,7 +153,7 @@ Given a sequence of points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error boun
 For the start point $P_s$ and any point $P_{s+i}$, $1\le i\le k$, there are two different lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$, satisfying $ped(P_i, \vv{P_sP^u_{s+i}}) = \epsilon$, $ped(P_i, \vv{P_sP^l_{s+i}}) = \epsilon$ and $\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta$. Indeed, they forms a \emph{sector} $\mathcal{S}$($P_s$, $P_{s+i}$, $\epsilon$) taking $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the border lines.
 % , where $P_s$ is the center point, and $\vv{P_sP^l_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ are two bound lines.
 Then there exists a point $Q$ such that all points $P_{s+i}$, $i \in [1, ... k]$, have perpendicular distances to
-line $\mathcal{L}(P_s,Q)$ within the given \ped tolerance $\epsilon$ if and only if $\bigcap_{i=1}^{k}\mathcal{S}(P_s, P_{s+i}, \epsilon) \ne \phi$.
+line $\mathcal{L}(P_s,Q)$ within the given \ped tolerance $\epsilon$ if and only if $\bigsqcap_{i=1}^{k}\mathcal{S}(P_s, P_{s+i}, \epsilon) \ne \{P_s\}$.
 Note that in this case, point $Q$ may not belong to $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$.
 However, if the last point $P_{s+k}$ is chosen as the end point $Q$ of the approximating line segment (namely, strong simplification), then a narrow \emph{sector} with a distance tolerance $\epsilon/2$ could be employed to ensure the algorithm be \ped error bounded by $\epsilon$\cite{Zhao:Sleeve}.
 
@@ -175,7 +175,7 @@ Algorithm \siped runs in $O(n)$ time and takes $O(1)$ space.
 	\label{exm-alg-sleeve}
 	Figure~\ref{fig:sleeve} is a running example of the narrow \emph{sector} method taking as input the same trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$. At the beginning, $P_0$ is the first start point, and points $P_1$, $P_2$, $P_3$, etc., each has a narrow \emph{sector}.
 	For example, the narrow \emph{sector} $\mathcal{S}$($P_0$, $P_{3}$, $\epsilon/2$) takes $P_0$ as the center point and $\vv{P_0P^u_{3}}$ and $\vv{P_0P^l_{3}}$ as the border lines.
-	Because $\bigcap_{i=1}^{4}\mathcal{S}(P_0, P_{s+i}, \epsilon/2) \ne \phi$ and $\bigcap_{i=1}^{5}\mathcal{S}(P_0, P_{s+i}, \epsilon/2) = \phi$, $\vv{P_0P_4}$ is output and $P_4$ becomes the start point of the next section.
+	Because $\bigsqcap_{i=1}^{4}\mathcal{S}(P_0, P_{s+i}, \epsilon/2) \ne \{P_0\}$ and $\bigsqcap_{i=1}^{5}\mathcal{S}(P_0, P_{s+i}, \epsilon/2) = \{P_0\}$, $\vv{P_0P_4}$ is output and $P_4$ becomes the start point of the next section.
 	At last, the algorithm outputs two continuous line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.
 \end{example}
 
@@ -220,11 +220,11 @@ Finally, \cised achieves $O(n)$ time and $O(1)$ space.
 
 
 \begin{example}
-	\label{exm-alg-conest}
-	Figure~\ref{fig:exm-const} shows a running example of \cised for compressing the trajectory \trajec{T} in Figure~\ref{fig:notations}.% in strong simplification.
-	%For convenience, here, we project the points and the oblique circular cones on a x-y space.
+\label{exm-alg-conest}
+	Figure~\ref{fig:exm-const} shows a running example of \cised for compressing the trajectory \trajec{T} in Figure~\ref{fig:notations}. 
+	For convenience, we project the points and the oblique circular cones on a x-y space.
 %	
-	(1) After initialization, the \cised algorithm reads point $P_1$ and builds a narrow \emph{oblique circular cone} \cone{(P_0, \mathcal{O}(P_{1}, \epsilon/2))}, taking $P_0$ as its apex and \circle{(P_1, \epsilon/2)} as its base (green dash). The \emph{circular cone} is projected on the plane $P.t-P_1.t=0$, and the inscribe regular polygon $\mathcal{R}_1$ of the projection circle is returned. As $\mathcal{R}^*$ is empty, $\mathcal{R}^*$ is set to $\mathcal{R}_1$.
+	(1) After initialization, the \cised algorithm reads point $P_1$ and builds a narrow \emph{oblique circular cone}~\cone{(P_0, \mathcal{O}(P_{1}, \epsilon/2))}, taking $P_0$ as its apex and \circle{(P_1, \epsilon/2)} as its base (green dash). The \emph{circular cone} is projected on the plane $P.t-P_1.t=0$, and the inscribe regular polygon $\mathcal{R}_1$ of the projection circle is returned. As $\mathcal{R}^*$ is empty, $\mathcal{R}^*$ is set to $\mathcal{R}_1$.
 %	
 	(2) The algorithm reads $P_2$ and builds \cone{(P_0, \mathcal{O}(P_{2}, \epsilon/2))} (red dash). The \emph{circular cone} is also projected on the plane $P.t-P_1.t=0$ and the inscribe regular polygon $\mathcal{R}_2$ of the projection circle is returned. As $\mathcal{R}^*=\mathcal{R}_1$ is not empty, $\mathcal{R}^*$ is set to the intersection of $\mathcal{R}_2$ and $\mathcal{R}^*$, which is $\mathcal{R}_1 \bigsqcap \mathcal{R}_2 \ne \emptyset$.
 %	
