@@ -4,8 +4,8 @@
 \label{sec-into}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Various mobile devices, such as smart-phones, on-board diagnostics, personal navigation devices, and wearable smart devices, have been widely using their sensors to collect massive trajectory data of moving objects at a certain sampling rate, and transmit it to cloud servers for location based services, trajectory mining and many other applications.
-\textcolor{blue}{The sampling rate is continuously increasing, \eg from 1 point per minute to currently 1 point per second, to get more accurate position information of a moving object. Thus an increasing size of trajectory data is collected, transmitted and stored.}
+Various mobile devices, such as smart-phones, on-board diagnostics, personal navigation devices, and wearable smart devices, have been using their GPS sensors to collect massive trajectory data of moving objects at a certain sampling rate, and transmit it to cloud servers for location based services, trajectory mining and many other applications.
+\textcolor{blue}{Apart from the widely using of GPS sensors, the sampling rate is also increasing, \eg from 1 point per minute to currently 1 point per second, in order to get more accurate position information of a moving object, which leads to mobile devices collecting, transmitting and storing an increasing size of trajectory data.}
 %
 It is known that transmitting and storing raw trajectory data consumes too much network bandwidth and storage capacity \cite{Chen:Trajectory,  Chen:Fast, Meratnia:Spatiotemporal, Keogh:online, Liu:BQS, Muckell:Compression,Cao:Spatio, Popa:Spatio, Schmid:Semantic,Richter:Semantic,Long:Direction,Nibali:Trajic}.
 Further, we find that the online transmitting of raw trajectories also seriously aggravates several other issues such as out-of-order and duplicate data points in our experiences when implementing an online vehicle-to-cloud data transmission system.
@@ -16,17 +16,17 @@ Trajectory Compression techniques may be lossless or lossy \cite{Muckell:Compres
 Lossless compression methods enable exact reconstruction of the original data from the compressed data without information loss. For example, delta compression \cite{Nibali:Trajic} is a lossless compression technique for trajectory data, which has zero error.
 The limitation of lossless compression lies in that its compression ratio is relatively poor \cite{Nibali:Trajic} and {queries on the compressed data are time consuming because data reconstructions from the compressed data are needed before the queries}.
 %
-In contrast, lossy compression methods allow errors or derivations, compared with the original data.
-These techniques focus on good compression ratios with acceptable errors. For trajectory data, they typically identify important data points, and remove statistical redundant data points from a trajectory.
+In contrast, lossy compression methods typically identify important data points and remove statistical redundant data points from the original data, and allow errors or derivations, compared with the original data. 
+These techniques focus on good compression ratios with acceptable errors, and are the mainstream techniques for trajectory compression.
 %, or replace original data points in a trajectory with other places of interests, such as roads and shops.
 
-A large number of lossy trajectory compression techniques, \eg the piece-wise line {simplification (or approximation)} \cite{Douglas:Peucker, Hershberger:Speeding, Keogh:online,Liu:BQS, Muckell:Compression, Chen:Trajectory, Chen:Fast, Cao:Spatio, Shi:Survey}, have been developed.
+A large number of lossy trajectory compression techniques have been developed, typically the piece-wise line simplification (or approximation) \cite{Douglas:Peucker, Hershberger:Speeding, Keogh:online,Liu:BQS, Muckell:Compression, Chen:Trajectory, Chen:Fast, Cao:Spatio, Shi:Survey}.
 The idea of piece-wise line simplification (\lsa) comes from computational geometry, whose target is to approximate a given finer piece-wise linear curve by another coarser piece-wise linear curve ({normally} a sub set of the former), such that the maximum distance of the former from the later is bounded by a user specified constant. 
 The \lsa method is widely used due to its distinct advantages: (a) simple and easy to implement, (b) no need of extra knowledge and suitable for freely  moving  objects \cite{Popa:Spatio}, and (c) bounded errors with good compression ratios.
 
 
-This work focus on the \lsa methods for trajectory compression. 
-In trajectory compression, the \lsa algorithms commonly use two distance metrics, \ie the \emph{perpendicular Euclidean distances} (\ped) and the \emph{synchronous Euclidean distances} (\sed).
+This work focus on the \lsa methods of trajectory compression. 
+More specifically, in trajectory compression, the \lsa algorithms commonly use two distance metrics, \ie the \emph{perpendicular Euclidean distances} (\ped) and the \emph{synchronous Euclidean distances} (\sed).
 Originally, \lsa algorithms adopt the \emph{perpendicular Euclidean distances} (\ped) as a metric to compute the errors,
 \eg $|\vv{P_4P^*_4}|$ is the \ped of data point $P_4$ to line segment $\vv{P_0P_{10}}$ in Figure~\ref{fig:notations} (left).
 Line simplification algorithms using \ped have good compression ratios~ \cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey}.  However, when using \ped, the temporal information is lost. Thus, a spatio-temporal query, \eg ``\emph{the position of a moving object at time $t$}", on the compressed trajectories by line simplification algorithms using \ped may return an approximate point $P'$ whose distance to the actual position $P$ of the moving object at time $t$ is unbounded. %For example, a query for the position of $P_7$ at time $t_7$ may return an approximate data point $P'_7$ whose distance to $P_7$ is great than the  bound $\epsilon$ in Figure~\ref{fig:notations} (left).
@@ -47,15 +47,15 @@ Line simplification algorithms using \ped have good compression ratios~ \cite{Do
 The \emph{synchronous Euclidean distances} (\sed) was then introduced for trajectory compression to support the above spatio-temporal queries \cite{Meratnia:Spatiotemporal}. \sed is the Euclidean distance of a data point to its \emph{approximate temporally synchronized data point \cite{Meratnia:Spatiotemporal}} on the corresponding line segment. For instance, $P'_4$ and $P'_7$ are the \emph{synchronized data points} of points $P_4$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$ and $\vv{P_4P_{10}}$, respectively, in Figure~\ref{fig:notations} (right).
 \lsa algorithms using \sed may produce more line segments. However, the use of \sed ensures that the Euclidean distance between a data point and its  synchronized point \wrt the corresponding line segment is bounded. Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the synchronized point $P'$ of a data point $P$ within a bounded distance.
 
-Moreover, the \lsa algorithms fall into two categories, \ie the optimal and sub-optimal algorithms. %targeting the ``min-\#" problem\cite{Imai:Optimal,Chan:Optimal},
-The optimal methods are to find the minimal number of points or segments to represent the original polygonal lines \wrt an error bound $\epsilon$.
+Moreover, the \lsa algorithms fall into two categories, \ie the \textit{optimal} and \textit{sub-optimal} algorithms. 
+The \textit{optimal} methods are to find the minimal number of points or segments to represent the original polygonal lines \wrt an error bound $\epsilon$.
 An optimal $O(n^3)$ \lsa algorithm using \ped was firstly developed in \cite{Imai:Optimal},  where $n$ is the number of the original points.
 %
-Later, an improved optimal  $O(n^2)$  algorithm using \ped was designed in \cite{Chan:Optimal}, with the help of \textit{sector intersection} mechanism.
+Later, an improved optimal  $O(n^2)$  algorithm using \ped was designed in \cite{Chan:Optimal}, with the help of {sector intersection} mechanism.
 However, the time complexity of the optimal \lsa algorithm using \sed remains in $O(n^3)$, as the optimization mechanisms are \ped specific, and cannot work with \sed.
 %	The high time complexities of the optimal \lsa algorithms using \sed make them impractical.
 
-Due to the high time complexities of optimal \lsa algorithms, sub-optimal \lsa algorithms have been developed and/or introduced for trajectory compression, including batch algorithms (\eg Douglas-Peucker \cite{Douglas:Peucker, Meratnia:Spatiotemporal} and Theo~Pavlidis \cite{Pavlidis:Segment}), online algorithms (\eg~\bqsa\cite{Liu:BQS} \squishe \cite{Muckell:Compression}) and one-pass algorithms (\eg~\operb \cite{Lin:Operb} and \cised \cite{Lin:Cised}). The online algorithms and one-pass algorithms are claimed more efficient, by using some optimization strategies, such as convex hull in \bqsa~\cite{Liu:BQS}, priority queue in \squishe \cite{Muckell:Compression}, and \textit{fitting function} and spatio-temporal cone intersection approaches in our preview works \operb \cite {Lin:Operb} and \cised \cite {Lin:Cised}, respectively. Note some sub-optimal algorithms, \eg ~\bqsa and \operb, are \ped specific while others, \eg~\squishe and \cised, are \sed specific, depending on the optimization techniques they applied.
+Due to the high time complexities of optimal \lsa algorithms, \textit{sub-optimal} \lsa algorithms have been developed and/or introduced for trajectory compression, including batch algorithms (\eg Douglas-Peucker \cite{Douglas:Peucker, Meratnia:Spatiotemporal} and Theo~Pavlidis \cite{Pavlidis:Segment}), online algorithms (\eg~\bqsa\cite{Liu:BQS} \squishe \cite{Muckell:Compression}) and one-pass algorithms (\eg~\operb \cite{Lin:Operb} and \cised \cite{Lin:Cised}). The online algorithms and one-pass algorithms are claimed more efficient, by using some optimization strategies, such as convex hull in \bqsa~\cite{Liu:BQS}, priority queue in \squishe \cite{Muckell:Compression}, and {fitting function} and spatio-temporal cone intersection approaches in our preview works \operb \cite {Lin:Operb} and \cised \cite {Lin:Cised}, respectively. Note some sub-optimal algorithms, \eg ~\bqsa and \operb, are \ped specific while others, \eg~\squishe and \cised, are \sed specific, depending on the optimization techniques they applied.
 
 
 \stitle{Motivations}. The motivations of this work are four folds.
@@ -74,7 +74,7 @@ Due to the high time complexities of optimal \lsa algorithms, sub-optimal \lsa a
 As a consequence, it is difficult for a practitioner to decide which algorithm and distance metric should be adopted for a specific application. Thus, these issues call for a more comprehensive evaluation of the existing \lsa techniques on trajectory data.
 
 \stitle{\textcolor[rgb]{0.00,0.07,1.00}{Contributions \& Roadmap}}.
-This paper presents an experimental comparison of the state-of-the-art \lsa algorithms for trajectory compression, including both the optimal and the sub-optimal methods using \ped and/or \sed. 
+This paper presents an experimental comparison of the state-of-the-art \lsa algorithms for trajectory compression, including \emph{both the optimal and the sub-optimal methods using \ped and/or \sed}. 
 The algorithms evaluated in our experiments are summarized in Table~\ref{tab:summary-lsa}, namely,
 (i) Douglas-Peucker\cite{Douglas:Peucker,Meratnia:Spatiotemporal} and \pavlidis~\cite{Pavlidis:Segment}, two distinct batch \lsa algorithms,
 (ii) \bqsa\cite{Liu:BQS} and \squishe~\cite{Muckell:SQUISH}, famous online \lsa algorithms,
@@ -105,16 +105,16 @@ The appendix covers additional related work and experimental results.
 		\kw{Name}  & \kw{Type}    & \kw{Key~Ideas}  &\kw{\ped} &\kw{\sed}  &  \kw{Time~Complexity} & \kw{Space~Complexity} \\		\hline
 		\dpa~\cite{Douglas:Peucker, Meratnia:Spatiotemporal}	&batch &Top-down     &Y &Y    & $O(n^2)$ & O(n)  \\		\hline
 		\tpa~\cite{Pavlidis:Segment}	&batch	&Bottom-up       &Y &Y   & $O(n^2/K)$ & O(n)  \\		\hline
-		\bqsa~\cite{Liu:BQS}	&online	&Top-down and convex hull    &Y   & N& $O(n^2)$  & $O(|Q|)$   \\		\hline
-		\squishe~\cite{Muckell:SQUISH}	&{online}	& Bottom-up and priority queue       & N &Y    & $O(n\log|Q|)$ & $O(|Q|)$ \\		\hline
+		\bqsa~\cite{Liu:BQS}	&online	&Top-down and Convex hull    &Y   & N& $O(n^2)$  & $O(|Q|)$   \\		\hline
+		\squishe~\cite{Muckell:SQUISH}	&{online}	& Bottom-up and Priority queue       & N &Y    & $O(n\log|Q|)$ & $O(|Q|)$ \\		\hline
 		%swab	&   &online   &Y &Y  & $\Omega(n)$ & $O(n^2)$ & O(w) &\textcolor[rgb]{1.00,0.00,0.00}{} \\		\hline
 		%owtd	&   &online    &Y &Y   & $\Omega(n)$ & $O(n^2)$ & O(n) &\textcolor[rgb]{1.00,0.00,0.00}{} \\ 	\hline
 		%ddr	    &       &one-pass    &Y  &Y  & $\Omega(n)$ & $O(n)$ & O(n) &\textcolor[rgb]{1.00,0.00,0.00}{} \\  \hline
 		\operb~\cite{Lin:Operb}	& one-pass	& Fitting function    &Y & N  & $O(n)$ & O(1)  \\		\hline
 		\siped~\cite{Dunham:Cone, Zhao:Sleeve}	&one-pass	& Sector intersection        &Y & N  & $O(n)$ & O(1) \\		\hline
-		\cised~\cite{Lin:Cised}	&one-pass	& Spatio-temporal Cone intersection        &N & Y & $O(n)$ & O(1) \\		\hline
-		\oped~\cite{Chan:Optimal}	&optimal	& Graph and sector intersection    &Y & N & $O(n^2)$	& {$O(n)$} \\		\hline
-		\osed~	&optimal	&Graph and spatio-temporal cone intersection&N & Y  & $O(n^2 \log n)$	& \textcolor{red}{$O(n)$} \\		\hline
+		\cised~\cite{Lin:Cised}	&one-pass	& Spatio-temporal cone intersection        &N & Y & $O(n)$ & O(1) \\		\hline
+		\oped~\cite{Chan:Optimal}	&optimal	& Graph and Sector intersection    &Y & N & $O(n^2)$	& {$O(n)$} \\		\hline
+		\osed~	&optimal	&Graph and Spatio-temporal cone intersection&N & Y  & $O(n^2 \log n)$	& \textcolor{red}{$O(n)$} \\		\hline
 	\end{tabular}
 	{\\  Note: $K$ is the number of the final segments of a trajectory and $|Q|$ is the size of buffer/window.}
 	\vspace{-1ex}
