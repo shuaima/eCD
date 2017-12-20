@@ -1,15 +1,5 @@
 \subsection{Batch Algorithms}
 
-\begin{figure*}[tb!]
-	\centering
-	\includegraphics[scale=0.55]{figures/Fig-Pavlidis.png}
-	\vspace{-3ex}
-	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{8}]$ is compressed by the \pavlidis~algorithm using \ped to two line segments. The triple $(i, j, cost)$ is the $cost$ of merging the line segments $\overline{P_iP_t}$ and $\overline{P_tP_j}$.} % The algorithm finally outputs $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$ 
-	\vspace{-2ex}
-	\label{fig:pavlidis}
-\end{figure*}
-
-
 Batch algorithms essentially enforce the global distance checking policy that requires all trajectory points be loaded before they start compressing. %, hence they run in batch.
 Batch algorithms can be either top-down or bottom-up.
 
@@ -20,6 +10,16 @@ Authors of \cite{Hershberger:Speeding} developed an improved method of \dpa, bas
 Bottom-up algorithms, \eg Theo Pavlidis \cite{Pavlidis:Segment}, is the natural complement to top-down ones, which recursively merge adjacent sub-trajectories with the smallest distance, initially $n/2$  sub-trajectories for a trajectory with $n$ points, until the stopping condition is met. Note that the distances of newly generated line segments are recalculated during the process.
 
 We next review algorithms Douglas-Peucker and Theo Pavlidis evaluated in out experiments.
+
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.55]{figures/Fig-Pavlidis.png}
+	\vspace{-5ex}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{8}]$ is compressed by the \pavlidis~algorithm using \ped to two line segments. The triple $(i, j, cost)$ is the $cost$ of merging the line segments $\overline{P_iP_t}$ and $\overline{P_tP_j}$.} % The algorithm finally outputs $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$ 
+	\vspace{-2ex}
+	\label{fig:pavlidis}
+\end{figure*}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Douglas-Peucker Algorithm}
 
@@ -64,7 +64,7 @@ Algorithm \dpa using \sed \cite{Meratnia:Spatiotemporal} runs in the same routin
 \vspace{-3ex}
 \caption{\small Basic Douglas-Peucker algorithm}
 \label{alg:dp}
-\vspace{-2ex}
+\vspace{-3ex}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -83,7 +83,9 @@ Finally, the algorithm outputs two continuous directed line segments $\vv{P_0P_4
 
 \subsubsection{Theo Pavlidis Algorithm}
 
-The {\pavlidis~(\tpa) algorithm}~\cite{Pavlidis:Segment}, invented in 1974, is known as the Bottom-up algorithm. It also employs the global checking policy, and hence, it is a batch algorithm. Because the original \tpa algorithm outputs disjoint line segments, we slightly modify the algorithm to output the continuous line segments.
+The {\pavlidis~(\tpa) algorithm}~\cite{Pavlidis:Segment}, invented in 1974, is known as the Bottom-up algorithm. It also employs the global checking policy, and hence, it is a batch algorithm. 
+%Because the original \tpa algorithm outputs disjoint line segments, 
+Note we slightly modify the algorithm to output continuous line segments.
 
 Given a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ and an error bound $\epsilon$,
 the algorithm begins by creating the finest possible approximation of the trajectory, \ie $[P_0, P_1], [P_2, P_3], \ldots$, so that $n-1$ segments are used to approximate the original $n$-length trajectory.
@@ -100,7 +102,7 @@ The \tpa algorithm like \dpa algorithm originally only support \ped, but is also
 
 
 \begin{example}
-\label{exm-alg-squishe}
+\label{exm-alg-pavlidis}
 Figure~\ref{fig:pavlidis} is an example of the \tpa algorithm.
 
 \ni (1) Initially, the $10$ segments are created, and for each pair of adjacent segments, the costs of merging them are calculated and saved. For example, the cost of merging $\vv{P_0P_1}$ and $\vv{P_1P_2}$ is $ped(P_{1}, \vv{P_0P_{2}}) = 0.32\epsilon$.

@@ -4,9 +4,9 @@
 \begin{figure*}[tb!]
 	\centering
 	\includegraphics[scale=0.55]{figures/Fig-Squishe.png}
-	\vspace{-1ex}
+	\vspace{-3ex}
 	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the \squishe algorithm using \sed to five line segments. The size of Q is 6, and the data structure after point $P$ is a tuple $(pre, suc, mmprio, prio)$. }
-	\vspace{-1ex}
+	\vspace{-2ex}
 	\label{fig:squishe}
 \end{figure*}
 
@@ -28,20 +28,20 @@ The time complexity of \bqsa remains $O(n^2)$ in the worst case, as \bqsa falls 
 }
 
 \begin{figure}[tb!]
-\vspace{0.5ex}
+\vspace{0ex}
 \centering
 \includegraphics[scale = 0.66]{figures/Fig-BQS.png}
 \vspace{-2ex}
 \caption{{\small Examples for algorithm \bqsa.}}
 \label{fig:bqs}
-\vspace{-3ex}
+\vspace{-2ex}
 \end{figure}
 
 
 We next review algorithms \bqsa and \squishe evaluated in out experiments.
 
 \subsubsection{Bounded Quadrant System Using \ped}
-The \bqsa algorithm \cite{Liu:BQS} is essentially an opening window and top-down algorithm\cite{Meratnia:Spatiotemporal}. It further reduces the compression time by introducing a \textit{convex hull} that bounds a certain number of points. 
+The \bqsa algorithm \cite{Liu:BQS} is essentially an opening window and top-down algorithm\cite{Meratnia:Spatiotemporal}. It reduces the compression time by introducing \textit{convex hulls} that bound a certain number of points. This strategy makes \bqsa be \ped specific.
 
 For a buffered sub trajectory $[P_s, \ldots, P_k]$, it splits the space into four quadrants. For each quadrant, a rectangular bounding box is firstly created using the least and highest $x$ values and the least and highest $y$ values among points $P_s,\ldots,P_k$. Then another two bounding lines connecting points $P_s$ and $P_{h}$ and points $P_s$ and $P_{l}$ are created such that lines $\vv{P_sP_{h}}$ and $\vv{P_sP_{l}}$ have the largest and smallest angles with the $x$-axis, respectively.
 Here $P_{h},P_{l} \in\{P_s,\ldots,P_k\}$. The bounding box and the two lines together form a convex hull.
@@ -53,7 +53,7 @@ Each time a new point is added to the buffer, \bqsa first picks out at most eigh
 
 The worst time complexity of \bqsa remains $O(n^2)$.
 %Its simplified version \fbqsa essentially avoids case (3) to achieve an $O(n)$ time complexity.
-And \bqsa only support \ped.
+%And \bqsa only support \ped.
 
 \begin{example}
 \label{exm-alg-bqs}
@@ -96,7 +96,8 @@ After that, a new point is read to the list and the information of its predecess
 The above process repeated until that no point has the priority smaller than $\epsilon$. % \ie  the \sed up bound
 
 \squishe finds and removes a point from $Q$ that has the lowest priority in $O(\log |Q|)$ time, where $|Q|$ denotes the number of points stored in $Q$.
-Thus, \squishe runs in $O(n\log |Q|)$ time and $O(|Q|)$ space. And \squishe only supports \sed.
+Thus, \squishe runs in $O(n\log |Q|)$ time and $O(|Q|)$ space. 
+%And \squishe only supports \sed.
 
 \begin{example}
 \label{exm-alg-squishe}
