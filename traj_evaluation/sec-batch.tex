@@ -21,7 +21,40 @@ We next review algorithms Douglas-Peucker and Theo Pavlidis evaluated in out exp
 \end{figure*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{-0.5ex}
 \subsubsection{Douglas-Peucker Algorithm}
+
+%%%%%%%%%%%%%%%%%%%%%Baseline Algorithm
+\begin{figure}[tb!]
+	%\vspace{-2ex}
+	\vspace{1ex}
+	\begin{center}
+		{\small
+			\begin{minipage}{3.3in}
+				\myhrule \vspace{-1ex}
+				\mat{0ex}{
+					{\bf Algorithm}~$\dpa(\dddot{\mathcal{T}}[P_0,\ldots,P_n], \epsilon)$\\
+					\sstab
+					\bcc \hspace{1ex}\=\For each point $P_i$ ($i\in[0,n]$) in $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ \Do\\
+					\icc \>\hspace{3ex}compute $ped(P_i, {\mathcal{L}})$ between $P_i$ and ${\mathcal{L}}(P_0, P_n)$;\\
+					\icc \> \Let $ped(P_k, {\mathcal{L}})$ := $\max \{ped(P_0, {\mathcal{L}}), \ldots, ped(P_n, {\mathcal{L}}) \}$;\\
+					\icc \> \If $ped(P_k, {\mathcal{L}}) \le\epsilon$ \Then \\
+					\icc \> \hspace{3ex}\Return $\{\mathcal{L}(P_0,P_n)\}$.\\
+					\icc \> \Else\\
+					\icc \> \hspace{3ex}\Return $\dpa($\trajec{T}$[P_0, \ldots, P_k], \epsilon)\cup\dpa($\trajec{T}$[P_{k}, \ldots, P_n], \epsilon)$.
+				}
+				\vspace{-2.5ex}
+				\myhrule
+			\end{minipage}
+		}
+	\end{center}
+	\vspace{-3ex}
+	\caption{\small Basic Douglas-Peucker algorithm}
+	\label{alg:dp}
+	\vspace{-3ex}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 The Douglas-Peucker (\dpa) algorithm \cite{Douglas:Peucker} was invented in 1973, for reducing the number of points required to represent a digitized line or its caricature in the context of computer graphics and image processing.
 The \dpa algorithm employ the Top-down and the global checking policy and it is clearly a batch algorithm, hence, the entire raw trajectory is needed at the beginning \cite{Meratnia:Spatiotemporal}.
@@ -37,36 +70,7 @@ Algorithm \dpa using \sed \cite{Meratnia:Spatiotemporal} runs in the same routin
 %However, the batch nature and high time complexity make it not suitable for the online scenarios.
 
 
-%%%%%%%%%%%%%%%%%%%%%Baseline Algorithm
-\begin{figure}[tb!]
-%\vspace{-2ex}
-\vspace{1ex}
-\begin{center}
-{\small
-\begin{minipage}{3.3in}
-\myhrule \vspace{-1ex}
-\mat{0ex}{
-{\bf Algorithm}~$\dpa(\dddot{\mathcal{T}}[P_0,\ldots,P_n], \epsilon)$\\
-\sstab
-\bcc \hspace{1ex}\=\For each point $P_i$ ($i\in[0,n]$) in $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ \Do\\
-\icc \>\hspace{3ex}compute $ped(P_i, {\mathcal{L}})$ between $P_i$ and ${\mathcal{L}}(P_0, P_n)$;\\
-\icc \> \Let $ped(P_k, {\mathcal{L}})$ := $\max \{ped(P_0, {\mathcal{L}}), \ldots, ped(P_n, {\mathcal{L}}) \}$;\\
-\icc \> \If $ped(P_k, {\mathcal{L}}) \le\epsilon$ \Then \\
-\icc \> \hspace{3ex}\Return $\{\mathcal{L}(P_0,P_n)\}$.\\
-\icc \> \Else\\
-\icc \> \hspace{3ex}\Return $\dpa($\trajec{T}$[P_0, \ldots, P_k], \epsilon)\cup\dpa($\trajec{T}$[P_{k}, \ldots, P_n], \epsilon)$.
-}
-\vspace{-2.5ex}
-\myhrule
-\end{minipage}
-}
-\end{center}
-\vspace{-3ex}
-\caption{\small Basic Douglas-Peucker algorithm}
-\label{alg:dp}
-\vspace{-3ex}
-\end{figure}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 
 %\vspace{-1ex}
@@ -80,7 +84,7 @@ Finally, the algorithm outputs two continuous directed line segments $\vv{P_0P_4
 \end{example}
 
 
-
+\vspace{-0.5ex}
 \subsubsection{Theo Pavlidis Algorithm}
 
 The {\pavlidis~(\tpa) algorithm}~\cite{Pavlidis:Segment}, invented in 1974, is known as the Bottom-up algorithm. It also employs the global checking policy, and hence, it is a batch algorithm. 

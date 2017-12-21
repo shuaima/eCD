@@ -1,31 +1,26 @@
 \section*{Appendix A: Additional Related Work}
-Apart from the techniques evaluated in this paper, many other approaches have been proposed for trajectory compression.
-Representative methods among them \textcolor[rgb]{1.00,0.00,0.00}{include ...}
+Apart from the techniques evaluated in this paper, other approaches that satisfies different requirements, have been proposed or could be applied for trajectory compression.
+We next summarized other representative line simplification algorithms. Interested readers refer to \cite{Shi:Survey}, \cite{Muckell:Compression} and \cite{Lin:Cised} for more related work.
 
+%\subsection*{A.1 Other Line simplification algorithms}
 
-\subsection*{A.1 Other Line simplification algorithms}
+\stitle {Weak simplification algorithms.}
+The weak simplification allows that the output data points may not belong to the original data sets \cite{Trajcevski:DDR} (otherwise, the strong simplification). That is, weak simplification allows data interpolation. Algorithms \sleeve \cite{Zhao:Sleeve}, \operb\cite{Lin:Operb} and \cised \cite{Lin:Cised} are both strong and weak \lsa algorithms whose weak simplification versions have better compression ratios than their strong simplification versions, and even comparable or better than the optimal strong simplification algorithms \cite{Lin:Cised}.
 
-\stitle {Weak simplification of the min-$\#$ problem.}
-
-
-\stitle {min-$\#$ problem using other error metric.}
+\stitle {Algorithms on the min-$\#$ problem using other error metric.}
 A number of algorithms \cite{Agarwal:Metric, Chen:Fast, Wu:Graph} have been developed to solve the ``min-\#" problem under alternative error metrics.
 \cite{Agarwal:Metric} studied the problem under the $L_1$ and uniform (also known as Chebyshev) metric. % while this study focuses on the $L_2$ metric.
 \cite{Chen:Fast} defined the local integral square synchronous Euclidean distance (LISSED) and the integral square synchronous Euclidean distance (ISSED), and used them to fast the construction of reachability graphs, and \cite{Wu:Graph} followed the ideas of \cite{Chen:Fast}.
 Both LISSED and ISSED cumulative errors that leads to varied effectiveness compared with \sed.
 
 
-\stitle {min-$\epsilon$ problem.}
-Todo... The minimal $\epsilon$ problem and related work.
 
+\stitle {Algorithms on the min-$\epsilon$ problem.}
+Some work focuses on the minimal $\epsilon$ problem \cite{Chan:Optimal} that, given $m$, constructs an approximate curve consisting of at most $m$ line segments with minimum error. SQUISH($\lambda$) \cite{Muckell:SQUISH} and SQUISH-E($\lambda$) \cite{Muckell:Compression} are such algorithms that compress a trajectory of length $n$ into a trajectory of length at most $n/\lambda$. 
+These methods lack the capability of compressing trajectories while ensuring that SED error is within a user-specified bound\cite{Muckell:Compression}.
+%It is based on the priority queue data structure, where the prioritization is determined based on estimating the amount of \sed introduced into the compression if that point was removed from the compression\cite{Muckell:SQUISH}.
 
-\textcolor[rgb]{0.00,0.07,1.00}{{SQUISH \cite{Muckell:SQUISH}} compresses a trajectory of length $n$ into a trajectory of length at
-	most $n/\lambda$. It is based on the priority queue data structure, where the prioritization is determined based on estimating the amount of \sed introduced into the compression if that point was removed from the compression\cite{Muckell:SQUISH}.
-	However, it lacks the capability of compressing trajectories while ensuring that SED error is within a user-specified bound\cite{Muckell:Compression}. }
-
-
-
-
+\eat{
 \subsection*{A.2 Semantic based algorithms}
 The trajectories of certain moving objects such as cars and trucks are constrained by road networks. These moving objects typically travel along road networks, instead of the line segment between two points. Trajectory compression methods based on road networks \cite{Chen:Trajectory, Popa:Spatio,Civilis:Techniques,Hung:Clustering, Gotsman:Compaction, Song:PRESS, Han:Compress}  project trajectory points onto roads (also known as Map-Matching). Moreover, \cite{Gotsman:Compaction, Song:PRESS, Han:Compress} mine and use high frequency patterns of compressed trajectories, instead of roads, to further improve compression effectiveness.
 %
@@ -35,22 +30,25 @@ of other user specified domain knowledge, such as places of interests along the 
 There are also compression algorithms preserving the direction of the trajectory \cite{Long:Direction}. %As it mentions that the trajectory of a moving object contains a large amount of semantic information that could be used to compress the trajectory. For example, the driving direction of a moving object implies the information of the next direction.
 
 These  semantics based approaches are orthogonal to line simplification based methods, and may be combined with each other to  improve the effectiveness of trajectory compression.
+}
 
 
 
-\subsection*{A.3 Wild algorithms}
-*******************
-
-\stitle{Independent point algorithms}.
-\textcolor[rgb]{0.00,0.07,1.00}{Independent point algorithms roughly determine which points of a line should be retained. Two examples of this category are the $n^{th}$ point routine and the routine of random-selection of points \cite{Shi:Survey}. In these two routines, for every fixed number of consecutive points along the line, the $n^{th}$ point and one random point among them are retained, respectively.}
 
 
 
-\stitle{Naive Local Processing}.
-\textcolor[rgb]{0.00,0.07,1.00}{The Naive local processing routines\cite{Shi:Survey} regards a relationship between every two or three consecutive original points. Two examples of the relation are (a) the distance between the two consecutive points and (b) the perpendicular distance from a line connecting two points to an intermediate point, which should not be smaller than their individual tolerance bandwidths (a user-supplied minimum distance or angular change). Points within the bandwidth are eliminated, whereas points exceeding the bandwidth are retained. These tolerance routines are called the routine of distance between points and the perpendicular distance routine, respectively.}
 
-\stitle{Uniform Sampling}.
-\textcolor[rgb]{0.00,0.00,1.00}{Similarly, Uniform Sampling\cite{Muckell:Compression} down samples a trajectory \trajec{T} at fixed time intervals in a manner that achieves the compression ratio of $\lambda$.}
+\section*{Appendix B: Additional Experiments}
+
+As the optimal \lsa algorithm~\cite{Imai:Optimal} has both high time and space complexities, \ie $O(n^3)$ time and $O(n^2)$ space, it is impossible to compress the entire datasets (too slow and out of memory). Hence, we further build four \textit{small datasets}, each dataset includes 10 middle-size ($10K$ points per trajectory) trajectories selected from \ucar, \geolife, \mopsi and \act, respectively.
+
+\subsection*{B.1 Optimal vs near optimal algorithms}
+
+
+
+
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%End%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -143,3 +141,18 @@ These  semantics based approaches are orthogonal to line simplification based me
 		(2) by the Linear Dead Reckoning algorithm to eight line segments $\vv{P_0P_1}$, $\vv{P_1P_2}$, $\vv{P_2P_3}$, $\vv{P_3P_4}$, $\vv{P_4P_5}$, $\vv{P_5P_7}$, $\vv{P_7P_8}$ and $\vv{P_8P_{10}}$. First, an initial velocity ${\vv{v}_0}$ is set to $|P_0P_1|/(t_1-t_0)$. Then the synchronized point $P'_2$ of $P_2$ is estimated based on the velocity ${\vv{v}_0}$ and time of $P_2$, \ie ${v}_0 * (t_2-t_0)$. Because the \sed from $P_2$ to the line $\vv{P_0P'_2}$ , \ie $|P_2P'_2|$, is great than $\epsilon/2$, the algorithm outputs $\vv{P_0P_1}$ and starts the next section.
 	\end{example}
 }%%%%%%%%%%%%%%%%%%%%%%%%%Examples of strip and LDR
+
+
+
+\eat{%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{A.3 Wild algorithms}
+
+\stitle{Independent point algorithms}.
+\textcolor[rgb]{0.00,0.07,1.00}{Independent point algorithms roughly determine which points of a line should be retained. Two examples of this category are the $n^{th}$ point routine and the routine of random-selection of points \cite{Shi:Survey}. In these two routines, for every fixed number of consecutive points along the line, the $n^{th}$ point and one random point among them are retained, respectively.}
+
+\stitle{Naive Local Processing}.
+\textcolor[rgb]{0.00,0.07,1.00}{The Naive local processing routines\cite{Shi:Survey} regards a relationship between every two or three consecutive original points. Two examples of the relation are (a) the distance between the two consecutive points and (b) the perpendicular distance from a line connecting two points to an intermediate point, which should not be smaller than their individual tolerance bandwidths (a user-supplied minimum distance or angular change). Points within the bandwidth are eliminated, whereas points exceeding the bandwidth are retained. These tolerance routines are called the routine of distance between points and the perpendicular distance routine, respectively.}
+
+\stitle{Uniform Sampling}.
+\textcolor[rgb]{0.00,0.00,1.00}{Similarly, Uniform Sampling\cite{Muckell:Compression} down samples a trajectory \trajec{T} at fixed time intervals in a manner that achieves the compression ratio of $\lambda$.}
+}%%%%%%%%%%%%%%%%%
