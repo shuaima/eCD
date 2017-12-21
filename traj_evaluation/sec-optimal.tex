@@ -6,14 +6,14 @@ For the ``min-\#" problem that finds out the minimal number of points or segment
 %
 Toussaint of \cite{Toussaint:Optimal} and Melkman and O'Rourke of \cite{Melkman:Optimal} improved the time complexity to $O(n^2 \log n)$ by using either \textit{convex hull} or \textit{sector intersection} methods.
 %
-The authors of \cite{Chan:Optimal} presented an optimal algorithm using \ped (\oped) that achieves $O(n^2)$ time by using the \textit{sector intersection} mechanism (see Section~\ref{sec-siped}).
+The authors of \cite{Chan:Optimal} presented an optimal algorithm using \ped (\optp) that achieves $O(n^2)$ time by using the \textit{sector intersection} mechanism (see Section~\ref{sec-siped}).
 Because the \textit{sector intersection} and the \textit{convex hull} mechanisms can not work with \sed, hence, currently the time complexity of the optimal algorithm using \sed remains $O(n^3)$.
-However, we argue that an optimal \lsa algorithm using \sed (\osed) can achieve $O(n^2 \log n)$ time by applying the spatio-temporal cone intersection mechanism (See Section~\ref{sec-cised}) developed in our preview work \cised~\cite{Lin:Cised}. 
+However, we argue that an optimal and a near optimal \lsa algorithms using \sed (\opts) can achieve $O(n^2 \log n)$ time and $O(n^2)$ time, respectively, by applying the spatio-temporal cone intersection mechanism (See Section~\ref{sec-cised}) developed in our preview work \cised~\cite{Lin:Cised}. 
 
 
 
-In the rest of this section, we first introduce the naive optimal \lsa algorithm \cite{Imai:Optimal} that runs in $O(n^3)$ time. We then review the \ped specific optimal algorithm \oped \cite{Chan:Optimal} that achieves $O(n^2)$ time. Finally, we provide the \sed enabled optimal algorithm \osed that achieves $O(n^2 \log n)$ time. 
-Algorithms \oped and \osed are evaluated in our experiments.
+In the rest of this section, we first introduce the naive optimal (\opt) algorithm \cite{Imai:Optimal} that runs in $O(n^3)$ time. We then review the \ped specific optimal algorithm \optp \cite{Chan:Optimal} that achieves $O(n^2)$ time. Finally, we provide the \sed enabled near optimal algorithm \nopts that achieves $O(n^2)$ time and $O(n)$ space. 
+Algorithms \optp and \nopts are evaluated in our experiments.
 
 \subsection{The Naive Optimal Algorithm}
 Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ and an error bound $\epsilon$, the optimal trajectory simplification problem, as formulated by Imai and Iri in \cite{Imai:Optimal}, can be solved in two steps: (1) construct a reachability graph $G$ of \trajec{T} and (2) search a shortest path from $P_0$ to $P_{n}$ in graph $G$.
@@ -26,8 +26,8 @@ Observe that in the graph $G$, (1) a path from nodes $P_0$ to $P_{n}$ is a repre
 A straightforward way of constructing the reachability graph $G$ needs to check for all pair of points $P_s$ and $P_{s+k}$ whether the distances of all points ($P_{s+i}$, $0<i<k$) to the line segment $\vv{P_sP_{s+k}}$ are less than $\epsilon$.
 There are $O(n^2)$ pairs of points in the trajectory and checking the error of all points $P_{s+i}$ to a line segment $\vv{P_sP_{s+k}}$ takes $O(n)$ time.
 Thus, the construction step takes $O(n^3)$ time.
-Finding a shortest path takes no more than $O(n^2)$ time. Hence, the straightforward algorithm takes $O(n^3)$ time in total.
-For space complexity, this algorithm needs $O(n^2)$ space.
+Finding a shortest path takes no more than $O(n^2)$ time. Hence, the straightforward algorithm, \ie~\opt, takes $O(n^3)$ time in total.
+For space complexity, it needs $O(n^2)$ space.
 
 \begin{figure}[tb!]
 	\centering
@@ -48,23 +48,23 @@ For space complexity, this algorithm needs $O(n^2)$ space.
 %We next introduce two improved optimal algorithms using \ped and \sed that run in $O(n^2)$ and $O(n^2 \log n)$ time, respectively, by fasting the construction of reachability graph $G$.
 
 \subsection{The Optimal Algorithm using \ped}
-Authors of \cite{Chan:Optimal} provide \oped that constructs the reachability graph $G$ using \ped in $O(n^2)$ time, by using the \textit{sector intersection} mechanism (See Section~\ref{sec-siped}). 
+Authors of \cite{Chan:Optimal} provide an optimal algorithm using \ped (\optp) that constructs the reachability graph $G$ in $O(n^2)$ time, by using the \textit{sector intersection} mechanism (See Section~\ref{sec-siped}). 
 
-Given a point $P_s$, $0 \le s < n$, \oped builds a sector taking $P_s$ as the start point and checks for all points $P_{s+k}$, $k>0 ~and~ s+k \le n$, whether $(P_s, P_k)$ can be included in graph $G$. It can be added to the graph if and only if $(\bigsqcap_{i=1}^{k-1}\mathcal{S}(P_s, P_{s+i}, \epsilon)) \bigsqcap \vv{P_sP_{s+k}} \ne \{P_s\}$, \ie line segment $\vv{P_sP_{s+k}}$ ~passing through the common intersection area of sectors $\mathcal{S}(P_s, P_{s+i}, \epsilon))$, $0<i<k$. 
+Given a point $P_s$, $0 \le s < n$, \optp builds a sector taking $P_s$ as the start point and checks for all points $P_{s+k}$, $k>0 ~and~ s+k \le n$, whether $(P_s, P_k)$ can be included in graph $G$. It can be added to the graph if and only if $(\bigsqcap_{i=1}^{k-1}\mathcal{S}(P_s, P_{s+i}, \epsilon)) \bigsqcap \vv{P_sP_{s+k}} \ne \{P_s\}$, \ie line segment $\vv{P_sP_{s+k}}$ ~passing through the common intersection area of sectors $\mathcal{S}(P_s, P_{s+i}, \epsilon))$, $0<i<k$. 
 
 There are $n$ points of $P_s$ in the trajectory and the checking of $(\bigsqcap_{i=1}^{k-1}\mathcal{S}(P_s, P_{s+i}, \epsilon)) \bigsqcap \vv{P_sP_{s+k}} \ne \{P_s\}$ for one $P_s$ takes $O(n)$ time.
-Thus, the construction step takes $O(n^2)$ time and the algorithm \oped takes $O(n^2)$ time in total.
+Thus, the construction step takes $O(n^2)$ time and the algorithm takes $O(n^2)$ time in total.
 For space complexity, this algorithm takes $O(n^2)$ space. However, it could be optimized to $O(n)$ space by the approach presented in \cite{Chen:Space}, whose fundamental idea is that it computes a shortest path in graph $G$ without having to maintain $G$ explicitly.
 
 
 \subsection{The Optimal Algorithm using \sed}
-The \osed constructs the reachability graph $G$ using \sed in $O(n^2 \log n)$ time, by using the \textit{spatio-temporal cone intersection} mechanism (See Section~\ref{sec-siped}). 
+The optimal algorithm constructs the reachability graph $G$ using \sed in $O(n^2 \log n)$ time, by using the \textit{spatio-temporal cone intersection} mechanism (See Section~\ref{sec-siped}). 
 
-Given a point $P_s$, $0 \le s < n$, \osed builds a cone taking $P_s$ as the start point and checks for all points $P_{s+k}$, $k>0 ~and~ s+k \le n$, whether $(P_s, P_k)$ can be included in graph $G$ by checking $(\bigsqcap_{i=1}^{k-1}\mathcal{C}(P_s, P_{s+i}, \epsilon)) \bigsqcap \vv{P_sP_{s+k}} \ne \{P_s\}$, \ie line segment $\vv{P_sP_{s+k}}$ ~passing through the common intersection area of cones $\mathcal{C}(P_s, P_{s+i}, \epsilon))$, $0<i<k$. Note that the checking of intersection of cones is equal to check the intersection of circles on a plane \cite{Lin:Cised}, which can be achieved in $O(n \log n)$ time for $n$ circles~\cite{Shamos:Circle}. 
+Given a point $P_s$, $0 \le s < n$, the optimal builds a cone taking $P_s$ as the start point and checks for all points $P_{s+k}$, $k>0 ~and~ s+k \le n$, whether $(P_s, P_k)$ can be included in graph $G$ by checking $(\bigsqcap_{i=1}^{k-1}\mathcal{C}(P_s, P_{s+i}, \epsilon)) \bigsqcap \vv{P_sP_{s+k}} \ne \{P_s\}$, \ie line segment $\vv{P_sP_{s+k}}$ ~passing through the common intersection area of cones $\mathcal{C}(P_s, P_{s+i}, \epsilon))$, $0<i<k$. Note that the checking of intersection of cones is equal to check the intersection of circles on a plane \cite{Lin:Cised}, which can be achieved in $O(n \log n)$ time for $n$ circles~\cite{Shamos:Circle}. 
 
 There are $n$ points of $P_s$ in the trajectory and the checking for one $P_s$ takes $O(n \log n)$ time.
-Thus, the construction step takes $O(n^2 \log n)$ time and the algorithm \osed takes $O(n^2 \log n)$ time in total.
+Thus, the construction step takes $O(n^2 \log n)$ time and the algorithm takes $O(n^2 \log n)$ time in total.
 
 \stitle{Remark}.
-If we approxite each circle by its $m$-edges inscribed regular polygon and approxite the intersection of $n$ circles on a plane by the intersection of their inscribed regular polygons, the way \cised does, then we get a near optimal graph $G'$ such that $\lim_{m \to \infty}{G'=G}$, and a \textit{near optimal} \lsa algorithm using \sed that achieves $O(n^2)$ time. The space complexity of the near optimal algorithm also achieves $O(n)$ by combining the approach of \cite{Chen:Space}.
+If we approxite each circle by its $m$-edges inscribed regular polygon and approxite the intersection of $n$ circles on a plane by the intersection of their inscribed regular polygons, the way \cised does, then we get a near optimal graph $G'$ such that $\lim_{m \to \infty}{G'=G}$, and a \textit{near optimal} algorithm using \sed, \ie ~\nopts, that achieves $O(n^2)$ time. The space complexity of the near optimal algorithm also achieves $O(n)$ by combining the approach of \cite{Chen:Space}.
  
