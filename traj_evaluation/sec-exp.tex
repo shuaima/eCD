@@ -3,10 +3,11 @@
 \label{sec-exp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 In this section, we present an extensive experimental study of the nine \lsa algorithms listed in \mytable{tab:summary-lsa} on trajectory data sets.
-Using four real-life datasets, we conducted three sets of experiments to evaluate:
-(1) the compression ratios of these algorithms, and the impacts of distance metrics,\ie \sed and \ped, to the compression ratios, 
-(2) the execution time of these algorithms, and
-(3) the average errors of these algorithms.
+Using four real-life datasets, we conducted two sets of experiments to evaluate:
+%(1) the compression ratios and average errors of these algorithms, and the impacts of distance metrics,\ie \sed and \ped, to them
+%(2) the execution time of them.
+(1) the effectiveness of these algorithms, and
+(2) the efficiency of them.
 \textcolor{blue}{Note the additional comparison of the near optimal algorithm (\nopts) and the optimal algorithm (\opt) is presented in Appendix B.}
 
 
@@ -93,6 +94,15 @@ over 3 times and the average is reported here.
 
 
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Experimental Results}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+We next present our findings.
+
+
+
 \begin{figure*}[tb!]
 	\centering
 	\includegraphics[scale=0.315]{Figures/Exp-PED-CR-epsilon-service.png} 	\hspace{1ex}
@@ -140,44 +150,99 @@ over 3 times and the average is reported here.
 	\vspace{-2ex}
 \end{figure*}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Experimental Results}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-We next present our findings.
-
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Evaluation of Compression Effectiveness}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-In the first set of tests, we compare the compression ratios of these algorithms using \ped and \sed, respectively.
+In the first set of tests, we compare the effectiveness (compression ratios and average errors) of these algorithms.% using \ped and \sed, respectively.
 
-
-Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations
-$\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$,
- the compression ratio is $(\sum_{j=1}^{M} |\overline{\mathcal{T}}_j |)/(\sum_{j=1}^{M} |\dddot{\mathcal{T}}_j |)$.
- Note that by the definition, algorithms with lower compression ratios are better.
-
-
-\stitle{Exp-1.1: Impacts of the error bound $\epsilon$}.
-To evaluate the impacts of $\epsilon$ on compression ratios of these algorithms, we varied $\epsilon$ from $5m$ to $100m$ on
- the entire four datasets, respectively.
+\stitle{Exp-1.1: Compression ratios}.
+To compare the compression ratios of these algorithms and evaluate the impacts of $\epsilon$ on compression ratios of them, we varied $\epsilon$ from $10m$ to $100m$ on the entire four datasets, respectively.
+%
 The results are reported in Figure~\ref{fig:cr-ped} and Figure~\ref{fig:cr-sed}.
+%
+Note given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations
+$\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$,
+the compression ratio is $(\sum_{j=1}^{M} |\overline{\mathcal{T}}_j |)/(\sum_{j=1}^{M} |\dddot{\mathcal{T}}_j |)$.
+Note that by the definition, algorithms with lower compression ratios are better.
+%
 
-\sstab (1) When increasing $\epsilon$, the compression ratios decrease. For example, in \ucar,
-the compression ratios are greater than $28.7\%$ when $\epsilon$ = $5m$, but are less than $6.6\%$ when $\epsilon$ = $100m$.
 
-\sstab (2) using \ped, optimal and sub-optimal.
+\sstab (1) When increasing $\epsilon$, the compression ratios decrease. For example, in \mopsi,
+the compression ratios are greater than \textcolor{red}{$10\%$} when $\epsilon$ = $10m$, but are less than \textcolor{red}{$5\%$} when $\epsilon$ = $100m$.
 
-\sstab (3) using \sed, optimal and sub-optimal.
+\sstab (2) Dataset \act has the lowest compression ratios, compared with \ucar, \geolife and \mopsi, due to its highest sampling rate, \ucar has the highest compression ratios due to its lowest sampling rate, and \geolife and \mopsi have the compression ratios in the middle accordingly.
 
-\sstab (4) \ped vs \sed.
+\sstab (3) When using \ped, in most cases, the compression ratios from the best to the worst are the optimal algorithm \optp, batch and online algorithms \tpa, \dpa and \bqsa, and one-pass algorithms \siped and \operb. Algorithms \tpa, \dpa and \bqsa are comparable, and they are on average \textcolor{red}{($5\%,5\%,5\%,5\%$)} of the optimal algorithm \optp on datasets (\ucar, \geolife, \mopsi, \act), respectively. Algorithms \siped and \operb are comparable, and they are on average \textcolor{red}{($5\%,5\%,5\%,5\%$)} of the optimal algorithm \optp on datasets (\ucar, \geolife, \mopsi, \act), respectively.
+For example, in \mopsi, the compression ratios of algorithms (\optp,\tpa,\dpa,\bqsa,\siped,\operb ) are \textcolor{red}{($5\%, 5\%,5\%,5\%,5\%,5\%$)} when $\epsilon$ = $40m$.
+
+\sstab (4) When using \sed, in most cases, the compression ratios from the best to the worst are the near optimal algorithm \nopts, batch algorithms \tpa and \dpa, one-pass algorithm \cised, and online algorithm \squishe. Algorithms \tpa and \dpa are comparable, and they are on average \textcolor{red}{($5\%,5\%,5\%,5\%$)} of the near optimal algorithm \nopts on datasets (\ucar, \geolife, \mopsi, \act), respectively. Algorithms \cised and \squishe are on average \textcolor{red}{($5\%,5\%,5\%,5\%$)} and \textcolor{red}{($5\%,5\%,5\%,5\%$)} of the near optimal algorithm \nopts on datasets (\ucar, \geolife, \mopsi, \act), respectively.
+For example, in \mopsi, the compression ratios of algorithms (\nopts,\tpa,\dpa,\squishe, \cised) are \textcolor{red}{($5\%, 5\%,5\%,5\%,5\%$)} when $\epsilon$ = $40m$.
+
+\sstab (5) The compression ratios of algorithms using \ped are obviously better than using \sed. More specifically, the compression ratios of algorithms (\optp, \tpa, \dpa) using \ped are on average \textcolor{red}{($5\%,5\%,5\%,5\%$)}, \textcolor{red}{($5\%,5\%,5\%,5\%$)} and \textcolor{red}{($5\%,5\%,5\%,5\%$)} of algorithms (\nopts, \tpa, \dpa) using \sed on datasets (\ucar, \geolife, \mopsi, \act), respectively.
 	
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\vspace{-0.5ex}
+%\subsubsection{Evaluation of Average Errors}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%In the third set of tests, we evaluate the average errors of these algorithms.
+
+
+\stitle{Exp-1.2: Average errors}.
+To compare the errors of these algorithms and evaluate the impacts of $\epsilon$ on errors of them, we varied $\epsilon$ from $5m$ to $100m$ on the entire \taxi, \truck, \ucar and \geolife, respectively.
+The results are reported in Figure~\ref{fig:ae-ped} and Figure~\ref{fig:ae-sed}.
+%
+Note given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations
+$\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$, and point $P_{j,i}$ denoting
+a point in trajectory $\dddot{\mathcal{T}}_j$ contained in a line segment $\mathcal{L}_{l,i}\in\overline{\mathcal{T}_l}$ ($l\in[1,M]$),
+then the average error is $\sum_{j=1}^{M}\sum_{i=0}^{M} d(P_{j,i},
+\mathcal{L}_{l,i})/\sum_{j=1}^{M}{|\dddot{\mathcal{T}}_j |}$.
+
+
+\sstab (1) When increasing $\epsilon$, the average errors increase linearly. 
+
+\sstab (2) Datasets have few impacts on the average errors.
+
+\sstab (3) When using \ped, in most cases, the average errors from the smallest to the largest are batch and online algorithms \tpa, \dpa and \bqsa, one-pass algorithms \siped and \operb, and the optimal algorithm \optp. Algorithms \tpa, \dpa and \bqsa are comparable, and they are on average \textcolor{red}{($5\%,5\%,5\%,5\%$)} of the optimal algorithm \optp on datasets (\ucar, \geolife, \mopsi, \act), respectively. Algorithms \siped and \operb are comparable, and they are on average \textcolor{red}{($5\%,5\%,5\%,5\%$)} of the optimal algorithm \optp on datasets (\ucar, \geolife, \mopsi, \act), respectively.
+For example, in \mopsi, the average errors of algorithms (\optp,\tpa,\dpa,\bqsa,\siped,\operb ) are \textcolor{red}{($5m, 5m,5m,5m,5m,5m$)} when $\epsilon$ = $40m$.
+
+\sstab (4) When using \sed, in most cases, the average errors from the smallest to the largest are online algorithm \squishe, batch algorithms \tpa and \dpa, one-pass algorithm \cised, and the near optimal algorithm \nopts. Algorithms \tpa and \dpa are comparable, and they are on average \textcolor{red}{($5\%,5\%,5\%,5\%$)} of the near optimal algorithm \nopts on datasets (\ucar, \geolife, \mopsi, \act), respectively. Algorithms \cised and \squishe are on average \textcolor{red}{($5\%,5\%,5\%,5\%$)} and \textcolor{red}{($5\%,5\%,5\%,5\%$)} of the near optimal algorithm \nopts on datasets (\ucar, \geolife, \mopsi, \act), respectively.
+For example, in \mopsi, the average errors of algorithms (\nopts,\tpa,\dpa,\squishe, \cised) are \textcolor{red}{($5m, 5m,5m,5m,5m$)} when $\epsilon$ = $40m$.
+
+\sstab (5) The average errors of algorithms using \sed are a bit larger than using \ped. 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Evaluation of Compression Efficiency}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In the second set of tests, we compare the efficiency (execution time) of these algorithms.
+For fairness, we load and compress trajectories one by one, and only count the running time of the compressing process.
+%For a small size trajectory, we repeat compress it tens of times and accumulation the total running time so as  to get the average compression time.
+
+
+\stitle{Exp-3.1: Impacts of the error bound $\epsilon$}.
+To evaluate the impacts of $\epsilon$ on efficiency of these algorithms, we varied $\epsilon$ from $5m$ to $100m$ on the entire \taxi, \truck, \ucar and \geolife, respectively.
+The results are reported in Figure~\ref{fig:ae-ped} and Figure~\ref{fig:ae-sed}.
+
+\sstab (1) 
+All algorithms are not very sensitive to $\epsilon$, but their running time all decreases a little bit with the increase of $\epsilon$,
+as the increment of $\epsilon$ decreases the number of directed line segments in the output.
+Further, algorithm \dpa is more sensitive to $\epsilon$ than the other three algorithms.
+
+\sstab (3) using \ped, optimal and sub-optimal.
+
+\sstab (4) using \sed, optimal and sub-optimal.
+
+Algorithms \operb and \operba are obviously faster than \dpa and \fbqsa in all cases.
+\operb is on average ($13.9$, $17.4$, $14.7$, {$20.6$}) times faster than \dpa, and ($4.1$, $4.1$, $5.4$, {$5.2$}) times faster than \fbqsa on (\taxi, \truck, \ucar, {\geolife}), respectively. Algorithm \operba is as fast as \operb because trajectory interpolation is a light weight operation.
+
 \sstab (5) sampling rate and datasets.
-\geolife has the lowest compression ratios, compared with \taxi, \truck and \ucar, due to its highest sampling rate, \taxi has the highest compression ratios due to its lowest sampling rate, and \truck and \ucar have the compression ratios in the middle accordingly.
+
 
 \begin{figure*}[tb!]
 	\centering
@@ -222,92 +287,6 @@ the compression ratios are greater than $28.7\%$ when $\epsilon$ = $5m$, but are
 	\caption{\small Evaluation of efficiency (\sed): varying the size of trajectories.}\label{fig:time-size-sed}
 	\vspace{-1ex}
 \end{figure*}
-	
-\eat{%%%%%%%%%%%%%%%%%%%%%%%%
-First, algorithm \operb has comparable compression ratios with \fbqsa and \dpa.
-For example, when $\epsilon = 40m$, the compression ratios are ($20.9\%$, $20.4\%$, $11.1\%$, $3.1\%$) of \fbqsa, ($20.7\%$, $18.7\%$, $8.9\%$, $2.6\%$) of \dpa and ($22.3\%$, $20.3\%$, $10.0\%$, $2.6\%$) of \operb on (\taxi, \truck, \ucar, \geolife), respectively.
-For all $\epsilon$, the compression ratios of \operb are on average ($107.2\%$, $98.3\%$, $92.9\%$, {$85.1\%$}) of \fbqsa and ($107.7\%$, $106.6\%$, $113.5\%$, $99.6\%$) of \dpa on (\taxi, \truck, \ucar, \geolife), respectively.
-\operb is better than  \fbqsa on \truck, \ucar and \geolife, while a little worse on \taxi. The results also show that \operb has a better performance than \fbqsa on datasets with high sampling rates.
-
-Second, algorithm \operba achieves the best compression ratios on all datasets and nearly all $\epsilon$ values.
-Its compression ratios are on average ($83.7\%$, $79.5\%$, $79.7\%$, $81.0\%$) of \fbqsa and ($84.2\%$, $86.4\%$, $97.1\%$, $94.7\%$) of \dpa on (\taxi, \truck, \ucar, \geolife), respectively.
-}%%%%%%%%%%%%%%
-
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\vspace{-0.5ex}
-\subsubsection{Evaluation of Average Errors}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-In the third set of tests, we evaluate the average errors of these algorithms.
-Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations
-$\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$, and point $P_{j,i}$ denoting
-a point in trajectory $\dddot{\mathcal{T}}_j$ contained in a line segment $\mathcal{L}_{l,i}\in\overline{\mathcal{T}_l}$ ($l\in[1,M]$),
-then the average error is $\sum_{j=1}^{M}\sum_{i=0}^{M} d(P_{j,i},
-\mathcal{L}_{l,i})/\sum_{j=1}^{M}{|\dddot{\mathcal{T}}_j |}$.
-
-
-
-
-\stitle{Exp-2.1: Impacts of the error bound $\epsilon$}.
-To evaluate the impacts of $\epsilon$ on errors of these algorithms, we varied $\epsilon$ from $5m$ to $100m$ on the entire \taxi, \truck, \ucar and \geolife, respectively.
-The results are reported in Figure~\ref{fig:ae-ped} and Figure~\ref{fig:ae-sed}.
-
-\sstab (1) When increasing $\epsilon$, the average errors increase. For example, in \ucar,
-the compression ratios are greater than $28.7\%$ when $\epsilon$ = $5m$, but are less than $6.6\%$ when $\epsilon$ = $100m$.
-
-\sstab (2) using \ped, optimal and sub-optimal.
-
-\sstab (3) using \sed, optimal and sub-optimal.
-
-\sstab (4) \ped vs \sed.
-
-\sstab (5) sampling rate and datasets.
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{Evaluation of Compression Efficiency}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-In the first set of tests, we compare the efficiency (execution time) of our approaches \operb and \operba with algorithms \dpa and \fbqsa
-and with algorithms \kw{Raw}-\operb and \kw{Raw}-\operba.
-For fairness, we load and compress trajectories one by one, and only count the running time of the compressing process.
-%For a small size trajectory, we repeat compress it tens of times and accumulation the total running time so as  to get the average compression time.
-
-
-\stitle{Exp-3.1: Impacts of the error bound $\epsilon$}.
-To evaluate the impacts of $\epsilon$ on efficiency of these algorithms, we varied $\epsilon$ from $5m$ to $100m$ on the entire \taxi, \truck, \ucar and \geolife, respectively.
-The results are reported in Figure~\ref{fig:ae-ped} and Figure~\ref{fig:ae-sed}.
-
-\sstab (1) 
-All algorithms are not very sensitive to $\epsilon$, but their running time all decreases a little bit with the increase of $\epsilon$,
-as the increment of $\epsilon$ decreases the number of directed line segments in the output.
-Further, algorithm \dpa is more sensitive to $\epsilon$ than the other three algorithms.
-
-\sstab (2) \ped vs \sed.
-
-\sstab (3) using \ped, optimal and sub-optimal.
-
-\sstab (4) using \sed, optimal and sub-optimal.
-
-Algorithms \operb and \operba are obviously faster than \dpa and \fbqsa in all cases.
-\operb is on average ($13.9$, $17.4$, $14.7$, {$20.6$}) times faster than \dpa, and ($4.1$, $4.1$, $5.4$, {$5.2$}) times faster than \fbqsa on (\taxi, \truck, \ucar, {\geolife}), respectively. Algorithm \operba is as fast as \operb because trajectory interpolation is a light weight operation.
-
-\sstab (5) sampling rate and datasets.
-
-
-
 
 
 
