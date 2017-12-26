@@ -34,7 +34,7 @@ For space complexity, it needs $O(n^2)$ space.
 	\includegraphics[scale=0.75]{figures/Fig-Optimal.png}
 	\vspace{-2ex}
 	\caption{\small Example of reachability graph of trajectory \trajec{T}$[P_0, \ldots, P_n]$ whose shortest path is $(P_0, P_4, P_{10})$.}
-	\vspace{-2ex}
+	\vspace{-3ex}
 	\label{fig:optimal}
 \end{figure}
 
@@ -43,12 +43,12 @@ For space complexity, it needs $O(n^2)$ space.
 	Figure~\ref{fig:optimal} is an example of the naive optimal algorithm using \ped taking as input the trajectory \trajec{T} shown in Figure~\ref{fig:notations}. The reachability graph of \trajec{T} is constructed and a shortest path with 2 edges is founded. 
 	At last, the algorithm outputs two line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.	
 \end{example}
-
+\vspace{-1ex}
 %Though the brute-force algorithm was initially developed using \ped, it can be used for \sed.
 %We next introduce two improved optimal algorithms using \ped and \sed that run in $O(n^2)$ and $O(n^2 \log n)$ time, respectively, by fasting the construction of reachability graph $G$.
 
 \subsection{The Optimal Algorithm using \ped}
-Authors of \cite{Chan:Optimal} provide an optimal algorithm using \ped (\optp) that constructs the reachability graph $G$ in $O(n^2)$ time, by using the \textit{sector intersection} mechanism (See Section~\ref{sec-siped}). 
+Authors of \cite{Chan:Optimal} provide an optimal algorithm using \ped (\optp) that constructs the graph $G$ in $O(n^2)$ time, by using the \textit{sector intersection} mechanism (See Section~\ref{sec-siped}). 
 
 Given a point $P_s$, $0 \le s < n$, \optp builds a sector taking $P_s$ as the start point and checks for all points $P_{s+k}$, $k>0 ~and~ s+k \le n$, whether $(P_s, P_k)$ can be included in graph $G$. It can be added to the graph if and only if $(\bigsqcap_{i=1}^{k-1}\mathcal{S}(P_s, P_{s+i}, \epsilon)) \bigsqcap \vv{P_sP_{s+k}} \ne \{P_s\}$, \ie line segment $\vv{P_sP_{s+k}}$ ~passing through the common intersection area of sectors $\mathcal{S}(P_s, P_{s+i}, \epsilon))$, $0<i<k$. 
 
@@ -60,8 +60,9 @@ For space complexity, this algorithm takes $O(n^2)$ space. However, it could be 
 \subsection{The Optimal Algorithm using \sed}
 The optimal algorithm constructs the reachability graph $G$ using \sed in $O(n^2 \log n)$ time, by using the \textit{spatio-temporal cone intersection} mechanism (See Section~\ref{sec-siped}). 
 
-Given a point $P_s$, $0 \le s < n$, the optimal builds a cone taking $P_s$ as the start point and checks for all points $P_{s+k}$, $k>0 ~and~ s+k \le n$, whether $(P_s, P_k)$ can be included in graph $G$ by checking $(\bigsqcap_{i=1}^{k-1}\mathcal{C}(P_s, P_{s+i}, \epsilon)) \bigsqcap \vv{P_sP_{s+k}} \ne \{P_s\}$, \ie line segment $\vv{P_sP_{s+k}}$ ~passing through the common intersection area of cones $\mathcal{C}(P_s, P_{s+i}, \epsilon))$, $0<i<k$. Note that the checking of intersection of cones is equal to check the intersection of circles on a plane \cite{Lin:Cised}, which can be achieved in $O(n \log n)$ time for $n$ circles~\cite{Shamos:Circle}. 
+Given a point $P_s$, $0 \le s < n$, the optimal builds a cone taking $P_s$ as the start point and checks for all points $P_{s+k}$, $k>0 ~and~ s+k \le n$, whether $(P_s, P_k)$ can be included in graph $G$ by checking $(\bigsqcap_{i=1}^{k-1}\mathcal{C}(P_s, P_{s+i}, \epsilon)) \bigsqcap \vv{P_sP_{s+k}} \ne \{P_s\}$, \ie line segment $\vv{P_sP_{s+k}}$ ~passing through the common intersection area of cones $\mathcal{C}(P_s, P_{s+i}, \epsilon))$, $0<i<k$. 
 
+The checking of intersection of cones is equal to check the intersection of circles on a plane \cite{Lin:Cised}, which can be achieved in $O(n \log n)$ time for $n$ circles~\cite{Shamos:Circle}. 
 There are $n$ points of $P_s$ in the trajectory and the checking for one $P_s$ takes $O(n \log n)$ time.
 Thus, the construction step takes $O(n^2 \log n)$ time and the algorithm takes $O(n^2 \log n)$ time in total.
 

@@ -28,7 +28,7 @@
 		\nopts~	&near optimal&Graph and Spatio-temporal cone intersection&N & Y  & $O(n^2)$	& $O(n)$ \\		\hline
 	\end{tabular}
 	{\\  Note: $K$ is the number of the final segments of a trajectory and $|Q|$ is the size of buffer/window.}
-	\vspace{-3ex}
+	\vspace{-4.5ex}
 \end{table*}
 
 
@@ -36,16 +36,17 @@ Various mobile devices, such as smart-phones, on-board diagnostics, personal nav
 \textcolor{blue}{Apart from the widely using of GPS sensors, the sampling rate is also increasing, \eg from 1 point per minute to currently 1 point per second, in order to get more accurate position information of a moving object, which leads to mobile devices collecting, transmitting and storing an increasing size of trajectory data.}
 %
 It is known that transmitting and storing raw trajectory data consumes too much network bandwidth and storage capacity \cite{Chen:Trajectory,  Chen:Fast, Meratnia:Spatiotemporal, Keogh:online, Liu:BQS, Muckell:Compression,Cao:Spatio, Popa:Spatio, Schmid:Semantic,Richter:Semantic,Long:Direction,Nibali:Trajic}.
-Further, we find that the online transmitting of raw trajectories also seriously aggravates several other issues such as out-of-order and duplicate data points in our experiences when implementing an online vehicle-to-cloud data transmission system.
+%Further, we find that the online transmitting of raw trajectories also seriously aggravates several other issues such as out-of-order and duplicate data points in our experiences when implementing an online vehicle-to-cloud data transmission system.
 Fortunately, these issues can be resolved or greatly alleviated by the trajectory compression techniques \cite{Douglas:Peucker, Hershberger:Speeding, Meratnia:Spatiotemporal, Liu:BQS, Muckell:Compression, Chen:Trajectory, Chen:Fast, Keogh:online, Cao:Spatio, Shi:Survey, Richter:Semantic ,Long:Direction, Song:PRESS, Nibali:Trajic}.
 
 Trajectory Compression techniques may be lossless or lossy \cite{Muckell:Compression}.
 %
-Lossless compression methods enable exact reconstruction of the original data from the compressed data without information loss. For example, delta compression \cite{Nibali:Trajic} is a lossless compression technique for trajectory data, which has zero error.
+Lossless compression methods enable exact reconstruction of the original data from the compressed data without information loss. 
+%For example, delta compression \cite{Nibali:Trajic} is a lossless compression technique for trajectory data, which has zero error.
 The limitation of lossless compression lies in that its compression ratio is relatively poor \cite{Nibali:Trajic} and {queries on the compressed data are time consuming because data reconstructions from the compressed data are needed before the queries}.
 %
 In contrast, lossy compression methods typically identify important data points and remove statistical redundant data points from the original data, and allow errors or derivations compared with the original trajectory data. 
-These techniques focus on good compression ratios with acceptable errors, and are the mainstream techniques for trajectory compression.
+These techniques focus on good compression ratios with acceptable errors, and are the mainstream techniques in field of trajectory compression.
 %, or replace original data points in a trajectory with other places of interests, such as roads and shops.
 
 A large number of lossy trajectory compression techniques, most notably the piece-wise line simplification \cite{Douglas:Peucker, Hershberger:Speeding, Keogh:online,Liu:BQS, Muckell:Compression, Chen:Trajectory, Chen:Fast, Cao:Spatio, Shi:Survey}, have been developed. The idea of piece-wise line simplification (\lsa) comes from computational geometry, whose target is to approximate a given finer piece-wise linear curve by another coarser piece-wise linear curve ({normally} a sub set of the former), such that the maximum distance of the former from the later is bounded by a user specified constant. It is widely used due to its distinct advantages: (a) simple and easy to implement, (b) no need of extra knowledge and suitable for freely  moving  objects \cite{Popa:Spatio}, and (c) bounded errors with good compression ratios.
@@ -64,7 +65,7 @@ The using \ped bring good compression ratios~ \cite{Douglas:Peucker, Hershberger
 %
 \sed was then introduced for trajectory compression to save temporal information \cite{Meratnia:Spatiotemporal}. \sed is the Euclidean distance of a data point to its \emph{approximate temporally synchronized data point} \cite{Meratnia:Spatiotemporal} on the corresponding line segment. 
 %For instance, $P'_4$ and $P'_7$ are the \emph{synchronized data points} of points $P_4$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$ and $\vv{P_4P_{10}}$, respectively, in Figure~\ref{fig:notations} (right).
-\lsa algorithms using \sed may produce more line segments. However, the use of \sed ensures that the Euclidean distance between a data point and its synchronized point \wrt the corresponding line segment is bounded. 
+\lsa algorithms using \sed may produce more line segments, however, the use of \sed ensures that the Euclidean distance between a data point and its synchronized point \wrt the corresponding line segment is bounded. 
 %Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the synchronized point $P'$ of a data point $P$ within a bounded distance.
 
 Moreover, the \lsa algorithms fall into two categories, \ie the \textit{optimal} and \textit{sub-optimal} algorithms. 
@@ -92,7 +93,7 @@ Hence, \textit{sub-optimal} \lsa algorithms have been developed and/or introduce
 %\end{enumerate}
 
 As a consequence, it is difficult for a practitioner to decide which algorithm and distance metric should be adopted for a specific application. 
-Thus, these issues call for a more comprehensive evaluation of the existing \lsa techniques on trajectory data.
+Thus, these issues call for a more comprehensive evaluation of the existing \lsa techniques. % on trajectory data.
 
 \stitle{Contributions}.
 This paper presents an experimental comparison of the state-of-the-art \lsa algorithms for trajectory compression, including \emph{both the optimal and the sub-optimal methods that use either \ped or \sed}. 

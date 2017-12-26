@@ -5,13 +5,14 @@ We next summarized other representative \lsa algorithms. Interested readers refe
 %\subsection*{A.1 Other Line simplification algorithms}
 
 \stitle {Weak simplification algorithms.}
-The weak simplification allows that the output data points may not belong to the original data sets \cite{Trajcevski:DDR} (otherwise, the strong simplification). That is, weak simplification allows data interpolation. Algorithms \sleeve \cite{Zhao:Sleeve}, \operb\cite{Lin:Operb} and \cised \cite{Lin:Cised} are both strong and weak \lsa algorithms whose weak simplification versions have better compression ratios than their strong simplification versions, and even comparable or better than the optimal strong simplification algorithms \cite{Lin:Cised}.
+The weak simplification allows that the output data points may not belong to the original data sets \cite{Trajcevski:DDR} (otherwise, the strong simplification). 
+That is, weak simplification allows data interpolation. Algorithms \sleeve \cite{Zhao:Sleeve}, \operb\cite{Lin:Operb} and \cised \cite{Lin:Cised} are both strong and weak \lsa algorithms whose weak simplification versions have better compression ratios than their strong simplification versions, and even comparable or better than the optimal algorithms \cite{Lin:Cised}.
 
-\stitle {Algorithms on the min-$\#$ problem using other error metric.}
+\stitle {Algorithms using other error metric.} %on the min-$\#$ problem
 A number of algorithms \cite{Agarwal:Metric, Chen:Fast, Wu:Graph} have been developed to solve the ``min-\#" problem under alternative error metrics.
 \cite{Agarwal:Metric} studied the problem under the $L_1$ and uniform (also known as Chebyshev) metric. % while this study focuses on the $L_2$ metric.
-\cite{Chen:Fast} defined the local integral square synchronous Euclidean distance (LISSED) and the integral square synchronous Euclidean distance (ISSED), and used them to fast the construction of reachability graphs, and \cite{Wu:Graph} followed the ideas of \cite{Chen:Fast}.
-Both LISSED and ISSED cumulative errors that leads to varied effectiveness compared with \sed.
+\cite{Chen:Fast} defined \eat{the local integral square synchronous Euclidean distance (LISSED) and} the integral square synchronous Euclidean distance (ISSED), and used it to fast the construction of reachability graphs, and \cite{Wu:Graph} followed the ideas of \cite{Chen:Fast}.
+ISSED is a cumulative error that leads to varied effectiveness compared with \sed.
 
 
 
@@ -43,47 +44,41 @@ These  semantics based approaches are orthogonal to line simplification based me
 
 
 \subsection*{B.1 The effectiveness of near optimal algorithm}
-In this section, we compare the performance of the near optimal algorithm (\nopts) and the optimal algorithm (\opt) using \sed.
-As the optimal \lsa algorithm~\cite{Imai:Optimal} has both high time and space complexities, \ie $O(n^3)$ time and $O(n^2)$ space, it is impossible to compress the entire datasets (too slow and out of memory). Hence, we further build four \textit{small datasets}, each dataset includes $10$ middle-size ($10K$ points per trajectory) trajectories selected from \ucar, \geolife, \mopsi and \act, respectively.
-The results are reported in \mytable{tab:cr-nearOpt}
+\label{sec-app-exp-cr}
+In this section, we compare the performance of the near optimal algorithm using \sed (\nopts) and the naive optimal algorithm (\opt) using \sed.
+As the naive optimal algorithm has both high time and space complexities, \ie $O(n^3)$ time and $O(n^2)$ space, it is impossible to compress the entire datasets (too slow and out of memory). Hence, we build four \textit{small datasets} for this test, and each dataset includes $10$ middle-size ($10K$ points per trajectory) trajectories selected from \ucar, \geolife, \mopsi and \act, respectively.
+The results are reported in Figure~\ref{fig:cr-nopts}. The compression ratios of algorithm \nopts are on average \textcolor{red}{($110\%$, $110\%$, $110\%$, $110\%$)} of \opt using \sed on datasets (\ucar, \geolife, \mopsi, \act), respectively.
 
-\begin{table}[h]
-	%\vspace{-2ex}
-	\caption{\small The effectiveness of near optimal algorithm}
+\begin{figure}[h]
 	\centering
-	\small
-	\begin{tabular}{|l|c|c|c|r|}
-		\hline
-		\kw{Data}& \kw{Number\ of}     &\kw{Sampling}   &\kw{Points~Per}    &\kw{Total} \\
-		\kw{Sets} & \kw{Trajectories}   &\kw{Rates (s)}  &\kw{Trajectory (K)}&\kw{points}\\	\hline
-		\ucar	&1,00	    &3-5	&$\sim114.0$   &114M 	\\	\hline
-		\geolife\cite{Web:Geolife} &182	    &1-5	&$\sim131.4$   &24.2M	\\	\hline
-		\mopsi\cite{Web:Mopsi}	&51	    	&2	    &$\sim153.9$   &7.9M	\\	\hline
-		\act	& 10	    &1	    &$\sim11.8$    &112.8K	\\	\hline
-	\end{tabular}
-	\label{tab:cr-nearOpt}
-	\vspace{-3ex}
-\end{table}
+	\includegraphics[scale=0.15]{Figures/Exp-SED-cr-epsilon-service.png}	
+	\includegraphics[scale=0.15]{Figures/Exp-SED-cr-epsilon-geolife.png}	
+	\includegraphics[scale=0.15]{Figures/Exp-SED-cr-epsilon-mopsi.png}	
+	\includegraphics[scale=0.15]{Figures/Exp-SED-cr-epsilon-geolife.png} 
+	\vspace{-2.5ex}
+	\caption{\small Evaluation of compression ratios of the near optimal algorithm: varying the error bound $\epsilon$.}
+	\label{fig:cr-nopts}
+	\vspace{-2ex}
+\end{figure}
 
 \subsection*{B.2 The efficiencies of optimal algorithms}
+\label{sec-app-exp-time}
+We next test the efficiencies of the optimal algorithm using \ped (\optp) and the near optimal algorithm using \sed (\nopts).
+The results are reported in Figure~\ref{fig:time-opt}.
+The running time of algorithms \optp and \nopts are on average \textcolor{red}{(100, 100, 100, 100)} and \textcolor{red}{(100, 100, 100, 100)} times slower than one-pass algorithms \siped and \cised on datasets (\ucar, \geolife, \mopsi, \act), respectively. 
+%For example, the running time of \optp and \nopts are \textcolor{red}{(100, 100, 100, 100)} and \textcolor{red}{(100, 100, 100, 100)} on datasets (\ucar, \geolife, \mopsi, \act), respectively, when $\epsilon=40m$.
 
-\begin{table}[h]
-	%\vspace{-2ex}
-	\caption{\small The efficiency of the (near) optimal algorithms}
+\begin{figure}[h]
 	\centering
-	\small
-	\begin{tabular}{|l|c|c|c|r|}
-		\hline
-		\kw{Data}& \kw{Number\ of}     &\kw{Sampling}   &\kw{Points~Per}    &\kw{Total} \\
-		\kw{Sets} & \kw{Trajectories}   &\kw{Rates (s)}  &\kw{Trajectory (K)}&\kw{points}\\	\hline
-		\ucar	&1,00	    &3-5	&$\sim114.0$   &114M 	\\	\hline
-		\geolife\cite{Web:Geolife} &182	    &1-5	&$\sim131.4$   &24.2M	\\	\hline
-		\mopsi\cite{Web:Mopsi}	&51	    	&2	    &$\sim153.9$   &7.9M	\\	\hline
-		\act	& 10	    &1	    &$\sim11.8$    &112.8K	\\	\hline
-	\end{tabular}
-	\label{tab:time-Opt}
-	\vspace{-3ex}
-\end{table}
+	\includegraphics[scale=0.15]{Figures/Exp-SED-cr-epsilon-service.png}	
+	\includegraphics[scale=0.15]{Figures/Exp-SED-cr-epsilon-geolife.png}	
+	\includegraphics[scale=0.15]{Figures/Exp-SED-cr-epsilon-mopsi.png}	
+	\includegraphics[scale=0.15]{Figures/Exp-SED-cr-epsilon-geolife.png} 
+	\vspace{-2.5ex}
+	\caption{\small Evaluation of running time of the (near) optimal algorithms: varying the error bound $\epsilon$.}
+	\label{fig:time-opt}
+	\vspace{-2ex}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%End%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \eat{
