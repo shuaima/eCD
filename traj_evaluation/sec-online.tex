@@ -12,7 +12,7 @@
 
 Online algorithms enforces the constrained global checking policy that need not have the entire trajectory ready before they start compressing, instead, they restrict the checking within a window, sliding or opening.
 
-Several line simplification algorithms have been developed \eg by combining \dpa or \tpa with sliding or opening windows for online processing\cite{Meratnia:Spatiotemporal, Keogh:online}.
+Several online \lsa algorithms have been developed \eg by combining \dpa or \tpa with sliding or opening windows for online processing\cite{Meratnia:Spatiotemporal, Keogh:online}.
 Algorithm \opwa \cite{Meratnia:Spatiotemporal} is a combination of \textit{Top-down} and \textit{opening window} while \cite{Keogh:online} is a combination of \textit{Bottom-up} and \textit{sliding window}.
 These methods still have a high time and/or space complexity, which significantly hinders their utility in resource-constrained mobile devices \cite{Liu:BQS}.
 %
@@ -63,7 +63,7 @@ the max and min distances to $\vv{P_0P_7}$ are larger and less than $\epsilon$, 
 \vspace{-0.5ex}
 \subsubsection{SQUISH-E Using \sed}
 
-The \squishe algorithm~\cite{Muckell:Compression} is a bottom-up algorithm running in a window. It has two forms, \ie~\squishe($\lambda$) that it minimizes \sed error ensuring the compression ratio of $\lambda$, and \squishe($\epsilon$) that maximizes compression ratio while keeping \sed error under $\epsilon$. In this paper, we refer to \squishe($\epsilon$).
+The \squishe algorithm~\cite{Muckell:Compression} is a bottom-up algorithm running in a buffer. It has two forms, \ie~\squishe($\lambda$) that it minimizes \sed error ensuring the compression ratio of $\lambda$, and \squishe($\epsilon$) that maximizes compression ratio while keeping \sed error under $\epsilon$. In this paper, we refer to \squishe($\epsilon$).
 
 \eat{%%%%%%%%%%%%%%%%
 taking as input a trajectory \trajec{T} and two additional parameters $\lambda$ and $\epsilon$.
@@ -74,14 +74,13 @@ Meanwhile, \squishe($\lambda$) is the case where $\epsilon$ is set to $0$ and th
 In this paper, we only discuss \squishe($\epsilon$).
 }%%%%%%%%%%%%%%%%%%%%
 
-The \squishe algorithm optimizes the \tpa algorithm by using a doubly linked list $Q$. Each node in the list is a tuple, \ie $P(pre, suc, mnprio, prio)$, where $P$ is a trajectory data point (for convenience, we also refer $P$ to the node), $pre$ refers to its predecessor node/point, $suc$ refers to its successor node/point, $prio$ is the priority of the point, which is defined as an upper bound on the \sed error that the removal of that point would introduce, and $mnprio$ is the max priority of its predecessor and successor points that have ever been removed from the list.
+The \squishe algorithm optimizes the \tpa algorithm by using a doubly linked list $Q$. Each node in the list is a tuple, \ie $P(pre, suc, mnprio, prio)$, where $P$ is a trajectory data point (for convenience, we also refer $P$ to the node), $pre$ refers to its predecessor node/point, $suc$ refers to its successor node/point, $prio$ is the priority of the point which is defined as an upper bound on the \sed error that the removal of that point would introduce, and $mnprio$ is the max priority of its predecessor and successor points that have ever been removed from the list.
 %
 Initially, trajectory points are loaded to the list $Q$ one by one.
 At the same time, $mnprio$ of each point is set to $0$ as no node has been removed from the list.
 Moreover, the priorities of points $P_0$ and $P_{|Q|-1}$ are set to $\infty$, and the priority of point $P_i$, $0<i<|Q|-1$, is set to $sed(P_i, \vv{pre(P_{i})suc(P_{i})})$.
 %
-Then, \squishe finds and removes a point $P_j$ from $Q$ that has the lowest priority and $prio(P_j)<\epsilon$.
-And, the properties $mnprio$ of predecessor point $pre(P_j)$ and successor point $suc(P_j)$ are updated to $max\{mnprio(pre(P_j)), ~prio(P_j)\}$ and $max\{mnprio(suc(P_j)), ~prio(P_j)\}$ , respectively.
+Then, \squishe finds and removes a point $P_j$ from $Q$ that has the lowest priority and $prio(P_j)<\epsilon$, and the properties $mnprio$ of predecessor point $pre(P_j)$ and successor point $suc(P_j)$ are updated to $max\{mnprio(pre(P_j)), ~prio(P_j)\}$ and $max\{mnprio(suc(P_j)), ~prio(P_j)\}$ , respectively.
 Next, the properties $prio$ of points $pre(P_j)$ and $suc(P_j)$ are further updated to $mnprio(pre(P_j))$ + $sed(pre(P_j), \vv{pre(pre(P_{j}))suc(P_{j})})$ and $mnprio(suc(P_j))$ + $sed(suc(P_j),\vv{pre(P_{j})suc(suc(P_{j}))})$, respectively.
 %
 After that, a new point is read to the list and the information of its predecessor point in the list is updated.

@@ -6,9 +6,9 @@
 {One-pass algorithms that enforce the local checking policy}.
 The local checking policy \eat{, the key to achieve the \emph{one-pass} processing,} does not need a window to buffer the preview read points. 
 Instead, it processes each point in a trajectory once and only once. % when compressing the trajectory.
-Obviously, the one-pass algorithms have linear time complexity.
+Obviously, the one-pass algorithms have a linear time complexity.
 
-Reumann-Witkam (\rwa) routine \cite{Reumann:Strip} is a straightforward one-pass algorithm that builds a strip paralleling to the line connecting the first two points, then the points within this strip compose one section of the line. \rwa runs fast, but it is limited in compression ratio.
+Reumann-Witkam (\rwa) routine \cite{Reumann:Strip} is a straightforward one-pass algorithm that builds a strip paralleling to the line connecting the first two points, then the points within this strip compose a section of the line. \rwa runs fast, but it is limited in compression ratio.
 %
 The Linear Dead Reckoning (\ldr) method \cite{Lange:Tracking} for position tracking follows the similar routine as \rwa except that it uses \sed and assumes a velocity ${\vv{v}}$ for each section. In addition, the authors of \cite{Trajcevski:DDR} proved that \ldr is also suitable for online spatio-temporal compression. % as long as the tolerance threshold is set to $\epsilon/2$.
 However, its compression ratios are poor because both the value and the direction of velocity ${\vv{v}}$ are pre-defined and fixed between two updates.
@@ -25,7 +25,7 @@ These SI algorithms are \ped specific, and run fast as well as have comparable c
 
 In addition, the authors of this paper recently extends the \textit{sector intersection} method from a 2D space to a Spatio-Temporal 3D space, and develop a new one-pass and \sed enabled algorithm \cised that runs fast as well as has comparable compression ratio with the \dpa algorithm using \sed.
 
-We next review \operb, sector intersection method and \cised evaluated in out experiments.
+We next review algorithm \operb, sector intersection method and algorithm \cised evaluated in out experiments.
 
 
 
@@ -147,16 +147,20 @@ And \operb only supports \ped.
 %The Sector intersection algorithms using \ped (\siped) \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone}, also named \sleeve in \cite{Zhao:Sleeve}, are {the angle-adjustable strips too}.
 %Note that the ``cone intersection" algorithms, developed in fields of graphic, cartographic and pattern recognition, are still not familiar to researchers of trajectory compression.
 Given a sequence of points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$, the \siped approach processes the input points in order and produces a simplified poly-line. Instead of using the distance tolerance $\epsilon$ directly as the distance threshold, \siped converts the distance tolerance into a variable angle tolerance for testing the points.
-%
-For the start point $P_s$ and any point $P_{s+i}$, $1\le i\le k$, there are two different lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$, satisfying $ped(P_i, \vv{P_sP^u_{s+i}}) = \epsilon$, $ped(P_i, \vv{P_sP^l_{s+i}}) = \epsilon$ and $\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta$. Indeed, they forms a \emph{sector} $\mathcal{S}$($P_s$, $P_{s+i}$, $\epsilon$) taking $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the border lines.
-% , where $P_s$ is the center point, and $\vv{P_sP^l_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ are two bound lines.
-Then there exists a point $Q$ such that all points $P_{s+i}$, $i \in [1, ... k]$, have perpendicular distances to
-line $\mathcal{L}(P_s,Q)$ within the given \ped tolerance $\epsilon$ if and only if $\bigsqcap_{i=1}^{k}\mathcal{S}(P_s, P_{s+i}, \epsilon) \ne \{P_s\}$.
-Note that in this case, point $Q$ may not belong to $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$.
-However, if the last point $P_{s+k}$ is chosen as the end point $Q$ of the approximating line segment (namely, strong simplification), then a narrow \emph{sector} with a distance tolerance $\epsilon/2$ could be employed to ensure the algorithm be \ped error bounded by $\epsilon$\cite{Zhao:Sleeve}.
 
-Algorithm \siped runs in $O(n)$ time and takes $O(1)$ space.
-\siped also only supports \ped.
+For the start data point $P_s$, any point $P_{s+i}$ and $|\vv{P_sP_{s+i}}|>\epsilon$ ($i\in[1, k]$), there are two directed lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ such that $ped(P_{s+i}, \vv{P_sP^u_{s+i}})$ $=$ $ped(P_{s+i}, \vv{P_sP^l_{s+i}}) = \epsilon$ and either ($\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta ~and~\vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta <\pi$) or ($\vv{P_sP^l_{s+i}}.\theta > \vv{P_sP^u_{s+i}}.\theta ~and~ \vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta < -\pi)$. Indeed, they forms a \emph{sector} \sector{(P_s, P_{s+i}, \epsilon)} that takes $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the border lines.
+%
+Then there exists a data point $Q$ such that for any data point $P_{s+i}$ ($i \in [1, ... k]$), its perpendicular Euclidean distance to
+directed line $\overline{P_sQ}$ is no greater than the error bound $\epsilon$ if and only if the $k$ sectors \sector{(P_s, P_{s+i}, \epsilon)} ($i\in[1,k]$) share common data points other than $P_s$, \ie $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon)} $\ne \{P_s\}$ \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}.
+%
+The point $Q$ may not belong to $\{P_{s}, P_{s+1},$ $\ldots, P_{s+k}\}$.
+However, if $P_{s+i}$ ($1\le i\le k$) is chosen as $Q$, then
+for any data point $P_{s+j}$ ($j \in [1, ... i]$), its perpendicular Euclidean distance to
+line segment $\overline{P_sP_{s+i}}$ is no greater than the error bound $\epsilon$ if and only if $\bigsqcap_{j=1}^{i}$\sector{(P_s, P_{s+j}, \epsilon/2)} $\ne \{P_s\}$, as pointed out in \cite{Zhao:Sleeve}.
+
+That is, {\em these sector intersection based algorithms can be easily adopted for trajectory compression although they have been overlooked by existing trajectory simplification studies}.
+
+Algorithm \siped runs in $O(n)$ time and takes $O(1)$ space, and \siped also only supports \ped.
 
 
 \begin{figure}[tb!]
