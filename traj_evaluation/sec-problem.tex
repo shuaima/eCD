@@ -1,53 +1,71 @@
-\section{Problem Definition}	%Trajectory simplification Problem
+%\section{Overview of LS algorithms for trajectory compression}	%Trajectory simplification Problem
+\section{Overview of algorithms}
 \label{sec-problem}
 
 %In this section, we first introduce basic concepts, then state the problem of trajectory simplification.%piece-wise line based
 
-\begin{figure*}[tb!]
+
+
+
+\begin{table*}
+	\renewcommand{\arraystretch}{1.20}
+	\caption{\small Summary of piece-wise line based algorithms for trajectory simplification}
+	\label{tab:summary-lsa}
 	\centering
-	\vspace{-1ex}
-	\includegraphics[scale=0.66]{Figures/Fig-DP.png}
-	\vspace{-2.5ex}
-	\caption{\small A trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$  with 11 points is represented by two (left) and four (right) continuous line segments (solid blue), compressed by the Douglas--Peucker algorithm \cite{Douglas:Peucker} with error metrics \ped and \sed, respectively.}
-	\vspace{-3ex}
-	\label{fig:notations}
-\end{figure*}
+	\small
+	\begin{tabular}{|l|c|c|c|c|c|c|c|}
+		\hline
+		\kw{Name}  & \kw{Type}    & \kw{Key~Ideas}  &\kw{\ped} &\kw{\sed}  &  \kw{Time~Complexity} & \kw{Space~Complexity} \\		\hline
+		\dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal}	&batch &Top-down     &Y &Y    & $O(n^2)$ & O(n)  \\		\hline
+		\tpa\cite{Pavlidis:Segment}	&batch	&Bottom-up       &Y &Y   & $O(n^2/K)$ & O(n)  \\		\hline
+		\bqsa\cite{Liu:BQS}	&online	&Top-down, opening window and Convex hull    &Y   & N& $O(n^2)$  & $O(|Q|)$   \\		\hline
+		\squishe\cite{Muckell:Compression}	&{online}	& Bottom-up and Priority queue       & N &Y    & $O(n\log|Q|)$ & $O(|Q|)$ \\		\hline
+		%swab	&   &online   &Y &Y  & $\Omega(n)$ & $O(n^2)$ & O(w) &\textcolor[rgb]{1.00,0.00,0.00}{} \\		\hline
+		%owtd	&   &online    &Y &Y   & $\Omega(n)$ & $O(n^2)$ & O(n) &\textcolor[rgb]{1.00,0.00,0.00}{} \\ 	\hline
+		%ddr	    &       &one-pass    &Y  &Y  & $\Omega(n)$ & $O(n)$ & O(n) &\textcolor[rgb]{1.00,0.00,0.00}{} \\  \hline
+		\operb\cite{Lin:Operb}	& one-pass	& Fitting function    &Y & N  & $O(n)$ & O(1)  \\		\hline
+		\siped\cite{Dunham:Cone, Zhao:Sleeve}	&one-pass	& Sector intersection   &Y & N & $O(n)$ & O(1) \\		\hline
+		\cised\cite{Lin:Cised}	&one-pass	& Spatio-temporal cone intersection    	&N & Y & $O(n)$ & O(1) \\		\hline
+		\opt~\cite{Imai:Optimal}	&optimal	& Graph    							&Y & Y & $O(n^3)$	& {$O(n^2)$} \\		\hline
+		\optp\cite{Chan:Optimal}	&optimal	& Graph and Sector intersection    	&Y & N & $O(n^2)$	& {$O(n)$} \\		\hline
+		%\nopts~	&near optimal&Graph and Spatio-temporal cone intersection&N & Y  & $O(n^2)$	& $O(n)$ \\		\hline
+	\end{tabular}
+	{\\  Note: $K$ is the number of the final segments of a trajectory and $|Q|$ is the size of buffer/window.}
+	\vspace{-4.5ex}
+\end{table*}
 
 
-
-\subsection{Basic Notations}
+\subsection{Problem Definition}
 \label{subsec-notation}
 
-We first introduce basic notations.
+%We first introduce basic notations.
+A \textit{trajectory} $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is a sequence of points in a monotonically increasing order of their associated time values (\ie $P_i.t < P_j.t$ for any $0\le i<j\le n$), where a data \textit{point} is defined as a triple $P(x, y, t)$, which represents that a moving object is located at {\em longitude} $x$ and {\em latitude} $y$ at {\em time} $t$. Note that data points can be viewed as points in a three-dimension Euclidean space.
 
-\stitle{Points ($P$)}. A data point is defined as a triple $P(x, y, t)$, which represents that a moving object is located at {\em longitude} $x$ and {\em latitude} $y$ at {\em time} $t$. 
-%Note that data points can be viewed as points in a three-dimension Euclidean space.
+%Intuitively, a trajectory can also be represented by a continuous $n$-pieces directed line segments (or line segment for simplicity) $\mathcal{L}_i$, $0\le i < n$, where  $\mathcal{L}_i = \vv{P_{i}P_{i+1}}$, represents the closed line segment that connects the start point $P_{i}$ and the end point $P_{i+1}$. 
 
-\stitle{Trajectories ($\dddot{\mathcal{T}}$)}. A trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is a sequence of points in a monotonically increasing order of their associated time values (\ie $P_i.t < P_j.t$ for any $0\le i<j\le n$). 
-%Intuitively, a trajectory is the path (or track) that a moving object follows through space as a function of time~\cite{physics-trajectory}.
+A \textit{piece-wise line representation} $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$) of a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is a sequence of continuous \textit{directed line segments} (or line segment for simplicity) $\mathcal{L}_{i}$ = $\vv{P_{s_i}P_{e_i}}$ ($i\in[0,m]$) of $\dddot{\mathcal{T}}$ such that $\mathcal{L}_{0}.P_{s_0} = P_0$, $\mathcal{L}_{m}.P_{e_m} = P_n$ and  $\mathcal{L}_{i}.P_{e_i}$ = $\mathcal{L}_{i+1}.P_{s_{i+1}}$ for all $i\in[0, m-1]$. 
+Note that each directed line segment in $\overline{\mathcal{T}}$ essentially represents a continuous sequence of data points in $\dddot{\mathcal{T}}$.
 
-\stitle{Directed line segments ($\mathcal{L}$)}. A directed line segment (or line segment for simplicity) $\mathcal{L}$ is defined as $\vv{P_{s}P_{e}}$, which represents the closed line segment that connects the start point $P_s$ and the end point $P_e$.
-%Note that here $P_s$ or $P_e$ may not be a point in a trajectory $\dddot{\mathcal{T}}$.
 
-%, and hence, we also use notation $\mathcal{R}$ instead of $\mathcal{L}$ when both $P_s$ and $P_e$ belong to $\dddot{\mathcal{T}}$.
-
+\eat{
+A \textit{directed line segment} (or line segment for simplicity) $\mathcal{L}$ is defined as $\vv{P_{s}P_{e}}$, which represents the closed line segment that connects the start point $P_s$ and the end point $P_e$.
 We also use $|\mathcal{L}|$ and $\mathcal{L}.\theta\in [0, 2\pi)$ to denote the length of a directed line segment $\mathcal{L}$, and its angle with the $x$-axis of the coordinate system $(x, y)$, where $x$ and $y$ are the longitude and latitude, respectively.
 That is, a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$ can be treated as a triple $(P_s, |\mathcal{L}|, \mathcal{L}.\theta)$.
-
-\stitle{Piecewise line representation ($\overline{\mathcal{T}}$)}. A piece-wise line representation $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$) of a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is a sequence of continuous directed line segments $\mathcal{L}_{i}$ = $\vv{P_{s_i}P_{e_i}}$ ($i\in[0,m]$) of $\dddot{\mathcal{T}}$  such that $\mathcal{L}_{0}.P_{s_0} = P_0$, $\mathcal{L}_{m}.P_{e_m} = P_n$ and  $\mathcal{L}_{i}.P_{e_i}$ = $\mathcal{L}_{i+1}.P_{s_{i+1}}$ for all $i\in[0, m-1]$. Note that each directed line segment in $\overline{\mathcal{T}}$ essentially represents a continuous sequence of data points in $\dddot{\mathcal{T}}$.
-
-%comments: 20171126
-%\stitle{Perpendicular Euclidean Distance (\ped)}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the perpendicular Euclidean distance (or simply perpendicular distance) $ped(P, \mathcal{L})$ of $P$ to $\mathcal{L}$ is the Euclidean distance of $P$ to line $\overline{P_{s}P_{e}}$, adopted by many trajectory simplification methods, \eg~\cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve, Lin:Operb}.
+}
 
 
-\stitle{Perpendicular Euclidean Distance (\ped)}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the perpendicular Euclidean distance (or simply perpendicular distance) $ped(P, \mathcal{L})$ of point $P$ to line segment $\mathcal{L}$ is $\min\{|PQ|\}$ for any point $Q$ on $\vv{P_{s}P_{e}}$.
+Then, given a trajectory \trajec{T}$[P_0, \dots, P_n]$ and a pre-specified constant $\epsilon$, a trajectory simplification algorithm $\mathcal{A}$ approximates the trajectory \trajec{T} by $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$), such that  
+(1) on each of them the data points $[P_{s_i}, \dots, P_{e_i}]$ are approximated by a line segment $\mathcal{L}_i = \vv{P_{s_i}P_{e_i}}$ with the maximum {error} of point $P_j$ to line segment $\mathcal{L}_i$, $s_i < j<e_i$,  less than $\epsilon$, and
+(2) $P_{s_i}$ and $P_{e_i} \in$ \trajec{T}. 
+This definition is also an extending of the famous \emph{min-$\#$ problem} \cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment} of piece-wise line simplification.
+%
 
-\stitle{Synchronized points \cite{Meratnia:Spatiotemporal}}. Given a sub-trajectory $\dddot{\mathcal{T}}_s[P_s$, $\ldots, P_e]$, the synchronized point $P'$ of a data point  $P \in \dddot{\mathcal{T}}_s$,~\wrt line segment $\vv{P_sP_e}$ is defined as follows:
+For trajectory simplification, two error metrics are commonly used, namely, the \emph{perpendicular Euclidean distances} (\ped) and the \emph{synchronous Euclidean distances} (\sed).
+%
+Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the $ped(P, \mathcal{L})$ of point $P$ to line segment $\mathcal{L}$ is $\min\{|PQ|\}$ for any point $Q$ on $\vv{P_{s}P_{e}}$, and the $sed(P, \mathcal{L})$ of $P$ to $\mathcal{L}$ is $|\vv{PP'}|$ that is the Euclidean distance from $P$ to its \textit{synchronized data point} $P'$ \wrt $\mathcal{L}$, where the synchronized data point $P'$ \wrt $\mathcal{L}$ is defined as follows:
 (1) $P'.x$ = $P_s.x +  c\cdot(P_e.x - P_s.x)$,
 (2) $P'.y$ = $P_s.y +  c\cdot(P_e.y - P_s.y)$ and
 (3) $P'.t$ = $P.t$, where $c= \frac{P.t-P_s.t}{P_e.t-P_s.t}$.
-
-\stitle{Synchronous Euclidean Distance (\sed) \cite{Meratnia:Spatiotemporal}}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the synchronous Euclidean distance (or simply synchronous distance) $sed(P, \mathcal{L})$ of $P$ to $\mathcal{L}$ is $|\vv{PP'}|$ that is the Euclidean distance from $P$ to its synchronized data point $P'$ \wrt $\mathcal{L}$. %, adopted by recent trajectory simplification methods~\cite{Meratnia:Spatiotemporal, Potamias:Sampling, Chen:Fast, Muckell:Compression, Popa:Spatio}.
 
 We illustrate these notations with examples.
 
@@ -106,62 +124,35 @@ Notations used are summarized in Table \ref{tab:notations}.
 \end{table}
 }%%%%%%%%%%%%%EAT
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\eat{%%%%%%%%%%
-	\stitle{Error bounded algorithms}. Given a trajectory \trajec{T} and its compression  algorithm $\mathcal{A}$ using \sed (respectively \ped) that produces another trajectory \trajec{T'},
-	we say that algorithm $\mathcal{A}$ is error bounded by $\epsilon$ if  for each point $P$ in \trajec{T}, there exist points $P_j$ and $P_{j+1}$ in \trajec{T'} such that $sed(P, \mathcal{L}(P_j,P_{j+1}))\le \epsilon$ (respectively $ped(P, \mathcal{L}(P_j,P_{j+1}))\le \epsilon$).
-}%%%%%%%%%%%%%%
+\subsection {Taxonomy of Algorithms}
 
+Existing \lsa algorithms solving the \emph{min-$\#$} problem \cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment} fall into two categories, namely (1) the \textit{optimal} method and (2) the \textit{sub-optimal} method. And the sub-optimal algorithms can further be organized with batch method, online method and one-pass method.
+We now describe these categories and leave the detailed discussion and description of each algorithm to Section 3 and Section 4.
 
-\subsection{Trajectory Simplification Problem}
-This paper focus on the \emph{min-$\#$ problem} \cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment} of the piece-wise line based trajectory simplification.
-%
-Given a trajectory \trajec{T}$[P_0, \dots, P_n]$ and a pre-specified constant $\epsilon$, a trajectory simplification algorithm $\mathcal{A}$ approximates the trajectory \trajec{T} by $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$), such that  
-(1) on each of them the data points $[P_{s_i}, \dots, P_{e_i}]$ are approximated by a line segment $\mathcal{L}_i = \vv{P_{s_i}P_{e_i}}$ with the maximum error of  $ped(P_j, \mathcal{L}_i)$ or $sed(P_j, \mathcal{L}_i)$, $s_i < j<e_i$,  less than $\epsilon$, and 	%\ie error bounded by ped or sed
-(2) $P_{s_i}$ and $P_{e_i} \in$ \trajec{T}. 	%\ie Strong simplification
+\stitle{The optimal method.}
+The \textit{optimal} methods\cite{Imai:Optimal,Chan:Optimal} are to find the minimal number of points or segments to represent the original polygonal lines \wrt an error bound $\epsilon$.
 
 
+\stitle{The sub-optimal method.}
 
-\eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%
-This paper evaluates both the optimal and the sub-optimal methods using \ped and/or \sed for the \emph{min-$\#$ problem} of trajectory simplification.
-Table~\ref{tab:summary-lsa} is a summary of these algorithms.
-	
-They are nine \lsa algorithms evaluated in our experiments, namely,
-(i) Douglas-Peucker (\dpa)\cite{Douglas:Peucker,Meratnia:Spatiotemporal} and \pavlidis (\tpa)~\cite{Pavlidis:Segment}, two distinct batch algorithms,
-(ii) \bqsa\cite{Liu:BQS} and \squishe~\cite{Muckell:SQUISH}, two online algorithms, %\textcolor[rgb]{1.00,0.00,0.00}{\opwa, \swab  and}
-(iii) \operb\cite{Lin:Operb}, sector intersection (\siped)~\cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve} and spatio-temporal cone intersection using \sed~(\cised)~\cite{Lin:Cised}, three one-pass algorithms, and 
-(iv) \oped\cite{Chan:Optimal} and \osed, two optimal \lsa algorithms.
-}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ni (1) 
+ batch algorithms (\eg Douglas-Peucker \cite{Douglas:Peucker, Meratnia:Spatiotemporal} and Theo~Pavlidis \cite{Pavlidis:Segment})
+ 
+ 
+\ni (2) 
+online algorithms (\eg~\bqsa\cite{Liu:BQS} \squishe \cite{Muckell:Compression}) and most recent, 
+
+\ni (3) 
+one-pass algorithms (\eg~\operb \cite{Lin:Operb} and \cised \cite{Lin:Cised}). Online algorithms and one-pass algorithms are claimed more efficient, by using some optimization strategies, such as convex hull in \bqsa~\cite{Liu:BQS}, priority queue in \squishe \cite{Muckell:Compression}, {fitting function} in \operb \cite {Lin:Operb} and spatio-temporal cone intersection in \cised \cite {Lin:Cised}. 
 
 
 
-\eat{%%%%%%%%%%%%%%%%%%%%%%%%
-	\begin{table*}
-		\renewcommand{\arraystretch}{1.20}
-		\vspace{1ex}
-		\caption{\small Summary of piece-wise line based algorithms for trajectory simplification}
-		\label{tab:summary-lsa}
-		\centering
-		\small
-		\begin{tabular}{|l|c|c|c|c|c|c|c|}
-			\hline
-			\kw{Name}  & \kw{Type}    & \kw{Key~Ideas}  &\multicolumn{2}{|c|}{\kw{Error~Metrics}} &\multicolumn{2}{|c|}{ \kw{Time~Complexity}} & \kw{Space} \\		\cline{4-7}
-			&  			&            &\kw{\ped} &\kw{\sed} 		& \kw{Best}& \kw{Worst}		& \kw{Complexity}\\		\hline
-			\dpa~\cite{Douglas:Peucker, Meratnia:Spatiotemporal}	&batch &Top-down     &Y &Y   & $\Omega(n)$ & $O(n^2)$ & O(n)  \\		\hline
-			\tpa~\cite{Pavlidis:Segment}	&batch	&Bottom-up       &Y &Y   & $\Omega(n\log n)$ & $O(n^2/K)$ & O(n)  \\		\hline
-			\bqsa~\cite{Liu:BQS}	&online	&Top-down and Convex hull    &Y   & N &$\Omega(n)$ & $O(n^2)$  & $O(|Q|)$   \\		\hline
-			\squishe~\cite{Muckell:SQUISH}	&{online}	& Bottom-up and Priority queue       & N &Y   & $\Omega(n\log|Q|)$ & $O(n\log|Q|)$ & $O(|Q|)$ \\		\hline
-			%swab	&   &online   &Y &Y  & $\Omega(n)$ & $O(n^2)$ & O(w) &\textcolor[rgb]{1.00,0.00,0.00}{} \\		\hline
-			%owtd	&   &online    &Y &Y   & $\Omega(n)$ & $O(n^2)$ & O(n) &\textcolor[rgb]{1.00,0.00,0.00}{} \\ 	\hline
-			%ddr	    &       &one-pass    &Y  &Y  & $\Omega(n)$ & $O(n)$ & O(n) &\textcolor[rgb]{1.00,0.00,0.00}{} \\  \hline
-			\operb~\cite{Lin:Operb}	& one-pass	& Fitting function    &Y & N &   $\Omega(n)$ & $O(n)$ & O(1)  \\		\hline
-			\sia~\cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}	&one-pass	& Sector         &Y & N &   $\Omega(n)$ & $O(n)$ & O(1) \\		\hline
-			\cia~\cite{Lin:Cised}	&one-pass	& Spatio-temporal Cone         &N & Y &   $\Omega(n)$ & $O(n)$ & O(1) \\		\hline
-			\oped~\cite{Chan:Optimal}	&optimal	& Graph and Sector     &Y & N &   $\Omega(n)$ & $O(n^2)$ & \textcolor{red}{$O(n^2)$} \\		\hline
-			\osed~	&optimal	& Graph and Spatio-temporal Cone         &N & Y &   $\Omega(n)$ & $O(n^2 \log n)$ & \textcolor{red}{$O(n)$} \\		\hline
-		\end{tabular}
-		{\\ \small Note: $K$ is the number of the final segments and $|Q|$ is the buffer size.}
-		%\vspace{-3ex}
-	\end{table*}
-}%%%%%%%%%%%%%%%%%%EAT
+It is worth pointing out that some algorithms, \eg ~\bqsa and \operb, are \ped specific while others, \eg~\squishe and \cised, are \sed specific, depending on the optimization techniques they applied.
+
+The algorithms reviewed and evaluated in our experiments are summarized in \mytable{tab:summary-lsa}, namely,
+(i) Douglas-Peucker\cite{Douglas:Peucker,Meratnia:Spatiotemporal} and \pavlidis~\cite{Pavlidis:Segment}, two distinct batch \lsa algorithms,
+(ii) \bqsa\cite{Liu:BQS} and \squishe~\cite{Muckell:SQUISH}, two famous online \lsa algorithms,
+(iii) \operb\cite{Lin:Operb}, sector intersection \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve} and \cised \cite{Lin:Cised}, three one-pass \lsa algorithms, and
+(iv) \opt\cite{Chan:Optimal} and \nopts, an optimal and a near optimal \lsa algorithms using \ped and \sed, respectively.
+
