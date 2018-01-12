@@ -1,18 +1,18 @@
 \section{Optimal Algorithms}
 \label{sec-optimal}
 
-This section reviews the optimal \lsa algorithms.
+This section reviews the optimal \lsa algorithms for trajectory simplification.
 For the ``min-\#" problem that finds out the minimal number of points or segments to represent the original polygonal lines \wrt an error bound $\epsilon$, Imai and Iri \cite{Imai:Optimal} first formulated it as a graph problem, and showed that it could be solved in  $O(n^3)$ time, where $n$ is the number of the original points.
 %
 Toussaint of \cite{Toussaint:Optimal} and Melkman and O'Rourke of \cite{Melkman:Optimal} improved the time complexity to $O(n^2 \log n)$ by using either \textit{convex hull} or \textit{sector intersection} methods.
 %
-The authors of \cite{Chan:Optimal} presented an optimal algorithm using \ped (\optp) that achieves $O(n^2)$ time by using the \textit{sector intersection} mechanism (see Section~\ref{sec-siped}).
-Because the \textit{sector intersection} and the \textit{convex hull} mechanisms can not work with \sed, hence, currently the time complexity of the optimal algorithm using \sed remains $O(n^3)$.
+The authors of \cite{Chan:Optimal} presented an optimal algorithm using \ped (\optp) that achieves $O(n^2)$ time by using the \textit{sector intersection} mechanism.
+Because the \textit{sector intersection} and the \textit{convex hull} mechanisms can not work with \sed, currently the time complexity of the optimal algorithm using \sed remains $O(n^3)$.
 
 %However, we argue that an optimal and a near optimal \lsa algorithms using \sed can achieve $O(n^2 \log n)$ time and $O(n^2)$ time, respectively, by applying the spatio-temporal cone intersection mechanism shown in Section~\ref{sec-cised} developed in our preview work \cised~\cite{Lin:Cised}. 
 
 In the rest of this section, we first introduce the naive optimal (\opt) algorithm \cite{Imai:Optimal} that runs in $O(n^3)$ time. We then review a \ped specific optimal algorithm \optp \cite{Chan:Optimal} that achieves $O(n^2)$ time. 
-Algorithms \opt and \optp are evaluated in our experiments.
+Algorithms \opt and \optp are both evaluated in our experiments.
 
 \subsection{The Naive Optimal Algorithm}
 Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ and an error bound $\epsilon$, the optimal trajectory simplification problem, as formulated by Imai and Iri in \cite{Imai:Optimal}, can be solved in two steps: (1) construct a reachability graph $G$ of \trajec{T} and (2) search a shortest path from $P_0$ to $P_{n}$ in graph $G$.
@@ -47,7 +47,11 @@ For space complexity, it needs $O(n^2)$ space.
 %We next introduce two improved optimal algorithms using \ped and \sed that run in $O(n^2)$ and $O(n^2 \log n)$ time, respectively, by fasting the construction of reachability graph $G$.
 
 \subsection{The Optimal Algorithm using \ped}
-Authors of \cite{Chan:Optimal} provide an optimal algorithm using \ped (\optp) that constructs the graph $G$ in $O(n^2)$ time, by using the \textit{sector intersection} mechanism (See Section~\ref{sec-siped}). 
+Authors of \cite{Chan:Optimal} provide an optimal algorithm using \ped (\optp) that constructs the graph $G$ in $O(n^2)$ time, by using the \textit{sector intersection} mechanism.
+
+
+
+ 
 
 Given a point $P_s$, $0 \le s < n$, \optp builds a sector taking $P_s$ as the start point and checks for all points $P_{s+k}$, $k>0 ~and~ s+k \le n$, whether $(P_s, P_k)$ can be included in graph $G$. It can be added to the graph if and only if $(\bigsqcap_{i=1}^{k-1}\mathcal{S}(P_s, P_{s+i}, \epsilon)) \bigsqcap \vv{P_sP_{s+k}} \ne \{P_s\}$, \ie line segment $\vv{P_sP_{s+k}}$ ~passing through the common intersection area of sectors $\mathcal{S}(P_s, P_{s+i}, \epsilon))$, $0<i<k$. 
 
