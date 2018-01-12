@@ -1,5 +1,4 @@
-%\section{Overview of LS algorithms for trajectory compression}	%Trajectory simplification Problem
-\section{Overview of algorithms}
+\section{Overview of LS algorithms for trajectory compression}	%\section{Overview of algorithms}
 \label{sec-problem}
 
 %In this section, we first introduce basic concepts, then state the problem of trajectory simplification.%piece-wise line based
@@ -16,6 +15,9 @@
 	\begin{tabular}{|l|c|c|c|c|c|c|c|}
 		\hline
 		\kw{Name}  & \kw{Type}    & \kw{Key~Ideas}  &\kw{\ped} &\kw{\sed}  &  \kw{Time~Complexity} & \kw{Space~Complexity} \\		\hline
+		\opt~\cite{Imai:Optimal}	&optimal	& Graph    							&Y & Y & $O(n^3)$	& {$O(n^2)$} \\		\hline
+		\optp\cite{Chan:Optimal}	&optimal	& Graph and Sector intersection    	&Y & N & $O(n^2)$	& {$O(n)$} \\		\hline
+		%\nopts~	&near optimal&Graph and Spatio-temporal cone intersection&N & Y  & $O(n^2)$	& $O(n)$ \\		\hline
 		\dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal}	&batch &Top-down     &Y &Y    & $O(n^2)$ & O(n)  \\		\hline
 		\tpa\cite{Pavlidis:Segment}	&batch	&Bottom-up       &Y &Y   & $O(n^2/K)$ & O(n)  \\		\hline
 		\bqsa\cite{Liu:BQS}	&online	&Top-down, opening window and Convex hull    &Y   & N& $O(n^2)$  & $O(|Q|)$   \\		\hline
@@ -26,12 +28,9 @@
 		\operb\cite{Lin:Operb}	& one-pass	& Fitting function    &Y & N  & $O(n)$ & O(1)  \\		\hline
 		\siped\cite{Dunham:Cone, Zhao:Sleeve}	&one-pass	& Sector intersection   &Y & N & $O(n)$ & O(1) \\		\hline
 		\cised\cite{Lin:Cised}	&one-pass	& Spatio-temporal cone intersection    	&N & Y & $O(n)$ & O(1) \\		\hline
-		\opt~\cite{Imai:Optimal}	&optimal	& Graph    							&Y & Y & $O(n^3)$	& {$O(n^2)$} \\		\hline
-		\optp\cite{Chan:Optimal}	&optimal	& Graph and Sector intersection    	&Y & N & $O(n^2)$	& {$O(n)$} \\		\hline
-		%\nopts~	&near optimal&Graph and Spatio-temporal cone intersection&N & Y  & $O(n^2)$	& $O(n)$ \\		\hline
 	\end{tabular}
 	{\\  Note: $K$ is the number of the final segments of a trajectory and $|Q|$ is the size of buffer/window.}
-	\vspace{-4.5ex}
+	\vspace{-4ex}
 \end{table*}
 
 
@@ -55,7 +54,7 @@ That is, a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$ can be treate
 
 
 Then, given a trajectory \trajec{T}$[P_0, \dots, P_n]$ and a pre-specified constant $\epsilon$, a trajectory simplification algorithm $\mathcal{A}$ approximates the trajectory \trajec{T} by $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$), such that  
-(1) on each of them the data points $[P_{s_i}, \dots, P_{e_i}]$ are approximated by a line segment $\mathcal{L}_i = \vv{P_{s_i}P_{e_i}}$ with the maximum {error} of point $P_j$ to line segment $\mathcal{L}_i$, $s_i < j<e_i$,  less than $\epsilon$, and
+(1) on each of them the data points $[P_{s_i}, \dots, P_{e_i}]$ are approximated by a line segment $\mathcal{L}_i = \vv{P_{s_i}P_{e_i}}$ with the maximum \emph{error} of point $P_j$ to line segment $\mathcal{L}_i$, $s_i < j<e_i$,  less than $\epsilon$, and
 (2) $P_{s_i}$ and $P_{e_i} \in$ \trajec{T}. 
 This definition is also an extending of the famous \emph{min-$\#$ problem} \cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment} of piece-wise line simplification.
 %
@@ -67,7 +66,7 @@ Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{
 (2) $P'.y$ = $P_s.y +  c\cdot(P_e.y - P_s.y)$ and
 (3) $P'.t$ = $P.t$, where $c= \frac{P.t-P_s.t}{P_e.t-P_s.t}$.
 
-We illustrate these notations with examples.
+We illustrate the problem and notations with examples.
 
 
 \begin{example}
@@ -127,32 +126,29 @@ Notations used are summarized in Table \ref{tab:notations}.
 
 \subsection {Taxonomy of Algorithms}
 
-Existing \lsa algorithms solving the \emph{min-$\#$} problem \cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment} fall into two categories, namely (1) the \textit{optimal} method and (2) the \textit{sub-optimal} method. And the sub-optimal algorithms can further be organized with batch method, online method and one-pass method.
+Existing \lsa algorithms, solving the \emph{min-$\#$} problem \cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment}, fall into two categories, namely the \textit{optimal} method and the \textit{sub-optimal} method. And the sub-optimal algorithms can further be organized with batch method, online method and one-pass method.
 We now describe these categories and leave the detailed discussion and description of each algorithm to Section 3 and Section 4.
 
 \stitle{The optimal method.}
-The \textit{optimal} methods\cite{Imai:Optimal,Chan:Optimal} are to find the minimal number of points or segments to represent the original polygonal lines \wrt an error bound $\epsilon$.
-
+The \textit{optimal} method is to find the minimal number of points or segments to represent the original trajectory \wrt an error bound $\epsilon$, by transforms the problem to search for the shortest path of a graph built from the original trajectory.
+Example algorithms of this category are \opt \cite{Chan:Optimal} and \optp \cite{Chan:Optimal}.
+%The optimal \lsa algorithms have relative high time/space complexities.
 
 \stitle{The sub-optimal method.}
+The sub-optimal algorithms are heuristic, they achieve better efficiencies at the expense of outputting a little more data points.
+From the point of view of the distance checking policies they applied, these algorithms can further be organized with
+batch method, online method and one-pass method, as follows:
 
-\ni (1) 
- batch algorithms (\eg Douglas-Peucker \cite{Douglas:Peucker, Meratnia:Spatiotemporal} and Theo~Pavlidis \cite{Pavlidis:Segment})
- 
- 
-\ni (2) 
-online algorithms (\eg~\bqsa\cite{Liu:BQS} \squishe \cite{Muckell:Compression}) and most recent, 
+\ni (1) \textit{batch algorithms} apply the global distance checking policy which requires all trajectory points be loaded before they start compressing and a point may be checked many times to calculate the distance of it to the corresponding line segments during the whole process. Example algorithms are Douglas-Peucker\cite{Douglas:Peucker,Meratnia:Spatiotemporal} and \pavlidis~\cite{Pavlidis:Segment}. 
 
-\ni (3) 
-one-pass algorithms (\eg~\operb \cite{Lin:Operb} and \cised \cite{Lin:Cised}). Online algorithms and one-pass algorithms are claimed more efficient, by using some optimization strategies, such as convex hull in \bqsa~\cite{Liu:BQS}, priority queue in \squishe \cite{Muckell:Compression}, {fitting function} in \operb \cite {Lin:Operb} and spatio-temporal cone intersection in \cised \cite {Lin:Cised}. 
+\ni (2) \textit{online algorithms} apply the constraint global distance checking policy which need not have the entire trajectory ready before they start compressing, instead, they restrict the checking within a window. A point is still checked multiple times during the process. Example algorithms are \opwa \cite{Meratnia:Spatiotemporal}, \bqsa\cite{Liu:BQS} and \squishe~\cite{Muckell:SQUISH}.
 
-
-
-It is worth pointing out that some algorithms, \eg ~\bqsa and \operb, are \ped specific while others, \eg~\squishe and \cised, are \sed specific, depending on the optimization techniques they applied.
+\ni (3) \textit{one-pass algorithms} apply the local distance checking policy which does not need a window to buffer the preview read points, instead, it processes each point in a trajectory once and only once. Example algorithms are \operb\cite{Lin:Operb}, sector intersection \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve} and \cised \cite{Lin:Cised}.
 
 The algorithms reviewed and evaluated in our experiments are summarized in \mytable{tab:summary-lsa}, namely,
-(i) Douglas-Peucker\cite{Douglas:Peucker,Meratnia:Spatiotemporal} and \pavlidis~\cite{Pavlidis:Segment}, two distinct batch \lsa algorithms,
-(ii) \bqsa\cite{Liu:BQS} and \squishe~\cite{Muckell:SQUISH}, two famous online \lsa algorithms,
-(iii) \operb\cite{Lin:Operb}, sector intersection \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve} and \cised \cite{Lin:Cised}, three one-pass \lsa algorithms, and
-(iv) \opt\cite{Chan:Optimal} and \nopts, an optimal and a near optimal \lsa algorithms using \ped and \sed, respectively.
-
+(i) \opt\cite{Chan:Optimal} and \optp, two optimal algorithms.
+(ii) Douglas-Peucker\cite{Douglas:Peucker,Meratnia:Spatiotemporal} and \pavlidis~\cite{Pavlidis:Segment}, two distinct batch \lsa algorithms,
+(iii) \bqsa\cite{Liu:BQS} and \squishe~\cite{Muckell:SQUISH}, two famous online \lsa algorithms, and
+(iv) \operb\cite{Lin:Operb}, sector intersection \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve} and \cised \cite{Lin:Cised}, three one-pass \lsa algorithms.
+%
+It is worth pointing out that some algorithms, \eg ~\optp, \bqsa and \operb, are \ped specific while others, \eg~\squishe and \cised, are \sed specific, depending on the optimization techniques they applied.
