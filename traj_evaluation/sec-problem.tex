@@ -1,40 +1,7 @@
 \section{Overview of trajectory simplification algorithms}	%\section{Overview of algorithms}
 \label{sec-problem}
 
-%In this section, we first introduce basic concepts, then state the problem of trajectory simplification.%piece-wise line based
-
-
-
-\eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{table*}
-	\renewcommand{\arraystretch}{1.20}
-	\caption{\small Summary of piece-wise line based algorithms for trajectory simplification}
-	\label{tab:summary-lsa}
-	\centering
-	\small
-	\begin{tabular}{|l|c|c|c|c|c|c|c|}
-		\hline
-		\kw{Name}  & \kw{Type}    & \kw{Key~Ideas}  &\kw{\ped} &\kw{\sed}  &  \kw{Time~Complexity} & \kw{Space~Complexity} \\		\hline
-		\opt~\cite{Imai:Optimal}	&optimal	& Graph    							&Y & Y & $O(n^3)$	& {$O(n^2)$} \\		\hline
-		\optp\cite{Chan:Optimal}	&optimal	& Graph and Sector intersection    	&Y & N & $O(n^2)$	& {$O(n)$} \\		\hline
-		%\nopts~	&near optimal&Graph and Spatio-temporal cone intersection&N & Y  & $O(n^2)$	& $O(n)$ \\		\hline
-		\dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal}	&batch &Top-down     &Y &Y    & $O(n^2)$ & O(n)  \\		\hline
-		\tpa\cite{Pavlidis:Segment}	&batch	&Bottom-up       &Y &Y   & $O(n^2/K)$ & O(n)  \\		\hline
-		\bqsa\cite{Liu:BQS}	&online	&Top-down, opening window and Convex hull    &Y   & N& $O(n^2)$  & $O(|Q|)$   \\		\hline
-		\squishe\cite{Muckell:Compression}	&{online}	& Bottom-up and Priority queue       & N &Y    & $O(n\log|Q|)$ & $O(|Q|)$ \\		\hline
-		%swab	&   &online   &Y &Y  & $\Omega(n)$ & $O(n^2)$ & O(w) &\textcolor[rgb]{1.00,0.00,0.00}{} \\		\hline
-		%owtd	&   &online    &Y &Y   & $\Omega(n)$ & $O(n^2)$ & O(n) &\textcolor[rgb]{1.00,0.00,0.00}{} \\ 	\hline
-		%ddr	    &       &one-pass    &Y  &Y  & $\Omega(n)$ & $O(n)$ & O(n) &\textcolor[rgb]{1.00,0.00,0.00}{} \\  \hline
-		\operb\cite{Lin:Operb}	& one-pass	& Fitting function    &Y & N  & $O(n)$ & O(1)  \\		\hline
-		\siped\cite{Dunham:Cone, Zhao:Sleeve}	&one-pass	& Sector intersection   &Y & N & $O(n)$ & O(1) \\		\hline
-		\cised\cite{Lin:Cised}	&one-pass	& Spatio-temporal cone intersection    	&N & Y & $O(n)$ & O(1) \\		\hline
-	\end{tabular}
-	{\\  Note: $K$ is the number of the final segments of a trajectory and $|Q|$ is the size of buffer/window.}
-	\vspace{-4ex}
-\end{table*}
-}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
+We first introduce the \emph{min-$\#$ problem} of trajectory simplification, then describe the taxonomy of the different algorithms for solving this problem.
 
 
 \subsection{Problem Definition}
@@ -49,18 +16,11 @@ A \textit{piece-wise line representation} $\overline{\mathcal{T}}[\mathcal{L}_0,
 Note that each directed line segment in $\overline{\mathcal{T}}$ essentially represents a continuous sequence of data points in $\dddot{\mathcal{T}}$.
 
 
-\eat{
-A \textit{directed line segment} (or line segment for simplicity) $\mathcal{L}$ is defined as $\vv{P_{s}P_{e}}$, which represents the closed line segment that connects the start point $P_s$ and the end point $P_e$.
-We also use $|\mathcal{L}|$ and $\mathcal{L}.\theta\in [0, 2\pi)$ to denote the length of a directed line segment $\mathcal{L}$, and its angle with the $x$-axis of the coordinate system $(x, y)$, where $x$ and $y$ are the longitude and latitude, respectively.
-That is, a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$ can be treated as a triple $(P_s, |\mathcal{L}|, \mathcal{L}.\theta)$.
-}
-
-
-Then, given a trajectory \trajec{T}$[P_0, \dots, P_n]$ and a pre-specified constant $\epsilon$, a trajectory simplification algorithm $\mathcal{A}$ approximates the trajectory \trajec{T} by $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$), such that  
-(1) on each of them the data points $[P_{s_i}, \dots, P_{e_i}]$ are approximated by a line segment $\mathcal{L}_i = \vv{P_{s_i}P_{e_i}}$ with the maximum \emph{error} of point $P_j$ to line segment $\mathcal{L}_i$, $s_i < j<e_i$,  less than $\epsilon$, and
+Then, given a trajectory \trajec{T}$[P_0, \dots, P_n]$ and a pre-specified constant $\epsilon$, the \emph{min-$\#$} problem of trajectory simplification, is to approximate the trajectory \trajec{T} by $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$), such that  
+(1) on each of them the points $[P_{s_i}, \dots, P_{e_i}]$ are approximated by a line segment $\mathcal{L}_i = \vv{P_{s_i}P_{e_i}}$ with the maximum \emph{error} of point $P_j$ to line segment $\mathcal{L}_i$, $s_i < j<e_i$,  less than $\epsilon$, and
 (2) $P_{s_i}$ and $P_{e_i} \in$ \trajec{T}. 
-This definition is also an extending of the famous \emph{min-$\#$ problem} \cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment} of piece-wise line simplification.
-%
+%algorithm $\mathcal{A}$
+% an extension of the famous \emph{min-$\#$} problem of piece-wise line simplification\cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment}, 
 
 For trajectory simplification, two error metrics are commonly used, namely, the \emph{perpendicular Euclidean distances} (\ped) and the \emph{synchronous Euclidean distances} (\sed).
 %
@@ -86,6 +46,12 @@ We illustrate the problem and notations with examples.
 	where points $P'_4$, $P'_2$ and $P'_7$ are the synchronized points of $P_4$, $P_2$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$, $\vv{P_0P_{4}}$ and $\vv{P_4P_{10}}$, respectively.
 \end{example}
 
+
+\eat{
+	A \textit{directed line segment} (or line segment for simplicity) $\mathcal{L}$ is defined as $\vv{P_{s}P_{e}}$, which represents the closed line segment that connects the start point $P_s$ and the end point $P_e$.
+	We also use $|\mathcal{L}|$ and $\mathcal{L}.\theta\in [0, 2\pi)$ to denote the length of a directed line segment $\mathcal{L}$, and its angle with the $x$-axis of the coordinate system $(x, y)$, where $x$ and $y$ are the longitude and latitude, respectively.
+	That is, a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$ can be treated as a triple $(P_s, |\mathcal{L}|, \mathcal{L}.\theta)$.
+}
 
 \eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%}
 Notations used are summarized in Table \ref{tab:notations}.
@@ -126,9 +92,37 @@ Notations used are summarized in Table \ref{tab:notations}.
 \end{table}
 }%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
+\eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\begin{table*}
+		\renewcommand{\arraystretch}{1.20}
+		\caption{\small Summary of piece-wise line based algorithms for trajectory simplification}
+		\label{tab:summary-lsa}
+		\centering
+		\small
+		\begin{tabular}{|l|c|c|c|c|c|c|c|}
+			\hline
+			\kw{Name}  & \kw{Type}    & \kw{Key~Ideas}  &\kw{\ped} &\kw{\sed}  &  \kw{Time~Complexity} & \kw{Space~Complexity} \\		\hline
+			\opt~\cite{Imai:Optimal}	&optimal	& Graph    							&Y & Y & $O(n^3)$	& {$O(n^2)$} \\		\hline
+			\optp\cite{Chan:Optimal}	&optimal	& Graph and Sector intersection    	&Y & N & $O(n^2)$	& {$O(n)$} \\		\hline
+			%\nopts~	&near optimal&Graph and Spatio-temporal cone intersection&N & Y  & $O(n^2)$	& $O(n)$ \\		\hline
+			\dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal}	&batch &Top-down     &Y &Y    & $O(n^2)$ & O(n)  \\		\hline
+			\tpa\cite{Pavlidis:Segment}	&batch	&Bottom-up       &Y &Y   & $O(n^2/K)$ & O(n)  \\		\hline
+			\bqsa\cite{Liu:BQS}	&online	&Top-down, opening window and Convex hull    &Y   & N& $O(n^2)$  & $O(|Q|)$   \\		\hline
+			\squishe\cite{Muckell:Compression}	&{online}	& Bottom-up and Priority queue       & N &Y    & $O(n\log|Q|)$ & $O(|Q|)$ \\		\hline
+			%swab	&   &online   &Y &Y  & $\Omega(n)$ & $O(n^2)$ & O(w) &\textcolor[rgb]{1.00,0.00,0.00}{} \\		\hline
+			%owtd	&   &online    &Y &Y   & $\Omega(n)$ & $O(n^2)$ & O(n) &\textcolor[rgb]{1.00,0.00,0.00}{} \\ 	\hline
+			%ddr	    &       &one-pass    &Y  &Y  & $\Omega(n)$ & $O(n)$ & O(n) &\textcolor[rgb]{1.00,0.00,0.00}{} \\  \hline
+			\operb\cite{Lin:Operb}	& one-pass	& Fitting function    &Y & N  & $O(n)$ & O(1)  \\		\hline
+			\siped\cite{Dunham:Cone, Zhao:Sleeve}	&one-pass	& Sector intersection   &Y & N & $O(n)$ & O(1) \\		\hline
+			\cised\cite{Lin:Cised}	&one-pass	& Spatio-temporal cone intersection    	&N & Y & $O(n)$ & O(1) \\		\hline
+		\end{tabular}
+		{\\  Note: $K$ is the number of the final segments of a trajectory and $|Q|$ is the size of buffer/window.}
+		\vspace{-4ex}
+	\end{table*}
+}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection {Taxonomy of Algorithms}
+\label{subsec-taxonomy}
 
 Existing \lsa algorithms, solving the \emph{min-$\#$} problem \cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment}, fall into two categories, namely the \textit{optimal} method and the \textit{sub-optimal} method. And the sub-optimal algorithms can further be organized with batch method, online method and one-pass method.
 We now describe these categories and leave the detailed discussion and description of each algorithm to Section 3 and Section 4.

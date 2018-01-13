@@ -1,12 +1,10 @@
 
 \vspace{-1ex}
 \subsection{One-pass Algorithms}
-
-
-{One-pass algorithms that enforce the local checking policy}.
-The local checking policy \eat{, the key to achieve the \emph{one-pass} processing,} does not need a window to buffer the preview read points. 
-Instead, it processes each point in a trajectory once and only once. % when compressing the trajectory.
-Obviously, the one-pass algorithms have a linear time complexity.
+%{One-pass algorithms that enforce the local checking policy}.
+%The local checking policy \eat{, the key to achieve the \emph{one-pass} processing,} does not need a window to buffer the preview read points. 
+%Instead, it processes each point in a trajectory once and only once. % when compressing the trajectory.
+%Obviously, the one-pass algorithms have a linear time complexity.
 
 Reumann-Witkam (\rwa) routine \cite{Reumann:Strip} is a straightforward one-pass algorithm that builds a strip paralleling to the line connecting the first two points, then the points within this strip compose a section of the line. \rwa runs fast, but it is limited in compression ratio.
 %
@@ -15,17 +13,17 @@ However, its compression ratios are poor because both the value and the directio
 %
 The authors of this paper improved the \rwa routine by essentially allow the angle of a strip be dynamically adjustable, and developed the One-Pass ERror Bounded (\operb) algorithm~\cite{Lin:Operb} coupled with several detailed optimization techniques.
 
-There are also {sector intersection (SI)} based algorithms, developed in fields of graphic, cartographic and pattern recognition, that can be easily adopted for trajectory compression although \textit{they have been overlooked by existing trajectory simplification studies}.
-Williams~\cite{Williams:Longest} and Sklansky and Gonzalez \cite{Sklansky:Cone} proposed linear time algorithms based on the idea of ``sector intersection", Dunham \cite{Dunham:Cone} extend these algorithms, and the Sleeve algorithm \cite{Zhao:Sleeve} in the cartographic discipline
-essentially applies the same idea as the SI algorithm.
-These SI algorithms are \ped specific, and run fast as well as have comparable compression ratios in comparing with the \dpa algorithm using \ped.
+There is also {sector intersection (\siped)} method, developed in fields of graphic, cartographic and pattern recognition, that can be easily adopted for trajectory compression although \textit{it has been overlooked by existing trajectory simplification studies}.
+Initially, Williams~\cite{Williams:Longest} and Sklansky and Gonzalez \cite{Sklansky:Cone} proposed linear time algorithms based on the idea of ``cone intersection" in a plane, then Dunham \cite{Dunham:Cone} extended these algorithms, and the Sleeve algorithm \cite{Zhao:Sleeve} in the cartographic discipline
+essentially applied the same idea as \siped but alternatively called it ``sector intersection".
+The sector intersection method is \ped specific, and runs fast as well as has comparable compression ratios in comparing with the \dpa algorithm using \ped.
 %
 %Moreover, {fast \bqsa \cite{Liu:BQS} (\fbqsa in short), the simplified version of \bqsa, has a linear time complexity.}
 %
 
 In addition, the authors of this paper recently extends the \textit{sector intersection} method from a 2D space to a Spatio-Temporal 3D space, and develop a new one-pass and \sed enabled algorithm \cised that runs fast as well as has comparable compression ratio with the \dpa algorithm using \sed.
 
-We next review algorithm \operb, sector intersection method and algorithm \cised evaluated in out experiments.
+We next review algorithms \operb, \siped and \cised evaluated in out experiments.
 
 
 
@@ -145,18 +143,20 @@ Algorithm \operb runs in $O(n)$ time and takes $O(1)$ space, and it only support
 
 %The Sector intersection algorithms using \ped (\siped) \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone}, also named \sleeve in \cite{Zhao:Sleeve}, are {the angle-adjustable strips too}.
 %Note that the ``cone intersection" algorithms, developed in fields of graphic, cartographic and pattern recognition, are still not familiar to researchers of trajectory compression.
-Given a sequence of points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$, the \siped approach processes the input points in order and produces a simplified poly-line. Instead of using the distance tolerance $\epsilon$ directly as the distance threshold, \siped converts the distance tolerance into a variable angle tolerance for testing the points.
+Given a sequence of points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$, the \siped approach processes the input points in order and produces a simplified poly-line. Instead of using the distance tolerance $\epsilon$ directly as the distance threshold, \siped converts the distance tolerance into a variable angle tolerance for testing the points. It defines the idea of ``Sector" as shown in Section~\ref{subsec-optped} and uses it to fast the process.
 
-For the start data point $P_s$, any point $P_{s+i}$ and $|\vv{P_sP_{s+i}}|>\epsilon$ ($i\in[1, k]$), there are two directed lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ such that $ped(P_{s+i}, \vv{P_sP^u_{s+i}})$ $=$ $ped(P_{s+i}, \vv{P_sP^l_{s+i}}) = \epsilon$ and either ($\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta ~and~\vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta <\pi$) or ($\vv{P_sP^l_{s+i}}.\theta > \vv{P_sP^u_{s+i}}.\theta ~and~ \vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta < -\pi)$. Indeed, they forms a \emph{sector} \sector{(P_s, P_{s+i}, \epsilon)} that takes $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the border lines.
-%
-Then there exists a data point $Q$ such that for any data point $P_{s+i}$ ($i \in [1, ... k]$), its perpendicular Euclidean distance to
+For the start data point $P_s$, 
+\eat{%%%%%%%%%%%%%
+any point $P_{s+i}$ and $|\vv{P_sP_{s+i}}|>\epsilon$ ($i\in[1, k]$), there are two directed lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ such that $ped(P_{s+i}, \vv{P_sP^u_{s+i}})$ $=$ $ped(P_{s+i}, \vv{P_sP^l_{s+i}}) = \epsilon$ and either ($\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta ~and~\vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta <\pi$) or ($\vv{P_sP^l_{s+i}}.\theta > \vv{P_sP^u_{s+i}}.\theta ~and~ \vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta < -\pi)$. Indeed, they forms a \emph{sector} \sector{(P_s, P_{s+i}, \epsilon)} that takes $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the border lines.
+}%%%%%%%%%%%
+there exists a data point $Q$ such that for any data point $P_{s+i}$ ($i \in [1, ... k]$), its perpendicular Euclidean distance to
 directed line $\overline{P_sQ}$ is no greater than the error bound $\epsilon$ if and only if the $k$ sectors \sector{(P_s, P_{s+i}, \epsilon)} ($i\in[1,k]$) share common data points other than $P_s$, \ie $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon)} $\ne \{P_s\}$ \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}.
 %
-The point $Q$ may not belong to $\{P_{s}, P_{s+1},$ $\ldots, P_{s+k}\}$.
+Here, the point $Q$ may not belong to $\{P_{s}, P_{s+1},$ $\ldots, P_{s+k}\}$.
 However, if $P_{s+i}$ ($1\le i\le k$) is chosen as $Q$, then
-for any data point $P_{s+j}$ ($j \in [1, ... i]$), its perpendicular Euclidean distance to
+for any point $P_{s+j}$ ($j \in [1, ... i]$), its \ped to
 line segment $\overline{P_sP_{s+i}}$ is no greater than the error bound $\epsilon$ if and only if $\bigsqcap_{j=1}^{i}$\sector{(P_s, P_{s+j}, \epsilon/2)} $\ne \{P_s\}$, as pointed out in \cite{Zhao:Sleeve}. 
-%That is, {\em these sector intersection based algorithms can be easily adopted for trajectory compression}.
+That is, {\em these sector intersection based algorithms can be easily adopted for trajectory compression}.
 
 Algorithm \siped runs in $O(n)$ time and takes $O(1)$ space, and \siped also only supports \ped.
 
@@ -194,7 +194,9 @@ Then, there exists a point $Q$ such that $Q.t = P_{s+k}.t$ and $sed(P_{s+i}, \vv
 Algorithm \cised applies the idea of spatio-temporal cone intersection and runs in the similar routine as \siped. And its strong simplification version also applies the half $\epsilon$ in building a cone.
 
 In addition, because these spatio-temporal cones have the same apex $P_s$, the checking of their intersection can be computed by a much simpler way, \ie the checking of intersection of cone projection circles on a plane (Figure~\ref{fig:cis}), and a circle is further approximated with its $m$-edge inscribed regular polygon, whose intersection can be computed more efficiently.
-Finally, \cised achieves $O(n)$ time and $O(1)$ space. 
+At last, \cised achieves $O(n)$ time and $O(1)$ space. 
+
+\cised only supports \sed.
 
 	
 \begin{figure}[tb!]
