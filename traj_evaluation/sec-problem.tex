@@ -2,6 +2,42 @@
 \label{sec-problem}
 
 We first introduce the \emph{min-$\#$ problem} of trajectory simplification, then describe the taxonomy of the different algorithms for solving this problem.
+Notations used are summarized in Table \ref{tab:notations}.
+	
+	\begin{table}
+		\renewcommand{\arraystretch}{1.20}
+		\vspace{-1ex}
+		\caption{\small Summary of notations}
+		\centering
+		%	\footnotesize
+		\small
+		\begin{tabular}{|c|l|}
+			\hline
+			{\bf Notations}& {\bf Semantics}   \\		\hline %\hline
+			$P$ & a data point \\		\hline
+			$\dddot{\mathcal{T}}$ & a trajectory $\dddot{\mathcal{T}}$ is a sequence of data points\\		\hline
+			$\overline{\mathcal{T}}$&  {a piece-wise line representation of a trajectory $\dddot{\mathcal{T}}$}	\\		\hline
+			$\mathcal{L}$ & a directed line segment  \\		\hline
+			$ped(P, \mathcal{L})$ &  {the perpendicular Euclidean distance of $P$ to $\mathcal{L}$}	\\	\hline
+			$sed(P, \mathcal{L})$ & {the synchronous Euclidean distance of $P$ to $\mathcal{L}$} 	\\		\hline
+			$\epsilon$ & the error bound \\		\hline
+			\sector{} & a sector \\		\hline
+			%		$\vv{A} \times \vv{B}$ & the cross product of (vectors) $\vv{A}$ and $\vv{B}$\\		\hline
+			%		$\mathcal{H}(\mathcal{L})$ & The open half-plane to the left of $\mathcal{L}$ \\		\hline
+			%		$\mathcal{R}$& a convex polygon \\		\hline
+			%		$\mathcal{R}^*$ & the intersection of convex polygons \\		\hline
+			%		$m$ & the maximum number of edges of a polygon\\		\hline
+			%		$E^j$ & a group of edges labeled with $j$\\		\hline
+			%		$g(e)$ & the label of an edge $e$ of polygons \\		\hline
+			%		\circle{} & a synchronous circle\\		\hline
+			\cone{} & a spatio-temporal cone \\		\hline
+			%		\pcircle{} & a cone projection circle \\		\hline
+			$\bigsqcap$ & intersection of geometries\\		\hline
+			$G$ &	the reachability graph of a trajectory\\		\hline
+		\end{tabular}
+		\label{tab:notations}
+		\vspace{-1ex}
+	\end{table}
 
 
 \subsection{Problem Definition}
@@ -53,44 +89,7 @@ We illustrate the problem and notations with examples.
 	That is, a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$ can be treated as a triple $(P_s, |\mathcal{L}|, \mathcal{L}.\theta)$.
 }
 
-\eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%}
-Notations used are summarized in Table \ref{tab:notations}.
 
-\begin{table}
-	\renewcommand{\arraystretch}{1.20}
-	\vspace{-1ex}
-	\caption{\small Summary of notations}
-	\centering
-	%	\footnotesize
-	\small
-	\begin{tabular}{|c|l|}
-		\hline
-		{\bf Notations}& {\bf Semantics}   \\		\hline %\hline
-		$P$ & a data point \\		\hline
-		$\dddot{\mathcal{T}}$ & a trajectory $\dddot{\mathcal{T}}$ is a sequence of data points\\		\hline
-		$\overline{\mathcal{T}}$&  {a piece-wise line representation of a trajectory $\dddot{\mathcal{T}}$}	\\		\hline
-		$\mathcal{L}$ & a directed line segment  \\		\hline
-		$ped(P, \mathcal{L})$ &  {the perpendicular Euclidean distance of $P$ to $\mathcal{L}$}	\\	\hline
-		$sed(P, \mathcal{L})$ & {the synchronous Euclidean distance of $P$ to $\mathcal{L}$} 	\\		\hline
-		$\epsilon$ & the error bound \\		\hline
-		\sector{} & a sector \\		\hline
-		%		$\vv{A} \times \vv{B}$ & the cross product of (vectors) $\vv{A}$ and $\vv{B}$\\		\hline
-		%		$\mathcal{H}(\mathcal{L})$ & The open half-plane to the left of $\mathcal{L}$ \\		\hline
-		%		$\mathcal{R}$& a convex polygon \\		\hline
-		%		$\mathcal{R}^*$ & the intersection of convex polygons \\		\hline
-		%		$m$ & the maximum number of edges of a polygon\\		\hline
-		%		$E^j$ & a group of edges labeled with $j$\\		\hline
-		%		$g(e)$ & the label of an edge $e$ of polygons \\		\hline
-		%		\circle{} & a synchronous circle\\		\hline
-		\cone{} & a spatio-temporal cone \\		\hline
-		%		\pcircle{} & a cone projection circle \\		\hline
-		$\bigsqcap$ & intersection of geometries\\		\hline
-		$G$ &	the reachability graph of a trajectory\\		\hline
-	\end{tabular}
-	\label{tab:notations}
-	\vspace{-1ex}
-\end{table}
-}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\begin{table*}
@@ -139,7 +138,7 @@ batch method, online method and one-pass method, as follows:
 
 \ni (1) \textit{batch algorithms} apply the global distance checking policy which requires all trajectory points be loaded before they start compressing and a point may be checked many times to calculate the distance of it to the corresponding line segments during the whole process. Example algorithms are Douglas-Peucker\cite{Douglas:Peucker,Meratnia:Spatiotemporal} and \pavlidis~\cite{Pavlidis:Segment}. 
 
-\ni (2) \textit{online algorithms} apply the constraint global distance checking policy which need not have the entire trajectory ready before they start compressing, instead, they restrict the checking within a window. A point is still checked multiple times during the process. Example algorithms are \opwa \cite{Meratnia:Spatiotemporal}, \bqsa\cite{Liu:BQS} and \squishe~\cite{Muckell:SQUISH}.
+\ni (2) \textit{online algorithms} apply the constraint global distance checking policy which need not have the entire trajectory ready before they start compressing, instead, they restrict the checking within a window and a point is still checked multiple times during the process. Example algorithms are \opwa \cite{Meratnia:Spatiotemporal}, \bqsa\cite{Liu:BQS} and \squishe~\cite{Muckell:SQUISH}.
 
 \ni (3) \textit{one-pass algorithms} apply the local distance checking policy which does not need a window to buffer the preview read points, instead, it processes each point in a trajectory once and only once. Example algorithms are \operb\cite{Lin:Operb}, sector intersection \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve} and \cised \cite{Lin:Cised}.
 
