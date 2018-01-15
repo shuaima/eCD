@@ -16,7 +16,7 @@ Using four real-life datasets, we conducted two sets of experiments to evaluate:
 %We first introduce the settings of our experimental study.
 
 \stitle{Real-life Trajectory Datasets}.
-We use four real-life datasets shown in \mytable{tab:datasets}, namely, Service car trajectory data (\ucar) collected by a Chinese car rental company, Geolife trajectory data (\geolife) collected in GeoLife project~\cite{Web:Geolife}, Mopsi trajectory data (\mopsi) collected in Mopsi project \cite{Web:Mopsi} and Act trajectory data (\act) collected by our team members, to evaluate those \lsa algorithms.
+We use four real-life datasets shown in \mytable{tab:datasets}, namely, taxi trajectory data (\taxi) collected by a Beijing taxi company, Service car trajectory data (\ucar) collected by a Chinese car rental company, Geolife trajectory data (\geolife) collected in GeoLife project~\cite{Web:Geolife} and Mopsi trajectory data (\mopsi) collected in Mopsi project \cite{Web:Mopsi}, to evaluate those \lsa algorithms. These data sets have varied sampling rates, ranging from one point per minute to one point per second.
 
 \begin{table}
 	\vspace{-1ex}
@@ -27,14 +27,14 @@ We use four real-life datasets shown in \mytable{tab:datasets}, namely, Service 
 		\hline
 		\kw{Data}& \kw{Number\ of}     &\kw{Sampling}   &\kw{Points~Per}    &\kw{Total} \\
 		\kw{Sets} & \kw{Trajectories}   &\kw{Rates (s)}  &\kw{Trajectory (K)}&\kw{points}\\	\hline
-		%\taxi	&12,727	    &60	        &$\sim39.1$      &498M \\	\hline
+		\taxi	&\textcolor{red}{1,000}	    &60	        &\textcolor{red}{$\sim39.1$}      &\textcolor{red}{39.1M} \\	\hline
 		%\truck	&10,368	    &1-60	    &$\sim71.9$     &746M \\	\hline
 		%\ucar	&11,000	    &3-5	    &$\sim119.1$   &1.31G\\		\hline
 		%
-		\ucar	&1,00	    &3-5	&$\sim114.0$   &114M 	\\	\hline
+		\ucar	&1,000	    &3-5	&$\sim114.0$   &114M 	\\	\hline
 		\geolife\cite{Web:Geolife} &182	    &1-5	&$\sim131.4$   &24.2M	\\	\hline
 		\mopsi\cite{Web:Mopsi}	&51	    	&2	    &$\sim153.9$   &7.9M	\\	\hline
-		\act	& 10	    &1	    &$\sim11.8$    &112.8K	\\	\hline
+		%\act	& 10	    &1	    &$\sim11.8$    &112.8K	\\	\hline
 	\end{tabular}
 	\label{tab:datasets}
 	\vspace{-3ex}
@@ -68,7 +68,7 @@ We implement the algorithms listed in \mytable{tab:summary-lsa}.
 For algorithm \cised, we fixed parameter $m=16$ as evaluated in \cite{Lin:Cised}, \ie 16-edges inscribe regular polygon.
 For algorithm \nopts, we fixed parameter $m=32$. 
 All algorithms were implemented with Java.
-All tests were run on an x64-based  PC with 4 Intel(R) Core(TM) i5-4570 CPU @ 3.20GHz  and 16GB of memory.
+All tests were run on an x64-based  PC with 4 Intel(R) Core(TM) i5-4570 CPU @ 3.20GHz  and 16GB of memory. \textcolor{red}{Todo... Java memory?}
 %, and each test was repeated over 3 times and the average is reported here.
 
 
@@ -92,6 +92,23 @@ All tests were run on an x64-based  PC with 4 Intel(R) Core(TM) i5-4570 CPU @ 3.
 
 
 
+\subsection{Evaluation Metrics}
+Effectiveness (compression ratios and average errors) and efficiency are used to evaluate these algorithms.
+
+\stitle{Compression ratios.}
+Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations $\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$,
+the compression ratio is $(\sum_{j=1}^{M} |\overline{\mathcal{T}}_j |)/(\sum_{j=1}^{M} |\dddot{\mathcal{T}}_j |)$.
+By this definition, algorithms with lower compression ratios are better.
+
+\stitle{Average error.}
+Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations
+$\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$, and $P_{j,i}$ denoting
+a point in trajectory $\dddot{\mathcal{T}}_j$ contained in a line segment $\mathcal{L}_{l,i}\in\overline{\mathcal{T}_l}$ ($l\in[1,M]$),
+then the average error is $\sum_{j=1}^{M}\sum_{i=0}^{M} d(P_{j,i},
+\mathcal{L}_{l,i})/\sum_{j=1}^{M}{|\dddot{\mathcal{T}}_j |}$.
+
+\stitle{Efficiency.}
+Efficiency describes the speed of compressing trajectories. We load and compress trajectories one by one, and only count the running time of the compressing process.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Experimental Results}
@@ -153,10 +170,7 @@ We next present our findings.
 
 In the first set of tests, we compare the effectiveness (compression ratios and average errors) of these algorithms.% using \ped and \sed, respectively.
 
-\stitle{Exp-1.1: Compression ratios}. Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations $\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$,
-the compression ratio is $(\sum_{j=1}^{M} |\overline{\mathcal{T}}_j |)/(\sum_{j=1}^{M} |\dddot{\mathcal{T}}_j |)$.
-By this definition, algorithms with lower compression ratios are better.
-
+\stitle{Exp-1.1: Compression ratios}. 
 To compare the compression ratios of these algorithms and evaluate the impacts of $\epsilon$ on them, we varied $\epsilon$ from $10m$ to $100m$ on the entire four datasets, respectively.
 The results are reported in Figure~\ref{fig:cr-ped} and Figure~\ref{fig:cr-sed}.
 
@@ -262,12 +276,6 @@ $64.50\%$, $40.63\%$) of algorithms \nopts, \tpa and \dpa using \sed on datasets
 
 
 \stitle{Exp-1.2: Average errors}.
-Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations
-$\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$, and $P_{j,i}$ denoting
-a point in trajectory $\dddot{\mathcal{T}}_j$ contained in a line segment $\mathcal{L}_{l,i}\in\overline{\mathcal{T}_l}$ ($l\in[1,M]$),
-then the average error is $\sum_{j=1}^{M}\sum_{i=0}^{M} d(P_{j,i},
-\mathcal{L}_{l,i})/\sum_{j=1}^{M}{|\dddot{\mathcal{T}}_j |}$.
-
 To compare the average errors of these algorithms and evaluate the impacts of $\epsilon$ on them, we varied $\epsilon$ from $10m$ to $100m$ on the entire four datasets, respectively.
 The results are reported in Figure~\ref{fig:ae-ped} and Figure~\ref{fig:ae-sed}.
 
