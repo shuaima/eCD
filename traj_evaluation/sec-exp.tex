@@ -27,7 +27,7 @@ We use four real-life datasets shown in \mytable{tab:datasets}, namely, taxi tra
 		\hline
 		\kw{Data}& \kw{Number\ of}     &\kw{Sampling}   &\kw{Points~Per}    &\kw{Total} \\
 		\kw{Sets} & \kw{Trajectories}   &\kw{Rates (s)}  &\kw{Trajectory (K)}&\kw{points}\\	\hline
-		\taxi	&\textcolor{red}{500}	    &60	        &\textcolor{red}{$\sim39.1$}      &\textcolor{red}{39.1M} \\	\hline
+		\taxi	&{500}	    &60	        &{$\sim42.8$}      &{21.4M} \\	\hline
 		%\truck	&10,368	    &1-60	    &$\sim71.9$     &746M \\	\hline
 		%\ucar	&11,000	    &3-5	    &$\sim119.1$   &1.31G\\		\hline
 		%
@@ -66,10 +66,10 @@ We use four real-life datasets shown in \mytable{tab:datasets}, namely, taxi tra
 \stitle{Algorithms and implementation}.
 We implement the algorithms listed in \mytable{tab:summary-lsa}.
 For algorithm \cised, we fixed parameter $m=16$ as evaluated in \cite{Lin:Cised}, \ie 16-edges inscribe regular polygon.
-For algorithm \nopts, we fixed parameter $m=32$. 
+% For algorithm \nopts, we fixed parameter $m=32$. 
 All algorithms were implemented with Java.
-All tests were run on an x64-based  PC with 4 Intel(R) Core(TM) i5-4570 CPU @ 3.20GHz  and 16GB of memory. 
-%\textcolor{red}{Todo... Java memory?}
+All tests were run on an x64-based  PC with 4 Intel(R) Core(TM) i7-6700 CPU @
+3.40GHz  and 8GB of memory. {Java max heap size 4GB}
 %, and each test was repeated over 3 times and the average is reported here.
 
 
@@ -143,15 +143,31 @@ We next present our findings.
 
 \begin{figure*}[tb!]
 	\centering
-	\includegraphics[scale=0.315]{Figures/Exp-small-CR-epsilon-taxi.png}\hspace{1ex}
-	\includegraphics[scale=0.315]{Figures/Exp-small-CR-epsilon-service.png} 	\hspace{1ex}
-	\includegraphics[scale=0.315]{Figures/Exp-small-CR-epsilon-geolife.png}	\hspace{1ex}
-	\includegraphics[scale=0.315]{Figures/Exp-small-CR-epsilon-mopsi.png}		
+	\includegraphics[scale=0.315]{Figures/Exp-PED-CR-size-taxi.png}\hspace{1ex}
+	\includegraphics[scale=0.315]{Figures/Exp-PED-CR-size-service.png} 	\hspace{1ex}
+	\includegraphics[scale=0.315]{Figures/Exp-PED-CR-size-geolife.png}	\hspace{1ex}
+	\includegraphics[scale=0.315]{Figures/Exp-PED-CR-size-mopsi.png}		
 	\vspace{-2.5ex}
-	\caption{\small Evaluation of compression ratios (\ped and \sed): varying the error bound $\epsilon$.}
-	\label{fig:cr-all}
+	\caption{\small Evaluation of compression ratios (\ped): varying the size of
+    trajectories.}
+  \label{fig:cr-ped-size}
 	\vspace{-2ex}
 \end{figure*}
+
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.315]{Figures/Exp-SED-CR-size-taxi.png}\hspace{1ex}
+	\includegraphics[scale=0.315]{Figures/Exp-SED-CR-size-service.png} 	\hspace{1ex}
+	\includegraphics[scale=0.315]{Figures/Exp-SED-CR-size-geolife.png}	\hspace{1ex}
+	\includegraphics[scale=0.315]{Figures/Exp-SED-CR-size-mopsi.png}		
+	\vspace{-2.5ex}
+
+	\caption{\small Evaluation of compression ratios (\sed): varying the size of
+    trajectories.}
+  \label{fig:cr-sed-size}
+	\vspace{-2ex}
+\end{figure*}
+
 
 
 
@@ -181,15 +197,30 @@ We next present our findings.
 
 \begin{figure*}[tb!]
 	\centering
-	\includegraphics[scale=0.315]{Figures/Exp-small-error-epsilon-taxi.png} \hspace{1ex}
-	\includegraphics[scale=0.315]{Figures/Exp-small-error-epsilon-service.png}	\hspace{1ex}
-	\includegraphics[scale=0.315]{Figures/Exp-small-error-epsilon-geolife.png}	\hspace{1ex}
-	\includegraphics[scale=0.315]{Figures/Exp-small-error-epsilon-mopsi.png}	
+	\includegraphics[scale=0.315]{Figures/Exp-PED-error-size-taxi.png}\hspace{1ex}
+	\includegraphics[scale=0.315]{Figures/Exp-PED-error-size-service.png} 	\hspace{1ex}
+	\includegraphics[scale=0.315]{Figures/Exp-PED-error-size-geolife.png}	\hspace{1ex}
+	\includegraphics[scale=0.315]{Figures/Exp-PED-error-size-mopsi.png}		
 	\vspace{-2.5ex}
-	\caption{\small Evaluation of average errors (\ped and \sed): varying the error bound $\epsilon$.}
-	\label{fig:ae-all}
+	\caption{\small Evaluation of average errors (\ped): varying the size of
+    trajectories.}
+  \label{fig:ae-ped-size}
 	\vspace{-2ex}
 \end{figure*}
+
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.315]{Figures/Exp-SED-error-size-taxi.png}\hspace{1ex}
+	\includegraphics[scale=0.315]{Figures/Exp-SED-error-size-service.png} 	\hspace{1ex}
+	\includegraphics[scale=0.315]{Figures/Exp-SED-error-size-geolife.png}	\hspace{1ex}
+	\includegraphics[scale=0.315]{Figures/Exp-SED-error-size-mopsi.png}		
+	\vspace{-2.5ex}
+	\caption{\small Evaluation of average errors (\sed): varying the size of
+    trajectories.}
+  \label{fig:ae-sed-size}
+	\vspace{-2ex}
+\end{figure*}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -279,18 +310,6 @@ $64.50\%$, $40.63\%$) of algorithms \nopts, \tpa and \dpa using \sed on datasets
 	\caption{\small Evaluation of efficiency (\sed): varying the error bound $\epsilon$.}\label{fig:time-epsilon-sed}
 	\vspace{-2ex}
 \end{figure*}
-
-\begin{figure*}[tb!]
-	\centering
-	\includegraphics[scale=0.315]{Figures/Exp-small-time-epsilon-taxi.png}\hspace{1ex}
-	\includegraphics[scale=0.315]{Figures/Exp-small-time-epsilon-service.png} 	\hspace{1ex}
-	\includegraphics[scale=0.315]{Figures/Exp-small-time-epsilon-geolife.png}	\hspace{1ex}
-	\includegraphics[scale=0.315]{Figures/Exp-small-time-epsilon-mopsi.png}		
-	\vspace{-2.5ex}
-	\caption{\small Evaluation of compression ratios (\ped and \sed): varying the error bound $\epsilon$.}
-	\vspace{-2ex}
-\end{figure*}
-
 
 
 \begin{figure*}[tb!]
