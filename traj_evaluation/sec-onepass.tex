@@ -69,8 +69,8 @@ In Figure~\ref{fig:ldr}, the trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}
 \subsubsection{\operb Using \ped}
 \label{sec-operb}
 
+Authors of \operb \cite{Lin:Operb} design an approach that depends on a \emph{direction-dynamically-adjusting line segment} to achieve a one-pass process.
 
-%Algorithm \operb, after initializing, repeatedly processes the data points in $\dddot{\mathcal{T}}[P_0,$ $\ldots, P_{n}]$ one by one until that all data points have been considered.
 Consider an error bound $\epsilon$ and a sub-trajectory $\dddot{\mathcal{T}_s}[P_s,$ $\ldots, P_{s+k}]$.
 \operb dynamically maintains a directed line segment $\mathcal{L}_i$ ($i\in[1,k]$), whose start point is fixed with $P_s$ and its end point is identified (may not in $\{P_s, \ldots, P_{s+i}\}$) to {\em fit} all the previously processed points $\{P_s, \ldots, P_{s+i}\}$.
 The directed line segment $\mathcal{L}_i$ is built by a function named \emph{fitting function $\mathbb{F}$}, such that when a new point $P_{s+i+1}$ is considered, only its distance to the directed line segment $\mathcal{L}_i$ is checked, instead of checking the distances of all or a subset of data points of $\{P_{s}, \ldots, P_{s+i}\}$ to $\mathcal{R}_{i+1}$ = $\vv{P_sP_{s+i+1}}$ as the global distance checking does.
@@ -143,9 +143,10 @@ Algorithm \operb runs in $O(n)$ time and takes $O(1)$ space, and it only support
 
 %The Sector intersection algorithms using \ped (\siped) \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone}, also named \sleeve in \cite{Zhao:Sleeve}, are {the angle-adjustable strips too}.
 %Note that the ``cone intersection" algorithms, developed in fields of graphic, cartographic and pattern recognition, are still not familiar to researchers of trajectory compression.
-Given a sequence of points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$, the \siped approach processes the input points in order and produces a simplified poly-line. Instead of using the distance tolerance $\epsilon$ directly as the distance threshold, \siped converts the distance tolerance into a variable angle tolerance for testing the points. It defines the idea of ``Sector" as shown in Section~\ref{subsec-optped} and uses it to fast the process.
+The \siped approach processes the input points in order and produces a simplified poly-line. Instead of using the distance tolerance $\epsilon$ directly as the distance threshold, \siped converts the distance tolerance into a variable angle tolerance for testing the points. It defines the idea of ``Sector" as shown in Section~\ref{subsec-optped} and uses it to fast the process.
 
-For the start data point $P_s$, 
+Given a sequence of points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$, 
+for the start data point $P_s$, 
 \eat{%%%%%%%%%%%%%
 any point $P_{s+i}$ and $|\vv{P_sP_{s+i}}|>\epsilon$ ($i\in[1, k]$), there are two directed lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ such that $ped(P_{s+i}, \vv{P_sP^u_{s+i}})$ $=$ $ped(P_{s+i}, \vv{P_sP^l_{s+i}}) = \epsilon$ and either ($\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta ~and~\vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta <\pi$) or ($\vv{P_sP^l_{s+i}}.\theta > \vv{P_sP^u_{s+i}}.\theta ~and~ \vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta < -\pi)$. Indeed, they forms a \emph{sector} \sector{(P_s, P_{s+i}, \epsilon)} that takes $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the border lines.
 }%%%%%%%%%%%
@@ -184,6 +185,7 @@ Algorithm \siped runs in $O(n)$ time and takes $O(1)$ space, and \siped also onl
 \vspace{-0.5ex}
 \subsubsection {Cone Intersection Using \sed}
 \label{sec-cised}
+\cised \cite{Lin:Cised} extends the \textit{sector intersection} method from a 2D space to a Spatio-Temporal 3D space so as to get a \textit{Spatio-temporal Cone} method, and further achieves a one-pass process by a carefully designing.
 
 Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, any point $P'_{s+i}$, $0< i \le k$, on the plane $P.t-P_{s+i}.t = 0$ is a synchronized data point of $P_{s+i}$. For all $P'_{s+i}$ in the plane satisfying $|P_{s+i}P'_{s+i}| \le \epsilon$, they form a \textit{synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$} of $P_{s+i}$ with $P_{s+i}$ as its center and $\epsilon$ as its radius.
 %
