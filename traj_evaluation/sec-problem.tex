@@ -85,7 +85,7 @@ Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{
  
 
 
-Then, given a trajectory \trajec{T}$[P_0, \dots, P_n]$ and a pre-specified constant $\epsilon$, the \emph{min-$\#$} problem of trajectory simplification, is to approximate the trajectory \trajec{T} by $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$), such that
+Then, given a trajectory \trajec{T}$[P_0, \dots, P_n]$ and a pre-specified constant $\epsilon$, the \emph{min-$\#$} problem of trajectory simplification is to approximate the trajectory \trajec{T} by $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$), such that
 (1) on each of them the points $[P_{s_i}, \dots, P_{e_i}]$ are approximated by a line segment $\mathcal{L}_i = \vv{P_{s_i}P_{e_i}}$ with the maximum \ped or \sed \emph{error} of point $P_j$ (or \dad \emph{error} of line segment $|\vv{P_jP_{j+1}}|$) to line segment $\mathcal{L}_i$, $s_i < j<e_i$,  less than $\epsilon$, and
 (2) $P_{s_i}$ and $P_{e_i} \in$ \trajec{T}.
 %algorithm $\mathcal{A}$
@@ -110,9 +110,6 @@ We illustrate the problem and notations with examples.
     %
     (5) $dad(\vv{P_5P_6}, \vv{P_0P_{10}})=\theta_5$ is the \dad of line segment $\vv{P_5P_6}$ to $\vv{P_0P_{10}}$.
 \end{example}
-
-
-%%%{It is worth pointing out that in some algorithms, they do not directly define threshold on a distance, instead, they accumulate the distances of points to a line segment and define a threshold on the accumulated value. For example, algorithms MRPA and DOTS use ISSD which is an accumulated value of \ped. }
 
 
 
@@ -169,13 +166,15 @@ batch method, online method and one-pass method, as follows:
 
 \ni (3) \textit{one-pass algorithms} apply the local distance checking policy which does not need a window to buffer the preview read points, instead, it processes each point in a trajectory once and only once. Example algorithms are \operb\cite{Lin:Operb}, \siped \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve} and \cised \cite{Lin:Cised}.
 
-The algorithms reviewed and evaluated in our experiments are summarized in \mytable{tab:summary-lsa}, namely,
+The algorithms and distance metrics reviewed and evaluated in our experiments are summarized in \mytable{tab:summary-lsa}, namely,
 (i) \opt\cite{Chan:Optimal} and \optp, two optimal algorithms.
 (ii) Douglas-Peucker\cite{Douglas:Peucker,Meratnia:Spatiotemporal} and \pavlidis~\cite{Pavlidis:Segment}, two distinct batch \lsa algorithms,
 (iii) \bqsa\cite{Liu:BQS} and \squishe~\cite{Muckell:SQUISH}, two famous online \lsa algorithms, and
 (iv) \operb\cite{Lin:Operb}, \siped \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}, \cised \cite{Lin:Cised} and \interval\cite{Ke:Interval}, four one-pass \lsa algorithms.
 %
 It is worth pointing out that some algorithms, \eg ~\optp, \bqsa and \operb, are \ped specific while others, \eg~\squishe and \cised, are \sed specific, depending on the optimization techniques they applied.
+
+\todo{There are also some trajectory simplification algorithms that do not directly enforce threshold on a distance, instead, they accumulate the distances of points to a line segment and enforce a threshold on the accumulated value. For example, algorithms MRPA and DOTS use ISSD which is an accumulated value of \ped. We do not evaluate these ISSD based algorithms because the comparison between ISSD and the above distances seems meaningless.}
 
 \begin{table}
 	\renewcommand{\arraystretch}{1.20}
