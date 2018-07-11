@@ -27,10 +27,11 @@ Notations used are summarized in Table \ref{tab:notations}.
 			{\bf Notations}& {\bf Semantics}   \\		\hline %\hline
 			$P$ & a data point \\		\hline
 			$\dddot{\mathcal{T}}$ & a trajectory $\dddot{\mathcal{T}}$ is a sequence of data points\\		\hline
-			$\overline{\mathcal{T}}$&  {a piece-wise line representation of a trajectory $\dddot{\mathcal{T}}$}	\\		\hline
+			$\overline{\mathcal{T}}$&  {a piece-wise line representation of a $\dddot{\mathcal{T}}$}	\\		\hline
 			$\mathcal{L}$ & a directed line segment  \\		\hline
 			$ped(P, \mathcal{L})$ &  {the perpendicular Euclidean distance of $P$ to $\mathcal{L}$}	\\	\hline
 			$sed(P, \mathcal{L})$ & {the synchronous Euclidean distance of $P$ to $\mathcal{L}$} 	\\		\hline
+			$dad(\mathcal{L}_1, \mathcal{L}_2)$ & {the direction-aware distance of $\mathcal{L}_1$ to $\mathcal{L}_2$} 	\\		\hline
 			$\epsilon$ & the error bound \\		\hline
 			\sector{} & a sector \\		\hline
 			%		$\vv{A} \times \vv{B}$ & the cross product of (vectors) $\vv{A}$ and $\vv{B}$\\		\hline
@@ -57,27 +58,42 @@ Notations used are summarized in Table \ref{tab:notations}.
 %We first introduce basic notations.
 A \textit{trajectory} $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is a sequence of points in a monotonically increasing order of their associated time values (\ie $P_i.t < P_j.t$ for any $0\le i<j\le n$), where a data \textit{point} is defined as a triple $P(x, y, t)$, which represents that a moving object is located at {\em longitude} $x$ and {\em latitude} $y$ at {\em time} $t$. Note that data points can be viewed as points in a three-dimension Euclidean space.
 
-%Intuitively, a trajectory can also be represented by a continuous $n$-pieces directed line segments (or line segment for simplicity) $\mathcal{L}_i$, $0\le i < n$, where  $\mathcal{L}_i = \vv{P_{i}P_{i+1}}$, represents the closed line segment that connects the start point $P_{i}$ and the end point $P_{i+1}$. 
 
-A \textit{piece-wise line representation} $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$) of a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is a sequence of continuous \textit{directed line segments} (or line segment for simplicity) $\mathcal{L}_{i}$ = $\vv{P_{s_i}P_{e_i}}$ ($i\in[0,m]$) of $\dddot{\mathcal{T}}$ such that $\mathcal{L}_{0}.P_{s_0} = P_0$, $\mathcal{L}_{m}.P_{e_m} = P_n$ and  $\mathcal{L}_{i}.P_{e_i}$ = $\mathcal{L}_{i+1}.P_{s_{i+1}}$ for all $i\in[0, m-1]$. 
+\eat{
+A \textit{directed line segment} (or line segment for simplicity) $\mathcal{L}$ is defined as $\vv{P_{s}P_{e}}$, which represents the closed line segment that connects the start point $P_s$ and the end point $P_e$.
+	We also use $|\mathcal{L}|$ and $\mathcal{L}.\theta\in [0, 2\pi)$ to denote the length of a directed line segment $\mathcal{L}$, and its angle with the $x$-axis of the coordinate system $(x, y)$, where $x$ and $y$ are the longitude and latitude, respectively.
+	That is, a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$ can be treated as a triple $(P_s, |\mathcal{L}|, \mathcal{L}.\theta)$.
+}
+
+%Intuitively, a trajectory can also be represented by a continuous $n$-pieces directed line segments (or line segment for simplicity) $\mathcal{L}_i$, $0\le i < n$, where  $\mathcal{L}_i = \vv{P_{i}P_{i+1}}$, represents the closed line segment that connects the start point $P_{i}$ and the end point $P_{i+1}$.
+
+A \textit{piece-wise line representation} $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$) of a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is a sequence of continuous \textit{directed line segments} (or line segment for simplicity) $\mathcal{L}_{i}$ = $\vv{P_{s_i}P_{e_i}}$ ($i\in[0,m]$) of $\dddot{\mathcal{T}}$ such that $\mathcal{L}_{0}.P_{s_0} = P_0$, $\mathcal{L}_{m}.P_{e_m} = P_n$ and  $\mathcal{L}_{i}.P_{e_i}$ = $\mathcal{L}_{i+1}.P_{s_{i+1}}$ for all $i\in[0, m-1]$.
 Note that each directed line segment in $\overline{\mathcal{T}}$ essentially represents a continuous sequence of data points in $\dddot{\mathcal{T}}$.
 
-
-Then, given a trajectory \trajec{T}$[P_0, \dots, P_n]$ and a pre-specified constant $\epsilon$, the \emph{min-$\#$} problem of trajectory simplification, is to approximate the trajectory \trajec{T} by $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$), such that  
-(1) on each of them the points $[P_{s_i}, \dots, P_{e_i}]$ are approximated by a line segment $\mathcal{L}_i = \vv{P_{s_i}P_{e_i}}$ with the maximum \emph{error} of point $P_j$ to line segment $\mathcal{L}_i$, $s_i < j<e_i$,  less than $\epsilon$, and
-(2) $P_{s_i}$ and $P_{e_i} \in$ \trajec{T}. 
-%algorithm $\mathcal{A}$
-% an extension of the famous \emph{min-$\#$} problem of piece-wise line simplification\cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment}, 
-
-For trajectory simplification, two error metrics are commonly used, namely, the \emph{perpendicular Euclidean distances} (\ped) and the \emph{synchronous Euclidean distances} (\sed).
+For trajectory simplification, three distance metrics are commonly used, namely, the \emph{perpendicular Euclidean distances} (\ped), the \emph{synchronous Euclidean distances} \cite{Meratnia:Spatiotemporal}(\sed) and the \emph{direction-aware distance}\cite{Long:Direction, Zhang:Evaluation}(\dad).
 %
-Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the $ped(P, \mathcal{L})$ of point $P$ to line segment $\mathcal{L}$ is $\min\{|PQ|\}$ for any point $Q$ on $\vv{P_{s}P_{e}}$, and the $sed(P, \mathcal{L})$ of $P$ to $\mathcal{L}$ is $|\vv{PP'}|$ that is the Euclidean distance from $P$ to its \textit{synchronized data point} $P'$ \wrt $\mathcal{L}$, where the synchronized data point $P'$ \wrt $\mathcal{L}$ is defined as follows:
-(1) $P'.x$ = $P_s.x +  c\cdot(P_e.x - P_s.x)$,
-(2) $P'.y$ = $P_s.y +  c\cdot(P_e.y - P_s.y)$ and
-(3) $P'.t$ = $P.t$, where $c= \frac{P.t-P_s.t}{P_e.t-P_s.t}$.
+Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$,
+
+ (1) the $ped(P, \mathcal{L})$ of point $P$ to line segment $\mathcal{L}$ is $\min\{|PQ|\}$ for any point $Q$ on $\vv{P_{s}P_{e}}$,
+
+ (2) the $sed(P, \mathcal{L})$ of $P$ to $\mathcal{L}$ is $|\vv{PP'}|$ that is the Euclidean distance from $P$ to its \textit{synchronized data point} $P'$ \wrt $\mathcal{L}$, where the synchronized data point $P'$ \wrt $\mathcal{L}$ is defined as follows:
+(a) $P'.x$ = $P_s.x +  c\cdot(P_e.x - P_s.x)$,
+(b) $P'.y$ = $P_s.y +  c\cdot(P_e.y - P_s.y)$ and
+(c) $P'.t$ = $P.t$, where $c= \frac{P.t-P_s.t}{P_e.t-P_s.t}$.
+
+ (3) the $dad(\mathcal{L}_1, \mathcal{L}_2)$, say, the direction deviation from $\mathcal{L}_1$ to $\mathcal{L}_2)$, is $\Delta(\mathcal{L}_1.\theta, \mathcal{L}_2.\theta) = \min\{|\mathcal{L}_1.\theta - \mathcal{L}_2.\theta|, 2\pi - |\mathcal{L}_1.\theta - \mathcal{L}_2.\theta|\}$, where $\theta \in [0, 2\pi)$ is the angular of $\mathcal{L}$.
+ 
+
+
+Then, given a trajectory \trajec{T}$[P_0, \dots, P_n]$ and a pre-specified constant $\epsilon$, the \emph{min-$\#$} problem of trajectory simplification, is to approximate the trajectory \trajec{T} by $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$), such that
+(1) on each of them the points $[P_{s_i}, \dots, P_{e_i}]$ are approximated by a line segment $\mathcal{L}_i = \vv{P_{s_i}P_{e_i}}$ with the maximum \ped or \sed \emph{error} of point $P_j$ (or \dad \emph{error} of line segment $|\vv{P_jP_{j+1}}|$) to line segment $\mathcal{L}_i$, $s_i < j<e_i$,  less than $\epsilon$, and
+(2) $P_{s_i}$ and $P_{e_i} \in$ \trajec{T}.
+%algorithm $\mathcal{A}$
+% an extension of the famous \emph{min-$\#$} problem of piece-wise line simplification\cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment},
+
+
 
 We illustrate the problem and notations with examples.
-
 
 \begin{example}
 	\label{exm-notations}
@@ -85,20 +101,20 @@ We illustrate the problem and notations with examples.
 	%
 	(1) $\dddot{\mathcal{T}}[P_0$, $\ldots, P_{10}]$ is a trajectory having 11 data points,
 	%
-	 (2) the set of two continuous line segments $\{\vv{P_0P_4}$, $\vv{P_4P_{10}}$\} and the set of four continuous line segments $\{\vv{P_0P_2}$, $\vv{P_2P_4}$, $\vv{P_4P_7}$, $\vv{P_7P_{10}}$\} are two piecewise line representations of trajectory $\dddot{\mathcal{T}}$,
+    (2) the set of two continuous line segments $\{\vv{P_0P_4}$, $\vv{P_4P_{10}}$\}, the set of four continuous line segments $\{\vv{P_0P_2}$, $\vv{P_2P_4}$, $\vv{P_4P_7}$, $\vv{P_7P_{10}}$\} and the set of three continuous line segments $\{\vv{P_0P_4}$, $\vv{P_4P_5}$, $\vv{P_5P_{10}}$\} are three piecewise line representations of trajectory $\dddot{\mathcal{T}}$,
 	%
-	(3) $ped(P_4, \vv{P_0P_{10}})=|\vv{P_4P^*_4}|$, where $P^*_4$ is the perpendicular point of $P_4$ \wrt line segment $\vv{P_0P_{10}}$, and
+	(3) $ped(P_4, \vv{P_0P_{10}})=|\vv{P_4P^*_4}|$, where $P^*_4$ is the perpendicular point of $P_4$ \wrt line segment $\vv{P_0P_{10}}$, 
 	%
 	(4) $sed(P_4, \vv{P_0P_{10}})= |\vv{P_4P'_4}|$, $sed(P_2, \vv{P_0P_{4}})= |\vv{P_2P'_2}|$ and $sed(P_7, \vv{P_4P_{10}})$ $=$ $|\vv{P_7P'_7}|$,
-	where points $P'_4$, $P'_2$ and $P'_7$ are the synchronized points of $P_4$, $P_2$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$, $\vv{P_0P_{4}}$ and $\vv{P_4P_{10}}$, respectively.
+	where points $P'_4$, $P'_2$ and $P'_7$ are the synchronized points of $P_4$, $P_2$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$, $\vv{P_0P_{4}}$ and $\vv{P_4P_{10}}$, respectively, and
+    %
+    (5) $dad(\vv{P_5P_6}, \vv{P_0P_{10}})=\theta_5$ is the \dad of line segment $\vv{P_5P_6}$ to $\vv{P_0P_{10}}$.
 \end{example}
 
 
-\eat{
-	A \textit{directed line segment} (or line segment for simplicity) $\mathcal{L}$ is defined as $\vv{P_{s}P_{e}}$, which represents the closed line segment that connects the start point $P_s$ and the end point $P_e$.
-	We also use $|\mathcal{L}|$ and $\mathcal{L}.\theta\in [0, 2\pi)$ to denote the length of a directed line segment $\mathcal{L}$, and its angle with the $x$-axis of the coordinate system $(x, y)$, where $x$ and $y$ are the longitude and latitude, respectively.
-	That is, a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$ can be treated as a triple $(P_s, |\mathcal{L}|, \mathcal{L}.\theta)$.
-}
+%%%{It is worth pointing out that in some algorithms, they do not directly define threshold on a distance, instead, they accumulate the distances of points to a line segment and define a threshold on the accumulated value. For example, algorithms MRPA and DOTS use ISSD which is an accumulated value of \ped. }
+
+
 
 
 
@@ -147,7 +163,7 @@ The sub-optimal algorithms are heuristic, they achieve better efficiencies at th
 From the point of view of the distance checking policies they applied, these algorithms can further be organized with
 batch method, online method and one-pass method, as follows:
 
-\ni (1) \textit{batch algorithms} apply the global distance checking policy which requires all trajectory points be loaded before they start compressing and a point may be checked many times to calculate the distance of it to the corresponding line segments during the whole process. Example algorithms are Douglas-Peucker\cite{Douglas:Peucker,Meratnia:Spatiotemporal} and \pavlidis~\cite{Pavlidis:Segment}. 
+\ni (1) \textit{batch algorithms} apply the global distance checking policy which requires all trajectory points be loaded before they start compressing and a point may be checked many times to calculate the distance of it to the corresponding line segments during the whole process. Example algorithms are Douglas-Peucker\cite{Douglas:Peucker,Meratnia:Spatiotemporal} and \pavlidis~\cite{Pavlidis:Segment}.
 
 \ni (2) \textit{online algorithms} apply the constraint global distance checking policy which need not have the entire trajectory ready before they start compressing, instead, they restrict the checking within a window and a point is still checked multiple times during the process. Example algorithms are \opwa \cite{Meratnia:Spatiotemporal}, \bqsa\cite{Liu:BQS} and \squishe~\cite{Muckell:SQUISH}.
 
@@ -157,7 +173,7 @@ The algorithms reviewed and evaluated in our experiments are summarized in \myta
 (i) \opt\cite{Chan:Optimal} and \optp, two optimal algorithms.
 (ii) Douglas-Peucker\cite{Douglas:Peucker,Meratnia:Spatiotemporal} and \pavlidis~\cite{Pavlidis:Segment}, two distinct batch \lsa algorithms,
 (iii) \bqsa\cite{Liu:BQS} and \squishe~\cite{Muckell:SQUISH}, two famous online \lsa algorithms, and
-(iv) \operb\cite{Lin:Operb}, \siped \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve} and \cised \cite{Lin:Cised}, three one-pass \lsa algorithms.
+(iv) \operb\cite{Lin:Operb}, \siped \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}, \cised \cite{Lin:Cised} and \interval\cite{Ke:Interval}, four one-pass \lsa algorithms.
 %
 It is worth pointing out that some algorithms, \eg ~\optp, \bqsa and \operb, are \ped specific while others, \eg~\squishe and \cised, are \sed specific, depending on the optimization techniques they applied.
 
@@ -170,16 +186,17 @@ It is worth pointing out that some algorithms, \eg ~\optp, \bqsa and \operb, are
 	\small
 	\begin{tabular}{|l|c|c|c|c|c|c|c|}
 		\hline
-		\kw{Name}  & \kw{Type}      &\kw{\ped} &\kw{\sed}  &  \kw{Time} & \kw{Space} \\		\hline
-		\opt~\cite{Imai:Optimal}	&optimal		&Y & Y & $O(n^3)$	& {$O(n^2)$} \\		\hline
-		\optp\cite{Chan:Optimal}	&optimal		&Y & N & $O(n^2)$	& {$O(n)$} \\		\hline
-		\dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal}	&batch  &Y &Y    & $O(n^2)$ & O(n)  \\		\hline
-		\tpa\cite{Pavlidis:Segment}	&batch       &Y &Y   & $O(n^2/K)$ & O(n)  \\		\hline
-		\bqsa\cite{Liu:BQS}	&online	   &Y   & N& $O(n^2)$  & $O(|Q|)$   \\		\hline
-		\squishe\cite{Muckell:Compression}\hspace{-1ex}	&{online}	  & N &Y    & \hspace{-1ex}$O(n\log|Q|)$\hspace{-1ex} & $O(|Q|)$ \\		\hline
-		\operb\cite{Lin:Operb}	& one-pass	  &Y & N  & $O(n)$ & O(1)  \\		\hline
-		\siped\cite{Dunham:Cone, Zhao:Sleeve}\hspace{-1ex}	&one-pass	  &Y & N & $O(n)$ & O(1) \\		\hline
-		\cised\cite{Lin:Cised}	&one-pass	 	&N & Y & $O(n)$ & O(1) \\		\hline
+		\kw{Name}  & \kw{Type}      &\kw{\ped} &\kw{\sed}  &\kw{\dad} &  \kw{Time} & \kw{Space} \\		\hline
+		\opt~\cite{Imai:Optimal}	&optimal		&Y & Y & Y & $O(n^3)$	& {$O(n^2)$} \\		\hline
+		\optp\cite{Chan:Optimal}	&optimal		&Y & N & N & $O(n^2)$	& {$O(n)$} \\		\hline
+		\dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal}	&batch  &Y &Y & Y   & $O(n^2)$ & O(n)  \\		\hline
+		\tpa\cite{Pavlidis:Segment}	&batch       &Y &Y & Y  & $O(n^2/K)$ & O(n)  \\		\hline
+		\bqsa\cite{Liu:BQS}	&online	   &Y   & N & N & $O(n^2)$  & $O(|Q|)$   \\		\hline
+		\squishe\cite{Muckell:Compression}\hspace{-1ex}	&{online}	  & N &Y  & N  & \hspace{-1ex}$O(n\log|Q|)$\hspace{-1ex} & $O(|Q|)$ \\		\hline
+		\operb\cite{Lin:Operb}	& one-pass	  &Y & N & N & $O(n)$ & O(1)  \\		\hline
+		\siped\cite{Dunham:Cone, Zhao:Sleeve}\hspace{-1ex}	&one-pass	  &Y & N & N & $O(n)$ & O(1) \\		\hline
+		\cised\cite{Lin:Cised}	&one-pass	 	&N & Y & N & $O(n)$ & O(1) \\		\hline
+		\interval\cite{Ke:Interval}	&one-pass	 	&N & N & Y & $O(n)$ & O(1) \\		\hline
 	\end{tabular}
 	{\\  Note: $K$ is the number of the final segments of a trajectory and $|Q|$ is the size of a buffer/window.}
 	\vspace{-3ex}
