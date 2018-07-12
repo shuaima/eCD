@@ -82,7 +82,7 @@ Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{
 (c) $P'.t$ = $P.t$, where $c= \frac{P.t-P_s.t}{P_e.t-P_s.t}$.
 
  (3) the $dad(\mathcal{L}_1, \mathcal{L}_2)$, say, the direction deviation from $\mathcal{L}_1$ to $\mathcal{L}_2)$, is $\Delta(\mathcal{L}_1.\theta, \mathcal{L}_2.\theta) = \min\{|\mathcal{L}_1.\theta - \mathcal{L}_2.\theta|, 2\pi - |\mathcal{L}_1.\theta - \mathcal{L}_2.\theta|\}$, where $\theta \in [0, 2\pi)$ is the angular of $\mathcal{L}$.
- 
+
 
 
 Then, given a trajectory \trajec{T}$[P_0, \dots, P_n]$ and a pre-specified constant $\epsilon$, the \emph{min-$\#$} problem of trajectory simplification is to approximate the trajectory \trajec{T} by $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$), such that
@@ -103,7 +103,7 @@ We illustrate the problem and notations with examples.
 	%
     (2) the set of two continuous line segments $\{\vv{P_0P_4}$, $\vv{P_4P_{10}}$\}, the set of four continuous line segments $\{\vv{P_0P_2}$, $\vv{P_2P_4}$, $\vv{P_4P_7}$, $\vv{P_7P_{10}}$\} and the set of three continuous line segments $\{\vv{P_0P_4}$, $\vv{P_4P_5}$, $\vv{P_5P_{10}}$\} are three piecewise line representations of trajectory $\dddot{\mathcal{T}}$,
 	%
-	(3) $ped(P_4, \vv{P_0P_{10}})=|\vv{P_4P^*_4}|$, where $P^*_4$ is the perpendicular point of $P_4$ \wrt line segment $\vv{P_0P_{10}}$, 
+	(3) $ped(P_4, \vv{P_0P_{10}})=|\vv{P_4P^*_4}|$, where $P^*_4$ is the perpendicular point of $P_4$ \wrt line segment $\vv{P_0P_{10}}$,
 	%
 	(4) $sed(P_4, \vv{P_0P_{10}})= |\vv{P_4P'_4}|$, $sed(P_2, \vv{P_0P_{4}})= |\vv{P_2P'_2}|$ and $sed(P_7, \vv{P_4P_{10}})$ $=$ $|\vv{P_7P'_7}|$,
 	where points $P'_4$, $P'_2$ and $P'_7$ are the synchronized points of $P_4$, $P_2$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$, $\vv{P_0P_{4}}$ and $\vv{P_4P_{10}}$, respectively, and
@@ -176,27 +176,27 @@ It is worth pointing out that some algorithms, \eg ~\optp, \bqsa and \operb, are
 
 \todo{There are also some trajectory simplification algorithms that do not directly enforce threshold on a distance, instead, they accumulate the distances of points to a line segment and enforce a threshold on the accumulated value. For example, algorithms MRPA and DOTS use ISSD which is an accumulated value of \ped. We do not evaluate these ISSD based algorithms because the comparison between ISSD and the above distances seems meaningless.}
 
-\begin{table}
+\begin{table*}
 	\renewcommand{\arraystretch}{1.20}
 	\vspace{-1ex}
 	\caption{\small Evaluated trajectory simplification algorithms}
 	\label{tab:summary-lsa}
 	\centering
 	\small
-	\begin{tabular}{|l|c|c|c|c|c|c|c|}
+	\begin{tabular}{|l|c|c|c|c|c|c|c|c}
 		\hline
-		\kw{Name}  & \kw{Type}      &\kw{\ped} &\kw{\sed}  &\kw{\dad} &  \kw{Time} & \kw{Space} \\		\hline
-		\opt~\cite{Imai:Optimal}	&optimal		&Y & Y & Y & $O(n^3)$	& {$O(n^2)$} \\		\hline
-		\optp\cite{Chan:Optimal}	&optimal		&Y & N & N & $O(n^2)$	& {$O(n)$} \\		\hline
-		\dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal}	&batch  &Y &Y & Y   & $O(n^2)$ & O(n)  \\		\hline
-		\tpa\cite{Pavlidis:Segment}	&batch       &Y &Y & Y  & $O(n^2/K)$ & O(n)  \\		\hline
-		\bqsa\cite{Liu:BQS}	&online	   &Y   & N & N & $O(n^2)$  & $O(|Q|)$   \\		\hline
-		\squishe\cite{Muckell:Compression}\hspace{-1ex}	&{online}	  & N &Y  & N  & \hspace{-1ex}$O(n\log|Q|)$\hspace{-1ex} & $O(|Q|)$ \\		\hline
-		\operb\cite{Lin:Operb}	& one-pass	  &Y & N & N & $O(n)$ & O(1)  \\		\hline
-		\siped\cite{Dunham:Cone, Zhao:Sleeve}\hspace{-1ex}	&one-pass	  &Y & N & N & $O(n)$ & O(1) \\		\hline
-		\cised\cite{Lin:Cised}	&one-pass	 	&N & Y & N & $O(n)$ & O(1) \\		\hline
-		\interval\cite{Ke:Interval}	&one-pass	 	&N & N & Y & $O(n)$ & O(1) \\		\hline
+		\kw{Name}  & \kw{Type}      &\kw{\ped} &\kw{\sed}  &\kw{\dad} &  \kw{Time} & \kw{Space} & \kw{Key~Idea}\\		\hline
+		\opt~\cite{Imai:Optimal}	&optimal		&Y & Y & Y & $O(n^3)$	& {$O(n^2)$}  & Graph\\		\hline
+		\optp\cite{Chan:Optimal}	&optimal		&Y & N & N & $O(n^2)$	& {$O(n)$}  &Graph and Sector intersection  \\		\hline
+		\dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal}	&batch  &Y &Y & Y   & $O(n^2)$ & O(n)   & Top-down \\		\hline
+		\tpa\cite{Pavlidis:Segment}	&batch       &Y &Y & Y  & $O(n^2/K)$ & O(n)   &Bottom-up \\		\hline
+		\bqsa\cite{Liu:BQS}	&online	   &Y   & N & N & $O(n^2)$  & $O(|Q|)$    &Top-down, opening window and Convex hull  \\		\hline
+		\squishe\cite{Muckell:Compression}	&{online}	  & N &Y  & N  & $O(n\log|Q|)$ & $O(|Q|)$  &Bottom-up and Priority queue \\		\hline
+		\operb\cite{Lin:Operb}	& one-pass	  &Y & N & N & $O(n)$ & O(1)   & Fitting function \\		\hline
+		\siped\cite{Dunham:Cone, Zhao:Sleeve}	&one-pass	  &Y & N & N & $O(n)$ & O(1)  & Sector intersection\\		\hline
+		\cised\cite{Lin:Cised}	&one-pass	 	&N & Y & N & $O(n)$ & O(1)  & Spatio-temporal cone intersection \\		\hline
+		\interval\cite{Ke:Interval}	&one-pass	 	&N & N & Y & $O(n)$ & O(1)  & Interval intersection \\		\hline
 	\end{tabular}
 	{\\  Note: $K$ is the number of the final segments of a trajectory and $|Q|$ is the size of a buffer/window.}
 	\vspace{-3ex}
-\end{table}
+\end{table*}
