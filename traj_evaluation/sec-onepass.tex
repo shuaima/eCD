@@ -250,6 +250,24 @@ Given a direction line segment $\mathcal{L}$ and an angle $\epsilon$, the \emph{
 %
 The \emph{common subinterval} of a set of directed line segments $\{\vv{P_sP_{s+1}}, \vv{P_{s+1}P_{s+2}}, ..., \vv{P_{s+k-1}P_{s+k}}\}$ \wrt $\epsilon$ is $\bigsqcap_{i=1}^{k}Range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon)$.
 %denoted by $ComSub(\{\vv{P_sP_{s+1}}, \vv{P_{s+1}P_{s+2}}, ..., \vv{P_{s+k-1}P_{s+k}}\}, \epsilon)$, 
-It is proved that if the \emph{common subinterval} $\bigsqcap_{i=1}^{k}Range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon)\ne \phi$ and $\vv{P_sP_{s+k}}$ falls in the \emph{common subinterval}, then the maximum angular difference between each $\vv{P_{s+i-1}P_{s+i}}$, $i\in [1, k]$, and $\vv{P_sP_{s+k}}$ is not larger than $\epsilon$.
+It is proved that if the \emph{common subinterval} $\bigsqcap_{i=1}^{k}Range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon)\ne \phi$ and $\vv{P_sP_{s+k}}.\theta$ falls in the \emph{common subinterval}, then the maximum angular difference between each $\vv{P_{s+i-1}P_{s+i}}$, $i\in [1, k]$, and $\vv{P_sP_{s+k}}$ is not larger than $\epsilon$.
 
 Algorithm \interval runs in $O(n)$ time and takes $O(1)$ space, and it only supports \dad. 
+
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.66]{Figures/Fig-interval.png}
+	\vspace{-5ex}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}$ is compressed by the interval algorithm using \dad to two line segments.}
+	\vspace{-2ex}
+	\label{fig:interval}
+\end{figure}
+
+
+\begin{example}
+	\label{exm-alg-interval}
+	Figure~\ref{fig:interval} is a running example of the \emph{interval} method taking as input the same trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$. At the beginning, $P_0$ is the first start point, and points $P_1$, $P_2$, $P_3$, etc., each has a \emph{direction range}, defined by $Range(\vv{P_0P_1}, \epsilon)$, $Range(\vv{P_1P_2}, \epsilon)$, $Range(\vv{P_2P_3}, \epsilon)$, etc., respectively.
+	%
+	Because $\bigsqcap_{i=1}^{4}Range(\vv{P_{0+i-1}P_{0+i}}, \epsilon) \ne \phi$ and $\vv{P_0P_{4}}.\theta$ falls in the \emph{common subinterval}, and $\bigsqcap_{i=1}^{5}Range(\vv{P_{0+i-1}P_{0+i}}, \epsilon) = \phi$, $\vv{P_0P_4}$ is output and $P_4$ becomes the start point of the next section.
+	At last, the algorithm outputs two continuous line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.
+\end{example}
