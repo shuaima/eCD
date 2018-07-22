@@ -151,9 +151,9 @@ Existing \lsa algorithms, solving the \emph{min-$\#$} problem \cite{Chan:Optimal
 We now describe these categories and leave the detailed discussion and description of each algorithm to Section 3 and Section 4.
 
 \stitle{Optimal method.}
-The \textit{optimal} method is to find the minimal number of points or segments to represent the original trajectory \wrt an error bound $\epsilon$, by transforms the problem to search for the shortest path of a graph built from the original trajectory.
-Example algorithms of this category are \opt \cite{Chan:Optimal} and \optp \cite{Chan:Optimal}.
-%The optimal \lsa algorithms have relative high time/space complexities.
+The \textit{optimal} method is to find the minimal number of points or segments to represent the original trajectory \wrt an error bound $\epsilon$, by transforms the problem to search for the shortest path of a graph built from the original trajectory. Indeed, the optimal \lsa algorithms have relative high time/space complexities.
+Example algorithm of this category is \opt \cite{Imai:Optimal,Chan:Optimal}. % and \optp \cite{Chan:Optimal}.
+
 
 \stitle{Sub-optimal method.}
 The sub-optimal algorithms are heuristic, they achieve better efficiencies at the expense of outputting a little more data points.
@@ -166,14 +166,15 @@ batch method, online method and one-pass method, as follows:
 
 \ni (3) \textit{one-pass algorithms} apply the local distance checking policy which does not need a window to buffer the preview read points, instead, it processes each point in a trajectory once and only once. Example algorithms are \operb\cite{Lin:Operb}, \siped \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve} and \cised \cite{Lin:Cised}.
 
+We choose the most typical algorithms from each categories.
 The algorithms and distance metrics reviewed and evaluated in our experiments are summarized in \mytable{tab:summary-lsa}, namely,
-(i) \opt\cite{Chan:Optimal} and \optp, two optimal algorithms.
+(i) \opt\cite{Chan:Optimal} \eat{and \optp}, a naive optimal algorithm.
 (ii) Douglas-Peucker\cite{Douglas:Peucker,Meratnia:Spatiotemporal} and \pavlidis~\cite{Pavlidis:Segment}, two distinct batch \lsa algorithms,
-(iii) \bqsa\cite{Liu:BQS} and \squishe~\cite{Muckell:SQUISH}, two famous online \lsa algorithms, and
+(iii) \bqsa\cite{Liu:BQS} and \squishe~\cite{Muckell:SQUISH}, two important online \lsa algorithms, and
 (iv) \operb\cite{Lin:Operb}, \siped \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}, \cised \cite{Lin:Cised} and \interval\cite{Ke:Interval}, four one-pass \lsa algorithms.
-
-It is worth pointing out that some algorithms, \eg ~\optp, \bqsa and \operb, are \ped specific while others, \eg~\squishe and \cised, are \sed specific, depending on the optimization techniques they applied.
 %
+These algorithms, some are \ped specific (\eg ~\optp, \bqsa and \operb), some are \sed specific (\eg~\squishe and \cised) and some are \dad specific (\eg~\interval), depending on the optimization techniques they applied.
+
 \todo{There are also some trajectory simplification algorithms that do not directly enforce threshold on a distance, instead, they accumulate the distances of points to a line segment and enforce a threshold on the accumulated value. For example, algorithms MRPA and DOTS use ISSD which is an accumulated value of \ped. We do not evaluate these ISSD based algorithms because the comparison of compression ratios between ISSD and the above distances seems meaningless.}
 
 \begin{table*}
@@ -186,8 +187,8 @@ It is worth pointing out that some algorithms, \eg ~\optp, \bqsa and \operb, are
 	\begin{tabular}{|l|c|c|c|c|c|c|c|c}
 		\hline
 		\kw{Name}  & \kw{Type}      &\kw{\ped} &\kw{\sed}  &\kw{\dad} &  \kw{Time} & \kw{Space} & \kw{Key~Idea}\\		\hline
-		\opt~\cite{Imai:Optimal}	&optimal		&Y & Y & Y & $O(n^3)$	& {$O(n^2)$}  & Graph\\		\hline
-		\optp\cite{Chan:Optimal}	&optimal		&Y & N & N & $O(n^2)$	& {$O(n)$}  &Graph and Sector intersection  \\		\hline
+		\opt~\cite{Imai:Optimal}	&optimal		&Y & Y & Y & $O(n^3)$	& {$O(n^2)$}  & Reachability Graph\\		\hline
+%		\optp\cite{Chan:Optimal}	&optimal		&Y & N & N & $O(n^2)$	& {$O(n)$}  &Graph and Sector intersection  \\		\hline
 		\dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal}	&batch  &Y &Y & Y   & $O(n^2)$ & O(n)   & Top-down \\		\hline
 		\tpa\cite{Pavlidis:Segment}	&batch       &Y &Y & Y  & $O(n^2/K)$ & O(n)   &Bottom-up \\		\hline
 		\bqsa\cite{Liu:BQS}	&online	   &Y   & N & N & $O(n^2)$  & $O(|Q|)$    &Top-down, opening window and Convex hull  \\		\hline

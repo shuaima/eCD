@@ -201,7 +201,7 @@ In the first set of tests, we compare the compression ratios of these algorithms
 
 \stitle{Exp-1.1: Impacts of the error bound $\epsilon$}.
 To compare the compression ratios of these algorithms and evaluate the impacts of $\epsilon$ on them, we varied $\epsilon$ from $10m$ to $100m$ on the entire four datasets, respectively.
-The results are reported in Figure~\ref{fig:cr-ped-epsilon}, Figure~\ref{fig:cr-sed-epsilon} and Figure~\ref{fig:cr-dad-epsilon} (\todo{Note that algorithm \opt using \sed is not reported in Figure~\ref{fig:cr-sed-epsilon} because it can not run with the full dataset as input}).
+The results are reported in Figure~\ref{fig:cr-ped-epsilon}, Figure~\ref{fig:cr-sed-epsilon} and Figure~\ref{fig:cr-dad-epsilon} ({Note that the naive optimal algorithm using \sed is not reported in this tests because it can not run with the full dataset as input}).
 
 
 \sstab (1) When increasing $\epsilon$, the compression ratios decrease. 
@@ -210,20 +210,20 @@ The results are reported in Figure~\ref{fig:cr-ped-epsilon}, Figure~\ref{fig:cr-
 \sstab (2) Dataset \mopsi has the lowest compression ratios, compared with \taxi, \ucar and \geolife, due to its highest sampling rate, \taxi has the highest compression ratios due to its lowest sampling rate, and \ucar and \geolife and  have the compression ratios in the middle accordingly.
 
 \sstab (3) When using \ped, the compression ratios from the best
-to the worst are the optimal algorithm \optp, online algorithm \bqsa, batch algorithms \tpa and
+to the worst are the optimal algorithm \opt, online algorithm \bqsa, batch algorithms \tpa and
 \dpa, and one-pass algorithms \siped and \operb. 
 The output sizes of algorithm \bqsa are on average
-($103.58\%$, $113.32\%$, $120.22\%$, $120.83\%$) of the optimal algorithm \optp
+($103.58\%$, $113.32\%$, $120.22\%$, $120.83\%$) of the optimal algorithm \opt
 on datasets \dSets, respectively. 
 Algorithms \tpa and \dpa are comparable, and their output sizes are on average
-($103.17\%$, $125.05\%$, $131.01\%$, $138.01\%$) and ($106.98\%$, $130.03\%$, $140.56\%$, $139.00\%$) of \optp
+($103.17\%$, $125.05\%$, $131.01\%$, $138.01\%$) and ($106.98\%$, $130.03\%$, $140.56\%$, $139.00\%$) of \opt
 on datasets \dSets, respectively.
 Algorithms \siped and \operb are comparable, and they are on average
 ($113.09\%$, $136.73\%$, $150.23\%$, $152.29\%$)
-and ($119.89\%$, $143.14\%$, $147.80\%$, $152.37\%$) of \optp on datasets \dSets, respectively.
+and ($119.89\%$, $143.14\%$, $147.80\%$, $152.37\%$) of \opt on datasets \dSets, respectively.
 %
 For example, in \mopsi, the compression ratios of algorithms
-(\optp, \tpa, \dpa, \bqsa, \siped, \operb ) are ($1.6\%$, $2.2\%$, $2.2\%$, $1.9\%$, $2.4\%$, $2.4\%$) when $\epsilon$ = $40m$.
+(\opt, \tpa, \dpa, \bqsa, \siped, \operb ) are ($1.6\%$, $2.2\%$, $2.2\%$, $1.9\%$, $2.4\%$, $2.4\%$) when $\epsilon$ = $40m$.
 
 \sstab (4) When using \sed, the compression ratios from the best
 to the worst are batch algorithms \tpa and
@@ -252,7 +252,7 @@ $50.88\%$, $64.50\%$) of algorithms \tpa and \dpa using \sed on datasets \dSets,
 
 \stitle{{Exp-1.2}: Impacts of the sizes of trajectories}.
 To compare the compression ratios of these algorithms and evaluate the impacts of trajectory sizes on them, we chose $10$ trajectories from each dataset \taxi, \ucar, \geolife and \mopsi, respectively,
-and varied the size \trajec{|T|} of a trajectory from $1,000$ points to $10,000$ points, while fixed error bound $\epsilon = 60$ meters ({or $\epsilon = 45$ degrees}).
+and varied the size \trajec{|T|} of a trajectory from $1,000$ points to $10,000$ points, while fixed error bound $\epsilon = 60$ meters for \ped and \sed ({or $\epsilon = 45$ degrees for \dad}).
 The results are reported in Figure~\ref{fig:cr-ped-size}, Figure~\ref{fig:cr-sed-size} and Figure~\ref{fig:cr-dad-size}.
 
 
@@ -261,8 +261,8 @@ The results are reported in Figure~\ref{fig:cr-ped-size}, Figure~\ref{fig:cr-sed
 \sstab (2) The compression ratios in this test are consistent with test Exp-1.1.
 
 \sstab (3) When using \sed, the compression ratios from the best
-to the worst are the near optimal algorithm \opt, batch algorithms \tpa and
-\dpa, one-pass algorithm \cised, and online algorithm \squishe. 
+to the worst are the optimal algorithm \opt, batch algorithms \tpa and
+\dpa, one-pass algorithm \cised and online algorithm \squishe. 
 %
 {Algorithms \tpa and \dpa are comparable, and they are on average
 ($102.72\%$, $125.23\%$, $143.92\%$, $128.63\%$) and ($103.18\%$, $123.93\%$, $141.46\%$, $121.14\%$)
@@ -287,7 +287,7 @@ one-pass algorithm \interval and batch algorithm \dpa.
 
 
 \sstab (5) The compression ratios of algorithms using \ped are obviously better than using \sed.
-More specifically, the compression ratios of algorithms \optp, \tpa and \dpa
+More specifically, the compression ratios of algorithms \opt, \tpa and \dpa
 using \ped are on average {($56.03\%$, $33.42\%$, $33.12\%$, $72.42\%$),
 ($55.78\%$, $31.88\%$, $34.27\%$, $69.44\%$) and ($58.09\%$, $34.82\%$,
 $40.91\%$, $75.06\%$)} of algorithms \opt, \tpa and \dpa using \sed on datasets \dSets, respectively. 
@@ -390,16 +390,16 @@ The results are reported in Figure~\ref{fig:ae-ped-epsilon}, Figure~\ref{fig:ae-
 
 \sstab (3) When using \ped, the average errors from the smallest
 to the largest are batch algorithms \tpa and \dpa, one-pass
-algorithms \siped and \operb, the optimal algorithm \optp and online algorithm \bqsa. 
+algorithms \siped and \operb, the optimal algorithm \opt and online algorithm \bqsa. 
 Algorithms \tpa and
 \dpa are comparable, and they are on average ($77.43\%$, $58.69\%$, $61.34\%$,
-$57.57\%$) and ($88.12\%$, $57.61\%$, $62.66\%$, $60.23\%$) of the optimal algorithm \optp on datasets \dSets, respectively.
+$57.57\%$) and ($88.12\%$, $57.61\%$, $62.66\%$, $60.23\%$) of the optimal algorithm \opt on datasets \dSets, respectively.
 Algorithms \siped and \operb are comparable, and they are on average
-($73.08\%$, $80.96\%$, $79.12\%$, $79.33\%$), ($73.03\%$, $70.60\%$, $76.64\%$, $78.71\%$) of \optp on datasets \dSets, respectively.
-Algorithm \bqsa is on average ($97.69\%$, $104.67\%$, $108.91\%$, $106.92\%$) of \optp on datasets \dSets, respectively.
+($73.08\%$, $80.96\%$, $79.12\%$, $79.33\%$), ($73.03\%$, $70.60\%$, $76.64\%$, $78.71\%$) of \opt on datasets \dSets, respectively.
+Algorithm \bqsa is on average ($97.69\%$, $104.67\%$, $108.91\%$, $106.92\%$) of \opt on datasets \dSets, respectively.
 %
 For example, in \mopsi, the average errors of algorithms
-(\optp, \tpa, \dpa, \bqsa, \siped, \operb ) are ($16.08$, $9.19$, $9.68$, $17.4$, $12.96$, $12.77$)  metres when $\epsilon$ = $40m$.
+(\opt, \tpa, \dpa, \bqsa, \siped, \operb ) are ($16.08$, $9.19$, $9.68$, $17.4$, $12.96$, $12.77$)  metres when $\epsilon$ = $40m$.
 
 \sstab (4) When using \sed, the average errors from the smallest
 to the largest are online algorithm \squishe, batch algorithms \tpa and \dpa,
@@ -420,11 +420,13 @@ For example, in \mopsi, the average errors of algorithms
 \stitle{{Exp-2.2}: Impacts of the sizes of trajectories}.
 To compare the errors of these algorithms and evaluate the impacts of the sizes of trajectories on them, we chose the same $10$ trajectories from each dataset \taxi, \ucar, \geolife and \mopsi, respectively,
 and varied the size \trajec{|T|} of a trajectory from $1,000$ points to $10,000$ points, while fixed error bound $\epsilon = 60$ meters ({or $\epsilon = 45$ degrees}).
-The results are reported in Figure~\ref{fig:ae-ped-size},Figure~\ref{fig:ae-sed-size} and Figure~\ref{fig:ae-dad-size}.
+The results are reported in Figure~\ref{fig:ae-ped-size}, Figure~\ref{fig:ae-sed-size} and Figure~\ref{fig:ae-dad-size}.
 
 \sstab (1) The sizes of trajectories have few impacts on average errors.
 
 \sstab (2) The average errors in this test are consistent with test Exp-2.1.
+
+\sstab (3) \todo{When using \ped?}
 
 \sstab (3) When using \sed, the average errors from the smallest
 to the largest are online algorithm \squishe, batch algorithms \tpa and \dpa,
@@ -457,15 +459,15 @@ In the third set of tests, we compare the efficiency (execution time) of these a
 \stitle{Exp-3.1: Impacts of the error bound $\epsilon$}.
 To evaluate the impacts of $\epsilon$ on efficiencies of these algorithms, we varied $\epsilon$ from $10m$ to $100m$ on the entire four datasets, respectively.
 %
-The results show that the running time of algorithm \optp is on
-average ($261.71$, $334.49$, $403.56$, $202.82$) times slower than one-pass algorithms \siped and \cised on datasets \dSets, respectively. 
-For example, in \mopsi, the running time of algorithms
-(\optp, \siped, \cised) are  {($3014.2$, $7.5$, $9.8$)} seconds when $\epsilon$ = $40m$.
+%The results show that the running time of algorithm \optp is on average ($261.71$, $334.49$, $403.56$, $202.82$) times slower than one-pass algorithms \siped and \cised on datasets \dSets, respectively. 
+%For example, in \mopsi, the running time of algorithms (\opt, \siped, \cised) are  {($3014.2$, $7.5$, $9.8$)} seconds when $\epsilon$ = $40m$.
 %
-It is not easy to show all these algorithms in a figure, thus, only the results of sub-optimal algorithms are reported in Figure~\ref{fig:time-epsilon-ped},Figure~\ref{fig:time-epsilon-sed} and Figure~\ref{fig:time-epsilon-dad}.
+The results show that the running time of algorithm \opt is thousands of times slower than one-pass algorithms on our datasets.
+Indeed, it is not easy to show all these algorithms in a figure, thus, only the results of sub-optimal algorithms are reported in Figure~\ref{fig:time-epsilon-ped}, Figure~\ref{fig:time-epsilon-sed} and Figure~\ref{fig:time-epsilon-dad}.
 
 \sstab (1) One-pass algorithms are not very sensitive to error bound $\epsilon$. 
-More specifically, the running time of algorithms \dpa and \tpa decreases and increases with the increase of $\epsilon$ due to the top-down and bottom-up approaches they applying, respectively. It also shows that \dpa is more suitable than \tpa in circumstances that compression ratios are less than $\sim 10\%$.
+More specifically, the running time of algorithms \dpa and \tpa decreases and increases with the increase of $\epsilon$ due to the top-down and bottom-up approaches they applying, respectively. 
+%It also shows that \dpa is more suitable than \tpa in circumstances that compression ratios are less than $\sim 10\%$.
 
 \sstab (2) When using \ped, in most cases, the running time from the smallest to the largest are one-pass algorithms \siped and \operb, batch algorithms \tpa and \dpa, and online algorithm \bqsa. 
 Algorithms \siped and \operb are comparable, and algorithms \tpa, \dpa and \bqsa are on average
@@ -573,7 +575,7 @@ $\epsilon=45$ degrees, respectively.
 To evaluate the impacts of the number of data points in a trajectory (\ie the size of a trajectory),
 we chose $10$ trajectories from each dataset \taxi, \ucar, \geolife and \mopsi, respectively,
 and varied the size \trajec{|T|} of trajectories from $1,000$ points to $10,000$ points, while fixed error bound $\epsilon = 60$ meters ({or $\epsilon = 45$ degrees}).
-The results are reported in Figure~\ref{fig:time-size-ped}, Figure~\ref{fig:time-size-sed} and Figure~\ref{fig:time-size-dad}. Note the running time of algorithm \opt is great slower than \optp, and it is hard to show it in the figure.
+The results are reported in Figure~\ref{fig:time-size-ped}, Figure~\ref{fig:time-size-sed} and Figure~\ref{fig:time-size-dad}. 
 
 \sstab(1) One-pass algorithms \siped, \operb, \cised and \interval scale well with the increase of trajectory size \eat{on all datasets} and show a linear running time, while batch and online algorithms do not.
 This is consistent with their time complexity analyses.
@@ -595,17 +597,17 @@ From these tests we find the following.
 \emph{\sstab{(1) Compression ratios}}. 
 (a) When using \ped, the output data sizes of sub-optimal algorithms (\tpa,
 \dpa, \bqsa, \siped, \operb) are on average ($125.67\%$, $130.24\%$, $115.94\%$, $139.41\%$, $141.15\%$)
-of the optimal algorithm \optp, respectively.
-%the compression ratios from the best to the worst are the optimal algorithm \optp, batch and online algorithms \tpa, \dpa and \bqsa, and one-pass algorithms \siped and \operb. 
+of the optimal algorithm \opt, respectively.
+%the compression ratios from the best to the worst are the optimal algorithm \opt, batch and online algorithms \tpa, \dpa and \bqsa, and one-pass algorithms \siped and \operb. 
 (b) When using \sed, the output data sizes of sub-optimal algorithms (\tpa,
 \dpa, \squishe, \cised) are on average ($126.10\%$, $124.31\%$, $180.41\%$, $136.66\%$) of the naive optimal algorithm \opt, respectively.
 %the compression ratios from the best to the worst are the near optimal algorithm \nopts, batch algorithms \tpa and \dpa, one-pass algorithm \cised, and online algorithm \squishe.  
 (c) The compression ratios of algorithms using \ped are better than
-using \sed. The output data sizes of algorithms (\optp, \tpa, \dpa) using \ped
+using \sed. The output data sizes of algorithms (\opt, \tpa, \dpa) using \ped
 are on average ($46.66\%$, $46.64\%$, $48.96\%$) of (\opt, \tpa, \dpa) using \sed, respectively.
 
 \emph{\sstab{(2) Average errors}}. 
-(a) When using \ped, the average errors from the smallest to the largest are batch algorithms \tpa, \dpa, one-pass algorithms \siped and \operb, the optimal algorithm \optp, and online algorithm \bqsa. 
+(a) When using \ped, the average errors from the smallest to the largest are batch algorithms \tpa, \dpa, one-pass algorithms \siped and \operb, the optimal algorithm \opt, and online algorithm \bqsa. 
 (b) When using \sed, the average errors from the smallest to the largest are online algorithm \squishe, batch algorithms \tpa and \dpa, one-pass algorithm \cised, and the naive optimal algorithm \opt.
 %(c) The average errors of algorithms using \sed are a bit larger than using \ped. 
 

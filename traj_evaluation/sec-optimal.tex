@@ -8,15 +8,17 @@ The original optimal algorithm supports \ped, however, it is easy to revise it t
 %
 Toussaint of \cite{Toussaint:Optimal} and Melkman and O'Rourke of \cite{Melkman:Optimal} improved the time complexity to $O(n^2 \log n)$ by using either \textit{convex hull} or \textit{sector intersection} methods.
 The authors of \cite{Chan:Optimal} further presented an optimal algorithm using \ped (\optp) that achieves $O(n^2)$ time by using the \textit{sector intersection} mechanism.
+% 
+Algorithm SP\cite{Long:Direction} is essential an optimization of the original optimal algorithm using \dad that achieves $O(n^2)$ time.
 %
-Because the \textit{sector intersection} and the \textit{convex hull} mechanisms can not work with \sed, currently the time complexity of the optimal algorithm using \sed remains $O(n^3)$.
-%
-Furthermore, algorithm SP\cite{Long:Direction} is essential an optimization of the original optimal algorithm using \dad that achieves $O(n^2)$ time.
+Because the above optimizing mechanisms can not work with \sed, currently the time complexity of the optimal algorithm using \sed remains $O(n^3)$.
 %
 %However, we argue that an optimal and a near optimal \lsa algorithms using \sed can achieve $O(n^2 \log n)$ time and $O(n^2)$ time, respectively, by applying the spatio-temporal cone intersection mechanism shown in Section~\ref{sec-cised} developed in our preview work \cised~\cite{Lin:Cised}.
 
-In the rest of this section, we first introduce the naive optimal (\opt) algorithm \cite{Imai:Optimal} that runs in $O(n^3)$ time. We then review a \ped specific optimal algorithm \optp \cite{Chan:Optimal} that achieves $O(n^2)$ time.
-Algorithms \opt and \optp are both evaluated in our experiments.
+In the rest of this section, we introduce the naive optimal (\opt) algorithm \cite{Imai:Optimal} that runs in $O(n^3)$ time. 
+%We then review a \ped specific optimal algorithm \optp \cite{Chan:Optimal} that achieves $O(n^2)$ time.
+%Algorithms \opt and \optp are both evaluated in our experiments.
+Algorithm \opt is evaluated in our experiments.
 
 \subsection{The Naive Optimal Algorithm}
 Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ and an error bound $\epsilon$, the optimal trajectory simplification problem, as formulated by Imai and Iri in \cite{Imai:Optimal}, can be solved in two steps: (1) construct a reachability graph $G$ of \trajec{T} and (2) search a shortest path from point $P_0$ to point $P_{n}$ in graph $G$.
@@ -32,7 +34,8 @@ Thus, the construction step takes $O(n^3)$ time.
 Finding a shortest path takes no more than $O(n^2)$ time. Hence, the straightforward algorithm, \ie~\opt, takes $O(n^3)$ time in total.
 For space complexity, it needs $O(n^2)$ space.
 
-Algorithm \opt also supports \sed, and it runs in the same routine as using \ped.
+Though the brute-force algorithm was initially developed using \ped, it can be revised to support \sed and \dad smoothly.
+%Algorithm \opt also supports \sed, and it runs in the same routine as using \ped.
 
 \begin{figure}[tb!]
 	\centering
@@ -50,6 +53,9 @@ Algorithm \opt also supports \sed, and it runs in the same routine as using \ped
 %Though the brute-force algorithm was initially developed using \ped, it can be used for \sed.
 %We next introduce two improved optimal algorithms using \ped and \sed that run in $O(n^2)$ and $O(n^2 \log n)$ time, respectively, by fasting the construction of reachability graph $G$.
 
+
+
+\eat{%%%%%%%%%%%%%%%%%%%%%%%%20180722
 \subsection{The Fast Optimal Algorithm Using \ped}
 \label{subsec-optped}
 
@@ -80,9 +86,11 @@ Algorithm \optp does not support \sed.
 \begin{figure}[tb!]
 	\centering
 	\hspace{-1ex}\includegraphics[scale=0.66]{Figures/Fig-OptPed.png}\vspace{-3ex}
-	\caption{\small The trajectory $\dddot{\mathcal{T}}$ is compressed by the sector intersection algorithm using \ped to two line segments.}	\vspace{-3ex}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}$ is compressed by the fast optimal algorithm using \ped to two line segments.}	\vspace{-3ex}
 	\label{fig:optped}
 \end{figure}
+}
+
 
 \eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{The Optimal Algorithm using \sed}
