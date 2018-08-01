@@ -1,0 +1,218 @@
+\vspace{-1ex}
+\section*{Appendix: Examples}
+
+
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.75]{Figures/Fig-Optimal.png}\vspace{-2ex}
+	\caption{\small Example of reachability graph of trajectory \trajec{T}$[P_0, \ldots, P_n]$ whose shortest path is $(P_0, P_4, P_{10})$.}	\vspace{-3ex}
+	\label{fig:optimal}
+\end{figure}
+
+\begin{example}
+	\label{exm-alg-optimal}
+	Figure~\ref{fig:optimal} is an example of the naive optimal algorithm using \ped taking as input the trajectory \trajec{T} shown in Figure~\ref{fig:notations}. The reachability graph of \trajec{T} is constructed and a shortest path with 2 edges is founded.
+	At last, the algorithm outputs two line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.	
+\end{example}
+\vspace{-1ex}
+
+
+
+
+\begin{example}
+\label{exm-alg-lsa}
+Consider the trajectory $\dddot{\mathcal{T}}[P_0,\ldots,P_{10}]$ shown in Figure~\ref{fig:notations}.
+The $\dpa$ Algorithm firstly creates $\vv{P_0P_{10}}$, then it calculates the distance of each point in $\{P_0,\ldots,P_{10}\}$ to $\vv{P_0P_{10}}$.
+It finds that $P_{4}$ has the maximum distance to $\vv{P_0P_{10}}$, which is greater than $\epsilon$. Then it goes to compress sub-trajectories $[P_0, \ldots, P_{4}]$ and $[P_{4}, \ldots, P_{10}]$, separately.
+When using \sed (right), the sub-trajectory $[P_4,\ldots, P_{10}]$ is further split to $[P_4$, $\ldots$, $P_7]$ and $[P_7$, $P_{10}]$.
+Finally, the algorithm outputs two continuous directed line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$ when using \ped, and three continuous directed line segments $\vv{P_0P_4}$, $\vv{P_4P_7}$ and $\vv{P_7P_{10}}$ when using \sed.
+\end{example}
+
+
+
+
+
+
+\begin{example}
+\label{exm-alg-pavlidis}
+Figure~\ref{fig:pavlidis} is an example of the \tpa algorithm.
+
+\ni (1) Initially, $10$ line segments are created, and for each pair of adjacent segments, the costs of merging them are calculated and saved. For example, the cost of merging $\vv{P_0P_1}$ and $\vv{P_1P_2}$ is $ped(P_{1}, \vv{P_0P_{2}}) = 0.32\epsilon$.
+%
+(2) The cost of merging $\vv{P_6P_7}$ and $\vv{P_7P_8}$ is $0.02\epsilon$, which is the minimal value among all costs. Hence, $\vv{P_6P_7}$ and $\vv{P_7P_8}$ are merged to $\vv{P_6P_8}$. The cost of merging $\vv{P_5P_6}$ and $\vv{P_6P_8}$, and the cost of merging $\vv{P_6P_8}$ and $\vv{P_8P_9}$ are further updated to $0.37\epsilon$ and $0.11\epsilon$, respectively.
+%
+(3) $\vv{P_2P_3}$ and $\vv{P_3P_4}$ are merged to $\vv{P_2P_4}$. The cost merging $\vv{P_2P_4}$ and $\vv{P_4P_5}$, and the cost of merging $\vv{P_1P_2}$ and $\vv{P_2P_4}$ are also updated.
+%
+(4) At last, the algorithm outputs two line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.
+\end{example}
+
+
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.55]{Figures/Fig-Pavlidis.png}
+	\vspace{-5.5ex}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{8}]$ is compressed by the \pavlidis~algorithm using \ped to two line segments. The triple $(i, j, cost)$ is the $cost$ of merging the line segments $\overline{P_iP_t}$ and $\overline{P_tP_j}$.} % The algorithm finally outputs $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$ 
+	\vspace{-2.5ex}
+	\label{fig:pavlidis}
+\end{figure*}
+
+
+
+
+
+
+\begin{example}
+\label{exm-alg-bqs}
+In Figure~\ref{fig:bqs}, the bounding box $c_1c_2c_3c_4$ and the two lines $\vv{P_sP_{h}} = \vv{P_0P_1}$ and $\vv{P_sP_{l}} = \vv{P_0P_2}$ form a convex hull $u_1u_2c_2l_2l_1c_4$. \bqsa computes the distances of $u_1,u_2,c_2,l_2,l_1$ and $c_4$ to line $\vv{P_0P_6}$ when $k=6$ or to line $\vv{P_0P_7}$ when $k=7$.
+
+When $k=6$, all these distances to $\vv{P_0P_6}$  are less than $\epsilon$, hence \bqsa goes on to the next point (case 2); When $k=7$,
+the max and min distances to $\vv{P_0P_7}$ are larger and less than $\epsilon$, respectively, and \bqsa needs to compress sub-trajectory $[P_0, \ldots, P_7]$ along the same line as \dpa (case 3).
+\end{example}
+
+\begin{figure}[tb!]
+%\vspace{-1ex}
+\centering
+\includegraphics[scale = 0.66]{Figures/Fig-BQS.png}
+\vspace{-2ex}
+\caption{{\small Examples for algorithm \bqsa.}}
+\label{fig:bqs}
+\vspace{-3ex}
+\end{figure}
+
+
+
+
+\begin{example}
+\label{exm-alg-squishe}
+Figure~\ref{fig:squishe} is an example of \squishe.
+%
+(1) Initially, $|Q| = 6$ points are read to the list. The tuple $(pre, suc, mmprio, prio)$ for each point is initialized. For example, the tuple of $P_1$ is set to $(0, 2, 0, 0.42\epsilon)$, where $0.42\epsilon$ is the \sed from $P_1$ to $\vv{P_0P_2}$.
+%
+(2) The priority of $P_3$ has the minimal value, thus, it is removed from the list.
+The $mnprio$ properties of $P_2$ and $P_4$ are updated to $max\{mnprio(pre(P_3)), prio(P_3)\}$ = $max\{mnprio(P_2), prio(P_3)\}$ = $max\{0, 0.39\epsilon\}$ = $0.39\epsilon$, and $max\{mnprio(P_4), ~prio(P_3)\}$ = $0.39\epsilon$, respectively.
+Furthermore, the $prio$ property of $P_4$ is updated to $mnprio(suc(P_j)) + sed(suc(P_j),\vv{pre(P_{j})suc(suc(P_{j}))})$ = $mnprio(P_4) + sed(P_4,\vv{P_2P_5})$ = $0.39\epsilon + 2.50\epsilon$ = $2.89\epsilon$, and the $prio$ property of $P_2$ is updated to $mnprio(P_2) + sed(P_2,\vv{P_1P_4})$ = $0.39\epsilon + 2.12\epsilon$ = $2.51\epsilon$.
+Then, $P_6$ is read, and the information of $P_5$ is updated.
+%
+(3) $P_5$ is removed and $P_7$ is read to the list.
+%
+(4) Finally, the algorithm outputs 5 line segments $\vv{P_0P_2},\vv{P_2P_4},\vv{P_4P_7},\vv{P_7P_9}$ and $\vv{P_9P_{10}}$.
+\end{example}
+
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.55]{Figures/Fig-Squishe.png}
+	\vspace{-3ex}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the \squishe algorithm using \sed to five line segments. The size of Q is 6, and the data structure after point $P$ is a tuple $(pre, suc, mmprio, prio)$. }
+	\vspace{-3ex}
+	\label{fig:squishe}
+\end{figure*}
+
+
+
+
+
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.66]{Figures/Fig-OPER.png}
+	\vspace{-5ex}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the \operb algorithm using \ped to two line segments.}
+	\vspace{-2ex}
+	\label{fig:operb}
+\end{figure}
+
+
+\begin{example}
+	\label{exm-alg-operb}
+	Figure~\ref{fig:operb} is a running example of the \operb algorithm compressing the same trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$.
+	(1) It takes $P_0$ as the start point, reads $P_1$ and sets $\mathcal{L}_1$ = $\vv{P_0P_1}$.
+	(2) It reads $P_2$. The distance from $P_2$ to $\mathcal{L}_1$ is less than the threshold, thus, it updates $\mathcal{L}_1$  to $\mathcal{L}_2$ by the fitting function $\mathbb{F}$.
+	(3) It reads $P_3$ and $P_4$, and updates $\mathcal{L}_2$ to $\mathcal{L}_3$ and $\mathcal{L}_3$ to $\mathcal{L}_4$, respectively.
+	(4) It reads $P_5$. The distance from $P_5$ to $\mathcal{L}_4$ is larger than the threshold, thus, it outputs $\vv{P_0P_4}$ and start the next section taking $P_4$ as the new start point.
+	(5) The process continues until all points have been processed. At last, the algorithm outputs two continuous line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.
+\end{example}
+
+
+
+
+\begin{example}
+	\label{exm-alg-sleeve}
+	Figure~\ref{fig:sleeve} is a running example of the narrow \emph{sector} method taking as input the same trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$. At the beginning, $P_0$ is the first start point, and points $P_1$, $P_2$, $P_3$, etc., each has a narrow \emph{sector}.
+	For example, the narrow \emph{sector} $\mathcal{S}$($P_0$, $P_{3}$, $\epsilon/2$) takes $P_0$ as the center point and $\vv{P_0P^u_{3}}$ and $\vv{P_0P^l_{3}}$ as the border lines.
+	Because $\bigsqcap_{i=1}^{4}\mathcal{S}(P_0, P_{0+i}, \epsilon/2) \ne \{P_0\}$ and $\bigsqcap_{i=1}^{5}\mathcal{S}(P_0, P_{0+i}, \epsilon/2) = \{P_0\}$, $\vv{P_0P_4}$ is output and $P_4$ becomes the start point of the next section.
+	At last, the algorithm outputs two continuous line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.
+\end{example}
+
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.66]{Figures/Fig-sleeve.png}
+	\vspace{-5ex}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}$ is compressed by the sector intersection algorithm using \ped to two line segments.}
+	\vspace{-2ex}
+	\label{fig:sleeve}
+\end{figure}
+
+
+
+
+
+%%%%%%%%%%%%%%% example of Algorithm CISED
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.66]{Figures/Fig-Conest.png}
+	\vspace{-3ex}
+	\caption{\small A running example of the \cised algorithm. The points and the oblique circular cones are projected on an x-y space. }%The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed into four line segments.
+	\vspace{-3ex}
+	\label{fig:exm-const}
+\end{figure}
+%%%%%%%%%%%%%%%%
+
+\begin{example}
+\label{exm-alg-conest}
+	Figure~\ref{fig:exm-const} shows a running example of \cised for compressing the trajectory \trajec{T} in Figure~\ref{fig:notations}.
+	For convenience, we project the points and the oblique circular cones on a x-y space.
+%	
+	(1) After initialization, the \cised algorithm reads point $P_1$ and builds a narrow \emph{oblique circular cone}~\cone{(P_0, \mathcal{O}(P_{1}, \epsilon/2))}, taking $P_0$ as its apex and \circle{(P_1, \epsilon/2)} as its base (green dash). The \emph{circular cone} is projected on the plane $P.t-P_1.t=0$, and the inscribe regular polygon $\mathcal{R}_1$ of the projection circle is returned. As $\mathcal{R}^*$ is empty, $\mathcal{R}^*$ is set to $\mathcal{R}_1$.
+%	
+	(2) The algorithm reads $P_2$ and builds \cone{(P_0, \mathcal{O}(P_{2}, \epsilon/2))} (red dash). The \emph{circular cone} is also projected on the plane $P.t-P_1.t=0$ and the inscribe regular polygon $\mathcal{R}_2$ of the projection circle is returned. As $\mathcal{R}^*=\mathcal{R}_1$ is not empty, $\mathcal{R}^*$ is set to the intersection of $\mathcal{R}_2$ and $\mathcal{R}^*$, which is $\mathcal{R}_1 \bigsqcap \mathcal{R}_2 \ne \emptyset$.
+%	
+	(3) For point $P_3$, the algorithm runs the same routine as $P_2$ until the intersection of $\mathcal{R}_3$ and $\mathcal{R}^*$ is $\emptyset$. Thus, a line segment $\vv{P_0P_2}$ is generated, and the process of a new line segment is started, taking $P_2$ as the new start point and $P.t-P_3.t=0$ as the new projection plane.
+%	
+	(4) At last, the algorithm outputs four continuous line segments, \ie $\{\vv{P_0P_2}$, $\vv{P_2P_4}$, $\vv{P_4P_{7}}$, $\vv{P_7P_{10}}\}$. %\eop
+\end{example} 	
+\vspace{-1ex}
+
+
+
+
+
+
+
+
+
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.66]{Figures/Fig-interval.png}
+	\vspace{-5ex}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}$ is compressed by the interval algorithm using \dad to two line segments.}
+	\vspace{-2ex}
+	\label{fig:interval}
+\end{figure}
+
+
+\begin{example}
+	\label{exm-alg-interval}
+	Figure~\ref{fig:interval} is a running example of the \emph{interval} method taking as input the same trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$. At the beginning, $P_0$ is the first start point, and points $P_1$, $P_2$, $P_3$, etc., each has a \emph{direction range} $Range(\vv{P_0P_1}, \epsilon)$, $Range(\vv{P_1P_2}, \epsilon)$, $Range(\vv{P_2P_3}, \epsilon)$, etc., respectively.
+	%
+	Because $\bigsqcap_{i=1}^{4}Range(\vv{P_{0+i-1}P_{0+i}}, \epsilon) \ne \phi$ and $\vv{P_0P_{4}}.\theta$ falls in the \emph{common subinterval}, and $\bigsqcap_{i=1}^{5}Range(\vv{P_{0+i-1}P_{0+i}}, \epsilon) = \phi$, $\vv{P_0P_4}$ is output and $P_4$ becomes the start point of the next section.
+	At last, the algorithm outputs two continuous line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.
+\end{example}
+
+
+
+
+
+
+
+
+
+

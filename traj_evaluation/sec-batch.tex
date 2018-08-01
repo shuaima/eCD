@@ -10,14 +10,8 @@ Bottom-up algorithms, \eg Theo Pavlidis \cite{Pavlidis:Segment}, is the natural 
 
 We next review algorithms Douglas-Peucker and Theo Pavlidis evaluated in out experiments.
 
-\begin{figure*}[tb!]
-	\centering
-	\includegraphics[scale=0.55]{Figures/Fig-Pavlidis.png}
-	\vspace{-5.5ex}
-	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{8}]$ is compressed by the \pavlidis~algorithm using \ped to two line segments. The triple $(i, j, cost)$ is the $cost$ of merging the line segments $\overline{P_iP_t}$ and $\overline{P_tP_j}$.} % The algorithm finally outputs $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$ 
-	\vspace{-2.5ex}
-	\label{fig:pavlidis}
-\end{figure*}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{-1ex}
@@ -71,19 +65,6 @@ The basic \dpa uses \ped, however, it also supports \sed \cite{Meratnia:Spatiote
 
 
 
-
-
-%\vspace{-1ex}
-\begin{example}
-\label{exm-alg-lsa}
-Consider the trajectory $\dddot{\mathcal{T}}[P_0,\ldots,P_{10}]$ shown in Figure~\ref{fig:notations}.
-The $\dpa$ Algorithm firstly creates $\vv{P_0P_{10}}$, then it calculates the distance of each point in $\{P_0,\ldots,P_{10}\}$ to $\vv{P_0P_{10}}$.
-It finds that $P_{4}$ has the maximum distance to $\vv{P_0P_{10}}$, which is greater than $\epsilon$. Then it goes to compress sub-trajectories $[P_0, \ldots, P_{4}]$ and $[P_{4}, \ldots, P_{10}]$, separately.
-When using \sed (right), the sub-trajectory $[P_4,\ldots, P_{10}]$ is further split to $[P_4$, $\ldots$, $P_7]$ and $[P_7$, $P_{10}]$.
-Finally, the algorithm outputs two continuous directed line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$ when using \ped, and three continuous directed line segments $\vv{P_0P_4}$, $\vv{P_4P_7}$ and $\vv{P_7P_{10}}$ when using \sed.
-\end{example}
-
-
 \vspace{-1ex}
 \subsubsection{Theo Pavlidis Algorithm}
 
@@ -100,18 +81,4 @@ When the pair of adjacent segments $[P_{s}, P_{s+j}]$ and $[P_{s+j}, P_{s+k}]$ a
 The time complexity of the algorithm is $O(n^2/K)$, where $K$ is the number of the final segments.
 %Furthermore, it is also easy to implement \sed in the \tpa algorithm.
 The \tpa algorithm like \dpa algorithm originally only supports \ped, but it is also easy to be extended to support \sed.
-
-
-\begin{example}
-\label{exm-alg-pavlidis}
-Figure~\ref{fig:pavlidis} is an example of the \tpa algorithm.
-
-\ni (1) Initially, $10$ line segments are created, and for each pair of adjacent segments, the costs of merging them are calculated and saved. For example, the cost of merging $\vv{P_0P_1}$ and $\vv{P_1P_2}$ is $ped(P_{1}, \vv{P_0P_{2}}) = 0.32\epsilon$.
-%
-(2) The cost of merging $\vv{P_6P_7}$ and $\vv{P_7P_8}$ is $0.02\epsilon$, which is the minimal value among all costs. Hence, $\vv{P_6P_7}$ and $\vv{P_7P_8}$ are merged to $\vv{P_6P_8}$. The cost of merging $\vv{P_5P_6}$ and $\vv{P_6P_8}$, and the cost of merging $\vv{P_6P_8}$ and $\vv{P_8P_9}$ are further updated to $0.37\epsilon$ and $0.11\epsilon$, respectively.
-%
-(3) $\vv{P_2P_3}$ and $\vv{P_3P_4}$ are merged to $\vv{P_2P_4}$. The cost merging $\vv{P_2P_4}$ and $\vv{P_4P_5}$, and the cost of merging $\vv{P_1P_2}$ and $\vv{P_2P_4}$ are also updated.
-%
-(4) At last, the algorithm outputs two line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.
-\end{example}
 
