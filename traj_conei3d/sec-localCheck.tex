@@ -10,10 +10,9 @@ We consider a sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, P_{s+k}]$, an e
 
 \subsection{Spatio-Temporal Cone Intersection}
 
-We first present the \textit{spatio-temporal cone intersection} method in a \emph{x-y-t} 3D coordinate system, which extends the \textit{sector intersection} method~\cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve}. %in a 2D Cartesian coordinate system.
+We first define the \textit{synchronous circles} in a \emph{x-y-t} 3D coordinate system and show the relationship between the \textit{synchronous circles} and the \textit{synchronous distances}.
 
 %Recall that the \sed of point $P_i$ to a directed line segment $\mathcal{L} = \vv{P_{s}P_{e}}$, denoted as $sed(P_i, \mathcal{L})$, is $|P_iP_i'|$, the distance from $P_i$ to its synchronized point $P_i' (x_i', y_i', t_i)$ \wrt $\mathcal{L}$.
-
 
 
 
@@ -26,10 +25,22 @@ It is easy to know that for any point in the area of a circle \circle{(P_{s+i}, 
 %Note that in this definition, a \emph{synchronous circle} $\mathcal{O}(P_i, \epsilon)$ is only defined by a central point $P_i$ and a constant $\epsilon$. Indeed, it is nothing to do with any start point $P_s$ or end point $P_e$.
 
 
+\begin{prop}
+\label{prop-3d-syn-point}
+Given a sub-trajectory $[P_s, \ldots, P_{s+k}]$ and a point $Q$ in the area of synchronous circle \circle{(P_{s+k}, \epsilon)}, the intersection point $P'_{s+i}$ of the directed line segment $\vv{P_sQ}$ and the plane $P.t - P_{s+i}.t = 0$ is the synchronized point of $P_{s+i}$ ($1\le i\le k$) \wrt  $\vv{P_sQ}$, and the distance $|\vv{P_{s+i}P'_{s+i}}|$ from $P_{s+i}$ to $P'_{s+i}$ is the synchronous distance of $P_{s+i}$ to $\vv{P_sQ}$.
+%in the spatio-temporal space.
+\end{prop}
 
-\stitle{Spatio-temporal cones (\cone{})}. Given the start point $P_s$ of $\dddot{\mathcal{T}_s}$ and an error bound $\epsilon$, the spatio-temporal cone (or simply \textit{cone}) of a data point $P_{s+i}$ ($1\le i\le k$) in $\dddot{\mathcal{T}_s}$ \wrt the point $P_s$ and the error bound $\epsilon$, denoted as \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))}, or \cone{_{s+i}} in short, is an oblique circular cone such that point $P_s$ is its apex and the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$ of point $P_{s+i}$ is its base.
-
-Figure~\ref{fig:cis} also illustrates two example spatio-temporal cones: \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} {(purple)} and \cone{(P_s, \mathcal{O}(P_{s+k}, \epsilon))} (red), with the same apex $P_s$ and error bound $\epsilon$.
+\begin{proof}\ It suffices to show that $P'_{s+i}$ is indeed a synchronized point $P_{s+i}$ \wrt $\vv{P_sQ}$.
+%
+The intersection point $P'_{s+i}$ satisfies that 
+(1) $P'_{s+i}.t = P_{s+i}.t$, 
+(2) $P'_{s+i}.x$ = $P_s.x +  c\cdot(Q.x - P_s.x)$, and
+(3) $P'_{s+i}.y$ = $P_s.y +  c\cdot(Q.y - P_s.y)$, 
+where $c= \frac{P'_{s+i}.t - P_{s}.t}{Q.t - P_{s}.t}= \frac{P_{s+i}.t-P_s.t}{Q.t-P_s.t}$.
+%
+Hence, by the definition of synchronized points, we have the conclusion. \eop
+\end{proof}
 
 
 
@@ -57,21 +68,13 @@ Figure~\ref{fig:cis} also illustrates two example spatio-temporal cones: \cone{(
 
 %\textcolor[rgb]{1.00,0.00,0.00}{The \sed is demonstrated in 2D space in the previews works~\cite{Meratnia:Spatiotemporal, Chen:Fast, Muckell:Compression, Popa:Spatio}. However,  the trajectory and the \sed are also capable presented in 3D space.}
 
-\begin{prop}
-\label{prop-3d-syn-point}
-Given a sub-trajectory $[P_s, \ldots, P_{s+k}]$ and a point $Q$ in the area of synchronous circle \circle{(P_{s+k}, \epsilon)}, the intersection point $P'_{s+i}$ of the directed line segment $\vv{P_sQ}$ and the plane $P.t - P_{s+i}.t = 0$ is the synchronized point of $P_{s+i}$ ($1\le i\le k$) \wrt  $\vv{P_sQ}$, and the distance $|\vv{P_{s+i}P'_{s+i}}|$ from $P_{s+i}$ to $P'_{s+i}$ is the synchronous distance of $P_{s+i}$ to $\vv{P_sQ}$.
-%in the spatio-temporal space.
-\end{prop}
 
-\begin{proof}\ It suffices to show that $P'_{s+i}$ is indeed a synchronized point $P_{s+i}$ \wrt $\vv{P_sQ}$.
-%
-The intersection point $P'_{s+i}$ satisfies that $P'_{s+i}.t = P_{s+i}.t$ and
-$\frac{P'_{s+i}.t - P_{s}.t}{Q.t - P_{s}.t}$ = $\frac{P_{s+i}.t - P_{s}.t}{Q.t - P_{s}.t}$  =
-$\frac{|\vv{P_sP'_{s+i}}|}{|\vv{P_sQ}|}$ =
-$\frac{P'_{s+i}.x - P_{s}.x}{Q.x - P_{s}.x}$ = $\frac{P'_{s+i}.y - P_{s}.y}{Q.y - P_{s}.y}$.
-%
-Hence, by the definition of synchronized points, we have the conclusion. \eop
-\end{proof}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+We then define the \textit{spatio-temporal cone} in the 3D coordinate system and present the \textit{spatio-temporal cone intersection} method which converts the \sed distance tolerance into the intersection of spatio-temporal cones.
+
+\stitle{Spatio-temporal cones (\cone{})}. Given the start point $P_s$ of $\dddot{\mathcal{T}_s}$ and an error bound $\epsilon$, the spatio-temporal cone (or simply \textit{cone}) of a data point $P_{s+i}$ ($1\le i\le k$) in $\dddot{\mathcal{T}_s}$ \wrt the point $P_s$ and the error bound $\epsilon$, denoted as \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))}, or \cone{_{s+i}} in short, is an oblique circular cone such that point $P_s$ is its apex and the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$ of point $P_{s+i}$ is its base.
+
+Figure~\ref{fig:cis} also illustrates two example spatio-temporal cones: \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} {(purple)} and \cone{(P_s, \mathcal{O}(P_{s+k}, \epsilon))} (red), with the same apex $P_s$ and error bound $\epsilon$.
 
 
 
@@ -94,6 +97,10 @@ Conversely, assume that there exists a point $Q$ such that $Q.t = P_{s+k}.t$ and
 \end{proof}
 
 By Proposition~\ref{prop-3d-ci}, we now have a spatio-temporal cone intersection method in a 3D Cartesian coordinate system, which significantly extends the sector intersection method~\cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve} {from a 2D space to a Spatio-Temporal 3D space}.
+
+
+
+
 
 
 \subsection{Circle Intersection}
