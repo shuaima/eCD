@@ -1,0 +1,160 @@
+\documentclass[twocolumn]{svjour3}          % twocolumn
+%
+\smartqed  % flush right qed marks, e.g. at end of proof
+%
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage{latexsym}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[bigsqcap]{stmaryrd}
+\usepackage{color}
+\usepackage{colortbl}
+\usepackage{epsfig}
+\usepackage{xspace}
+\usepackage{graphicx}
+\usepackage{esvect} % for arrows
+\usepackage{subfigure}
+\usepackage{balance}
+\usepackage{cite}
+\usepackage[english]{babel}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DO NOT DELETE!!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{tikz}
+%\usetikzlibrary{trees}
+
+\usepackage{multirow}
+\usepackage{url}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input {config}
+
+\newcommand{\kwlog}{\emph{w.l.o.g.}\xspace}
+\newcommand{\lsa}{\kw{LS}}
+\newcommand{\dpa}{\kw{DP}}
+\newcommand{\dps}{\kw{DPSED}}
+\newcommand{\osed}{\kw{Optional}}
+\newcommand{\opwa}{\kw{OPW}}
+\newcommand{\bqsa}{\kw{BQS}}
+\newcommand{\fbqsa}{\kw{FBQS}}
+\newcommand{\operb}{\kw{OPERB}}
+\newcommand{\operba}{\kw{OPERBA}}
+\newcommand{\squish}{\kw{SQUISH}}
+\newcommand{\squishe}{\kw{SQUISH}-\kw{E}}
+\newcommand{\sleeve}{\kw{Sleeve}}
+\newcommand{\pavlidis}{\kw{Theo~Pavlidis'}}
+\newcommand{\reumann}{\kw{Reumann}-\kw{Witkam}}
+\newcommand{\swab}{\kw{SWAB}}
+
+\newcommand{\cia}{\kw{SI}}
+\newcommand{\cpia}{\kw{CPolyInter}} % convex polygon intersection algorithm
+\newcommand{\rpia}{\kw{FastRPolyInter}} % regular polygon intersection algorithm
+
+\newcommand{\conei}{\kw{Cone~Intersection}}
+%\newcommand{\cist}{\kw{ConeST}}
+\newcommand{\cist}{\kw{CISED}-\kw{S}}
+\newcommand{\cista}{\kw{CISED}-\kw{W}}
+\newcommand{\cisto}{\kw{CISED}-\kw{O}}
+\newcommand{\dpsed}{\kw{DPSED}}
+\newcommand{\nopt}{\kw{Near}-\kw{Optimal}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Data sets%%%%%%%%%%%%%%%%%
+\newcommand{\taxi}{\kw{Taxi}}
+\newcommand{\truck}{\kw{Truck}}
+\newcommand{\mopsi}{\kw{Mopsi}}
+%\newcommand{\serviceCar}{\kw{SerCar}}
+\newcommand{\sercar}{\kw{ServiceCar}}
+\newcommand{\pricar}{\kw{PrivateCar}}
+\newcommand{\geolife}{\kw{GeoLife}}
+
+\newcommand{\trajec}[1]{$\dddot{\mathcal{#1}}$}
+\newcommand{\ffunc}[1]{{\mathbb{#1}}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%DualError%%%%%%%%%%%%%%%%%%
+\newcommand{\ped}{\kw{PED}} %perpendicular Euclidean distance (PED).
+\newcommand{\red}{\kw{RED}} %radial Euclidean distance (RED).
+\newcommand{\sed}{\kw{SED}} %synchronous Euclidean distance (SED).
+\newcommand{\ded}{\kw{DED}} %dual Euclidean distance (PED).
+%\renewcommand{\vv}[1]{\protect\overrightarrow{\rm #1}}
+\newcommand{\sector}[1]{{$\mathcal{S}{#1}$}}
+\newcommand{\cone}[1]{{$\mathcal{C}{#1}$}}
+\renewcommand{\circle}[1]{{$\mathcal{O}{#1}$}}
+\newcommand{\pcircle}[1]{{$\mathcal{O}^c{#1}$}}
+
+
+%
+% Insert the name of "your journal" with
+% journalname{myjournal}
+%
+
+\begin{document}
+
+%\title{A Fast Spatio-temporal Data Simplification}
+%\title{One-Pass Error Bounded  Trajectory Simplification with Synchronous  Euclidean Distances}
+%\title{Trajectory Simplification with Synchronous  Euclidean Distances}
+%\title{Spatiotemporal Trajectory Compression with Synchronous  Euclidean Distances}
+%\title{One-Pass Error Bounded Spatiotemporal Trajectory Compression}
+%\title{Trajectory Simplification Using Spatio-temporal Cone}
+\title{One-Pass Trajectory Simplification Using the Synchronous Euclidean Distance}
+
+
+\author{Xuelian~Lin \and
+	Jiahao~Jiang \and
+	Shuai~Ma \and
+	Yimeng~Zuo \and
+	Chunming~Hu
+}
+
+\institute{X. Lin, J. Jiang, S. Ma (correspondence), Y. Zuo and C. Hu \at
+	SKLSDE lab, School of Computer Science and Engineering, Beihang University, China. \\
+	\email{\{linxl, jiangjh, mashuai, zuoym, hucm\}@buaa.edu.cn}           %  \\
+}
+
+\date{Received: xxx, 2017 / Accepted: xxx, 2018}
+
+\maketitle
+
+
+\begin{abstract}
+Various mobile devices have been used to collect, store and transmit tremendous trajectory data, and it is known that raw trajectory data seriously wastes the storage, network band and computing resource.  To attack this issue, one-pass  line simplification (\lsa) algorithms have are been developed, by compressing data points in a trajectory to a set of continuous line segments. However, these algorithms adopt the {\em perpendicular Euclidean distance}, and none of them uses the {\em synchronous Euclidean distance} (\sed), and cannot support spatio-temporal queries.
+%an effective approach to attacking this issue by compressing data points in a trajectory to a set of continuous line segments, and are commonly used in practice.
+%However, existing line simplification algorithms are not sufficient for the needs of sensors in mobile devices.
+%
+%However, although one-pass \lsa algorithms has been developed using the perpendicular Euclidean distance, none of them uses the synchronous Euclidean distance (\sed), and cannot support spatio-temporal queries.
+%
+To do this, we develop two one-pass error bounded trajectory simplification algorithms (\cist and \cista) using \sed,
+based on a novel spatio-temporal cone intersection technique.
+%
+Using four real-life trajectory datasets, we experimentally show that our approaches are both efficient and effective.
+%
+In terms of running time, algorithms \cist and \cista are on average {$3$ times faster} than \squishe (the most efficient existing \lsa algorithm using \sed). In terms of compression ratios, algorithms \cist and \cista are comparable with and {$19.6\%$} better than \dps (the most effective existing \lsa algorithm using \sed) on average, respectively, and are {$21.1\%$} and {$42.4\%$} better than \squishe on average, respectively.
+\end{abstract}
+
+
+\input{sec-intro}
+\input{sec-preliminary}
+\input{sec-localCheck}
+\input{sec-alg}
+\input{sec-exp}
+\input{sec-related}
+\input{sec-conclusion}
+
+
+% use section* for acknowledgment
+% The Computer Society usually uses the plural form
+\section*{Acknowledgments}
+This work is supported in part by NSFC (U1636210), 973 program ({2014CB340300}), NSFC ({61421003}) and  Beijing Advanced Innovation Center for Big Data and Brain Computing.
+
+\balance
+%\begin{footnotesize}
+\bibliographystyle{abbrv}
+\bibliography{sec-ref}
+%\end{footnotesize}
+
+% that's all folks
+\end{document}

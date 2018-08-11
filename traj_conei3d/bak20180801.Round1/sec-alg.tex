@@ -1,0 +1,304 @@
+%\section{One-Pass Trajectory Simplification}
+\section{One-Pass Trajectory Simplification}
+\label{sec-alg}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%example of Algorithm CISED
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.8]{figures/Fig-Ex-Conest.png}
+	%\vspace{-2ex}
+	\caption{\small A running example of the \cist algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed into four line segments.}
+%	\vspace{-1ex}
+	\label{fig:exm-const}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+Following \cite{Trajcevski:DDR,Lin:Operb}, we consider two classes of trajectory simplification.
+The first one, referred to as \emph{strong simplification}, that takes as input a trajectory \trajec{T}, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and produces a simplified trajectory \trajec{T'} such that all data points in \trajec{T'} belong to \trajec{T}.
+The second one, referred to as \emph{weak simplification}, that takes as input a trajectory \trajec{T}, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and produces a simplified trajectory \trajec{T'} such that some data points in \trajec{T'} may not belong to \trajec{T}. That is, weak simplification allows data interpolation.
+
+The main result here is stated as follows.
+
+\begin{theorem}
+\label{prop-cist-op}
+There exist one-pass, error bounded and strong and weak trajectory simplification algorithms using the synchronous Euclidean distance (\sed).
+\end{theorem}
+
+We shall prove this by providing such algorithms for both strong and weak trajectory simplifications, by employing the constant time synchronous distance checking technique developed in Section~\ref{sec-localcheck}.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Strong Trajectory Simplification}
+
+
+
+
+Recall that in Propositions~\ref{prop-3d-ci} and~\ref{prop-circle-intersection}, the point $Q$ may not be in the input sub-trajectory $[P_s,...,P_{s+k}]$.
+If we restrict $Q=P_{s+k}$, the end point of the sub-trajectory, then the narrow cones whose base circles with a radius of $\epsilon/2$ suffice.
+
+\begin{prop}
+\label{prop-3d-ci-half}
+Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P_{s+i}, \vv{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if  $\bigsqcap_{i=1}^{k}$\cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon/2))} $\ne \{P_s\}$.
+\end{prop}
+
+
+\begin{proof}\
+If $\bigsqcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_{s+i}, \epsilon/2)} \ne \{P_s\}$, then by Proposition~\ref{prop-3d-ci}, there exists a point $Q$, $Q.t = P_{s+k}.t$, such that $sed(P_{s+i}, \vv{P_sQ})\le \epsilon/2$ for all $i \in [1,k]$. By the triangle inequality essentially, $sed(P_{s+i}, \vv{P_sP_{s+k}})\le  sed(P_{s+i}, \vv{P_sQ}) + |\vv{QP_{s+k}}| \le  \epsilon/2+\epsilon/2 = \epsilon$. \eop
+\end{proof}
+
+
+ We first present the  one-pass error bounded {\em strong trajectory simplification} algorithm using \sed, as shown in Figure~\ref{alg:CI3d}.
+
+% \stitle{Procedure \kw{getRegularPolygon}}.
+% We first present procedure \kw{getRegularPolygon} that, given a cone projection circle, generates its inscribed $m$-edge regular polygon,  following the definition in Section~\ref{subsec-RPI}.
+
+% The parameters $P_s$, $P_i$, $r$ and $t_c$ together form the projection circle \pcircle{(P^c_i, r^c_i)} of the spatio-temporal cone \cone{(P_s, \mathcal{O}(P_{i}, r))} of point $P_{i}$ \wrt point $P_s$ on the plane $P.t - t_c$ = $0$. Firstly, $P^c_i.x$ and $P^c_i.y$ are computed (lines 1--3), and $r^c_i = c\cdot r$.
+% Then it builds and returns an $m$-edge inscribed regular polygon $\mathcal{R}$ of \pcircle{(P^c_i, r^c_i)} (lines 4--8), by transforming a polar coordinate system
+% into a Cartesian one. Note that here $\theta$, $r\cdot\sin\theta$ and $r\cdot\cos\theta$ only need to be computed once during the entire processing of a trajectory.
+
+\stitle{Procedure \kw{getRegularPolygon}}.
+We first present procedure \kw{getRegularPolygon} that, given a cone projection circle, generates its inscribed $m$-edge regular polygon,  following the definition in Section~\ref{subsec-RPI}.
+
+The parameters $P_s$, $P_i$, $r$ and $t_c$ together form the projection circle \pcircle{(P^c_i, r^c_i)} of the spatio-temporal cone \cone{(P_s, \mathcal{O}(P_{i}, r))} of point $P_{i}$ \wrt point $P_s$ on the plane $P.t - t_c$ = $0$. Firstly, $P^c_i.x$ and $P^c_i.y$ are computed (lines 1--3), and $r^c_i = c\cdot r$.
+Then it builds and returns an $m$-edge inscribed regular polygon $\mathcal{R}$ of \pcircle{(P^c_i, r^c_i)} (lines 4--8), by transforming a polar coordinate system
+into a Cartesian one. Note here $\theta$, $r\cdot\sin\theta$ and $r\cdot\cos\theta$ only need to be computed once during the entire processing of a trajectory.
+
+
+\stitle{Algorithm \cist}.
+%We now present algorithm \cist.
+It takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and returns a simplified  trajectory $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%A running example of the \cista algorithm
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.79]{figures/Fig-Conesta.png}
+	%\vspace{-1ex}
+	\caption{\small A running example of the \cista algorithm. The points and the oblique circular cones are projected on an x-y space. The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed into three line segments.}
+%	\vspace{-1ex}
+	\label{fig:exm-consta}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The algorithm first initializes the start point $P_s$ to $P_0$, the index $i$ of the current data point to $1$, the intersection polygon $\mathcal{R}^*$ to $\emptyset$, the output $\overline{\mathcal{T}}$ to $\emptyset$, and $t_c$ to $P_1.t$, respectively (line 1).
+%
+The algorithm sequentially processes the data points of the trajectory one by one  (lines 2--10). It gets the $m$-inscribed regular polygon \wrt the current point $P_i$ (line 3) by calling procedure $\kw{getRegularPolygon}$. When $\mathcal{R}^* = \emptyset$, the intersection polygon $\mathcal{R}^*$ is simply initialized as $\mathcal{R}$ (lines 4, 5). Otherwise,
+$\mathcal{R}^*$ is  the intersection of the current regular polygon $\mathcal{R}$ with $\mathcal{R}^*$ by calling procedure $\rpia()$ introduced in Section~\ref{subsec-fastRPI} (line 7). If the resulting intersection $\mathcal{R}^*$ is empty, then a new line segment $\vv{P_sP_{i-1}}$ is generated (lines 8--10). The process repeats until all points have been processed (line 11).
+After the  final new line segment $\vv{P_sP_{n}}$ is generated (line 12), it returns the simplified  piece-wise line representation $\overline{\mathcal{T}}$ (line 13).
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%algorithm
+\begin{figure}[tb!]
+	\begin{center}
+		{\small
+			\begin{minipage}{3.3in}
+				\myhrule
+				%\vspace{-1ex}
+				\mat{0ex}{
+					{\bf Algorithm}~\cist$(\dddot{\mathcal{T}}[P_0,\ldots,P_n],~\epsilon,~m)$\\
+					%	\sstab
+					\bcc \hspace{1ex}\= $P_s := P_0$; ~$i := 1$;  ~$\mathcal{R}^* := \emptyset$;  ~$\overline{\mathcal{T}} := \emptyset$; ~$t_c$ := $P_1.t$;\\
+					\icc \hspace{1ex}\= \While $i \le n$ \Do \\
+					\icc \>\hspace{2ex} $\mathcal{R}$ := \kw{getRegularPolygon}($P_s$, $P_i$, $\epsilon/2$, $m$, $t_c$); \\
+					\icc \>\hspace{2ex} \If $\mathcal{R}^* = \emptyset$  \Then \hspace{3ex} /* $\mathcal{R}^*$ needs to be initialized */\\
+					\icc \>\hspace{2ex} \ \ \ $\mathcal{R}^* :=\mathcal{R};$ \\
+					\icc \>\hspace{2ex} \Else \\
+					\icc \>\hspace{2ex}\ \ \ \ $\mathcal{R}^* := {\rpia}(\mathcal{R}^*, ~\mathcal{R})$; \\
+					\icc \>\hspace{4ex} \If $\mathcal{R}^* = \emptyset$ \Then \hspace{1ex} /* generate a new line segment */\\
+					\icc \> \hspace{4ex} \ \ \ $i$ := $i - 1$;\ \ $\overline{\mathcal{T}} := \overline{\mathcal{T}}\cup \{\vv{P_sP_{i}}\}$; \\
+					\icc \> \hspace{4ex} \ \ \ $P_s := P_{i}$; \ \ $t_c$ := $P_{i+1}.t$;\\
+					\icc \>\hspace{2ex} $i$ := $i +1$;\\
+					\icc \> \hspace{0ex} $\overline{\mathcal{T}}$ := $\overline{\mathcal{T}}\cup \{\vv{P_sP_{n}}\}$; \\
+					\icc \hspace{1ex}\Return $\overline{\mathcal{T}}$. \\
+					%
+					\\
+					{\bf Procedure} ~\kw{getRegularPolygon}$(P_s,~P_i,~r,~m,~t_c)$ \\
+					%	\bcc \hspace{1ex} \textcolor[rgb]{0.00,0.07,1.00}{Transform $P_s$ and $P_i$ to points in Cartesian coordinates} \\
+					\bcc \hspace{1ex} $c := (t_c-t_s)/(P_i.t - P_s.t)$; \\
+					\icc \hspace{1ex} $x := P_s.x + c\cdot(P_i.x-P_s.x)$; \\
+					\icc \hspace{1ex} $y := P_s.y + c\cdot(P_i.y-P_s.y)$; \\
+					\icc \hspace{1ex} \For $(j := 1;j \le m;j++)$ \Do \\
+					\icc \> \hspace{2ex} $\theta :=  (2j + 1)*\pi /m $; \\
+					\icc \> \hspace{2ex} $\mathcal{R}.v_j.x := x + c\cdot r\cdot\cos\theta$;\\
+					\icc \> \hspace{2ex} $\mathcal{R}.v_j.y := y + c\cdot r\cdot\sin\theta$;\\
+					\icc \hspace{1ex} \Return $\mathcal{R}$.
+				}
+				\vspace{-2ex}
+				\myhrule
+			\end{minipage}
+		}
+	\end{center}
+	\vspace{-1ex}
+	\caption{\small One-pass strong trajectory  simplification algorithm.}
+	\label{alg:CI3d}
+	\vspace{-1ex}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+\begin{example}
+\label{exm-alg-conest}
+Figure~\ref{fig:exm-const} shows a running example of \cist for compressing the trajectory \trajec{T} in Figure~\ref{fig:notations}.
+%For convenience, here, we project the points and the oblique circular cones on a x-y space.
+
+\sstab (1) After initialization, the \cist algorithm reads point $P_1$ and builds a narrow \emph{oblique circular cone} \cone{(P_0, \mathcal{O}(P_{1}, \epsilon/2))}, taking $P_0$ as its apex and \circle{(P_1, \epsilon/2)} as its base (green dash). The \emph{circular cone} is projected on the plane $P.t-P_1.t=0$, and the inscribe regular polygon $\mathcal{R}_1$ of the projection circle is returned. As $\mathcal{R}^*$ is empty, $\mathcal{R}^*$ is set to $\mathcal{R}_1$.
+
+\sstab(2) The algorithm reads $P_2$ and builds \cone{(P_0, \mathcal{O}(P_{2}, \epsilon/2))} (red dash). The \emph{circular cone} is also projected on the plane $P.t-P_1.t=0$ and the inscribe regular polygon $\mathcal{R}_2$ of the projection circle is returned. As $\mathcal{R}^*=\mathcal{R}_1$ is not empty, $\mathcal{R}^*$ is set to the intersection of $\mathcal{R}_2$ and $\mathcal{R}^*$, which is $\mathcal{R}_1 \bigsqcap \mathcal{R}_2 \ne \emptyset$.
+
+\sstab (3) For point $P_3$, the algorithm runs the same routine as $P_2$ until the intersection of $\mathcal{R}_3$ and $\mathcal{R}^*$ is $\emptyset$. Thus, a line segment $\vv{P_0P_2}$ is generated, and the process of a new line segment is started, taking $P_2$ as the new start point and $P.t-P_3.t=0$ as the new projection plane.
+
+\sstab (4) At last, the algorithm outputs four continuous line segments, \ie $\{\vv{P_0P_2}$, $\vv{P_2P_4}$, $\vv{P_4P_{7}}$, $\vv{P_7P_{10}}\}$. \eop
+\end{example}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Weak Trajectory Simplification}
+
+We then present the one-pass error bounded {\em weak simplification} algorithm using \sed.
+
+%, based on Proposition~\ref{prop-circle-intersection}.
+
+
+\stitle{Algorithm \cista}.
+Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed
+regular polygons, it returns a simplified trajectory,
+which may contain interpolated points.
+%
+By Proposition~\ref{prop-circle-intersection}, algorithm \cista generates spatio-temporal cones whose bases are circles with a radius of $\epsilon$,
+and, hence, it replaces $\epsilon/2$ with $\epsilon$ (line 3 of \cist). It also generates new line segments with data points $Q$ (may be interpolated points), and,
+hence, it replaces point $P_i$ and line segment $\vv{P_sP_i}$  (lines 9 and 10 of algorithm \cist) with $Q$ and $\vv{P_sQ}$, respectively,  such that $Q$ is generated as follows.
+
+
+\begin{prop}
+\label{prop-cist-Q}
+Given a sub-trajectory \trajec{T}${[P_s, \ldots, P_{s+k}]}$ and an error bound $\epsilon$,  $t_c=P_{s+k}.t$ and $\mathcal{R}^*_k$ be the intersection of all polygons $\mathcal{R}_{s+i}$ ($i\in[1,k]$) on the plane $P.t - t_c = 0$. If $\mathcal{R}^*_k$ is not empty, then any point in the area of $\mathcal{R}^*_k$ is feasible for $Q$.
+\end{prop}
+
+\begin{proof}\
+By Proposition~\ref{prop-circle-intersection} and the nature of inscribed regular polygon, it is easy to find that for any point $Q \in \mathcal{R}^*_k$  \wrt plane $t_c=P_{s+k}.t$, there is $sed(P_{s+i}, \vv{P_sQ})\le \epsilon$ for all points $P_{s+i}$ ($i \in [1,k]$).
+
+From this, we have the conclusion. \eop
+\end{proof}
+
+The choice of a point $Q$ from $\mathcal{R}^*_k$ may slightly affect the effectiveness (\eg average errors and compression ratios). However, the choice of an optimal $Q$ is non-trivial. For the benefit of efficiency, we apply the following strategies.
+
+\sstab (1) If $P_{s+k}$ is in the area of $\mathcal{R}^*_k$ \wrt $t_c=P_{s+k}.t$, then $Q$ is simply chosen as $P_{s+k}$.
+%meaning the projection point of $P_e$ on the plane ``$t=t_c$", \ie $P^c_e$, is in the intersection polygon of regular polygons \{$\mathcal{R}_s, \dots, \mathcal{R}_e$\} of all projection circles \{$\mathcal{O}(P^c_s, \epsilon^c_s), \ldots, \mathcal{O}(P^c_e, \epsilon^c_e)$\},
+
+\sstab (2) If $\mathcal{R}^*_k \ne \emptyset$ and $P_{s+k}$ is not in the area of $\mathcal{R}^*_k$ \wrt $t_c$=$P_{s+k}.t$, then the central point of $\mathcal{R}^*_k$ is chosen as $Q$.
+
+\sstab (3)  If $t_c \ne P_{s+k}.t$, which is the general case, then we project the intersection polygon $\mathcal{R}^*_k$ \wrt $t_c \ne P_{s+k}.t$ on the plane $P.t -P_{s+k}.t = 0$, and apply strategies (1) and (2) above. That is, the projection has no affects on the choice of $Q$.
+%so as to get the $\mathcal{R}^*_k$ \wrt $t_c = t_{s+k}$,
+
+\begin{example}
+\label{exm-alg-conesta}
+Figure~\ref{fig:exm-consta}  shows a running example of algorithm \cista for compressing the trajectory \trajec{T} in Figure~\ref{fig:notations} again.
+
+
+\sstab (1) After initialization, the \cista algorithm reads point $P_1$ and builds an \emph{oblique circular cone} \cone{(P_0, \mathcal{O}(P_{1}, \epsilon))}, and projects it on the plane $P.t-P_1.t=0$. The inscribed regular polygon $\mathcal{R}_1$ of the projection circle is returned and the intersection $\mathcal{R}^*$ is set to $\mathcal{R}_1$.
+
+\sstab (2) $P_2$, $P_3$ and $P_4$ are processed in turn. The intersection polygons $\mathcal{R}^*$ are not empty.
+
+\sstab (3) For point $P_5$, the intersection of polygons $\mathcal{R}_5$ and $\mathcal{R}^*$ is $\emptyset$. Thus, line segment $\vv{P_0Q} =\vv{P_0P'_4}$ is output, and a new line segment is started such that point $Q=P'_4$ is the new start point and plane $P.t-P_5.t=0$ is the new projection plane.
+
+\sstab (4) At last, the algorithm outputs 3 continuous line segments, \ie $\vv{P_0P'_4}$, $\vv{P'_4P_8}$ and $\vv{P_8P_{10}}$, in which $P'_4$ is an interpolated data points not in \trajec{T}. \eop
+\end{example}
+
+
+
+\begin{table*}[bt!]
+	%\renewcommand{\arraystretch}{1.2}
+	\vspace{-1ex}
+	\caption{\small Real-life trajectory datasets}
+	\centering
+	\small
+	\begin{tabular}{|l|c|c|c|r|}
+		\hline
+		%\bf{ Data}& \bf{Number\ of}     &\bf {Sampling}   &\bf{Points Per}    &\bf {Total} \\
+		%\bf{ Sets} & \bf{Trajectories}   &\bf{Rates\ (s)}  &\bf{Trajectory\ (K)}&\bf {points}\\
+		\bf{ Data Sets}& \bf{Number\ of Trajectories}     &\bf {Sampling Rates\ (s)}   &\bf{Points Per Trajectory\ (K)}    &\bf {Total points} \\
+		\hline
+		%\truck	&10,368	    &1-60	    &$\sim71.9$     &746M \\
+		% \truck	&1,000	    &1-60	    &$\sim132.7$     &132.7M \\
+		%\sercar	&11,000	    &3-5	    &$\sim119.1$   &1.31G\\
+		\sercar	&1,000	    &3-5	    &$\sim114.0$   &114M\\
+		\hline
+		\geolife &182	    &1-5	    &$\sim131.4$   &24.2M\\
+		\hline
+		\mopsi	&51	    	&2	    &$\sim153.9$     &7.9M\\
+		\hline
+		\pricar	& 10	    &1	        &$\sim11.8$      &112.8K \\
+		\hline
+	\end{tabular}
+	\label{tab:datasets}
+	%	\vspace{-1ex}
+\end{table*}
+
+\vspace{.5ex}
+\stitle{Correctness and complexity analyses}.
+%
+The correctness of algorithms \cist and \cista follows from Propositions~\ref{prop-circle-intersection} and~\ref{prop-3d-ci-half}, and Propositions~\ref{prop-circle-intersection} and~\ref{prop-cist-Q}, respectively.
+%
+It is easy to verify that each data point in a trajectory is only processed once, and each can be done in $O(1)$ time,
+as both procedures  $\kw{getRegularPolygon}$ and $\rpia$ can be done in $O(1)$ time.
+Hence, these algorithms are both one-pass error bounded trajectory simplification algorithms.
+It is also easy to see that these algorithms take $O(1)$ space.
+%These together also complete the proof of Theorem~\ref{prop-cist-op}.
+
+
+
+
+\eat{%%%%%%%%%%%%%%%%%%%%% Algorithm
+\begin{figure}[tb!]
+\begin{center}
+{\small
+\begin{minipage}{3.36in}
+\myhrule
+\vspace{-1ex}
+\mat{0ex}{
+	{\bf Algorithm}~$\cista(\dddot{\mathcal{T}}[P_0,\ldots,P_n], ~\epsilon, ~M, ~t_c)$\\
+%	\sstab
+	\bcc \hspace{1ex}\= $P_s := P_0$;  ~$P_e := P_0$;  ~$\overline{\mathcal{T}} := \phi$;  ~$\mathcal{R}^* := \phi$;  ~$i := 1$\\
+%         \hspace{2ex}     $intersection = \emptyset$;   \\
+	\icc \hspace{1ex}\= \While $i \le n$ \Do \\
+	\icc \>\hspace{3ex} $\mathcal{R} := {getRegularPolygon}$($P_s$, $P_i$, $\epsilon$, $M$, $t_c$) \\
+	\icc \>\hspace{3ex} \If $\mathcal{R}^* = \phi$ \Then \\
+	\icc \>\hspace{6ex} $\mathcal{R}^* :=\mathcal{R}$ \\
+	\icc \>\hspace{3ex} \Else \\
+	\icc \>\hspace{6ex} $\mathcal{R}^* := {\rpia}(\mathcal{R}^*, ~\mathcal{R})$ \\
+	\icc \>\hspace{3ex} \If $\mathcal{R}^* \ne \phi$ \Then \\
+	\icc \> \hspace{6ex} $P_e := P_i$ \\
+	\icc \> \hspace{6ex} $i := i+1$ \\
+	\icc \>\hspace{3ex} \Else\\
+	\icc \> \hspace{6ex} $\overline{\mathcal{T}} := \overline{\mathcal{T}}\cup \{\mathcal{L}(P_s,Q)\}$ \\
+	\icc \> \hspace{6ex} $P_s := Q$;  ~~$\mathcal{R}^* := \phi$ \\
+	\icc \hspace{1ex}\Return $\overline{\mathcal{T}}$
+%
+%	{\bf procedure} $getPolygon$($P_s$, $P_i$, $\epsilon/2$) \\
+%
+%	{\bf procedure} $getIntersection(ipolygon, \mathcal{R})$ \\
+}
+\vspace{-2ex}
+\myhrule
+\end{minipage}
+}
+\end{center}
+\vspace{-2ex}
+\caption{\small Aggressive spatio-temporal cone intersection algorithm (\cista).}
+\label{alg:ciseda}
+\vspace{-2ex}
+\end{figure}
+}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+

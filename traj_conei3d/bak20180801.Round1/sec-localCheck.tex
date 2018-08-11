@@ -1,0 +1,246 @@
+\section{Local Synchronous Distance Checking}
+\label{sec-localcheck}
+
+%In this section, we first analyze the properties of synchronized points and synchronous Euclidean distances, then we present a local one-pass \sed checking method by extending the cone intersection for \ped checking in Section~\ref{sub-ci-ped}.
+%Finally, we provide a one-pass, error-bounded and \sed enabled trajectory simplification algorithm.
+
+In this section, we develop a local synchronous distance checking approach such that each point in a trajectory is checked only once in $O(1)$ time during the entire process of trajectory simplification, by substantially extending the \textit{sector intersection} method in Section~\ref{sub-ci-ped} from a 2D space to a Spatio-Temporal 3D space, which lays down the key for the one-pass trajectory simplification algorithms using \sed (Section~\ref{sec-alg}).
+
+We consider a sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, P_{s+k}]$, an error bound $\epsilon$, and a 3D Cartesian coordinate system whose origin, $x$-axis, $y$-axis and $t$-axis  are $P_s$, longitude, latitude and time, respectively.
+
+\subsection{Spatio-Temporal Cone Intersection}
+
+We first present the \textit{spatio-temporal cone intersection} method in a 3D Cartesian coordinate system, which extends the \textit{sector intersection} method~\cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve}. %in a 2D Cartesian coordinate system.
+
+%Recall that the \sed of point $P_i$ to a directed line segment $\mathcal{L} = \vv{P_{s}P_{e}}$, denoted as $sed(P_i, \mathcal{L})$, is $|P_iP_i'|$, the distance from $P_i$ to its synchronized point $P_i' (x_i', y_i', t_i)$ \wrt $\mathcal{L}$.
+
+
+
+
+\stitle{Synchronous Circles (\circle{})}. The synchronous circle of a data point $P_{s+i}$ ($1\le i\le k$) in $\dddot{\mathcal{T}}_s$ \wrt an error bound $\epsilon$, denoted as \circle{(P_{s+i}, \epsilon)}, or \circle{_{s+i}} in short, is a circle on the plane $P.t-P_{s+i}.t = 0$ such that $P_{s+i}$ is its center and $\epsilon$ is its radius.
+
+Figure~\ref{fig:cis} shows two synchronous circles, \circle{(P_{s+i}, \epsilon)} of point $P_{s+i}$ and \circle{(P_{s+k}, \epsilon)} of point $P_{s+k}$.
+It is easy to know that for any point in the area of a circle \circle{(P_{s+i}, \epsilon)}, its distance to $P_{s+i}$ is no greater than $\epsilon$.
+
+
+%Note that in this definition, a \emph{synchronous circle} $\mathcal{O}(P_i, \epsilon)$ is only defined by a central point $P_i$ and a constant $\epsilon$. Indeed, it is nothing to do with any start point $P_s$ or end point $P_e$.
+
+
+
+\stitle{Spatio-temporal cones (\cone{})}. The spatio-temporal cone (or simply \textit{cone}) of a data point $P_{s+i}$ ($1\le i\le k$) in $\dddot{\mathcal{T}}_s$ \wrt a point $P_s$ and an error bound $\epsilon$, denoted as \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))}, or \cone{_{s+i}} in short, is an oblique circular cone such that point $P_s$ is its apex and the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$ of point $P_{s+i}$ is its base.
+
+Figure~\ref{fig:cis} also illustrates two example spatio-temporal cones: \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} {(purple)} and \cone{(P_s, \mathcal{O}(P_{s+k}, \epsilon))} (red), with the same apex $P_s$ and error bound $\epsilon$.
+
+
+
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.66]{figures/Fig-CIS.png}
+%	\vspace{-1ex}
+	\caption{\small Examples of spatio-temporal cones in a 3D Cartesian coordinate system, where (1) $P_s$, $P_{s+i}$ and $P_{s+k}$ are three points, (2) \circle{_{s+i}} and \circle{_{s+k}} are two synchronous circles, (3) \cone{_{s+i}} and \cone{_{s+k}} are two spatio-temporal cones, (4) $Q$ is a point in synchronous circle \circle{_{s+k}}, and (5) $P'_{s+i}$ is the intersection point of line $\overline{P_sQ}$ and synchronous circle \circle{_{s+i}}.}
+	%\vspace{-1ex}
+	\label{fig:cis}
+\end{figure}
+%Note that the projection circle $\mathcal{O}(P^i_{i+1}, r^i_{i+1})$ is on the plane $t=t_i$.
+
+%\begin{figure}[tb!]
+%\centering
+%\includegraphics[scale=0.56]{figures/Fig-SEDin3D.png}
+%\vspace{-1ex}
+%\caption{\small Trajectory simplification in the Spatio-temporal space. Note the synchronous circle $\mathcal{O}(P_i, \epsilon)$ is on plane $t=t_i$.} %
+%\vspace{-3ex}
+%\label{fig:sed3d}
+%\end{figure}
+
+
+
+
+%\textcolor[rgb]{1.00,0.00,0.00}{The \sed is demonstrated in 2D space in the previews works~\cite{Meratnia:Spatiotemporal, Chen:Fast, Muckell:Compression, Popa:Spatio}. However,  the trajectory and the \sed are also capable presented in 3D space.}
+
+\begin{prop}
+\label{prop-3d-syn-point}
+Given a sub-trajectory $[P_s, \ldots, P_{s+k}]$ and a point $Q$ in the area of synchronous circle \circle{(P_{s+k}, \epsilon)}, the intersection point $P'_{s+i}$ of the directed line segment $\vv{P_sQ}$ and the plane $P.t - P_{s+i}.t = 0$ is the synchronized point of $P_{s+i}$ ($1\le i\le k$) \wrt  $\vv{P_sQ}$, and the distance $|\vv{P_{s+i}P'_{s+i}}|$ from $P_{s+i}$ to $P'_{s+i}$ is the synchronous distance of $P_{s+i}$ to $\vv{P_sQ}$.
+%in the spatio-temporal space.
+\end{prop}
+
+\begin{proof}\ It suffices to show that $P'_{s+i}$ is indeed a synchronized point $P_{s+i}$ \wrt $\vv{P_sQ}$.
+%
+The intersection point $P'_{s+i}$ satisfies that $P'_{s+i}.t = P_{s+i}.t$ and
+$\frac{P'_{s+i}.t - P_{s}.t}{Q.t - P_{s}.t}$ = $\frac{P_{s+i}.t - P_{s}.t}{Q.t - P_{s}.t}$  =
+$\frac{|\vv{P_sP'_{s+i}}|}{|\vv{P_sQ}|}$ =
+$\frac{P'_{s+i}.x - P_{s}.x}{Q.x - P_{s}.x}$ = $\frac{P'_{s+i}.y - P_{s}.y}{Q.y - P_{s}.y}$.
+%
+Hence, by the definition of synchronized points, we have the conclusion. \eop
+\end{proof}
+
+
+
+
+
+
+\begin{prop}
+\label{prop-3d-ci}
+Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, there exists a point $Q$ such that $Q.t = P_{s+k}.t$ and $sed(P_{s+i}, \vv{P_sQ})\le \epsilon$ for each $i \in [1,k]$ if and only if $\bigsqcap_{i=1}^{k}$\cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} $\ne \{P_s\}$.
+\end{prop}
+
+\begin{proof}\
+Let $P'_{s+i}$ ($i\in[1, k]$) be the intersection point of line segment $\vv{P_sQ}$ and the plane $P.t - P_{s+i}.t$ = $0$.
+By Proposition~\ref{prop-3d-syn-point}, $P'_{s+i}$ is the synchronized point of $P_{s+i}$ \wrt $\vv{P_sQ}$.
+
+Assume first that $\bigsqcap_{i=1}^{k}$\cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} $\ne \{P_s\}$. Then there must exist a point $Q $ in the area of the  synchronous circle \circle{(P_{s+k}, \epsilon)} such that $\vv{P_sQ}$ passes through all the cones \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} $i\in[1, k]$. Hence,  $Q.t = P_{s+k}.t$.
+We also have $sed(P_{s+i}, \vv{P_sQ}) = |\vv{P'_{s+i}P_{s+i}}| \le \epsilon$ for each $i \in [1, k]$  since $P'_{s+i}$  is in the area of circle  \circle{(P_{s+i}, \epsilon)}.
+
+Conversely, assume that there exists a point $Q$ such that $Q.t = P_{s+k}.t$ and $sed(P_{s+i}, \vv{P_sQ})\le\epsilon$ for all $P_{s+i}$ ($i \in [1,k]$). Then $|\vv{P'_{s+i}P_{s+i}}| \le \epsilon$ for all $i \in [1, k]$. Hence, we have  $\bigsqcap_{i=1}^{k}$\cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} $\ne \{P_s\}$. \eop
+\end{proof}
+
+By Proposition~\ref{prop-3d-ci}, we now have a spatio-temporal cone intersection method in a 3D Cartesian coordinate system, which significantly extends the sector intersection method~\cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve} {from a 2D space to a Spatio-Temporal 3D space}.
+
+
+\subsection{Circle Intersection}
+\label{subsec-ProjectionCircle}
+
+For spatio-temporal cones with the same apex $P_s$, the checking of their intersection can be computed by a much simpler way, \ie the checking of intersection of cone projection circles on a plane, as follows.
+
+\stitle{Cone projection circles}. The projection of a cone \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} on a plane $P.t- t_c = 0$ ($t_c > P_s.t$) is a circle \pcircle{(P^c_{s+i}, r^c_{s+i})}, or \pcircle{_{s+i}} in short, such that
+%
+(1) $P^c_{s+i}.x = P_s.x +  c\cdot(P_{s+i}.x- P_{s}.x)$,
+%
+(2) $P^c_{s+i}.y = P_s.y +  c\cdot(P_{s+i}.y- P_{s}.y)$,
+%
+(3) $P^c_{s+i}.t = t_c$ and
+%
+(4) $r^c_{s+i} =c\cdot\epsilon$, where $c=\frac{t_c - P_s.t}{P_{s+i}.t - P_s.t}$ .
+
+\vspace{.5ex}
+
+
+In Figure~\ref{fig:pcircle}, the green dashed circles \pcircle{(P^c_{s+i}, r^c_{s+i})} and \pcircle{(P^c_{s+k}, r^c_{s+k})} on plane ``$P.t-t_{c}=0$" are the projection circles of cones \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} and \cone{(P_s, \mathcal{O}(P_{s+k}, \epsilon))} on the plane.
+
+
+
+
+\begin{prop}
+\label{prop-circle-intersection}
+Given a sub-trajectory $[P_s,\ldots, P_{s+k}]$, an error bound $\epsilon$, and any $t_c > P_s.t$, there exists a point $Q$ such that $Q.t = P_{s+k}.t$ and $sed(P_{s+i}, \vv{P_sQ})\le \epsilon$ for all points $P_{s+i}$ ($i \in [1,k]$) if and only if $\bigsqcap_{i=1}^{k}$\pcircle{(P^c_{s+i}, r^c_{s+i})} $\ne \emptyset$.
+\end{prop}
+
+
+\begin{proof}\
+By Proposition~\ref{prop-3d-ci}, it suffices to show that $\bigsqcap_{i=1}^{k}$ \pcircle{(P^c_{s+i}, r^c_{s+i})} $\ne \emptyset$ if and only if $\bigsqcap_{i=1}^{k}$\cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))}$\ne \{P_s\}$, which is obvious. Hence, we have the conclusion. \eop
+\end{proof}
+
+%These oblique circular cones have the same vertex $P_s$ and their bottom circles are parallel, thus,
+% ``$\bigcap_{i=1}^{e}{\mathcal{O}(P^c_i, r^c_i)} \ne \phi$, $t_c > t_s$" is naturally equivalent to ``$\bigcap_{i=s+1}^{e}{\mathcal{C}(P_s, P_i, \epsilon)} \ne \{P_s\}$".
+%For example, in Figure~\ref{fig:sed3d}, $\mathcal{O}(P^i_{i+1}, r^i_{i+1})$ is the projection circle of synchronous circle $\mathcal{O}(P_{i+1}, \epsilon)$ on the plane $t=t_i$, then ``${\mathcal{O}(P^i_{i+1}, r^i_{i+1})} \bigcap{\mathcal{O}(P_i, \epsilon)} \ne \emptyset$" is equal to ``$\mathcal{C}(P_s, P_i, \epsilon) \bigcap {\mathcal{C}(P_s, P_{i+1}, \epsilon)} \ne \{P_s\}$". Hence, by Theorem~\ref{prop-3d-ci}, we have the conclusion.
+
+
+Proposition~\ref{prop-circle-intersection} tells us that the intersection checking of spatio-temporal cones can be reduced to simply check the intersection of cone projection circles on a plane. %\textcolor{blue}{which can be implemented in ${O(n\log n)}$ time ~\cite{Shamos:Circle}.}
+
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.7]{figures/Fig-project-circle.png}
+%	\vspace{-1ex}
+	\caption{\small Cone projection circles.}
+	\vspace{-1ex}
+	\label{fig:pcircle}
+\end{figure}
+%\vspace{1ex}
+
+
+\subsection{Inscribed Regular Polygon Intersection}
+\label{subsec-RPI}
+
+Finding the common intersection of $n$ circles on a plane has a time complexity of ${O(n\log n)}$~\cite{Shamos:Circle}, which cannot be used for designing one-pass trajectory simplification algorithms using \sed.
+%
+However, we can approximate a circle with its $m$-edge inscribed regular polygon, whose intersection can be computed more efficiently.
+
+
+
+
+\stitle{Inscribed regular polygons ($\mathcal{R}$)}.
+Given a cone projection circle \pcircle{(P, r)}, its inscribed $m$-edge regular polygon is denoted as $\mathcal{R}(V, E)$,
+where (1) $V=\{v_1, \ldots, v_{m}\}$ is the set of vertexes that are defined by a polar coordinate system, whose origin is the center $P$ of \pcircle{}, as follows:
+
+
+\vspace{-2ex}
+\begin{equation*}
+\label{equ-regular-polygon}
+%\hspace{-1.5ex}
+    \begin{aligned}
+        \hspace{5ex}  v_j = (r, \frac{(j-1)}{m}2\pi), ~j \in [1, m], \\
+    \end{aligned}
+\end{equation*}
+%
+\ni and (2) $E= \{\vv{v_mv_1}\} \bigcup \{\vv{v_jv_{j+1}}\ |\ j\in [1, m-1]\}$ is the set of edges that are labeled with the subscript of their start points.
+
+%\stitle{intersection polygons ($\mathcal{R}^*$)}.
+
+Figure~\ref{fig:polygons}.(1) illustrates the inscribed regular octagon ($m=8$) of a cone projection circle \pcircle{(P, r)}.
+
+Let $\mathcal{R}_{s+i}$ ($1\le i \le k$) be the inscribed regular polygon of the cone projection  circle \pcircle{(P^c_{s+i}, r^c_{s+i})},
+$\mathcal{R}^*_l$ ($1\le l\le k$) be the intersection $\bigsqcap_{i=1}^{l}\mathcal{R}_{s+i}$,
+and $E^j$ ($1\le j \le m$) be the group of $k$ edges labeled with $j$ in all $\mathcal{R}_{s+i}$ ($i\in[1, k]$).
+%
+It is easy to verify that all edges in the same edge groups $E^j$ ($1\le j\le m$) are in parallel (or overlapping) with each other by the above definition of inscribed regular polygons, as illustrated in Figure~\ref{fig:polygons}.(2).
+
+
+\begin{prop}
+\label{prop-rp-intersection}
+The intersection $\mathcal{R}^*_{l} \bigsqcap \mathcal{R}_{s+l+1}$ ($ 1\le l< k$) has at most $m$ edges, \ie at most one from each edge group.
+\end{prop}
+
+
+
+\eat{%%%%%%%%%%%
+\begin{theorem}
+\label{prop-rp-intersection}
+If $\mathcal{R}_i$, $i \in [1, k]$, are M-edges regular polygons on a plane which are built by equation (3), then the intersection polygon
+$\mathcal{R}^*_k$ of all $\mathcal{R}_i$ includes at most one edge from an edge group, \eg the $j^{th}$ edge group.
+\end{theorem}
+}%%%%%%%%%%%%%
+
+
+\begin{proof}\
+We shall prove this by contradiction.
+Assume that $\mathcal{R}^*_{l} \bigsqcap \mathcal{R}_{s+l+1}$ has two distinct edges $\vv{A_i}$ and $\vv{A_{i'}}$  with the same label $j$ $(1\le j \le m)$, originally from
+$\mathcal{R}_{s+i}$ and $\mathcal{R}_{s+i'}$  ($1\le i< i' \le l+1$).
+%
+Note that here $\mathcal{R}_{s+i} \bigsqcap \mathcal{R}_{s+i'} \ne \emptyset$ since $\mathcal{R}^*_l \bigsqcap \mathcal{R}_{s+l+1} \ne \emptyset$.
+%
+However, when $\mathcal{R}_{s+i} \bigsqcap \mathcal{R}_{s+i'} \ne \emptyset$, the intersection $\mathcal{R}_{s+i} \bigsqcap \mathcal{R}_{s+i'}$ cannot have
+both edge $\vv{A_i}$ and edge $\vv{A_{i'}}$, which contradicts the assumption. \eop
+\end{proof}
+
+
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.85]{figures/Fig-polygons.png}
+	\vspace{0ex}
+	\caption{\small Regular octagons and their intersections ($m =8$).}
+	\vspace{-1ex}
+	\label{fig:polygons}
+\end{figure}
+
+Figure~\ref{fig:polygons}.(2) shows the intersection polygon (red lines) of $\mathcal{R}_1$, $\mathcal{R}_2$ and $\mathcal{R}_3$ with $7$ edges, and here edges labeled with $7$ have no contributions to the resulting intersection polygon.
+
+\begin{prop}
+\label{prop-cpi-time}
+The intersection of $\mathcal{R}^*_l$ and $\mathcal{R}_{s+l+1}$ ($ 1\le l< k$) can be done in $O(1)$
+time.
+\end{prop}
+
+\begin{proof}\
+The inscribed regular polygon $\mathcal{R}_{s+l+1}$ has $m$ edges, and intersection polygon $\mathcal{R}^*_l$ has at most $m$ edges by Proposition~\ref{prop-rp-intersection}.
+As the intersection of two $m$-edge convex polygons can be computed in $O(m)$ time~\cite{ORourke:Intersection}, the intersection of polygons $\mathcal{R}^*_l$ and $\mathcal{R}_{s+l+1}$ can be done in $O(1)$ time for a fixed $m$. \eop
+\end{proof}
+
+%By Theorem~\ref{prop-rp-intersection}, the intersection polygon $\mathcal{R}^*_k$ of all approximate polygon $\mathcal{R}_i$, $i \in [1, k]$, has no more than $M$ edges. We know the convex polygon intersection algorithm, \ie \cpia, of Figure~\ref{alg:c-poly-inter} has a time complexity of $O(|\mathcal{R}^*_k| + |\mathcal{R}_{k+1}|)$, which is $O(2M)$ here, thus, the computing of the intersection of polygons $\mathcal{R}^*_k$ and $\mathcal{R}_{k+1}$ can be implemented in a constant time, \ie $O(M)$, by the \cpia algorithm.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{subsec-fastRPI}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
