@@ -36,6 +36,8 @@
 \newcommand{\AFPR}{\kw{AFP}-\kw{reduction}}
 \newcommand{\nwm}{{\sc nwm}\xspace}
 
+
+
 \begin{document}
 
 
@@ -75,7 +77,7 @@ Below please find our detailed responses to the comments.
 
 \textbf{[R1C1]} \emph{On page 2, the first column is a little bit confusing. Going back and forth between SED and PED might confuse the readers. The second paragraph discusses optimal PED-based algorithms that run in $O(n^3)$ and $O(n^2)$. Then it says that the $O(n^2)$ algorithm is not applicable to SED distance. The third paragraph then describes some sub-optimal algorithms for SED-based simplification. {The fourth paragraph talks again about PED-based algorithms and mentions some linear-time algorithms but it's clear whether these algorithms are optimal or approximate. It is not clear either why do we need to reiterate over PED-based algorithms if they are not applicable to the addresses problem.}}
  
-(I) In the fourth paragraph, the mentioned PED-based algorithms are approximate. 
+(I) Yes! In the fourth paragraph, the mentioned PED-based algorithms are approximate. 
 
 (II) Here we reiterate over PED-based algorithms, our intention was to say that there are some PED-based linear-time algorithms but no SED-based linear-time algorithm yet, indeed, it is attractive to develop a SED-based linear-time algorithm. However, as you mentioned, this causes a bit confusing. So we rewrite the fourth and fifth paragraphs to clarify this.
 
@@ -130,8 +132,7 @@ Yes, we have elaborated these. Thanks for these nice suggestions!
 
 (2) We have highlighted some key ideas or intuitions in Section 3 to help the readability of the method.
 
-(3) \textcolor{red}{remove? proposition 8? remove some proof?}
-
+(3) Please refer to our responses to R2C6 and R2C7 for more details.
 
 \textbf{[R2C2]} \emph{In terms of the setting of the problem, the authors did not discuss the device range error which varies from device to device and may affect the algorithms.
 In addition, it seems that the authors assume that the devices move in uniform speed which may not be realistic.
@@ -192,7 +193,21 @@ Fixed! Thanks!
 
 \textbf{[R3C1]} \emph{From the example in Fig. 1, it is really difficult to tell the difference between PED and SED. It seems that SED will use more line segments due to the given constraint enforced by epsilon. However, why is the compression using SED better than that using PED? If PED is good enough, why do we care about SED? Essentially, the motivation of leaning towards SED is never clear from a practical perspective. I think it all depends on the tolerance at the application level. So I would like the authors to evaluate some real applications on top of the compressed trajectory data, to demonstrate the benefits of using SED. At least, the authors should give some convincing arguments on that.}
 
+(1) The meaning of SED is highly depending on the notion of the \emph{synchronized point}. Please refer to our response to \textbf{R3C2} for more detail about the \emph{synchronized point}. 
+
+(2) When compressing trajectories, the choosing of PED or SED depends on the application retuirements. For example, a spatio-temporal query application, ``\emph{the position of a moving object at time $t$}", on trajectories compressed by algorithms using SED will return a point $P'$ whose distance to of the actual position of the moving object is within the bound $\epsilon$, while the same query on trajectories compressed by algorithms using PED will not. In a word, the using of PED brings good compression ratios as well as does not support applications like spatio-temporal query, while the using of SED is in contrast.
+
+We have clarified these in the second and third paragraphs of Section 1. 
+The formal definitions of the SED and PED are presented in Section 2.1.
+
+
 \textbf{[R3C2]} \emph{The authors should give more intuitive explanation of the semantics of "synchronized points." Maybe this has been documented in the literature, but the authors should give sufficient explanation to make this paper self-contained.}
+
+Intuitively, a synchronized data point $P'_i$, $s<i<e$, is a point on $\overrightarrow{P_sP_{e}}$ satisfying $\frac{|P_sP'_i|}{|P_sP_e|} = \frac{t_i - t_s}{t_e-t_s}$. 
+Or we surppose that the moving object is moving from $P_s$ to $P_e$ at an average speed $\overline{v} = \frac{|P_sP_e|} {t_e-t_s}$, then its position at time $t_i$ on $\overrightarrow{P_sP_{e}}$ is $\overline{v}*t_i$ after $P_s$.
+We have clarified this in the second and third paragraphs of Section 1. The formal definition of the synchronized data point is also presented in Section 2.1.
+Thanks for pointing this out.
+
 
 \textbf{[R3C3]} \emph{Examples 1, 2, 3, 4, and 5 are not illustrative: They basically explained what happened in the corresponding figures but did not explain why. So it is not helpful if readers try to understand the algorithms by reading these examples. More details should be given. For instance, in Example 1, you can give specific coordinates to certain points so that readers can verify how the SED points are computed.}
 

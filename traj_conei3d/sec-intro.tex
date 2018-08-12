@@ -31,7 +31,13 @@ It is known that these issues can be resolved or greatly alleviated by trajector
 
 Originally, line simplification (\lsa) algorithms adopt the \emph{perpendicular Euclidean distance} (\ped) as a metric to compute the errors,
 \eg $|\vv{P_4P^*_4}|$ is the \ped of data point $P_4$ to line segment $\vv{P_0P_{10}}$ in Figure~\ref{fig:notations} (left).
-Line simplification algorithms using \ped have good compression ratios~ \cite{Douglas:Peucker, Hershberger:Speeding,Lin:Operb, Liu:BQS, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey}.  However, when using \ped, the temporal information is lost. Thus, a spatio-temporal query, \eg ``\emph{the position of a moving object at time $t$}", on the compressed trajectories by \lsa algorithms using \ped may return an approximate point $P'$ whose distance to the actual position $P$ of the moving object at time $t$ is unbounded. %For example, a query for the position of $P_7$ at time $t_7$ may return an approximate data point $P'_7$ whose distance to $P_7$ is great than the  bound $\epsilon$ in Figure~\ref{fig:notations} (left).
+Line simplification algorithms using \ped have good compression ratios~ \cite{Douglas:Peucker, Hershberger:Speeding,Lin:Operb, Liu:BQS, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey}.  
+However, when using \ped, a spatio-temporal query, \eg ``\emph{the position of a moving object at time $t$}", on the compressed trajectories will return an approximate point $P'$ whose distance to the actual position $P$ of the moving object at time $t$ is unbounded. 
+We will explain this more concretely.
+Here, the approximate point $P'$ is formally called the synchronized data point \cite{Meratnia:Spatiotemporal}.
+Intuitively, a synchronized data point $P'_i$, $s<i<e$, is a point on $\vv{P_sP_{e}}$ satisfying $\frac{|P_sP'_i|}{|P_sP_e|} = \frac{t_i - t_s}{t_e-t_s}$. 
+For instance, $P'_4$ and $P'_7$ are the \emph{synchronized data points} of points $P_4$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$ and $\vv{P_4P_{10}}$ satisfying $\frac{|P_0P'_4|}{|P_0P_{10}|} = \frac{t_4 - t_0}{t_{10}-t_0}$ and $\frac{|P_4P'_7|}{|P_4P_{10}|} = \frac{t_7 - t_4}{t_{10}-t_4}$, respectively, in Figure~\ref{fig:notations} (left).
+And a query for the position of the moving object at time $t_7$ will return the synchronized data point $P'_7$ whose distance to the actual position at time $t_7$, \ie $P_7$, is great than the bound $\epsilon$.
 
 
 \eat{, of a data point to a proposed generalized line (\eg in Figure~\ref{fig:notations} (left), $|P_4P^*_4|$ is the \ped of $P_4$ to the line $\overline{P_0P_{10}}$) as the condition to discard or retain that data point.
@@ -41,8 +47,9 @@ Line simplification algorithms using \ped have good compression ratios~ \cite{Do
 }
 
 
-The \emph{synchronous Euclidean distance} (\sed) was then introduced for trajectory compression to support the above spatio-temporal queries \cite{Meratnia:Spatiotemporal}. \sed is the Euclidean distance of a data point to its \emph{approximate temporally synchronized data point} \cite{Meratnia:Spatiotemporal} on the corresponding line segment. For instance, $P'_4$ and $P'_7$ are the \emph{synchronized data points} of points $P_4$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$ and $\vv{P_4P_{10}}$, respectively, in Figure~\ref{fig:notations} (right).
-\lsa algorithms using \sed may produce more line segments. However, the use of \sed ensures that the Euclidean distance between a data point and its  synchronized point \wrt the corresponding line segment is limited within a distance bound $\epsilon$. Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the synchronized point $P'$ of a data point $P$ within the bound $\epsilon$.
+	The \emph{synchronous Euclidean distance} (\sed) was then introduced for trajectory compression to support the above spatio-temporal queries \cite{Meratnia:Spatiotemporal}. \sed is the Euclidean distance of a data point $P_i$ to its \emph{approximate temporally synchronized data point $P'_i$} on the corresponding line segment $\vv{P_sP_{e}}$. For example, the \sed of point $P_7$ to the line segment $\vv{P_4P_{10}}$ is $|P_7P'_7|$. 
+Indeed, \lsa algorithms using \sed may output more line segments. 
+However, the use of \sed ensures that the Euclidean distance between a data point and its synchronized point \wrt the corresponding line segment is limited within a distance bound $\epsilon$. Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the synchronized point $P'$ of a data point $P$ within the bound $\epsilon$.
 
 
 %No matter using \ped or \sed,
