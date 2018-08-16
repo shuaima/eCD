@@ -37,6 +37,10 @@
 \newcommand{\nwm}{{\sc nwm}\xspace}
 
 
+\newcommand{\cone}[1]{{$\mathcal{C}{#1}$}}
+\renewcommand{\circle}[1]{{$\mathcal{O}{#1}$}}
+\newcommand{\pcircle}[1]{{$\mathcal{O}^c{#1}$}}
+
 
 \begin{document}
 
@@ -67,8 +71,9 @@ Below please find our detailed responses to the comments.
 
 \textbf{[AE]} \emph{The paper suffers from over-formalization that loses the intuition of the solution. In particular, the crucial sections 3 and 4 are too dense and fail to convey to readers the key technical ideas. The paper also contains numerous typos and grammatical errors. The revision should address these shortcomings. Consider providing an overview/outline of the approach first, rather than laying out a sequence of propositions. Moving some of the proofs to an appendix might be an option to improve readability. }
 
+Yes, we have provided sufficient text to describe the intuitions and the key technical ideas of the solution. We have provided an overview/outline of the approach in the first paragraph of Section 3. Then in Section 3.1, we have re-organized the contents into two parts. The first part defines the \emph{Synchronous Circles}, followed by Proposition 1 that shows the relationship between the \textit{synchronous circles} and the \textit{synchronous distances}; the second part defines the \textit{spatio-temporal cone}, followed by proposition 2 presenting the \textit{spatio-temporal cone intersection} method. This re-organization makes the propositions be easy to follow. We have also highlighted some key ideas or intuitions in Sections 3.3 and 3.4 to help the readability of the method. 
 
-
+We have fixed typos and grammatical errors raised by reviewers and carefully done times of proof-readings. And all comments from reviewers have been seriously solved and responsed. Thus, the quality and readability of the paper has been improved a lot.
 
 %******************* reviewer 1 ***********************************************
 \line(1,0){500}
@@ -170,16 +175,18 @@ We have fixed these grammatical mistakes and carefully done many times of proof-
 
 \line(1,0){100}
 
-\textbf{[R2C1]} \emph{Sections 3 and 4, which constitute the core of the paper, are written as a series of propositions, some of which are not needed or are not easy to grasp.
-The authors could easily remove some and also add some intuition to others.}
+\textbf{[R2C1]} \emph{Sections 3 and 4, which constitute the core of the paper, are written as a series of propositions, some of which are not needed or are not easy to grasp. The authors could easily remove some and also add some intuition to others.}
 
 Yes, we have elaborated these. Thanks for these nice suggestions!
 
-(1) In Section 3.1, we have re-organized the contents into two parts. The first part defines the \emph{Synchronous Circles}, followed by Proposition 1 that shows the relationship between the \textit{synchronous circles} and the \textit{synchronous distances}; the second part defines the \textit{spatio-temporal cone}, followed by proposition 2 presenting the \textit{spatio-temporal cone intersection} method which converts the SED distance tolerance into the intersection of spatio-temporal cones.
+(1) We have provided an overview/outline of the approach in the first paragraph of Section 3.
 
-(2) We have highlighted some key ideas or intuitions in Section 3 to help the readability of the method.
+(2) In Section 3.1, we have re-organized the contents into two parts. The first part defines the \emph{Synchronous Circles}, followed by Proposition 1 that shows the relationship between the \textit{synchronous circles} and the \textit{synchronous distances}; the second part defines the \textit{spatio-temporal cone}, followed by proposition 2 presenting the \textit{spatio-temporal cone intersection} method which converts the SED distance tolerance into the intersection of spatio-temporal cones.
 
-(3) Please refer to our responses to R2C6 and R2C7 for more details.
+(3) We have highlighted some key ideas or intuitions in Sections 3.3 and 3.4 to help the readability of the method.
+
+
+(4) Please refer to our responses to R2C6 and R2C7 for more details.
 
 \textbf{[R2C2]} \emph{In terms of the setting of the problem, the authors did not discuss the device range error which varies from device to device and may affect the algorithms.
 In addition, it seems that the authors assume that the devices move in uniform speed which may not be realistic.
@@ -195,16 +202,41 @@ We have also observed that there are many GPS device-level works focus on correc
 The proof of proposition looks incorrect, take as an example a moving device along the y-axis only over the time axis. In this case, $p'_{s+i}.x - P_s.x = 0$ while $p'_{s+i}.y - P_s.y$ is not zero.
 }
 
-We have corrected the proof of \textbf{Proposition 1}. Thanks for raising this issue.
+Yes, the proof of proposition.1 is not strict enough. In the preview version, we said:
+``The intersection point $P'_{s+i}$ satisfies that $P'_{s+i}.t = P_{s+i}.t$ and
+$\frac{P'_{s+i}.t - P_{s}.t}{Q.t - P_{s}.t}$ = $\frac{P_{s+i}.t - P_{s}.t}{Q.t - P_{s}.t}$  =
+$\frac{|\overrightarrow{P_sP'_{s+i}}|}{|\overrightarrow{P_sQ}|}$ =
+$\frac{P'_{s+i}.x - P_{s}.x}{Q.x - P_{s}.x}$ = 
+$\frac{P'_{s+i}.y - P_{s}.y}{Q.y - P_{s}.y}$.
+Hence, by the definition of synchronized points, we have the conclusion."
+As you pointed out, it is possible that $|\overrightarrow{P_sQ}|=0$ or $Q.x - P_{s}.x=0$ or $Q.y - P_{s}.y$.
+
+We have corrected the proof. The above proof is replaced by
+``The intersection point $P'_{s+i}$ satisfies that 
+(1) $P'_{s+i}.t = P_{s+i}.t$, 
+(2) $P'_{s+i}.x$ = $P_s.x +  c\cdot(Q.x - P_s.x)$, and
+(3) $P'_{s+i}.y$ = $P_s.y +  c\cdot(Q.y - P_s.y)$, 
+where $c= \frac{P'_{s+i}.t - P_{s}.t}{Q.t - P_{s}.t}= \frac{P_{s+i}.t-P_s.t}{Q.t-P_s.t}$.
+Hence, by the definition of synchronized points, we have the conclusion."
+
+Thanks for raising this issue.
 
 
 \textbf{[R2C4]} \emph{Except if I am missing something, projecting a cone over a plane is not necessarily a circle.}
 
-No! The projection of a \emph{spatio-temporal cone} over a plane $P.t- t_c = 0$ ($t_c > P_s.t$) is certainly a circle. Please refer to the definiton of \emph{Spatio-temporal cone}, indeed, it is an oblique circular cone whose base is a  \emph{synchronous circle} on a plane being paralel to the plane $P.t- t_c = 0$. 
+No! The projection of a \emph{spatio-temporal cone} over a plane $P.t- t_c = 0$ ($t_c > P_s.t$) is certainly a circle. 
+
+The synchronous circle of a data point $P_{s+i}$ \wrt an error bound $\epsilon$, denoted as \circle{(P_{s+i}, \epsilon)}, is \textcolor{blue}{a circle on the plane $P.t-P_{s+i}.t = 0$} such that $P_{s+i}$ is its center and $\epsilon$ is its radius.
+%
+Then, given the start point $P_s$ and an error bound $\epsilon$, the spatio-temporal cone of a data point $P_{s+i}$ \wrt the point $P_s$ and the error bound $\epsilon$, denoted as \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))}, is \textcolor{blue}{an oblique circular cone} such that point $P_s$ is its apex and the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$ of point $P_{s+i}$ is its base. Note that the base, \ie the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$, is on the plane $P.t-P_{s+i}.t = 0$ which is sure parallel to any other plane $P.t- t_c = 0$. Hence, the  projection of a cone \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} on a plane $P.t- t_c = 0$ ($t_c > P_s.t$) is sure a circle.
+
 
 \textbf{[R2C5]} \emph{Looking at Proposition 4, if you take only two polygons with m edges, their intersection could have more than m edges. Or are the authors doing the intersection differently.}
 
-We approximate a circle by a specialized polygon, \ie a fixed rotating and m-edges inscribed regular polygon. This elaborate design ensures that the intersenction of these polygons has no more than $m$ edges. 
+As you mentioned, the intersection of two \textcolor{blue}{general} $m$-edge polygons may produce a polygon with more than $m$ edges. To avoid this, we approximate a circle by a \textcolor{blue}{specialized} polygon, \ie a fixed rotating and m-edges inscribed regular polygon $\mathcal{R}(V, E)$,
+where (1) $V=\{v_1, \ldots, v_{m}\}$ is the set of vertexes that are defined by a polar coordinate system, whose origin is the center $P$ of \pcircle{}, satisfying $v_j = (r, \frac{(j-1)}{m}2\pi), ~j \in [1, m]$
+and (2) $E= \{\overrightarrow{v_mv_1}\} \bigcup \{\overrightarrow{v_jv_{j+1}}\ |\ j\in [1, m-1]\}$ is the set of edges that are labeled with the subscript of their start points.
+This elaborate design ensures that the intersenction of these polygons has no more than $m$ edges, thus, we have Proposition 4.
 
 We have appended the first paragraph of Section 3.3 to explain this. 
 
@@ -216,7 +248,8 @@ We have rewrited the first two paragraphs of Section 3.4 to clarify this. Thanks
 
 \textbf{[R2C7]} \emph{Theorem 8 is not really needed.}
 
-Yes! We have romoved it from the manuscript.
+\textcolor{red}{Todo}
+%Yes! We have romoved it from the manuscript.
 
 \textbf{[R2C8]} \emph{Referring to Exp-1.1, I wouldn't say that CISED-S is comparable to DPSED, a $~10\%$ difference is not small.}
 
@@ -262,8 +295,11 @@ The formal definitions of the SED and PED are presented in Section 2.1.
 
 Intuitively, a synchronized data point $P'_i$, $s<i<e$, is a point on $\overrightarrow{P_sP_{e}}$ satisfying $\frac{|P_sP'_i|}{|P_sP_e|} = \frac{P_i.t - P_s.t}{P_e.t-P_s.t}$. 
 Or we surppose that the moving object is moving from $P_s$ to $P_e$ at an average speed $\overline{v} = \frac{|P_sP_e|}{P_e.t-P_s.t}$, then its position at time $t_i$ on $\overrightarrow{P_sP_{e}}$ is a distance $\overline{v}*(P_i.t-P_s.t)$ after point $P_s$.
+
 We have clarified this in the second and third paragraphs of Section 1. The formal definition of the synchronized data point is also presented in Section 2.1.
 Thanks for pointing this out.
+
+% [Meratnia2004] Nirvana Meratnia and Rolf A. de By. Spatiotemporal Compression Techniques for Moving Point Objects. EDBT, 2004.
 
 
 \textbf{[R3C3]} \emph{Examples 1, 2, 3, 4, and 5 are not illustrative: They basically explained what happened in the corresponding figures but did not explain why. So it is not helpful if readers try to understand the algorithms by reading these examples. More details should be given. For instance, in Example 1, you can give specific coordinates to certain points so that readers can verify how the SED points are computed.}
@@ -279,8 +315,11 @@ Yes, we have add more detail for helping understand these examples.
 (1) Yes, we have provided addtional tests that compare the performance of algorithms using PED VS. SED. Two pairs of algorithms are tested, the first is the algorithm Douglas-Peucker using PED and SED, respectively, and the second is the sector intersection algorithm using PED and our spatio-temporal cone intersection algorithm using SED. %Note that spatio-temporal cone intersection method is an extension of the sector intersection method.
 The results are presented in the Appendix.
 
-(2) We have observed that some \textcolor{red}{works} have evaluated trajectory simplification algorithms from the view of real applications, \eg spatio-temporal queries, however, we would not do this as we consider that there are so many important applications over trajectories and we are impossible to cover the most of them in this work. So, it is a good choice that we concentrate on designing the algorithm and testing the common metrics on the  algorithm, and let the extensive evaluations by other researchers or works.
+(2) Firstly, the application requirements of the work directly comes from our CarStream [Zhang2017] project, an industrial data-processing system for chauffeured car services that has connected over 30,000 vehicles in more than 60 cities. In this project, trajectory data are collected from cars, transported to cloud, simplified/compressed and stored in databases, and then used for applications like tracking the historical trajectories of cars, analyzing the trips, mileages and travel patterns of cars, and so on. From these applications, we find that the metrics of compression ratio, max error and average error are enough to evaluate the qualify of our algorithm. Secondly, in the area of trajectory simplification, compression ratio, average error, max error and runing time of algorithm are the major metrics. We follow the customary practices. Finally, we have also observed that some {works}, eg. [Zhang2018], have evaluated trajectory simplification algorithms from the view of spatio-temporal queries, however, we would not do this as we consider that there are so many important applications over trajectories and we are impossible to cover the most of them in this work. So, it is a good choice that we concentrate on designing the algorithm and testing the common metrics on the  algorithm, and let the extensive evaluations by other researchers or works.
 
+[Zhang2017] Mingming Zhang, Tianyu Wo, Tao Xie, Xuelian Lin and Yaxiao Liu. CarStream: An Industrial System of Big Data Processing for Internet-of-Vehicles. PVLDB, 10 (12), 2017.
+
+[Zhang2018] Dongxiang Zhang, Mengting Ding, Dingyu Yang, Yi Liu, Ju Fan, and Heng Tao Shen. Trajectory Simplification: An Experimental Study and Quality Analysis. PVLDB, 11 (9): 934-946, 2018.
 
 \line(1,0){500}
 
