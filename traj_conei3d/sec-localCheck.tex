@@ -5,8 +5,9 @@
 %Finally, we provide a one-pass, error-bounded and \sed enabled trajectory simplification algorithm.
 
 In this section, we develop a local synchronous distance checking approach such that each point in a trajectory is checked only once in $O(1)$ time during the entire process of trajectory simplification, \textcolor{blue}{and it lays down the key for the one-pass trajectory simplification algorithms using \sed (Section~\ref{sec-alg}).}
-\textcolor{blue}{We first substantially extending the \textit{sector intersection} method in Section~\ref{sub-ci-ped} from a 2D space to a Spatio-Temporal 3D space, which converts the \sed distance tolerance into the intersection of spatio-temporal cones for testing the successive data points. }
-\textcolor{blue}{Then we simplify the spatio-temporal cones intersection into the circles intersection and approximate a circle by a specialized polygon so as to get the local synchronous distance checking approach.}
+\textcolor{blue}{The key idea of the local distance checking method using \sed is largely depending on the \emph{spatio-temporal cones} that convert the \sed distance tolerance into the intersection of spatio-temporal cones for testing the successive data points.}
+\textcolor{blue}{More specifically, we first substantially extend the \textit{sectors} in Section~\ref{sub-ci-ped} from a 2D space to a Spatio-Temporal 3D space and get \emph{spatio-temporal cones},}
+\textcolor{blue}{then we simplify the spatio-temporal cones intersection into the circles intersection, and finally, we approximate a circle by a specialized polygon (fixed rotation and edge number) so as to get the local synchronous distance checking approach.}
 
 
 We consider a sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, P_{s+k}]$, an error bound $\epsilon$, and a 3D Cartesian coordinate system whose origin, $x$-axis, $y$-axis and $t$-axis  are $P_s$, longitude, latitude and time, respectively.
@@ -112,7 +113,8 @@ By Proposition~\ref{prop-3d-ci}, we now have a spatio-temporal cone intersection
 
 For spatio-temporal cones with the same apex $P_s$, the checking of their intersection can be computed by a much simpler way, \ie the checking of intersection of cone projection circles on a plane, as follows.
 
-\stitle{Cone projection circles}. The projection of a cone \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} on a plane $P.t- t_c = 0$ ($t_c > P_s.t$) is a circle \pcircle{(P^c_{s+i}, r^c_{s+i})}, or \pcircle{_{s+i}} in short, such that
+\stitle{Cone projection circles}.
+\textcolor{blue}{As the base of a cone \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))}, \ie the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$, is on the plane $P.t-P_{s+i}.t = 0$, which is sure parallel to any other plane $P.t- t_c = 0$, hence,} the projection of a cone \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} on a plane $P.t- t_c = 0$ ($t_c > P_s.t$) is a circle \pcircle{(P^c_{s+i}, r^c_{s+i})}, or \pcircle{_{s+i}} in short, such that
 %
 (1) $P^c_{s+i}.x = P_s.x +  c\cdot(P_{s+i}.x- P_{s}.x)$,
 %
@@ -163,7 +165,7 @@ Proposition~\ref{prop-circle-intersection} tells us that the intersection checki
 
 Finding the common intersection of $n$ circles on a plane has a time complexity of ${O(n\log n)}$~\cite{Shamos:Circle}, which cannot be used for designing one-pass trajectory simplification algorithms using \sed.
 %
-Intuitively, we can approximate a circle with its $m$-edge inscribed polygon {whose intersection can be computed more fast}. \textcolor{blue}{However, the intersection of two $m$-edge polygons may produce a polygon with more than $m$ edges, thus, the time complexity of finding the common intersection of $n$ polygons on a plane is not linear. To solve this problem, we approximate a circle with a fixed rotating, $m$-edge inscribed regular polygon.}
+Intuitively, we can approximate a circle with its $m$-edge inscribed polygon {whose intersection can be computed more fast}. \textcolor{blue}{However, the intersection of two $m$-edge polygons may produce a polygon with more than $m$ edges, thus, the time complexity of finding the common intersection of $n$ polygons on a plane is not linear. To solve this problem, we approximate a circle with a fixed rotation, $m$-edge inscribed regular polygon.}
 
 \stitle{Inscribed regular polygons ($\mathcal{R}$)}.
 Given a cone projection circle \pcircle{(P, r)}, its inscribed $m$-edge regular polygon is denoted as $\mathcal{R}(V, E)$,
