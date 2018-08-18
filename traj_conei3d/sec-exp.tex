@@ -8,9 +8,9 @@ In this section, we present an extensive experimental study of our one-pass traj
 Using four real-life trajectory datasets, we conducted three sets of experiments to evaluate:
 (1) the compression ratios of algorithms \cist and \cista vs. \dps, \squishe and the optimal algorithm,
 (2) the average errors of algorithms \cist and \cista vs. \dps, \squishe and the optimal algorithm,
-(3) the execution time of algorithms \cist and \cista vs. \dps, \squishe and the optimal algorithm, and
-(4) the impacts of polygon intersection algorithms \rpia and \cpia and the edge number $m$ of inscribed regular polygons to the compression ratios, errors and running time of algorithms \cist and \cista.
-
+(3) the execution time of algorithms \cist and \cista vs. \dps, \squishe and the optimal algorithm, 
+(4) the impacts of polygon intersection algorithms \rpia and \cpia and the edge number $m$ of inscribed regular polygons to the compression ratios, errors and running time of algorithms \cist and \cista, and
+\textcolor{blue}{(5) the impacts of the distance metrics \ped and \sed to the compression ratios, errors and running time of algorithms.}
 
 \subsection{Experimental Setting}
 %We first introduce the settings of our experimental study.
@@ -95,7 +95,7 @@ By the definition, \emph{algorithms with lower compression ratios are better}.
 \includegraphics[scale = 0.290]{Figures/Exp-M-e-60-CR-private.png}
 %\vspace{-1ex}
 \caption{\small Evaluation of compression ratios: fixed error bound with $\epsilon=60$ meters and varying $m$.
-Here ``R'' denotes our fast regular polygon intersection algorithm \rpia, and ``C'' denotes \cpia, respectively.}
+Here ``R'' denotes our fast regular polygon intersection algorithm \rpia, and ``C'' denotes the convex polygon intersection algorithm \cpia, respectively.}
 \label{fig:m-cr-e60}
 %\vspace{-1ex}
 \end{figure*}
@@ -146,8 +146,9 @@ Here ``R'' denotes our fast regular polygon intersection algorithm \rpia, and ``
 
 %\vspace{0.5ex}
 \stitle{Exp-1.1: Impacts of parameter $m$ on compression ratios}.
-To evaluate the impacts of the number $m$ of edges of polygons on the
-compression ratios of algorithms \cist and \cista, we fixed the error bounds {$\epsilon =60$ meters}, and varied $m$ from $4$ to $40$. The results are reported in Figure~\ref{fig:m-cr-e60}.
+To evaluate the impacts of the number $m$ of edges of polygons on the compression ratios of algorithms \cist and \cista, 
+\textcolor{blue}{and also to confirm that our fast regular polygon intersection algorithm \rpia has the same compression ratios as the convex polygon intersection algorithm \cpia, }
+we fixed the error bounds {$\epsilon =60$ meters}, and varied $m$ from $4$ to $40$. The results are reported in Figure~\ref{fig:m-cr-e60}.
 
 \ni(1) Algorithms \cist and \cista using \rpia have the same compression ratios as their counterparts using \cpia for all cases.
 
@@ -199,7 +200,7 @@ For example, when $\epsilon$ = $40$ meters, the compression ratios of \cist and 
 ($22.0\%$, $5.9\%$, $1.9\%$, $3.3\%$) and {($16.4\%$, $4.2\%$, $0.9\%$, $2.4\%$)}
 on  {datasets (\sercar, \geolife, \mopsi, \pricar)}, respectively.
 
-\ni {(2)} Algorithm \cista is comparable with the optimal algorithm on all datasets and for all $\epsilon$.
+\ni {(2)} Algorithm \cista has the closest compression ratios to the optimal algorithm on all datasets and for all $\epsilon$.
 The compression ratios of \cista are on average  ($94.8\%$, $115.5\%$, $119.7\%$, $107.5\%$)} of the optimal algorithm
  on {datasets (\sercar, \geolife, \mopsi, \pricar)}, respectively.
 For example, when $\epsilon$ = $40$ meters, the compression ratios of algorithm
@@ -300,7 +301,9 @@ then the average error is $\sum_{j=1}^{M}\sum_{i=0}^{M} d(P_{j,i},
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\vspace{0.5ex}
 \stitle{Exp-2.1: Impacts of parameter $m$ on average errors}.
-To evaluate the impacts of parameter $m$ on average errors of algorithms \cist and \cista, we fixed the error bounds {$\epsilon =60$ meters}, and varied $m$ from $4$ to $40$. The results are reported in Figure~\ref{fig:m-error-e60}.
+To evaluate the impacts of parameter $m$ on average errors of algorithms \cist and \cista, 
+\textcolor{blue}{and also to confirm that our fast regular polygon intersection algorithm \rpia has the same average errors as the convex polygon intersection algorithm \cpia, }
+we fixed the error bounds {$\epsilon =60$ meters}, and varied $m$ from $4$ to $40$. The results are reported in Figure~\ref{fig:m-error-e60}.
 
 
 %\ni(1) The polygon intersection algorithms \rpia and \cpia have the same impacts on average errors on all datasets. \eg the average error of \rpia equipped simplification algorithm \cist, \ie \cist-\rpia, is the same as the \cpia equipped algorithm, \ie \cist-\cpia, for each $m$.
@@ -389,8 +392,9 @@ In the last set of tests, we evaluate the impacts of parameter $m$ on the runnin
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\vspace{0.5ex}
 \stitle{Exp-3.1: Impacts of algorithm \rpia and parameter $m$ on running time.}
-To evaluate the impacts of \rpia and parameter $m$ on the running time of algorithm \cist and \cista, we
-equipped \cist and \cista with \rpia and \cpia, respectively, fixed $\epsilon =60$ meters, and varied $m$ from $4$ to $40$.
+To evaluate the impacts of parameter $m$ on the running time of algorithm \cist and \cista, 
+\textcolor{blue}{and also to confirm that our fast regular polygon intersection algorithm \rpia runs fast than the convex polygon intersection algorithm \cpia, }
+we equipped \cist and \cista with \rpia and \cpia, respectively, fixed $\epsilon =60$ meters, and varied $m$ from $4$ to $40$.
 %
 The results are reported in Figures~\ref{fig:m-poly-time} and~\ref{fig:m-time-e60}.
 
@@ -557,8 +561,8 @@ From these tests we find the following.
 
 \sstab\emph{(3) Parameter $m$}. The compression ratio decreases with the increase of $m$, and the running time increases nearly linearly with the increase of $m$. In practice, the range of $[12, 20]$ is a good candidate region for $m$.
 
-\sstab\emph{(4) Compression ratios}. The optimal \lsa algorithm has the best compression ratios among all strong simplification algorithms. Algorithm \cist is comparable with \dps and algorithm \cista is comparable with the optimal \lsa algorithm.
-They are all better than \squishe.
+\sstab\emph{(4) Compression ratios}. The optimal \lsa algorithm has the best compression ratios among all strong simplification algorithms. Algorithm \cist is comparable with \dps and algorithm \cista is better than all the sub-optimal \lsa algorithm.
+%They are all better than \squishe.
 The compression ratios of algorithm \cist, the optimal algorithm and algorithm \cista are on average
 ($79.3\%$, $71.9\%$, $67.3\%$, $72.7\%$),
 {($58.1\%$, $45.1\%$, $39.2\%$, $52.8\%$)} and ($57.7\%$, $53.8\%$, $50.0\%$, $54.6\%$) of \squishe
