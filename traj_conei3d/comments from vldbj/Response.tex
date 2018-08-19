@@ -287,9 +287,9 @@ We have rewritten the first two paragraphs of Section 3.4 to clarify this and al
 
 \textbf{[R2C7]} \emph{Theorem 8 is not really needed.}
 
-To our knowledge, no one-pass and error bounded line simplification algorithm using SED has been developed in the community yet. Hence, one may wonder whether there exists an effective, one-pass and error bounded line simplification algorithm using SED. Theorem 8 is the positive answer to this question, and we proved the theorem by presenting two algorithms CISED-S and CISED-W. Indeed, Theorem 8 is an important contribution that we do for the community. 
+To our knowledge, no one-pass and error bounded line simplification algorithm using SED has been developed in the community yet. Hence, one may wonder whether there exists an effective, one-pass and error bounded line simplification algorithm using SED. Theorem 8 is the positive answer to this question, proved by two algorithms CISED-S and CISED-W. Indeed, Theorem 8 is an important contribution that we do for the community. 
 
-%BTW, a algorithm that outputs all the original is also a one-pass algorithm, but it is hardly an effective error bounded trajectory compression algorithm as it does not remove any data points from the input.
+BTW, an algorithm that outputs all the original data points is obviously a one-pass algorithm, but it is hardly an effective trajectory compression algorithm as it does not remove any data points from the input.
 
 \textbf{[R2C8]} \emph{Referring to Exp-1.1, I wouldn't say that CISED-S is comparable to DPSED, a $~10\%$ difference is not small.}
 
@@ -307,11 +307,19 @@ We have explained this phoemenon in Exp 1.2, Exp 2.2 and the summary (the first 
 
 \textbf{[R2C10]} \emph{In the summary about the experiments, the authors should have discussed, based on compression ratios, average errors, and running time, which of the proposed algorithms should be used in practice under which circumstances. In particular, looking at the average errors, how acceptable are these for the applications that will use the proposed compression algorithms. Being fast with high compression is good, but if the quality is not that good then no one will use these algorithms.}
 
-Yes, we have added a brief guideline for choosing an algorithm from the views of running time, compression ratio and average error. Please refer to Section 5.2.4 for more details. Thanks for your nice advice.
+Yes, a guideline is good. However, its hard to give an exclusive guideline for applications to select a compresss algorithm, because applications have varied requirements or they may require a balance among multiple metrics, normally running time, compression ratio and  error. For example, from the experiences of the CarStream [Zhang2017] project (an industrial data-processing system for chauffeured car services that has connected over 30,000 vehicles in more than 60 cities, deployed applications like ``tracking the historical trajectories of cars", ``mapping trajectories on road networks", ``analyzing the trips, mileages and travel patterns of cars", and so on), we find from our scenarios,  the importances of the metrics from high to low are running time, compression ratio, max error and average error. Say, the running time and compression ratio are more important than average error in the scenarios.
+Nevertheless, one may find in others applications that errors are more important.
+Hence, the choosing of a compression algorithm is application specific.
 
-\textcolor{red}{more details.}
+Anyway, in Section 5.2.4, we have provided a brief guideline for choosing an algorithm from the views of running time, compression ratio and average error, as follows: 
+(1) If the running time is the first-level consideration or the algorithms is to run in resource-constrained devices, then the one-pass algorithms, \ie~CISED-S and CISED-W, are surely the best choices as they have a linear time and constant space, and at the same time have pretty good compression ratios. Also note that CISED-W may output data points that are not selected from the input data points.
+%
+(2) If the compression ratio is the priority, then algorithm CISED-W and the optimal algorithm are the selections.
+%
+(3) When considering error, algorithm SQUISH-E is a choice because it has a relative small average error. Alternatively, we can also use DPSED or CISED-S with a smaller parameter $\epsilon$ compared with SQUISH-E.
+%Keep in mind that its compression ratio is limited. %, an algorithm that outputs the original trajectory is sure having the smallest error. 
 
-\textcolor{red}{quality? 1. hard to choose, depending on application requirements; 2. in our scenarios (mobile: time, cr, ae), compression ratio and time is the most important; 3. follow the tradition of LS [ref]; 4. brief guideline.}
+[Zhang2017] Mingming Zhang, Tianyu Wo, Tao Xie, Xuelian Lin and Yaxiao Liu. CarStream: An Industrial System of Big Data Processing for Internet-of-Vehicles. PVLDB, 10 (12), 2017.
 
 \textbf{[R2C11]} \emph{Few examples of the typos and the grammatical errors: \\
    a. In th abstract "algorithms have are been"	\\
@@ -369,7 +377,13 @@ The results are presented in the Appendix.
 
 \textcolor{red}{in 5.expr}
 
-(2) Firstly, the application requirements of the work directly comes from our CarStream [Zhang2017] project, an industrial data-processing system for chauffeured car services that has connected over 30,000 vehicles in more than 60 cities. In this project, trajectory data are collected from cars, transported to cloud, simplified/compressed and stored in databases, and then used for applications like tracking the historical trajectories of cars, analyzing the trips, mileages and travel patterns of cars, and so on. From these applications, we find that the metrics of compression ratio, max error and average error are enough to evaluate the qualify of our algorithm. Secondly, in the area of trajectory simplification, compression ratio, average error, max error and runing time of algorithm are the major metrics. We follow the customary practices. Finally, we have also observed that some {works}, eg. [Zhang2018], have evaluated trajectory simplification algorithms from the view of spatio-temporal queries, however, we would not do this as we consider that there are so many important applications over trajectories and we are impossible to cover the most of them in this work. So, it is a good choice that we concentrate on designing the algorithm and testing the common metrics on the  algorithm, and let the extensive evaluations by other researchers or works.
+(2) Firstly, the application requirements of the work directly comes from our CarStream [Zhang2017] project, an industrial data-processing system for chauffeured car services that has connected over 30,000 vehicles in more than 60 cities. In this project, trajectory data are collected from cars, transported to cloud, simplified/compressed and stored in databases, and then used for applications like tracking the historical trajectories of cars, analyzing the trips, mileages and travel patterns of cars, and so on. From these applications, we find that the metrics of compression ratio, max error and average error are enough to evaluate the qualify of our algorithm. 
+%
+Secondly, in the area of trajectory simplification, compression ratio, average error, max error and runing time of algorithm are the major metrics. We follow the customary practices. 
+%
+Finally, we have also observed that some {works}, eg. [Zhang2018], have evaluated trajectory simplification algorithms from the view of spatio-temporal queries, however, we would not do this as we consider that there are so many important applications over trajectories and we are impossible to cover the most of them in this work. 
+%
+So, it is a good choice that we concentrate on designing the algorithm and testing the common metrics on the  algorithm, and let the extensive evaluations by other researchers or works.
 
 [Zhang2017] Mingming Zhang, Tianyu Wo, Tao Xie, Xuelian Lin and Yaxiao Liu. CarStream: An Industrial System of Big Data Processing for Internet-of-Vehicles. PVLDB, 10 (12), 2017.
 
