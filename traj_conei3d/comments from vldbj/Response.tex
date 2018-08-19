@@ -341,26 +341,21 @@ Fixed! Thanks!
 
 \textbf{[R3C1]} \emph{From the example in Fig. 1, it is really difficult to tell the difference between PED and SED. It seems that SED will use more line segments due to the given constraint enforced by epsilon. However, why is the compression using SED better than that using PED? If PED is good enough, why do we care about SED? Essentially, the motivation of leaning towards SED is never clear from a practical perspective. I think it all depends on the tolerance at the application level. So I would like the authors to evaluate some real applications on top of the compressed trajectory data, to demonstrate the benefits of using SED. At least, the authors should give some convincing arguments on that.}
 
-(1) The meaning of SED is highly depending on the notion of the \emph{synchronized point}. Please refer to our response to \textbf{R3C2} for more detail about the \emph{synchronized point}.
+(1) The meaning of SED is highly depending on the notion of the \emph{synchronized point}. Please first refer to our response to \textbf{R3C2} for more detail about the \emph{synchronized point}.
 
 (2) When compressing trajectories, the choosing of PED or SED depends on the application retuirements. For example, a spatio-temporal query application, ``\emph{the position of a moving object at time $t$}", on trajectories compressed by algorithms using SED will return a point $P'$ whose distance to of the actual position of the moving object is within the bound $\epsilon$, while the same query on trajectories compressed by algorithms using PED will not. In a word, the using of PED brings good compression ratios as well as does not support applications like spatio-temporal query, while the using of SED is in contrast.
 
-We have clarified these in the second and third paragraphs of Section 1.
-The formal definitions of the SED and PED are presented in Section 2.1.
-
-\textcolor{red}{detailed explain in section 2.1}
+We have clarified these in the second and third paragraphs of Section 1, and some extra explains have been presented after the definitions of SED and PED in Section 2.1, respectively. Thanks for raising this issue.
 
 \textbf{[R3C2]} \emph{The authors should give more intuitive explanation of the semantics of "synchronized points." Maybe this has been documented in the literature, but the authors should give sufficient explanation to make this paper self-contained.}
 
-Intuitively, a synchronized data point $P'_i$, $s<i<e$, is a point on $\overrightarrow{P_sP_{e}}$ satisfying $\frac{|P_sP'_i|}{|P_sP_e|} = \frac{P_i.t - P_s.t}{P_e.t-P_s.t}$.
-Or we surppose that the moving object is moving from $P_s$ to $P_e$ at an average speed $\overline{v} = \frac{|P_sP_e|}{P_e.t-P_s.t}$, then its position at time $t_i$ on $\overrightarrow{P_sP_{e}}$ is a distance $\overline{v}*(P_i.t-P_s.t)$ after point $P_s$.
+Intuitively, given a sub-trajectory $[P_s$, $\ldots, P_e]$ to be simplified, a synchronized data point $P'_i$, $s<i<e$, is a point on line segment $\overrightarrow{P_sP_{e}}$ satisfying $|P_sP_e|>0$ and $\frac{|P_sP'_i|}{|P_sP_e|} = \frac{P_i.t - P_s.t}{P_e.t-P_s.t}$, which means that the object is moving from $P_s$ to $P_e$ at an average speed $\overline{v} = \frac{|P_sP_e|}{P_e.t-P_s.t}$, thus its position at time $t_i$ is the point $P'_i$ on $\overrightarrow{P_sP_{e}}$ having a distance of $\overline{v}\times (P_i.t-P_s.t)$ to point $P_s$.
 
-We have clarified this in the second and third paragraphs of Section 1. The formal definition of the synchronized data point is also presented in Section 2.1.
+We have clarified this in the second and third paragraphs of Section 1. Moreover, an extra explain have been presented after the definition of synchronized points in Section 2.1, and an example of the synchronized point has been illustrated in Example.1 in Section 2.1.
 Thanks for pointing this out.
 
 % [Meratnia2004] Nirvana Meratnia and Rolf A. de By. Spatiotemporal Compression Techniques for Moving Point Objects. EDBT, 2004.
 
-\textcolor{red}{detailed explain in section 2.1}
 
 \textbf{[R3C3]} \emph{Examples 1, 2, 3, 4, and 5 are not illustrative: They basically explained what happened in the corresponding figures but did not explain why. So it is not helpful if readers try to understand the algorithms by reading these examples. More details should be given. For instance, in Example 1, you can give specific coordinates to certain points so that readers can verify how the SED points are computed.}
 

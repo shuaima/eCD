@@ -112,17 +112,22 @@ However, for trajectory simplification, the distance based metrics are definitel
 
 \stitle{Perpendicular Euclidean Distance (\ped)}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the perpendicular Euclidean distance (or simply perpendicular distance) $ped(P, \mathcal{L})$ of point $P$ to line segment $\mathcal{L}$ is $\min\{|PQ|\}$ for any point $Q$ on $\vv{P_{s}P_{e}}$.
 
+\textcolor{blue}{The using of \ped brings good compression ratios, however, the temporal informtion of data points is not taken into account \cite{Meratnia:Spatiotemporal}, thus the compressed data using \ped is not suitable for spatio-temporal queries.}
+
+%ll as does not support applications like spatio-temporal query
+
 \stitle{Synchronized points \cite{Meratnia:Spatiotemporal}}. Given a sub-trajectory $\dddot{\mathcal{T}}_s[P_s$, $\ldots, P_e]$, the synchronized point $P'$ of a data point  $P \in \dddot{\mathcal{T}}_s$,~\wrt line segment $\vv{P_sP_e}$ is defined as follows:
 (1) $P'.x$ = $P_s.x +  c\cdot(P_e.x - P_s.x)$,
 (2) $P'.y$ = $P_s.y +  c\cdot(P_e.y - P_s.y)$ and
 (3) $P'.t$ = $P.t$, where $c= \frac{P.t-P_s.t}{P_e.t-P_s.t}$.
 
-\textcolor{blue}{In the definition of synchronized points, it assumes that a sub-trajectory $[P_s, ..., P_e]$ is represented by or simplified to a line segment $\overrightarrow{P_sP_e}$ and the object is moving from $P_s$ to $P_e$ linearly in a \textit{uniform speed}. This assumption is followed by the subsequent trajectory simplification works\cite{Meratnia:Spatiotemporal, Chen:Fast, Zhang:Evaluation}. Note the uniform speed assumption is constraint between two adjacant points $P_s$ and $P_e$ (points $P_s$ and $P_e$ are saved as adjacant because other points are discarded), and the device is not necessary moving in uniform speed in reality.}
+\textcolor{blue}{Intuitively, a synchronized data point $P'_i$ of $P_i$, $s<i<e$, is a point on $\vv{P_sP_{e}}$ satisfying $|P_sP_e|>0$ and $\frac{|P_sP'_i|}{|P_sP_e|} = \frac{P_i.t - P_s.t}{P_e.t - P_s.t}$, which means that the object is moving from $P_s$ to $P_e$ at an average speed $\overline{v} = \frac{|P_sP_e|}{P_e.t-P_s.t}$, and its position at time $t_i$ is point $P'_i$ on $\overrightarrow{P_sP_{e}}$ having a distance of $\overline{v}\times (P_i.t-P_s.t)$ to point $P_s$.}
+\textcolor{blue}{This definition assumes that the sub-trajectory $[P_s, ..., P_e]$ is to be represented by or simplified to a line segment $\overrightarrow{P_sP_e}$ and the object is moving from $P_s$ to $P_e$ linearly in a \textit{uniform speed}. This assumption is followed by the subsequent trajectory simplification works\cite{Meratnia:Spatiotemporal, Chen:Fast, Zhang:Evaluation} and also the work. Note the uniform speed assumption is constraint between two adjacant points $P_s$ and $P_e$ (points $P_s$ and $P_e$ are saved as adjacant because other points between them have been discarded), and the device is not necessary moving in uniform speed in reality.}
 %from the start point to the end point of a trajectory .
 
 \stitle{Synchronous Euclidean Distance (\sed) \cite{Meratnia:Spatiotemporal}}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the synchronous Euclidean distance (or simply synchronous distance) $sed(P, \mathcal{L})$ of $P$ to $\mathcal{L}$ is $|\vv{PP'}|$ that is the Euclidean distance from $P$ to its synchronized data point $P'$ \wrt $\mathcal{L}$. %, adopted by recent trajectory simplification methods~\cite{Meratnia:Spatiotemporal, Potamias:Sampling, Chen:Fast, Muckell:Compression, Popa:Spatio}.
 
-
+\textcolor{blue}{The using of \sed brings poorer compression ratios compared with \ped, however, both spatial and temporal informtion of data points are taken into account \cite{Meratnia:Spatiotemporal}, and the compressed data using \sed is suitable for spatio-temporal queries.}
 
 
 We illustrate these notations with examples.
