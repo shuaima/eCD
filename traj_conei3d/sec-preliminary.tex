@@ -122,12 +122,12 @@ However, for trajectory simplification, the distance based metrics are definitel
 (3) $P'.t$ = $P.t$, where $c= \frac{P.t-P_s.t}{P_e.t-P_s.t}$.
 
 \textcolor{blue}{Intuitively, a synchronized data point $P'_i$ of $P_i$, $s<i<e$, is a point on $\vv{P_sP_{e}}$ satisfying $|P_sP_e|>0$ and $\frac{|P_sP'_i|}{|P_sP_e|} = \frac{P_i.t - P_s.t}{P_e.t - P_s.t}$, which means that the object is moving from $P_s$ to $P_e$ at an average speed $\overline{v} = \frac{|P_sP_e|}{P_e.t-P_s.t}$, and its position at time $t_i$ is point $P'_i$ on $\overrightarrow{P_sP_{e}}$ having a distance of $\overline{v}\times (P_i.t-P_s.t)$ to point $P_s$.}
-\textcolor{blue}{This definition assumes that the sub-trajectory $[P_s, ..., P_e]$ is to be represented by or simplified to a line segment $\overrightarrow{P_sP_e}$ and the object is moving from $P_s$ to $P_e$ linearly in a \textit{uniform speed}. This assumption is followed by the subsequent trajectory simplification works\cite{Meratnia:Spatiotemporal, Chen:Fast, Zhang:Evaluation} and also the work. Note the uniform speed assumption is constraint between two adjacant points $P_s$ and $P_e$ (points $P_s$ and $P_e$ are saved as adjacant because other points between them have been discarded), and the device is not necessary moving in uniform speed in reality.}
+\textcolor{blue}{This definition assumes that the sub-trajectory $[P_s, ..., P_e]$ is to be represented by or simplified to a line segment $\overrightarrow{P_sP_e}$ and the object is moving from $P_s$ to $P_e$ linearly in a \textit{uniform speed}. This assumption is followed by the subsequent trajectory simplification works\cite{Meratnia:Spatiotemporal, Chen:Fast, Zhang:Evaluation} and also the work. Note the uniform speed assumption is constraint between two adjacant points $P_s$ and $P_e$ (points $P_s$ and $P_e$ are saved as adjacant because other points between them have been discarded), and the device in reality is not necessary moving in uniform speed.}
 %from the start point to the end point of a trajectory .
 
 \stitle{Synchronous Euclidean Distance (\sed) \cite{Meratnia:Spatiotemporal}}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the synchronous Euclidean distance (or simply synchronous distance) $sed(P, \mathcal{L})$ of $P$ to $\mathcal{L}$ is $|\vv{PP'}|$ that is the Euclidean distance from $P$ to its synchronized data point $P'$ \wrt $\mathcal{L}$. %, adopted by recent trajectory simplification methods~\cite{Meratnia:Spatiotemporal, Potamias:Sampling, Chen:Fast, Muckell:Compression, Popa:Spatio}.
 
-\textcolor{blue}{The using of \sed brings poorer compression ratios compared with \ped, however, both spatial and temporal informtion of data points are taken into account \cite{Meratnia:Spatiotemporal}, and the compressed data using \sed is suitable for spatio-temporal queries.}
+\textcolor{blue}{The using of \sed brings poorer compression ratios compared with \ped, however, both spatial and temporal informtion of data points are taken into account \cite{Meratnia:Spatiotemporal}, hence, the compressed data using \sed is suitable for spatio-temporal queries.}
 
 
 We illustrate these notations with examples.
@@ -243,7 +243,7 @@ Similarly, points $P_3$ and $P_4$ are processed, as shown in Figures~\ref{fig:sl
 \label{subsec-cpi}
 
 We also employ and revise a convex polygon intersection algorithm developed in~\cite{ORourke:Intersection}, whose basic idea is straightforward.
-Assume \kwlog that the edges of polygons $\mathcal{R}_1$ and $\mathcal{R}_2$ are oriented counterclockwise, and $\vv{A} = (P_{s_A}, P_{e_A})$ and $\vv{B} = (P_{s_B}, P_{e_B})$ are two (directed) edges on $\mathcal{R}_2$ and $\mathcal{R}_1$, repectively (see Figure~\ref{fig:c-poly-inter}).
+Assume \kwlog that the edges of polygons $\mathcal{R}_1$ and $\mathcal{R}_2$ are oriented counterclockwise, and $\vv{A} = (P_{s_A}, P_{e_A})$ and $\vv{B} = (P_{s_B}, P_{e_B})$ are two (directed) edges on $\mathcal{R}_2$ and $\mathcal{R}_1$, repectively.
 
 
 The algorithm has $\vv{A}$ and $\vv{B}$ ``chasing'' one another, \ie moves $\vv{A}$ on $\mathcal{R}_2$ and $\vv{B}$ on $\mathcal{R}_1$ counter-clockwise step by step under certain rules, so that they meet at every crossing of $\mathcal{R}_1$ and $\mathcal{R}_2$.
@@ -260,6 +260,16 @@ For example, in Figure~\ref{fig:c-poly-inter}.(1) and~\ref{fig:c-poly-inter}.(2)
 
 
 For example, in Figure~\ref{fig:c-poly-inter}.(6) and~\ref{fig:c-poly-inter}.(7), $\vv{B}$ moves forward a step as $\vv{A} \times \vv{B} < 0$ and $P_{e_A} \in \mathcal{H}(\vv{B})$.
+
+
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.92]{figures/Fig-convex-poly-inter.png}
+%	\vspace{-1ex}
+	\caption{\small A running example of convex polygons intersection.}
+	\vspace{-1ex}
+	\label{fig:c-poly-inter}
+\end{figure}
 
 
 \stitle{Algorithm \cpia}. The complete algorithm is shown in Figure~\ref{alg:c-poly-inter}.
@@ -314,6 +324,10 @@ It is worth pointing out that $|\mathcal{R}_1 \bigsqcap \mathcal{R}_2| \le (|\ma
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+
+
+
 \begin{example}
 Figure~\ref{fig:c-poly-inter} shows a running example of the convex polygon intersection algorithm \cpia.
 
@@ -332,14 +346,7 @@ After 7 steps of moving of edge $\vv{A}$ or $\vv{B}$, each by an advance rule, $
 
 
 
-\begin{figure}[tb!]
-	\centering
-	\includegraphics[scale=0.92]{figures/Fig-convex-poly-inter.png}
-%	\vspace{-1ex}
-	\caption{\small A running example of convex polygons intersection.}
-	\vspace{-1ex}
-	\label{fig:c-poly-inter}
-\end{figure}
+
 
 
 

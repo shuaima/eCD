@@ -208,9 +208,11 @@ Yes, we have elaborated these. Thanks for these nice suggestions!
 
 (2) In Section 3.1, we have re-organized the contents into two parts. The first part defines the \emph{Synchronous Circles}, followed by Proposition 1 that shows the relationship between the \textit{synchronous circles} and the \textit{synchronous distances}; the second part defines the \textit{spatio-temporal cone}, followed by proposition 2 presenting the \textit{spatio-temporal cone intersection} method which converts the SED distance tolerance into the intersection of spatio-temporal cones.
 
-(3) We have given intuitions and key ideas in the first paragraph of Sections 3.3 to help the readability of the method. In Section 3.3, we explain that why we approximate a circle with a special designed, fixed rotating, $m$-edges, inscribed regular polygon. ``Intuitively, we can approximate a circle with its $m$-edge inscribed polygon {whose intersection can be computed more fast}. However, the intersection of two $m$-edge polygons may produce a polygon with more than $m$ edges, thus, the time complexity of finding the common intersection of $n$ polygons on a plane is not linear. To solve this problem, we approximate a circle with a fixed rotation, $m$-edge inscribed regular polygon."
+(3) We have given intuitions and key ideas in the first paragraph of Sections 3.3 to help the readability of the method. We explained why we approximate a circle with a special designed, fixed rotating, $m$-edges, inscribed regular polygon. ``Intuitively, we can approximate a circle with its general $m$-edges inscribed polygon {whose intersection can be computed more fast}. However, the intersection of two general $m$-edges polygons may produce a polygon with more than $m$ edges, thus, the time complexity of finding the common intersection of $n$ polygons on a plane is not linear. To solve this problem, we approximate a circle with a fixed rotation, $m$-edges inscribed regular polygon."
 
-(4) We have also highlighted the motivation and key ideas of the fast Regular Polygon Intersection algorithm in the second paragraph of Section 3.4, followed by an example.
+(4) We have also highlighted the motivation and key ideas of the fast Regular Polygon Intersection algorithm in the second paragraph of Section 3.4, followed by an example. The key idea is, when the edges $\vv{A} = (P_{s_A}, P_{e_A})$ and $\vv{B} = (P_{s_B}, P_{e_B})$ on polygons $\mathcal{R}_2$ and $\mathcal{R}_1$ (both $\mathcal{R}_2$ and $\mathcal{R}_1$ can be an inscribed regular polygon or the common intersection of inscribed regular polygons) are ``chasing'' one another as the way the convex polygon intersection algorithm \emph{CPolyInter} does, 
+observing that every segment in the two polygons being intersected has to originate from one of the $m$ edges of the regular polygons and the geometric similarity of the regular polygons, 
+we may advance edge $\vv{A}$ or $\vv{B}$ multiple steps at a time, instead of one step at a time of the convex polygon intersection algorithm \emph{CPolyInter}.
 
 (5) Please refer to our responses to R2C5, R2C6 and R2C7 for more details.
 
@@ -254,7 +256,6 @@ We have corrected the proof. The above proof is replaced by
 (3) $P'_{s+i}.y$ = $P_s.y +  c\cdot(Q.y - P_s.y)$,
 where $c= \frac{P'_{s+i}.t - P_{s}.t}{Q.t - P_{s}.t}= \frac{P_{s+i}.t-P_s.t}{Q.t-P_s.t}$.
 Hence, by the definition of synchronized points, we have the conclusion."
-
 Thanks for raising this issue.
 
 
@@ -270,12 +271,12 @@ We have clarified this in the definition of \emph{cone projection circles} in Se
 
 \textbf{[R2C5]} \emph{Looking at Proposition 4, if you take only two polygons with m edges, their intersection could have more than m edges. Or are the authors doing the intersection differently.}
 
-As you mentioned, the intersection of two \textcolor{blue}{general} $m$-edge polygons may produce a polygon with more than $m$ edges. To avoid this, we approximate a circle by a \textcolor{blue}{specialized} polygon, \ie a fixed rotation and m-edges inscribed regular polygon $\mathcal{R}(V, E)$,
+As you mentioned, the intersection of two \textcolor{blue}{general} $m$-edges polygons may produce a polygon with more than $m$ edges. To avoid this, we approximate a circle by a \textcolor{blue}{specialized} polygon, \ie a fixed rotation and m-edges inscribed regular polygon $\mathcal{R}(V, E)$,
 where (1) $V=\{v_1, \ldots, v_{m}\}$ is the set of vertexes that are defined by a polar coordinate system, whose origin is the center $P$ of \pcircle{}, satisfying $v_j = (r, \frac{(j-1)}{m}2\pi), ~j \in [1, m]$
 and (2) $E= \{\overrightarrow{v_mv_1}\} \bigcup \{\overrightarrow{v_jv_{j+1}}\ |\ j\in [1, m-1]\}$ is the set of edges that are labeled with the subscript of their start points.
 This elaborate design ensures that the intersenction of these polygons has no more than $m$ edges, thus, we have Proposition 4.
 
-We have appended the first paragraph of Section 3.3 to explain the motivation and intuition of this: ``Intuitively, we can approximate a circle with its $m$-edge inscribed polygon {whose intersection can be computed more fast}. However, the intersection of two $m$-edge polygons may produce a polygon with more than $m$ edges, thus, the time complexity of finding the common intersection of $n$ polygons on a plane is not linear. To solve this problem, we approximate a circle with a fixed rotation, $m$-edges, inscribed regular polygon."
+We have appended the first paragraph of Section 3.3 to explain the motivation and intuition of this: ``Intuitively, we can approximate a circle with its $m$-edges inscribed polygon {whose intersection can be computed more fast}. However, the intersection of two $m$-edges polygons may produce a polygon with more than $m$ edges, thus, the time complexity of finding the common intersection of $n$ polygons on a plane is not linear. To solve this problem, we approximate a circle with a fixed rotation, $m$-edges, inscribed regular polygon."
 
 
 
@@ -345,13 +346,13 @@ Fixed! Thanks!
 
 (2) When compressing trajectories, the choosing of PED or SED depends on the application retuirements. For example, a spatio-temporal query application, ``\emph{the position of a moving object at time $t$}", on trajectories compressed by algorithms using SED will return a point $P'$ whose distance to of the actual position of the moving object is within the bound $\epsilon$, while the same query on trajectories compressed by algorithms using PED will not. In a word, the using of PED brings good compression ratios as well as does not support applications like spatio-temporal query, while the using of SED is in contrast.
 
-We have clarified these in the second and third paragraphs of Section 1, and some extra explains have been presented after the definitions of SED and PED in Section 2.1, respectively. Thanks for raising this issue.
+We have clarified these in the third paragraph of Section 1, and some extra explains have been presented after the definitions of SED and PED in Section 2.1, respectively. Thanks for raising this issue.
 
 \textbf{[R3C2]} \emph{The authors should give more intuitive explanation of the semantics of "synchronized points." Maybe this has been documented in the literature, but the authors should give sufficient explanation to make this paper self-contained.}
 
 Intuitively, given a sub-trajectory $[P_s$, $\ldots, P_e]$ to be simplified, a synchronized data point $P'_i$, $s<i<e$, is a point on line segment $\overrightarrow{P_sP_{e}}$ satisfying $|P_sP_e|>0$ and $\frac{|P_sP'_i|}{|P_sP_e|} = \frac{P_i.t - P_s.t}{P_e.t-P_s.t}$, which means that the object is moving from $P_s$ to $P_e$ at an average speed $\overline{v} = \frac{|P_sP_e|}{P_e.t-P_s.t}$, thus its position at time $t_i$ is the point $P'_i$ on $\overrightarrow{P_sP_{e}}$ having a distance of $\overline{v}\times (P_i.t-P_s.t)$ to point $P_s$.
 
-We have clarified this in the second and third paragraphs of Section 1. Moreover, an extra explain have been presented after the definition of synchronized points in Section 2.1, and an example of the synchronized point has been illustrated in Example.1 in Section 2.1.
+We have clarified this in the third paragraph of Section 1. Moreover, an extra explain have been presented after the definition of synchronized points in Section 2.1, and an example of the synchronized point has been illustrated in Example.1 in Section 2.1.
 Thanks for pointing this out.
 
 % [Meratnia2004] Nirvana Meratnia and Rolf A. de By. Spatiotemporal Compression Techniques for Moving Point Objects. EDBT, 2004.

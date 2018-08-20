@@ -24,7 +24,7 @@ It is known that these issues can be resolved or greatly alleviated by trajector
 %\vspace{-1ex}
 \caption{\small A trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$  with eleven points is represented by two (left) and four (right) continuous line segments (solid blue), compressed by the Douglas--Peucker algorithm \cite{Douglas:Peucker} using \ped and \sed, respectively. The Douglas--Peucker algorithm firstly creates line segment $\protect\vv{P_0P_{10}}$, then it calculates the distance of each point in the trajectory to $\protect\vv{P_{0}P_{10}}$. It finds that point $P_{4}$ has the maximum distance to $\protect\vv{P_{0}P_{10}}$, and is greater than the user defined threshold $\epsilon$. Then it goes to compress sub-trajectories $[P_0, \ldots, P_{4}]$ and $[P_{4}, \ldots, P_{10}]$, separately.
 }
-\vspace{-1ex}
+\vspace{-2ex}
 \label{fig:notations}
 \end{figure*}
 
@@ -33,11 +33,11 @@ Originally, line simplification (\lsa) algorithms adopt the \emph{perpendicular 
 \eg $|\vv{P_4P^*_4}|$ is the \ped of data point $P_4$ to line segment $\vv{P_0P_{10}}$ in Figure~\ref{fig:notations} (left).
 Line simplification algorithms using \ped have good compression ratios~ \cite{Douglas:Peucker, Hershberger:Speeding,Lin:Operb, Liu:BQS, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey}.  
 However, when using \ped, a spatio-temporal query, \eg ``\emph{the position of a moving object at time $t$}", on the compressed trajectories will return an approximate point $P'$ whose distance to the actual position $P$ of the moving object at time $t$ is unbounded. 
-\textcolor{blue}{We will explain this more concretely.
-Here, the approximate point $P'$ is formally called the synchronized data point \cite{Meratnia:Spatiotemporal}.
-Intuitively, given a sub-trajectory $[P_s$, $\ldots, P_e]$ to be simplified, a synchronized data point $P'_i$, $s<i<e$, is a point on $\vv{P_sP_{e}}$ satisfying $|P_sP_e|>0$ and $\frac{|P_sP'_i|}{|P_sP_e|} = \frac{P_i.t - P_s.t}{P_e.t - P_s.t}$. 
-For instance, $P'_4$ and $P'_7$ are the \emph{synchronized data points} of points $P_4$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$ and $\vv{P_4P_{10}}$ satisfying $\frac{|P_0P'_4|}{|P_0P_{10}|} = \frac{P_4.t - P_0.t}{P_{10}.t-P_0.t}$ and $\frac{|P_4P'_7|}{|P_4P_{10}|} = \frac{P_7.t - P_4.t}{P_{10}.t-P_4.t}$, respectively, in Figure~\ref{fig:notations} (left).
-And a query for the position of the moving object at time $P_7.t$ will return the synchronized data point $P'_7$ whose distance to the actual position $P_7$ is great than the bound $\epsilon$.}
+
+
+
+%For instance,
+%And a query for the position of the moving object at time $P_7.t$ will return the synchronized data point $P'_7$ whose distance to the actual position $P_7$ is great than the bound $\epsilon$.}
 
 
 \eat{, of a data point to a proposed generalized line (\eg in Figure~\ref{fig:notations} (left), $|P_4P^*_4|$ is the \ped of $P_4$ to the line $\overline{P_0P_{10}}$) as the condition to discard or retain that data point.
@@ -46,14 +46,16 @@ And a query for the position of the moving object at time $P_7.t$ will return th
 ,  and implemented it in Douglas-Peucker (\dpa)~\cite{Douglas:Peucker} algorithm
 }
 
-
-	The \emph{synchronous Euclidean distance} (\sed) was then introduced for trajectory compression to support the above spatio-temporal queries \cite{Meratnia:Spatiotemporal}. \sed is the Euclidean distance of a data point $P_i$ to its \emph{approximate temporally synchronized data point $P'_i$} on the corresponding line segment $\vv{P_sP_{e}}$. For example, the \sed of point $P_7$ to the line segment $\vv{P_4P_{10}}$ is $|P_7P'_7|$. 
-Indeed, \lsa algorithms using \sed may output more line segments. 
+\textcolor{blue}{The approximate point $P'$ was formally called the approximate temporally \emph{synchronized data point} \cite{Meratnia:Spatiotemporal}, and based on the concept of synchronized data point, the \emph{synchronous Euclidean distance} (\sed) was then introduced for trajectory compression to support the above spatio-temporal queries \cite{Meratnia:Spatiotemporal}.} 
+\textcolor{blue}{Intuitively, given a sub-trajectory $[P_s$, $\ldots, P_e]$ to be simplified, a synchronized data point $P'_i$, $s<i<e$, is a point on $\vv{P_sP_{e}}$ satisfying $|P_sP_e|>0$ and $\frac{|P_sP'_i|}{|P_sP_e|} = \frac{P_i.t - P_s.t}{P_e.t - P_s.t}$, and \sed is the Euclidean distance of a data point $P_i$ to its \emph{synchronized data point $P'_i$} on the corresponding line segment $\vv{P_sP_{e}}$.}
+%
+\textcolor{blue}{For example, in Figure~\ref{fig:notations}, $P'_4$ and $P'_7$ are the \emph{synchronized data points} of points $P_4$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$ and $\vv{P_4P_{10}}$, respectively, satisfying $\frac{|P_0P'_4|}{|P_0P_{10}|} = \frac{P_4.t - P_0.t}{P_{10}.t-P_0.t}$ and $\frac{|P_4P'_7|}{|P_4P_{10}|} = \frac{P_7.t - P_4.t}{P_{10}.t-P_4.t}$, and the \sed of point $P_7$ to the line segment $\vv{P_4P_{10}}$ is $|P_7P'_7|$.}
+%
+\textcolor{blue}{Indeed, the \sed of a point to a line segment is always no less than the \ped of the point to the line segment, thus, \lsa algorithms using \sed may split a trajectory into more sub-trajectories and output more line segments.}
 However, the use of \sed ensures that the Euclidean distance between a data point and its synchronized point \wrt the corresponding line segment is limited within a distance bound $\epsilon$. Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the synchronized point $P'$ of a data point $P$ within the bound $\epsilon$.
 
 
 %No matter using \ped or \sed,
-
 \textcolor{blue}{The problem of finding the minimal number of line segments to represent the original polygonal lines \wrt an error bound $\epsilon$ is known as the ``min-\#" problem\cite{Imai:Optimal,Chan:Optimal}.}
 %
 \textcolor{blue}{An optimal $O(n^3)$  \lsa algorithm was firstly developed in \cite{Imai:Optimal}, where $n$ is the number of the original points. The high time and space complexities of the optimal \lsa algorithm make it impractical.}
@@ -64,7 +66,7 @@ However, the use of \sed ensures that the Euclidean distance between a data poin
 However, the current one-pass algorithms are all \ped specific, and to our knowledge, no one-pass \lsa algorithm using \sed has been developed in the community.}
 
 
-\textcolor{blue}{As have been pointed out in \cite {Lin:Operb}, the key idea to achieve a one-pass algorithm is by \emph{local distance checking} in constant time, \eg the \textit{sector intersection} mechanism used in \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} and the \textit{fitting function} approach used in our preview work \cite {Lin:Operb}, however, the design of an effective local distance checking approach is non-trival, especially for \sed.}
+\textcolor{blue}{As have been pointed out in \cite {Lin:Operb}, the key idea to achieve a one-pass algorithm is by \emph{local distance checking} in constant time, \eg the \textit{sector intersection} mechanism used in \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} and the \textit{fitting function} approach used in our preview work \cite {Lin:Operb}, however, the design of an effective local synchronous distance checking approach is non-trival.}
 
 
 
@@ -74,7 +76,7 @@ To this end, we propose two one-pass error bounded \lsa algorithms using \sed fo
 
 \sstab {(1)} We first develop a novel local synchronous distance checking approach, \ie spatio-temporal \underline{C}one \underline{I}ntersection using the \underline{S}ynchronous \underline{E}uclidean \underline{D}istance (CISED).
 %, by extending the sector intersection method \cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve}\eat{(Section~\ref{sec-localcheck})}.
-We further approximate the intersection of spatio-temporal cones with the intersection of regular polygons, and develop a fast regular polygon intersection algorithm, such that each data point in a trajectory is checked in $O(1)$ time during the entire process of trajectory simplification.
+We further approximate the intersection of spatio-temporal cones with the intersection of \textcolor{blue}{special designed} regular polygons, and develop a fast regular polygon intersection algorithm, such that each data point in a trajectory is checked in $O(1)$ time during the entire process of trajectory simplification.
 
 %\sstab {(2)} \textcolor{blue}{We then show that an optimal trajectory simplification algorithm using \sed can achieve $O(n^2 \log n)$ time by using our local synchronous distance checking technique, and provide a \textit{near optimal} trajectory simplification algorithm \cisto that achieves $O(n^2)$ time and $O(n)$ space.}
 
