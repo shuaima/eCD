@@ -37,6 +37,15 @@ We first introduce basic notations.
 								& trajectory $\dddot{\mathcal{T}}$		\\
 		\hline
 		$\mathcal{L}$ & a directed line segment  \\
+
+
+\hline
+		$\vv{P_{s}P_{e}}$ & a directed line segment with the start point $P_s$ \\
+        & and the end point $P_e$	\\
+        \hline
+$|\mathcal{L}|$ &  the length of $\mathcal{L}$ in the x-y 2D space  \\
+
+
 		\hline
 		$ped(P, \mathcal{L})$ &  {the perpendicular Euclidean distance of }	\\
 								& point $P$ to line segment $\mathcal{L}$	\\
@@ -88,8 +97,9 @@ Note that here $P_s$ or $P_e$ may not be a point in a trajectory $\dddot{\mathca
 
 %, and hence, we also use notation $\mathcal{R}$ instead of $\mathcal{L}$ when both $P_s$ and $P_e$ belong to $\dddot{\mathcal{T}}$.
 
-\textcolor{blue}{When a line segment $\mathcal{L}$ is projected on a \emph{x-y} 2D space, where $x$ and $y$ are the longitude and latitude, respectively, we also use $|\mathcal{L}|$ and $\mathcal{L}.\theta\in [0, 2\pi)$ to denote the length of $\mathcal{L}$ in the x-y 2D space}, and its angle with the $x$-axis of the coordinate system $(x, y)$.
-That is, \textcolor{blue}{in the 2D space}, a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$ can be treated as a triple $(P_s, |\mathcal{L}|, \mathcal{L}.\theta)$.
+\textcolor{blue}{For the projection of a directed line segment $\mathcal{L}$ on a \emph{x-y} 2D space, where $x$ and $y$ are the longitude and latitude, respectively, we also use $|\mathcal{L}|$ and $\mathcal{L}.\theta\in [0, 2\pi)$ to denote the length of $\mathcal{L}$ in the x-y 2D space}, and its angle with the $x$-axis of the coordinate system $(x, y)$.
+ That is, the projection of a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$ on a \emph{x-y} 2D space is treated as a triple $(P_s, |\mathcal{L}|, \mathcal{L}.\theta)$.
+
 
 \stitle{Piecewise line representation ($\overline{\mathcal{T}}$)}. A piece-wise line representation $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$) of a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is a sequence of continuous directed line segments $\mathcal{L}_{i}$ = $\vv{P_{s_i}P_{e_i}}$ ($i\in[0,m]$) of $\dddot{\mathcal{T}}$  such that $\mathcal{L}_{0}.P_{s_0} = P_0$, $\mathcal{L}_{m}.P_{e_m} = P_n$ and  $\mathcal{L}_{i}.P_{e_i}$ = $\mathcal{L}_{i+1}.P_{s_{i+1}}$ for all $i\in[0, m-1]$. Note that each directed line segment in $\overline{\mathcal{T}}$ essentially represents a continuous sequence of data points in $\dddot{\mathcal{T}}$.
 
@@ -108,7 +118,7 @@ However, for trajectory simplification, the distance based metrics are definitel
 %\stitle{Perpendicular Euclidean Distance (\ped)}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the perpendicular Euclidean distance (or simply perpendicular distance) $ped(P, \mathcal{L})$ of $P$ to $\mathcal{L}$ is the Euclidean distance of $P$ to line $\overline{P_{s}P_{e}}$, adopted by many trajectory simplification methods, \eg~\cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve, Lin:Operb}.
 
 
-\stitle{Perpendicular Euclidean Distance (\ped)}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the perpendicular Euclidean distance (or simply perpendicular distance) $ped(P, \mathcal{L})$ of point $P$ to line segment $\mathcal{L}$ is $\min\{|PQ|\}$ for any point $Q$ on $\vv{P_{s}P_{e}}$.
+\stitle{Perpendicular Euclidean Distance (\ped)}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the perpendicular Euclidean distance (or simply perpendicular distance) $ped(P, \mathcal{L})$ of point $P$ to line segment $\mathcal{L}$ is $\min\{|\vv{PQ}|\}$ for any point $Q$ on $\vv{P_{s}P_{e}}$.
 
 \textcolor{blue}{The using of \ped brings good compression ratios, however, the temporal informtion of data points is not taken into account \cite{Meratnia:Spatiotemporal}, thus the compressed data using \ped is not suitable for spatio-temporal queries.}
 
@@ -125,7 +135,7 @@ However, for trajectory simplification, the distance based metrics are definitel
 
 \stitle{Synchronous Euclidean Distance (\sed) \cite{Meratnia:Spatiotemporal}}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the synchronous Euclidean distance (or simply synchronous distance) $sed(P, \mathcal{L})$ of $P$ to $\mathcal{L}$ is $|\vv{PP'}|$ that is the Euclidean distance from $P$ to its synchronized data point $P'$ \wrt $\mathcal{L}$. %, adopted by recent trajectory simplification methods~\cite{Meratnia:Spatiotemporal, Potamias:Sampling, Chen:Fast, Muckell:Compression, Popa:Spatio}.
 
-\textcolor{blue}{The using of \sed brings poorer compression ratios compared with \ped, however, both spatial and temporal informtion of data points are taken into account \cite{Meratnia:Spatiotemporal}, hence, the compressed data using \sed is suitable for spatio-temporal queries.}
+\textcolor{blue}{The use of \sed takes both spatial and temporal information of data points into considerations \cite{Meratnia:Spatiotemporal}, hence, the compressed data using \sed is suitable for spatio-temporal queries.}
 
 
 We illustrate these notations with examples.
@@ -139,7 +149,7 @@ Consider Figure~\ref{fig:notations}, in which
 
 \sstab(2) the set of two continuous line segments $\{\vv{P_0P_4}$, $\vv{P_4P_{10}}$\} (Left) and the set of four continuous line segments $\{\vv{P_0P_2}$, $\vv{P_2P_4}$, $\vv{P_4P_7}$, $\vv{P_7P_{10}}$\} (Right) are two piecewise line representations of trajectory $\dddot{\mathcal{T}}$,
 
-\sstab(3) $ped(P_4, \vv{P_0P_{10}})=|\vv{P_4P^*_4}|$, where $P^*_4$ is the perpendicular point of $P_4$ \wrt line segment $\vv{P_0P_{10}}$, 
+\sstab(3) $ped(P_4, \vv{P_0P_{10}})=|\vv{P_4P^*_4}|$, where $P^*_4$ is the perpendicular point of $P_4$ \wrt line segment $\vv{P_0P_{10}}$,
 
 \sstab(4) \textcolor{blue}{$P'_4$ is the synchronized point of $P_4$ \wrt line segment $\vv{P_0P_{10}}$, satisfying $\frac{|P_0P'_4|}{|P_0P_{10}|} = \frac{P_4.t - P_0.t}{P_{10}.t-P_0.t} = \frac{4-0}{10-0}= \frac{2}{5}$, and}
 
@@ -172,11 +182,6 @@ Though the brute-force algorithm was initially developed using \ped, it can be u
 As pointed out in \cite{Chan:Optimal}, the construction of the reachability graph $G$ using \ped can be implemented in $O(n^2)$ time using the \textit{sector intersection} mechanism (see Section \ref{sub-ci-ped}). However, the \textit{sector intersection} mechanism cannot work with \sed.  Hence, the construction of the reachability graph $G$ using \sed remains in $O(n^3)$ time, and the brute-force algorithm using \sed remains in  $O(n^3)$ time.
 
 
-
-\subsection{Sector Intersection based Algorithms using \ped}
-\label{sub-ci-ped}
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Cone Intersection
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -188,6 +193,12 @@ As pointed out in \cite{Chan:Optimal}, the construction of the reachability grap
 	\vspace{-1ex}
 	\label{fig:sleeve}
 \end{figure*}
+
+
+\subsection{Sector Intersection based Algorithms using \ped}
+\label{sub-ci-ped}
+
+
 
 
 
@@ -212,10 +223,6 @@ line segment $\overline{P_sP_{s+i}}$ is no greater than the error bound $\epsilo
 That is, {\em these \cia based algorithms can be easily adopted for trajectory compression using \ped although they have been overlooked by existing trajectory simplification studies}.
 The \cia based algorithms run in $O(n)$ time and $O(1)$ space and are one-pass algorithms.
 
-However, if we use \sed instead of \ped, then  ``the $k$ sectors \sector{(P_s, P_{s+i}, \epsilon)} ($i\in[1,k]$) sharing common data points other than $P_s$" cannot ensure ``there exists a data point $Q$ such that for any data point $P_{s+i}$ ($i \in [1, ... k]$), its synchronized Euclidean distance to directed line $\overline{P_sQ}$ is no greater than the error bound $\epsilon$''.
-Hence, the \cia mechanism is \ped specific, and not applicable for \sed.
-
-
 We next illustrate how the \cia based algorithms can be used for trajectory compression with an example.
 
 \begin{example}
@@ -233,6 +240,13 @@ Similarly, points $P_3$ and $P_4$ are processed, as shown in Figures~\ref{fig:sl
 
 \sstab(4) Points $P_5, \ldots, P_{10}$ are processed similarly one by one in order, and finally the algorithm outputs another line segment $\vv{P_4P_{10}}$ as shown in Figure~\ref{fig:sleeve}.(5). \eop
 \end{example}
+
+
+However, if we use \sed instead of \ped, then  ``the $k$ sectors \sector{(P_s, P_{s+i}, \epsilon)} ($i\in[1,k]$) sharing common data points other than $P_s$" cannot ensure ``there exists a data point $Q$ such that for any data point $P_{s+i}$ ($i \in [1, ... k]$), its synchronized Euclidean distance to directed line $\overline{P_sQ}$ is no greater than the error bound $\epsilon$''.
+Hence, the \cia mechanism is \ped specific, and not applicable for \sed.
+
+
+
 
 
 
@@ -275,15 +289,14 @@ Given two convex polygons $\mathcal{R}_1$ and $\mathcal{R}_2$, algorithm \cpia f
 %
 It then checks the intersection of edges $\vv{A}$ and $\vv{B}$. If $\vv{A}$ intersects $\vv{B}$ (line 3), then the algorithm checks for some special termination conditions (\eg if $\vv{A}$ and $\vv{B}$ are overlapped and, at the same time, polygons $\mathcal{R}_1$ and $\mathcal{R}_2$ are on the opposite sides of the overlapped edges, then the process is terminated) (line 4), and records the inner edge, which is a boundary segment of the intersection polygon (line 5).
 After that, the algorithm moves on $\vv{A}$ or $\vv{B}$ one step under the advance rules (lines 6--11).
-The above processes repeated, until both $\vv{A}$ and $\vv{B}$ cycle their polygons (line 12).
+The above processes repeated, until both $\vv{A}$ and $\vv{B}$ completely cycle their polygons (line 12).
 %
 Next, the algorithm handles three special cases of the polygons $\mathcal{R}_1$ and $\mathcal{R}_2$, \ie $\mathcal{R}_1$ is inside of $\mathcal{R}_2$, $\mathcal{R}_2$ is inside of $\mathcal{R}_1$, and $\mathcal{R}_1 \bigsqcap \mathcal{R}_2 = \emptyset$ (line 13).
 %
 At last, it returns the intersection polygon (line 14).
 
 
-The algorithm has a time complexity of $O(|\mathcal{R}_1| + |\mathcal{R}_2|)$, where $|\mathcal{R}|$ is the number of edges of polygon $\mathcal{R}$.
-It is worth pointing out that $|\mathcal{R}_1 \bigsqcap \mathcal{R}_2| \le (|\mathcal{R}_1| + |\mathcal{R}_2|)$.
+
 
 
 %%%%%%%%%%%%%%%%%%%%%Baseline Algorithm
@@ -342,7 +355,8 @@ After 7 steps of moving of edge $\vv{A}$ or $\vv{B}$, each by an advance rule, $
 \end{example}
 
 
-
+Algorithm  \cpia has a time complexity of $O(|\mathcal{R}_1| + |\mathcal{R}_2|)$, where $|\mathcal{R}|$ is the number of edges of polygon $\mathcal{R}$.
+It is worth pointing out that $|\mathcal{R}_1 \bigsqcap \mathcal{R}_2| \le (|\mathcal{R}_1| + |\mathcal{R}_2|)$.
 
 
 

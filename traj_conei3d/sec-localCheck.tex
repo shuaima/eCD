@@ -4,7 +4,7 @@
 %In this section, we first analyze the properties of synchronized points and synchronous Euclidean distances, then we present a local one-pass \sed checking method by extending the cone intersection for \ped checking in Section~\ref{sub-ci-ped}.
 %Finally, we provide a one-pass, error-bounded and \sed enabled trajectory simplification algorithm.
 
-In this section, we develop a local synchronous distance checking approach, \textcolor{blue}{laying down the key for the one-pass trajectory simplification algorithms using \sed (Section~\ref{sec-alg})}, such that each point in a trajectory is checked only once in $O(1)$ time during the entire process of trajectory simplification, 
+In this section, we develop a local synchronous distance checking approach, \textcolor{blue}{laying down the key for the one-pass trajectory simplification algorithms using \sed (Section~\ref{sec-alg})}, such that each point in a trajectory is checked only once in $O(1)$ time during the entire process of trajectory simplification,
 \textcolor{blue}{The key idea of the local synchronous distance checking method is largely depending on the concept of \emph{spatio-temporal cones} that converts the \sed distance tolerance into the intersection of spatio-temporal cones for testing the successive data points.}
 \textcolor{blue}{More specifically, we first substantially extend the \textit{sectors} in Section~\ref{sub-ci-ped} from a 2D space to a Spatio-Temporal 3D space and get \emph{spatio-temporal cones}, then we prove that the \sed distance checking can be achieved by intersecting of spatio-temporal cones.}
 \textcolor{blue}{Next, we simplify the spatio-temporal cones intersection into the circles intersection, and  approximate a circle by a specialized polygon (fixed rotation and edge number). By this way, we finally get the local synchronous distance checking approach.}
@@ -37,11 +37,11 @@ Given a sub-trajectory $[P_s, \ldots, P_{s+k}]$ and a point $Q$ in the area of s
 
 \begin{proof}\ It suffices to show that $P'_{s+i}$ is indeed a synchronized point $P_{s+i}$ \wrt $\vv{P_sQ}$.
 %
-The intersection point $P'_{s+i}$ satisfies that 
+The intersection point $P'_{s+i}$ satisfies that
 \textcolor{blue}{
-(1) $P'_{s+i}.t = P_{s+i}.t$, 
+(1) $P'_{s+i}.t = P_{s+i}.t$,
 (2) $P'_{s+i}.x$ = $P_s.x +  c\cdot(Q.x - P_s.x)$, and
-(3) $P'_{s+i}.y$ = $P_s.y +  c\cdot(Q.y - P_s.y)$, 
+(3) $P'_{s+i}.y$ = $P_s.y +  c\cdot(Q.y - P_s.y)$,
 where $c= \frac{P'_{s+i}.t - P_{s}.t}{Q.t - P_{s}.t}= \frac{P_{s+i}.t-P_s.t}{Q.t-P_s.t}$.
 }%
 Hence, by the definition of synchronized points, we have the conclusion. \eop
@@ -77,7 +77,7 @@ Hence, by the definition of synchronized points, we have the conclusion. \eop
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \textcolor{blue}{We then define the \textit{spatio-temporal cones} in the 3D coordinate system and show that the \sed distance tolerance can be checked by finding the common intersection of spatio-temporal cones.}
 
-\stitle{Spatio-temporal cones (\cone{})}. Given the start point $P_s$ of $\dddot{\mathcal{T}_s}$ and an error bound $\epsilon$, the spatio-temporal cone (or simply \textit{cone}) of a data point $P_{s+i}$ ($1\le i\le k$) in $\dddot{\mathcal{T}_s}$ \wrt the point $P_s$ and the error bound $\epsilon$, denoted as \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))}, or \cone{_{s+i}} in short, is an oblique circular cone such that point $P_s$ is its apex and the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$ of point $P_{s+i}$ is its base.
+\stitle{Spatio-temporal cones (\cone{})}. Given the start point $P_s$ of $\dddot{\mathcal{T}_s}$ and an error bound $\epsilon$, the spatio-temporal cone (or simply \textit{cone}) of a data point $P_{s+i}$ ($1\le i\le k$) in $\dddot{\mathcal{T}_s}$ \wrt $P_s$ and $\epsilon$, denoted as \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))}, or \cone{_{s+i}} in short, is an oblique circular cone such that point $P_s$ is its apex and the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$ of point $P_{s+i}$ is its base.
 %
 Figure~\ref{fig:cis} also illustrates two example spatio-temporal cones: \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} {(purple)} and \cone{(P_s, \mathcal{O}(P_{s+k}, \epsilon))} (red), with the same apex $P_s$ and error bound $\epsilon$.
 
