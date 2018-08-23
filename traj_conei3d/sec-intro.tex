@@ -46,12 +46,13 @@ However, when using \ped, a spatio-temporal query, \eg ``\emph{the position of a
 ,  and implemented it in Douglas-Peucker (\dpa)~\cite{Douglas:Peucker} algorithm
 }
 
-\textcolor{blue}{The approximate point $P'$ was formally called the approximate temporally \emph{synchronized data point} \cite{Meratnia:Spatiotemporal}, and based on the concept of synchronized data point, the \emph{synchronous Euclidean distance} (\sed) was then introduced for trajectory compression to support the above spatio-temporal queries \cite{Meratnia:Spatiotemporal}.}
-\textcolor{blue}{Intuitively, given a sub-trajectory $[P_s$, $\ldots, P_e]$ to be simplified, a synchronized data point $P'_i$, $s<i<e$, is a point on $\vv{P_sP_{e}}$ satisfying $|P_sP_e|>0$ and $\frac{|P_sP'_i|}{|P_sP_e|} = \frac{P_i.t - P_s.t}{P_e.t - P_s.t}$, and \sed is the Euclidean distance of a data point $P_i$ to its \emph{synchronized data point $P'_i$} on the corresponding line segment $\vv{P_sP_{e}}$.}
+\textcolor{blue}{The \emph{synchronous Euclidean distance} (\sed) was then introduced for trajectory compression to support the above spatio-temporal queries, where the approximate point $P'$ was refferred to as the approximate temporally \emph{synchronized data point} \cite{Meratnia:Spatiotemporal}.
+}
+\textcolor{blue}{Intuitively, given a sub-trajectory $[P_s$, $\ldots, P_e]$ to be simplified, a synchronized data point $P'_i$, $s<i<e$, is a point on line segment $\vv{P_sP_{e}}$ satisfying $|\vv{P_sP_e}|>0$ and $\frac{|\vv{P_sP'_i}|}{|\vv{P_sP_e}|} = \frac{P_i.t - P_s.t}{P_e.t - P_s.t}$, and \sed is the Euclidean distance of a data point $P_i$ to its \emph{synchronized data point $P'_i$} on the corresponding line segment $\vv{P_sP_{e}}$.}
 %
-\textcolor{blue}{For example, in Figure~\ref{fig:notations}, $P'_4$ and $P'_7$ are the \emph{synchronized data points} of points $P_4$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$ and $\vv{P_4P_{10}}$, respectively, satisfying $\frac{|P_0P'_4|}{|P_0P_{10}|} = \frac{P_4.t - P_0.t}{P_{10}.t-P_0.t}$ and $\frac{|P_4P'_7|}{|P_4P_{10}|} = \frac{P_7.t - P_4.t}{P_{10}.t-P_4.t}$, and the \sed of point $P_7$ to the line segment $\vv{P_4P_{10}}$ is $|P_7P'_7|$.}
+\textcolor{blue}{For example, in Figure~\ref{fig:notations}, $P'_4$ is a \emph{synchronized data points} of points $P_4$ \wrt line segments $\vv{P_0P_{10}}$, satisfying $\frac{|\vv{P_0P'_4}|}{|\vv{P_0P_{10}}|} = \frac{P_4.t - P_0.t}{P_{10}.t-P_0.t}$. The \sed of point $P_4$ to line segment $\vv{P_0P_{10}}$ is $|\vv{P_4P'_4}|$.}
 %
-\textcolor{blue}{Indeed, the \sed of a point to a line segment is always no less than the \ped of the point to the line segment, thus, \lsa algorithms using \sed may split a trajectory into more sub-trajectories and output more line segments.}
+\textcolor{blue}{Indeed, the \sed of a point to a line segment is always no less than the \ped of the point to the line segment, thus, \lsa algorithms using \sed may lead to more line segments.}
 However, the use of \sed ensures that the Euclidean distance between a data point and its synchronized point \wrt the corresponding line segment is limited within a distance bound $\epsilon$. Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the synchronized point $P'$ of a data point $P$ within the bound $\epsilon$.
 
 
@@ -87,9 +88,7 @@ However, the current one-pass algorithms are all \ped specific, and to our knowl
 }%%%%%%%%%%%%%%%%%%
 
 
-\stitle{{Contributions}}. To this end,
-\textcolor{blue}{we study the lossy simplification of trajectory data after it is collected by mobile devices from GPS sensors (the quality of GPS and the problem of device range error are out of the scope). }
-We propose two one-pass error bounded \lsa algorithms using \sed for compressing trajectories in a fast way and with good compression ratios. % error bounded
+\stitle{{Contributions}}. To this end, we propose two one-pass error bounded \lsa algorithms using \sed for compressing trajectories in a fast way and with good compression ratios. % error bounded
 
 \sstab {(1)} We first develop a novel local synchronous distance checking approach, \ie spatio-temporal \underline{C}one \underline{I}ntersection using the \underline{S}ynchronous \underline{E}uclidean \underline{D}istance (CISED).
 %, by extending the sector intersection method \cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve}\eat{(Section~\ref{sec-localcheck})}.
@@ -109,6 +108,8 @@ algorithms \cist and \cista are on average $15.0$, $3.2$ and $14345.0$ times fas
 %
 For compression ratios, algorithm \cist is better than \squishe and close to \dps. The output sizes of \cist are on average $74.4\%$, $110.4\%$ and $137.9\%$ of \squishe, \dps and the optimal \lsa algorithm on the test datasets, respectively.
 Moreover, algorithm \cista is better than \squishe and \dps that are on average $54.9\%$ and $81.6\%$ of \squishe and \dps on the test datasets, respectively.
+
+It is worth pointing out that trajectory data is collected by mobile devices from GPS sensors, and these devices have range errors, which leads to data quality issues of  trajectory data~\cite{PfoserJ99,ZufleTPRRLDE17}. However, the problem is beyond the scope of this study, and we foucus on lossy simplification of trajectory data only.
 
 
 \stitle{{Organization}}.

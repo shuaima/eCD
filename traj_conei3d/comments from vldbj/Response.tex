@@ -48,7 +48,7 @@
 
 
 
-Prof. \marked{RenÃ©e Miller} \\
+Prof. {Ren{\'{e}}e J. Miller} \\
 Editor-in-Chief		\\
 The VLDB Journal	\\
 
@@ -60,7 +60,7 @@ Attached please find a revised version of our submission to
 the VLDB Journal, \emph{One-Pass Trajectory Simplification Using the Synchronous Euclidean Distance}.
 
 
-The paper has been substantially revised according to the referees' comments. In particular, we have {(a) highlighted the intuition and key technical ideas of the solution, (b) clarified the scope and some definitions of the work, and (c) refined the entire paper to improve its readability.}
+The paper has been substantially revised according to the referees' comments. In particular, we have (a) added the intuition and key ideas of our solution, (b) elaborated the proofs and clarified the necessities of propositions, (c) added a set of new experiments to compare PED with SED, and (d) refined the entire paper to improve its readability.
 
 We would like to thank all the referees for their thorough reading of our paper and for their valuable comments.
 
@@ -102,7 +102,7 @@ We have fixed these grammatical mistakes and carefully done times of proof-readi
 \textbf{[R1C1]} \emph{On page 2, the first column is a little bit confusing. Going back and forth between SED and PED might confuse the readers. The second paragraph discusses optimal PED-based algorithms that run in $O(n^3)$ and $O(n^2)$. Then it says that the $O(n^2)$ algorithm is not applicable to SED distance. The third paragraph then describes some sub-optimal algorithms for SED-based simplification. {The fourth paragraph talks again about PED-based algorithms and mentions some linear-time algorithms but it's clear whether these algorithms are optimal or approximate. It is not clear either why do we need to reiterate over PED-based algorithms if they are not applicable to the addresses problem.}}
 
 Yes! We have now removed the introduction of algorithms using PED, and directly discussed the algorithms using SED in the second paragraph. We have also merged the original second and third paragraphs, as they both talk about the algorithms using SED. Thanks for raising this issue!
- 
+
 
 
 %The mentioned PED-based linear-time algorithms in the fourth paragraph are approximate.
@@ -136,12 +136,11 @@ We have clarified this in the definition of directed line segment (L) in Section
 
 \textbf{[R1C5]} \emph{In Section 3.1, the definition of spatio-temporal cones (C) mentions "w.r.t. a Point $P_s$" is this the starting point $P_s$ or any arbitrary point? If it is always the starting point $P_s$, then you might better rephrase it to "w.r.t. the starting point $P_s$."}
 
-Yes, it is ``the" starting point, and we have fixed it. Thanks!
+Yes, it is ``the" starting point. We have fixed it. Thanks!
 
 \textbf{[R1C6]} \emph{In Section 3.4, it could be better if you mention the key idea of the proposed algorithm to help the readers understand it. For example, you can mention that the key observation is that every segment in the two polygons being intersected has to originate from one of the m edges of the regular polygon. Then you can mention how this helps skipping multiple segments at a time.}
 
-Yes, we have rewritten the first two paragraphs of Section 3.4 and highlighted the key idea of the proposed Fast Regular Polygon Intersection algorithm in the second paragraph.
-{Essentially it is due to ``..., every segment in the two polygons being intersected has to originate from one of the $m$ edges of the regular polygons and also the geometric similarity of the regular polygons,
+Yes, we have rewritten the first two paragraphs of Section 3.4, and highlighted the key idea of the proposed Fast Regular Polygon Intersection algorithm in the second paragraph. {Essentially, it is due to ``..., every segment in the two polygons being intersected has to originate from one of the $m$ edges of the regular polygons and also the geometric similarity of the regular polygons,
 we may advance edge $\vv{A}$ or $\vv{B}$ multiple steps at a time, instead of one step at a time of the convex polygon intersection algorithm CPolyInter."} Then an example follows to illustrate this idea.  Thanks for your advice!
 
 
@@ -149,10 +148,10 @@ we may advance edge $\vv{A}$ or $\vv{B}$ multiple steps at a time, instead of on
 \textbf{[R1C7]} \emph{In the experiments section, Figures 12 and 16 are confusing as they compare the compression ratio and error of the proposed algorithm with and without the improved polygon intersection algorithm. It looks like the proposed improvement only affects the running time but produces the same output which makes it unclear how it might affect the quality of the results. It looks like the numbers in the two figures are exactly the same with both intersection algorithms (and they had to be the same). I suggest making two lines only CISED-S and CISED-W similar to figures 13-15 and 17-19.}
 
 The motivations of developing the Fast Regular Polygon Intersection (RPolyInter) algorithm are (1) it should improve the running time of computing the common intersection of inscribed regular polygons, and at the same time, (2) it should have the same outputs (compressed trajectories) as the Convex Polygon Intersection (CPolyInter) algorithm.
+
+Tests Exp 1.1, Exp 2.1 and Exp 3.1 are also designed to demonstrate: (1) our algorithm RPolyInter runs faster than algorithm CPolyInter (see Fig.20 and Fig.21), and (2) it has the same compression ratios and average errors as the later (see Fig.12 and Fig.16).
 %
-According to these motivations, the tests Exp 1.1, Exp 2.1 and Exp 3.1 are also designed to demonstrate: (1) our algorithm RPolyInter runs faster than algorithm CPolyInter (see Fig.20 and Fig.21), and (2) it has the same compression ratios and average errors as the later (see Fig.12 and Fig.16).
-%
-Thus, we think it is beter to reserve the current lines as shown in Fig.12, Fig.16, Fig.20 and Fig.21. %, where ``R'' denotes using our algorithm RPolyInter and ``C'' denotes using algorithm CPolyInter.
+Thus, we believe that it is would be better to reserve the current lines as shown in Fig.12, Fig.16, Fig.20 and Fig.21. %, where ``R'' denotes using our algorithm RPolyInter and ``C'' denotes using algorithm CPolyInter.
 
 We have clarified this in tests Exp 1.1, Exp 2.1 and Exp 3.1. Thanks for pointing this out!
 
@@ -162,13 +161,16 @@ We have used consistent point types in all the figures. Thanks for your nice adv
 
 \textbf{[R1C9]} \emph{In Figure 14, it is not clear how the proposed CISED-W algorithm produced a compression ratio that is better than the optimal algorithm. You need to comment on this or correct it.}
 
-(1) \textcolor{blue}{By allowing data interpolations, algorithm CISED-W extends the radius of the base circles of the spatio-temporal cones from $\epsilon/2$ in CISED-S to $\epsilon$ in CISED-W, thus, it gets better compression ratios compared with CISED-S. Its comparession ratios are ``comparable with" the optimal algorithm of strong simplification, and some times are even better than the later, \eg in Fig.14-(1) Service-Car, CISED-W is better than the optimal algorithm. }
+ \textcolor{blue}{By allowing data interpolations, algorithm CISED-W extends the radius of the base circles of the spatio-temporal cones from $\epsilon/2$ in CISED-S to $\epsilon$ in CISED-W???, thus, it gets better compression ratios compared with CISED-S. Its comparession ratios are ``comparable with" the optimal algorithm, and some times are even better than the later, \eg in Fig.14-(1) Service-Car, CISED-W is better than the optimal algorithm. }
 
-(2) Actually, in Exp 1.3 (Figure 14), we did not claim that ``the proposed CISED-W algorithm produced a compression ratio that is better than the optimal algorithm" {in general}.
-We found from Fig.14 that algorithm CISED-W is \emph{comparable with} the optimal algorithm.
+
+We have clarified this in Exp 1.3. Thanks!
+
+%(2) Actually, in Exp 1.3 (Figure 14), we did not claim that ``the proposed CISED-W algorithm produced a compression ratio that is better than the optimal algorithm" {in general}.
+%We found from Fig.14 that algorithm CISED-W is \emph{comparable with} the optimal algorithm.
 %Also, we claimed in Exp 1.2 (Figure 13) that our CISED-W algorithm has better compression ratios than other sub-optimal algorithms, including DPSED, SQUISHE and CISED-S.
 
-\textcolor{blue}{We have clarified this in Exp 1.3. BTW, we have replaced the words ``comparable with" by ``close to" to avoid controversy.}
+%\textcolor{blue}{We have clarified this in Exp 1.3. BTW, we have replaced the words ``comparable with" by ``close to" to avoid controversy.}
 
 
 \textbf{[R1C10]} \emph{The paper has some minor language issues that can be easily corrected with a proofread.\\
@@ -231,23 +233,47 @@ we may advance edge $\vv{A}$ or $\vv{B}$ multiple steps at a time, instead of on
 
 \textbf{[R2C2-1]} \emph{In terms of the setting of the problem, the authors did not discuss the device range error which varies from device to device and may affect the algorithms.}
 
-In this work, we study the lossy simplification of trajectory data after it is collected by mobile devices from GPS sensors. The quality of GPS and the problem of device range error are out of the scope.
+
+We have discussed this in the second last paragraph of Section 1.
+
+Yes, these devices have range errors, which leads to data quality issues of trajectory data~[27, 44]. However, we strongly believe that the problem is beyond the scope of this study. We focus on lossy simplification of trajectory data only in this article as many existing studies do, \eg [15, 20, 23, 40].
+
+[27] D. Pfoser and C. S. Jensen. Capturing the uncertainty of moving-object representations. In SSD, 1999.
+
+[44] A. Z¨¹fle, G. Trajcevski, D. Pfoser, M. Renz, M. T. Rice, T. Leslie, P. L. Delamater, and T. Emrich.
+Handling uncertainty in geo-spatial data. In ICDE, 2017.
+
+%In this work, we study the lossy simplification of trajectory data after it is collected by mobile devices from GPS sensors. The quality of GPS and the problem of device range error are out of the scope.
 %
-We have also observed that there are GPS device-level works focus on correcting GPS errors caused by clock inaccuracies, obstructions on GPS signal path, atmospheric effects and so on. Besides, map-matching [Quddus2007] is a method that maps trajectories on road paths and it is believed a way to correct the GPS error taking urban roads as the benchmark, and semantic-based trajectory simplification (see Section 6.2) will first map trajectories on road paths and then remove redundant data points on the road paths.
-
-We have clarified this in the first line of \textbf{Contributions} of Section 1. Thanks for point this out!
+%We have also observed that there are GPS device-level works focus on correcting GPS errors caused by clock inaccuracies, obstructions on GPS signal path, atmospheric effects and so on. Besides, map-matching [Quddus2007] is a method that maps trajectories on road paths and it is believed a way to correct the GPS error taking urban roads as the benchmark, and semantic-based trajectory simplification (see Section 6.2) will first map trajectories on road paths and then remove redundant data points on the road paths.
 
 
-[Quddus2007] Mohammed A.Quddus, Washington Y. Ochieng and Robert B. Noland. Current map-matching algorithms for transport applications: State-of-the art and future research directions. {Transportation research part c: Emerging technologies}, 15(5): 312--328, 2007.
+
+%[Quddus2007] Mohammed A.Quddus, Washington Y. Ochieng and Robert B. Noland. Current map-matching algorithms for transport applications: State-of-the art and future research directions. {Transportation research part c: Emerging technologies}, 15(5): 312--328, 2007.
 
 \textbf{[R2C2-2]} \emph{In addition, it seems that the authors assume that the devices move in uniform speed which may not be realistic.}
 
-In the definition of SED [Meratnia2004], it assumes that the object is moving linearly in a uniform speed \textit{between two adjacent data points} of a compressed trajectory. Or we can say, after a sub-trajectory $[P_s, ..., P_e]$ is represented by or simplified to a line segment $\overrightarrow{P_sP_e}$ (points $P_s$ and $P_e$ are supposed to be saved as adjacent points, and other points between them are discarded), the object is assumed moving from $P_s$ to $P_e$ linearly in a uniform speed. This assumption is followed by the subsequent trajectory simplification works, including our work. Also note the uniform speed assumption is constraint between two adjacent data points, which means the device is not necessary moving in uniform speed in reality.
-%from the start point to the end point of a trajectory including more than two points, no matter the trajectory is original or simplified.
+This indeed questions the rationale of SED, which was proposed in [Meratnia2004]. Yes, SED assumes that the object is moving linearly in a uniform speed \textit{between two adjacent data points} of a compressed trajectory. The observation is right, and yes, it may not be realistic. However, when data points are sampled at a reasonable rate, the uniform speed assumption makes sense, and it does alleviate the problem of the issues discussed in the Introduction. Furthermore, SED has become a very important metric for trajectory simplification~[Chen2012, Zhang2018].
 
-We have clarified this after the definition of \emph{synchronized points} in Section 2.1. Thanks for raising this issue!
+
+
+We have further clarified this in the definition of \emph{synchronized points} in Section 2.1.
 
 [Meratnia2004] Nirvana Meratnia and Rolf A. de By. Spatiotemporal Compression Techniques for Moving Point Objects. EDBT, 2004.
+
+
+[Chen2012] M. Chen, M. Xu, and P. Franti. A fast multi-resolution polygonal approximation algorithm for GPS trajectory
+simplification. IEEE Trans. Image Processing, 21(5):2770¨C2785, 2012.
+
+[Zhang2018] Dongxiang Zhang, Mengting Ding, Dingyu Yang, Yi Liu, Ju Fan, and Heng Tao Shen. Trajectory Simplification: An Experimental Study and Quality Analysis. PVLDB, 11 (9): 934-946, 2018.
+
+
+
+%Or we can say, after a sub-trajectory $[P_s, ..., P_e]$ is represented by or simplified to a line segment $\overrightarrow{P_sP_e}$ (points $P_s$ and $P_e$ are supposed to be saved as adjacent points, and other points between them are discarded), the object is assumed moving from $P_s$ to $P_e$ linearly in a uniform speed. This assumption is followed by the subsequent trajectory simplification works, including our work. Also note the uniform speed assumption is constraint between two adjacent data points, which means the device is not necessary moving in uniform speed in reality.
+%from the start point to the end point of a trajectory including more than two points, no matter the trajectory is original or simplified.
+
+% Thanks for raising this issue!
+
 
 
 \textbf{[R2C3]} \emph{Now looking at some of the propositions.
@@ -270,69 +296,78 @@ We have corrected the proof. The above proof is replaced by
 (3) $P'_{s+i}.y$ = $P_s.y +  c\cdot(Q.y - P_s.y)$,
 where $c= \frac{P'_{s+i}.t - P_{s}.t}{Q.t - P_{s}.t}= \frac{P_{s+i}.t-P_s.t}{Q.t-P_s.t}$.
 Hence, by the definition of synchronized points, we have the conclusion."
+
 Thanks for raising this issue!
 
 
 \textbf{[R2C4]} \emph{Except if I am missing something, projecting a cone over a plane is not necessarily a circle.}
 
-No! The projection of a \emph{spatio-temporal cone} over a plane $P.t- t_c = 0$ ($t_c > P_s.t$) is certainly a circle.
+In our case, the projection of a \emph{spatio-temporal cone} over a plane $P.t- t_c = 0$ ($t_c > P_s.t$) is certainly a circle.
 
 Recall in the definition, the \emph{synchronous circle} of a data point $P_{s+i}$ \wrt an error bound $\epsilon$, denoted as \circle{(P_{s+i}, \epsilon)}, is \textcolor{blue}{a circle on the plane $P.t-P_{s+i}.t = 0$} such that $P_{s+i}$ is its center and $\epsilon$ is its radius.
 %
-Then, given the start point $P_s$ and an error bound $\epsilon$, the \emph{spatio-temporal cone} of a data point $P_{s+i}$ \wrt the point $P_s$ and the error bound $\epsilon$, denoted as \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))}, is \textcolor{blue}{an oblique circular cone} such that point $P_s$ is its apex and the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$ of point $P_{s+i}$ is its base. Note that the base, \ie the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$, is on the plane $P.t-P_{s+i}.t = 0$ which is sure parallel to any other plane $P.t- t_c = 0$. Hence, the  projection of a cone \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} on a plane $P.t- t_c = 0$ ($t_c > P_s.t$) is sure a circle.
+Then, given the start point $P_s$ and an error bound $\epsilon$, the \emph{spatio-temporal cone} of a data point $P_{s+i}$ \wrt the point $P_s$ and the error bound $\epsilon$, denoted as \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))}, is \textcolor{blue}{an oblique circular cone} such that point $P_s$ is its apex and the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$ of point $P_{s+i}$ is its base. Note that the base, \ie the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$, is on the plane $P.t-P_{s+i}.t = 0$ which is  parallel to any other plane $P.t- t_c = 0$. Hence, the  projection of a cone \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} on a plane $P.t- t_c = 0$ ($t_c > P_s.t$) is surely a circle.
 
-We have clarified this in the definition of \emph{cone projection circles} in Section 3.2. Thanks for pointing out this.
+We have further clarified this in the definition of \emph{cone projection circles} in Section 3.2.
 
 \textbf{[R2C5]} \emph{Looking at Proposition 4, if you take only two polygons with m edges, their intersection could have more than m edges. Or are the authors doing the intersection differently.}
 
-As you mentioned, the intersection of two {general} $m$-edges polygons may produce a polygon with more than $m$ edges. To avoid this, we approximate a circle by a {specialized} polygon, \ie a fixed rotation and m-edges inscribed regular polygon $\mathcal{R}(V, E)$,
+Yes, the intersection of two {general} $m$-edges polygons may produce a polygon with more than $m$ edges.
+
+However, we approximate a circle by a {specialized} polygon, \ie a fixed rotation and m-edges inscribed regular polygon $\mathcal{R}(V, E)$,
 where (1) $V=\{v_1, \ldots, v_{m}\}$ is the set of vertexes that are defined by a polar coordinate system, whose origin is the center $P$ of \pcircle{}, satisfying $v_j = (r, \frac{(j-1)}{m}2\pi), ~j \in [1, m]$
 and (2) $E= \{\overrightarrow{v_mv_1}\} \bigcup \{\overrightarrow{v_jv_{j+1}}\ |\ j\in [1, m-1]\}$ is the set of edges that are labeled with the subscript of their start points.
-This elaborate design ensures that the intersenction of these polygons has no more than $m$ edges, thus, we have Proposition 4.
 
-We have appended the first paragraph of Section 3.3 to explain the motivation and intuition of this design: ``Intuitively, we can approximate a circle with its $m$-edges inscribed polygon {whose intersection can be computed more fast}. However, the intersection of two general $m$-edges polygons may produce a polygon with more than $m$ edges, thus, the time complexity of finding the common intersection of $n$ polygons on a plane is not linear. To solve this problem, we approximate a circle with a fixed rotation, $m$-edges, inscribed regular polygon."
+For fixed rotation and m-edges inscribed regular polygons,  all edges in the same edge groups $E^j$ ($1\le j\le m$) are in parallel (or overlapping) with each other by the above definition of inscribed regular polygons. This design ensures that the intersection of these polygons has no more than $m$ edges.
+
+We have refined our proof to further clarify this, and we have also explained the motivation and intuition of this design in the first paragraph of Section 3.3.
 
 Thanks for pointing out this!
 
 \textbf{[R2C6]} \emph{Propositions 6 and 7 are not really needed as they follow up from the way your algorithms function.}
 
-No! Propositions 6 and 7 are derived from the definiton of the special designed, fixed rotation and m-edges \emph{inscribed regular polygon} (Section 3.3) and also the principles of the convex polygons intersecton algorithm (Section 2.4), and serve as the basis of the extra \emph{advance rules} that we apply to speed up the process of inscribed regular polygons intersection. Hence, they are needed.
+Indeed, Propositions 6 and 7 grantees the correctness of the Fast Regular Polygon Intersection algorithm FastRPolyInter.
 
-We have rewritten the first two paragraphs of Section 3.4 to clarify this and also highlight the key idea of the Fast Regular Polygon Intersection algorithm. Thanks!
+  Propositions 6 and 7 are derived from the definition of the special designed, fixed rotation and m-edges \emph{inscribed regular polygon} (Section 3.3) and also the principles of the convex polygons intersection algorithm (Section 2.4), and serve as the basis of the extra \emph{advance rules} that we apply to speed up the process of inscribed regular polygons intersection. Hence, they are critical for algorithm FastRPolyInter.
+
+We have rewritten the first two paragraphs of Section 3.4 to clarify this.
 
 \textbf{[R2C7]} \emph{Theorem 8 is not really needed.}
 
-No! To our knowledge, no one-pass and error bounded line simplification algorithm using SED has been developed in the community yet. Hence, one may wonder whether there exists an effective, one-pass and error bounded line simplification algorithm using SED. Theorem 8 is the positive answer to this question, proved by two algorithms CISED-S and CISED-W. Indeed, Theorem 8 is an important contribution that we do for the community.
+Theorem 8 clearly tells the contribution of this study to the community.
 
-BTW, an algorithm that outputs all the original data points is obviously a one-pass algorithm, however, it is hardly an effective trajectory compression algorithm as it does not remove any data points from the input.
+To our knowledge, no one-pass and error bounded line simplification algorithm using SED has been developed in the community yet. Hence, one may wonder whether there exists an effective, one-pass and error bounded line simplification algorithm using SED. Theorem 8 is the positive answer to this question, proved by two algorithms CISED-S and CISED-W.
+
+%BTW, an algorithm that outputs all the original data points is obviously a one-pass algorithm, however, it is hardly an effective trajectory compression algorithm as it does not remove any data points from the input.
 
 \textbf{[R2C8]} \emph{Referring to Exp-1.1, I wouldn't say that CISED-S is comparable to DPSED, a $~10\%$ difference is not small.}
 
 In Exp-1.2, the compression ratios of CISED-S are on averaged $109.5\%$ of SQUISH-E and DPSED on all test datasets. For example, when $\epsilon$ = $40$ meters, the compression ratios of algorithms CISED-S and DPSED are ($16.1\%$, $5.8\%$, $3.9\%$, $3.6\%$) and ($14.8\%$, $5.4\%$, $3.4\%$, $3.4\%$) on the four datasets, respectively. Indeed, the compression ratios of algorithm CISED-S are a bit poorer than DPSED. However, when consider the great benefit of running time of CISED-S, we would like to say that the compress ratio of CISED-S is ``comparable" with DPSED.
-%
-Of course, the word ``comparable" is somehow a subjective judgment, and as you have mentioned that a $10\%$ difference is not small. To deal with this controversy, we have replaced the words ``comparable with" by ``close to" in Exp 1.2 and also the rest of the paper. Thanks for pointing out this!
+
+Yes, a $10\%$ difference is not that small. To deal with this controversy, we have replaced the words ``comparable with¡®¡¯ with ``close to" in Exp 1.2 and also the rest of the paper. Thanks for pointing out this!
 
 
 \textbf{[R2C9]} \emph{In almost all the experiments, the behavior of the different algorithms across all datasets is quite similar; the authors should have commented on this.}
 
-Yes, in almost all of the tests, the behaviors of all algorithms across all datasets are quite similar. More specifically, the compression ratio $cr$ of each algorithm has approximately an exponential relation to the error bound $\epsilon$, \ie $cr=a^\epsilon$, where $a$ is in $(0,1)$, and the average error of it has approximately a linear relation to $\epsilon$.
+Yes, in almost all of the tests, the behaviors of all algorithms across all datasets are quite similar.  More specifically, the compression ratio $cr$ of each algorithm has approximately an exponential relation to the error bound $\epsilon$, \ie $cr=a^\epsilon$, where $a$ is in $(0,1)$, and the average error of it has approximately a linear relation to $\epsilon$.
 
-We have explained these phenomenons in Exp 1.2, Exp 2.2 and the summary (the first item) in Section 5.2. Thanks for pointing out this!
+This indeed justifies the robustness of our algorithms. We have explained these phenomenons in Exp 1.2, Exp 2.2 and the summary (the first bullet) in Section 5.2.
 
 
 \textbf{[R2C10]} \emph{In the summary about the experiments, the authors should have discussed, based on compression ratios, average errors, and running time, which of the proposed algorithms should be used in practice under which circumstances. In particular, looking at the average errors, how acceptable are these for the applications that will use the proposed compression algorithms. Being fast with high compression is good, but if the quality is not that good then no one will use these algorithms.}
 
-Yes, a guideline is good. However, its hard to give an exclusive guideline for applications to select a compresss algorithm, because applications have varied requirements or they may require a balance among multiple metrics, normally running time, compression ratio and  error. For example, from the experiences of the CarStream [Zhang2017] project (an industrial data-processing system for chauffeured car services that has connected over 30,000 vehicles in more than 60 cities, deployed applications like ``tracking the historical trajectories of cars", ``mapping trajectories on road networks", ``analyzing the trips, mileages and travel patterns of cars", and so on), we find from our scenarios,  the importances of the metrics from high to low are running time, compression ratio, max error and average error. Say, the running time and compression ratio are more important than average error in the scenarios.
-Nevertheless, in other applications, one may find that errors are more important.
-Hence, the choosing of a compression algorithm is likely application specific.
+Yes, a guideline would be good. However, it is extremely hard to provide such a  guideline, as different applications many have different requirements to reach a balance among multiple metrics, normally running time, compression ratio and  error. 
 
-Anyway, in Section 5.2.5, we have provided a brief guideline for choosing an algorithm from the views of running time, compression ratio and average error, as follows:
+For example, from the experiences of the CarStream [Zhang2017] project (an industrial data-processing system for chauffeured car services that has connected over 30,000 vehicles in more than 60 cities, deployed applications like ``tracking the historical trajectories of cars", ``mapping trajectories on road networks", ``analyzing the trips, mileages and travel patterns of cars", and so on), we find from our scenarios,  the importance ranking of the metrics from high to low is running time, compression ratio and error. Say, the running time and compression ratio are more important than errors in this scenario. 
+Nevertheless, in other applications, one may find that errors are more important.
+Hence, the choice of compression algorithms is application specific.
+
+In Section 5.2.5, we have provided a brief guideline for choosing an algorithm from the views of running time, compression ratio and average error, as follows:
 (1) If the running time is the first-level consideration or the algorithms is to run in resource-constrained devices, then the one-pass algorithms, \ie~CISED-S and CISED-W, are surely the best choices as they have a linear time and a constant space, and at the same time have pretty good compression ratios. Also note that CISED-W may output data points that are not selected from the input data points.
 %
 (2) If the compression ratio is the priority, then algorithm CISED-W and the optimal algorithm are the selections, followed by algorithms DPSED and CISED-S.
 %
 (3) When considering error, algorithm SQUISH-E is a choice because it has relative small average errors. Alternatively, we can also use algorithms DPSED or CISED-S with a smaller error bound $\epsilon$ compared with SQUISH-E.
-%Keep in mind that its compression ratio is limited. %, an algorithm that outputs the original trajectory is sure having the smallest error.
 
 Thanks for pointing out this!
 
@@ -358,17 +393,19 @@ Fixed! Thanks!
 
 \textbf{[R3C1]} \emph{From the example in Fig. 1, it is really difficult to tell the difference between PED and SED. It seems that SED will use more line segments due to the given constraint enforced by epsilon. However, why is the compression using SED better than that using PED? If PED is good enough, why do we care about SED? Essentially, the motivation of leaning towards SED is never clear from a practical perspective. I think it all depends on the tolerance at the application level. So I would like the authors to evaluate some real applications on top of the compressed trajectory data, to demonstrate the benefits of using SED. At least, the authors should give some convincing arguments on that.}
 
-(1) The meaning of SED is highly depending on the notion of \emph{synchronized point}. Please first refer to our response to \textbf{R3C2} for more detail about the \emph{synchronized point}.
 
-(2) When compressing trajectories, the choosing of PED or SED depends on the application retuirements. For example, a spatio-temporal query application, ``\emph{the position of a moving object at time $t$}", on trajectories compressed by algorithms using SED will return a point $P'$ whose distance to of the actual position of the moving object is within the bound $\epsilon$, while the same query on trajectories compressed by algorithms using PED will not. In a word, the using of PED brings good compression ratios as well as does not support applications like spatio-temporal query, while the using of SED is in contrast.
+The second and the third paragraphs in Section 1 serve as the purpose of using SED. 
 
-We have clarified these in the third paragraph of Section 1, and some extra explains have been presented after the definitions of SED and PED in Section 2.1, respectively. Thanks for raising this issue!
+When compressing trajectories, the choice of PED or SED depends on the specific application requirements. For example, for a spatio-temporal query application, ``\emph{the position of a moving object at time $t$}", on trajectories compressed by algorithms using SED returns a point $P'$ whose distance to the actual position of the moving object is within the bound $\epsilon$, while the same query on trajectories compressed by algorithms using PED does not has this property. The use of PED brings better compression ratios, but it does not support applications like spatio-temporal query.
+
+We have clarified these in the third paragraph of Section 1, with some extra explains presented in the definitions of SED and PED in Section 2.1. Thanks for raising this issue!
 
 \textbf{[R3C2]} \emph{The authors should give more intuitive explanation of the semantics of "synchronized points." Maybe this has been documented in the literature, but the authors should give sufficient explanation to make this paper self-contained.}
 
-Intuitively, given a sub-trajectory $[P_s$, $\ldots, P_e]$ to be simplified, a synchronized data point $P'_i$, $s<i<e$, is a point on line segment $\overrightarrow{P_sP_{e}}$ satisfying $|P_sP_e|>0$ and $\frac{|P_sP'_i|}{|P_sP_e|} = \frac{P_i.t - P_s.t}{P_e.t-P_s.t}$, which means that the object is moving from $P_s$ to $P_e$ at an average speed $\overline{v} = \frac{|P_sP_e|}{P_e.t-P_s.t}$, thus its position at time $t_i$ is the point $P'_i$ on line segment $\overrightarrow{P_sP_{e}}$ having a distance of $\overline{v}\times (P_i.t-P_s.t)$ to point $P_s$.
+Given a sub-trajectory $[P_s$, $\ldots, P_e]$ to be simplified, a synchronized data point $P'_i$, $s<i<e$, is a point on line segment $\overrightarrow{P_sP_{e}}$ satisfying $|\vv{P_sP_e}|>0$ and $\frac{|\vv{P_sP'_i}|}{|\vv{P_sP_e}|} = \frac{P_i.t - P_s.t}{P_e.t-P_s.t}$, which means that the object is moving from $P_s$ to $P_e$ at an average speed $\overline{v} = \frac{|\vv{P_sP_e}|}{P_e.t-P_s.t}$, thus its position at time $t_i$ is the point $P'_i$ on line segment $\overrightarrow{P_sP_{e}}$ having a distance of $\overline{v}\times (P_i.t-P_s.t)$ to point $P_s$.
 
-We have clarified this in the third paragraph of Section 1. Moreover, an extra explanation has been presented after the definition of the \emph{synchronized points} in Section 2.1, and an example of the synchronized points has also been illustrated in Example.1 in Section 2.1.
+We have clarified this in the third paragraph of Section 1 and in the definition of the \emph{synchronized points} in Section 2.1, and an example of synchronized points has also been added in Example 1 in Section 2.1.
+
 Thanks for pointing this out!
 
 % [Meratnia2004] Nirvana Meratnia and Rolf A. de By. Spatiotemporal Compression Techniques for Moving Point Objects. EDBT, 2004.
@@ -376,29 +413,31 @@ Thanks for pointing this out!
 
 \textbf{[R3C3]} \emph{Examples 1, 2, 3, 4, and 5 are not illustrative: They basically explained what happened in the corresponding figures but did not explain why. So it is not helpful if readers try to understand the algorithms by reading these examples. More details should be given. For instance, in Example 1, you can give specific coordinates to certain points so that readers can verify how the SED points are computed.}
 
-Yes, we have add more details for helping readers understand these examples.
+Yes, we have add more details.
 
-(1) As shown in the responses to R3C2, we have given intuitive explanation of the semantics of ``synchronized points" which is helpful for understanding the computing of the synchronized points and SED.
+As in the responses to R3C2, we have given an intuitive explanation of the semantics of ``synchronized points", which is helpful for understanding the computing of the synchronized points and SED.
 
-(2) We have added more details for Examples 1, 2, 3, 4, and 5. In Example 1, we have given coordinates to points and demonstrated the computing of a synchronized point. In Example 2, we have described the meaning of a circle in the Figure and its relation to a sector. In Example 3, we have explained how an \emph{advance rule} is actived so that edge $\overrightarrow{A}$ or $\overrightarrow{B}$ moves on a step. In Examples 4 and 5, we have redrawed the circles and added some comments in the captions.
+We have added more details for Examples 1, 2, 3, 4, and 5. In Example 1, we have given coordinates to points and demonstrated the computing of a synchronized point. In Example 2, we have described the meaning of a circle in the Figure and its relation to a sector. In Example 3, we have explained how an \emph{advance rule} is activated  so that edge $\overrightarrow{A}$ or $\overrightarrow{B}$ moves on a step. In Examples 4 and 5, we have redrawn the circles and added some comments in the captions.
 
-Thanks for pointing out this!
+Thanks for the nice suggestion!
 
 \textbf{[R3C4-1]} \emph{Following my first comment, I would suggest at least comparing with one algorithm based on PED (e.g., your previous work [15]). }
 
-Yes, we have provided addtional tests that compare the performance of algorithms using PED VS. SED. Two pairs of algorithms are tested, the first is the algorithm Douglas-Peucker using PED and SED, respectively, and the second is the sector intersection algorithm using PED and our spatio-temporal cone intersection algorithm using SED. %Note that spatio-temporal cone intersection method is an extension of the sector intersection method.
-The results have been presented in Section 5.2.4. Thanks for your advice!
+Yes, we have provided additional tests that compare the performance of algorithms using PED vs. SED. We have tested the algorithm Douglas-Peucker using PED and SED, respectively, and the sector intersection algorithm using PED and our spatio-temporal cone intersection algorithm using SED. %Note that spatio-temporal cone intersection method is an extension of the sector intersection method.
+The results have been presented in Section 5.2.4. 
+
+Thanks for your advice!
 
 
 \textbf{[R3C4-2]} \emph{Also, I am not convinced by just using compression ratio as the single metric for measuring effectiveness. As I mentioned, I recommend using the compressed data to evaluate some real applications.}
 
-Firstly, the application requirements of the work directly comes from our CarStream [Zhang2017] project, an industrial data-processing system for chauffeured car services that has connected over 30,000 vehicles in more than 60 cities. In this project, trajectory data are collected from cars, transported to cloud, simplified/compressed and stored in databases, and then used for applications like tracking the historical trajectories of cars, analyzing the trips, mileages and travel patterns of cars, and so on. From these applications, it seems that the metrics of compression ratio, max error and average error are enough to evaluate the qualify of our algorithm.
-%
-Secondly, in the area of trajectory simplification, compression ratio, average error, max error and runing time of algorithm are the major metrics. We follow the customary practices in the work.
-%
+Firstly, the application requirements of this work directly comes from our CarStream [Zhang2017] project, an industrial data-processing system for chauffeured car services that has connected over 30,000 vehicles in more than 60 cities. In this project, trajectory data are collected from cars, transported to cloud, simplified/compressed and stored in databases, and then used for applications like tracking the historical trajectories of cars, analyzing the trips, mileages and travel patterns of cars, and so on. From these applications, it seems that the metrics of compression ratio, and error are good enough to evaluate the qualify of our algorithm.
+
+Secondly, in the area of trajectory simplification, compression ratio,  error and running time of algorithm are the major metrics~[???]. We follow the customary practices in this work.
+
 Finally, we have also observed that some {works}, eg. [Zhang2018], have evaluated trajectory simplification algorithms from the view of spatio-temporal queries, however, we do not do this in view of there are so many important applications over trajectories and these applications, combining with their deployment scenarios, may have varied requirements or require a balance among multiple metrics, \eg running time, compression ratio and error, thus, it is really hard to cover them in this work.
-%
-So, it is a good choice that we concentrate on designing the algorithm and testing it by the common metrics, and let the extensive evaluations be done by applications developers or other researchers. Thank you for your kind advice!
+
+To conclude, we concentrate on designing the algorithm and testing it with common metrics, and we let the applications developers/users to decide which algorithm to choose.
 
 [Zhang2017] Mingming Zhang, Tianyu Wo, Tao Xie, Xuelian Lin and Yaxiao Liu. CarStream: An Industrial System of Big Data Processing for Internet-of-Vehicles. PVLDB, 10 (12), 2017.
 
