@@ -48,7 +48,7 @@ However, when using \ped, a spatio-temporal query, \eg ``\emph{the position of a
 
 \textcolor{blue}{The \emph{synchronous Euclidean distance} (\sed) was then introduced for trajectory compression to support the above spatio-temporal queries, where the approximate point $P'$ was refferred to as the approximate temporally \emph{synchronized data point} \cite{Meratnia:Spatiotemporal}.
 }
-\textcolor{blue}{Intuitively, given a sub-trajectory $[P_s$, $\ldots, P_e]$ to be simplified, a synchronized data point $P'_i$, $s<i<e$, is a point on line segment $\vv{P_sP_{e}}$ satisfying $|\vv{P_sP_e}|>0$ and $\frac{|\vv{P_sP'_i}|}{|\vv{P_sP_e}|} = \frac{P_i.t - P_s.t}{P_e.t - P_s.t}$, and \sed is the Euclidean distance of a data point $P_i$ to its \emph{synchronized data point $P'_i$} on the corresponding line segment $\vv{P_sP_{e}}$.}
+\textcolor{blue}{Intuitively, given a sub-trajectory $[P_s$, $\ldots, P_e]$ to be simplified, a synchronized data point $P'_i$ ($s<i<e$) is a point on line segment $\vv{P_sP_{e}}$ satisfying $|\vv{P_sP_e}|>0$ and $\frac{|\vv{P_sP'_i}|}{|\vv{P_sP_e}|} = \frac{P_i.t - P_s.t}{P_e.t - P_s.t}$, and \sed is the Euclidean distance of a data point $P_i$ to its \emph{synchronized data point $P'_i$} on the line segment $\vv{P_sP_{e}}$.}
 %
 \textcolor{blue}{For example, in Figure~\ref{fig:notations}, $P'_4$ is a \emph{synchronized data points} of points $P_4$ \wrt line segments $\vv{P_0P_{10}}$, satisfying $\frac{|\vv{P_0P'_4}|}{|\vv{P_0P_{10}}|} = \frac{P_4.t - P_0.t}{P_{10}.t-P_0.t}$. The \sed of point $P_4$ to line segment $\vv{P_0P_{10}}$ is $|\vv{P_4P'_4}|$.}
 %
@@ -64,7 +64,7 @@ However, these methods still have high time and/or space complexities, which hin
 Observe that linear time \lsa algorithms using \ped \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve, Lin:Operb} have been develped, and they are more efficient for resource-constrained devices.
 %
 The key idea to achieve a linear time complexity is by local distance checking in constant time, \eg the \textit{sector intersection} mechanism used in \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} and the \textit{fitting function} approach used in our preview work \cite {Lin:Operb}.
-Unfortunately, these techinques are designed specifically for \ped, and cannot be applied for \sed.
+Unfortunately, these techinques are designed specifically for \ped, and can hardly be applied for \sed.
 
 
 Indeed, it is even more challenging to design an one-pass \lsa algorithm using \sed than using \ped.
@@ -88,11 +88,11 @@ However, the current one-pass algorithms are all \ped specific, and to our knowl
 }%%%%%%%%%%%%%%%%%%
 
 
-\stitle{{Contributions}}. To this end, we propose two one-pass error bounded \lsa algorithms using \sed for compressing trajectories in a fast way and with good compression ratios. % error bounded
+\stitle{{Contributions}}. To this end, we propose two faste one-pass error bounded \lsa algorithms using \sed for compressing trajectories with good compression ratios. % error bounded
 
 \sstab {(1)} We first develop a novel local synchronous distance checking approach, \ie spatio-temporal \underline{C}one \underline{I}ntersection using the \underline{S}ynchronous \underline{E}uclidean \underline{D}istance (CISED).
 %, by extending the sector intersection method \cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve}\eat{(Section~\ref{sec-localcheck})}.
-We further approximate the intersection of spatio-temporal cones with the intersection of \textcolor{blue}{special designed} regular polygons, and develop a fast regular polygon intersection algorithm, such that each data point in a trajectory is checked in $O(1)$ time during the entire process of trajectory simplification.
+We further approximate the intersection of spatio-temporal cones with the intersection of \textcolor{blue}{a special class of } regular polygons, and develop a fast regular polygon intersection algorithm, such that each data point in a trajectory is checked in $O(1)$ time during the entire process of trajectory simplification.
 
 %\sstab {(2)} \textcolor{blue}{We then show that an optimal trajectory simplification algorithm using \sed can achieve $O(n^2 \log n)$ time by using our local synchronous distance checking technique, and provide a \textit{near optimal} trajectory simplification algorithm \cisto that achieves $O(n^2)$ time and $O(n)$ space.}
 

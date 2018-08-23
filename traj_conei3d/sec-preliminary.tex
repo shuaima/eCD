@@ -120,7 +120,7 @@ However, for trajectory simplification, the distance based metrics are definitel
 
 \stitle{Perpendicular Euclidean Distance (\ped)}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the perpendicular Euclidean distance (or simply perpendicular distance) $ped(P, \mathcal{L})$ of point $P$ to line segment $\mathcal{L}$ is $\min\{|\vv{PQ}|\}$ for any point $Q$ on $\vv{P_{s}P_{e}}$.
 
-\textcolor{blue}{The using of \ped brings good compression ratios, however, the temporal informtion of data points is not taken into account \cite{Meratnia:Spatiotemporal}, thus the compressed data using \ped is not suitable for spatio-temporal queries.}
+
 
 %ll as does not support applications like spatio-temporal query
 
@@ -129,13 +129,14 @@ However, for trajectory simplification, the distance based metrics are definitel
 (2) $P'.y$ = $P_s.y +  c\cdot(P_e.y - P_s.y)$ and
 (3) $P'.t$ = $P.t$, where $c= \frac{P.t-P_s.t}{P_e.t-P_s.t}$.
 
-\textcolor{blue}{Intuitively, a synchronized data point $P'_i$ of $P_i$, $s<i<e$, is a point on $\vv{P_sP_{e}}$ satisfying $|P_sP_e|>0$ and $\frac{|\vv{P_sP'_i}|}{|\vv{P_sP_e}|} = \frac{P_i.t - P_s.t}{P_e.t - P_s.t}$, which means that the object is moving from $P_s$ to $P_e$ at an average speed $\overline{v} = \frac{|\vv{P_sP_e}|}{P_e.t-P_s.t}$, and its position at time $t_i$ is point $P'_i$ on $\overrightarrow{P_sP_{e}}$ having a distance of $\overline{v}\times (P_i.t-P_s.t)$ to point $P_s$~\cite{Meratnia:Spatiotemporal, Chen:Fast, Zhang:Evaluation}.}
+\textcolor{blue}{Intuitively, a synchronized data point $P'_i$ of $P_i$ ($s<i<e$) is a point on $\vv{P_sP_{e}}$ satisfying $|\vv{P_sP_e}|>0$ and $\frac{|\vv{P_sP'_i}|}{|\vv{P_sP_e}|} = \frac{P_i.t - P_s.t}{P_e.t - P_s.t}$, which means that the object is moving from $P_s$ to $P_e$ at an average speed $\frac{|\vv{P_sP_e}|}{P_e.t-P_s.t}$, and its position at time $t_i$ is point $P'_i$ on $\overrightarrow{P_sP_{e}}$ having a distance of $\frac{P_i.t - P_s.t}{P_e.t - P_s.t}\cdot|\vv{P_sP_e}|$ to point $P_s$~\cite{Meratnia:Spatiotemporal, Chen:Fast, Zhang:Evaluation}.}
 %\textcolor{blue}{This definition assumes that the sub-trajectory $[P_s, ..., P_e]$ is to be represented by or simplified to a line segment $\overrightarrow{P_sP_e}$ and the object is moving from $P_s$ to $P_e$ linearly in a \textit{uniform speed}. This assumption is followed by the subsequent trajectory simplification works\cite{Meratnia:Spatiotemporal, Chen:Fast, Zhang:Evaluation}.}
 %from the start point to the end point of a trajectory .
 
 \stitle{Synchronous Euclidean Distance (\sed) \cite{Meratnia:Spatiotemporal}}. Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$, the synchronous Euclidean distance (or simply synchronous distance) $sed(P, \mathcal{L})$ of $P$ to $\mathcal{L}$ is $|\vv{PP'}|$ that is the Euclidean distance from $P$ to its synchronized data point $P'$ \wrt $\mathcal{L}$. %, adopted by recent trajectory simplification methods~\cite{Meratnia:Spatiotemporal, Potamias:Sampling, Chen:Fast, Muckell:Compression, Popa:Spatio}.
 
-\textcolor{blue}{The use of \sed takes both spatial and temporal information of data points into considerations \cite{Meratnia:Spatiotemporal}, hence, the compressed data using \sed is suitable for spatio-temporal queries.}
+\textcolor{blue}{The use of \ped brings better compression ratios, and the temporal information of data points is not available \cite{Meratnia:Spatiotemporal}, which makes \ped not suitable for spatio-temporal queries.}
+\textcolor{blue}{In contrast, \sed takes both spatial and temporal information of data points into consideration \cite{Meratnia:Spatiotemporal}. Hence \sed is more suitable for spatio-temporal queries.}
 
 
 We illustrate these notations with examples.
@@ -143,7 +144,7 @@ We illustrate these notations with examples.
 
 \begin{example}
 \label{exm-notations}
-Consider Figure~\ref{fig:notations}, in which
+Consider Figure~\ref{fig:notations} again, in which
 
 \sstab(1) $\dddot{\mathcal{T}}[P_0$, $\ldots, P_{10}]$ is a trajectory having 11 data points,
 
@@ -151,7 +152,7 @@ Consider Figure~\ref{fig:notations}, in which
 
 \sstab(3) $ped(P_4, \vv{P_0P_{10}})=|\vv{P_4P^*_4}|$, where $P^*_4$ is the perpendicular point of $P_4$ \wrt line segment $\vv{P_0P_{10}}$,
 
-\sstab(4) \textcolor{blue}{$P'_4$ is the synchronized point of $P_4$ \wrt line segment $\vv{P_0P_{10}}$, satisfying $\frac{|P_0P'_4|}{|P_0P_{10}|} = \frac{P_4.t - P_0.t}{P_{10}.t-P_0.t} = \frac{4-0}{10-0}= \frac{2}{5}$, and}
+\sstab(4) \textcolor{blue}{$P'_4$ is the synchronized point of $P_4$ \wrt line segment $\vv{P_0P_{10}}$, satisfying $\frac{|\vv{P_0P'_4}|}{|\vv{P_0P_{10}}|} = \frac{P_4.t - P_0.t}{P_{10}.t-P_0.t} = \frac{4-0}{10-0}= \frac{2}{5}$, and}
 
 \sstab(5) $sed(P_4, \vv{P_0P_{10}})= |\vv{P_4P'_4}|$, $sed(P_2, \vv{P_0P_{4}})= |\vv{P_2P'_2}|$ and $sed(P_7, \vv{P_4P_{10}})$ $=$ $|\vv{P_7P'_7}|$,
 where points $P'_4$, $P'_2$ and $P'_7$ are the synchronized points of $P_4$, $P_2$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$, $\vv{P_0P_{4}}$ and $\vv{P_4P_{10}}$, respectively. \eop
@@ -356,7 +357,7 @@ After 7 steps of moving of edge $\vv{A}$ or $\vv{B}$, each by an advance rule, $
 
 
 Algorithm  \cpia has a time complexity of $O(|\mathcal{R}_1| + |\mathcal{R}_2|)$, where $|\mathcal{R}|$ is the number of edges of polygon $\mathcal{R}$.
-It is worth pointing out that $|\mathcal{R}_1 \bigsqcap \mathcal{R}_2| \le (|\mathcal{R}_1| + |\mathcal{R}_2|)$.
+It is also worth pointing out that $|\mathcal{R}_1 \bigsqcap \mathcal{R}_2| \le (|\mathcal{R}_1| + |\mathcal{R}_2|)$.
 
 
 
