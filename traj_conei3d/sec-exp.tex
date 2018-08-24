@@ -50,6 +50,7 @@ As the optimal \lsa algorithm~\cite{Imai:Optimal} it has both high time and spac
 \stitle{Algorithms and implementation}.
 We implement seven \lsa algorithms, \ie our \cist and \cista,  sector intersection algorithm using \ped (\kw{SIPED})~\cite{Dunham:Cone, Zhao:Sleeve}, \kw{DPPED}~\cite{Douglas:Peucker} and \dps~\cite{Meratnia:Spatiotemporal} (the existing sub-optimal \lsa algorithms having the best compression ratios), \squishe~\cite{Muckell:Compression} (the most fast existing \lsa algorithm using \sed) and the optimal \lsa algorithm using \sed (see Section~\ref{subsec-optimal}).
 We also implement the polygon intersection algorithms, \cpia and our \rpia.
+
 All algorithms were implemented with Java.
 All tests were run on an {x64-based  PC with 8 Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz and 8GB of memory, and each test was repeated
 over 3 times and the average is reported here.
@@ -165,14 +166,14 @@ Here the compression ratio of $m$=$12$ is only on average {$100.95\%$} of $m$=$2
 
 
 %\vspace{0.5ex}
-\stitle{Exp-1.2: Impacts of the error bound $\epsilon$ on compression ratios (VS. algorithms \dps and \squishe)}.
+\stitle{Exp-1.2: Impacts of the error bound $\epsilon$ on compression ratios (vs. algorithms \dps and \squishe)}.
 To evaluate the impacts of error bound $\epsilon$ on compression ratios, we fixed {$m$=$16$}, the middle of $[12, 20]$, and varied $\epsilon$ from $10$ meters to $200$ meters on the entire four datasets, respectively.
 The results are reported in Figure~\ref{fig:cr-m16} .
 %Figure~\ref{fig:cr-m10}.  and
 
 
 \ni (1) When increasing $\epsilon$, the compression ratios of all these algorithms decrease on all datasets.
-\textcolor{blue}{More specifically, the compression ratio $cr$ of each algorithm has approximately an exponential relation to $\epsilon$, \ie $cr=a^\epsilon$, where $a$ is in $(0,1)$.}
+%\textcolor{blue}{More specifically, the compression ratio $cr$ of each algorithm has approximately an exponential relation to $\epsilon$, \ie $cr=a^\epsilon$, where $a$ is in $(0,1)$.}
 
 \ni (2) Dataset \pricar has the lowest compression ratios, compared with datasets \mopsi, \sercar and \geolife, due to its highest sampling rate,
 \sercar has the highest compression ratios due to its lowest sampling rate, and \geolife and \mopsi have the compression ratios in the middle accordingly.
@@ -191,18 +192,18 @@ For example, when $\epsilon$ = $40$ meters, the compression ratios of algorithm
 \cista are ($11.5\%$, $4.3\%$, $2.8\%$, $2.7\%$) on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
 
 %\vspace{0.5ex}
-\stitle{Exp-1.3: Impacts of the error bound $\epsilon$ on compression ratios (VS. the optimal algorithm).}
-To evaluate the impacts of error bound $\epsilon$ on compression ratios, we once again fixed {$m$=$16$}, the middle of $[12, 20]$, and varied $\epsilon$ from $10$ to $200$ meters on the first $1K$ points of each trajectory of the selected \textit{small datasets}, respectively.
+\stitle{Exp-1.3: Impacts of the error bound $\epsilon$ on compression ratios (vs. the optimal algorithm).}
+To evaluate the impacts of error bound $\epsilon$ on compression ratios, we again fixed {$m$=$16$}, the middle of $[12, 20]$, and varied $\epsilon$ from $10$ to $200$ meters on the first $1K$ points of each trajectory of the selected \textit{small datasets}, respectively.
 The results are reported in Figure~\ref{fig:cr-optimal-m16} .
 %Figure~\ref{fig:cr-m10}.  and
 
-\ni {(1)} Algorithm \cist is poorer than the optimal algorithm on all datasets and for all $\epsilon$.
+\ni {(1)} Algorithm \cist is worse than the optimal algorithm on all datasets and for all $\epsilon$.
 More specifically, the compression ratios of \cist are on average ($134.6\%$, $150.7\%$, $155.5\%$, $138.5\%$) of the optimal algorithm on {datasets (\sercar, \geolife, \mopsi, \pricar)}, respectively.
 For example, when $\epsilon$ = $40$ meters, the compression ratios of \cist and the optimal algorithm are
 ($22.0\%$, $5.9\%$, $1.9\%$, $3.3\%$) and {($16.4\%$, $4.2\%$, $0.9\%$, $2.4\%$)}
 on  {datasets (\sercar, \geolife, \mopsi, \pricar)}, respectively.
 
-\ni {(2)} Algorithm \cista~\textcolor{blue}{(weak simplification)} has the closest compression ratios to the optimal algorithm~\textcolor{blue}{(strong simplification)} on all datasets and for all $\epsilon$.
+\ni {(2)} Algorithm \cista~has the closest compression ratios to the optimal algorithm on all datasets and for all $\epsilon$.
 The compression ratios of \cista are on average  ($94.8\%$, $115.5\%$, $119.7\%$, $107.5\%$)} of the optimal algorithm on {datasets (\sercar, \geolife, \mopsi, \pricar)}, respectively.
 For example, when $\epsilon$ = $40$ meters, the compression ratios of algorithm
 \cista are ($14.6\%$, $4.6\%$, $1.2\%$, $2.5\%$) on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
@@ -216,7 +217,7 @@ fixed {$m$=$16$} and $\epsilon$=$60$ meters, and varied the size \trajec{|T|} of
 %
 The results are reported in Figure~\ref{fig:cr-size}.
 
-\ni(1) The compression ratios of these algorithms from the best to the worst are \cista, \dps, \cist and \squishe, on all datasets and for all sizes of trajectories.
+\ni(1) The compression ratios of these algorithms ordered from the best to the worst are \cista, \dps, \cist and \squishe, on all datasets and for all sizes of trajectories.
 
 \ni(2) The size of input trajectories has few impacts on the compression ratios of \lsa algorithms on all datasets.
 
@@ -326,14 +327,14 @@ Here the average error of $m=12$ is only on average {$98.49\%$} of $m=20$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\vspace{0.5ex}
-\stitle{Exp-2.2: Impacts of the error bound $\epsilon$ on average errors (VS. algorithms \dps and \squishe)}.
+\stitle{Exp-2.2: Impacts of the error bound $\epsilon$ on average errors (vs. algorithms \dps and \squishe)}.
 To evaluate the average errors of these algorithms, we fixed {$m$=$16$}, and
-varied $\epsilon$ from $10$ meters to $200$ meters on the entire
+varied $\epsilon$ from $10$ to $200$ meters on the entire
 {datasets} \sercar, \geolife, \mopsi and \pricar, respectively.
 The results are reported in Figure~\ref{fig:ae-m16}.
 
 \ni(1) Average errors increase with the increase of $\epsilon$.
-\textcolor{blue}{More specifically, the average of each algorithm has approximately a linear relation to $\epsilon$.}
+%\textcolor{blue}{More specifically, the average of each algorithm has approximately a linear relation to $\epsilon$.}
 
 \ni(2) The average errors of these algorithms from the largest to the smallest are \cista, \cist, \dps and \squishe, on all datasets and for all $\epsilon$.
 The average errors of algorithms \cist and \cista are on average
@@ -350,9 +351,9 @@ average errors of \cista are on average ($93.8\%$, $86.0\%$, $81.4\%$, {$79.4\%$
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\vspace{0.5ex}
-\stitle{Exp-2.3: Impacts of the error bound $\epsilon$ on average errors (VS. the optimal algorithm).}
-To evaluate the average errors of these algorithms, we once again fixed {$m$=$16$}, and
-varied $\epsilon$ from $10$ meters to $200$ meters on the first $1K$ points of each trajectory of the selected \textit{small datasets}, respectively.
+\stitle{Exp-2.3: Impacts of the error bound $\epsilon$ on average errors (vs. the optimal algorithm).}
+To evaluate the average errors of these algorithms, we fixed {$m$=$16$}, and
+varied $\epsilon$ from $10$ to $200$ meters on the first $1K$ points of each trajectory of the selected \textit{small datasets}, respectively.
 The results are reported in Figure~\ref{fig:ae-optimal-m16}.
 
 The average errors of these algorithms from the largest to the smallest are \cista, the optimal algorithm and \cist, on all datasets and for all $\epsilon$.
@@ -370,7 +371,7 @@ We fixed {$m$=$16$} and $\epsilon = 60$ meters, and varied the size \trajec{|T|}
 %
 The results are reported in Figure~\ref{fig:ae-size}.
 
-\ni(1) The average errors of these algorithms from the smallest to the largest are \squishe, \dps, \cist and \cista, on all datasets and for all trajectory sizes. %, which is consistent with Figure~\ref{fig:ae-m16}.
+\ni(1) The average errors of these algorithms ordered from the smallest to the largest are \squishe, \dps, \cist and \cista, on all datasets and for all trajectory sizes. %, which is consistent with Figure~\ref{fig:ae-m16}.
 
 \ni(2) The size of input trajectories has few impacts on the average errors of \lsa algorithms on all datasets.
 
@@ -397,7 +398,7 @@ In the last set of tests, we evaluate the impacts of parameter $m$ on the runnin
 %\vspace{0.5ex}
 \stitle{Exp-3.1: Impacts of algorithm \rpia and parameter $m$ on running time.}
 To evaluate the impacts of parameter $m$ on the running time of algorithm \cist and \cista,
-\textcolor{blue}{and also to confirm that our fast regular polygon intersection algorithm \rpia runs fast than the convex polygon intersection algorithm \cpia, }
+\textcolor{blue}{and also to confirm that our fast regular polygon intersection algorithm \rpia runs faster than the convex polygon intersection algorithm \cpia, }
 we equipped \cist and \cista with \rpia and \cpia, respectively, fixed $\epsilon =60$ meters, and varied $m$ from $4$ to $40$.
 %
 The results are reported in Figures~\ref{fig:m-poly-time} and~\ref{fig:m-time-e60}.
@@ -517,8 +518,8 @@ and ($2.84$, $3.45$, $3.69$, $2.86$) times faster than \squishe on
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\vspace{0.5ex}
 \stitle{Exp-3.3: Impacts of the error bound $\epsilon$ on running time (VS. the optimal algorithm).}
-To evaluate the impacts of $\epsilon$ on running time, we once again fixed $m$ = $16$,
-and varied $\epsilon$ from $10$ meters to $200$ meters on the first $1K$ points of each trajectory of the selected \textit{small datasets}, respectively.
+To evaluate the impacts of $\epsilon$ on running time, we fixed $m$ = $16$,
+and varied $\epsilon$ from $10$ to $200$ meters on the first $1K$ points of each trajectory of the selected \textit{small datasets}, respectively.
 The results are reported in Figure~\ref{fig:time-optimal-epsilon}.
 
 \ni(1) Algorithms \cist and \cista are obviously faster than the optimal algorithm for all cases.
@@ -550,7 +551,7 @@ This is consistent with their time complexity analyses.
 
 
 
-\subsubsection{\textcolor{blue}{Distance Metrics \ped vs \sed}}
+\subsubsection{\textcolor{blue}{Evaluation of Distance Metrics \ped vs. \sed}}
 
 
 \begin{figure*}[tb!]
@@ -560,7 +561,7 @@ This is consistent with their time complexity analyses.
 \includegraphics[scale = 0.290]{Figures/Exp-CR-epsilon-ped-mopsi.png}\hspace{1ex}
 \includegraphics[scale = 0.290]{Figures/Exp-CR-epsilon-ped-private.png}
 %\vspace{-1ex}
-\caption{\small Evaluation of compression ratios (\ped VS. \sed): fixed with $m=16$ and varying
+\caption{\small Evaluation of compression ratios (\ped vs. \sed): fixed with $m=16$ and varying
   error bound $\epsilon$.}
 \label{fig:cr-ped}
 %\vspace{-1.0ex}
@@ -573,7 +574,7 @@ This is consistent with their time complexity analyses.
 	\includegraphics[scale = 0.2900]{Figures/Exp-error-epsilon-ped-mopsi.png}\hspace{1ex}
 	\includegraphics[scale = 0.2900]{Figures/Exp-error-epsilon-ped-private.png}
 	%\vspace{-1ex}
-	\caption{\small Evaluation of average errors (\ped VS. \sed): fixed with $m=16$ and varying
+	\caption{\small Evaluation of average errors (\ped vs. \sed): fixed with $m=16$ and varying
     error bound $\epsilon$ .}
 	\label{fig:ae-ped}
 	%\vspace{-1ex}
@@ -587,21 +588,21 @@ This is consistent with their time complexity analyses.
 \includegraphics[scale = 0.290]{Figures/Exp-time-epsilon-ped-mopsi.png}\hspace{1ex}
 \includegraphics[scale = 0.290]{Figures/Exp-time-epsilon-ped-private.png}
 %\vspace{-1ex}
-\caption{\small Evaluation of running time (\ped VS. \sed): fixed with $m=16$ and varying error
+\caption{\small Evaluation of running time (\ped vs. \sed): fixed with $m=16$ and varying error
   bounds $\epsilon$.}
 \label{fig:time-ped}
 %\vspace{-1ex}
 \end{figure*}
 
 
-In this section, we compare the performance of algorithms using \ped VS. \sed. Two pairs of algorithms are tested, namely, (1) the algorithm \dpa using \ped and \sed, respectively, and (2) the sector intersection  algorithm \cite{Williams:Longest, Sklansky:Cone} using \ped and our spatio-temporal cone intersection algorithm using \sed.
+In this section, we compare the performance of algorithms using \ped vs. \sed. Two pairs of algorithms are tested, namely, (1) the algorithm \dpa using \ped and \sed, respectively, and (2) the sector intersection  algorithm \cite{Williams:Longest, Sklansky:Cone} using \ped and our spatio-temporal cone intersection algorithm using \sed.
 
-\stitle{Exp-4.1: Impacts of distance metrics on compression ratios (\ped vs \sed)}.
+\stitle{Exp-4.1: Impacts of distance metrics on compression ratios}.
 To evaluate the impacts of distance metrics, \ie \ped and \sed, on compression ratios, we fixed {$m$=$16$} and varied $\epsilon$ from $10$ meters to $200$ meters on the entire four datasets, respectively.
 The results are reported in Figure~\ref{fig:cr-ped} .
 
 
-Given the same error bound $\epsilon$, the compression ratios of algorithms using \ped are obviously better
+Given the same error bound $\epsilon$, the compression ratios using \ped are obviously better
 than using \sed.
 More specifically, the compression ratios of algorithms \dpa
 using \ped are on average ($47.1\%$, $55.5\%$, $60.7\%$, $44.7\%$) of algorithm \dpa using \sed and
@@ -610,8 +611,8 @@ the compression ratio of algorithm \cist is on average
 
 
 
-\stitle{Exp-4.2: Impacts of distance metrics on average errors (\ped vs \sed)}.
-To evaluate the impacts of distance metrics on average errors, we fixed {$m$=$16$} and varied $\epsilon$ from $10$ meters to $200$ meters on the entire four datasets, respectively.
+\stitle{Exp-4.2: Impacts of distance metrics on average errors}.
+To evaluate the impacts of distance metrics on average errors, we fixed {$m$=$16$} and varied $\epsilon$ from $10$ to $200$ meters on the entire four datasets, respectively.
 The results are reported in Figure~\ref{fig:ae-ped} .
 
 
@@ -623,8 +624,8 @@ errors of algorithm \cia  is on average
 
 
 
-\stitle{Exp-4.3: Impacts of distance metrics on running time (\ped vs \sed)}.
-To evaluate the impacts of distance metrics on running time, we also fixed {$m$=$16$} and varied $\epsilon$ from $10$ meters to $200$ meters on the entire four datasets, respectively.
+\stitle{Exp-4.3: Impacts of distance metrics on running time}.
+To evaluate the impacts of distance metrics on running time, we also fixed {$m$=$16$} and varied $\epsilon$ from $10$ to $200$ meters on the entire four datasets, respectively.
 The results are reported in Figure~\ref{fig:time-ped} .
 
 Given the same error bound $\epsilon$, the running time of \dpa  using \ped is on average
@@ -641,37 +642,38 @@ of algorithm \cist on datasets (\sercar, \geolife, \mopsi, \pricar), respectivel
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \stitle{Summary}. From these tests we find the following.
 
-\sstab \emph{(1) Datasets}. \textcolor{blue}{The behaviors of all algorithms across all datasets are quite similar, \eg the compression ratio $cr$ of each algorithm has approximately an exponential relation to $\epsilon$, \ie $cr=a^\epsilon$, where $a$ is in $(0,1)$, and the average error of it has a linear relation to $\epsilon$.}
+\sstab \emph{(1) Datasets}. The behaviors of all algorithms across all datasets are quite similar.
 
-\sstab \emph{(2) Distance metrics}. \textcolor{blue}{The compression ratios of algorithms using \ped are obviously better than using \sed, and the sizes of compresed data using \ped are nearly half of using \sed.}
+\sstab \emph{(2) Polygon intersection Algorithms}. Algorithm \rpia runs faster than  algorithm \cpia, and has the same compression ratios and average errors as \cpia.
 
-\sstab \emph{(3) Polygon intersection Algorithms}. Algorithm \rpia runs faster than  algorithm \cpia, and has the same compression ratios and average errors as \cpia.
+\sstab\emph{(3) Parameter $m$}. The compression ratio decreases with the increase of $m$, and the running time increases nearly linearly with the increase of $m$. In practice, the range of $[12, 20]$ is a good candidate region for $m$.
 
-\sstab\emph{(4) Parameter $m$}. The compression ratio decreases with the increase of $m$, and the running time increases nearly linearly with the increase of $m$. In practice, the range of $[12, 20]$ is a good candidate region for $m$.
-
-\sstab\emph{(5) Compression ratios}. The optimal \lsa algorithm has the best compression ratios among all strong simplification algorithms. Algorithm \cist is close to \dps and algorithm \cista is better than all the sub-optimal \lsa algorithm.
+\sstab\emph{(4) Compression ratios}. The optimal \lsa algorithm has the best compression ratios among all strong simplification algorithms. Algorithm \cist is close to \dps and algorithm \cista is better than all the sub-optimal \lsa algorithm.
 %They are all better than \squishe.
 The compression ratios of algorithm \cist, the optimal algorithm and algorithm \cista are on average
 ($79.3\%$, $71.9\%$, $67.3\%$, $72.7\%$),
 {($58.1\%$, $45.1\%$, $39.2\%$, $52.8\%$)} and ($57.7\%$, $53.8\%$, $50.0\%$, $54.6\%$) of \squishe
 and ($109.2\%$, $108.0\%$, $111.7\%$, $109.1\%$), {($81.3\%$, $75.5\%$, $72.5\%$, $78.1\%$)} and ($79.5\%$, $81.0\%$, $83.0\%$, $82.0\%$) of \dps on {datasets} (\sercar, \geolife, \mopsi, \pricar), respectively.
 
-\sstab\emph{(6) Average errors}. The average errors of these algorithms from the smallest to the largest are \squishe, \dps, \cist, the optimal \lsa algorithm and \cista. Algorithm \cista has obvious higher average errors than \cist as the former essentially forms spatio-temporal cones with a radius of $\epsilon$.
+\sstab\emph{(5) Average errors}. The average errors of these algorithms from the smallest to the largest are \squishe, \dps, \cist, the optimal \lsa algorithm and \cista. Algorithm \cista has obvious higher average errors than \cist as the former essentially forms spatio-temporal cones with a radius of $\epsilon$.
 
-\sstab\emph{(7) Running time}. Algorithms \cist and \cista are the fastest. They are on average
+\sstab\emph{(6) Running time}. Algorithms \cist and \cista are the fastest. They are on average
 ($14.21$, $18.19$, $17.06$, $9.98$), ($2.84$, $3.45$, $3.69$, $2.86$) and ($925.25$, $7888.26$, $40041.59$, $8528.76$) times faster than \dps, \squishe and the optimal \lsa algorithm on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
 The advantage of of running time of algorithms \cist and \cista also increases  with the increase of the trajectory size.
 
 
-\stitle{Discuss}. \textcolor{blue}{Based on these findings, we are to provide a brief guideline for selecting an algorithm to compresss trajectories.
-First of all, its hard to give an exclusive guidline for applications to select a compresss algorithm, because applications have varied requirements or they may require a balance among multiple metrics, \eg running time, compression ratio and error.
-Thus, we provide a brief guideline from the views of running time, compression ratio and average error, respectively.
-(1) If the running time is the first-level consideration or the algorithms is to run in resource-constrained devices, then the one-pass algorithms, \ie~\cist and \cista, are surely the best choices as they have a linear time and constant space, and at the same time have pretty good compression ratios. Also note that \cista may output data points that are not selected from the input data points.
-%
-(2) If the compression ratio is the priority, then algorithm \cista and the optimal algorithm are the selections, followed by algorithms \dps and \cist.
-%
-(3) When considering error, \squishe is a choice because it has a relative small average error. Alternatively, we can also use \dps or \cist setting a smaller error bound $\epsilon$ compared with \squishe.
-}
+\sstab \emph{(7) Distance metrics}. Compared with \ped, \sed supports  spatio-temporal queries. However, it comes a price, \eg  the compression ratios of algorithms using \ped are obviously better than using \sed.}
+
+
+\stitle{Discussion}. We next briefly discuss the choice of algorithms to compress trajectories.
+As different applications many have different requirements to reach a balance among multiple metrics, we only provide a brief guideline from the views of running time, compression ratio and average error, respectively.
+
+\sstab(1) When the running time is the first-level consideration or algorithms are run in resource-constrained devices, then the one-pass algorithms, \ie~\cist and \cista, are surely the best choices, and they have pretty good compression ratios at the same time.
+
+\sstab(2) When the compression ratio is the priority, then algorithm \cista and the optimal algorithm are the selections, followed by algorithms \dps and \cist.
+
+\sstab(3) When considering error, \squishe is a good choice because it has a relative small average error. Alternatively, we can also use \dps or \cist by setting a smaller error bound $\epsilon$ compared with \squishe.
+
 
 %%********************************* The End **********************************
 
