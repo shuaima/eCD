@@ -57,7 +57,7 @@ Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P
 \stitle{Procedure \kw{getRegularPolygon}}.
 We first present procedure \kw{getRegularPolygon} that, given a cone projection circle, generates its inscribed $m$-edges regular polygon,  following the definition in Section~\ref{subsec-RPI}.
 
-The parameters $P_s$, $P_i$, $r$ and $t_c$ together form the projection circle \pcircle{(P^c_i, r^c_i)} of the spatio-temporal cone \cone{(P_s, \mathcal{O}(P_{i}, r))} of point $P_{i}$ \wrt point $P_s$ on the plane $P.t - t_c$ = $0$. Firstly, $P^c_i.x$ and $P^c_i.y$ are computed (lines 1--3), and $r^c_i = c\cdot r$.
+The parameters $P_s$, $P_i$, $r$ and $t_c$ together form the projection circle \pcircle{(P^c_i, r^c_i)} of the spatio-temporal cone \cone{(P_s, \mathcal{O}(P_{i}, r))} of point $P_{i}$ \wrt point $P_s$ on the plane $P.t - t_c$ = $0$. Firstly, $P^c_i.x$ and $P^c_i.y$ are computed (lines 1--3), and $r^c_i = w\cdot r$.
 Then it builds and returns an $m$-edges inscribed regular polygon $\mathcal{R}$ of \pcircle{(P^c_i, r^c_i)} (lines 4--8), by transforming a polar coordinate system
 into a Cartesian one. Note here $\theta$, $r\cdot\sin\theta$ and $r\cdot\cos\theta$ only need to be computed once during the entire processing of a trajectory.
 
@@ -105,13 +105,13 @@ After the  final line segment $\vv{P_sP_{n}}$ is generated (line 12), it returns
 					\\
 					{\bf Procedure} ~\kw{getRegularPolygon}$(P_s,~P_i,~r,~m,~t_c)$ \\
 					%	\bcc \hspace{1ex} \textcolor[rgb]{0.00,0.07,1.00}{Transform $P_s$ and $P_i$ to points in Cartesian coordinates} \\
-					\bcc \hspace{1ex} $c := (t_c-t_s)/(P_i.t - P_s.t)$; \\
-					\icc \hspace{1ex} $x := P_s.x + c\cdot(P_i.x-P_s.x)$; \\
-					\icc \hspace{1ex} $y := P_s.y + c\cdot(P_i.y-P_s.y)$; \\
+					\bcc \hspace{1ex} $w := (t_c-t_s)/(P_i.t - P_s.t)$; \\
+					\icc \hspace{1ex} $x := P_s.x + w\cdot(P_i.x-P_s.x)$; \\
+					\icc \hspace{1ex} $y := P_s.y + w\cdot(P_i.y-P_s.y)$; \\
 					\icc \hspace{1ex} \For $(j := 1;j \le m;j++)$ \Do \\
 					\icc \> \hspace{2ex} $\theta :=  (2j + 1)*\pi /m $; \\
-					\icc \> \hspace{2ex} $\mathcal{R}.v_j.x := x + c\cdot r\cdot\cos\theta$;\\
-					\icc \> \hspace{2ex} $\mathcal{R}.v_j.y := y + c\cdot r\cdot\sin\theta$;\\
+					\icc \> \hspace{2ex} $\mathcal{R}.v_j.x := x + w\cdot r\cdot\cos\theta$;\\
+					\icc \> \hspace{2ex} $\mathcal{R}.v_j.y := y + w\cdot r\cdot\sin\theta$;\\
 					\icc \hspace{1ex} \Return $\mathcal{R}$.
 				}
 				\vspace{-2ex}
