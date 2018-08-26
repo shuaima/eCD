@@ -5,7 +5,7 @@
 
 
 In this section, we present an extensive experimental study of our one-pass trajectory simplification algorithms (\cist and \cista) compared with the optimal algorithm using \sed and existing algorithms of \dps and \squishe on trajectory datasets.
-Using four real-life trajectory datasets, we conducted three sets of experiments to evaluate:
+Using four real-life trajectory datasets, we conducted four sets of experiments to evaluate:
 (1) the compression ratios of algorithms \cist and \cista vs. \dps, \squishe and the optimal algorithm,
 (2) the average errors of algorithms \cist and \cista vs. \dps, \squishe and the optimal algorithm,
 (3) the running time of algorithms \cist and \cista vs. \dps, \squishe and the optimal algorithm,
@@ -42,13 +42,12 @@ The sampling rate was one point per $2$ seconds, and each trajectory has around 
 %{This dataset contains 182 trajectories, one trajectory for each user, with a total distance of about 1.2 million kilometers. }
 
 \vspace{0.5ex}
-\ni \emph{(5) Small trajectory data}.
 As the optimal \lsa algorithm~\cite{Imai:Optimal} it has both high time and space complexities, \ie $O(n^3)$ time and $O(n^2)$ space, it is impossible to compress the entire datasets (too slow and out of memory). Hence, we further build four \textit{small datasets}, each dataset includes 10 middle-size ($10K$ points per trajectory) trajectories selected from \sercar, \geolife, \mopsi and \pricar, respectively.
 
 %The details of these datasets are shown in Table~\ref{tab:dataset}.
 
 \stitle{Algorithms and implementation}.
-We implement seven \lsa algorithms, \ie our \cist and \cista,  sector intersection algorithm using \ped (\kw{SIPED})~\cite{Dunham:Cone, Zhao:Sleeve}, \kw{DPPED}~\cite{Douglas:Peucker} and \dps~\cite{Meratnia:Spatiotemporal} (the existing sub-optimal \lsa algorithms having the best compression ratios), \squishe~\cite{Muckell:Compression} (the most fast existing \lsa algorithm using \sed) and the optimal \lsa algorithm using \sed (see Section~\ref{subsec-optimal}).
+We implement seven \lsa algorithms, \ie our \cist and \cista,  sector intersection algorithm using \ped (\kw{SIPED})~\cite{Dunham:Cone, Zhao:Sleeve}, \kw{DPPED}~\cite{Douglas:Peucker} and \dps~\cite{Meratnia:Spatiotemporal} (the existing sub-optimal \lsa algorithms having the best compression ratios), \squishe~\cite{Muckell:Compression} (the fastest existing \lsa algorithm using \sed) and the optimal \lsa algorithm using \sed (see Section~\ref{subsec-optimal}).
 We also implement the polygon intersection algorithms, \cpia and our \rpia.
 
 All algorithms were implemented with Java.
@@ -77,7 +76,7 @@ We next present our findings.
 In the first set of tests, we evaluate the impacts of parameter $m$ on the
 compression ratios of our algorithms \cist and \cista, and compare the compression ratios of \cist and \cista with \dps, \squishe and the optimal algorithm.
 %
-The compression ratio is defined as follows: Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations $\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$, the compression ratio of an algorithm is $(\sum_{j=1}^{M} |\overline{\mathcal{T}}_j |)/(\sum_{j=1}^{M} |\dddot{\mathcal{T}}_j |)$.
+The compression ratio is defined as follows: Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piece-wise line representations $\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$, the compression ratio of an algorithm is $(\sum_{j=1}^{M} |\overline{\mathcal{T}}_j |)/(\sum_{j=1}^{M} |\dddot{\mathcal{T}}_j |)$.
 By the definition, \emph{algorithms with lower compression ratios are better}.
 
 
@@ -387,7 +386,7 @@ The results are reported in Figure~\ref{fig:ae-size}.
 \subsubsection{Evaluation of Running Time}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-In the last set of tests, we evaluate the impacts of parameter $m$ on the running time of algorithms \cist and \cista, and compare the running time of our approaches \cist and \cista with the optimal algorithm and algorithms \dps and \squishe.
+In the third set of tests, we evaluate the impacts of parameter $m$ on the running time of algorithms \cist and \cista, and compare the running time of our approaches \cist and \cista with the optimal algorithm and algorithms \dps and \squishe.
 
 %\ie the edge number of a regular polygon,
 %
@@ -595,11 +594,11 @@ This is consistent with their time complexity analyses.
 \end{figure*}
 
 
-In this section, we compare the performance of algorithms using \ped vs. \sed. Two pairs of algorithms are tested, namely, (1) the algorithm \dpa using \ped and \sed, respectively, and (2) the sector intersection  algorithm \cite{Williams:Longest, Sklansky:Cone} using \ped and our spatio-temporal cone intersection algorithm using \sed.
+In the last set of tests, we compare the performance of algorithms using \ped vs. \sed. Two pairs of algorithms are tested, namely, (1) the algorithm \dpa using \ped and \sed, respectively, and (2) the sector intersection  algorithm \cite{Williams:Longest, Sklansky:Cone} using \ped and our spatio-temporal cone intersection algorithm using \sed.
 
 \stitle{Exp-4.1: Impacts of distance metrics on compression ratios}.
 To evaluate the impacts of distance metrics, \ie \ped and \sed, on compression ratios, we fixed {$m$=$16$} and varied $\epsilon$ from $10$ meters to $200$ meters on the entire four datasets, respectively.
-The results are reported in Figure~\ref{fig:cr-ped} .
+The results are reported in Figure~\ref{fig:cr-ped}.
 
 
 Given the same error bound $\epsilon$, the compression ratios using \ped are obviously better
@@ -613,7 +612,7 @@ the compression ratio of algorithm \cist is on average
 
 \stitle{Exp-4.2: Impacts of distance metrics on average errors}.
 To evaluate the impacts of distance metrics on average errors, we fixed {$m$=$16$} and varied $\epsilon$ from $10$ to $200$ meters on the entire four datasets, respectively.
-The results are reported in Figure~\ref{fig:ae-ped} .
+The results are reported in Figure~\ref{fig:ae-ped}.
 
 
 Given the same error bound $\epsilon$, the average errors of algorithms using \sed are a bit larger than using \ped.
@@ -626,7 +625,7 @@ errors of algorithm \cia  is on average
 
 \stitle{Exp-4.3: Impacts of distance metrics on running time}.
 To evaluate the impacts of distance metrics on running time, we also fixed {$m$=$16$} and varied $\epsilon$ from $10$ to $200$ meters on the entire four datasets, respectively.
-The results are reported in Figure~\ref{fig:time-ped} .
+The results are reported in Figure~\ref{fig:time-ped}.
 
 Given the same error bound $\epsilon$, the running time of \dpa  using \ped is on average
 ($24.3\%$, $119.9\%$, $23.4\%$, $91.3\%$) of \dpa  using \sed, and  the running
@@ -659,10 +658,10 @@ and ($109.2\%$, $108.0\%$, $111.7\%$, $109.1\%$), {($81.3\%$, $75.5\%$, $72.5\%$
 
 \sstab\emph{(6) Running time}. Algorithms \cist and \cista are the fastest. They are on average
 ($14.21$, $18.19$, $17.06$, $9.98$), ($2.84$, $3.45$, $3.69$, $2.86$) and ($925.25$, $7888.26$, $40041.59$, $8528.76$) times faster than \dps, \squishe and the optimal \lsa algorithm on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
-The advantage of of running time of algorithms \cist and \cista also increases  with the increase of the trajectory size.
+The advantage of running time of algorithms \cist and \cista also increases  with the increase of the trajectory size.
 
 
-\sstab \emph{(7) Distance metrics}. Compared with \ped, \sed supports  spatio-temporal queries. However, it comes a price, \eg  the compression ratios of algorithms using \ped are obviously better than using \sed.}
+\sstab \emph{(7) Distance metrics}. Compared with \ped, \sed supports  spatio-temporal queries. However, it comes a price, \eg  the compression ratios of algorithms using \ped are better than those using \sed.}
 
 
 \stitle{Discussion}. We next briefly discuss the choice of algorithms to compress trajectories.

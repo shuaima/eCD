@@ -7,7 +7,7 @@
 In this section, we develop a local synchronous distance checking approach, \textcolor{blue}{laying down the key for the one-pass trajectory simplification algorithms using \sed (Section~\ref{sec-alg})}, such that each point in a trajectory is checked only once in $O(1)$ time during the entire process of trajectory simplification.
 \textcolor{blue}{The key of the local synchronous distance checking method lies in a new concept of \emph{spatio-temporal cones} that converts the \sed distance tolerance into the intersection of spatio-temporal cones for testing the successive data points.}
 \textcolor{blue}{More specifically, we first substantially extend the \textit{sectors} in Section~\ref{sub-ci-ped} from a 2D space to a spatio-temporal 3D space, which leads to \emph{spatio-temporal cones}. Then we prove that the \sed distance checking can be achieved by the intersection of spatio-temporal cones.}
-\textcolor{blue}{Finally, wesimplify the spatio-temporal cones intersection into the circles intersection, and approximate a circle by a special class of (fixed rotation and edge number) polygons.}
+\textcolor{blue}{Finally, we simplify the spatio-temporal cone intersection into the circle intersection, and approximate scircle with a special class of (fixed rotation and edge number) polygons.}
 
 
 We consider a sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, P_{s+k}]$, an error bound $\epsilon$, and a 3D Cartesian coordinate system whose origin, $x$-axis, $y$-axis and $t$-axis  are $P_s$, longitude, latitude and time, respectively.
@@ -25,14 +25,14 @@ We first present the \textit{spatio-temporal cone intersection} method in a 3D C
 
 
 
-\stitle{Spatio-temporal cones (\cone{})}. Given the start point $P_s$ of $\dddot{\mathcal{T}_s}$ and an error bound $\epsilon$, the spatio-temporal cone (or simply \textit{cone}) of a data point $P_{s+i}$ ($1\le i\le k$) in $\dddot{\mathcal{T}_s}$ \wrt $P_s$ and $\epsilon$, denoted as \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))}, or \cone{_{s+i}} in short, is an oblique circular cone such that point $P_s$ is its apex and the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$ of point $P_{s+i}$ is its base.
+\stitle{Spatio-temporal cones (\cone{})}. Given a start point $P_s$ of $\dddot{\mathcal{T}_s}$ and an error bound $\epsilon$, the spatio-temporal cone (or simply \textit{cone}) of a data point $P_{s+i}$ ($1\le i\le k$) in $\dddot{\mathcal{T}_s}$ \wrt $P_s$ and $\epsilon$, denoted as \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))}, or \cone{_{s+i}} in short, is an oblique circular cone such that point $P_s$ is its apex and the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$ of point $P_{s+i}$ is its base.
 
 
 \begin{example}
 \label{exm-circles-cones}
 
 (1) Figure~\ref{fig:cis} shows two synchronous circles, \circle{(P_{s+i}, \epsilon)} of point $P_{s+i}$ and \circle{(P_{s+k}, \epsilon)} of point $P_{s+k}$.
-It is easy to see that for any point in the area of a circle \circle{(P_{s+i}, \epsilon)}, its distance to $P_{s+i}$ is no greater than $\epsilon$.
+It is easy to see that for any point in the area of a circle \circle{(P_{s+i}, \epsilon)}, its distance to $P_{s+i}$ is not greater than $\epsilon$.
 
 \sstab(2) Figure~\ref{fig:cis} also illustrates two example spatio-temporal cones: \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} {(purple)} and \cone{(P_s, \mathcal{O}(P_{s+k}, \epsilon))} (red), with the same apex $P_s$ and error bound $\epsilon$. \eop
 \end{example}
@@ -78,7 +78,7 @@ It is easy to see that for any point in the area of a circle \circle{(P_{s+i}, \
 
 
 
-\textcolor{blue}{Indee, the \sed distance tolerance can be checked by finding the common intersection of spatio-temporal cones, as shown below.}
+\textcolor{blue}{Indeed, the \sed distance tolerance can be checked by finding the common intersection of spatio-temporal cones, as shown below.}
 
 
 \begin{prop}
@@ -110,7 +110,7 @@ For spatio-temporal cones with the same apex $P_s$, we then show that the checki
 (4) $r^c_{s+i} =c\cdot\epsilon$, where $c=\frac{t_c - P_s.t}{P_{s+i}.t - P_s.t}$.
 
 
-\textcolor{blue}{Recall that the base of a cone \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} is a cirle on plane $P.t-P_{s+i}.t = 0$, and plane $P.t- t_c = 0$ is parallel to plane $P.t-P_{s+i}.t = 0$. These  ensure that the projection of a cone is a circle.}
+\textcolor{blue}{Recall that the base of a cone \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} is a cirle on plane $P.t-P_{s+i}.t = 0$, and plane $P.t- t_c = 0$ is parallel to plane $P.t-P_{s+i}.t = 0$. These  ensure that the projection a cone on plane $P.t -t_c = 0$ is a circle.}
 
 \begin{example}
 \label{exm-projection-circles}
@@ -147,7 +147,7 @@ Proposition~\ref{prop-circle-intersection} tells us that the intersection checki
 
 Finding the common intersection of $n$ circles on a plane has a time complexity of ${O(n\log n)}$~\cite{Shamos:Circle}, which cannot be used for designing one-pass trajectory simplification algorithms using \sed.
 %
-Intuitively, we can approximate a circle with its $m$-edges inscribed polygon {whose intersection can be computed more fast}. \textcolor{blue}{However, the intersection of two general $m$-edges polygons may produce a polygon with more than $m$ edges, thus, the time complexity of finding the common intersection of $n$ polygons on a plane is not linear. To solve this problem, we approximate a circle with a fixed rotation and $m$-edges inscribed regular polygon.}
+Intuitively, we can approximate a circle with its $m$-edges inscribed polygon {whose intersection can be computed much faster}. \textcolor{blue}{However, the intersection of two general $m$-edges polygons may produce a polygon with more than $m$ edges, thus, the time complexity of finding the common intersection of $n$ polygons on a plane is not linear. To solve this problem, we approximate a circle with a fixed rotation and $m$-edges inscribed regular polygon.}
 
 \stitle{Inscribed regular polygons ($\mathcal{R}$)}.
 Given a cone projection circle \pcircle{(P, r)}, its inscribed $m$-edges regular polygon is denoted as $\mathcal{R}(V, E)$,

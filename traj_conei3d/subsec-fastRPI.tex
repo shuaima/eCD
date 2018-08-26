@@ -1,9 +1,9 @@
 \subsection{Speedup Inscribed Regular Polygon Intersection}
 \label{subsec-fastRPI}
 
-Recall that \textcolor{blue}{the intersection of the inscribed regular polygons can be implemented by the convex polygon intersection algorithm \cpia~\cite{ORourke:Intersection} in Figure~\ref{alg:c-poly-inter}. }
+Recall that \textcolor{blue}{the intersection of inscribed regular polygons can be computed by the convex polygon intersection algorithm \cpia~\cite{ORourke:Intersection} in Figure~\ref{alg:c-poly-inter}. }
 However, observe that algorithm \cpia is for general convex polygons, while the inscribed regular polygons $\mathcal{R}_{s+i}$ ($i\in[1, k]$) of the cone projection circles are constructed in a unified way, \ie fixed rotation and edge number,
-which allows us to develop a faster method to speedup the computation of their intersection.
+which allows us to develop a faster method to speed up the computation of their intersection.
 
 We next explain the key idea for speeding up the computation. \textcolor{blue}{Observe that when the edges $\vv{A} = (P_{s_A}, P_{e_A})$ and $\vv{B} = (P_{s_B}, P_{e_B})$ on polygons $\mathcal{R}_2$ and $\mathcal{R}_1$ (both $\mathcal{R}_2$ and $\mathcal{R}_1$ can be either inscribed regular polygons or the common intersection of inscribed regular polygons) are ``chasing'' one another as the way the convex polygon intersection algorithm \cpia does, every segment in the two polygons being intersected has to originate from one of the $m$ edges of the regular polygons and the geometric similarity of the regular polygons, we may advance edge $\vv{A}$ or $\vv{B}$ multiple steps at a time, instead of a single step at a time of the convex polygon intersection algorithm \cpia.}
 %
@@ -121,12 +121,12 @@ If $A \bigcap B = \phi$ and advances $B$, then moves $A$ and $B$ forward ``$a$ a
 
 
 
-We then present our faster algorithm for the computation of inscribed regular polygons that makes of the advance rules in terms of Propositions \ref{prop-rule1} and \ref{prop-rule2}.
+We then present our faster algorithm for computing the intersection of inscribed regular polygons that makes of the advance rules in terms of Propositions \ref{prop-rule1} and \ref{prop-rule2}.
 
 
 \stitle{Algorithm \rpia}.
 The regular polygon intersection algorithm, \ie\ \rpia, is the optimized version of the convex polygon intersection algorithm \cpia, based on Propositions \ref{prop-rule1} and \ref{prop-rule2}. We also save vertexes of a polygon in a fixed size array, which is different from \cpia  that saves polygons in linked lists.
-Considering the regular polygons each having a fixed number of vertexes/edges, marked from $1$ to $m$, this policy allows us to quickly address an edge or vertex by its label.
+Considering the regular polygons each having a fixed number of vertexes/edges, marked from $1$ to $m$, this policy allows us to quickly address an edge or a vertex with its label.
 %, as well as avoid the creating and removing of link nodes.
 
 Given intersection polygon $\mathcal{R}^*_{l}$ of the preview $l$ polygons and the next approximate polygon $\mathcal{R}_{s+l+1}$, the algorithm \rpia returns $\mathcal{R}^*_{l+1}=\mathcal{R}^*_{l}  \bigsqcap \mathcal{R}_{s+l+1}$.
@@ -200,7 +200,7 @@ Figure~\ref{fig:r-poly-inter} is a running example of algorithm \rpia. The input
 
 \vspace{0.5ex}
 \stitle{Correctness and complexity analyses.}
-Observe that algorithm \rpia basically has the same routine as algorithm \cpia, except that it fastens the advancing speed of directed edges $\vv{A}$ and $\vv{B}$ under certain circumstances as shown by Propositions \ref{prop-rule1} and \ref{prop-rule2}, which together ensure the correctness of \rpia. Moreover, algorithm \rpia runs in $O(1)$ time
+Observe that algorithm \rpia basically has the same routine as algorithm \cpia, except that it speeds up the advance of directed edges $\vv{A}$ and $\vv{B}$ under certain circumstances as shown by Propositions \ref{prop-rule1} and \ref{prop-rule2}, which together ensure the correctness of \rpia. Moreover, algorithm \rpia runs in $O(1)$ time
 by Proposition~\ref{prop-cpi-time}.
 
 
