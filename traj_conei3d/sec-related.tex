@@ -7,7 +7,7 @@
 Trajectory compression algorithms are normally classified into two categories, namely lossless compression and lossy compression\cite{Muckell:Compression}.
 (1) Lossless compression methods enable exact reconstruction of the original data from the compressed data without information loss.
 %For example, delta compression \cite{Nibali:Trajic} is a lossless compression technique, which has zero error and a time complexity of $O(n)$, where $n$ is the number of data points in a trajectory. The limitation of lossless compression lies in that its compression ratio is relatively poor \cite{Nibali:Trajic}.
-(2) In contrast, lossy compression methods allow errors or derivations, compared with the original trajectories.
+(2) In contrast, lossy compression methods allow errors or deviations, compared with the original trajectories.
 These techniques typically identify important data points, and remove statistical redundant data points from a trajectory, or replace original data points in a trajectory with other places of interests, such as roads and shops. They focus on good compression ratios with acceptable errors.
 %, and a large number of lossy trajectory compression techniques have been developed.
 %
@@ -23,7 +23,9 @@ Its target is to approximate a given finer piece-wise linear curve by another co
 Initially, line simplification (\lsa) algorithms use perpendicular Euclidean distances (\ped) as the distance metric.
 Then a new distance metric, the synchronous Euclidean distances (\sed), was developed after the \lsa algorithms were introduced to compress trajectories.
 \sed was first introduced in the name of \emph{time-ratio distance} in~\cite{Meratnia:Spatiotemporal}, and formally presented in~\cite{Potamias:Sampling} as the \emph{synchronous Euclidean distance}.
-\ped and \sed are two common  metrics adopted in trajectory simplification. The former usually brings better compression ratios while the later reserves temporal information in the result trajectories.
+\ped and \sed are two common  metrics adopted in trajectory simplification. The former usually brings better compression ratios while the later reserves temporal information in the result trajectories. Besides, there is direction based metric \cite{Long:Direction}  that preserves the directions of trajectories.
+
+
 
 Line simplification algorithms can be classified into two aspects: optimal and sub-optimal methods.
 
@@ -86,10 +88,10 @@ These methods still have a high time and/or space complexity, which significantl
 %
 \bqsa \cite{Liu:BQS, Liu:Amnesic} and \squishe\cite{Muckell:Compression} further optimize the opening window algorithms.
 %
-\bqsa \cite{Liu:BQS, Liu:Amnesic} fasts the processing by picking out at most eight special points from an open window based on a convex hull, which, however, hardly supports \sed.
+\bqsa \cite{Liu:BQS, Liu:Amnesic} speeds up the processing by picking out at most eight special points from an open window based on a convex hull, which, however, hardly supports \sed.
 %The time complexity of \bqsa is $O(n^2)$ in the worst case.
 %it \eat{optimizes the \pavlidis by using}
-The \squishe\cite{Muckell:Compression} algorithm is an combination of {opening} window and bottom-up online algorithm. It uses a doubly linked list $Q$ to achieve a better efficiency. Although \squishe supports \sed, it is not one-pass, and has a relatively poor compression ratio.
+The \squishe\cite{Muckell:Compression} algorithm is a combination of {opening} window and bottom-up online algorithm. It uses a doubly linked list $Q$ to achieve a better efficiency. Although \squishe supports \sed, it is not one-pass, and has a relatively poor compression ratio.
 
 \stitle{One-pass algorithms.}
 The one-pass algorithms adopt a local distance checking policy.
@@ -125,6 +127,6 @@ The trajectories of certain moving objects such as cars and trucks are constrain
 Some methods \cite{Schmid:Semantic, Richter:Semantic} compress trajectories beyond the use of road networks, and further make use
 of other user specified domain knowledge, such as places of interests along the trajectories \cite{Richter:Semantic}.
 %
-There are also compression algorithms preserving the direction of the trajectory \cite{Long:Direction}. %As it mentions that the trajectory of a moving object contains a large amount of semantic information that could be used to compress the trajectory. For example, the driving direction of a moving object implies the information of the next direction.
+%There are also compression algorithms preserving the direction of the trajectory \cite{Long:Direction}. %As it mentions that the trajectory of a moving object contains a large amount of semantic information that could be used to compress the trajectory. For example, the driving direction of a moving object implies the information of the next direction.
 
 These  semantics based approaches are orthogonal to line simplification based methods, and may be combined with each other to  improve the effectiveness of trajectory compression.
