@@ -1,15 +1,16 @@
 \subsection{Speedup Inscribed Regular Polygon Intersection}
 \label{subsec-fastRPI}
 
-Recall that \textcolor{blue}{the intersection of inscribed regular polygons can be computed by the convex polygon intersection algorithm \cpia~\cite{ORourke:Intersection} in Figure~\ref{alg:c-poly-inter}. }
+Recall that the intersection of inscribed regular polygons can be computed by the convex polygon intersection algorithm \cpia~\cite{ORourke:Intersection} in Figure~\ref{alg:c-poly-inter}. 
 However, observe that algorithm \cpia is for general convex polygons, while the inscribed regular polygons $\mathcal{R}_{s+i}$ ($i\in[1, k]$) of the cone projection circles are constructed in a unified way, \ie fixed rotation and edge number,
 which allows us to develop a faster method to speed up the computation of their intersection.
 
-We next explain the key idea for speeding up the computation. \textcolor{blue}{Observe that when the edges $\vv{A} = (P_{s_A}, P_{e_A})$ and $\vv{B} = (P_{s_B}, P_{e_B})$ on polygons $\mathcal{R}_2$ and $\mathcal{R}_1$ (both $\mathcal{R}_2$ and $\mathcal{R}_1$ can be either inscribed regular polygons or the common intersection of inscribed regular polygons) are ``chasing'' one another as the way the convex polygon intersection algorithm \cpia does, every segment in the two polygons being intersected has to originate from one of the $m$ edges of the regular polygons, and consider the geometric similarity of the regular polygons, we may advance edge $\vv{A}$ or $\vv{B}$ multiple steps at a time, instead of a single step at a time of the convex polygon intersection algorithm \cpia.}
+We next explain the key idea for speeding up the computation. Observe that when the edges $\vv{A} = (P_{s_A}, P_{e_A})$ and $\vv{B} = (P_{s_B}, P_{e_B})$ on polygons $\mathcal{R}_2$ and $\mathcal{R}_1$ (both $\mathcal{R}_2$ and $\mathcal{R}_1$ can be either inscribed regular polygons or the common intersection of inscribed regular polygons) are ``chasing'' one another as the way the convex polygon intersection algorithm \cpia does, every segment in the two polygons being intersected has to originate from one of the $m$ edges of the regular polygons, and consider the geometric similarity of the regular polygons, we may advance edge $\vv{A}$ or $\vv{B}$ multiple steps at a time, instead of a single step at a time of the convex polygon intersection algorithm \cpia.
 %
 For example, in Figure~\ref{fig:c-poly-inter}.(1)--(5), edge $\vv{A}$ successively moves four steps, each under the advance rule (1) ``($\vv{A} \times \vv{B} < 0$ and $P_{e_A} \not \in \mathcal{H}(\vv{B})$) or ($\vv{A} \times \vv{B} \ge 0$ and $P_{e_B} \in \mathcal{H}(\vv{A})$)'' of algorithm \cpia.
 Alternatively, we can directly move $A$ from Figure~\ref{fig:c-poly-inter}.(1) to Figure~\ref{fig:c-poly-inter}.(5), by reducing four steps to one step only.
-\textcolor{blue}{To achieve this, we first develop two extra \emph{advance rules} (Propositions \ref{prop-rule1} and \ref{prop-rule2}) for the intersection of inscribed regular polygons.}
+To achieve this, we first develop two extra \emph{advance rules} (Propositions \ref{prop-rule1} and \ref{prop-rule2}) for the intersection of inscribed regular polygons.
+
 %due to the nature of the inscribed regular polygon,
 %because every segment in the two polygons being intersected has to originate from one of the $m$ edges of a inscribed regular polygon,
 
@@ -129,7 +130,7 @@ The regular polygon intersection algorithm, \ie\ \rpia, is the optimized version
 Considering the regular polygons each having a fixed number of vertexes/edges, marked from $1$ to $m$, this policy allows us to quickly address an edge or a vertex with its label.
 %, as well as avoid the creating and removing of link nodes.
 
-Given intersection polygon $\mathcal{R}^*_{l}$ of the preview $l$ polygons and the next approximate polygon $\mathcal{R}_{s+l+1}$, the algorithm \rpia returns $\mathcal{R}^*_{l+1}=\mathcal{R}^*_{l}  \bigsqcap \mathcal{R}_{s+l+1}$.
+Given intersection polygon $\mathcal{R}^*_{l}$ of the preview $l$ polygons and the next approximate polygon $\mathcal{R}_{s+l+1}$, algorithm \rpia returns $\mathcal{R}^*_{l+1}=\mathcal{R}^*_{l}  \bigsqcap \mathcal{R}_{s+l+1}$.
 %The sketch of the algorithm is shown in Figure~\ref{alg:r-poly-inter}.
 It runs the similar routine as the \cpia algorithm, except that (1) it saves polygons in arrays, and (2) the advance strategies are partitioned into two parts, \ie $\vv{A} \bigsqcap \vv{B} \ne \emptyset$ and $\vv{A} \bigsqcap \vv{B} = \emptyset$, where the former applies Propositions \ref{prop-rule1} and \ref{prop-rule2}, and the latter remains the same as algorithm \cpia.
 

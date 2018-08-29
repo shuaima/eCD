@@ -4,10 +4,10 @@
 %In this section, we first analyze the properties of synchronized points and synchronous Euclidean distances, then we present a local one-pass \sed checking method by extending the cone intersection for \ped checking in Section~\ref{sub-ci-ped}.
 %Finally, we provide a one-pass, error-bounded and \sed enabled trajectory simplification algorithm.
 
-In this section, we develop a local synchronous distance checking approach, \textcolor{blue}{laying down the key for the one-pass trajectory simplification algorithms using \sed (Section~\ref{sec-alg})}, such that each point in a trajectory is checked only once in $O(1)$ time during the entire process of trajectory simplification.
-\textcolor{blue}{The local synchronous distance checking method is based on a new concept of \emph{spatio-temporal cones} that converts the \sed distance tolerance into the intersection of spatio-temporal cones for testing the successive data points.}
-\textcolor{blue}{More specifically, we first substantially extend the \textit{sectors} in Section~\ref{sub-ci-ped} from a 2D space to a spatio-temporal 3D space, which leads to \emph{spatio-temporal cones}. Then we prove that the \sed distance checking can be achieved by the intersection of spatio-temporal cones.}
-\textcolor{blue}{Finally, we simplify the spatio-temporal cone intersection into the circle intersection, and approximate circles with a special class of (fixed rotation and edge number) polygons.}
+In this section, we develop a local synchronous distance checking approach, laying down the key for the one-pass trajectory simplification algorithms using \sed (Section~\ref{sec-alg}), such that each point in a trajectory is checked only once in $O(1)$ time during the entire process of trajectory simplification.
+The local synchronous distance checking method is based on a new concept of \emph{spatio-temporal cones} that converts the \sed distance tolerance into the intersection of spatio-temporal cones for testing the successive data points.
+More specifically, we first substantially extend the \textit{sectors} in Section~\ref{sub-ci-ped} from a 2D space to a spatio-temporal 3D space, which leads to \emph{spatio-temporal cones}. Then we prove that the \sed distance checking can be achieved by the intersection of spatio-temporal cones.
+Finally, we simplify the spatio-temporal cone intersection into the circle intersection, and approximate circles with a special class of (fixed rotation and edge number) polygons.
 
 
 We consider a sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, P_{s+k}]$, an error bound $\epsilon$, and a 3D Cartesian coordinate system whose origin, $x$-axis, $y$-axis and $t$-axis  are $P_s$, longitude, latitude and time, respectively.
@@ -78,7 +78,7 @@ It is easy to see that for any point in the area of a circle \circle{(P_{s+i}, \
 
 
 
-\textcolor{blue}{Indeed, the \sed distance tolerance can be checked by finding the common intersection of spatio-temporal cones, as shown below.}
+Indeed, the \sed distance tolerance can be checked by finding the common intersection of spatio-temporal cones, as shown below.
 
 
 \begin{prop}
@@ -110,7 +110,7 @@ For spatio-temporal cones with the same apex $P_s$, we then show that the checki
 (4) $r^c_{s+i} =w\cdot\epsilon$, where $w=\frac{t_c - P_s.t}{P_{s+i}.t - P_s.t}$.
 
 
-\textcolor{blue}{Recall that the base of a cone \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} is a circle on plane $P.t-P_{s+i}.t = 0$, and plane $P.t- t_c = 0$ is parallel to plane $P.t-P_{s+i}.t = 0$. These  ensure that the projection a cone on plane $P.t -t_c = 0$ is a circle.}
+Recall that the base of a cone \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} is a circle on plane $P.t-P_{s+i}.t = 0$, and plane $P.t- t_c = 0$ is parallel to plane $P.t-P_{s+i}.t = 0$. These  ensure that the projection of a cone on plane $P.t -t_c = 0$ is a circle.
 
 \begin{example}
 \label{exm-projection-circles}
@@ -147,7 +147,7 @@ Proposition~\ref{prop-circle-intersection} tells us that the intersection checki
 
 Finding the common intersection of $n$ circles on a plane has a time complexity of ${O(n\log n)}$~\cite{Shamos:Circle}, which cannot be used for designing one-pass trajectory simplification algorithms using \sed.
 %
-Intuitively, we can approximate a circle with its $m$-edges inscribed polygon {whose intersection can be computed much faster}. \textcolor{blue}{However, the intersection of two general $m$-edges polygons may produce a polygon with more than $m$ edges, thus, the time complexity of finding the common intersection of $n$ polygons on a plane is not linear. To solve this problem, we approximate a circle with a fixed rotation and $m$-edges inscribed regular polygon.}
+Intuitively, we can approximate a circle with its $m$-edges inscribed polygon {whose intersection can be computed much faster}. However, the intersection of two general $m$-edges polygons may produce a polygon with more than $m$ edges, thus, the time complexity of finding the common intersection of $n$ polygons on a plane is not linear. To solve this problem, we approximate a circle with a fixed rotation and $m$-edges inscribed regular polygon.
 
 \stitle{Inscribed regular polygons ($\mathcal{R}$)}.
 Given a cone projection circle \pcircle{(P, r)}, its inscribed $m$-edges regular polygon is denoted as $\mathcal{R}(V, E)$,
@@ -217,7 +217,7 @@ time.
 
 %By Theorem~\ref{prop-rp-intersection}, the intersection polygon $\mathcal{R}^*_k$ of all approximate polygon $\mathcal{R}_i$, $i \in [1, k]$, has no more than $M$ edges. We know the convex polygon intersection algorithm, \ie \cpia, of Figure~\ref{alg:c-poly-inter} has a time complexity of $O(|\mathcal{R}^*_k| + |\mathcal{R}_{k+1}|)$, which is $O(2M)$ here, thus, the computing of the intersection of polygons $\mathcal{R}^*_k$ and $\mathcal{R}_{k+1}$ can be implemented in a constant time, \ie $O(M)$, by the \cpia algorithm.
 
-\textcolor{blue}{By Propostion~\ref{prop-cpi-time}, we have a local synchronous distance checking method.}
+By Propostion~\ref{prop-cpi-time}, we have a local synchronous distance checking method.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{subsec-fastRPI}
