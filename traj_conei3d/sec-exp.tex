@@ -28,7 +28,7 @@ each trajectory has around $114.1K$ points.
 %.We randomly chose $1,000$ cars from them
 
 \vspace{0.5ex}
-\ni \emph{(2) GeoLife trajectory data} (\geolife) is the GPS trajectories collected in GeoLife project~\cite{Zheng:GeoLife} by 182 users in a period from Apr. 2007 to Oct. 2011. These trajectories have a variety of sampling rates, among which 91\% are logged in each 1-5 seconds per point. %or each 5-10 meters
+\ni \emph{(2) GeoLife trajectory data} (\geolife) is the GPS trajectories collected in GeoLife project~\cite{Zheng:GeoLife} by 182 users in a period from Apr. 2007 to Oct. 2011. These trajectories have a variety of sampling rates, among which 91\% are logged with one point per 1-5 seconds. %or each 5-10 meters
 %The longest trajectory has 2,156,994 points.
 
 \vspace{0.5ex}
@@ -47,7 +47,7 @@ As the optimal \lsa algorithm~\cite{Imai:Optimal} has both high time and space c
 %The details of these datasets are shown in Table~\ref{tab:dataset}.
 
 \stitle{Algorithms and implementation}.
-We implement seven \lsa algorithms, \ie our \cist and \cista,  sector intersection algorithm using \ped (\kw{SIPED})~\cite{Dunham:Cone, Zhao:Sleeve}, \kw{DPPED}~\cite{Douglas:Peucker} and \dps~\cite{Meratnia:Spatiotemporal} (the existing sub-optimal \lsa algorithms having the best compression ratios), \squishe~\cite{Muckell:Compression} (the fastest existing \lsa algorithm using \sed) and the optimal \lsa algorithm using \sed (see Section~\ref{subsec-optimal}).
+We implement seven \lsa algorithms, \ie our \cist and \cista,  sector intersection algorithm using \ped (\kw{SIPED})~\cite{Dunham:Cone, Zhao:Sleeve}, \kw{DPPED} and \dps (\dpa using \ped~\cite{Douglas:Peucker} and \dpa using \sed~\cite{Meratnia:Spatiotemporal}, the existing sub-optimal \lsa algorithms having the best compression ratios), \squishe~\cite{Muckell:Compression} (the fastest existing \lsa algorithm using \sed) and the optimal \lsa algorithm using \sed (see Section~\ref{subsec-optimal}).
 We also implement the polygon intersection algorithms, \cpia and our \rpia.
 
 All algorithms were implemented with Java.
@@ -146,7 +146,7 @@ Here ``R'' denotes our fast regular polygon intersection algorithm \rpia, and ``
 
 %\vspace{0.5ex}
 \stitle{Exp-1.1: Impacts of parameter $m$ on compression ratios}.
-To evaluate the impacts of the number $m$ of edges of polygons on the compression ratios of algorithms \cist and \cista, and also to confirm that our fast regular polygon intersection algorithm \rpia has the same compression ratios as the convex polygon intersection algorithm \cpia, 
+To evaluate the impacts of the number $m$ of edges of polygons on the compression ratios of algorithms \cist and \cista, and also to confirm that our fast regular polygon intersection algorithm \rpia has the same compression ratios as the convex polygon intersection algorithm \cpia,
 we fixed the error bound {$\epsilon =60$ meters}, and varied $m$ from $4$ to $40$. The results are reported in Figure~\ref{fig:m-cr-e60}.
 
 \ni(1) Algorithms \cist and \cista using \rpia have the same compression ratios as their counterparts using \cpia for all cases.
@@ -206,7 +206,7 @@ The compression ratios of \cista are on average  ($94.8\%$, $115.5\%$, $119.7\%$
 For example, when $\epsilon$ = $40$ meters, the compression ratios of algorithm
 \cista are ($14.6\%$, $4.6\%$, $1.2\%$, $2.5\%$) on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
 %
- This is because algorithm CISED-W allows data interpolations, thus by Proposition \ref{prop-circle-intersection}, it extends the radius of the base circles of the spatio-temporal cones from $\epsilon/2$ in CISED-S to $\epsilon$ in CISED-W to contain more points.
+ This is because algorithm CISED-W allows data interpolations, thus by Proposition \ref{prop-circle-intersection}, it extends the radii of the base circles of the spatio-temporal cones from $\epsilon/2$ in CISED-S to $\epsilon$ in CISED-W to contain more points.
 
 \stitle{Exp-1.4: Impacts of trajectory sizes on compression ratios}.
 To evaluate the impacts of trajectory size, \ie the number of data points in a trajectory, on compression ratios,
@@ -217,7 +217,7 @@ The results are reported in Figure~\ref{fig:cr-size}.
 
 \ni(1) The compression ratios of these algorithms ordered from the best to the worst are \cista, \dps, \cist and \squishe, on all datasets with all sizes of trajectories.
 
-\ni(2) The size of input trajectories has few impacts on the compression ratios of \lsa algorithms on all datasets.
+\ni(2) The sizes of input trajectories have few impacts on the compression ratios of \lsa algorithms on all datasets.
 
 
 
@@ -370,7 +370,7 @@ The results are reported in Figure~\ref{fig:ae-size}.
 
 \ni(1) The average errors of these algorithms ordered from the smallest to the largest are \squishe, \dps, \cist and \cista, on all datasets and for all trajectory sizes. %, which is consistent with Figure~\ref{fig:ae-m16}.
 
-\ni(2) The size of input trajectories has few impacts on the average errors of \lsa algorithms on all datasets.
+\ni(2) The sizes of input trajectories have few impacts on the average errors of \lsa algorithms on all datasets.
 
 
 
@@ -395,7 +395,7 @@ In the third set of tests, we evaluate the impacts of parameter $m$ on the runni
 %\vspace{0.5ex}
 \stitle{Exp-3.1: Impacts of algorithm \rpia and parameter $m$ on running time.}
 To evaluate the impacts of parameter $m$ on the running time of algorithm \cist and \cista,
- and also to confirm that our fast regular polygon intersection algorithm \rpia runs faster than the convex polygon intersection algorithm \cpia, 
+ and also to confirm that our fast regular polygon intersection algorithm \rpia runs faster than the convex polygon intersection algorithm \cpia,
 we equipped \cist and \cista with \rpia and \cpia, respectively, fixed $\epsilon =60$ meters, and varied $m$ from $4$ to $40$.
 %
 The results are reported in Figures~\ref{fig:m-poly-time} and~\ref{fig:m-time-e60}.
@@ -604,7 +604,7 @@ than using \sed.
 More specifically, the compression ratios of algorithms \dpa
 using \ped are on average ($47.1\%$, $55.5\%$, $60.7\%$, $44.7\%$) of algorithm \dpa using \sed and
 the compression ratios of algorithm \cist are on average
-($45.4\%$, $54.5\%$, $60.1\%$, $43.0\%$) of algorithm \cia on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
+($45.4\%$, $54.5\%$, $60.1\%$, $43.0\%$) of algorithm \kw{SIPED} on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
 
 
 
@@ -616,8 +616,8 @@ The results are reported in Figure~\ref{fig:ae-ped}.
 Given the same error bound $\epsilon$, the average errors of algorithms using \sed are a bit larger than using \ped.
 The average errors of \dpa  using \ped are on average
 ($76.7\%$, $77.6\%$, $79.7\%$, $63.0\%$) of \dpa  using \sed, and  the average
-errors of algorithm \cia  are on average
-($97.5\%$, $78.1\%$, $92.4\%$, $74.2\%$) of algorithm \cist on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
+errors of algorithm \kw{SIPED}  are on average
+($97.5\%$, $78.1\%$, $92.4\%$, $74.2\%$) of algorithm \cist on (\sercar, \geolife, \mopsi, \pricar), respectively.
 
 
 
@@ -627,7 +627,7 @@ The results are reported in Figure~\ref{fig:time-ped}.
 
 Given the same error bound $\epsilon$, the running time of \dpa  using \ped is on average
 ($24.3\%$, $119.9\%$, $23.4\%$, $91.3\%$) of \dpa  using \sed, and  the running
-time of algorithm \cia  is on average ($7.0\%$, $36.3\%$, $19.9\%$, $69.2\%$)
+time of algorithm \kw{SIPED}  is on average ($7.0\%$, $36.3\%$, $19.9\%$, $69.2\%$)
 of algorithm \cist on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
 
 
@@ -641,7 +641,7 @@ of algorithm \cist on datasets (\sercar, \geolife, \mopsi, \pricar), respectivel
 
 \sstab \emph{(1) Datasets}. The behaviors of all algorithms across all datasets are quite similar.
 
-\sstab \emph{(2) Polygon intersection Algorithms}. Algorithm \rpia runs faster than  algorithm \cpia, and has the same compression ratios and average errors as \cpia.
+\sstab \emph{(2) Polygon intersection algorithms}. Algorithm \rpia runs faster than  algorithm \cpia, and has the same compression ratios and average errors as \cpia.
 
 \sstab\emph{(3) Parameter $m$}. The compression ratio decreases with the increase of $m$, and the running time increases nearly linearly with the increase of $m$. In practice, the range of $[12, 20]$ is a good candidate region for $m$.
 
