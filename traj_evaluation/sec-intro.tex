@@ -4,6 +4,16 @@
 \label{sec-into}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{figure*}[tb!]
+	\centering
+	%\vspace{-1ex}
+	\includegraphics[scale=0.60]{Figures/Fig-DP.png}
+	\vspace{-6ex}
+	\caption{\small A trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$  with 11 points is represented by (2) two and (3) four continuous line segments (solid blue), compressed by the Douglas--Peucker algorithm \cite{Douglas:Peucker} with error metrics \ped and \sed, respectively.}
+	\vspace{-3ex}
+	\label{fig:notations}
+\end{figure*}
+
 A trajectory is a sequence of GPS data points representing the track of a moving object, which is collected at a certain sampling rate by a GPS sensor, transmitted to and saved in cloud servers for subsequent applications, such as location based services, moving object tracking, user behavior analysis, POI recommendation, {traffic analysis} and so on.
 %
 With the increasing use of GPS sensors on various mobile devices, such as smart-phones, on-board diagnostics, personal navigation devices and wearable smart devices, the number of trajectories are increasing rapidly.
@@ -47,19 +57,52 @@ Hence, \textit{sub-optimal} \lsa algorithms have been developed and/or introduce
 %Thus, a spatio-temporal query, \eg ``\emph{the position of a moving object at time $t$}", on the compressed trajectories by line simplification algorithms using \ped may return an approximate point $P'$ whose distance to the actual position $P$ of the moving object at time $t$ is unbounded.
 %For example, a query for the position of $P_7$ at time $t_7$ may return an approximate data point $P'_7$ whose distance to $P_7$ is great than the  bound $\epsilon$ in Figure~\ref{fig:notations} (left).
 %
-For trajectory simplification, there are varied distance metrics, most typically, the \emph{perpendicular Euclidean distances} (\ped), the \emph{synchronous Euclidean distances}\cite{Meratnia:Spatiotemporal} (\sed) and the \emph{direction-aware distance}\cite{Zhang:Evaluation}(\dad) (It is first called the \emph{direction-based measurement} in \cite{Long:Direction}).
+For trajectory simplification, there are varied distance metrics, most typically, the \emph{perpendicular Euclidean distances} (\ped), the \emph{synchronous Euclidean distances}\cite{Meratnia:Spatiotemporal} (\sed) and the \emph{direction-aware distances}\cite{Zhang:Evaluation}(\dad) (It is first called the \emph{direction-based measurement} in \cite{Long:Direction}).
 Originally, \lsa algorithms adopt \ped as the distance metric, which brings good compression ratios~ \cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey}. Nevertheless, when uses it for trajectory compression, the temporal information is lost.
 %
 \sed was then introduced to save temporal information of trajectories \cite{Meratnia:Spatiotemporal}. \sed is the Euclidean distance of a data point to its \emph{approximate temporally synchronized data point} \cite{Meratnia:Spatiotemporal} on the corresponding line segment.
-%For instance, $P'_4$ and $P'_7$ are the \emph{synchronized data points} of points $P_4$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$ and $\vv{P_4P_{10}}$, respectively, in Figure~\ref{fig:notations} (right).
+Intuitively, given a sub-trajectory $[P_s$, $\ldots, P_e]$, a synchronized data point $P'_i$ of $P_i$ ($s<i \le e$) \wrt $\vv{P_sP_{e}}$ is a point on $\vv{P_sP_{e}}$ satisfying $|\vv{P_sP_e}|>0$ and $\frac{|\vv{P_sP'_i}|}{|\vv{P_sP_e}|} = \frac{P_i.t - P_s.t}{P_e.t - P_s.t}$, which means that the object is moving from $P_s$ to $P_e$ at an average speed $\frac{|\vv{P_sP_e}|}{P_e.t-P_s.t}$, and its position at time $t_i$ is point $P'_i$ on $\overrightarrow{P_sP_{e}}$ having a distance of $\frac{P_i.t - P_s.t}{P_e.t - P_s.t}\cdot|\vv{P_sP_e}|$ to point $P_s$~\cite{Meratnia:Spatiotemporal, Chen:Fast, Zhang:Evaluation}.
+For instance, $P'_4$ and $P'_7$ are the \emph{synchronized data points} of points $P_4$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$ and $\vv{P_4P_{10}}$, respectively, in Figure~\ref{fig:notations}.
 \lsa algorithms using \sed may produce more line segments, however, the use of \sed ensures that the Euclidean distance between a data point and its synchronized point \wrt the corresponding line segment is bounded.
 %Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the synchronized point $P'$ of a data point $P$ within a bounded distance.
 %
-In addition, \dad\cite{Long:Direction, Zhang:Evaluation} was introduced to preserve the direction information of a moving object, which is claimed important in applications of trajectory clustering and direction-based query processing\cite{Long:Direction}. Note that the temporal information is also lost when using \dad.
+In addition, \dad\cite{Long:Direction, Zhang:Evaluation} was introduced to preserve the direction information of a moving object.
+The \dad of $\vv{P_{i-1}P_{i}}$ ($s<i\le e$) to $\vv{P_{s}P_{e}}$ is the direction deviation among them.
+For instance, in Figure~\ref{fig:notations}, $\theta_{56}$ is the \dad of line segment $\vv{P_5P_6}$ to $\vv{P_0P_{10}}$.
+It is claimed that \dad is important in applications of trajectory clustering and direction-based query processing\cite{Long:Direction}.
+Note that the temporal information is also lost when using \dad.
+
+
+
+\begin{table*}
+	\renewcommand{\arraystretch}{1.20}
+	\vspace{-1ex}
+	\caption{\small Evaluated trajectory simplification algorithms}
+	\label{tab:summary-lsa}
+	\centering
+	\small
+	\begin{tabular}{|l|c|c|c|c|c|c|c|c}
+		\hline
+		\kw{Name}  & \kw{Type}      &\kw{\ped} &\kw{\sed}  &\kw{\dad} &  \kw{Time} & \kw{Space} & \kw{Key~Idea}\\		\hline
+		\opt~\cite{Imai:Optimal}	&optimal		&Y & Y & Y & $O(n^3)$	& {$O(n^2)$}  & Reachability Graph\\		\hline
+%		\optp\cite{Chan:Optimal}	&optimal		&Y & N & N & $O(n^2)$	& {$O(n)$}  &Graph and Sector intersection  \\		\hline
+		\dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal}	&batch  &Y &Y & Y   & $O(n^2)$ & O(n)   & Top-down \\		\hline
+		\tpa\cite{Pavlidis:Segment}	&batch       &Y &Y & Y  & $O(n^2/K)$ & O(n)   &Bottom-up \\		\hline
+		\bqsa\cite{Liu:BQS}	&online	   &Y   & N & N & $O(n^2)$  & $O(|Q|)$    &Top-down, opening window and Convex hull  \\		\hline
+		\squishe\cite{Muckell:Compression}	&{online}	  & N &Y  & N  & $O(n\log|Q|)$ & $O(|Q|)$  &Bottom-up and Priority queue \\		\hline
+		\operb\cite{Lin:Operb}	& one-pass	  &Y & N & N & $O(n)$ & O(1)   & Fitting function \\		\hline
+		\siped\cite{Dunham:Cone, Zhao:Sleeve}	&one-pass	  &Y & N & N & $O(n)$ & O(1)  & Sector intersection\\		\hline
+		\cised\cite{Lin:Cised}	&one-pass	 	&N & Y & N & $O(n)$ & O(1)  & Spatio-temporal cone intersection \\		\hline
+		\interval\cite{Ke:Interval}	&one-pass	 	&N & N & Y & $O(n)$ & O(1)  & Interval intersection \\		\hline
+	\end{tabular}
+	{\\  Note: $K$ is the number of the final segments of a trajectory and $|Q|$ is the size of a buffer/window.}
+	\vspace{-3ex}
+\end{table*}
+
 
 
 \stitle{Motivations}. A number of techniques are developed or can be applied for trajectory compression, however, these techniques have not been compared systematically under the same experimental framework.
-Though recently, Zhang et al in \cite{Zhang:Evaluation} experimental compared a wide range of trajectory simplification algorithms, they focus on the compression quality, \ie the error between the compressed data and the original data. Meanwhile, two important features of those algorithms, \ie the compression ratio and execution time, are not comprehensively studied. %Also some important algorithms are not discussed in this study.
+Though recently, Zhang et al in \cite{Zhang:Evaluation} experimental compared a wide range of trajectory simplification algorithms, they focus on the compression quality, \ie the average errors between the compressed data and the original data. Meanwhile, two key features of those algorithms, \ie the compression ratio and execution time, are not comprehensively studied. %Also some important algorithms are not discussed in this study.
 More specifically,
 
 %\begin{enumerate}
@@ -105,8 +148,13 @@ As a consequence, it is difficult for a practitioner to decide which algorithm a
 %
 Thus, these issues call for a more comprehensive evaluation of the existing \lsa techniques. % on trajectory data.
 
+
+
+
+
 \stitle{\textcolor{blue}{Contributions}}.
 This paper presents an experimental comparison of the state-of-the-art \lsa algorithms for trajectory compression, including \emph{both the optimal and the sub-optimal methods that use either \ped or \sed or \dad}.
+
 
 We organize \lsa algorithms into categories, % based on the nature of them,
 review algorithms of each category and evaluate the most distinct and/or recent algorithms of each category.
@@ -115,8 +163,6 @@ The algorithms reviewed and evaluated in our experiments are summarized in \myta
 (ii) Douglas-Peucker\cite{Douglas:Peucker,Meratnia:Spatiotemporal} and \pavlidis~\cite{Pavlidis:Segment}, two distinct batch \lsa algorithms,
 (iii) \bqsa\cite{Liu:BQS} and \squishe~\cite{Muckell:SQUISH}, two famous online \lsa algorithms, and
 (iv) \operb\cite{Lin:Operb}, sector intersection (\siped) \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}, \cised \cite{Lin:Cised} and \interval\cite{Ke:Interval}, four one-pass \lsa algorithms.
-
-%
 %
 Using a variety of real trajectory datasets, we evaluated the performance of each technique in terms of its processing time, compression ratio and average error.
 %with up to \textcolor{red}{$2.5$} billion data points
@@ -125,9 +171,9 @@ Our experimental results reveal the characteristics of different techniques.
 %
 Based on these findings, we provide guidelines on selecting appropriate methods and distance metrics for various scenarios.
 
-It is worth pointing out that algorithms without error bound, \eg the $n^{th}$ point routine and the routine of random-
-selection of points\cite{Shi:Survey}, and algorithms using cumulative error, \eg MRPA that uses the  integral square synchronous
-Euclidean distance \cite{Chen:Fast}, are out of the scope.
+Note algorithms without error bound, \eg the $n^{th}$ point routine and the routine of random-selection of points\cite{Shi:Survey},
+and algorithms using cumulative error, \eg MRPA that uses the  integral square synchronous Euclidean distance \cite{Chen:Fast}, are out of the scope.
+%\ie the accumulation of errors of the points to a line segment,
 
 \stitle{Roadmap}.
 The remainder of the paper is organized as follows.

@@ -1,23 +1,17 @@
 \vspace{-1ex}
 \subsection{Online Algorithms}
 
-
-
-
 %Online algorithms enforces the constrained global checking policy that need not have the entire trajectory ready before they start compressing, instead, they restrict the checking within a window, sliding or opening.
 
 Online \lsa algorithms are essentially the combination of batch algorithms \dpa or \tpa with sliding or opening windows, \eg algorithm \opwa \cite{Meratnia:Spatiotemporal} is a combination of \textit{Top-down} and \textit{opening window} while \cite{Keogh:online} is a combination of \textit{Bottom-up} and \textit{sliding window}.
 %These methods still have a high time and/or space complexity, which significantly hinders their utility in resource-constrained mobile devices \cite{Liu:BQS}.
 \bqsa \cite{Liu:BQS} and \squishe\cite{Muckell:Compression} further optimize these online algorithms, respectively. Where \bqsa \cite{Liu:BQS} fasts the process by using a \textit{convex hull} and \squishe\cite{Muckell:Compression} uses a data structure named priority queue.
-
+%
 \eat{
 Recently, \bqsa \cite{Liu:BQS} has been proposed, using a new distance checking method by picking out at most eight special points from an open window based on a convex hull, \eg a rectangular bounding box with two bounding lines, so that when a new point is added to a window, it only needs to calculate the distances of the  special points to a line, instead of all data points in the window, in many cases.
 The time complexity of \bqsa remains $O(n^2)$ in the worst case, as \bqsa falls back to \dpa when the eight special points cannot be used. However, its simplified version, \fbqsa directly outputs a line segment, and starts a new window when the eight special points cannot bound all the points considered so far. Indeed, \fbqsa has a linear time complexity, and is the fastest \lsa based solution for trajectory compression.
 }
-
-
-
-
+%
 We next review the optimized online algorithms \bqsa and \squishe evaluated in out experiments.
 
 \vspace{-0.5ex}
@@ -31,9 +25,10 @@ Each time a new point is added to the buffer, \bqsa first picks out at most eigh
 (1) If $d_l\ge \epsilon$, it produces a new line segment $\mathcal{L}(P_{s}, P_{k})$, and replaces $W$ with a new window $[P_{k},\ldots,P_{k+1}]$.
 (2) If $d_u < \epsilon$, it simply expands the buffer to $[P_s, \ldots, P_k, P_{k+1}]$ $(k+1\le n)$ by adding a new point $P_{k+1}$.
 (3) Otherwise, it computes all distances $d(P_i, {\mathcal{L}(P_s,P_k)})$ ($i\in[s, k]$) as algorithm \dpa.
-
+%
 The worst time complexity of \bqsa remains $O(n^2)$.
-It is worth pointing out that its simply version, \fbqsa, essentially avoids case (3) to speed up the process. The performance of \fbqsa has already been evaluated in work \cite{Lin:Operb}. %our preview work
+It is worth pointing out that its simply version, \fbqsa, essentially avoids case (3) to speed up the process. 
+%The performance of \fbqsa has already been evaluated in work \cite{Lin:Operb}. %our preview work
 
 
 
@@ -63,7 +58,7 @@ Next, the properties $prio$ of points $pre(P_j)$ and $suc(P_j)$ are further upda
 After that, a new point is read to the list and the information of its predecessor point in the list is updated.
 %
 The above process repeated until that no point has the priority smaller than $\epsilon$. % \ie  the \sed up bound
-
+%
 \squishe finds and removes a point from $Q$ that has the lowest priority in $O(\log |Q|)$ time, where $|Q|$ denotes the number of points stored in $Q$.
 Thus, \squishe runs in $O(n\log |Q|)$ time and $O(|Q|)$ space.
 %And \squishe only supports \sed.
@@ -81,16 +76,11 @@ Thus, \squishe runs in $O(n\log |Q|)$ time and $O(|Q|)$ space.
 The \opwa algorithm~\cite{Meratnia:Spatiotemporal} combines the Top-down and opening window strategies, and enforces the constrained global checking in the window.
 
 Given a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ and an error bound $\epsilon$, algorithm \opwa~\cite{Meratnia:Spatiotemporal} maintains a window $W[P_s, \ldots, P_k]$, where $P_s$ and $P_k$ are the start and end points, respectively. Initially, $P_s$ = $P_0$ and $P_k$ = $P_1$, and the window $W$ is gradually expanded by adding new points one by one. \opwa tries to compress all points in $W[P_s, \ldots, P_k]$ to a single line segment $\mathcal{L}(P_{s}, P_{k})$. If the distances $ped(P_i, {\mathcal{L}})\le \epsilon$ for all points $P_i$ ($i\in[s, k]$), it simply expands $W$ to $[P_s, \ldots, P_k, P_{k+1}]$ $(k+1\le n)$ by adding a new point $P_{k+1}$. Otherwise, it produces a new line segment $\mathcal{L}(P_{s}, P_{k-1})$, and replaces $W$ with a new window $[P_{k-1},\ldots,P_{k+1}]$. The above process repeats until all points in $\dddot{\mathcal{T}}$ have been considered.
-
+%
 %\textcolor[rgb]{0.00,0.07,1.00}{According to the different methods of selecting the end points of a line segment, Open Window can further be divided into Normal Penning Window and Before Opening Window~\cite{Meratnia:Spatiotemporal}. When the distance of the point to compressed trajectory exceeds a certain threshold, Normal Opening Window algorithm select that point as the end point, while Before Opening Window select the last point within the window as the end point of the current trajectory.}
-
+%
 Algorithm \opwa is not efficient enough for compressing long trajectories as it remains in $O(n^2)$ time, the same as the \dpa algorithm.
 Also, \ped and \sed are both supported in \opwa as the algorithm \dpa does.
-
-
-\begin{example}
-\label{exm-alg-opw}
-\end{example}
 
 
 \subsubsection{Sliding Window and Bottom-up}

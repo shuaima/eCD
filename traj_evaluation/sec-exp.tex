@@ -108,7 +108,8 @@ then the average error is $\sum_{j=1}^{M}\sum_{i=0}^{M} d(P_{j,i},
 \mathcal{L}_{l,i})/\sum_{j=1}^{M}{|\dddot{\mathcal{T}}_j |}$.
 
 \stitle{Running time.}
-It describes the speed of compressing trajectories. We load and compress trajectories one by one, and only count the running time of the compressing process.
+It is the time of compressing trajectories.
+%We load and compress trajectories one by one, and only count the running time of the compressing process.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Experimental Results}
@@ -249,7 +250,7 @@ More specifically, the compression ratios of algorithms \tpa and \dpa
 using \ped are on average ($55.08\%$, $43.55\%$, $47.49\%$, $63.15\%$) and ($56.75\%$, $45.79\%$,
 $50.88\%$, $64.50\%$) of algorithms \tpa and \dpa using \sed on datasets \dSets, respectively.
 	
-\sstab (7) Though \ped, \sed and \dad are totally different distances, in practical (\eg $\epsilon <100$ meters or $\epsilon < 60$ degrees), \ped and \sed usually bring obvious better compression ratios than \dad, especially in high sampling data sets.
+\sstab (7) Though \ped, \sed and \dad are totally different distances, in practical (\eg $\epsilon <100$ meters and $\epsilon < 60$ degrees), \ped and \sed usually bring obvious better compression ratios than \dad, especially in high sampling data sets.
 
 \stitle{{Exp-1.2}: Impacts of the sizes of trajectories}.
 To compare the compression ratios of these algorithms and evaluate the impacts of trajectory sizes on them, we chose $10$ trajectories from each dataset \taxi, \ucar, \geolife and \mopsi, respectively,
@@ -257,7 +258,7 @@ and varied the size \trajec{|T|} of a trajectory from $1,000$ points to $10,000$
 The results are reported in Figure~\ref{fig:cr-ped-size}, Figure~\ref{fig:cr-sed-size} and Figure~\ref{fig:cr-dad-size}.
 
 
-\sstab (1) Trajectory size has few impact on compression ratio.
+\sstab (1) Trajectory sizes have few impacts on compression ratios.
 
 \sstab (2) The compression ratios in this test are consistent with test Exp-1.1.
 
@@ -383,6 +384,7 @@ We then evaluate the average errors of these algorithms.
 
 \stitle{Exp-2.1: Impacts of the error bound $\epsilon$}.
 To compare the average errors of these algorithms and evaluate the impacts of $\epsilon$ on them, we varied $\epsilon$ from $10m$ to $100m$ in \ped and \sed (or from $15^o$ to $90^o$ in \dad) on the entire four datasets, respectively.
+For \dad, we computed the average \ped errors of points to their corresponding line segments.
 The results are reported in Figure~\ref{fig:ae-ped-epsilon}, Figure~\ref{fig:ae-sed-epsilon} and Figure~\ref{fig:ae-dad-ped-epsilon}.
 
 
@@ -414,13 +416,12 @@ For example, in \mopsi, the average errors of algorithms
 to the largest are batch algorithms \dpa and \tpa,
 and one-pass algorithm \interval.
 For example, in \mopsi, the average errors of algorithms
-(\tpa, \dpa, \interval) are ($65.6$, $75.4$, $68.1$) meters, respectively, when
-$\epsilon$ = $45$ degrees.
-It is worth pointing out that the max errors of algorithms
-(\tpa, \dpa, \interval) using \dad may be very large in terms of the perpendicular Euclidean distances, \eg they are ($68247.9$, $66794.4$, $68247.9$) meters, respectively, when $\epsilon$ = $45$ degrees.}
+(\tpa, \dpa, \interval) in terms of \ped are ($65.6$, $75.4$, $68.1$) meters, respectively, when $\epsilon$ = $45$ degrees.
+It is also worth pointing out that the max errors of algorithms
+(\tpa, \dpa, \interval) using \dad may be very large in terms of \ped, \eg they are ($68247.9$, $66794.4$, $68247.9$) meters, respectively, when $\epsilon$ = $45$ degrees.}
 
 \sstab (6) Given the same error bound $\epsilon$, the average errors of algorithms using \sed are a bit larger than using \ped.
-
+And in practical (\eg $\epsilon <100$ meters and $\epsilon < 60$ degrees), the average errors of algorithms using \dad, in terms of \ped, are obvious larger than algorithms using \ped and \sed.
 
 
 \stitle{{Exp-2.2}: Impacts of the sizes of trajectories}.
@@ -428,7 +429,7 @@ To compare the errors of these algorithms and evaluate the impacts of the sizes 
 and varied the size \trajec{|T|} of a trajectory from $1,000$ points to $10,000$ points, while fixed error bound $\epsilon = 60$ meters ({or $\epsilon = 45$ degrees}).
 The results are reported in Figure~\ref{fig:ae-ped-size}, Figure~\ref{fig:ae-sed-size} and Figure~\ref{fig:ae-dad-ped-size}.
 
-\sstab (1) Trajectory size has few impact on average error.
+\sstab (1) Trajectory sizes have few impacts on average errors.
 
 \sstab (2) The average errors in this test are consistent with test Exp-2.1.
 
@@ -515,7 +516,7 @@ $\epsilon=45$ degrees, respectively.
 \sstab (5) For batch algorithms \dpa and \tpa, they run a bit faster using \sed and \dad than using
 \ped.
 
-\sstab (6) One pass algorithms \siped (\ped), \operb (\ped) and \interval (\dad) have the similar running time, and algorithm \cised (\sed) runs a bit slower than them.
+\sstab (6) One pass algorithms \siped, \operb and \interval have the similar running time, and algorithm \cised runs a bit slower than them.
 
 
 
@@ -629,13 +630,15 @@ of the optimal algorithm \opt, respectively.
 (d) The compression ratios of algorithms using \ped are better than
 using \sed. The output data sizes of algorithms (\opt, \tpa, \dpa) using \ped
 are on average ($46.66\%$, $46.64\%$, $48.96\%$) of them using \sed, respectively.
+(e) In practical (\eg $\epsilon <100$ meters and $\epsilon < 60$ degrees), \ped and \sed usually bring obvious better compression ratios than \dad, especially in high sampling data sets.
 
 \emph{\sstab{(2) Average errors}}.
 (a) When using \ped, the average errors from the smallest to the largest are batch algorithms \tpa, \dpa, one-pass algorithms \siped and \operb, the optimal algorithm \opt, and online algorithm \bqsa.
 (b) When using \sed, the average errors from the smallest to the largest are online algorithm \squishe, batch algorithms \tpa and \dpa, one-pass algorithm \cised, and the naive optimal algorithm \opt.
 (c) When using \dad, the average errors from the smallest
 to the largest are batch algorithms \dpa and \tpa, one-pass algorithm \interval, and the naive optimal algorithm \opt.
-%(c) The average errors of algorithms using \sed are a bit larger than using \ped.
+(d) The average errors of algorithms using \sed are a bit larger than using \ped.
+(e) In practical (\eg $\epsilon <100$ meters and $\epsilon < 60$ degrees), the average errors of algorithms using \dad, in terms of \ped, are obvious larger than algorithms using \ped and \sed.
 
 \emph{\sstab{(3) Running time}}.
 (a) When using \ped, algorithms \siped and \operb are comparable, and algorithms

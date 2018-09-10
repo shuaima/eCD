@@ -21,7 +21,7 @@ Algorithm \opt is evaluated in our experiments.
 \subsection{The Naive Optimal Algorithm}
 Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ and an error bound $\epsilon$, the optimal trajectory simplification problem, as formulated by Imai and Iri in \cite{Imai:Optimal}, can be solved in two steps: (1) construct a reachability graph $G$ of \trajec{T} and (2) search a shortest path from point $P_0$ to point $P_{n}$ in graph $G$.
 
-The reachability graph of a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ \wrt an error bound $\epsilon$ is $G$ = ($V$, $E)$, where (1) $V = \{P_0, \ldots, P_n\}$, and (2) for any nodes $P_s$ and $P_{s+k} \in V$ ($s\ge 0, k>0, s+k\le n$), edge $(P_s, P_{s+k}) \in E$ if and only if the distance of each point $P_{s+i} (0<i<k)$ to line segment $\vv{P_sP_{s+k}}$ is no greater than $\epsilon$.
+The reachability graph of a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ \wrt an error bound $\epsilon$ is $G$ = ($V$, $E)$, where (1) $V = \{P_0, \ldots, P_n\}$, and (2) for any nodes $P_s$ and $P_{s+k} \in V$ ($s\ge 0, k>0, s+k\le n$), edge $(P_s, P_{s+k}) \in E$ if and only if the distance of each point $P_{s+i} (0<i<k)$ to line segment $\vv{P_sP_{s+k}}$ is not greater than $\epsilon$.
 %
 Observe that in the graph $G$, (1) a path from nodes $P_0$ to $P_{n}$ is a representation of trajectory \trajec{T}. The path also reveals the subset of points of \trajec{T} used in the approximate trajectory, (2) the path length corresponds to the number of line segments in the approximation trajectory, and
 (3) a shortest path is an optimal representation of trajectory \trajec{T}.
@@ -31,7 +31,7 @@ There are $O(n^2)$ pairs of points in the trajectory and checking the error of a
 Thus, the construction step takes $O(n^3)$ time.
 Finding a shortest path takes no more than $O(n^2)$ time. Hence, the straightforward algorithm, \ie~\opt, takes $O(n^3)$ time in total.
 For space complexity, it needs $O(n^2)$ space.
-
+%
 Though the brute-force algorithm was initially developed using \ped, it can be revised to support other distances, such as \sed and \dad.
 %Algorithm \opt also supports \sed, and it runs in the same routine as using \ped.
 
