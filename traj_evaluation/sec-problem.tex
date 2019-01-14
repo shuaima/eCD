@@ -1,8 +1,8 @@
-\section{Overview of trajectory simplification algorithms}	%\section{Overview of algorithms}
+\section{Preliminary}	%\section{Overview of algorithms}
 \label{sec-problem}
 
 
-We first introduce the \emph{min-$\#$ problem} of trajectory simplification, then describe the taxonomy of the different algorithms for solving this problem.
+In this section, we introduce some basic concepts for trajectory simplification.
 
 \eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Notations used are summarized in Table \ref{tab:notations}.
@@ -43,11 +43,8 @@ Notations used are summarized in Table \ref{tab:notations}.
 	\end{table}
 }%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Problem Definition}
-\label{subsec-notation}
-
 %We first introduce basic notations.
-A \textit{trajectory} $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is a sequence of points in a monotonically increasing order of their associated time values (\ie $P_i.t < P_j.t$ for any $0\le i<j\le n$), where a data \textit{point} is defined as a triple $P(x, y, t)$, which represents that a moving object is located at {\em longitude} $x$ and {\em latitude} $y$ at {\em time} $t$. Note that data points can be viewed as points in a three-dimension Euclidean space.
+\stitle{Trajectory}. A \textit{trajectory} $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is a sequence of points in a monotonically increasing order of their associated time values (\ie $P_i.t < P_j.t$ for any $0\le i<j\le n$), where a data \textit{point} is defined as a triple $P(x, y, t)$, which represents that a moving object is located at {\em longitude} $x$ and {\em latitude} $y$ at {\em time} $t$. Note that data points can be viewed as points in a three-dimension Euclidean space.
 
 
 \eat{
@@ -58,30 +55,37 @@ A \textit{directed line segment} (or line segment for simplicity) $\mathcal{L}$ 
 
 %Intuitively, a trajectory can also be represented by a continuous $n$-pieces directed line segments (or line segment for simplicity) $\mathcal{L}_i$, $0\le i < n$, where  $\mathcal{L}_i = \vv{P_{i}P_{i+1}}$, represents the closed line segment that connects the start point $P_{i}$ and the end point $P_{i+1}$.
 
-A \textit{piece-wise line representation} $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$) of a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is a sequence of continuous \textit{directed line segments} (or line segment for simplicity) $\mathcal{L}_{i}$ = $\vv{P_{s_i}P_{e_i}}$ ($i\in[0,m]$) of $\dddot{\mathcal{T}}$ such that $\mathcal{L}_{0}.P_{s_0} = P_0$, $\mathcal{L}_{m}.P_{e_m} = P_n$ and  $\mathcal{L}_{i}.P_{e_i}$ = $\mathcal{L}_{i+1}.P_{s_{i+1}}$ for all $i\in[0, m-1]$.
+\stitle{Piece-wise line representation}. A \textit{piece-wise line representation} $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$) of a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is a sequence of continuous \textit{directed line segments} (or line segment for simplicity) $\mathcal{L}_{i}$ = $\vv{P_{s_i}P_{e_i}}$ ($i\in[0,m]$) of $\dddot{\mathcal{T}}$ such that $\mathcal{L}_{0}.P_{s_0} = P_0$, $\mathcal{L}_{m}.P_{e_m} = P_n$ and  $\mathcal{L}_{i}.P_{e_i}$ = $\mathcal{L}_{i+1}.P_{s_{i+1}}$ for all $i\in[0, m-1]$.
 Note that each directed line segment in $\overline{\mathcal{T}}$ essentially represents a continuous sequence of data points in $\dddot{\mathcal{T}}$.
 
-For trajectory simplification, three distance metrics are commonly used, namely, the \emph{perpendicular Euclidean distance} (\ped), the \emph{synchronous Euclidean distance} \cite{Meratnia:Spatiotemporal}(\sed) and the \emph{direction-aware distance}\cite{Long:Direction, Zhang:Evaluation}(\dad).
+ For trajectory simplification, three distance metrics are commonly used, namely, the \emph{perpendicular Euclidean distance} (\ped), the \emph{synchronous Euclidean distance} \cite{Meratnia:Spatiotemporal}(\sed) and the \emph{direction-aware distance}\cite{Long:Direction, Zhang:Evaluation}(\dad).
 %
-Given a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$,
+Consider a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$.
 
- (1) the perpendicular Euclidean distance $ped(P, \mathcal{L})$ of point $P$ to line segment $\mathcal{L}$ is $\min\{|PQ|\}$ for any point $Q$ on $\vv{P_{s}P_{e}}$.
+\stitle{Perpendicular Euclidean distance}. The perpendicular Euclidean distance $ped(P, \mathcal{L})$ of point $P$ to line segment $\mathcal{L}$ is $\min\{|PQ|\}$ for any point $Q$ on $\vv{P_{s}P_{e}}$.
 
- (2) the synchronous Euclidean distance $sed(P, \mathcal{L})$ of $P$ to $\mathcal{L}$ is $|\vv{PP'}|$ that is the Euclidean distance from $P$ to its \textit{synchronized data point} $P'$ \wrt $\mathcal{L}$, where the synchronized data point $P'$ \wrt $\mathcal{L}$ is defined as follows:
+\stitle{Synchronous Euclidean distance}. The synchronous Euclidean distance $sed(P, \mathcal{L})$ of $P$ to $\mathcal{L}$ is $|\vv{PP'}|$ that is the Euclidean distance from $P$ to its \textit{synchronized data point} $P'$ \wrt $\mathcal{L}$, where the synchronized data point $P'$ \wrt $\mathcal{L}$ is defined as follows:
 (a) $P'.x$ = $P_s.x +  c\cdot(P_e.x - P_s.x)$,
 (b) $P'.y$ = $P_s.y +  c\cdot(P_e.y - P_s.y)$ and
 (c) $P'.t$ = $P.t$, where $c= \frac{P.t-P_s.t}{P_e.t-P_s.t}$.
 
+%Intuitively, given a sub-trajectory $[P_s$, $\ldots, P_e]$, a synchronized data point $P'_i$ of $P_i$ ($s<i \le e$) \wrt $\vv{P_sP_{e}}$ is a point on $\vv{P_sP_{e}}$ satisfying $|\vv{P_sP_e}|>0$ and $\frac{|\vv{P_sP'_i}|}{|\vv{P_sP_e}|} = \frac{P_i.t - P_s.t}{P_e.t - P_s.t}$, which means that the object is moving from $P_s$ to $P_e$ at an average speed $\frac{|\vv{P_sP_e}|}{P_e.t-P_s.t}$, and its position at time $t_i$ is point $P'_i$ on $\overrightarrow{P_sP_{e}}$ having a distance of $\frac{P_i.t - P_s.t}{P_e.t - P_s.t}\cdot|\vv{P_sP_e}|$ to point $P_s$~\cite{Meratnia:Spatiotemporal, Chen:Fast, Zhang:Evaluation}. For instance, $P'_4$ and $P'_7$ are the \emph{synchronized data points} of points $P_4$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$ and $\vv{P_4P_{10}}$, respectively, in Figure~\ref{fig:notations}.
 
- (3) the direction-aware distance $dad(\mathcal{L}_1, \mathcal{L}_2)$, say, the direction deviation from $\mathcal{L}_1$ to $\mathcal{L}_2$, is $\Delta(\mathcal{L}_1.\theta, \mathcal{L}_2.\theta) = \min\{|\mathcal{L}_1.\theta - \mathcal{L}_2.\theta|, 2\pi - |\mathcal{L}_1.\theta - \mathcal{L}_2.\theta|\}$, where $\theta \in [0, 2\pi)$ is the angular of $\mathcal{L}$.
+\stitle{Direction-aware distance distance}.The direction-aware distance $dad(\mathcal{L}_1, \mathcal{L}_2)$ is the direction deviation from $\mathcal{L}_1$ to $\mathcal{L}_2$, is $\Delta(\mathcal{L}_1.\theta, \mathcal{L}_2.\theta) = \min\{|\mathcal{L}_1.\theta - \mathcal{L}_2.\theta|, 2\pi - |\mathcal{L}_1.\theta - \mathcal{L}_2.\theta|\}$, where $\theta \in [0, 2\pi)$ is the angular of $\mathcal{L}$.
 
 
 
-Then, given a trajectory \trajec{T}$[P_0, \dots, P_n]$ and a pre-specified constant $\epsilon$, the \emph{min-$\#$} problem of trajectory simplification is to approximate the trajectory \trajec{T} by $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$), such that
+Given a trajectory \trajec{T}$[P_0, \dots, P_n]$ and a pre-specified constant $\epsilon$, the \emph{min-$\#$} problem of trajectory simplification is to approximate the trajectory \trajec{T} by $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$), such that
 (1) on each of them the points $[P_{s_i}, \dots, P_{e_i}]$ are approximated by a line segment $\mathcal{L}_i = \vv{P_{s_i}P_{e_i}}$ with the maximum \ped or \sed \emph{error} of point $P_j$ (or \dad \emph{error} of line segment $|\vv{P_jP_{j+1}}|$) to line segment $\mathcal{L}_i$, $s_i < j<e_i$,  less than $\epsilon$, and
 (2) $P_{s_i}$ and $P_{e_i} \in$ \trajec{T}.
 %algorithm $\mathcal{A}$
 % an extension of the famous \emph{min-$\#$} problem of piece-wise line simplification\cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment},
+
+
+%\lsa algorithms using \sed may produce more line segments, however, the use of \sed ensures that the Euclidean distance between a data point and its synchronized point \wrt the corresponding line segment is bounded.
+%Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the synchronized point $P'$ of a data point $P$ within a bounded distance.
+
+%In addition, \dad\cite{Long:Direction, Zhang:Evaluation} was introduced to preserve the direction information of a moving object. The \dad of $\vv{P_{i-1}P_{i}}$ ($s<i\le e$) to $\vv{P_{s}P_{e}}$ is the direction deviation among them. For instance, in Figure~\ref{fig:notations}, $\theta_{56}$ is the \dad of line segment $\vv{P_5P_6}$ to $\vv{P_0P_{10}}$. It is claimed that \dad is important in applications of trajectory clustering and direction-based query processing\cite{Long:Direction}. Note that the temporal information is also lost when using \dad.
 
 
 
@@ -138,6 +142,9 @@ We illustrate the problem and notations with examples.
 	\end{table*}
 }%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+\eat{%%%%%%%%%%%%%%%%%
+
 \subsection {Taxonomy of Algorithms}
 \label{subsec-taxonomy}
 
@@ -159,6 +166,10 @@ batch method, online method and one-pass method, as follows:
 \ni (2) \textit{online algorithms} apply the constraint global distance checking policy which need not have the entire trajectory ready before they start compressing, instead, they restrict the checking within a window and a point is still checked multiple times during the process. Example algorithms are \opwa \cite{Meratnia:Spatiotemporal}, \bqsa\cite{Liu:BQS} and \squishe~\cite{Muckell:SQUISH}.
 
 \ni (3) \textit{one-pass algorithms} apply the local distance checking policy which does not need a window to buffer the preview read points, instead, it processes each point in a trajectory once and only once. Example algorithms are \operb\cite{Lin:Operb}, \siped \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}, \cised \cite{Lin:Cised} and \interval \cite{Ke:Interval}.
+
+}%%%%%%%%%%%%%%%%%
+
+
 
 \eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 We choose the most typical algorithms from each categories.
