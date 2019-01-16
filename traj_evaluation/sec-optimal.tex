@@ -1,25 +1,21 @@
 \section{Optimal Algorithms}
 \label{sec-optimal}
 
-This section reviews the optimal \lsa algorithms for trajectory simplification.
-For the ``min-\#" problem that finds out the minimal number of points or segments to represent the original polygonal lines \wrt an error bound $\epsilon$, Imai and Iri \cite{Imai:Optimal} first formulated it as a graph problem, and showed that it could be solved in  $O(n^3)$ time, where $n$ is the number of the original points.
-This is the naive optimal algorithm (\opt). Initially, \opt supports \ped, however, it is easy to revise it to support \sed or \dad.
+This section reviews the optimal \lsa algorithms that find the minimum number of points or segments to represent the original trajectory \wrt an error bound $\epsilon$.
 
-Toussaint of \cite{Toussaint:Optimal} and Melkman and O'Rourke of \cite{Melkman:Optimal} improved the time complexity to $O(n^2 \log n)$ by using either \textit{convex hull} or \textit{sector intersection} methods, and the authors of \cite{Chan:Optimal} further presented an optimal algorithm using \ped (\optp) that achieves $O(n^2)$ time by using the \textit{sector intersection} mechanism.
-%
-Besides, algorithm SP\cite{Long:Direction} is essential an optimization of the original optimal algorithm using \dad that achieves $O(n^2)$ time.
-%
-%Because the above optimizing mechanisms can not work with \sed, currently the time complexity of the optimal algorithm using \sed remains $O(n^3)$.
+The naive optimal algorithm (\opt)  \cite{Imai:Optimal} first formulates it as a graph reachability problem, and solve the problem in  $O(n^3)$ time, where $n$ is the number of the original points of a trajectory. It is initially designed to support \ped, but can easily modified to support \sed and \dad.
+By using \textit{convex hull} \cite{Toussaint:Optimal} and \textit{sector intersection} \cite{Melkman:Optimal}, faster optimal algorithms are proposed with an improved time complexity  to $O(n^2 \log n)$. \cite{Chan:Optimal} further presented an optimal algorithm using \ped (\optp) that achieves $O(n^2)$ time by using the \textit{sector intersection} mechanism. Further, \cite{Chan:Optimal} presents an optimal algorithm (\optp) using \ped achieves $O(n^2)$ running time by using the \textit{sector intersection} mechanism, and algorithm SP \cite{Long:Direction} is essential an optimization of the original optimal algorithm using \dad that achieves $O(n^2)$ time. However, all the above optimization mechanisms do not support \sed, and \opt remains the best optimal solution for \sed. As all the optimized algorithms have the same effectiveness using the same distance metric, and essentially work for small trajectory data only, we choose algorithm \opt as the representative of for optimal \lsa algorithms.
+
 %However, we argue that an optimal and a near optimal \lsa algorithms using \sed can achieve $O(n^2 \log n)$ time and $O(n^2)$ time, respectively, by applying the spatio-temporal cone intersection mechanism shown in Section~\ref{sec-cised} developed in our preview work \cised~\cite{Lin:Cised}.
 
-In the rest of this section, we introduce the naive optimal algorithm (\opt) \cite{Imai:Optimal} that runs in $O(n^3)$ time.
-The above optimized algorithms have the same effectiveness with the naive optimized algorithm using the same distance metric, thus, we won't go into them in detail.
+%we introduce the naive optimal algorithm (\opt) \cite{Imai:Optimal} that runs in $O(n^3)$ time.
+%The above optimized algorithms have the same effectiveness with the naive optimized algorithm using the same distance metric, thus, we won't go into them in detail.
 %We then review a \ped specific optimal algorithm \optp \cite{Chan:Optimal} that achieves $O(n^2)$ time.
 %Algorithms \opt and \optp are both evaluated in our experiments.
-Algorithm \opt is evaluated in our experiments.
+%Algorithm \opt is evaluated in our experiments.
 
-\subsection{The Naive Optimal Algorithm}
-Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ and an error bound $\epsilon$, the optimal trajectory simplification problem, as formulated by Imai and Iri in \cite{Imai:Optimal}, can be solved in two steps: (1) construct a reachability graph $G$ of \trajec{T} and (2) search a shortest path from point $P_0$ to point $P_{n}$ in graph $G$.
+%\subsection{The Naive Optimal Algorithm}
+Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ and an error bound $\epsilon$, algorithm (\opt) \cite{Imai:Optimal} solves the optimal trajectory simplification problem  in two steps: (1) it firsts construct a reachability graph $G$ of \trajec{T}, and then (2) searches a shortest path from point $P_0$ to point $P_{n}$ in graph $G$.
 
 The reachability graph of a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ \wrt an error bound $\epsilon$ is $G$ = ($V$, $E)$, where (1) $V = \{P_0, \ldots, P_n\}$, and (2) for any nodes $P_s$ and $P_{s+k} \in V$ ($s\ge 0, k>0, s+k\le n$), edge $(P_s, P_{s+k}) \in E$ if and only if the distance of each point $P_{s+i} (0<i<k)$ to line segment $\vv{P_sP_{s+k}}$ is not greater than $\epsilon$.
 %
@@ -32,7 +28,7 @@ Thus, the construction step takes $O(n^3)$ time.
 Finding a shortest path takes no more than $O(n^2)$ time. Hence, the straightforward algorithm, \ie~\opt, takes $O(n^3)$ time in total.
 For space complexity, it needs $O(n^2)$ space.
 %
-Though the brute-force algorithm was initially developed using \ped, it can be revised to support other distances, such as \sed and \dad.
+Though the algorithm is initially developed using \ped, it is easy to see that it also support \sed and \dad.
 %Algorithm \opt also supports \sed, and it runs in the same routine as using \ped.
 
 

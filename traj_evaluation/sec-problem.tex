@@ -58,7 +58,7 @@ A \textit{directed line segment} (or line segment for simplicity) $\mathcal{L}$ 
 \stitle{Piece-wise line representation}. A \textit{piece-wise line representation} $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$) of a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is a sequence of continuous \textit{directed line segments} (or line segment for simplicity) $\mathcal{L}_{i}$ = $\vv{P_{s_i}P_{e_i}}$ ($i\in[0,m]$) of $\dddot{\mathcal{T}}$ such that $\mathcal{L}_{0}.P_{s_0} = P_0$, $\mathcal{L}_{m}.P_{e_m} = P_n$ and  $\mathcal{L}_{i}.P_{e_i}$ = $\mathcal{L}_{i+1}.P_{s_{i+1}}$ for all $i\in[0, m-1]$.
 Note that each directed line segment in $\overline{\mathcal{T}}$ essentially represents a continuous sequence of data points in $\dddot{\mathcal{T}}$.
 
- For trajectory simplification, three distance metrics are commonly used, namely, the \emph{perpendicular Euclidean distance} (\ped), the \emph{synchronous Euclidean distance} \cite{Meratnia:Spatiotemporal}(\sed) and the \emph{direction-aware distance}\cite{Long:Direction, Zhang:Evaluation}(\dad).
+ For trajectory simplification, three distance metrics are commonly used, namely, the \emph{perpendicular Euclidean distance} (\ped), the \emph{synchronous Euclidean distance} \cite{Meratnia:Spatiotemporal} (\sed) and the \emph{direction-aware distance}\cite{Long:Direction, Zhang:Evaluation} (\dad).
 %
 Consider a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$.
 
@@ -75,9 +75,7 @@ Consider a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}
 
 
 
-Given a trajectory \trajec{T}$[P_0, \dots, P_n]$ and a pre-specified constant $\epsilon$, the \emph{min-$\#$} problem of trajectory simplification is to approximate the trajectory \trajec{T} by $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$), such that
-(1) on each of them the points $[P_{s_i}, \dots, P_{e_i}]$ are approximated by a line segment $\mathcal{L}_i = \vv{P_{s_i}P_{e_i}}$ with the maximum \ped or \sed \emph{error} of point $P_j$ (or \dad \emph{error} of line segment $|\vv{P_jP_{j+1}}|$) to line segment $\mathcal{L}_i$, $s_i < j<e_i$,  less than $\epsilon$, and
-(2) $P_{s_i}$ and $P_{e_i} \in$ \trajec{T}.
+
 %algorithm $\mathcal{A}$
 % an extension of the famous \emph{min-$\#$} problem of piece-wise line simplification\cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment},
 
@@ -87,6 +85,14 @@ Given a trajectory \trajec{T}$[P_0, \dots, P_n]$ and a pre-specified constant $\
 
 %In addition, \dad\cite{Long:Direction, Zhang:Evaluation} was introduced to preserve the direction information of a moving object. The \dad of $\vv{P_{i-1}P_{i}}$ ($s<i\le e$) to $\vv{P_{s}P_{e}}$ is the direction deviation among them. For instance, in Figure~\ref{fig:notations}, $\theta_{56}$ is the \dad of line segment $\vv{P_5P_6}$ to $\vv{P_0P_{10}}$. It is claimed that \dad is important in applications of trajectory clustering and direction-based query processing\cite{Long:Direction}. Note that the temporal information is also lost when using \dad.
 
+
+
+
+
+
+\stitle{Min-$\#$ problem}. Given a trajectory \trajec{T}$[P_0, \dots, P_n]$ and a pre-specified constant $\epsilon$, the \emph{min-$\#$} problem of trajectory simplification is to approximate the trajectory \trajec{T} with $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$), such that
+(1) on each of them the points $[P_{s_i}, \dots, P_{e_i}]$ are approximated by a line segment $\mathcal{L}_i = \vv{P_{s_i}P_{e_i}}$ with the maximum \ped or \sed \emph{error} of point $P_j$ (or \dad \emph{error} of line segment $|\vv{P_jP_{j+1}}|$) to line segment $\mathcal{L}_i$, $s_i < j<e_i$,  less than $\epsilon$, and
+(2) $P_{s_i}$ and $P_{e_i} \in$ \trajec{T}.
 
 
 We illustrate the problem and notations with examples.
@@ -108,10 +114,6 @@ We illustrate the problem and notations with examples.
     %
     (6) $dad(\vv{P_5P_6}, \vv{P_0P_{10}})=\theta_{56}$ is the \dad of line segment $\vv{P_5P_6}$ to $\vv{P_0P_{10}}$.
 \end{example}
-
-
-
-
 
 \eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\begin{table*}
