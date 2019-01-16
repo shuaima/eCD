@@ -55,14 +55,15 @@ Note that, compared with top-down algorithms, bottom-up algorithms fit better fo
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\stitle{Douglas-Peucker Algorithm (\dpa) \cite{Douglas:Peucker} }. It is invented for reducing the number of points required to represent a digitized line or its caricature in the context of computer graphics and image processing.
+\stitle{Douglas-Peucker Algorithm (\dpa) \cite{Douglas:Peucker}}. It is invented for reducing the number of points required to represent a digitized line or its caricature in the context of computer graphics and image processing.
 
 
 
 Given a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ and an error bound $\epsilon$, the algorithm uses the first point $P_0$ and the last point $P_n$ of \trajec{T} as the start point $P_s$ and the end point $P_e$ of the first line segment $\mathcal{L}(P_0, P_n)$, then it calculates the distance $ped(P_i, {\mathcal{L}})$ for each point $P_i$ ($i\in[0,n]$). If $ped(P_k, {\mathcal{L}})$ = $\max \{ped(P_0, {\mathcal{L}}), \ldots, ped(P_n, {\mathcal{L}}) \} \le \epsilon$, then it returns $\{\mathcal{L}(P_0,P_n)\}$. Otherwise, it divides \trajec{T} into two sub-trajectories \trajec{T}$[P_0, \ldots, P_k]$ and \trajec{T}$[P_{k}, \ldots, P_n]$, and recursively compresses these sub-trajectories until the entire trajectory has been considered.
 %
 In the best case, the time complexity of \dpa is $\Omega(n)$; in the worst case, it is $O(n^2)$.
-The basic \dpa uses \ped, however, it also supports \sed \cite{Meratnia:Spatiotemporal} that runs in the same routine as using \ped. %, except that $ped$ in Figure~\ref{alg:dp} is replace by $sed$.
+%The basic \dpa uses \ped, however, it also supports \sed \cite{Meratnia:Spatiotemporal} that runs in the same routine as using \ped. %, except that $ped$ in
+%Figure~\ref{alg:dp} is replace by $sed$.
 
 %The \dpa algorithm are \textcolor[rgb]{0.00,0.07,1.00}{widely considered have excellent compression ratio and accuracy.}
 %However, the batch nature and high time complexity make it not suitable for the online scenarios.
@@ -83,6 +84,7 @@ until that no cost is below the error bound $\epsilon$.
 When the pair of adjacent segments $[P_{s}, P_{s+j}]$ and $[P_{s+j}, P_{s+k}]$ are merged to a new segment $[P_{s}, P_{s+k}]$, the algorithm needs to recalculate the cost of merging the new segment with its preceding neighbour segment, and the cost of merging it with its successor neighbor segment.
 %
 The time complexity of the algorithm is $O(n^2/K)$, where $K$ is the number of the final segments.
+
 %Furthermore, it is also easy to implement \sed in the \tpa algorithm.
-The \tpa algorithm like \dpa algorithm originally only supports \ped, but it is also easy to be extended to support \sed.
+%The \tpa algorithm like \dpa algorithm originally only supports \ped, but it is also easy to be extended to support \sed.
 
