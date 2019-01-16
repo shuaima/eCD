@@ -1,21 +1,25 @@
 \subsection{Batch Algorithms}
-%Batch algorithms essentially enforce the global distance checking policy that requires all trajectory points be loaded before they start compressing.
-Batch algorithms can be either top-down or bottom-up.
+Batch algorithms essentially apply global distance checking policies for trajectory simplification, and can be either top-down or bottom-up.
+Global checking policies enforce batch algorithms to have an entire raw trajectory first \cite{Meratnia:Spatiotemporal}.
 
-Top-down algorithms, \eg Ramer \cite{Ramer:Split} and Douglas-Peucker \cite{Douglas:Peucker}, recursively divide a trajectory into sub-trajectories until the stopping condition is met.
-Authors of \cite{Meratnia:Spatiotemporal} revised the \dpa algorithm to support \sed.
-Authors of \cite{Hershberger:Speeding} developed an improved method of \dpa, based on \emph{convex hulls}, that uses the geometric structure of the problem to attain a worst-case running time proportional to $O(n\log n)$, which is the best case of the \dpa algorithm. {This optimization is specific for \ped and cannot work with \sed.}
+(1) Top-down algorithms recursively divide a trajectory into sub-trajectories until the stopping condition is met. 
+Algorithms Ramer \cite{Ramer:Split} and Douglas-Peucker (\dpa)  \cite{Douglas:Peucker} can support all the three distances \ped, \sed and \dad.
+%Algorithm \dpa is modified to further support \sed \cite{Meratnia:Spatiotemporal},
+An improved method of \dpa with a time complexity of $O(n\log n)$, based on \emph{convex hulls} is proposed in \cite{Hershberger:Speeding}, which is the best \dpa based  algorithm in terms of time complexities, and is designed for \ped only, not for \sed and \dad.
 
-Bottom-up algorithms, \eg Theo Pavlidis \cite{Pavlidis:Segment}, is the natural complement to top-down ones, which recursively merge adjacent sub-trajectories with the smallest distance, initially $n/2$  sub-trajectories for a trajectory with $n$ points, until the stopping condition is met. Note that the distances of newly generated line segments are recalculated during the process.
+(2) Bottom-up algorithms are the natural complement of top-down ones, and they recursively merge adjacent sub-trajectories with the smallest distance, initially $n/2$  sub-trajectories for a trajectory with $n$ points, until the stopping condition is met. Note that the distances of newly generated line segments are recalculated in reach iteration. To our knowledge, Theo-Pavlidis (\tpa) \cite{Pavlidis:Segment} is the only bottom-up \ls algorithm for trajectory simplification.
 
-We next review algorithms Douglas-Peucker and Theo Pavlidis evaluated in out experiments.
+Note that, compared with top-down algorithms, bottom-up algorithms fit better for trajectories with lower sampling rates, as they typically need more rounds to merge smaller line segments into larger line segments. Batch algorithms basically work for small and medium size trajectories, and we choose \dpa and \tpa that both support \ped, \sed and \dad  as the   representatives of  batch \lsa algorithms.
+
+
+%We next review algorithms Douglas-Peucker and Theo Pavlidis evaluated in out experiments.
 
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\vspace{-1ex}
-\subsubsection{Douglas-Peucker Algorithm}
+%\vspace{-1ex}
+%\subsubsection{Douglas-Peucker Algorithm}
 
 \eat{
 %%%%%%%%%%%%%%%%%%%%%Baseline Algorithm
@@ -51,8 +55,8 @@ We next review algorithms Douglas-Peucker and Theo Pavlidis evaluated in out exp
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-The Douglas-Peucker (\dpa) algorithm \cite{Douglas:Peucker} was invented in 1973, for reducing the number of points required to represent a digitized line or its caricature in the context of computer graphics and image processing.
-The \dpa algorithm employ the Top-down and the global checking policy and it is clearly a batch algorithm, hence, the entire raw trajectory is needed at the beginning \cite{Meratnia:Spatiotemporal}.
+\stitle{Douglas-Peucker Algorithm (\dpa) \cite{Douglas:Peucker} }. It is invented for reducing the number of points required to represent a digitized line or its caricature in the context of computer graphics and image processing.
+
 
 
 Given a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ and an error bound $\epsilon$, the algorithm uses the first point $P_0$ and the last point $P_n$ of \trajec{T} as the start point $P_s$ and the end point $P_e$ of the first line segment $\mathcal{L}(P_0, P_n)$, then it calculates the distance $ped(P_i, {\mathcal{L}})$ for each point $P_i$ ($i\in[0,n]$). If $ped(P_k, {\mathcal{L}})$ = $\max \{ped(P_0, {\mathcal{L}}), \ldots, ped(P_n, {\mathcal{L}}) \} \le \epsilon$, then it returns $\{\mathcal{L}(P_0,P_n)\}$. Otherwise, it divides \trajec{T} into two sub-trajectories \trajec{T}$[P_0, \ldots, P_k]$ and \trajec{T}$[P_{k}, \ldots, P_n]$, and recursively compresses these sub-trajectories until the entire trajectory has been considered.
@@ -65,10 +69,10 @@ The basic \dpa uses \ped, however, it also supports \sed \cite{Meratnia:Spatiote
 
 
 
-\vspace{-1ex}
-\subsubsection{Theo Pavlidis Algorithm}
+%\vspace{-1ex}
+%\subsubsection{Theo Pavlidis Algorithm}
 
-The {\pavlidis~(\tpa) algorithm}~\cite{Pavlidis:Segment}, invented in 1974, is known as the Bottom-up algorithm. It also employs the global checking policy, and hence, it is a batch algorithm. Because the original \tpa algorithm outputs disjoint line segments, we slightly modify it to get continuous line segments.
+\stitle{Theo-Pavlidis Algorithm (\tpa) ~\cite{Pavlidis:Segment}}. It initially employs the global checking policy to output disjoint line segments, and we slightly modify it to have continuous line segments.
 
 Given a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ and an error bound $\epsilon$,
 the algorithm begins by creating the finest possible approximation of the trajectory, \ie $[P_0, P_1], [P_1, P_2], \ldots,[P_{n-1}, P_n]$, so that $n$ segments are used to approximate the original trajectory.
