@@ -1,3 +1,5 @@
+
+\vspace{-1ex}
 \subsection{One-pass Algorithms}
 %{One-pass algorithms that enforce the local checking policy}.
 %The local checking policy \eat{, the key to achieve the \emph{one-pass} processing,} does not need a window to buffer the preview read points.
@@ -18,7 +20,7 @@ The sector intersection method is \ped specific, and runs fast as well as has co
 %
 %Moreover, {fast \bqsa \cite{Liu:BQS} (\fbqsa in short), the simplified version of \bqsa, has a linear time complexity.}%
 
-In addition, the \interval\cite{Ke:Interval} approach is somehow very like the \emph{sector intersection} method except that it is specifically designed for the direction-aware distance \dad.
+In addition, the \emph{direction range intersection}\cite{Long:Direction} approach (algorithms \intersec\cite{Long:Direction} and \interval\cite{Ke:Interval}) is somehow like the \emph{sector intersection} method except that it is specifically designed for the direction-aware distance \dad.
 %
 And the authors of this paper recently extends the \textit{sector intersection} method from a 2D space to a Spatio-Temporal 3D space, and develop a new one-pass and \sed enabled algorithm \cised~\cite{Lin:Cised} that runs fast as well as has a close compression ratio to the \dpa algorithm using \sed.
 %
@@ -145,7 +147,8 @@ That is, {\em these sector intersection based algorithms can be easily adopted f
 %
 Algorithm \siped runs in $O(n)$ time and takes $O(1)$ space, and \siped also only supports \ped.
 
-
+\stitle{Remark}. The original \siped uses a half sector, $\frac{\epsilon}{2}$-\sector, which may limit its compression performance. However, it can further be extended to a full ${\epsilon}$-\sector ~ by adding a constraint. That is, for any point $P_{s+j}$ ($j \in [1, ... i]$), its \ped to
+line segment $\overline{P_sP_{s+i}}$ is not greater than the error bound $\epsilon$ if $ P_{s+i} \ne {P_s}$ and $P_{s+i}\in \bigsqcap_{j=1}^{i-1}$\sector{(P_s, P_{s+j}, \epsilon)}, \ie $P_{s+i}$ lives in the common intersection of preview full \emph{sectors}.
 
 \vspace{-0.5ex}
 \subsubsection {Cone Intersection Using \sed}
@@ -161,8 +164,8 @@ Then, there exists a point $Q$ such that $Q.t = P_{s+k}.t$ and $sed(P_{s+i}, \vv
 %
 Like the \textit{sector intersection} method, the point $Q$ may also not belong to $\{P_{s}, P_{s+1},$ $\ldots, P_{s+k}\}$. If $P_{s+i}$ ($1\le i\le k$) is chosen as $Q$, then for any point $P_{s+j}$ ($j \in [1, ... i]$), its \sed to
 line segment $\overline{P_sP_{s+i}}$ is not greater than the error bound $\epsilon$ if
-(1) $\bigsqcap_{j=1}^{i}$\cone{(P_s, P_{s+j}, \epsilon/2)} $\ne \{P_s\}$ as pointed out in \cite{Lin:Cised}, or
-(2) $\vv{P_sP_{s+i}}$ passes through $\bigsqcap_{j=1}^{i-1}$\cone{(P_s, P_{s+j}, \epsilon)}$-\{P_s\}$, the common intersection of the previous cones except $\{P_s\}$.
+$\bigsqcap_{j=1}^{i}$\cone{(P_s, P_{s+j}, \epsilon/2)} $\ne \{P_s\}$ as pointed out in \cite{Lin:Cised}, or
+
 
 %And its strong simplification version also applies the half $\epsilon$ in building a cone.
 
@@ -182,22 +185,27 @@ At last, \cised achieves $O(n)$ time and $O(1)$ space.
 %
 \cised only supports \sed.
 
-	
 
+%(2) $\vv{P_sP_{s+i}}$ passes through $\bigsqcap_{j=1}^{i-1}$\cone{(P_s, P_{s+j}, \epsilon)}$-\{P_s\}$, the common intersection of the previous cones except $\{P_s\}$.	
 
+\stitle{Remark}. The original \cised also uses a half cone, $\frac{\epsilon}{2}$-\cone. It can be extended to ${\epsilon}$-\cone ~ by adding such a constraint, \ie $P_{s+i}$ lives in the common intersection of preview full \emph{cones}.
 
 
 
 \vspace{-0.5ex}
-\subsubsection {Interval Using \dad}
+\subsubsection {Range Intersection Using \dad}
 \label{sec-interval}
-The \interval\cite{Ke:Interval} approach is somehow very like the \emph{sector intersection} method except that it is specifically designed for the direction-aware distance \dad. It defines \emph{direction range} for each line segment and checks the intersection of \emph{direction ranges} as a way similar with the \emph{sector intersection}.
+
+The \emph{range intersection} method \cite{Long:Direction} is specifically designed for the direction-aware distance \dad, and serves as the foundation of the direction preserveing trajectory simplification algorithms \intersec \cite{Long:Direction} and \interval\cite{Ke:Interval}. This approach is a bit like the \emph{sector intersection} method in that it defines a \emph{direction range} for each line segment connecting two neighbouring points then checks the common intersection of those \emph{direction ranges} as a way similar with the \emph{sector intersection}.
 
 Given a direction line segment $\mathcal{L}$ and an angle $\epsilon$, the \emph{direction range} denoted by $Range(\mathcal{L}.\theta, \epsilon)$ is $[\mathcal{L}.\theta-\epsilon, \mathcal{L}.\theta+\epsilon]$, where $[\theta_1, \theta_2]$ denotes the varying range of a directed line segment originated from the origin when it is rotated anti-clockwise from $\theta_1$ to $\theta_2$.
 %
 The \emph{common subinterval} of a set of directed line segments $\{\vv{P_sP_{s+1}}, \vv{P_{s+1}P_{s+2}}, ..., \vv{P_{s+k-1}P_{s+k}}\}$ \wrt $\epsilon$ is $\bigsqcap_{i=1}^{k}Range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon)$.
 %denoted by $ComSub(\{\vv{P_sP_{s+1}}, \vv{P_{s+1}P_{s+2}}, ..., \vv{P_{s+k-1}P_{s+k}}\}, \epsilon)$,
-It is proved that if the \emph{common subinterval} $\bigsqcap_{i=1}^{k}Range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon)\ne \phi$ and $\vv{P_sP_{s+k}}.\theta$ falls in the \emph{common subinterval}, then the maximum angular difference between each $\vv{P_{s+i-1}P_{s+i}}$, $i\in [1, k]$, and $\vv{P_sP_{s+k}}$ is not larger than $\epsilon$.
 %
-Algorithm \interval runs in $O(n)$ time and takes $O(1)$ space, and it only supports \dad.
+Algorithm \intersec \cite{Long:Direction} uses a half range, it proves that if the \emph{common subinterval} $\bigsqcap_{i=1}^{k}Range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon/2)\ne \phi$, then the maximum angular difference between each $\vv{P_{s+i-1}P_{s+i}}$, $i\in [1, k]$, and $\vv{P_sP_{s+k}}$ is not larger than $\epsilon$.
+
+Recently, algorithm \interval\cite{Ke:Interval} extenses \intersec from half ranges to full ranges. It proves that if the \emph{common subinterval} $\bigsqcap_{i=1}^{k}Range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon)\ne \phi$ and $\vv{P_sP_{s+k}}.\theta$ falls in the \emph{common subinterval}, then the maximum angular difference between each $\vv{P_{s+i-1}P_{s+i}}$, $i\in [1, k]$, and $\vv{P_sP_{s+k}}$ is not larger than $\epsilon$.
+%
+Algorithms \intersec and \interval both run in $O(n)$ time and take $O(1)$ space, and they both only support \dad.
 
