@@ -1,18 +1,23 @@
-\vspace{-1ex}
 \subsection{Online Algorithms}
 
-%Online algorithms enforces the constrained global checking policy that need not have the entire trajectory ready before they start compressing, instead, they restrict the checking within a window, sliding or opening.
+Online \lsa algorithms adopt local checking policies by restricting the checking within a sliding or opening window such that there is no need to have the entire trajectory ready before compressing. That is, online algorithms essentially combine {\em batch algorithms} with {\em sliding or opening windows}, \eg\   
+\opwa \cite{Meratnia:Spatiotemporal} is a combination of top-down algorithm \dpa and opening windows while \cite{Keogh:online} is a combination of bottom-up algorithm \tpa and \textit{sliding windows}.
+Though these algorithm support all three distance metrics \ped, \sed and \dad, they still have a high time and/or space complexity \cite{Liu:BQS}. 
+To design more efficient online algorithms, techniques typically need to be designed closely coupled with distance metrics.  
+Indeed, \bqsa \cite{Liu:BQS}  and \squishe \cite{Muckell:Compression} proposes to utilize convex hulls and priority queues, respectively, and they speed up trajectory simplification using \ped and \sed, respectively. To our knowledge, no specific techniques have been developed for \dad.
+Hence, we choose algorithms \bqsa, \squishe and ??? as the representatives of  online algorithms for \ped, \sed and \dad, respectively.
 
-Online \lsa algorithms are essentially the combination of batch algorithms \dpa or \tpa with sliding or opening windows, \eg algorithm \opwa \cite{Meratnia:Spatiotemporal} is a combination of \textit{Top-down} and \textit{opening window} while \cite{Keogh:online} is a combination of \textit{Bottom-up} and \textit{sliding window}.
-%These methods still have a high time and/or space complexity, which significantly hinders their utility in resource-constrained mobile devices \cite{Liu:BQS}.
-\bqsa \cite{Liu:BQS} and \squishe\cite{Muckell:Compression} further optimize these online algorithms, respectively. Where \bqsa \cite{Liu:BQS} fasts the process by using a \textit{convex hull} and \squishe\cite{Muckell:Compression} uses a data structure named priority queue.
+
+%, which significantly hinders their utility in resource-constrained mobile devices \cite{Liu:BQS}.
+%\bqsa \cite{Liu:BQS} and \squishe\cite{Muckell:Compression} further optimize these online algorithms, respectively. 
+%Where 
 %
 \eat{
 Recently, \bqsa \cite{Liu:BQS} has been proposed, using a new distance checking method by picking out at most eight special points from an open window based on a convex hull, \eg a rectangular bounding box with two bounding lines, so that when a new point is added to a window, it only needs to calculate the distances of the  special points to a line, instead of all data points in the window, in many cases.
 The time complexity of \bqsa remains $O(n^2)$ in the worst case, as \bqsa falls back to \dpa when the eight special points cannot be used. However, its simplified version, \fbqsa directly outputs a line segment, and starts a new window when the eight special points cannot bound all the points considered so far. Indeed, \fbqsa has a linear time complexity, and is the fastest \lsa based solution for trajectory compression.
 }
 %
-We next review the optimized online algorithms \bqsa and \squishe evaluated in out experiments.
+%We next review the optimized online algorithms \bqsa and \squishe evaluated in out experiments.
 
 \vspace{-0.5ex}
 \subsubsection{Bounded Quadrant System Using \ped}
@@ -27,7 +32,7 @@ Each time a new point is added to the buffer, \bqsa first picks out at most eigh
 (3) Otherwise, it computes all distances $d(P_i, {\mathcal{L}(P_s,P_k)})$ ($i\in[s, k]$) as algorithm \dpa.
 %
 The worst time complexity of \bqsa remains $O(n^2)$.
-It is worth pointing out that its simply version, \fbqsa, essentially avoids case (3) to speed up the process. 
+It is worth pointing out that its simply version \fbqsa has a linear time complexity by essentially avoiding case (3) to speed up the process.
 %The performance of \fbqsa has already been evaluated in work \cite{Lin:Operb}. %our preview work
 
 
