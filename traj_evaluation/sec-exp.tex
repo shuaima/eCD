@@ -4,7 +4,7 @@
 \label{sec-exp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 In this section, we present an extensive experimental study of the nine \lsa algorithms listed in \mytable{tab:summary-lsa} on trajectory data sets.
-Using four real-life datasets, we conducted three sets of experiments to evaluate the compression ratios, average errors and execution time of these algorithms, and the impacts of distance metrics,\ie \sed and \ped, to them.
+Using four real-life datasets, we conducted three sets of experiments to evaluate the compression ratios, errors and execution time of these algorithms, and the impacts of distance metrics,\ie \ped, \sed and \dad, to them.
 
 %(1) the effectiveness of these algorithms, and
 %(2) the efficiency of them.
@@ -15,7 +15,8 @@ Using four real-life datasets, we conducted three sets of experiments to evaluat
 %We first introduce the settings of our experimental study.
 
 \stitle{Real-life Trajectory Datasets}.
-We use four real-life datasets shown in \mytable{tab:datasets}, namely, taxi trajectory data (\taxi) collected by a Beijing taxi company, Service car trajectory data (\ucar) collected by a Chinese car rental company, Geolife trajectory data (\geolife) collected in GeoLife project~\cite{Web:Geolife} and Mopsi trajectory data (\mopsi) collected in Mopsi project \cite{Web:Mopsi}, to evaluate those \lsa algorithms. These data sets have varied sampling rates, ranging from one point per minute to one point per second.
+We use four varied real-life datasets shown in \mytable{tab:datasets}, namely, taxi trajectory data (\taxi) collected by a Beijing taxi company, Service car trajectory data (\ucar) collected by a Chinese car rental company, Geolife trajectory data (\geolife) collected in GeoLife project~\cite{Web:Geolife} and \mopsi trajectory data (\mopsi) collected in Mopsi project \cite{Web:Mopsi}, to evaluate those \lsa algorithms. These data sets have varied sampling rates, ranging from one point per minute to one point per second.
+They also come from different sources, where \taxi and \ucar are collected by cars in urban, and \geolife and \mopsi are a mixing of cars and individuals. The data source and sampling rate also affect the performance of \lsa algorithms using certain distance metrics.
 
 \begin{table}
 	\vspace{-1ex}
@@ -93,15 +94,15 @@ All tests were run on an x64-based  PC with 4 Intel(R) Core(TM) i7-6700 CPU @
 
 
 \subsection{Evaluation Metrics}
-Compression ratios, errors and running time are used to evaluate these algorithms.
+Compression ratios, errors and running time are the most popular metrics to evaluate trajectory simplification algorithms.
 
 \stitle{Compression ratios.}
 Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations $\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$,
 the compression ratio is $(\sum_{j=1}^{M} |\overline{\mathcal{T}}_j |)/(\sum_{j=1}^{M} |\dddot{\mathcal{T}}_j |)$.
 By this definition, algorithms with lower compression ratios are better.
 
-\stitle{Average error.}
-Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations
+\stitle{Errors.}
+All these algorithms in \mytable{tab:summary-lsa} are error bounded, \ie the max errors are approximate the values of error bounds. Hence, we only evaluate the average errors here. Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations
 $\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$, and $P_{j,i}$ denoting
 a point in trajectory $\dddot{\mathcal{T}}_j$ contained in a line segment $\mathcal{L}_{l,i}\in\overline{\mathcal{T}_l}$ ($l\in[1,M]$),
 then the average error is $\sum_{j=1}^{M}\sum_{i=0}^{M} d(P_{j,i},
@@ -196,22 +197,42 @@ We next present our findings.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{-1ex}
-\subsubsection{Evaluation of Compression Ratios}
+\subsubsection{Evaluation and Analysis of Compression Ratios}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-In the first set of tests, we compare the compression ratios of these algorithms, using \ped and \sed, respectively.
+We first test the compression ratios of these algorithms under varied error bounds $\epsilon$ and trajectory sizes, respectively. We varied $\epsilon$ from $10m$ to $100m$ in \ped and \sed (or from $15^o$ to $90^o$ in \dad) on the entire four datasets, respectively. The results are reported in Figure~\ref{fig:cr-ped-epsilon}, Figure~\ref{fig:cr-sed-epsilon} and Figure~\ref{fig:cr-dad-epsilon} ({Note that the naive optimal algorithm using \sed or \dad is not reported here because it can not run with the full dataset as input}).
+%
+We then chose $10$ trajectories from each dataset \taxi, \ucar, \geolife and \mopsi, respectively, and varied the size \trajec{|T|} of a trajectory from $1,000$ points to $10,000$ points, while fixed error bound $\epsilon = 60$ meters for \ped and \sed ({or $\epsilon = 45$ degrees for \dad}).
+The results are reported in Figure~\ref{fig:cr-ped-size}, Figure~\ref{fig:cr-sed-size} and Figure~\ref{fig:cr-dad-size}.
+We then discuss our findings from the views of distance metrics and \lsa algorithms.
 
-\stitle{Exp-1.1: Impacts of the error bound $\epsilon$}.
-To compare the compression ratios of these algorithms and evaluate the impacts of $\epsilon$ on them, we varied $\epsilon$ from $10m$ to $100m$ in \ped and \sed (or from $15^o$ to $90^o$ in \dad) on the entire four datasets, respectively.
-The results are reported in Figure~\ref{fig:cr-ped-epsilon}, Figure~\ref{fig:cr-sed-epsilon} and Figure~\ref{fig:cr-dad-epsilon} ({Note that the naive optimal algorithm using \sed or \dad is not reported here because it can not run with the full dataset as input}).
+\stitle{Distance metrics}.
+Though \ped, \sed and \dad are different distances whose usages are mainly decided by application requirements, we can still compare them from the view of compression ratio, which can help to choose a effective distance metric.
+
+First, given the same error bound $\epsilon$, the compression ratios of algorithms using \ped are obviously better
+than using \sed. More specifically, \emph{the output sizes of using \sed are approximately twice of \ped.}
+%
+As shown in Figure~\ref{fig:cr-ped-epsilon} and Figure~\ref{fig:cr-sed-epsilon}, the compression ratios of algorithms \tpa and \dpa
+using \ped are on average ($55.08\%$, $43.55\%$, $47.49\%$, $63.15\%$) and ($56.75\%$, $45.79\%$,
+$50.88\%$, $64.50\%$) of algorithms \tpa and \dpa using \sed on datasets \dSets, respectively,
+%
+and in Figure~\ref{fig:cr-ped-size} and Figure~\ref{fig:cr-sed-size}, the compression ratios of algorithms \opt, \tpa and \dpa
+using \ped are on average {($56.03\%$, $33.42\%$, $33.12\%$, $72.42\%$),
+	($55.78\%$, $31.88\%$, $34.27\%$, $69.44\%$) and ($58.09\%$, $34.82\%$,
+	$40.91\%$, $75.06\%$)} of algorithms \opt, \tpa and \dpa using \sed on datasets \dSets, respectively.
+%
+This result shows ~\sed saves temporal information at a cost of saving more points.
 
 
-\sstab (1) When increasing $\epsilon$, the compression ratios decrease.
-%For example, in \mopsi, the compression ratios are greater than {$4\%$} when $\epsilon$ = $10m$, and less than {$2\%$} when $\epsilon$ = $100m$.
+Secondly, in practical (\eg $\epsilon <100$ meters and $\epsilon < 60$ degrees), \sed have obviously better compression ratios than \dad in datasets \geolife and \mopsi, a bit better than \dad in \taxi and a bit poorer than \dad in \ucar.
+This is because some \geolife and \mopsi trajectories are collected by individuals that are in transportation modes of walking, running and riding, and moving objects in those modes may change their directions with a considerable range (\eg large than $60$ degrees) more frequently than cars in urban. Moreover, \geolife and \mopsi have higher sampling rates than \taxi and \ucar, which are helpful to capture more direction changes, \ie direction changes in a small time interval.
 
-\sstab (2) Dataset \mopsi usually has the lowest compression ratios, compared with \taxi, \ucar and \geolife, due to its highest sampling rate, \taxi has the highest compression ratios due to its lowest sampling rate, and \ucar and \geolife and  have the compression ratios in the middle accordingly.
+%It seems that it is a normal phenomenon that a moving object frequently changes its direction with a considerable range (\eg large than $60$ degrees) during a trip.
 
-\sstab (3) When using \ped, the compression ratios from the best
+
+\stitle{\lsa algorithms}. The optimal algorithm is the best algorithm in term of compression ratio, and one pass algorithms using full $\epsilon$ are the first class among all sub optimal algorithms.
+%%%%%%%%%%%%%%%%%
+(1) The compression ratios of algorithms using \ped from the best
 to the worst are the optimal algorithm \opt, online algorithm \bqsa, batch algorithms \tpa and
 \dpa, and one-pass algorithms \siped and \operb.
 The output sizes of algorithm \bqsa are on average
@@ -226,45 +247,11 @@ and ($119.89\%$, $143.14\%$, $147.80\%$, $152.37\%$) of \opt on datasets \dSets,
 %
 For example, in \mopsi, the compression ratios of algorithms
 (\opt, \tpa, \dpa, \bqsa, \siped, \operb ) are ($1.6\%$, $2.2\%$, $2.2\%$, $1.9\%$, $2.4\%$, $2.4\%$) when $\epsilon$ = $40m$.
-
-\sstab (4) When using \sed, the compression ratios from the best
-to the worst are batch algorithms \tpa and
-\dpa, one-pass algorithm \cised, and online algorithm \squishe.
-For example, in \mopsi, the compression ratios of algorithms
-(\tpa, \dpa, \squishe, \cised)
-are ($3.45\%$, $3.41\%$, $5.75\%$, $3.86\%$), respectively, when $\epsilon$ = $40m$.
-
-%Algorithms \tpa and \dpa are comparable, and they are on average ($122.69\%$, $129.08\%$, $131.97\%$, $131.01\%$) and ($121.36\%$, $129.27\%$, $130.11\%$, $126.21\%$) of the near optimal algorithm \nopts on datasets \dSets, respectively.
-%Algorithms \cised and \squishe are on average ($132.07\%$, $139.67\%$, $146.56\%$, $135.10\%$) and ($164.47\%$, $189.87\%$, $213.30\%$, $186.72\%$) of \nopts on datasets \dSets, respectively.
 %
-%For example, in \mopsi, the compression ratios of algorithms (\nopts, \tpa, \dpa, \squishe, \cised) are ($2.62\%$, $3.45\%$, $3.41\%$, $5.75\%$, $3.86\%$), respectively, when $\epsilon$ = $40m$.
-
-\sstab {(5) When using \dad,} the compression ratios from the best to the worst are \tpa, \interval and \dpa.
-For example, in \mopsi, the compression ratios of algorithms (\tpa, \dpa, \interval)
-are ($13.3\%$, $23.1\%$, $13.7\%$), respectively, when $\epsilon$ = $45$ degrees.
-
-
-\sstab (6) Given the same error bound $\epsilon$, the compression ratios of algorithms using \ped are obviously better
-than using \sed.
-More specifically, the compression ratios of algorithms \tpa and \dpa
-using \ped are on average ($55.08\%$, $43.55\%$, $47.49\%$, $63.15\%$) and ($56.75\%$, $45.79\%$,
-$50.88\%$, $64.50\%$) of algorithms \tpa and \dpa using \sed on datasets \dSets, respectively.
-	
-\sstab (7) Though \ped, \sed and \dad are totally different distances, in practical (\eg $\epsilon <100$ meters and $\epsilon < 60$ degrees), \ped and \sed usually bring obvious better compression ratios than \dad, especially in high sampling data sets.
-
-\stitle{{Exp-1.2}: Impacts of the sizes of trajectories}.
-To compare the compression ratios of these algorithms and evaluate the impacts of trajectory sizes on them, we chose $10$ trajectories from each dataset \taxi, \ucar, \geolife and \mopsi, respectively,
-and varied the size \trajec{|T|} of a trajectory from $1,000$ points to $10,000$ points, while fixed error bound $\epsilon = 60$ meters for \ped and \sed ({or $\epsilon = 45$ degrees for \dad}).
-The results are reported in Figure~\ref{fig:cr-ped-size}, Figure~\ref{fig:cr-sed-size} and Figure~\ref{fig:cr-dad-size}.
-
-
-\sstab (1) Trajectory sizes have few impacts on compression ratios.
-
-\sstab (2) The compression ratios in this test are consistent with test Exp-1.1.
-
-\sstab (3) When using \sed, the compression ratios from the best
+%%%%%%%%%%%%%%%%%
+(2) The compression ratios of algorithms using \sed from the best
 to the worst are the optimal algorithm \opt, batch algorithms \tpa and
-\dpa, one-pass algorithm \cised and online algorithm \squishe.
+\dpa, one-pass algorithm \cised, and online algorithm \squishe.
 %
 {Algorithms \tpa and \dpa are comparable, and they are on average
 ($102.72\%$, $125.23\%$, $143.92\%$, $128.63\%$) and ($103.18\%$, $123.93\%$, $141.46\%$, $121.14\%$)
@@ -273,8 +260,18 @@ to the worst are the optimal algorithm \opt, batch algorithms \tpa and
 {Algorithms \cised and \squishe are on average ($108.00\%$,
   $134.35\%$, $159.30\%$, $136.06\%$) and ($110.27\%$, $165.94\%$, $225.68\%$, $206.90\%$)
  of \opt on datasets \dSets, respectively.}
-
-\sstab {(4) When using \dad,} the compression ratios from the best
+%
+For example, in \mopsi, the compression ratios of algorithms
+(\tpa, \dpa, \squishe, \cised)
+are ($3.45\%$, $3.41\%$, $5.75\%$, $3.86\%$), respectively, when $\epsilon$ = $40m$.
+%
+%Algorithms \tpa and \dpa are comparable, and they are on average ($122.69\%$, $129.08\%$, $131.97\%$, $131.01\%$) and ($121.36\%$, $129.27\%$, $130.11\%$, $126.21\%$) of the near optimal algorithm \nopts on datasets \dSets, respectively.
+%Algorithms \cised and \squishe are on average ($132.07\%$, $139.67\%$, $146.56\%$, $135.10\%$) and ($164.47\%$, $189.87\%$, $213.30\%$, $186.72\%$) of \nopts on datasets \dSets, respectively.
+%
+%For example, in \mopsi, the compression ratios of algorithms (\nopts, \tpa, \dpa, \squishe, \cised) are ($2.62\%$, $3.45\%$, $3.41\%$, $5.75\%$, $3.86\%$), respectively, when $\epsilon$ = $40m$.
+%
+%%%%%%%%%%%%%%%%%
+(3) The compression ratios of algorithms using \dad from the best
 to the worst are the optimal algorithm \opt, batch algorithm \tpa,
 one-pass algorithm \interval and batch algorithm \dpa.
 %
@@ -285,16 +282,41 @@ one-pass algorithm \interval and batch algorithm \dpa.
 {Algorithm \dpa is on average ($133.19\%$, $283.93\%$, $143.79\%$, $278.89\%$)
  of the optimal algorithm \opt on datasets \dSets, respectively.}
 %
+For example, in \mopsi, the compression ratios of algorithms (\tpa, \dpa, \interval)
+are ($13.3\%$, $23.1\%$, $13.7\%$), respectively, when $\epsilon$ = $45$ degrees.
 %
 
 
-\sstab (5) The compression ratios of algorithms using \ped are obviously better than using \sed.
-More specifically, the compression ratios of algorithms \opt, \tpa and \dpa
-using \ped are on average {($56.03\%$, $33.42\%$, $33.12\%$, $72.42\%$),
-($55.78\%$, $31.88\%$, $34.27\%$, $69.44\%$) and ($58.09\%$, $34.82\%$,
-$40.91\%$, $75.06\%$)} of algorithms \opt, \tpa and \dpa using \sed on datasets \dSets, respectively.
+%\todo{Batch: Bottom-up vs Top-down.}
+For batch algorithms, Bottom-up algorithm (\tpa) and Top-down algorithm (\dpa) have the similar compression ratios when using either \ped or \sed. However, when using \dad, Bottom-up method has obviously better compression ratios than Top-down method. We note that the experimental results of \cite{Long:Direction} also show this phenomenon (but without discuss). As we know the Top-down algorithm will split a long trajectory $[P_s, ..., P_e]$ into two sub trajectories by finding out a splitting point $P_i (s<i<e)$ who has the max position (or whose line segment $\vv{P_{i-1}P_{i}}$ has the max direction) deviation to line segment $\vv{P_sP_{e}}$. Through this strategy works well with \ped and \sed, a point with the max direction deviation may not be a reasonable splitting point in the direction-aware scenario. Thus it leads to a poorer compression ratio. The Bottom-up method does not have this weakness as it always merges neighbouring points.
 
-\sstab (6) In this test, \ie $\epsilon =60$ meters or $\epsilon = 45$ degrees, \ped has obvious better compression ratios than \dad in all datasets and \sed is better in all datasets except \ucar.
+
+
+%\todo{Online: }
+For online algorithms, \bqsa and \opwa are comparable with the best sub-optimal algorithms. This is because \opwa is indeed a combination of \dpa and opening window, and \bqsa is mainly an efficiency optimization of the \opwa.
+\squishe has the poorest compression ratio among all algorithms using \sed. This is the result of its nature: \squishe estimates the lowest \sed error and removes the point with is ``predicted to introduce the lowest amount of error into the compression"\cite{Muckell:SQUISH}. Its ``prediction" method is not accurate enough, thus, in order to ensure the error bound, it may ignore too many potential points that should be represented by a line segment.
+
+%\todo{One pass: half $\epsilon$ vs full $\epsilon$.}
+For one-pass algorithms, the full sector/cone/range combining with a position/direction constraint always have better compression ratios then the half sector/cone/range versions in all datasets.
+%This is related to the moving habits or patterns of moving objects that engender trajectories.
+We can find in our daily lives, a moving object, like an individual or a car, will keep moving forward for quite a long time, engendering a sequence of data points distributing in a narrow strip. Under such circumstance, a new data point is quite possible living in the common intersection of larger sectors/cones/ranges, which lets more data points be represented by a result line segment.
+\todo{strict proof?}
+%combining with a constraint that the current point should live in the common intersection of preview sectors/cones/ranges
+
+
+
+
+
+\eat{
+
+\sstab (1) Trajectory sizes have few impacts on compression ratios.
+
+\sstab (1) When increasing $\epsilon$, the compression ratios decrease.
+%For example, in \mopsi, the compression ratios are greater than {$4\%$} when $\epsilon$ = $10m$, and less than {$2\%$} when $\epsilon$ = $100m$.
+
+\sstab (2) Dataset \mopsi usually has the lowest compression ratios, compared with \taxi, \ucar and \geolife, due to its highest sampling rate, \taxi has the highest compression ratios due to its lowest sampling rate, and \ucar and \geolife and  have the compression ratios in the middle accordingly.
+}
+
 
 \begin{figure*}[tb!]
 	\centering
@@ -373,7 +395,7 @@ $40.91\%$, $75.06\%$)} of algorithms \opt, \tpa and \dpa using \sed on datasets 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{-0.5ex}
-\subsubsection{Evaluation of Average Errors}
+\subsubsection{Evaluation and Analysis of Average Errors}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %In the second set of tests, we evaluate the average errors of these algorithms.
 We then evaluate the average errors of these algorithms.
@@ -466,7 +488,7 @@ Algorithm \dpa is on average ($76.86\%$, $82.45\%$, $96.52\%$, $137.95\%$) of \o
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{-1ex}
-\subsubsection{Evaluation of running time}
+\subsubsection{Evaluation and Analysis of running time}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 In the third set of tests, we compare the running time of these algorithms.
