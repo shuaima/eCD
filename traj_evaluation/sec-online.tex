@@ -1,16 +1,16 @@
 \subsection{Online Algorithms}
 
-Online \lsa algorithms adopt local checking policies by restricting the checking within a sliding or opening window such that there is no need to have the entire trajectory ready before compressing. That is, online algorithms essentially combine {\em batch algorithms} with {\em sliding or opening windows}, \eg\   
+Online \lsa algorithms adopt local checking policies by restricting the checking within a sliding or opening window such that there is no need to have the entire trajectory ready before compressing. That is, online algorithms essentially combine {\em batch algorithms} with {\em sliding or opening windows}, \eg\
 \opwa \cite{Meratnia:Spatiotemporal} is a combination of top-down algorithm \dpa and opening windows while \cite{Keogh:online} is a combination of bottom-up algorithm \tpa and \textit{sliding windows}.
-Though these algorithm support all three distance metrics \ped, \sed and \dad, they still have a high time and/or space complexity \cite{Liu:BQS}. 
-To design more efficient online algorithms, techniques typically need to be designed closely coupled with distance metrics.  
+Though these algorithm support all three distance metrics \ped, \sed and \dad, they still have a high time and/or space complexity \cite{Liu:BQS}.
+To design more efficient online algorithms, techniques typically need to be designed closely coupled with distance metrics.
 Indeed, \bqsa \cite{Liu:BQS}  and \squishe \cite{Muckell:Compression} proposes to utilize convex hulls and priority queues, respectively, and they speed up trajectory simplification using \ped and \sed, respectively. To our knowledge, no specific techniques have been developed for \dad.
-Hence, we choose algorithms \bqsa, \squishe and ??? as the representatives of  online algorithms for \ped, \sed and \dad, respectively.
+Hence, we choose algorithms \bqsa, \squishe and \opwa as the representatives of online algorithms using \ped, \sed and \dad, respectively.
 
 
 %, which significantly hinders their utility in resource-constrained mobile devices \cite{Liu:BQS}.
-%\bqsa \cite{Liu:BQS} and \squishe\cite{Muckell:Compression} further optimize these online algorithms, respectively. 
-%Where 
+%\bqsa \cite{Liu:BQS} and \squishe\cite{Muckell:Compression} further optimize these online algorithms, respectively.
+%Where
 %
 \eat{
 Recently, \bqsa \cite{Liu:BQS} has been proposed, using a new distance checking method by picking out at most eight special points from an open window based on a convex hull, \eg a rectangular bounding box with two bounding lines, so that when a new point is added to a window, it only needs to calculate the distances of the  special points to a line, instead of all data points in the window, in many cases.
@@ -23,9 +23,9 @@ The time complexity of \bqsa remains $O(n^2)$ in the worst case, as \bqsa falls 
 %\subsubsection{Bounded Quadrant System Using \ped}
 
 \stitle{Algorithm BQS Using \ped \cite{Liu:BQS}}.
-It is essentially an optimized opening window algorithm \cite{Meratnia:Spatiotemporal}, and it reduces the running time by introducing convex hulls to pick out a certain number of points, which makes specifically for \ped.
+It is essentially an optimized opening window algorithm \cite{Meratnia:Spatiotemporal}, and reduces the running time by introducing convex hulls to pick out a certain number of points, which makes specifically for \ped.
 
-For a buffered sub trajectory $[P_s, \ldots, P_k]$, it splits the space into four quadrants. For each quadrant, a rectangular bounding box is firstly created using the least and highest $x$ values and the least and highest $y$ values among points $P_s,\ldots,P_k$. Then another two bounding lines connecting points $P_s$ and $P_{h}$ and points $P_s$ and $P_{l}$ are created such that lines $\vv{P_sP_{h}}$ and $\vv{P_sP_{l}}$ have the largest and smallest angles with the $x$-axis, respectively.
+For a buffered sub-trajectory $[P_s, \ldots, P_k]$, it splits the space into four quadrants. For each quadrant, a rectangular bounding box is firstly created using the least and highest $x$ values and the least and highest $y$ values among points $P_s,\ldots,P_k$. Then another two bounding lines connecting points $P_s$ and $P_{h}$ and points $P_s$ and $P_{l}$ are created such that lines $\vv{P_sP_{h}}$ and $\vv{P_sP_{l}}$ have the largest and smallest angles with the $x$-axis, respectively.
 Here $P_{h},P_{l} \in\{P_s,\ldots,P_k\}$. The bounding box and the two lines together form a convex hull.
 A buffer here is similar to the window in algorithm \opwa\cite{Meratnia:Spatiotemporal}.
 Each time a new point is added to the buffer, \bqsa first picks out at most eight significant points in a quadrant. It calculates the distances of the significant points to line $\vv{P_sP_e}$, among which the largest distance $d_{u}$ and the smallest distance $d_l$ are an upper bound and  a lower bound of the distances of all points in $[P_s, \ldots, P_k]$ to line $\vv{P_sP_e}$.
@@ -39,7 +39,7 @@ The time complexity of \bqsa remains $O(n^2)$. However, its simply version \fbqs
 
 
 \stitle{Algorithm SQUISH-E Using \sed~\cite{Muckell:Compression}}.
-It is a bottom-up algorithm running in a buffer. It has two forms, \ie~\squishe($\lambda$) that it minimizes \sed error ensuring the compression ratio of $\lambda$, and \squishe($\epsilon$) that maximizes compression ratio while keeping \sed error under $\epsilon$. In this paper, we refer to \squishe($\epsilon$).
+It is a bottom-up algorithm with a buffer, which has two forms: \squishe($\lambda$) ensuring the compression ratio $\lambda$, and \squishe($\epsilon$) ensuring the \sed error bound $\epsilon$. In this study, we  use \squishe($\epsilon$), as we focus on error bounded trajectory simplification.
 
 \eat{%%%%%%%%%%%%%%%%
 taking as input a trajectory \trajec{T} and two additional parameters $\lambda$ and $\epsilon$.
@@ -50,7 +50,7 @@ Meanwhile, \squishe($\lambda$) is the case where $\epsilon$ is set to $0$ and th
 In this paper, we only discuss \squishe($\epsilon$).
 }%%%%%%%%%%%%%%%%%%%%
 
-The \squishe algorithm optimizes the \tpa algorithm by using a doubly linked list $Q$. Each node in the list is a tuple, \ie $P(pre, suc, mnprio, prio)$, where $P$ is a trajectory data point (for convenience, we also refer $P$ to the node), $pre$ refers to its predecessor node/point, $suc$ refers to its successor node/point, $prio$ is the priority of the point which is defined as an upper bound on the \sed error that the removal of that point would introduce, and $mnprio$ is the max priority of its predecessor and successor points that have ever been removed from the list.
+Algorithm \squishe  optimizes the \tpa algorithm by using a doubly linked list $Q$. Each node in the list is a tuple, \ie $P(pre, suc, mnprio, prio)$, where $P$ is a trajectory data point (for convenience, we also refer $P$ to the node), $pre$ refers to its predecessor node/point, $suc$ refers to its successor node/point, $prio$ is the priority of the point which is defined as an upper bound on the \sed error that the removal of that point would introduce, and $mnprio$ is the max priority of its predecessor and successor points that have ever been removed from the list.
 %
 Initially, trajectory points are loaded to the list $Q$ one by one.
 At the same time, $mnprio$ of each point is set to $0$ as no node has been removed from the list.
