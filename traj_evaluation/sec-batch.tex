@@ -2,14 +2,14 @@
 Batch algorithms essentially apply global distance checking policies for trajectory simplification, and can be either top-down or bottom-up.
 Global checking policies enforce batch algorithms to have an entire trajectory first \cite{Meratnia:Spatiotemporal}.
 
-(1) Top-down algorithms recursively divide a trajectory into sub-trajectories until the stopping condition is met. 
+(1) Top-down algorithms recursively divide a trajectory into sub-trajectories until the stopping condition is met.
 Algorithms Ramer \cite{Ramer:Split} and Douglas-Peucker (\dpa)  \cite{Douglas:Peucker} can support all the three distances \ped, \sed and \dad.
 %Algorithm \dpa is modified to further support \sed \cite{Meratnia:Spatiotemporal},
 An improved method of \dpa with a time complexity of $O(n\log n)$, based on \emph{convex hulls} is proposed in \cite{Hershberger:Speeding}, which is the best \dpa based  algorithm in terms of time complexities, and is designed for \ped only, not for \sed and \dad.
 
 (2) Bottom-up algorithms are the natural complement of top-down ones, and they recursively merge adjacent sub-trajectories with the smallest distance, initially $n/2$  sub-trajectories for a trajectory with $n$ points, until the stopping condition is met. Note that the distances of newly generated line segments are recalculated in reach iteration. To our knowledge, Theo-Pavlidis (\tpa) \cite{Pavlidis:Segment} is the only bottom-up \ls algorithm for trajectory simplification.
 
-Note that, compared with top-down algorithms, bottom-up algorithms fit better for trajectories with lower sampling rates, as they typically need more rounds to merge smaller line segments into larger line segments. {\em Batch algorithms basically work for small and medium size trajectories, and we choose \dpa and \tpa that both support \ped, \sed and \dad  as the   representatives of  batch \lsa algorithms}.
+Note that, compared with top-down algorithms, bottom-up algorithms fit better for trajectories with lower sampling rates, as they typically need more rounds to merge smaller line segments into larger line segments. {\em Batch algorithms basically work for small and medium size trajectories, and we choose \dpa and \tpa that all support \ped, \sed and \dad  as the   representatives of  batch \lsa algorithms}.
 
 
 %We next review algorithms Douglas-Peucker and Theo Pavlidis evaluated in out experiments.
@@ -59,9 +59,9 @@ Note that, compared with top-down algorithms, bottom-up algorithms fit better fo
 
 
 
-Given a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ and an error bound $\epsilon$, the algorithm uses the first point $P_0$ and the last point $P_n$ of \trajec{T} as the start point $P_s$ and the end point $P_e$ of the first line segment $\mathcal{L}(P_0, P_n)$, then it calculates the distance $ped(P_i, {\mathcal{L}})$ for each point $P_i$ ($i\in[0,n]$). If $ped(P_k, {\mathcal{L}})$ = $\max \{ped(P_0, {\mathcal{L}}), \ldots, ped(P_n, {\mathcal{L}}) \} \le \epsilon$, then it returns $\{\mathcal{L}(P_0,P_n)\}$. Otherwise, it divides \trajec{T} into two sub-trajectories \trajec{T}$[P_0, \ldots, P_k]$ and \trajec{T}$[P_{k}, \ldots, P_n]$, and recursively compresses these sub-trajectories until the entire trajectory has been considered.
+Given a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ and an error bound $\epsilon$,  algorithm \dpa uses the first point $P_0$ and the last point $P_n$ of \trajec{T} as the start point $P_s$ and the end point $P_e$ of the first line segment $\mathcal{L}(P_0, P_n)$, then it calculates the distance $ped(P_i, {\mathcal{L}})$ for each point $P_i$ ($i\in[0,n]$). If $ped(P_k, {\mathcal{L}})$ = $\max \{ped(P_0, {\mathcal{L}}), \ldots, ped(P_n, {\mathcal{L}}) \} \le \epsilon$, then it returns $\{\mathcal{L}(P_0,P_n)\}$. Otherwise, it divides \trajec{T} into two sub-trajectories \trajec{T}$[P_0, \ldots, P_k]$ and \trajec{T}$[P_{k}, \ldots, P_n]$, and recursively compresses these sub-trajectories until the entire trajectory has been considered.
 %
-In the best case, the time complexity of \dpa is $\Omega(n)$; in the worst case, it is $O(n^2)$.
+The time complexity of \dpa is $\Omega(n)$ in the best case, but is $O(n^2)$ in the worst case.
 %The basic \dpa uses \ped, however, it also supports \sed \cite{Meratnia:Spatiotemporal} that runs in the same routine as using \ped. %, except that $ped$ in
 %Figure~\ref{alg:dp} is replace by $sed$.
 
@@ -76,14 +76,14 @@ In the best case, the time complexity of \dpa is $\Omega(n)$; in the worst case,
 \stitle{Algorithm Theo-Pavlidis  (\tpa) ~\cite{Pavlidis:Segment}}. It initially employs the global checking policy to output disjoint line segments, and we slightly modify it to have continuous line segments.
 
 Given a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ and an error bound $\epsilon$,
-the algorithm begins by creating the finest possible approximation of the trajectory, \ie $[P_0, P_1], [P_1, P_2], \ldots,[P_{n-1}, P_n]$, so that $n$ segments are used to approximate the original trajectory.
-Next, for each pair of adjacent segments $[P_{s}, P_{s+j}]$ and $[P_{s+j}, P_{s+k}]$, $0\le s<s+j < s+k \le n$,
-the max distance of each points $P_{s+i}$, $0<i<k$, to the line segment $\vv{P_sP_{s+k}}$, \ie $ped(P_{s+i}, \vv{P_sP_{s+k}})$, is calculated and the maximum of them is saved, denoting the \emph{cost} of merging them.
-Then the algorithm begins to iteratively merge the lowest cost adjacent segments pair
-until that no cost is below the error bound $\epsilon$.
-When the pair of adjacent segments $[P_{s}, P_{s+j}]$ and $[P_{s+j}, P_{s+k}]$ are merged to a new segment $[P_{s}, P_{s+k}]$, the algorithm needs to recalculate the cost of merging the new segment with its preceding neighbour segment, and the cost of merging it with its successor neighbor segment.
+algorithm \tpa begins by creating the finest possible  trajectory approximation: $[P_0, P_1]$, $[P_1, P_2], \ldots,[P_{n-1}, P_n]$, so that $n$ segments are used to approximate the original trajectory.
+Next, for each pair of adjacent segments $[P_{s}, P_{s+j}]$ and $[P_{s+j}, P_{s+k}]$ ($0\le s<s+j < s+k \le n$),
+the  distance $ped(P_{s+i}, \vv{P_sP_{s+k}})$ of each point $P_{s+i}$ ($0<i<k$) to the line segment $\vv{P_sP_{s+k}}$, is calculated, and the max distance is saved and denoted as the \emph{cost} of merging them.
+Then \tpa begins to iteratively merge the adjacent segment pair with the lowest cost 
+until no cost is below $\epsilon$.
+After the pair of adjacent segments $[P_{s}, P_{s+j}]$ and $[P_{s+j}, P_{s+k}]$ are merged to a new segment $[P_{s}, P_{s+k}]$, \tpa needs to recalculate the costs of the new segment with its preceding and successive segments.
 %
-The time complexity of the algorithm is $O(n^2/K)$, where $K$ is the number of the final segments.
+Algorithm \tpa runs in $O(n^2/K)$ time, where $K$ is the number of the final segments.
 
 %Furthermore, it is also easy to implement \sed in the \tpa algorithm.
 %The \tpa algorithm like \dpa algorithm originally only supports \ped, but it is also easy to be extended to support \sed.
