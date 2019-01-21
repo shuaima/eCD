@@ -42,11 +42,11 @@ The optimal \lsa algorithms have relative high time/space complexities which mak
 Hence, \textit{sub-optimal} \lsa algorithms have been developed and/or introduced for trajectory compression, and they achieve better efficiencies at the expense of outputting a little more data points. By the applied distance checking policies, sub-optimal algorithms can further be classified into
 batch, online and one-pass algorithms.
 
-\ni (1) {\em Batch algorithms} (Douglas-Peucker\cite{Douglas:Peucker,Meratnia:Spatiotemporal} and \pavlidis~\cite{Pavlidis:Segment}) apply the global distance checking policy such that all trajectory points need to be loaded before starting compression, and a point may be checked multiple times to compute its distance to the corresponding line segments.
+\ni (1) {\em Batch algorithms} such as Douglas-Peucker\cite{Douglas:Peucker,Meratnia:Spatiotemporal} and \pavlidis~\cite{Pavlidis:Segment} apply global distance checking policies such that all trajectory points need to be loaded before starting compression, and a point may be checked multiple times to compute its distance to the corresponding line segments.
 
-\ni (2) {\em Online algorithms} (\opwa \cite{Meratnia:Spatiotemporal}, \bqsa~\cite{Liu:BQS} and \squishe~\cite{Muckell:SQUISH}) apply a local distance checking policy which need not have the entire trajectory ready before they start compressing, instead, they restrict the checking within a window and a point is still checked multiple times during the process.
+\ni (2) {\em Online algorithms} such as \opwa \cite{Meratnia:Spatiotemporal}, \squishe \cite{Muckell:SQUISH} and \bqsa \cite{Liu:BQS} apply local distance checking policies, and need not to have the entire trajectory ready before compressing. They restrict the checking within a window, but may still check a point  multiple times during the process.
 
-\ni (3) {\em One-pass algorithms} (\operb\cite{Lin:Operb}, \siped  \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}, \cised \cite{Lin:Cised} and \interval \cite{Ke:Interval}) apply a better local distance checking policy, which even does not need a window to buffer the preview read points, and process each point in a trajectory once and only once.
+\ni (3) {\em One-pass algorithms} such as \operb\cite{Lin:Operb}, \siped  \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}, \cised \cite{Lin:Cised} and \interval \cite{Ke:Interval} apply better local distance checking policies, which even do not need a window to buffer the previous read points, and process each point in a trajectory once and only once.
 
 By using local distance checking, online and one-pass algorithms are much more efficient than batch algorithms.
 
@@ -112,15 +112,16 @@ and it provides a good experimental study on compression error and spatio-tempor
 \stitle{Contributions}.
 In this paper, we conduct a thorough and systematic evaluation and analyese of the mainstream trajectory compression techniques (\ie  error bounded trajectory simplification) for large-scale trajectory data.
 
-\sstab (1) We classifiy error bounded \lsa algorithms into different categories, review each category of algorithms, and systematically evaluate the classic and most recent algorithms of each category.
+\sstab (1) We classify error bounded \lsa algorithms into different categories, review each category of algorithms, and systematically evaluate the classic and most recent algorithms of each category.
 %
-\mytable{tab:summary-lsa} summarizes the algorithms reviewed and evaluated in this study, which consist of
+\mytable{tab:summary-lsa} summarizes the algorithms, which consist of
 optimal and suboptimal algorithms, and the later is further classified into batch, online and one-pass algorithms.
+
 Note that online and one-pass algorithms are typically designed for a specific distance metric of \ped, \sed and \dad.
 %optimal algorithm \opt,
 %batch algorithms \douglas and \pavlidis,
 %online algorithms \bqsa and \squishe,  and
-%one-pass algorithms \operb, \siped, \cised and \interval. 
+%one-pass algorithms \operb, \siped, \cised and \interval.
 
 \sstab (2) Using four real-life trajectory datasets, we systematically evaluate and analyze the performance (compression ratio, average error and running
 time) of error bounded \lsa algorithms in terms of trajectory sizes and error bounds.
