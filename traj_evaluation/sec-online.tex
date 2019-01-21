@@ -50,11 +50,11 @@ Meanwhile, \squishe($\lambda$) is the case where $\epsilon$ is set to $0$ and th
 In this paper, we only discuss \squishe($\epsilon$).
 }%%%%%%%%%%%%%%%%%%%%
 
-Algorithm \squishe  optimizes algorithm \tpa with a doubly linked list $Q$. Each node in the list is a tuple $P(pre, suc, prio, mnprio)$, where $P$ is a trajectory data point, $pre$ and $suc$ are the predecessive  and successive points of $P$, respectively,  $prio$ is the priority of the point defined as an upper bound on the \sed error that the removal of that point introduces, and $mnprio$ is the max priority of its predecessive and successive points removed from the list.
+Algorithm \squishe  optimizes algorithm \tpa with a doubly linked list $Q$. Each node in the list is a tuple $P(pre, suc, prio, mnprio)$, where $P$ is a trajectory data point, $pre$ and $suc$ are the predecessive  and successive points of $P$, respectively,  $prio$ is the priority of $P$ defined as an upper bound on the \sed error that the removal of $P$ introduces, and $mnprio$ is the max priority of its predecessive and successive points removed from the list.
 %
 Initially, trajectory points are loaded to $Q$ one by one.
 At the same time, $mnprio$ of each point is set to $zero$ as no node has been removed from the list.
-Moreover, the priorities of points $P_0$ and $P_{|Q|-1}$ are set to $\infty$, and the priority of point $P_i$, $0<i<|Q|-1$, is set to $sed(P_i, \vv{pre(P_{i})suc(P_{i})})$.
+Moreover, the priorities of points $P_0$ and $P_{|Q|-1}$ are set to $\infty$, and the priority of point $P_i$ ($0<i<|Q|-1$) is set to $sed(P_i, \vv{pre(P_{i})suc(P_{i})})$.
 %
 Then, \squishe finds and removes a point $P_j$ from $Q$ that has the lowest priority $prio(P_j)<\epsilon$, and the properties $mnprio$ of predecessor $pre(P_j)$ and successor $suc(P_j)$ are updated to $\max(mnprio(pre(P_j)), prio(P_j))$ and $\max(mnprio(suc(P_j)), prio(P_j))$, respectively.
 Next, the properties $prio$ of $pre(P_j)$ and $suc(P_j)$ are further updated to $mnprio(pre(P_j))$ + $sed(pre(P_j), \vv{pre(pre(P_{j}))suc(P_{j})})$ and $mnprio(suc(P_j))$ + $sed(suc(P_j),\vv{pre(P_{j})suc(suc(P_{j}))})$, respectively.
