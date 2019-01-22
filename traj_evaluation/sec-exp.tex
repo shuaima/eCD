@@ -65,6 +65,7 @@ They also come from different sources, where \taxi and \ucar are collected by ca
 
 \stitle{Algorithms and implementation}.
 We implement the algorithms listed in \mytable{tab:summary-lsa}.
+For one-pass algorithms \siped, \cised and \ridad, we implement two versions of them, \ie the half and full \emph{Sectors/Cones/Ranges}.
 For algorithm \cised, we fixed parameter $m=16$ as evaluated in \cite{Lin:Cised}, \ie 16-edges inscribe regular polygon.
 % For algorithm \nopts, we fixed parameter $m=32$.
 All algorithms were implemented with Java.
@@ -116,7 +117,7 @@ It is the time of compressing trajectories.
 \subsection{Experimental Results}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %We next present our findings.
-We test these algorithms under varied error bounds $\epsilon$ and trajectory sizes, respectively. We first varied $\epsilon$ from $10m$ to $100m$ in \ped and \sed (or from $15^o$ to $90^o$ in \dad) on the entire four datasets, respectively. We then chose $10$ trajectories from each dataset \taxi, \ucar, \geolife and \mopsi, respectively, and varied the size \trajec{|T|} of a trajectory from $1,000$ points to $10,000$ points while fixed the error bound $\epsilon=40$ metres or $\epsilon=45$ degrees. 
+We test these algorithms under varied error bounds $\epsilon$ and trajectory sizes, respectively. We first varied $\epsilon$ from $10m$ to $100m$ in \ped and \sed (or from $15^o$ to $90^o$ in \dad) on the entire four datasets, respectively. We then chose $10$ trajectories from each dataset \taxi, \ucar, \geolife and \mopsi, respectively, and varied the size \trajec{|T|} of a trajectory from $1,000$ points to $10,000$ points while fixed the error bound $\epsilon=40$ metres or $\epsilon=45$ degrees.
 
 
 \begin{figure*}[tb!]
@@ -208,8 +209,8 @@ We then chose $10$ trajectories from each dataset \taxi, \ucar, \geolife and \mo
 The experimental results are reported in Figure~\ref{fig:cr-ped-size}, Figure~\ref{fig:cr-sed-size} and Figure~\ref{fig:cr-dad-size}.
 }%%%%%%%%%%%
 
-%We test the compression ratios of these algorithms under varied error bounds $\epsilon$ and trajectory sizes, respectively. 
-The compression ratios of these algorithms under varied error bounds $\epsilon$ and trajectory sizes are reported in Figure~\ref{fig:cr-ped-epsilon}, Figure~\ref{fig:cr-sed-epsilon}, Figure~\ref{fig:cr-dad-epsilon}, Figure~\ref{fig:cr-ped-size}, Figure~\ref{fig:cr-sed-size} and Figure~\ref{fig:cr-dad-size}. 
+%We test the compression ratios of these algorithms under varied error bounds $\epsilon$ and trajectory sizes, respectively.
+The compression ratios of these algorithms under varied error bounds $\epsilon$ and trajectory sizes are reported in Figure~\ref{fig:cr-ped-epsilon}, Figure~\ref{fig:cr-sed-epsilon}, Figure~\ref{fig:cr-dad-epsilon}, Figure~\ref{fig:cr-ped-size}, Figure~\ref{fig:cr-sed-size} and Figure~\ref{fig:cr-dad-size}.
 {Note that the optimal algorithm using \sed or \dad is not reported in Figure~\ref{fig:cr-ped-epsilon}, Figure~\ref{fig:cr-sed-epsilon}, Figure~\ref{fig:cr-dad-epsilon} because it runs out of memory taking the full dataset as input}.
 
 %%%%%%%%%%%%%%%%%
@@ -459,7 +460,7 @@ Algorithm \dpa is on average ($76.86\%$, $82.45\%$, $96.52\%$, $137.95\%$) of \o
 
 We next discuss our findings also from the views of \lsa algorithms and distance metrics.
 
-\stitle{Analyses of \lsa algorithms}. The average errors of these algorithms as a whole are on the contrary of compression ratios. The optimal algorithm usually is the worst algorithm in term of average error, followed by one pass algorithms and then batch algorithms. 
+\stitle{Analyses of \lsa algorithms}. The average errors of these algorithms as a whole are on the contrary of compression ratios. The optimal algorithm usually is the worst algorithm in term of average error, followed by one pass algorithms and then batch algorithms.
 Online algorithms have varied average errors, ranging from the best to the worst in the tests.
 (1) For batch algorithms, bottom-up algorithm (\tpa) and top-down algorithm (\dpa) have the similar average errors when using either \ped or \sed as well as they have the similar compression ratios. Batch algorithm have pretty good average errors \wrt compression ratios compared with other algorithms. \todo{\dad}
 %

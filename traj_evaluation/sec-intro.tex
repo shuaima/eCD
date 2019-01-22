@@ -48,7 +48,7 @@ batch, online and one-pass algorithms.
 
 \ni (2) {\em Online algorithms} such as \opwa \cite{Meratnia:Spatiotemporal}, \squishe \cite{Muckell:SQUISH} and \bqsa \cite{Liu:BQS} apply local distance checking policies, and need not to have the entire trajectory ready before compressing. They restrict the checking within a window, but may still check a point  multiple times during the process.
 
-\ni (3) {\em One-pass algorithms} such as \operb\cite{Lin:Operb}, \siped  \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}, \cised \cite{Lin:Cised} and \interval \cite{Ke:Interval} apply better local distance checking policies, which even do not need a window to buffer the previous read points, and process each point in a trajectory once and only once.
+\ni (3) {\em One-pass algorithms} such as \operb\cite{Lin:Operb}, \siped  \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}, \cised \cite{Lin:Cised} and \ridad \cite{Ke:Interval} apply better local distance checking policies, which even do not need a window to buffer the previous read points, and process each point in a trajectory once and only once.
 
 By using local distance checking, online and one-pass algorithms are much more efficient than batch algorithms.
 
@@ -84,16 +84,18 @@ Note that \lsa algorithms using \sed or \dad may produce more line segments than
 	\begin{tabular}{|l|c|c|c|c|c|c|c|c}
 		\hline
 		\kw{Name}  & \kw{Type}      &\kw{\ped} &\kw{\sed}  &\kw{\dad} &  \kw{Time} & \kw{Space} & \kw{Key~Idea}\\		\hline
-		\opt~\cite{Imai:Optimal}	&optimal		&Y & Y & Y & $O(n^3)$	& {$O(n^2)$}  & Reachability Graph\\		\hline
-%		\optp\cite{Chan:Optimal}	&optimal		&Y & N & N & $O(n^2)$	& {$O(n)$}  &Graph and Sector intersection  \\		\hline
-		\dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal}	&batch  &Y &Y & Y   & $O(n^2)$ & O(n)   & Top-down \\		\hline
-		\tpa\cite{Pavlidis:Segment}	&batch       &Y &Y & Y  & $O(n^2/K)$ & O(n)   &Bottom-up \\		\hline
-		\bqsa\cite{Liu:BQS}	&online	   &Y   & N & N & $O(n^2)$  & $O(|Q|)$    &Top-down, opening window and Convex hull  \\		\hline
-		\squishe\cite{Muckell:Compression}	&{online}	  & N &Y  & N  & $O(n\log|Q|)$ & $O(|Q|)$  &Bottom-up and Priority queue \\		\hline
-		\operb\cite{Lin:Operb}	& one-pass	  &Y & N & N & $O(n)$ & O(1)   & Fitting function \\		\hline
-		\siped\cite{Dunham:Cone, Zhao:Sleeve}	&one-pass	  &Y & N & N & $O(n)$ & O(1)  & Sector intersection\\		\hline
-		\cised\cite{Lin:Cised}	&one-pass	 	&N & Y & N & $O(n)$ & O(1)  & Spatio-temporal cone intersection \\		\hline
-		\interval\cite{Ke:Interval}	&one-pass	 	&N & N & Y & $O(n)$ & O(1)  & Interval intersection \\		\hline
+		\opt~\cite{Imai:Optimal}				&optimal		&Y & Y & Y & $O(n^3)$	& {$O(n^2)$}  & Reachability Graph\\		\hline
+%		\optp\cite{Chan:Optimal}				&optimal		&Y & N & N & $O(n^2)$	& {$O(n)$}  &Graph and Sector intersection  \\		\hline
+		\dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal}	&batch  &Y &Y & Y   & $O(n^2)$ & $O(n)$   & Top-down \\		\hline
+		\tpa\cite{Pavlidis:Segment}				&batch      &Y &Y  & Y  	& $O(n^2/K)$ & $O(n)$   &Bottom-up \\		\hline
+		\opwa \cite{Meratnia:Spatiotemporal} 	&online  	&Y &Y  &Y   	& $O(n^2)$	& $O(n)$  &Top-down and opening window	\\		\hline
+		\bqsa\cite{Liu:BQS}						&online	   	&Y & N & N 		& $O(n^2)$  & $O(|Q|)$    &Top-down, opening window and Convex hull  \\		\hline
+		\squishe\cite{Muckell:Compression}		&{online}	&N &Y  & N  	& $O(n\log|Q|)$ & $O(|Q|)$  &Bottom-up and Priority queue \\		\hline
+		\operb\cite{Lin:Operb}					& one-pass	&Y & N & N 		& $O(n)$ 	& $O(1)$   & Fitting function \\		\hline
+		\siped\cite{Dunham:Cone, Zhao:Sleeve}	&one-pass	&Y & N & N 		& $O(n)$ 	& $O(1)$  & Sector intersection\\		\hline
+		\cised\cite{Lin:Cised}					&one-pass	&N & Y & N 		& $O(n)$ 	& $O(1)$  & Spatio-temporal cone intersection \\		\hline
+		\ridad\cite{Long:Direction,Ke:Interval}			&one-pass	&N & N & Y 		& $O(n)$ 	& $O(1)$  & Direction range intersection \\		\hline
+%		\interval\cite{Ke:Interval}				&one-pass	&N & N & Y 		& $O(n)$ 	& $O(1)$  & Direction range intersection with $\epsilon$-range \\		\hline
 	\end{tabular}
 	{\\  Note: $K$ is the number of the final segments of a trajectory and $|Q|$ is the size of a buffer/window.}
 	\vspace{-3ex}

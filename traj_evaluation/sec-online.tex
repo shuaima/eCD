@@ -1,8 +1,8 @@
 \subsection{Online Algorithms}
 
 Online \lsa algorithms adopt local checking policies by restricting the checking within a sliding or opening window such that there is no need to have the entire trajectory ready before compressing. That is, online algorithms essentially combine {\em batch algorithms} with {\em sliding or opening windows}, \eg\
-\opwa \cite{Meratnia:Spatiotemporal} is a combination of top-down algorithm \dpa and opening windows while \cite{Keogh:online} is a combination of bottom-up algorithm \tpa and \textit{sliding windows}.
-Though these algorithm support all three distance metrics \ped, \sed and \dad, they still have a high time and/or space complexity \cite{Liu:BQS}.
+\opwa \cite{Meratnia:Spatiotemporal} is a combination of top-down algorithm \dpa and opening windows while \kw{SWAB} \cite{Keogh:online} is a combination of bottom-up algorithm \tpa and \textit{sliding windows}.
+Though these algorithms support all three distance metrics \ped, \sed and \dad, they still have a high time and/or space complexity \cite{Liu:BQS}.
 To design more efficient online algorithms, techniques typically need to be designed closely coupled with distance metrics.
 Indeed, \bqsa \cite{Liu:BQS}  and \squishe \cite{Muckell:Compression} proposes to utilize convex hulls and priority queues, respectively, and they speed up trajectory simplification using \ped and \sed, respectively. To our knowledge, no specific techniques have been developed for \dad.
 Hence, {\em we choose algorithms \bqsa, \squishe and \opwa as the representatives of online algorithms using \ped, \sed and \dad, respectively}.
@@ -22,6 +22,19 @@ The time complexity of \bqsa remains $O(n^2)$ in the worst case, as \bqsa falls 
 %\vspace{-0.5ex}
 %\subsubsection{Bounded Quadrant System Using \ped}
 
+\eat{%%%% opening windows
+\stitle{{Algorithm \opwa \cite{Meratnia:Spatiotemporal}}.}
+{The \opwa algorithm~\cite{Meratnia:Spatiotemporal} combines the Top-down and opening window strategies, and enforces the constrained global checking in the window.}
+
+Given a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ and an error bound $\epsilon$, algorithm \opwa~\cite{Meratnia:Spatiotemporal} maintains a window $W[P_s, \ldots, P_k]$, where $P_s$ and $P_k$ are the start and end points, respectively. Initially, $P_s$ = $P_0$ and $P_k$ = $P_1$, and the window $W$ is gradually expanded by adding new points one by one. \opwa tries to compress all points in $W[P_s, \ldots, P_k]$ to a single line segment $\mathcal{L}(P_{s}, P_{k})$. If the distances $ped(P_i, {\mathcal{L}})\le \epsilon$ for all points $P_i$ ($i\in[s, k]$), it simply expands $W$ to $[P_s, \ldots, P_k, P_{k+1}]$ $(k+1\le n)$ by adding a new point $P_{k+1}$. Otherwise, it produces a new line segment $\mathcal{L}(P_{s}, P_{k-1})$, and replaces $W$ with a new window $[P_{k-1},\ldots,P_{k+1}]$. The above process repeats until all points in $\dddot{\mathcal{T}}$ have been considered.
+%
+%\textcolor[rgb]{0.00,0.07,1.00}{According to the different methods of selecting the end points of a line segment, Open Window can further be divided into Normal Penning Window and Before Opening Window~\cite{Meratnia:Spatiotemporal}. When the distance of the point to compressed trajectory exceeds a certain threshold, Normal Opening Window algorithm select that point as the end point, while Before Opening Window select the last point within the window as the end point of the current trajectory.}
+%
+Algorithm \opwa is not efficient enough for compressing long trajectories as it remains in $O(n^2)$ time, the same as the \dpa algorithm.
+%Also, \ped and \sed are both supported in \opwa as the algorithm \dpa does.
+}%%%%%Opening windows
+
+
 \stitle{Algorithm BQS Using \ped \cite{Liu:BQS}}.
 It is essentially an optimized opening window algorithm \cite{Meratnia:Spatiotemporal}, and reduces the running time by introducing convex hulls to pick out a certain number of points, which makes it specific for \ped.
 
@@ -35,6 +48,7 @@ Each time a new point is added to buffer $W$, \bqsa first picks out at most eigh
 %
 The time complexity of \bqsa remains $O(n^2)$. However, its simplified version \fbqsa has a linear time complexity by essentially avoiding case (3) to speed up the process.
 %The performance of \fbqsa has already been evaluated in work \cite{Lin:Operb}. %our preview work
+
 
 
 
