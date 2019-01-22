@@ -67,7 +67,7 @@ By using local distance checking, online and one-pass algorithms are much more e
 
 
 Originally, \lsa algorithms adopt \ped as the distance metric, which brings good compression ratios~ \cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey}. (1) \ped does not preserve the temporal information. Hence, \sed was then introduced to preserve temporal information of trajectories and to support spatio-temporal queries\cite{Meratnia:Spatiotemporal}.
-(2) \dad~\cite{Long:Direction, Zhang:Evaluation} was  introduced to preserve the direction information of moving objects, and was initially called the \emph{direction-based measurement} in \cite{Long:Direction}). It is important for applications such as trajectory clustering and direction-based query processing \cite{Long:Direction}.
+(2) \dad~\cite{Long:Direction, Zhang:Evaluation} was  introduced to preserve the direction information of moving objects, and was initially called the \emph{direction-based measurement} in \cite{Long:Direction}). It is important for applications such as trajectory clustering and direction-based query processing \cite{Long:Direction,Long:Mining}.
 %
 Note that \lsa algorithms using \sed or \dad may produce more line segments than using \ped. However, the use of \sed and \dad further preserve temporal and direction information, respectively.
 
@@ -88,11 +88,11 @@ Note that \lsa algorithms using \sed or \dad may produce more line segments than
 %		\optp\cite{Chan:Optimal}				&optimal		&Y & N & N & $O(n^2)$	& {$O(n)$}  &Graph and Sector intersection  \\		\hline
 		\dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal}	&batch  &Y &Y & Y   & $O(n^2)$ & $O(n)$   & Top-down \\		\hline
 		\tpa\cite{Pavlidis:Segment}				&batch      &Y &Y  & Y  	& $O(n^2/K)$ & $O(n)$   &Bottom-up \\		\hline
-		\opwa \cite{Meratnia:Spatiotemporal} 	&online  	&Y &Y  &Y   	& $O(n^2)$	& $O(n)$  &Top-down and opening window	\\		\hline
-		\bqsa\cite{Liu:BQS}						&online	   	&Y & N & N 		& $O(n^2)$  & $O(|Q|)$    &Top-down, opening window and Convex hull  \\		\hline
+		\opwa \cite{Meratnia:Spatiotemporal} 	&online  	&Y &Y  &Y   	& $O(n^2)$	& $O(n)$  &Top-down and Opening window	\\		\hline
+		\bqsa\cite{Liu:BQS}						&online	   	&Y & N & N 		& $O(n^2)$  & $O(|Q|)$    &Top-down, Opening window and Convex hull  \\		\hline
 		\squishe\cite{Muckell:Compression}		&{online}	&N &Y  & N  	& $O(n\log|Q|)$ & $O(|Q|)$  &Bottom-up and Priority queue \\		\hline
 		\operb\cite{Lin:Operb}					& one-pass	&Y & N & N 		& $O(n)$ 	& $O(1)$   & Fitting function \\		\hline
-		\siped\cite{Dunham:Cone, Zhao:Sleeve}	&one-pass	&Y & N & N 		& $O(n)$ 	& $O(1)$  & Sector intersection\\		\hline
+		\siped\cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve}	&one-pass	&Y & N & N 		& $O(n)$ 	& $O(1)$  & Sector intersection\\		\hline
 		\cised\cite{Lin:Cised}					&one-pass	&N & Y & N 		& $O(n)$ 	& $O(1)$  & Spatio-temporal cone intersection \\		\hline
 		\ridad\cite{Long:Direction,Ke:Interval}			&one-pass	&N & N & Y 		& $O(n)$ 	& $O(1)$  & Direction range intersection \\		\hline
 %		\interval\cite{Ke:Interval}				&one-pass	&N & N & Y 		& $O(n)$ 	& $O(1)$  & Direction range intersection with $\epsilon$-range \\		\hline
@@ -100,8 +100,6 @@ Note that \lsa algorithms using \sed or \dad may produce more line segments than
 	{\\  Note: $K$ is the number of the final segments of a trajectory and $|Q|$ is the size of a buffer/window.}
 	\vspace{-3ex}
 \end{table*}
-
-
 
 \stitle{Motivations}. Empirical studies on trajectory compression algorithms have been conducted~\cite{Muckell:Compression,MuckellHLR10,mThesis}. However, they only discuss a small number of algorithms. The very recent study \cite{Zhang:Evaluation} does evaluate a wide range of trajectory simplification algorithms,
 and it provides a good experimental study on compression error and spatio-temporal query analyses. However, two important aspects for trajectory simplification (\ie  compression ratios and running time) are not systematically studied in \cite{Zhang:Evaluation}. As a consequence, it remains difficult for practitioners to decide which algorithms and distance metrics should be adopted for a specific application.
