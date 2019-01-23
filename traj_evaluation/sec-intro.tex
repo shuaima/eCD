@@ -26,7 +26,7 @@ With the increasing popularity of GPS sensors on various mobile devices, such as
 %Further, we find that the online transmitting of raw trajectories also seriously aggravates several other issues such as out-of-order and duplicate data points in our experiences when implementing an online vehicle-to-cloud data transmission system.
 %Fortunately, these issues can be resolved or greatly alleviated by the trajectory compression techniques \cite{Douglas:Peucker, Hershberger:Speeding, Meratnia:Spatiotemporal, Liu:BQS, Muckell:Compression, Chen:Trajectory, Chen:Fast, Keogh:online, Cao:Spatio, Shi:Survey, Richter:Semantic ,Long:Direction, Song:PRESS, Nibali:Trajic}.
 
-Due to the  limitations (poor compression ratio and data reconstruction overhead) of lossless compression, lossy compression techniques has become the mainstream of trajectory compression \cite{Lin:Operb,Zhang:Evaluation}. Quite a few lossy trajectory compression techniques, most notably the piece-wise line simplification \cite{Douglas:Peucker, Hershberger:Speeding, Keogh:online,Liu:BQS, Muckell:Compression, Chen:Trajectory, Chen:Fast, Cao:Spatio, Shi:Survey} solving the \emph{min-$\#$} problem \cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment}, have been developed. The idea of piece-wise line simplification (\lsa) comes from computational geometry, whose target is to approximate a given finer piece-wise linear curve by another coarser piece-wise linear curve (\textcolor{blue}{normally a sub set of the former}), such that the maximum distance of the former from the later is bounded by a user specified threshold. It is widely used due to its distinct advantages: (a) simple and easy to implement, (b) no need of extra knowledge and suitable for freely  moving  objects \cite{Popa:Spatio}, and (c) bounded errors with good compression ratios.
+Due to the  limitations (poor compression ratio and data reconstruction overhead) of lossless compression, lossy compression techniques has become the mainstream of trajectory compression \cite{Lin:Operb,Zhang:Evaluation}. Quite a few lossy trajectory compression techniques, most notably the piece-wise line simplification \cite{Douglas:Peucker, Hershberger:Speeding, Keogh:online,Liu:BQS, Muckell:Compression, Chen:Trajectory, Chen:Fast, Cao:Spatio, Shi:Survey} solving the \emph{min-$\#$} problem \cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment}, have been developed. The idea of piece-wise line simplification (\lsa) comes from computational geometry, whose target is to approximate a given finer piece-wise linear curve by another coarser piece-wise linear curve ({normally a sub set of the former}), such that the maximum distance of the former from the later is bounded by a user specified threshold. It is widely used due to its distinct advantages: (a) simple and easy to implement, (b) no need of extra knowledge and suitable for freely  moving  objects \cite{Popa:Spatio}, and (c) bounded errors with good compression ratios.
 
 %These techniques may be lossless or lossy \cite{Muckell:Compression}.
 %Lossless compression methods enable exact reconstruction of the original data from the compressed data without information loss.
@@ -83,11 +83,12 @@ Note that \lsa algorithms using \sed or \dad may produce more line segments than
 	\small
 	\begin{tabular}{|l|c|c|c|c|c|c|c|c}
 		\hline
-		\kw{Name}  & \kw{Type}      &\kw{\ped} &\kw{\sed}  &\kw{\dad} &  \kw{Time} & \kw{Space} & \kw{Key~Idea} \\		\hline
-		\opt~\cite{Imai:Optimal}				&optimal		&Y & Y & Y & $O(n^3)$	& {$O(n^2)$}  & Reachability Graph \\		\hline
-        \optp\cite{Chan:Optimal}             &optimal		&Y & N & N & $O(n^2)$	& {$O(n^2)$}  & Reachability Graph and Sector intersection  \\		\hline
-%		\optp\cite{Chan:Optimal}				&optimal		&Y & N & N & $O(n^2)$	& {$O(n)$}  &Graph and Sector intersection  \\		\hline
-        \kw{SP} \cite{Long:Direction}           &optimal		&N & N & Y & $O(n^2)$	& {$O(n^2)$}  & {Reachability Graph and Direction range intersection}  \\		\hline
+		\kw{Name}  & \kw{Type}      &\kw{\ped} &\kw{\sed}  &\kw{\dad} &  \kw{Time} & \kw{Space} & \kw{Key~Ideas} \\		\hline
+		\opt~\cite{Imai:Optimal}				&optimal	&Y & Y & Y & $O(n^3)$	& {$O(n^2)$}  & Reachability Graph \\		\hline
+        \optp\cite{Chan:Optimal}             	&optimal	&Y & N & N & $O(n^2)$	& {$O(n^2)$}  & Reachability Graph and Sector intersection  \\		\hline
+%		\optp\cite{Chan:Optimal}				&optimal	&Y & N & N & $O(n^2)$	& {$O(n)$}  &Graph and Sector intersection  \\		\hline
+        \kw{SP} \cite{Long:Direction}           &optimal	&N & N & Y & $O(n^2)$	& {$O(n^2)$}  & {Reachability Graph and Direction range intersection}  \\		\hline
+		\textcolor{blue}{\kw{Ramer} \cite{Ramer:Split}}			&batch  	&Y &Y & Y   & $O(n^2)$ & $O(n)$   & Top-down \\		\hline
 		\dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal}	&batch  &Y &Y & Y   & $O(n^2)$ & $O(n)$   & Top-down \\		\hline
 		\tpa\cite{Pavlidis:Segment}				&batch      &Y &Y  & Y  	& $O(n^2/K)$ & $O(n)$   &Bottom-up \\		\hline
 		\opwa \cite{Meratnia:Spatiotemporal} 	&online  	&Y &Y  &Y   	& $O(n^2)$	& $O(n)$  &Top-down and Opening window	\\		\hline
