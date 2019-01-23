@@ -23,7 +23,7 @@ The sector intersection method is \ped specific, and runs fast as well as has co
 %Moreover, {fast \bqsa \cite{Liu:BQS} (\fbqsa in short), the simplified version of \bqsa, has a linear time complexity.}%
 
 
-Algorithm Linear Dead Reckoning (\ldr)  for position tracking \cite{Lange:Tracking}  follows the similar routine as \rwa except that it uses \sed and assumes a velocity ${\vv{v}}$ for each section.
+Algorithm Linear Dead Reckoning (\ldr) for position tracking \cite{Lange:Tracking,Trajcevski:DDR} follows the similar routine as \rwa except that it uses \sed and assumes a velocity ${\vv{v}}$ for each section.
 %In addition, the authors of \cite{Trajcevski:DDR} proved that \ldr is also suitable for online spatio-temporal compression. % as long as the tolerance threshold is set to $\epsilon/2$.
 However, it has poor compression ratios because both the value and the direction of velocity ${\vv{v}}$ are pre-defined and fixed between two updates.
 Recently algorithm \cised~\cite{Lin:Cised}  extends the \textit{sector intersection} method \siped from a 2D space to a Spatio-Temporal 3D space.
@@ -31,8 +31,9 @@ These one-pass algorithms are designed for \sed. {\em As algorithm \cised has a 
 
 
 
-Direction range intersection \cite{Long:Direction,Ke:Interval} approach is somehow like the \emph{sector intersection} methods except that they are designed for \dad.
-%(\eg\ \intersec \cite{Long:Direction} and \interval \cite{Ke:Interval})
+Direction range intersection \cite{Long:Direction} approach (\eg\ \intersec \cite{Long:Direction} and \interval \cite{Ke:Interval}) is somehow like the \emph{sector intersection} methods except that they are designed for \dad,
+\textcolor{blue}{we choose both of them as the representative of one-pass algorithms using \dad.}
+
 %{\em As \interval is an extension of \intersec, we choose \interval as the representative of  one-pass algorithms using \dad}.
 
 
@@ -195,7 +196,7 @@ The original \cised also uses a half cone, $\frac{\epsilon}{2}$-\cone. It can be
 
 
 
-\stitle{Algorithm \ridad Using \dad\cite{Long:Direction, Ke:Interval}.}
+\stitle{Algorithm \intersec\cite{Long:Direction} and \interval\cite{Ke:Interval} Using \dad.}
 %The \emph{range intersection} method \cite{Long:Direction} is specifically designed for the direction-aware distance \dad, and serves as the foundation of the direction preserveing trajectory simplification algorithms \intersec \cite{Long:Direction} and \interval . This approach is a bit like the \emph{sector intersection} method in that it defines a \emph{direction range} for each line segment connecting two neighbouring points then checks the common intersection of those \emph{direction ranges} as a way similar with the \emph{sector intersection}.
 %
 Given a direction line segment $\mathcal{L}$ and an angle $\epsilon$, the \emph{direction range} denoted by $range(\mathcal{L}.\theta, \epsilon)$ is $[\mathcal{L}.\theta-\epsilon, \mathcal{L}.\theta+\epsilon]$, where $[\theta_1, \theta_2]$ denotes the varying range of a directed line segment originated from the origin when it is rotated anti-clockwise from $\theta_1$ to $\theta_2$.
@@ -203,9 +204,9 @@ Given a direction line segment $\mathcal{L}$ and an angle $\epsilon$, the \emph{
 The {common intersection} of \emph{direction ranges} of directed line segments $\{\vv{P_sP_{s+1}}, \vv{P_{s+1}P_{s+2}}, ..., \vv{P_{s+k-1}P_{s+k}}\}$ \wrt $\epsilon$ is $\bigsqcap_{i=1}^{k}Range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon)$.
 %denoted by $ComSub(\{\vv{P_sP_{s+1}}, \vv{P_{s+1}P_{s+2}}, ..., \vv{P_{s+k-1}P_{s+k}}\}, \epsilon)$,
 
-Algorithm \ridad\cite{Long:Direction}, \textcolor{blue}{originally called \kw{Intersec}}, uses a half range, and shows that if the {common intersection} $\bigsqcap_{i=1}^{k}range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon/2)\ne \phi$, then the angular difference between $\vv{P_{s+i-1}P_{s+i}}$ and $\vv{P_sP_{s+k}}$ for all $i\in [1, k]$ is not larger than $\epsilon$.
+Algorithm \intersec\cite{Long:Direction} uses a half range, and shows that if the {common intersection} $\bigsqcap_{i=1}^{k}range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon/2)\ne \phi$, then the angular difference between $\vv{P_{s+i-1}P_{s+i}}$ and $\vv{P_sP_{s+k}}$ for all $i\in [1, k]$ is not larger than $\epsilon$.
 %
-Recently, \textcolor{blue}{authors of \cite{Ke:Interval} extend} \ridad from half to full ranges, \textcolor{blue}{and name it \interval,} by showing that if the {common intersection} $\bigsqcap_{i=1}^{k}range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon)\ne \phi$ and $\vv{P_sP_{s+k}}.\theta$ falls in the {common intersection}, then the angular difference between $\vv{P_{s+i-1}P_{s+i}}$ and $\vv{P_sP_{s+k}}$ for all $i\in [1, k]$ is not larger than $\epsilon$.
+Recently, {algorithm \interval \cite{Ke:Interval} extends} \intersec from half to full ranges, by showing that if the {common intersection} $\bigsqcap_{i=1}^{k}range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon)\ne \phi$ and $\vv{P_sP_{s+k}}.\theta$ falls in the {common intersection}, then the angular difference between $\vv{P_{s+i-1}P_{s+i}}$ and $\vv{P_sP_{s+k}}$ for all $i\in [1, k]$ is not larger than $\epsilon$.
 %
 %Algorithms \intersec and \interval both run in $O(n)$ time and take $O(1)$ space. %, and they both only support \dad.
 
