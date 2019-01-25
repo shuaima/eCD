@@ -4,17 +4,7 @@
 \label{sec-intro}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\eat{%%%%%%%%%%%%
-\begin{figure*}[tb!]
-	\centering
-	%\vspace{-1ex}
-	\includegraphics[scale=0.60]{Figures/Fig-DP.png}
-	\vspace{-6ex}
-	\caption{\small A trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$  with 11 points is represented by (2) two and (3) four continuous line segments (solid blue), compressed by the Douglas--Peucker algorithm \cite{Douglas:Peucker} with error metrics \ped and \sed, respectively.}
-	\vspace{-3ex}
-	\label{fig:notations}
-\end{figure*}
-}%%%%%%%%%%%%%%%
+
 
 %A trajectory is a sequence of GPS data points representing the track of a moving object, which is collected at a certain sampling rate by a GPS sensor, transmitted to and saved in cloud servers for subsequent applications, such as location based services, moving object tracking, user behavior analysis, POI recommendation, {traffic analysis} and so on.
 %
@@ -73,7 +63,7 @@ Note that \lsa algorithms using \sed or \dad may produce more line segments than
 
 
 
-
+\eat{
 \begin{table*}
 	\renewcommand{\arraystretch}{1.20}
 	\vspace{-1ex}
@@ -88,7 +78,7 @@ Note that \lsa algorithms using \sed or \dad may produce more line segments than
         \optp\cite{Chan:Optimal}             	&optimal	&Y & N & N & $O(n^2)$	& {$O(n^2)$}  & Reachability Graph and Sector intersection  \\		\hline
 %		\optp\cite{Chan:Optimal}				&optimal	&Y & N & N & $O(n^2)$	& {$O(n)$}  &Graph and Sector intersection  \\		\hline
         \kw{SP} \cite{Long:Direction}           &optimal	&N & N & Y & $O(n^2)$	& {$O(n^2)$}  & {Reachability Graph and Direction range intersection}  \\		\hline
-		\textcolor{blue}{\kw{Ramer} \cite{Ramer:Split}}			&batch  	&Y &Y & Y   & $O(n^2)$ & $O(n)$   & Top-down \\		\hline
+        {\kw{Ramer} \cite{Ramer:Split}}			&batch  	&Y &Y & Y   & $O(n^2)$ & $O(n)$   & Top-down \\		\hline
 		\dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal}	&batch  &Y &Y & Y   & $O(n^2)$ & $O(n)$   & Top-down \\		\hline
 		\tpa\cite{Pavlidis:Segment}				&batch      &Y &Y  & Y  	& $O(n^2/K)$ & $O(n)$   &Bottom-up \\		\hline
 		\opwa \cite{Meratnia:Spatiotemporal} 	&online  	&Y &Y  &Y   	& $O(n^2)$	& $O(n)$  &Top-down and Opening window	\\		\hline
@@ -104,6 +94,61 @@ Note that \lsa algorithms using \sed or \dad may produce more line segments than
 		\interval\cite{Ke:Interval}				&one-pass	&N & N & Y 		& $O(n)$ 	& $O(1)$  & Direction range intersection with $\epsilon$-range \\		\hline
 	\end{tabular}
 	{\\  Note: $K$ is the number of the final segments of a trajectory and $|Q|$ is the size of a buffer/window.}
+	\vspace{-3ex}
+\end{table*}
+}
+
+\begin{table*}
+	\renewcommand{\arraystretch}{1.20}
+	\vspace{-1ex}
+	\caption{\small Evaluated error bounded trajectory simplification algorithms}
+	\label{tab:summary-lsa}
+	\centering
+	\small
+	\begin{tabular}{|c|c|l|c|c|c|c|c|c|c|c}
+		\hline
+		\multicolumn{2}{|c|}{\kw{Category}} &\kw{Name} &\kw{\ped} &\kw{\sed}  &\kw{\dad} &  \kw{Time} & \kw{Space} &\kw{Rep} & \kw{Key~Ideas} \\		
+        \hline
+        \multicolumn{2}{|c|}{\multirow{3}*{\kw{optimal}}} &\opt~\cite{Imai:Optimal}					&\checkmark  & \checkmark & \checkmark & $O(n^3)$	& {$O(n^2)$} & \checkmark & Reachability Graph \\		
+        \cline{3-10}
+        \multicolumn{2}{|c|}{}&\optp\cite{Chan:Optimal}             		&\checkmark &$\times$ &$\times$ & $O(n^2)$	& {$O(n^2)$} & & {Reachability Graph and Sector intersection}  \\		
+        \cline{3-10}
+        \multicolumn{2}{|c|}{}&\kw{SP} \cite{Long:Direction}          &$\times$ &$\times$ & \checkmark & $O(n^2)$	& {$O(n^2)$} & & {Reachability Graph and Range intersection}  \\		
+        \hline
+        
+        \multirow{14}*{\rotatebox{90}{\kw{sub} \kw{optimal}}}
+        &\multirow{3}*{\rotatebox{90}{\kw{batch}}}  &{\kw{Ramer} \cite{Ramer:Split}}		&\checkmark &\checkmark & \checkmark   & $O(n^2)$ & $O(n)$  & & Top-down \\		
+        \cline{3-10}
+		& &\dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal}	&\checkmark &\checkmark &\checkmark   & $O(n^2)$ & $O(n)$  &\checkmark & Top-down \\		
+		\cline{3-10}
+        & &\tpa\cite{Pavlidis:Segment}			&\checkmark &\checkmark  &\checkmark  	& $O(n^2/K)$ & $O(n)$  &\checkmark &Bottom-up \\		
+        \cline{2-10}
+        
+        &\multirow{4}*{\rotatebox{90}{\kw{online}}}	&\opwa \cite{Meratnia:Spatiotemporal} 	&\checkmark &\checkmark  &\checkmark   	& $O(n^2)$	& $O(n)$  &\checkmark &Top-down and Opening window	\\		
+        \cline{3-10}
+		& &\kw{SWAB} \cite{Keogh:online} 	        &\checkmark &\checkmark  &\checkmark   	& $O(n*|Q|)$	& $O(|Q|)$  & &Bottom-up and Sliding window	\\		
+        \cline{3-10}
+		& &\bqsa\cite{Liu:BQS}					&\checkmark &$\times$ &$\times$ 		& $O(n^2)$  & $O(|Q|)$   &\checkmark &{Top-down, Opening window and Convex hull}  \\		
+        \cline{3-10}
+	    & &\squishe\cite{Muckell:Compression}		&$\times$ &\checkmark  &$\times$  	& $O(n\log|Q|)$ & $O(|Q|)$  &\checkmark &Bottom-up and Priority queue \\		
+        \cline{2-10}
+        
+        &\multirow{4}*{\rotatebox{90}{\kw{one}-\kw{pass}~~~ }}&\rwa \cite{Reumann:Strip}              &\checkmark &$\times$ &$\times$ 		& $O(n)$ 	& $O(1)$  & & Strip  \\		
+        \cline{3-10}
+		& &\operb\cite{Lin:Operb}					&\checkmark &$\times$ &$\times$ 		& $O(n)$ 	& $O(1)$   &\checkmark & Fitting function \\		
+        \cline{3-10}
+		& &\siped\cite{Dunham:Cone, Zhao:Sleeve}	&\checkmark &$\times$ &$\times$ 		& $O(n)$ 	& $O(1)$  &\checkmark & Sector intersection\\		 %Williams:Longest, Sklansky:Cone,
+        \cline{3-10}
+        & &\ldr\cite{Lange:Tracking,Trajcevski:DDR} &$\times$ &\checkmark &$\times$ 		& $O(n)$ 	& $O(1)$  & & Linear dead reckoning  \\		
+        \cline{3-10}
+		& &\cised\cite{Lin:Cised}					&$\times$ & \checkmark &$\times$ 		& $O(n)$ 	& $O(1)$  &\checkmark & Spatio-temporal Cone intersection \\		
+        \cline{3-10}
+		& &\intersec\cite{Long:Direction}			&$\times$ &$\times$ & \checkmark 		& $O(n)$ 	& $O(1)$  &\checkmark & Range intersection with $\frac{\epsilon}{2}$-range\\		
+        \cline{3-10}
+        & &\interval\cite{Ke:Interval}				&$\times$ &$\times$ & \checkmark 		& $O(n)$ 	& $O(1)$  &\checkmark & Range intersection with $\epsilon$-range \\		
+        \hline
+	\end{tabular}
+	{\\  Note: ``Rep" is ``representative", $K$ is the number of the final segments of a trajectory and $|Q|$ is the size of a buffer/window.}
 	\vspace{-3ex}
 \end{table*}
 
