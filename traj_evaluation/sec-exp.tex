@@ -502,30 +502,33 @@ The results are reported in Figure~\ref{fig:time-epsilon-ped}, Figure~\ref{fig:t
 Note that even on the small datasets, the running time of the \opt algorithm is thousands of times slower than one-pass algorithms on our datasets. Indeed, it is not easy to show all these algorithms in a figure, thus, only the results of sub-optimal algorithms are reported in these figures.
 
 \sstab (1) When using \ped, in most cases, the running time from the smallest to the largest are one-pass algorithms \siped and \operb, batch algorithms \tpa and \dpa, and online algorithm \bqsa.
-Algorithms \siped and \operb are comparable, and algorithms \tpa, \dpa and \bqsa are on average
+Algorithms \siped($\frac{\epsilon}{2}$) and \operb are comparable, algorithm \siped(${\epsilon}$) is a bit slower than \siped($\frac{\epsilon}{2}$), and algorithms \tpa, \dpa and \bqsa are on average
 ($19.19$, $26.79$, $28.25$, $29.87$), ($17.90$, $16.32$, $15.40$, $11.02$) and ($15.07$, $37.73$, $62.23$, $61.29$)
-times slower than the one-pass algorithm \siped on datasets \dSets, respectively.
+times slower than the one-pass algorithm \siped($\frac{\epsilon}{2}$) on datasets \dSets, respectively.
 %
 For example, in \mopsi, the running time of algorithms
-(\tpa, \dpa, \bqsa, \siped, \operb ) are ($232.9$, $124.2$, $469.4$, $7.6$, $8.6$) seconds when $\epsilon$ = $40m$.
+(\tpa, \dpa, \bqsa, \siped(${\epsilon}$), \siped($\frac{\epsilon}{2}$), \operb ) are ($232.9$, $124.2$, $469.4$, $?$, $7.6$, $8.6$) seconds when $\epsilon$ = $40m$.
 
-\sstab (2) When using \sed, the running time from the smallest to the largest are one-pass algorithm \cised, online algorithm \squishe, and batch algorithms \tpa and \dpa.
-Algorithms \tpa, \dpa and \squishe are on average
+\sstab (2) When using \sed, the running time from the smallest to the largest are one-pass algorithm \cised, online algorithm \squishe, and batch algorithms \tpa and \dpa. Algorithm \cised(${\epsilon}$) is also a bit slower than \cised($\frac{\epsilon}{2}$), and algorithms \tpa, \dpa and \squishe are on average
 ($8.58$, $13.33$, $15.81$, $13.09$), ($12.81$, $12.93$, $10.64$, $8.79$) and
-($2.63$, $2.75$, $2.78$, $2.57$) times slower than \cised on datasets \dSets, respectively.
+($2.63$, $2.75$, $2.78$, $2.57$) times slower than \cised($\frac{\epsilon}{2}$) on datasets \dSets, respectively.
 %
 For example, in \mopsi, the running time of algorithms
-(\tpa, \dpa, \squishe, \cised) are  ($156.6$, $104.8$, $27.2$, $9.7$) seconds when $\epsilon$ = $40m$.
+(\tpa, \dpa, \squishe, \cised($\epsilon$), \cised($\frac{\epsilon}{2}$)) are ($156.6$, $104.8$, $27.2$, $?$, $9.7$) seconds when $\epsilon$ = $40m$.
 
 \sstab {(3) When using \dad,} the running time from the smallest to the
-largest are one-pass algorithm \interval and batch algorithms \tpa and \dpa.
+largest are one-pass algorithms \intersec and \interval, and batch algorithms \tpa and \dpa.
 %
-Algorithms \tpa and \dpa are on average
-($6.66$, $13.55$, $12.73$, $12.73$) and ($11.67$, $14.24$, $16.51$, $17.59$)
-times slower than \interval on datasets \dSets, respectively.
+%Algorithm \interval is a bit slower than \intersec, and algorithms \tpa and \dpa are on average
+%($6.66$, $13.55$, $12.73$, $12.73$) and ($11.67$, $14.24$, $16.51$, $17.59$)
+%times slower than \interval on datasets \dSets, respectively.
 %
-For example, in \mopsi, the running time of algorithms
-(\tpa, \dpa, \interval) are ($105.57$, $152.53$, $8.57$) seconds when
+Algorithm \interval is a bit slower than \intersec, and algorithms \tpa and \dpa are on average
+($?$, $?$, $?$, $?$) and ($?$, $?$, $?$, $?$)
+times slower than \intersec on datasets \dSets, respectively.
+%
+For example, the running time of algorithms
+(\tpa, \dpa, \interval, \intersec) are ($105.57$, $152.53$, $8.57$, $?$) seconds in \mopsi when
 $\epsilon=45$ degrees, respectively.
 
 
@@ -545,7 +548,7 @@ The running time from the fastest to the slowest are one-pass algorithms, online
 For batch algorithms, the running time of algorithms \dpa and \tpa decreases and increases with the increase of error bound $\epsilon$, respectively, due to the top-down and bottom-up approaches they applying. When using \ped or \sed, top-down algorithm usually runs faster than bottom-up algorithm when the error bound $\epsilon$~is large enough (\eg in \geolife, $\epsilon >10$ metres when using \ped and $\epsilon >30$ metres when using \sed), which means that top-down (bottom-up) algorithm needs to split (merge) the original trajectory fewer (more) times in these cases, vice versa. When using \dad, recall the top-down algorithm has poorer compression ratios compared with bottom-up algorithm, meaning it needs more time to split the raw trajectory into more sub trajectories, thus, the top-down algorithm is normally a bit slower than the bottom-up algorithm.
 Besides error bounds, datasets also impact the efficiencies of batch algorithms. A dataset with high sampling rate likely needs more merging processes than splitting processes, thus, top-down algorithm runs faster than bottom-up algorithm in high sampling datasets when using \ped or \sed.
 
-For online algorithms, \fbqsa and \squishe are faster than \bqsa and \opwa at a cost of poorer compression ratios. Note they are still times slower than one pass algorithms. \bqsa and \opwa both have poor efficiencies as they finally need the batch approach. Even this batch approach is run in a buffer, it is still time consuming.
+For online algorithm \squishe is faster than \bqsa and \opwa at a cost of poorer compression ratios. Note it is still times slower than one pass algorithms. \bqsa and \opwa both have poor efficiencies as they finally need the batch approach. Even this batch approach is run in a buffer, it is still time consuming.
 
 One-pass algorithms \operb, \siped, \cised and \interval show a linear running time which is consistent with their time complexity analyses. They are not very sensitive to error bound $\epsilon$, and also scale well with the increase of trajectory size on all datasets as a data point is processed only one time during the whole process.
 Among these one pass algorithms, \siped, \operb and \interval have the similar running time, and algorithm \cised runs a bit slower than them, partially because finding the common intersection of spatial-temporal cones is a heavier work than sectors or ranges.
