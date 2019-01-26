@@ -64,7 +64,7 @@ They also come from different sources, where \taxi and \ucar are collected by ca
 %The details of these datasets are shown in Table~\ref{tab:dataset}.
 
 \stitle{Algorithms and implementation}.
-We implement the representative algorithms selected from \mytable{tab:summary-lsa}. They are \opt, \dpa, \tpa, \opwa, \bqsa, \squishe, \operb, \siped, \cised, \intersec and \interval.
+We implement the representative algorithms of \mytable{tab:summary-lsa}. They are \opt, \dpa, \tpa, \opwa, \bqsa, \squishe, \operb, \siped, \cised, \intersec and \interval.
 For one-pass algorithms \siped and \cised, we implement two versions of them, \ie the half and full \emph{Sectors/Cones}.
 For algorithm \cised, we fixed parameter $m=16$ as evaluated in \cite{Lin:Cised}, \ie 16-edges inscribe regular polygon.
 % For algorithm \nopts, we fixed parameter $m=32$.
@@ -238,7 +238,7 @@ to the worst are the optimal algorithm \opt, one-pass algorithm \cised($\epsilon
 %
 {Algorithms \tpa and \dpa are comparable, and they are on average
 ($102.72\%$, $125.23\%$, $143.92\%$, $128.63\%$) and ($103.18\%$, $123.93\%$, $141.46\%$, $121.14\%$)
- of the optimal algorithm \opt on datasets \dSets, respectively.}
+ of algorithm \opt on datasets \dSets, respectively.}
 %
 {Algorithms \cised(${\epsilon}$), \cised($\frac{\epsilon}{2}$) and \squishe are on average (
   $102.04\%$, $109.27\%$, $110.13\%$, $115.90\%$,), ($108.00\%$,
@@ -260,12 +260,12 @@ are ($3.45\%$, $3.41\%$, $5.75\%$, $3.02\%$, $3.86\%$), respectively, when $\eps
 to the worst are the optimal algorithm \opt, batch algorithm \tpa and
 one-pass algorithm \interval, online algorithm \opwa, one-pass algorithm \intersec and batch algorithm \dpa.
 %
-{Algorithms \tpa, \opwa and \interval are comparable, and they are on average
+{Algorithms \tpa, \opwa and \interval are comparable, and are on average
 ($100.81\%$, $102.91\%$, $102.27\%$, $106.88\%$), ($104.39\%$, $116.09\%$, $107.11\%$, $115.42\%$) and ($102.38\%$, $101.98\%$, $103.52\%$, $103.43\%$)
- of the optimal algorithm \opt on datasets \dSets, respectively.}
+ of algorithm \opt on datasets \dSets, respectively.}
 %
 {Algorithms \intersec and \dpa are on average ($111.72\%$, $156.00\%$, $121.20\%$, $230.52\%$) and ($133.19\%$, $283.93\%$, $143.79\%$, $278.89\%$)
- of the optimal algorithm \opt on datasets \dSets, respectively.}
+ of algorithm \opt on datasets \dSets, respectively.}
 %
 For example, in \mopsi, the compression ratios of algorithms (\tpa, \dpa, \opwa, \interval, \intersec)
 are ($13.3\%$, $23.1\%$, $14.12\%$, $13.7\%$, $18.96\%$), respectively, when $\epsilon$ = $45$ degrees.
@@ -274,7 +274,11 @@ are ($13.3\%$, $23.1\%$, $14.12\%$, $13.7\%$, $18.96\%$), respectively, when $\e
 
 We then discuss some extended findings from the views of \lsa algorithms and distance metrics.
 
-\stitle{Extended analyses of \lsa algorithms}. The optimal algorithm is the best algorithm in term of compression ratio, and one pass algorithms using full $\epsilon$ sector/cone/range are the most outstanding algorithms among all sub optimal algorithms, followed by batch algorithms. Online algorithms have varied compression ratios, ranging from the worst to the similar with batch and one-pass algorithms.
+\stitle{Extended analyses of \lsa algorithms}. The \opt algorithm is the best in term of compression ratio, followed by online algorithms \opwa and \bqsa and one-pass algorithms using the full $\epsilon$ \emph{sector/cone/range}. One-pass algorithms using a half $\epsilon$ \emph{sector/cone/range} and batch algorithms except \dpa using \dad also have good compression ratios.
+\eat{
+ are the most outstanding algorithms among all sub optimal algorithms.
+, followed by batch algorithms. Online algorithms have varied compression ratios, ranging from the worst to the similar with batch and one-pass algorithms.
+}
 
 %\todo{Batch: Bottom-up vs Top-down.}
 For batch algorithms, the bottom-up algorithm (\tpa) and top-down algorithm (\dpa) have the similar compression ratios when using either \ped or \sed. However, when using \dad, bottom-up method has obviously better compression ratios than top-down method. We note that the experimental results of \cite{Long:Direction} also show this phenomenon (but without discuss). As we know the top-down algorithm will split a long trajectory $[P_s, ..., P_e]$ into two sub trajectories by finding out a splitting point $P_i (s<i<e)$ who has the max position deviation (or whose line segment $\vv{P_{i-1}P_{i}}$ has the max direction deviation) to line segment $\vv{P_sP_{e}}$. Through this strategy works well with \ped and \sed, a point with the max direction deviation may not be a reasonable splitting point in the direction-aware scenario. Thus it leads to a poorer compression ratio. The bottom-up method does not have this weakness as it always merges neighbouring points.
@@ -290,13 +294,13 @@ For one-pass algorithms, the full $\epsilon$ sector/cone/range combining with a 
 This may be related to the moving habits or patterns of moving objects that engender trajectories.
 A moving object, like an individual or a car, usually keeps moving forward for quite a long time, engendering a sequence of data points distributing in a narrow strip. Under such circumstance, a new data point is quite possible living in the common intersection of larger sectors/cones/ranges, which further leads to a better compression ratio.
 %which lets more data points be represented by a result line segment.
-\todo{strict proof?}
+
 %combining with a constraint that the current point should live in the common intersection of preview sectors/cones/ranges
 
 
 
 \stitle{Extended analyses of distance metrics}.
-Though \ped, \sed and \dad are different distances, we can still compare them from the view of compression ratio, so as to help choose an effective distance metric.
+Though \ped, \sed and \dad are different distances, the comparison of their compression ratios is helpful to choose an effective distance metric.
 %whose usages are mainly decided by application requirements
 %
 First, given the same error bound $\epsilon$, the compression ratios of algorithms using \ped are obviously better
@@ -417,7 +421,7 @@ to the largest are batch algorithms \tpa and \dpa, one-pass
 algorithms \siped($\frac{\epsilon}{2}$) and \operb, the optimal algorithm \opt and one-pass algorithm \siped(${\epsilon}$), and online algorithm \bqsa.
 %
 In full datasets, algorithms \tpa and \dpa are comparable, and they are on average ($77.43\%$, $58.69\%$, $61.34\%$,
-$57.57\%$) and ($88.12\%$, $57.61\%$, $62.66\%$, $60.23\%$) of the optimal algorithm \opt on datasets \dSets, respectively.
+$57.57\%$) and ($88.12\%$, $57.61\%$, $62.66\%$, $60.23\%$) of algorithm \opt on datasets \dSets, respectively.
 Algorithms \siped($\frac{\epsilon}{2}$) and \operb are comparable, and they are on average
 ($73.08\%$, $80.96\%$, $79.12\%$, $79.33\%$), ($73.03\%$, $70.60\%$, $76.64\%$, $78.71\%$) of \opt on datasets \dSets, respectively.
 %
@@ -474,7 +478,7 @@ Online algorithms have varied average errors, ranging from the best to the worst
 
 
 \stitle{Extended analyses of distance metrics}.
-Given the same error bound $\epsilon$, the average errors of algorithms using \sed are a bit larger than using \ped. {As we know the \ped error is caused by the changes of direction of a moving object while the \sed error is caused by the changes of both the direction and the speed of a moving object, the above phenomenon probably reveals that the changes of speed is more often than the changes of direction of a moving object.}
+Given the same error bound $\epsilon$, the average errors of algorithms using \sed are a bit larger than using \ped. {As we know the \ped error is originally caused by the changes of direction of a moving object while the \sed error is caused by the changes of both the direction and the speed of a moving object, the above phenomenon probably reveals that the changes of speed is more often than the changes of direction of a moving object.}
 %
 And in practical (\eg $\epsilon = 60$ meters and $\epsilon = 45$ degrees), the average errors of algorithms using \dad, when translated to position errors like \ped, are likely $10$ times larger than algorithms directly using \ped and \sed. It is clearly a small direction deviation plus a long trip may lead to a large position error.
 
@@ -547,7 +551,7 @@ The running time from the fastest to the slowest are one-pass algorithms, online
 For batch algorithms, the running time of algorithms \dpa and \tpa decreases and increases with the increase of error bound $\epsilon$, respectively, due to the top-down and bottom-up approaches they applying. When using \ped or \sed, top-down algorithm usually runs faster than bottom-up algorithm when the error bound $\epsilon$~is large enough (\eg in \geolife, $\epsilon >10$ metres when using \ped and $\epsilon >30$ metres when using \sed), which means that top-down (bottom-up) algorithm needs to split (merge) the original trajectory fewer (more) times in these cases, vice versa. When using \dad, recall the top-down algorithm has poorer compression ratios compared with bottom-up algorithm, meaning it needs more time to split the raw trajectory into more sub trajectories, thus, the top-down algorithm is normally a bit slower than the bottom-up algorithm.
 Besides error bounds, datasets also impact the efficiencies of batch algorithms. A dataset with high sampling rate likely needs more merging processes than splitting processes, thus, top-down algorithm runs faster than bottom-up algorithm in high sampling datasets when using \ped or \sed.
 
-For online algorithm \squishe is faster than \bqsa and \opwa at a cost of poorer compression ratios. Note it is still times slower than one pass algorithms. \bqsa and \opwa both have poor efficiencies as they finally need the batch approach. Even this batch approach is run in a buffer, it is still time consuming.
+For online algorithms, \squishe is faster than \bqsa and \opwa at a cost of poorer compression ratios. Note it is still times slower than one pass algorithms. \bqsa and \opwa both have poor efficiencies as they finally need the batch approach. Even this batch approach is run in a buffer, it is still time consuming.
 
 One-pass algorithms \operb, \siped, \cised and \interval show a linear running time which is consistent with their time complexity analyses. They are not very sensitive to error bound $\epsilon$, and also scale well with the increase of trajectory size on all datasets as a data point is processed only one time during the whole process.
 Among these one pass algorithms, \siped, \operb and \interval have the similar running time, and algorithm \cised runs a bit slower than them, partially because finding the common intersection of spatial-temporal cones is a heavier work than sectors or ranges.
@@ -631,6 +635,41 @@ Our tests also show that the computing of a \dad is faster than \ped and \sed, a
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 From these tests we find the following.
 
+\stitle{Algorithms}. 
+(1) The optimal algorithm has the best compression ratios, large average errors and the worst efficiency.
+%
+(2) Batch algorithms, except \dpa using \dad, have good compression ratios, normal average errors and poor efficiency.
+%
+The bottom-up (\tpa) and top-down (\dpa) algorithms have the similar compression ratios and average errors when using either \ped or \sed. The Bottom-up method has obviously better compression ratios than the top-down method when using \dad.
+%
+The running time of batch algorithms \dpa and \tpa decreases and increases with the increase of error bound $\epsilon$, respectively. When using \ped or \sed, top-down algorithm \dpa usually runs faster than bottom-up algorithm \tpa when the error bound $\epsilon$~is large enough (\eg in \geolife, $\epsilon >10$ metres when using \ped and $\epsilon >30$ metres when using \sed). When using \dad, the top-down algorithm is normally a bit slower than the bottom-up algorithm.
+Top-down algorithm also runs faster than bottom-up algorithm in high sampling datasets when using \ped or \sed.
+%
+(3) Online algorithms \opwa and \bqsa usually have better compression ratios than batch algorithms, the worst average errors and poorer efficiency than batch algorithms. Algorithm \squishe is on the other side of \opwa and \bqsa.
+%
+(4) One-pass algorithms \operb, \siped, \cised, \intersec and \interval have good compression ratios (comparable with the best sub-optimal algorithms), poor average errors and the best efficiency.
+%
+The full $\epsilon$ \emph{sector/cone/range} combining with a position/direction constraint always have better compression ratios and also larger average errors than the half $\epsilon$ \emph{sector/cone/range} versions in all datasets. %and they are comparable with the best sub-optimal algorithms.
+%
+One-pass algorithms show a linear running time and they are not very sensitive to error bound $\epsilon$, and also scale well with the increase of trajectory size.
+
+%The average errors of algorithms as a whole are on the contrary of compression ratios. The optimal algorithm usually is the worst algorithm in term of average error, followed by one pass algorithms and then batch algorithms. Online algorithms have varied average errors, ranging from the best to the worst.
+
+
+\stitle{Distance Metrics}.
+The output sizes of algorithms using \sed are approximately twice of \ped, and in practical (\eg $\epsilon <100$ meters and $\epsilon < 60$ degrees), \ped and \sed usually bring obvious better compression ratios than \dad, especially in high sampling data sets.
+%
+The average errors of algorithms using \sed are a bit larger than using \ped, and in practical, the average errors of algorithms using \dad, in terms of \ped, are obvious larger than algorithms using \ped and \sed.
+%
+The computing of a \dad is faster than \ped and \sed, and the running time of computing \ped and \sed are 2.3 and 1.7 times of \dad, respectively.
+
+
+
+%%********************************* The End **********************************
+
+
+
+\eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \emph{\sstab{(1) Compression ratios}}.
 The optimal algorithm is the best algorithm in term of compression ratio, and one-pass algorithms using full $\epsilon$ sector/cone/range are the most outstanding algorithms among all sub optimal algorithms, followed by batch algorithms. Online algorithms have varied compression ratios, ranging from the worst to the similar with batch and one-pass algorithms.
 (a) When using \ped, the output data sizes of sub-optimal algorithms (\tpa,
@@ -642,6 +681,7 @@ of the optimal algorithm \opt, respectively.
 %the compression ratios from the best to the worst are the near optimal algorithm \nopts, batch algorithms \tpa and \dpa, one-pass algorithm \cised, and online algorithm \squishe.
 (c) When using \dad, the output data sizes of sub-optimal algorithms (\tpa,
 \dpa, \interval) are on average ($103.22\%$, $109.95\%$, $102.83\%$) of the optimal algorithm \opt, respectively.
+
 (d) The bottom-up (\tpa) and top-down (\dpa) algorithms have the similar compression ratios when using either \ped or \sed. The Bottom-up method has obviously better compression ratios than the top-down method when using \dad.
 (e) For one-pass algorithms, the full $\epsilon$ sector/cone/range combining with a position/direction constraint always have better compression ratios than the half $\epsilon$ sector/cone/range versions in all datasets. %and they are comparable with the best sub optimal algorithms
 (f) The output sizes of algorithms using \sed are approximately twice of \ped.
@@ -672,13 +712,7 @@ Top-down algorithm runs faster than bottom-up algorithm in high sampling dataset
 (g) The computing of a \dad is faster than \ped and \sed, and the running time of computing \ped and \sed are 2.3 and 1.7 times of \dad, respectively.
 
 Note the findings of compression ratios and running time are not reported in \cite{Zhang:Evaluation}, and for average errors, the items (a),(b), (c) and (d) are concluded from more distinct error bounded \lsa algorithms, including \opt, \siped and \cised, and items (e), (f) and (g) are new findings.
-
-
-%%********************************* The End **********************************
-
-
-
-
+}
 
 
 

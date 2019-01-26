@@ -4,27 +4,35 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 We have evaluated the state-of-the-art \lsa algorithms for trajectory compression, including \emph{both the optimal and the sub-optimal methods that use either \ped or \sed or \dad}.
-Using a variety of real trajectory datasets, we evaluated the performance of distinct techniques in terms of its processing time, compression ratio and average error.
+Using a variety of real trajectory datasets, we evaluated the performance of representative techniques in terms of their compression ratio, average error and efficiency.
 Our experimental results show that:
 %First of all,
 
-\emph{\sstab{(1) Distance metrics}}. Users are freely to choose distance metric \sed or \ped or \dad, depending on application requirements. Nevertheless, the selection of distance metric would bring difference performance.
+
+\emph{\sstab{(1) The choose of a \lsa algorithm}}. The optimal algorithms bring the best compression ratios, however, their efficiency is obvious poorer than sub-optimal algorithms. As the optimal simplified trajectory is actually meaningless from the perspective of trajectory application. Hence, it seems that the optimal algorithms are impractical, especially in case the input data set is large or computing resources are limited.
+
+For sub optimal algorithms, the output sizes of algorithms \bqsa and \siped($\epsilon$) using \ped, \cised($\epsilon$) using \sed, and \tpa and \interval using \dad are approximately $103\%$--$124\%$, $102\%$--$115\%$ and $102\%$--$107\%$ of the optimal algorithm, respectively. Batch algorithms using \ped and \sed also have good compression ratios. Thus, they are the alternates of the optimal algorithms.
+%
+More specifically, in case compression ratios are the first consideration, then algorithms \bqsa and \siped($\epsilon$) using \ped, \cised($\epsilon$) using \sed, and \tpa and \interval using \dad are good selections.
+%
+In case average error are concerns, then batch algorithms are the selections as one pass algorithms and online algorithms \opwa and \bqsa all have large average errors. % and algorithm \squishe has really limited compression ratios
+%
+In case running time is important factor or computing resources are limited, then one-pass algorithms are the certain choices.
+%
+Indeed, one-pass algorithms run fast and require few resources, and still have comparable compression ratios with batch and online algorithms, hence, they are prominent algorithms for trajectory compression when average error are not the main concerns.
+
+\emph{\sstab{(2) The choose of a distance metric}}. Users are freely to choose distance metric \sed or \ped or \dad, depending on application requirements. Nevertheless, the selection of distance metric would bring difference performance.
 For compression ratios, the using of synchronized distance \sed saves temporal information of trajectories with a cost of approximately double-sized (\ie $200\%$) outputs compared with using \ped, in all datasets and all algorithms; \ped has obvious better compression ratios than \dad in all datasets and \sed is also better than \dad in high sampling datasets.
-For average error, algorithms using \dad, in terms of \ped, are obvious larger than algorithms using \ped and \sed.
-For running time, the running time of computing \ped and \sed are 2.3 and 1.7 times of \dad, respectively.
+%For average error, algorithms using \dad will bring larger position error than algorithms using \ped and \sed.
+For efficiency, the running time of computing \ped and \sed are 2.3 and 1.7 times of \dad, respectively.
 %\sed and \dad in batch algorithms \dpa and \tpa run a bit faster than \ped, and \sed enabled one-pass algorithm \cised runs a bit slower than \ped (or \dad) enabled one-pass algorithm \siped and \operb (or \interval).
 
-\emph{\sstab{(2) Optimal algorithms}}. The optimal algorithms bring the best compression ratios, however, their running time is more than tens (hundreds) of times poorer than one-pass (sub-optimal) algorithms. It seems that the optimal algorithms are impractical, especially in case that the input data set is large or computing resources are limited.
-
-\emph{\sstab{(3) Sub-optimal algorithms}}. The output sizes of evaluated sub-optimal algorithms using \ped or \sed, except \squishe, are comparable, and they are approximately $120\%$--$150\%$ of the optimal algorithm; the output sizes of sub-optimal algorithms \tpa and \interval using \dad are comparable, and they are approximately $101\%$--$107\%$ of the optimal algorithm.
-For average errors, one-pass algorithms usually have a bit larger errors than batch and online algorithms.
-For running time, the one-pass algorithms \operb, \siped, \cised, \intersec and \interval are tens of times faster than the batch and online algorithms \tpa, \dpa and \bqsa, and more than $2$ times faster than online algorithm \squishe. Indeed, one-pass algorithms run fast and still have comparable compression ratios with batch and online algorithms, thus, they are more suitable for trajectory compression, especially on resource constraint mobile devices, when average error are not the main concerns.
 
 In the future of trajectory simplification, there are some work worthy of exploration:
-%
-(1) The effectiveness of sub-optimal algorithms remains a small room to be improved as their outputs are approximately $120\%$--$150\%$ of the optimal algorithms,
-%
-(2) The combination of trajectory simplification algorithms with other algorithms, \eg Map-Matching and Position Tracking, and
-(3) The impacts of simplified trajectory on trajectory data mining and trajectory data services.
+(1) The combination of trajectory simplification algorithms with other algorithms, \eg Map-Matching and Position Tracking, and
+(2) The impacts of simplified trajectory on trajectory data mining and trajectory data services.
 
+%
+%(1) The effectiveness of sub-optimal algorithms remains a small room to be improved as their outputs are approximately $120\%$--$150\%$ of the optimal algorithms,
+%
 %(3) The combination of trajectory simplification algorithms with other fundamental algorithms, such as location track, event detection, \etc.
