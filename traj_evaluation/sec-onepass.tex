@@ -9,7 +9,7 @@ One-pass algorithms adopt local checking policies, and run in $O(n)$ time with a
 Reumann-Witkam (\rwa) \cite{Reumann:Strip} is a straightforward one-pass algorithm that builds a strip paralleling to the line connecting the first two points, then the points within this strip compose a section of the line.  \rwa is fast, but has a poor compression ratio.
 Algorithm \operb~\cite{Lin:Operb} recently improves \rwa  by allowing dynamically adjustable strips, together with several detailed optimization techniques.
 %
-There is also algorithm \siped (\emph{sector intersection}) that converts distance tolerances into angle tolerances, which is {\em completely overlooked} by existing trajectory compression studies,  but can be easily adopted for trajectory compression, as it is originally developed in fields of computational geometry and pattern recognition~\cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}.
+There is also algorithm \siped (\emph{sector intersection}) that converts distance tolerances into angle tolerances to speed up the process, which is {\em completely overlooked} by existing trajectory compression studies,  but can be easily adopted for trajectory compression, as it is originally developed in fields of computational geometry and pattern recognition~\cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}.
 These algorithms are designed for \ped. {\em Algorithms \operb and \siped have good compression ratios, and, hence, we choose them as the as the representatives of  one-pass algorithms using \ped}.
 
 
@@ -166,7 +166,7 @@ Then, there exists a point $Q$ such that $Q.t = P_{s+k}.t$ and $sed(P_{s+i}, \vv
 %
 Like \textit{sector intersection} methods, point $Q$ may also not belong to $\{P_{s}, P_{s+1},$ $\ldots, P_{s+k}\}$. If $P_{s+i}$ ($1\le i\le k$) is chosen as $Q$, then for any point $P_{s+j}$ ($j \in [1, ... i]$), its \sed to
 line segment $\overline{P_sP_{s+i}}$ is not greater than the error bound $\epsilon$ if
-$\bigsqcap_{j=1}^{i}$\cone{(P_s, P_{s+j}, \epsilon/2)} $\ne \{P_s\}$ as pointed out in \cite{Lin:Cised}, or
+$\bigsqcap_{j=1}^{i}$\cone{(P_s, P_{s+j}, \epsilon/2)} $\ne \{P_s\}$ as pointed out in \cite{Lin:Cised}.
 
 
 %And its strong simplification version also applies the half $\epsilon$ in building a cone.
@@ -195,10 +195,10 @@ The original \cised also uses a half cone, $\frac{\epsilon}{2}$-\cone. It can be
 
 
 
-\stitle{Algorithms \intersec\cite{Long:Direction} and \interval\cite{Ke:Interval} Using \dad.}
+\stitle{Algorithms \intersec \cite{Long:Direction} and \interval \cite{Ke:Interval} Using \dad.}
 %The \emph{range intersection} method \cite{Long:Direction} is specifically designed for the direction-aware distance \dad, and serves as the foundation of the direction preserveing trajectory simplification algorithms \intersec \cite{Long:Direction} and \interval . This approach is a bit like the \emph{sector intersection} method in that it defines a \emph{direction range} for each line segment connecting two neighbouring points then checks the common intersection of those \emph{direction ranges} as a way similar with the \emph{sector intersection}.
 %
-Given a direction line segment $\mathcal{L}$ and an angle $\epsilon$, the \emph{direction range} denoted by $range(\mathcal{L}.\theta, \epsilon)$ is $[\mathcal{L}.\theta-\epsilon, \mathcal{L}.\theta+\epsilon]$, where $[\theta_1, \theta_2]$ denotes the varying range of a directed line segment originated from the origin when it is rotated anti-clockwise from $\theta_1$ to $\theta_2$.
+Given a direction line segment $\mathcal{L}$ and an angle $\epsilon$, the \emph{direction range} denoted by $range(\mathcal{L}.\theta, \epsilon)$ is $[\mathcal{L}.\theta-\epsilon, \mathcal{L}.\theta+\epsilon]$, where $[\theta_1, \theta_2]$ denotes the varying range of a directed line segment originated from the origin when it is rotated anti-clockwise from $\theta_1$ to $\theta_2$  \cite{Long:Direction}.
 %
 The {common intersection} of \emph{direction ranges} of directed line segments $\{\vv{P_sP_{s+1}}, \vv{P_{s+1}P_{s+2}}, ..., \vv{P_{s+k-1}P_{s+k}}\}$ \wrt $\epsilon$ is $\bigsqcap_{i=1}^{k}Range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon)$.
 %denoted by $ComSub(\{\vv{P_sP_{s+1}}, \vv{P_{s+1}P_{s+2}}, ..., \vv{P_{s+k-1}P_{s+k}}\}, \epsilon)$,

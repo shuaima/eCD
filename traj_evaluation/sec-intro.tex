@@ -16,7 +16,7 @@ With the increasing popularity of GPS sensors on various mobile devices, such as
 %Further, we find that the online transmitting of raw trajectories also seriously aggravates several other issues such as out-of-order and duplicate data points in our experiences when implementing an online vehicle-to-cloud data transmission system.
 %Fortunately, these issues can be resolved or greatly alleviated by the trajectory compression techniques \cite{Douglas:Peucker, Hershberger:Speeding, Meratnia:Spatiotemporal, Liu:BQS, Muckell:Compression, Chen:Trajectory, Chen:Fast, Keogh:online, Cao:Spatio, Shi:Survey, Richter:Semantic ,Long:Direction, Song:PRESS, Nibali:Trajic}.
 
-Due to the  limitations (poor compression ratio and data reconstruction overhead) of lossless compression, lossy compression techniques has become the mainstream of trajectory compression \cite{Lin:Operb,Zhang:Evaluation}. Quite a few lossy trajectory compression techniques, most notably the piece-wise line simplification \cite{Douglas:Peucker, Hershberger:Speeding, Keogh:online,Liu:BQS, Muckell:Compression, Chen:Trajectory, Chen:Fast, Cao:Spatio, Shi:Survey} solving the \emph{min-$\#$} problem \cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment}, have been developed. The idea of piece-wise line simplification (\lsa) comes from computational geometry, whose target is to approximate a given finer piece-wise linear curve by another coarser piece-wise linear curve ({normally a sub set of the former}), such that the maximum distance of the former from the later is bounded by a user specified threshold. It is widely used due to its distinct advantages: (a) simple and easy to implement, (b) no need of extra knowledge and suitable for freely  moving  objects \cite{Popa:Spatio}, and (c) bounded errors with good compression ratios.
+Due to the  limitations (poor compression ratio and data reconstruction overhead) of lossless compression, lossy compression techniques has become the mainstream of trajectory compression \cite{Lin:Operb,Zhang:Evaluation}. Quite a few lossy trajectory compression techniques, most notably the piece-wise line simplification \cite{Douglas:Peucker, Hershberger:Speeding, Keogh:online,Liu:BQS, Muckell:Compression, Chen:Trajectory, Chen:Fast, Cao:Spatio, Shi:Survey} solving the \emph{min-$\#$} problem \cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment}, have been developed. The idea of piece-wise line simplification (\lsa) comes from computational geometry, whose target is to approximate a fine piece-wise linear curve with a coarse one (whose corresponding data points are a subset of the former), such that the maximum distance of the former to the latter is bounded by a user specified threshold. It is widely used due to its distinct advantages: (a) simple and easy to implement, (b) no need of extra knowledge and suitable for freely  moving  objects \cite{Popa:Spatio}, and (c) bounded errors with good compression ratios.
 
 %These techniques may be lossless or lossy \cite{Muckell:Compression}.
 %Lossless compression methods enable exact reconstruction of the original data from the compressed data without information loss.
@@ -31,7 +31,7 @@ Due to the  limitations (poor compression ratio and data reconstruction overhead
 \stitle{Algorithm taxonomy}. \lsa algorithms fall into two categories: \textit{optimal} and \textit{sub-optimal} algorithms.
 \textit{Optimal} methods\cite{Imai:Optimal,Chan:Optimal} are to find the minimum number of points or segments to represent the original polygonal lines \wrt an error bound $\epsilon$, by transforms the problem to search for the shortest path of a graph built from the original trajectory.
 The optimal \lsa algorithms have relative high time/space complexities which make them impractical for large trajectory data.
-Hence, \textit{sub-optimal} \lsa algorithms have been developed and/or introduced for trajectory compression, and they achieve better efficiencies at the expense of outputting a little more data points. By the applied distance checking policies, sub-optimal algorithms can further be classified into
+Hence, \textit{sub-optimal} \lsa algorithms have been developed and/or introduced for trajectory compression, and they achieve better efficiencies at an expense of outputting a little more data points. By the applied distance checking policies, sub-optimal algorithms can further be classified into
 batch, online and one-pass algorithms.
 
 \sstab (1) {\em Batch algorithms} such as Douglas-Peucker\cite{Douglas:Peucker,Meratnia:Spatiotemporal} and \pavlidis~\cite{Pavlidis:Segment} apply global distance checking policies such that all trajectory points need to be loaded before starting compression, and a point may be checked multiple times to compute its distance to the corresponding line segments.
@@ -40,7 +40,7 @@ batch, online and one-pass algorithms.
 
 \sstab (3) {\em One-pass algorithms} such as \operb\cite{Lin:Operb}, \siped \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}, \cised \cite{Lin:Cised}, \intersec\cite{Long:Direction} and \interval \cite{Ke:Interval} apply better local distance checking policies, which even do not need a window to buffer the previous read points, and process each point in a trajectory once and only once.
 
-By using local distance checking, online and one-pass algorithms are much more efficient than batch algorithms.
+%By using local distance checking, online and one-pass algorithms are much more efficient than batch algorithms.
 
 %, such as the convex hull in \bqsa~\cite{Liu:BQS}, the priority queue in \squishe \cite{Muckell:Compression}, the {fitting function} in \operb \cite {Lin:Operb} and the spatio-temporal cone intersection in \cised \cite {Lin:Cised}.
 
@@ -116,7 +116,7 @@ Note that \lsa algorithms using \sed or \dad may produce more line segments than
         \multicolumn{2}{|c|}{}&\kw{SP} \cite{Long:Direction}          &$\times$ &$\times$ & \checkmark & $O(n^2)$	& {$O(n^2)$} & & {Reachability Graph and Range intersection}  \\		
         \hline
 
-        \multirow{14}*{\rotatebox{90}{\kw{sub} \kw{optimal}}}
+        \multirow{14}*{\rotatebox{90}{\kw{sub}-\kw{optimal}}}
         &\multirow{3}*{\rotatebox{90}{\kw{batch}}}  &{\kw{Ramer} \cite{Ramer:Split}}		&\checkmark &\checkmark & \checkmark   & $O(n^2)$ & $O(n)$  & & Top-down \\		
         \cline{3-10}
 		& &\dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal}	&\checkmark &\checkmark &\checkmark   & $O(n^2)$ & $O(n)$  &\checkmark & Top-down \\		
@@ -126,9 +126,10 @@ Note that \lsa algorithms using \sed or \dad may produce more line segments than
 
         &\multirow{4}*{\rotatebox{90}{\kw{online}}}	&\opwa \cite{Meratnia:Spatiotemporal} 	&\checkmark &\checkmark  &\checkmark   	& $O(n^2)$	& $O(n)$  &\checkmark &Top-down and Opening window	\\		
         \cline{3-10}
-		& &\kw{SWAB} \cite{Keogh:online} 	        &\checkmark &\checkmark  &\checkmark   	& $O(n*|Q|)$	& $O(|Q|)$  & &Bottom-up and Sliding window	\\		
+		& &\bqsa\cite{Liu:BQS}					&\checkmark &$\times$ &$\times$ 		& $O(n^2)$  & $O(|Q|)$   &\checkmark &{Top-down, Opening window and Convex hull} \\		
         \cline{3-10}
-		& &\bqsa\cite{Liu:BQS}					&\checkmark &$\times$ &$\times$ 		& $O(n^2)$  & $O(|Q|)$   &\checkmark &{Top-down, Opening window and Convex hull}  \\		
+		& &\kw{SWAB} \cite{Keogh:online} 	        &\checkmark &\checkmark  &\checkmark   	& $O(n*|Q|)$	& $O(|Q|)$  & &Bottom-up and Sliding window	\\		
+
         \cline{3-10}
 	    & &\squishe\cite{Muckell:Compression}		&$\times$ &\checkmark  &$\times$  	& $O(n\log|Q|)$ & $O(|Q|)$  &\checkmark &Bottom-up and Priority queue \\		
         \cline{2-10}
@@ -177,7 +178,9 @@ Note that online and one-pass algorithms are typically designed for a specific d
 \stab (2) Using four real-life trajectory datasets, we systematically evaluate and analyze the performance (compression ratio, average error and running
 time) of error bounded \lsa algorithms in terms of trajectory sizes and error bounds.
 %
-(i) For a fair running time analysis, all algorithms are (re)-implemented in Java, unlike \cite{Zhang:Evaluation} that reports running time of algorithms with different programming languages. (ii) compression ratio analyses are not considered in \cite{Zhang:Evaluation}. (iii) Optimal algorithms of \ped and \sed and one-pass algorithms \siped and \cised are not investigated in \cite{Zhang:Evaluation}. Indeed, algorithm \siped (sector intersection) is {\em completely overlooked} by existing trajectory compression studies as it is originally developed in fields of computational geometry and pattern recognition~\cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}, and we find that it can be easily adopted for trajectory compression with good performances.
+(i) For a fair running time analysis, all algorithms are (re)-implemented in Java, unlike \cite{Zhang:Evaluation} that reports running time of algorithms with different programming languages. (ii) compression ratio analyses are not considered in \cite{Zhang:Evaluation}. 
+(iii) Variations of distance metrics are not studied in \cite{Zhang:Evaluation}. 
+(iv) Optimal algorithms of \ped and \sed and one-pass algorithms \siped and \cised are not investigated in \cite{Zhang:Evaluation}. Indeed, algorithm \siped (sector intersection) is {\em completely overlooked} by existing trajectory compression studies as it is originally developed in fields of computational geometry and pattern recognition~\cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}, and we find that it can be easily adopted for trajectory compression with good performances.
 
 
 Essentially, this study is an important complimentary to \cite{Zhang:Evaluation} by providing a thorough and systematic evaluation and analyses of error bounded trajectory simplification algorithms. Further, though  \cite{Zhang:Evaluation} tests the average errors of algorithms from the aspect of applications, \ie spatio-temporal queries, different applications have different requirements, and it is hardly to enumerate all of them. Hence, we focus on revealing the intrinsic characteristics of algorithms, and providing guidelines and suggestions on the choice of methods and distance metrics for different scenarios.
@@ -243,7 +246,7 @@ Indeed, the average errors and the max errors both are metrics of quality of alg
 
 
 
-\stitle{Organization}. Section 2 introduces basics concepts of trajectory simplification,
+\stitle{Organization}. Section 2 introduces basic concepts of trajectory simplification,
 Section 3 and Section 4 systematically review optimal and sub-optimal \lsa methods, respectively,
 Section 5 reports and analyzes the experimental results, followed by
 conclusions in Section 6.

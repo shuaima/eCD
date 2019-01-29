@@ -1,10 +1,10 @@
 \subsection{Online Algorithms}
 
-Online \lsa algorithms adopt local checking policies by restricting the checking within a sliding or opening window such that there is no need to have the entire trajectory ready before compressing. That is, online algorithms essentially combine {\em batch algorithms} with {\em sliding or opening windows}, \eg\
+Online \lsa algorithms adopt local checking policies by restricting the distance checking within a sliding or opening window such that there is no need to have the entire trajectory ready before compressing. That is, online algorithms essentially combine {\em batch algorithms} with {\em sliding or opening windows}, \eg\
 \opwa \cite{Meratnia:Spatiotemporal} is a combination of top-down algorithm \dpa and opening windows while \kw{SWAB} \cite{Keogh:online} is a combination of bottom-up algorithm \tpa and \textit{sliding windows}.
-Though these algorithms support all three distance metrics \ped, \sed and \dad, they still have a high time and/or space complexity \cite{Liu:BQS}.
+Though these algorithms support the three distance metrics \ped, \sed and \dad, they still have a high time and/or space complexity \cite{Liu:BQS}.
 To design more efficient online algorithms, techniques typically need to be designed closely coupled with distance metrics.
-Indeed, \bqsa \cite{Liu:BQS} and \squishe \cite{Muckell:Compression} proposes to utilize convex hulls and priority queues, respectively, and they speed up trajectory simplification using \ped and \sed, respectively. To our knowledge, no specific techniques have been developed for \dad.
+Indeed, \bqsa \cite{Liu:BQS} and \squishe \cite{Muckell:Compression} propose to utilize convex hulls and priority queues, respectively, and they speed up trajectory simplification using \ped and \sed, respectively. To our knowledge, no specific techniques have been developed for \dad.
 Hence, {\em we choose algorithms \bqsa, \squishe and \opwa as the representatives of online algorithms using \ped, \sed and \dad, respectively}.
 
 
@@ -36,13 +36,13 @@ Algorithm \opwa is not efficient enough for compressing long trajectories as it 
 
 
 \stitle{Algorithm BQS Using \ped \cite{Liu:BQS}}.
-It is essentially an optimized \opwa algorithm \cite{Meratnia:Spatiotemporal}, and reduces the running time by introducing convex hulls to pick out a certain number of points, which makes it specific for \ped.
+It is essentially an efficiency optimized \opwa algorithm \cite{Meratnia:Spatiotemporal}, and reduces the running time by introducing convex hulls to pick out a certain number of points, which makes it specific for \ped.
 
 For a buffer $W$ with sub-trajectory $[P_s, \ldots, P_k]$, it splits the space into four quadrants. For each quadrant, a rectangular bounding box is firstly created using the least and highest $x$ and $y$ values among points $\{P_s,\ldots,P_k\}$, respectively. Then another two bounding lines connecting points $P_s$ and $P_{h}$ and points $P_s$ and $P_{l}$ are created such that lines $\vv{P_sP_{h}}$ and $\vv{P_sP_{l}}$ have the largest and smallest angles with the $x$-axis, respectively.
 Here $P_{h},P_{l} \in\{P_s,\ldots,P_k\}$. The bounding box and the two lines together form a convex hull.
 A buffer here is similar to a window in \opwa \cite{Meratnia:Spatiotemporal}.
-Each time a new point is added to buffer $W$, \bqsa first picks out at most eight significant points in a quadrant. It calculates the distances of the significant points to line $\vv{P_sP_e}$, among which the largest distance $d_{u}$ and the smallest distance $d_l$ are an upper bound and  a lower bound of the distances of all points in $[P_s, \ldots, P_k]$ to line $\vv{P_sP_e}$.
-(1) If $d_l\ge \epsilon$, it produces a new line segment $\mathcal{L}(P_{s}, P_{k})$, and produces a new window $[P_{k},\ldots,P_{k+1}]$ to replace $W$.
+Each time a new point $P_k$ is added to buffer $W$, \bqsa first picks out at most eight significant points in a quadrant. It calculates the distances of the significant points to line $\vv{P_sP_k}$, among which the largest distance $d_{u}$ and the smallest distance $d_l$ are an upper bound and  a lower bound of the distances of all points in $[P_s, \ldots, P_k]$ to line $\vv{P_sP_k}$.
+(1) If $d_l\ge \epsilon$, it produces a new line segment $\mathcal{L}(P_{s}, P_{k-1})$, and produces a new window $[P_{k-1},\ldots,P_{k}]$ to replace $W$.
 (2) If $d_u < \epsilon$, it simply expands buffer $W$ to $[P_s, \ldots, P_k, P_{k+1}]$ $(k+1\le n)$ by adding a new point $P_{k+1}$.
 (3) Otherwise, it computes all distances $d(P_i, {\mathcal{L}(P_s,P_k)})$ ($i\in[s, k]$) as algorithm \dpa does.
 %

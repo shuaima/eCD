@@ -1,12 +1,49 @@
-\vspace{-1ex}
+%\vspace{-1ex}
 \section*{Appendix A: Additional Related Work}
 Apart from the techniques evaluated in this paper, other approaches that satisfies different requirements, have been proposed or could be applied for trajectory compression.
 We next summarized other representative \lsa algorithms. Interested readers refer to \cite{Shi:Survey, Muckell:Compression, Lin:Cised, Zhang:Evaluation} for more information. %related work.
 
+\begin{figure*}[h]
+	\centering
+	%\vspace{-1ex}
+	\includegraphics[scale=0.60]{Figures/Fig-DP.png}
+	\vspace{-6ex}
+	\caption{\small A trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$  with 11 points is represented by (2) two and (3) four continuous line segments (solid blue), compressed by the Douglas--Peucker algorithm \cite{Douglas:Peucker} with error metrics \ped and \sed, respectively.}
+	\vspace{-3ex}
+	\label{fig:notations}
+\end{figure*}
+\begin{figure*}[h]
+	\centering
+	\includegraphics[scale=0.55]{Figures/Fig-Pavlidis.png}
+	\vspace{-5.5ex}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{8}]$ is compressed by the \pavlidis~algorithm using \ped to two line segments. The triple $(i, j, cost)$ is the $cost$ of merging the line segments $\overline{P_iP_t}$ and $\overline{P_tP_j}$.} % The algorithm finally outputs $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$
+	\vspace{-2.5ex}
+	\label{fig:pavlidis}
+\end{figure*}
+
+
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.55]{Figures/Fig-Squishe.png}
+	\vspace{-3ex}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the \squishe algorithm using \sed to five line segments. The size of Q is 6, and the data structure after point $P$ is a tuple $(pre, suc, mmprio, prio)$. }
+	\vspace{-3ex}
+	\label{fig:squishe}
+\end{figure*}
+
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.66]{Figures/Fig-OPER.png}
+	\vspace{-5ex}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the \operb algorithm using \ped to two line segments.}
+	\vspace{-2ex}
+	\label{fig:operb}
+\end{figure}
 %\subsection*{A.1 Other Line simplification algorithms}
 
 \stitle {Weak simplification algorithms.}
-The weak simplification allows that the output data points may not belong to the original data sets \cite{Trajcevski:DDR} (otherwise, the strong simplification). 
+The weak simplification allows that the output data points may not belong to the original data sets \cite{Trajcevski:DDR} (otherwise, the strong simplification).
 That is, weak simplification allows data interpolation. Algorithms \sleeve \cite{Zhao:Sleeve}, \operb\cite{Lin:Operb} and \cised \cite{Lin:Cised} are both strong and weak \lsa algorithms whose weak simplification versions have better compression ratios than their strong simplification versions, and even comparable with the optimal algorithms \cite{Lin:Cised}.
 
 \stitle {Algorithms using other error metrics.} %on the min-$\#$ problem
@@ -18,9 +55,12 @@ ISSED is a cumulative error that leads to varied effectiveness compared with \se
 
 
 \stitle {Algorithms on the min-$\epsilon$ problem.}
-Some work focuses on the minimal $\epsilon$ problem \cite{Chan:Optimal} that, given $m$, constructs an approximate curve consisting of at most $m$ line segments with minimum error. SQUISH($\lambda$) \cite{Muckell:SQUISH} and SQUISH-E($\lambda$) \cite{Muckell:Compression} are such algorithms that compress a trajectory of length $n$ into a trajectory of length at most $n/\lambda$. 
+Some work focuses on the minimal $\epsilon$ problem \cite{Chan:Optimal} that, given $m$, constructs an approximate curve consisting of at most $m$ line segments with minimum error. SQUISH($\lambda$) \cite{Muckell:SQUISH} and SQUISH-E($\lambda$) \cite{Muckell:Compression} are such algorithms that compress a trajectory of length $n$ into a trajectory of length at most $n/\lambda$.
 These methods lack the capability of compressing trajectories while ensuring that SED error is within a user-specified bound\cite{Muckell:Compression}.
 %It is based on the priority queue data structure, where the prioritization is determined based on estimating the amount of \sed introduced into the compression if that point was removed from the compression\cite{Muckell:SQUISH}.
+
+
+
 
 \eat{
 \subsection*{A.2 Semantic based algorithms}
@@ -64,7 +104,7 @@ These  semantics based approaches are orthogonal to line simplification based me
 
 \eat{%%%%%%%%%%%sliding window
 	\stitle{Sliding Window}.
-	The Lang simplification algorithm\cite{Lang:SideWindow}, is similar to the opening window approach except that a window is initialized as a region containing a fixed number of consecutive original points. 
+	The Lang simplification algorithm\cite{Lang:SideWindow}, is similar to the opening window approach except that a window is initialized as a region containing a fixed number of consecutive original points.
 	%If the distance from the segment, which connects the first and last original points inside the window, to the individual original points between the segment��s endpoints is less than the tolerance, a new window will be initialized by setting the last original point as the starting point; Otherwise, the window will be updated by excluding the last original point. The window is shifted over the original line.
 	
 	The \swab algorithm~\cite{Keogh:online} is essentially the combination of the Sliding Window mechanism and the Bottom-up algorithm.
