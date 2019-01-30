@@ -482,7 +482,7 @@ Local distance checking approaches try to include more points into a line segmen
 
 
 \stitle{Analyses of distance metrics}.
-For the same error bound $\epsilon$, the average errors of algorithms using \sed are a bit larger than using \ped. {As we know that the \ped error is originally caused by the changes of direction of a moving object while the \sed error is caused by the changes of both the direction and the speed of a moving object, the above phenomenon probably reveals that the changes of speeds are more frequent than the changes of directions for moving objects.}
+For the same error bound $\epsilon$, the average errors of algorithms using \sed are a bit larger than using \ped. {As we know that the \ped error is originally caused by the direction changes  of a moving object while the \sed error is caused by the changes of both the direction and the speed of a moving object, the above phenomenon probably reveals that the changes of speeds are more frequent than the changes of directions for moving objects.}
 %
 And in practice (\eg $\epsilon = 60$ meters and $\epsilon = 45$ degrees), the average errors of algorithms using \dad, when translated to position errors like \ped, are likely $10$ times larger than algorithms directly using \ped and \sed. This is obvious as a small direction deviation with a long trip may lead to a large position error.
 
@@ -516,17 +516,17 @@ Algorithms \siped($\frac{\epsilon}{2}$) and \operb are comparable, algorithm \si
 times slower than one-pass algorithm \siped($\frac{\epsilon}{2}$) on datasets \dSets, respectively.
 %
 For example, in \mopsi, the running time of algorithms
-(\tpa, \dpa, \bqsa, \siped(${\epsilon}$), \siped($\frac{\epsilon}{2}$), \operb ) are ($232.9$, $124.2$, $469.4$, $6.89$, $7.6$, $8.6$) seconds when $\epsilon$ = $40m$.
+(\tpa, \dpa, \bqsa, \siped(${\epsilon}$), \siped($\frac{\epsilon}{2}$), \operb ) is ($232.9$, $124.2$, $469.4$, $6.89$, $7.6$, $8.6$) seconds when $\epsilon$ = $40m$.
 
-\sstab (2) When using \sed, the running time from the smallest to the largest are one-pass algorithm \cised, online algorithm \squishe, and batch algorithms \tpa and \dpa. Algorithm \cised(${\epsilon}$) is $(1.17, 1.17, 1.17, 0.91)$ times of \cised($\frac{\epsilon}{2}$), and algorithms \tpa, \dpa and \squishe are on average
+\sstab (2) When using \sed, the running time from the smallest to the largest is one-pass algorithm \cised, online algorithm \squishe, and batch algorithms \tpa and \dpa. Algorithm \cised(${\epsilon}$) is $(1.17, 1.17, 1.17, 0.91)$ times of \cised($\frac{\epsilon}{2}$), and algorithms \tpa, \dpa and \squishe are on average
 ($8.58$, $13.33$, $15.81$, $13.09$), ($12.81$, $12.93$, $10.64$, $8.79$) and
 ($2.63$, $2.75$, $2.78$, $2.57$) times slower than \cised($\frac{\epsilon}{2}$) on datasets \dSets, respectively.
 %
 For example, in \mopsi, the running time of algorithms
-(\tpa, \dpa, \squishe, \cised($\epsilon$), \cised($\frac{\epsilon}{2}$)) are ($156.6$, $104.8$, $27.2$, $11.6$, $9.7$) seconds when $\epsilon$ = $40m$.
+(\tpa, \dpa, \squishe, \cised($\epsilon$), \cised($\frac{\epsilon}{2}$)) is ($156.6$, $104.8$, $27.2$, $11.6$, $9.7$) seconds when $\epsilon$ = $40m$.
 
 \sstab {(3) When using \dad,} the running time from the smallest to the
-largest are one-pass algorithms \intersec and \interval, batch algorithms \tpa and \dpa, and online algorithm \opwa.
+largest is one-pass algorithms \intersec and \interval, batch algorithms \tpa and \dpa, and online algorithm \opwa.
 %
 %Algorithm \interval is a bit slower than \intersec, and algorithms \tpa and \dpa are on average
 %($6.66$, $13.55$, $12.73$, $12.73$) and ($11.67$, $14.24$, $16.51$, $17.59$)
@@ -537,7 +537,7 @@ Algorithm \interval is $(1.86,1.80, 1.84, 1.81)$ times slower than \intersec, an
 times slower than \intersec on datasets \dSets, respectively.
 %
 For example, the running time of algorithms
-(\tpa, \dpa, \opwa, \interval, \intersec) are ($105.57$, $152.53$, $240.40$, $8.57$, $4.69$) seconds in \mopsi when
+(\tpa, \dpa, \opwa, \interval, \intersec) is ($105.57$, $152.53$, $240.40$, $8.57$, $4.69$) seconds in \mopsi when
 $\epsilon=45$ degrees, respectively.
 
 \begin{figure*}[tb!]
@@ -621,9 +621,9 @@ We then present analyses from the views of \lsa algorithms and distance metrics.
 The running time from the fastest to the slowest is one-pass algorithms, online and batch algorithms, and optimal algorithms.
 
 For batch algorithms, the running time of algorithms \dpa and \tpa decreases or increases with the increase of error bound $\epsilon$, respectively, due to the top-down and bottom-up approaches that they apply. When using \ped or \sed, top-down algorithm usually runs faster than bottom-up algorithm when the error bound $\epsilon$~is large (\eg in \geolife, $\epsilon >10$ metres when using \ped and $\epsilon >30$ metres when using \sed), which means that top-down (bottom-up) algorithm needs to split (merge) the original trajectory fewer (more) times in these cases, vice versa. When using \dad,  top-down algorithms are normally a bit slower than bottom-up algorithms (recall that top-down algorithms have poorer compression ratios compared with bottom-up algorithms, which means that it needs more time to split the raw trajectory into more sub trajectories).
-In addition to error bounds, sampling rates also have impacts on the efficiencies of batch algorithms. A dataset with high sampling rate likely needs more merging processes than splitting processes, thus, top-down algorithms run faster than bottom-up algorithms in high sampling datasets when using \ped or \sed.
+In addition to error bounds, sampling rates also have impacts on the efficiency of batch algorithms. A dataset with high sampling rate likely needs more merging processes than splitting processes, thus, top-down algorithms run faster than bottom-up algorithms in high sampling datasets when using \ped or \sed.
 
-For online algorithms, \squishe is faster than \bqsa and \opwa at a cost of poorer compression ratios, and it is still a few times slower than one-pass algorithms. \bqsa and \opwa both have poor efficiencies as they finally need batch approaches, and batch approaches running in a buffer are still time consuming.
+For online algorithms, \squishe is faster than \bqsa and \opwa at a cost of poorer compression ratios, and it is still a few times slower than one-pass algorithms. \bqsa and \opwa both have poor efficiency as they finally need batch approaches, and batch approaches running in a buffer are still time consuming.
 
 For one-pass algorithms, \operb, \siped, \cised and \interval show a linear running time that is consistent with their time complexity analyses. They are not very sensitive to error bound $\epsilon$, and also scale well with the increase of trajectory size on all datasets as a data point is processed only one time during the whole process.
 Algorithms \siped, \operb and \interval have similar running time, and algorithm \cised runs a bit slower than them, partially because finding the common intersection of spatial-temporal cones is a heavier work than sectors or ranges.
@@ -645,16 +645,16 @@ From these tests we find the followings.
 \stitle{\lsa Algorithms}.
 (1) The optimal algorithm has the best compression ratios, large average errors and the worst efficiencies.
 %
-(2) Batch algorithms, except \dpa using \dad, have good compression ratios, normal average errors and poor efficiencies.
+(2) Batch algorithms, except \dpa using \dad, have good compression ratios, normal average errors and poor efficiency.
 %
 The bottom-up (\tpa) and top-down (\dpa) algorithms have the similar compression ratios and average errors when using either \ped or \sed. The bottom-up method has obviously better compression ratios than the top-down method when using \dad.
 %
 The running time of batch algorithms \dpa and \tpa decreases and increases with the increase of error bound $\epsilon$, respectively. When using \ped or \sed, top-down algorithm \dpa usually runs faster than bottom-up algorithm \tpa when the error bound $\epsilon$~is large  (\eg in \geolife, $\epsilon >10$ metres when using \ped and $\epsilon >30$ metres when using \sed). When using \dad, the top-down algorithm is normally a bit slower than the bottom-up algorithm.
 Top-down algorithms also run faster than bottom-up algorithms in high sampling datasets when using \ped or \sed.
 %
-(3) Online algorithms \opwa and \bqsa usually have better compression ratios than batch algorithms, the worst average errors, and poorer efficiencies than batch algorithms. Algorithm \squishe is on the other side of \opwa and \bqsa.
+(3) Online algorithms \opwa and \bqsa usually have better compression ratios than batch algorithms, the worst average errors, and poorer efficiency than batch algorithms. Algorithm \squishe is on the other side of \opwa and \bqsa.
 %
-(4) One-pass algorithms \operb, \siped, \cised, \intersec and \interval have good compression ratios (comparable with the best sub-optimal algorithms), poor average errors and the best efficiencies.
+(4) One-pass algorithms \operb, \siped, \cised, \intersec and \interval have good compression ratios (comparable with the best sub-optimal algorithms), poor average errors and the best efficiency.
 %
 The full $\epsilon$ \emph{sector/cone/range} combining with a position/direction constraint always have better compression ratios and also larger average errors than the half $\epsilon$ \emph{sector/cone/range}. %and they are comparable with the best sub-optimal algorithms.
 %
