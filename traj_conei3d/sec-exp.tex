@@ -153,6 +153,8 @@ we fixed the error bound {$\epsilon =60$ meters}, and varied $m$ from $4$ to $40
 
 \ni(2) When varying $m$, the compression ratios of algorithms
 {\cist and \cista} decrease with the increase of $m$ on all datasets.
+\textcolor{blue}{The increase of edge number $m$ of a polygon lets the polygon more closely approximate its corresponding circle. Polygons with larger $m$ have higher potential to have common intersections, which further leads to a better compression ratio.}
+
 %The feature is holding on all error bounds $\epsilon$.
 %small error bounds, \eg $\epsilon < 60$ meters, and large error bounds, \eg $\epsilon > 60$ meters.
 
@@ -171,12 +173,15 @@ The results are reported in Figure~\ref{fig:cr-m16} .
 
 
 \ni (1) When increasing $\epsilon$, the compression ratios of all these algorithms decrease on all datasets.
+\textcolor{blue}{It is clear a larger $\epsilon$ will include more points into a line segment and bring a better compression ratio.}
 %\textcolor{blue}{More specifically, the compression ratio $cr$ of each algorithm has approximately an exponential relation to $\epsilon$, \ie $cr=a^\epsilon$, where $a$ is in $(0,1)$.}
 
 \ni (2) Dataset \pricar has the lowest compression ratios, compared with datasets \mopsi, \sercar and \geolife, due to its highest sampling rate,
 \sercar has the highest compression ratios due to its lowest sampling rate, and \geolife and \mopsi have the compression ratios in the middle accordingly.
 
 \ni {(3)} Algorithm \cist is better than \squishe ~{and close to} \dps on all datasets and for all $\epsilon$.
+%\textcolor{blue}{\cist shows better compression ratios than \squishe because \cist applies a greedy policy, \ie it includes as more point as possible into a line segment, while \squishe applies a loose policy, \ie it estimates the lowest \sed error and removes the point with ``predicted to introduce the lowest amount of error into the compression\cite{Muckell:Compression}" . Its prediction method is not accurate enough, thus, in order to ensure the error bound, it may ignore too many potential points that could be represented by a line segment.}
+%
 The compression ratios of \cist are on average {($79.3\%$, $71.9\%$, $67.3\%$, $72.7\%$) and ($109.2\%$, $108.0\%$, $111.7\%$, $109.1\%$)} of \squishe and
 \dps on {datasets (\sercar, \geolife, \mopsi, \pricar)}, respectively.
 For example, when $\epsilon$ = $40$ meters, the compression ratios of algorithms
@@ -312,6 +317,7 @@ we fixed the error bound {$\epsilon =60$ meters}, and varied $m$ from $4$ to $40
 \ni(1) Algorithms \cist and \cista using \rpia have the same average errors as their counterparts using \cpia, respectively, on all datasets and for all $m$.
 
 \ni(2) When varying $m$, the average errors of algorithms \cist and \cista increase with the increase of $m$ on all datasets.
+\textcolor{blue}{The increase of edge number $m$ of a polygon lets the polygon more closely approximate its corresponding circle, which means that some points whose \sed are large, \ie close to half-$\epsilon$ in \cist or $\epsilon$ in \cista, are included to a line segment, which further leads to a larger average error.}
 
 \ni(3) When varying $m$, similar to compression ratios, the average errors of
 algorithms \cist and \cista increase (a) fast when $m < 12$, (b) slowly when $m
@@ -331,7 +337,8 @@ varied $\epsilon$ from $10$ to $200$ meters on the entire
 The results are reported in Figure~\ref{fig:ae-m16}.
 
 \ni(1) Average errors increase with the increase of $\epsilon$.
-%\textcolor{blue}{More specifically, the average of each algorithm has approximately a linear relation to $\epsilon$.}
+\textcolor{blue}{More specifically, the average error of each algorithm has approximately a linear relation to $\epsilon$.}
+\textcolor{blue}{It is clear a larger $\epsilon$ will include more points into a line segment, including points with larger \sed, which brings a better compression ratio as well as a larger average error.}
 
 \ni(2) The average errors of these algorithms from the largest to the smallest are \cista, \cist, \dps and \squishe, on all datasets and for all $\epsilon$.
 The average errors of algorithms \cist and \cista are on average
@@ -340,6 +347,7 @@ and ($210.1\%$, $207.5\%$, $200.9\%$, $217.5\%$)
 of \dps and ($188.2\%$, $215.2\%$, $212.8\%$, $180.3\%$) and
 ($331.1\%$, $349.7\%$, $356.7\%$, $284.2\%$)
  of \squishe on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
+\textcolor{blue}{Algorithms \cista and \cist apply a greedy policy, \ie, they include as more points as possible into a line segment, this policy would usually lead to a larger average error.}
 
 \ni(3) When the error bound of algorithm \cista is set as the half of \cist, the
 average errors of \cista are on average ($93.8\%$, $86.0\%$, $81.4\%$, {$79.4\%$}) of \cist on {datasets} (\sercar, \geolife,\mopsi, \pricar), respectively, meaning that the large average errors of algorithm \cista are caused by its cone \wrt $\epsilon$ compared with the narrow cone \wrt $\epsilon/2$ of \cist.
@@ -368,7 +376,9 @@ We fixed {$m$=$16$} and $\epsilon = 60$ meters, and varied the size \trajec{|T|}
 %
 The results are reported in Figure~\ref{fig:ae-size}.
 
-\ni(1) The average errors of these algorithms ordered from the smallest to the largest are \squishe, \dps, \cist and \cista, on all datasets and for all trajectory sizes. %, which is consistent with Figure~\ref{fig:ae-m16}.
+\ni(1) The average errors of these algorithms ordered from the smallest to the largest are \squishe, \dps, \cist and \cista, on all datasets and for all trajectory sizes,
+\textcolor{blue}{which is consistent with Exp-2.2.}
+ %, which is consistent with Figure~\ref{fig:ae-m16}.
 
 \ni(2) The sizes of input trajectories have few impacts on the average errors of \lsa algorithms on all datasets.
 
@@ -406,11 +416,12 @@ polygon intersections. For all $m$, the execution time of algorithms \cpia and
 	and ($90.5\%$, $92.5\%$, $91.0\%$, $90.5\%$)} of the entire compression  time on {datasets}
 (\sercar, \geolife, \mopsi, \pricar), respectively.
 
-\ni(2) \rpia runs faster than \cpia on all datasets and for all $m$. The execution time of algorithms \cist-\rpia and \cista-\rpia is one average $83.74\%$ their counterparts with \cpia.
+\ni(2) \rpia runs faster than \cpia on all datasets and for all $m$ \textcolor{blue}{due to the techniques it applied to speed up
+the computation of polygon intersection}. The execution time of algorithms \cist-\rpia and \cista-\rpia is one average $83.74\%$ their counterparts with \cpia.
 
-\ni(3) When varying $m$, the execution time of algorithms \cist-\rpia, \cist-\cpia, \cista-\rpia and \cista-\cpia increases approximately linearly with the increase of $m$ on all the datasets.
+\ni(3) When varying $m$, the execution time of algorithms \cist-\rpia, \cist-\cpia, \cista-\rpia and \cista-\cpia increases approximately linearly with the increase of $m$ on all the datasets, \textcolor{blue}{\eg the running time of $m=12$ is on average $69.92\%$ of $m=20$ for \cist and \cista on all datasets. This is because the time complexities of \rpia and \cpia are both $O(m)$, and a larger $m$ leads to more comparisons of edges during the intersection computation of convex polygons.}
 
-\ni(4) The running time of $m=12$ is on average $69.92\%$ of $m=20$ for \cist and \cista on all datasets.
+%\ni(4) The running time of $m=12$ is on average $69.92\%$ of $m=20$ for \cist and \cista on all datasets.
 
 %\ni(6) The execution time of regular polygon intersection algorithm \rpia is average \textcolor[rgb]{1.00,0.00,0.00}{$20\%$ }less than convex polygon intersection algorithm \cpia on all the datasets and parameter $m$.
 
@@ -511,6 +522,7 @@ The running time of \dps decreases a little bit with the increase of $\epsilon$,
 They are on average ($14.21$, $18.19$, $17.06$, $9.98$) times faster than \dps,
 and ($2.84$, $3.45$, $3.69$, $2.86$) times faster than \squishe on
 {datasets} (\sercar, \geolife, \mopsi, \pricar), respectively.
+\textcolor{blue}{This is consistent with their time complexity analyses.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\vspace{0.5ex}
@@ -601,12 +613,13 @@ The results are reported in Figure~\ref{fig:cr-ped}.
 
 Given the same error bound $\epsilon$, the compression ratios using \ped are obviously better
 than using \sed.
-More specifically, the compression ratios of algorithms \dpa
+More specifically, the compression ratios of algorithm \dpa
 using \ped are on average ($47.1\%$, $55.5\%$, $60.7\%$, $44.7\%$) of algorithm \dpa using \sed and
 the compression ratios of algorithm \cist are on average
 ($45.4\%$, $54.5\%$, $60.1\%$, $43.0\%$) of algorithm \kw{SIPED} on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
-
-
+\textcolor{blue}{
+The reason behind this is that a \ped of a point is the shortest
+distance from the point to a line segment while a \sed of a point is the distance between the point and its synchronized data point \wrt the line segment, thus, the \sed of a point to a line segment is always not less than the \ped of the point to the line segment. Hence, given the same error bound $\epsilon$, \lsa algorithms using \sed usually output more line segments.}
 
 \stitle{Exp-4.2: Impacts of distance metrics on average errors}.
 To evaluate the impacts of distance metrics on average errors, we fixed {$m$=$16$} and varied $\epsilon$ from $10$ to $200$ meters on the entire four datasets, respectively.
@@ -614,11 +627,12 @@ The results are reported in Figure~\ref{fig:ae-ped}.
 
 
 Given the same error bound $\epsilon$, the average errors of algorithms using \sed are a bit larger than using \ped.
-The average errors of \dpa  using \ped are on average
-($76.7\%$, $77.6\%$, $79.7\%$, $63.0\%$) of \dpa  using \sed, and  the average
+The average errors of algorithm \dpa using \ped are on average
+($76.7\%$, $77.6\%$, $79.7\%$, $63.0\%$) of algorithm \dpa  using \sed, and  the average
 errors of algorithm \kw{SIPED}  are on average
 ($97.5\%$, $78.1\%$, $92.4\%$, $74.2\%$) of algorithm \cist on (\sercar, \geolife, \mopsi, \pricar), respectively.
-
+\textcolor{blue}{As we know the \ped error is originally caused by the direction changes of a moving object while the
+\sed error is caused by the changes of both the direction and the speed of a moving object. It seems the speed factor introduces an extra error and leads to a larger average error. }
 
 
 \stitle{Exp-4.3: Impacts of distance metrics on running time}.
@@ -626,10 +640,14 @@ To evaluate the impacts of distance metrics on running time, we also fixed {$m$=
 The results are reported in Figure~\ref{fig:time-ped}.
 
 Given the same error bound $\epsilon$, the running time of \dpa  using \ped is on average
-($24.3\%$, $119.9\%$, $23.4\%$, $91.3\%$) of \dpa  using \sed, and  the running
-time of algorithm \kw{SIPED}  is on average ($7.0\%$, $36.3\%$, $19.9\%$, $69.2\%$)
+($24.3\%$, $119.9\%$, $23.4\%$, $91.3\%$) of \dpa  using \sed.
+\textcolor{blue}{Algorithm \dpa using \ped runs faster than using \sed because \dpa using \ped has a better compression ratio than \sed, which instead leads to a fewer trajectory splitting and distance computing operations during the compression.}
+%
+The running time of algorithm \kw{SIPED} is on average ($7.0\%$, $36.3\%$, $19.9\%$, $69.2\%$)
 of algorithm \cist on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
-
+\textcolor{blue}{Algorithm \cist runs slower than \kw{SIPED} partially because
+finding the common intersection of spatial-temporal cones is a heavier work than sectors.
+}
 
 
 
