@@ -21,8 +21,8 @@ It is known that these issues can be resolved or greatly alleviated by trajector
 %%%%%%%%%%%%%%%PED%%%%%%%%%%%%%%%%%%
 Originally, line simplification (\lsa) algorithms adopt the \emph{perpendicular Euclidean distance} (\ped) as a metric to compute the errors.
 \textcolor{blue}{Suppose a sub-trajectory $[P_s, ..., P_e]$ is represented by a line segment $\vv{P_sP_e}$  simplified by an error bounded \lsa algorithm using \ped, then for any point $P \in [P_s, ..., P_e]$, its \emph{perpendicular Euclidean distance} to the line segment $\vv{P_sP_e}$  is the shortest distance from point $P$ to the line segment.}
-\textcolor{blue}{Indeed, after the redundant points are removed, information about those points are lost except that they are located in a zone composed by a rectangle and two half circles  as shown in Figure~\ref{fig:distances}(a), and each point in the zone has a \ped not more than the pre-defined error bound $\epsilon$ to $\vv{P_sP_e}$.}
-\textcolor{blue}{Hence, a spatio-temporal query, \eg ``\emph{the position $P$ of a moving object at time $t$}", on the compressed trajectories is inappropriate. This query, in best practice, returns a point $P'$ selected from the line segment $\vv{P_sP_e}$. No matter how to choose $P'$, the distance $|PP'|$ is possible larger than error bound $\epsilon$ as point $P$ may be located in any position of the zone. }
+\textcolor{blue}{Indeed, after the redundant points are removed, information about these points is lost except that they are located in a zone composed by a rectangle and two half circles  as shown in Figure~\ref{fig:distances}(a), and each point in the zone has a \ped not more than the pre-defined error bound $\epsilon$ to the line segment $\vv{P_sP_e}$.}
+\textcolor{blue}{Hence, a spatio-temporal query, \eg ``\emph{the position $P$ of a moving object at time $t$}", on the compressed trajectories is inappropriate. This query, in best practice, returns an approximate point $P'$ selected from the line segment $\vv{P_sP_e}$. However, no matter how to choose an approximate point $P'$, the distance between $P$ and $P'$ is possible larger than error bound $\epsilon$ as point $P$ may be located in any position of the zone. }
 %as the zone or the line segment usually has a bigger geographic range or a larger length compared with the error bound
 %Thus, the simplified trajectory using \ped is not suitable for the spatio-temporal query.
 
@@ -57,10 +57,10 @@ However, the use of \sed ensures that the Euclidean distance between a data poin
 
 
 The \emph{synchronous Euclidean distance} (\sed) was then introduced for trajectory compression to support the above spatio-temporal queries.
-\textcolor{blue}{The definition of \sed highly depends on a notion named \emph{synchronized data point} \cite{Meratnia:Spatiotemporal}. Intuitively, the \emph{synchronized data point} $P'$ of a point $P$ at time $t$ \wrt the line segment $\vv{P_sP_e}$  is the position of the moving object on $\vv{P_sP_e}$ at time $t$ if the object moved from $P_s$ to $P_e$ with an uniform speed.}
-\textcolor{blue}{Then the \sed of point $P$ to line segment $\vv{P_sP_e}$ is the distance between $P$ and its \emph{synchronized data point} $P'$  \wrt the line segment $\vv{P_sP_e}$, as shown in Figure~\ref{fig:notations}(b).}
-\textcolor{blue}{After the sub-trajectory is simplified by an error bounded \lsa algorithm using \sed to line segment $\vv{P_sP_e}$, those redundant points are removed, however, we can still infer that their are located inside of the circles around their \emph{synchronized data points} with a radius of $\epsilon$, respectively.}
-\textcolor{blue}{Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the synchronized point $P'$ of data point $P$ \wrt the corresponding line segment, and it ensures that the Euclidean distance between the data point and its synchronized point is limited within the distance bound $\epsilon$.}
+\textcolor{blue}{The definition of \sed highly depends on a notion named \emph{synchronized data point} \cite{Meratnia:Spatiotemporal}. Intuitively, the \emph{synchronized data point} $P'$ of a point $P$ at time $t$ \wrt the line segment $\vv{P_sP_e}$  is the position of the moving object on $\vv{P_sP_e}$ at time $t$ \emph{if the object moved from $P_s$ to $P_e$ with an uniform speed}, \ie the average speed from $P_s$ to $P_e$.}
+\textcolor{blue}{Then the \sed of point $P$ to line segment $\vv{P_sP_e}$ is the distance between $P$ and its \emph{synchronized data point} $P'$  \wrt the line segment $\vv{P_sP_e}$, as shown in Figure~\ref{fig:distances}(b).}
+\textcolor{blue}{When the sub-trajectory $[P_s, ..., P_e]$ is simplified by an error bounded \lsa algorithm using \sed to line segment $\vv{P_sP_e}$, though those redundant points are removed, we can still infer that each of them is located inside of a circle around its \emph{synchronized data points} with a radius of $\epsilon$.}
+\textcolor{blue}{Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the synchronized point $P'$ of data point $P$ \wrt the corresponding line segment, and it ensures the Euclidean distance between the data point and its synchronized point is limited within the error bound $\epsilon$.}
 %
 Note the \sed of a point to a line segment is always not less than the \ped of the point to the line segment, thus, \lsa algorithms using \sed may lead to more line segments.
 
@@ -68,10 +68,10 @@ Note the \sed of a point to a line segment is always not less than the \ped of t
 \begin{figure}[tb!]
 \centering
 %\vspace{-1ex}
-\includegraphics[scale=1.2]{figures/Fig-Distances.png}
+\includegraphics[scale=1.1]{figures/Fig-Distances.png}
 %\vspace{-1ex}
 \caption{\small A sub-trajectory $[P_s, \ldots, P_e]$ is simplified using \ped and \sed, respectively.}
-\vspace{-2ex}
+\vspace{-3ex}
 \label{fig:distances}
 \end{figure}
 
