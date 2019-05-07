@@ -26,7 +26,7 @@ Originally, line simplification (\lsa) algorithms adopt the \emph{perpendicular 
 %
 \textcolor{blue}{Hence, a spatio-temporal query, \eg ``\emph{the position $P$ of a moving object at time $t$}", on the compressed trajectories is inappropriate. This query, in best practice, returns an approximate point $P'$ selected from the line segment $\vv{P_sP_e}$. However, no matter how to choose an approximate point $P'$, the distance between $P$ and $P'$ is possible larger than error bound $\epsilon$ as a zone can be a large/long geographic range and point $P$ may be located in any position of the zone.}
 %%Thus, the simplified trajectory using \ped is not suitable for the spatio-temporal query.
-% 
+%
 
 \eat{
 \eg $|\vv{P_4P^*_4}|$ is the \ped of data point $P_4$ to line segment $\vv{P_0P_{10}}$ in Figure~\ref{fig:notations} (left).
@@ -116,17 +116,23 @@ However, the current one-pass algorithms are all \ped specific, and to our knowl
 
 \stitle{{Contributions}}. To this end, we propose two fast one-pass error bounded \lsa algorithms using \sed for compressing trajectories with good compression ratios. % error bounded
 
-\sstab {(1)} We first develop a novel local synchronous distance checking approach, \ie spatio-temporal \underline{C}one \underline{I}ntersection using the \underline{S}ynchronous \underline{E}uclidean \underline{D}istance (CISED).
+\sstab {(1)} We first develop a novel local synchronous distance checking approach, \ie spatio-temporal \underline{C}one \underline{I}ntersection using the \underline{S}ynchronous \underline{E}uclidean \underline{D}istance (CISED), such that each data point in a trajectory is checked in $O(1)$ time during the entire process of trajectory simplification.
 %, by extending the sector intersection method \cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve}\eat{(Section~\ref{sec-localcheck})}.
-We further approximate the intersection of spatio-temporal cones with the intersection of a special class of  regular polygons, and develop a fast regular polygon intersection algorithm, such that each data point in a trajectory is checked in $O(1)$ time during the entire process of trajectory simplification.
+\textcolor{blue}{It is the first local distance checking method for trajectory compression using SED and is the key to develop a one-pass trajectory simplification algorithm.}
+%To our knowledge, currently, there are only two effective local distance checking methods, the \textit{sector intersection} mechanism used in SI [40] (or Sleeve [11]) and the \textit{fitting function} approach used in OPERB [15], and these methods are both PED specific, and not applicable to SED.
+
+
+
+\sstab {(2)} \textcolor{blue}{We also developed a method that finds the approximate common intersection of $n$ circles in a linear time and a constant space. The key idea is to approximate circles by a special class of regular polygons and compute the intersection of them by a fast regular polygon intersection algorithm. Though we develop the circle intersection method for the local synchronous distance checking, it may have potential usages as it is a basic functionality.}
+
 
 %\sstab {(2)} \textcolor{blue}{We then show that an optimal trajectory simplification algorithm using \sed can achieve $O(n^2 \log n)$ time by using our local synchronous distance checking technique, and provide a \textit{near optimal} trajectory simplification algorithm \cisto that achieves $O(n^2)$ time and $O(n)$ space.}
 
-\sstab {(2)} We next develop two one-pass trajectory simplification algorithms \cist and \cista, achieving $O(n)$ time complexity and $O(1)$ space complexity, based on our local synchronous distance checking technique.
+\sstab {(3)} We next develop two one-pass trajectory simplification algorithms \cist and \cista, achieving $O(n)$ time complexity and $O(1)$ space complexity, based on our local synchronous distance checking technique.
 Algorithm \cist belongs to strong simplification that only has original points in its outputs, while algorithm \cista belongs to weak simplification that allows interpolated data points in its outputs.
 
 
-\sstab (3) Using four real-life trajectory datasets (\sercar, \geolife, \mopsi, \pricar),
+\sstab (4) Using four real-life trajectory datasets (\sercar, \geolife, \mopsi, \pricar),
 we finally conduct an extensive experimental study, by comparing our methods \cist and \cista  with the optimal \lsa algorithm using \sed, \dps~\cite{Meratnia:Spatiotemporal} (the existing sub-optimal \lsa algorithm using \sed having the best compression ratios) and \squishe \cite{Muckell:Compression} (the fastest existing \lsa algorithm using \sed).
 
 For running time,
