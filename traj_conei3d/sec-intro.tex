@@ -58,12 +58,12 @@ However, the use of \sed ensures that the Euclidean distance between a data poin
 }
 
 
-The \emph{synchronous Euclidean distance} (\sed) was then introduced for trajectory compression to support the above spatio-temporal queries.
+The \emph{synchronous Euclidean distance} (\sed) was then introduced for trajectory compression~\cite{Meratnia:Spatiotemporal,Potamias:Sampling,Muckell:Compression,Chen:Fast} to support the above spatio-temporal queries.
 \textcolor{blue}{The meaning of \sed highly depends on a notion named \emph{synchronized data point} \cite{Meratnia:Spatiotemporal} that could be computed easily. As shown in Figure~\ref{fig:distances}(b), the \emph{synchronized data point} $P'$ of a point $P$ at time $t$ \wrt a line segment $\vv{P_sP_e}$  is the position of the moving object on $\vv{P_sP_e}$ at time $t$ \emph{if the object moved from point $P_s$ to point $P_e$ with a uniform speed}, \ie the average speed of it between points $P_s$ and $P_e$.}
 \textcolor{blue}{Indeed, a moving object in real life is not necessary moving strictly along a line segment or with a uniform speed, hence, the synchronized data points are virtual points.}
-\textcolor{blue}{Then the \sed of point $P$ to line segment $\vv{P_sP_e}$ is the distance between $P$ and its \emph{synchronized data point} $P'$  \wrt the line segment $\vv{P_sP_e}$.}
+\textcolor{blue}{Then the \sed of point $P$ to line segment $\vv{P_sP_e}$ is the Euclidean distance between point $P$ and its \emph{synchronized data point} $P'$  \wrt the line segment $\vv{P_sP_e}$.}
 \textcolor{blue}{Next, when the sub-trajectory $[P_s, ..., P_e]$ is simplified by an error bounded \lsa algorithm using \sed to line segment $\vv{P_sP_e}$, though those redundant points are removed, we can still infer that each of them is located inside of a circle around its \emph{synchronized data point} with a radius of $\epsilon$ (Figure~\ref{fig:distances}(b)).}
-\textcolor{blue}{Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the synchronized point $P'$ of data point $P$ \wrt the corresponding line segment, and it ensures the Euclidean distance between the data point and its synchronized point is limited within the error bound $\epsilon$.}
+\textcolor{blue}{Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the synchronized point $P'$ of point $P$ \wrt the corresponding line segment, and it ensures the Euclidean distance between the data point and its synchronized point is limited within the error bound $\epsilon$.}
 %
 Note the \sed of a point to a line segment is always not less than the \ped of the point to the line segment, thus, \lsa algorithms using \sed may lead to more line segments.
 
@@ -133,16 +133,16 @@ Algorithm \cist belongs to strong simplification that only has original points i
 
 
 \sstab (4) Using four real-life trajectory datasets (\sercar, \geolife, \mopsi, \pricar),
-we finally conduct an extensive experimental study, by comparing our methods \cist and \cista  with the optimal \lsa algorithm using \sed, \dps~\cite{Meratnia:Spatiotemporal} (the existing sub-optimal \lsa algorithm using \sed having the best compression ratios) and \squishe \cite{Muckell:Compression} (the fastest existing \lsa algorithm using \sed).
-
-For running time,
-algorithms \cist and \cista are on average $15.0$, $3.2$ and $14345.0$ times faster than \dps, \squishe and the optimal \lsa algorithm on the test datasets, respectively.
+we finally conduct an extensive experimental study, by comparing our methods \cist and \cista  with the optimal \lsa algorithm using \sed, \textcolor{blue}{batch algorithm} \dps~\cite{Meratnia:Spatiotemporal} (the existing sub-optimal \lsa algorithm using \sed having the best compression ratios) and \textcolor{blue}{online algorithm} \squishe \cite{Muckell:Compression} (the fastest existing \lsa algorithm using \sed).
+%
+For running time, algorithms \cist and \cista are on average $15.0$, $3.2$ and $14345.0$ times faster than \dps, \squishe and the optimal \lsa algorithm on the test datasets, respectively.
 %
 For compression ratios, algorithm \cist is better than \squishe and close to \dps. The output sizes of \cist are on average $74.4\%$, $110.4\%$ and $137.9\%$ of \squishe, \dps and the optimal \lsa algorithm on the test datasets, respectively.
 Moreover, algorithm \cista is on average $54.9\%$ and $81.6\%$ better than \squishe and \dps on the test datasets, respectively.
 
 It is worth pointing out that trajectory data is collected by mobile devices from GPS sensors, and these devices have range errors, which leads to data quality issues of  trajectory data~\cite{PfoserJ99,ZufleTPRRLDE17}. However, the problem is beyond the scope of this study, and we focus on lossy simplification of trajectory data only.
-
+%
+\textcolor{blue}{We have also observed that some recent work \cite{Zhang:Evaluation} evaluated trajectory compression algorithms from the view of applications, such as range queries, spatial joins and trajectory clustering. Nevertheless, different applications may have different requirements to reach a balance among multiple metrics. Hence, we concentrate on the design of algorithms and the test with common metrics, \ie compression ratio, error and running time, in the area of trajectory simplification \cite{Meratnia:Spatiotemporal, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Liu:BQS, Liu:Amnesic, Lin:Operb, Chen:Fast}.}
 
 \stitle{{Organization}}.
 The remainder of the article is organized as follows.
