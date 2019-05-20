@@ -59,11 +59,11 @@ However, the use of \sed ensures that the Euclidean distance between a data poin
 
 
 The \emph{synchronous Euclidean distance} (\sed) was then introduced for trajectory compression~\cite{Meratnia:Spatiotemporal,Potamias:Sampling,Muckell:Compression,Chen:Fast} to support the above spatio-temporal queries.
-\textcolor{blue}{The meaning of \sed highly depends on a notion named \emph{synchronized data point} \cite{Meratnia:Spatiotemporal} that could be computed easily. As shown in Figure~\ref{fig:distances}(b), the \emph{synchronized data point} $P'$ of a point $P$ at time $t$ \wrt a line segment $\vv{P_sP_e}$  is the position of the moving object on $\vv{P_sP_e}$ at time $t$ \emph{if the object moved from point $P_s$ to point $P_e$ with a uniform speed}, \ie the average speed of it between points $P_s$ and $P_e$.}
-\textcolor{blue}{Indeed, a moving object in real life is not necessary moving strictly along a line segment or with a uniform speed, hence, the synchronized data points are virtual points.}
-\textcolor{blue}{Based on this notion, the \sed of point $P$ to line segment $\vv{P_sP_e}$ is the Euclidean distance between point $P$ and its \emph{synchronized data point} $P'$  \wrt the line segment $\vv{P_sP_e}$.}
-\textcolor{blue}{Then, when the sub-trajectory $[P_s, ..., P_e]$ is simplified by an error bounded \lsa algorithm using \sed to line segment $\vv{P_sP_e}$, though those redundant points are removed, we can still infer that each of them is located inside of a circle around its \emph{synchronized data point} with a radius of $\epsilon$ (Figure~\ref{fig:distances}(b)).}
-\textcolor{blue}{Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the synchronized point $P'$ of $P$ \wrt the corresponding line segment, and it ensures the Euclidean distance between the point and its synchronized data point is limited within the error bound $\epsilon$.}
+\textcolor{blue}{The meaning of \sed highly depends on a notion named \emph{synchronized point} \cite{Meratnia:Spatiotemporal} that could be computed easily. As shown in Figure~\ref{fig:distances}(b), the \emph{synchronized point} $P'$ of a point $P$ at time $t$ \wrt a line segment $\vv{P_sP_e}$  is the position of the moving object on $\vv{P_sP_e}$ at time $t$ \emph{if the object moved from point $P_s$ to point $P_e$ with a uniform speed}, \ie the average speed of it between points $P_s$ and $P_e$.}
+\textcolor{blue}{Indeed, a moving object in real life is not necessary moving strictly along a line segment or with a uniform speed, hence, the synchronized points are virtual points.}
+\textcolor{blue}{Based on this notion, the \sed of point $P$ to line segment $\vv{P_sP_e}$ is the Euclidean distance between point $P$ and its \emph{synchronized point} $P'$  \wrt the line segment $\vv{P_sP_e}$.}
+\textcolor{blue}{Then, when the sub-trajectory $[P_s, ..., P_e]$ is simplified by an error bounded \lsa algorithm using \sed to line segment $\vv{P_sP_e}$, though those redundant points are removed, we can still infer that each of them is located inside of a circle around its \emph{synchronized point} with a radius of $\epsilon$ (Figure~\ref{fig:distances}(b)).}
+\textcolor{blue}{Hence, the above spatio-temporal query over the trajectories compressed by \sed enabled approaches returns the \emph{synchronized point} $P'$ of $P$ \wrt the corresponding line segment, and it ensures the Euclidean distance between the point and its \emph{synchronized point} is limited within the error bound $\epsilon$.}
 %
 Note the \sed of a point to a line segment is always not less than the \ped of the point to the line segment, thus, \lsa algorithms using \sed may lead to more line segments.
 
@@ -73,7 +73,7 @@ Note the \sed of a point to a line segment is always not less than the \ped of t
 %\vspace{-1ex}
 \includegraphics[scale=1.2]{figures/Fig-Distances.png}
 %\vspace{-1ex}
-\caption{\small A sub-trajectory $[P_s, \ldots, P_e]$ is simplified using \ped and \sed, respectively. A spatio-temporal query ``\emph{the position $P$ of the moving object at time $t$}" on the simplified trajectory will return (a) a point in a zone composed by a rectangle and two half-circles, or (b) a point inside a circle.}
+\caption{\small A sub-trajectory $[P_s, \ldots, P_e]$ is simplified using \ped and \sed, respectively. A spatio-temporal query ``\emph{the position $P$ of the moving object at time $t$}" on the simplified trajectory will return a point (a) in a probable large zone composed by a rectangle and two half-circles, or (b) inside a small circle.}
 \vspace{-3ex}
 \label{fig:distances}
 \end{figure}
@@ -123,7 +123,7 @@ However, the current one-pass algorithms are all \ped specific, and to our knowl
 
 
 
-\sstab {(2)} \textcolor{blue}{We next developed a method that finds the approximate common intersection of $n$ circles in a linear time and a constant space, whose key idea is to approximate circles by a special class of regular polygons and compute the intersection of them by a fast regular polygon intersection algorithm. Though we develop the method for the local synchronous distance checking, it may have potential usages as it is a basic functionality.}
+\sstab {(2)} \textcolor{blue}{We also developed a method that finds the approximate common intersection of $n$ circles in a linear time and a constant space, whose key idea is to approximate circles by a special class of regular polygons and compute the intersection of them by a fast regular polygon intersection algorithm. Though we develop the method for the local synchronous distance checking, it may have potential usages as it is a basic functionality.}
 
 
 %\sstab {(2)} \textcolor{blue}{We then show that an optimal trajectory simplification algorithm using \sed can achieve $O(n^2 \log n)$ time by using our local synchronous distance checking technique, and provide a \textit{near optimal} trajectory simplification algorithm \cisto that achieves $O(n^2)$ time and $O(n)$ space.}
