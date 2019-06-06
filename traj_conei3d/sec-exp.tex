@@ -504,7 +504,7 @@ the computation of polygon intersection}. The execution time of algorithms \cist
 %\vspace{-1ex}
 \caption{\small Evaluation of running time: fixed with $m=16$ and $\epsilon=60$ meters, and varying the size of trajectories. }
 \label{fig:time-size}
-\vspace{-1ex}
+\vspace{-2ex}
 \end{figure*}
 
 
@@ -611,7 +611,7 @@ This is consistent with their time complexity analyses.
 \end{figure*}
 
 
-In the last set of tests, we compare the performance of algorithms using \ped vs. \sed. Two pairs of algorithms are tested, namely, (1) the algorithm \dpa using \ped and \sed, respectively, and (2) the sector intersection  algorithm \cite{Williams:Longest, Sklansky:Cone} using \ped and our spatio-temporal cone intersection algorithm using \sed.
+In this set of tests, we compare the performance of algorithms using \ped vs. \sed. Two pairs of algorithms are tested, namely, (1) the algorithm \dpa using \ped and \sed, respectively, and (2) the sector intersection  algorithm \cite{Williams:Longest, Sklansky:Cone} using \ped and our spatio-temporal cone intersection algorithm using \sed.
 
 \stitle{Exp-4.1: Impacts of distance metrics on compression ratios}.
 To evaluate the impacts of distance metrics, \ie \ped and \sed, on compression ratios, we fixed {$m$=$16$} and varied $\epsilon$ from $10$ meters to $200$ meters on the entire four datasets, respectively.
@@ -657,7 +657,18 @@ finding the common intersection of spatial-temporal cones is a heavier work than
 }
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{\textcolor{blue}{Evaluation of Spatio-Temporal Queries on Compressed Trajectories}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textcolor{blue}{We finally evaluate the compressed trajectories from the view of trajectory application.} 
+\textcolor{blue}{We first perform a spatio-temporal query, \ie ``\emph{the position $P$ of a moving object at time $t$}", on the compressed trajectories simplified by some \lsa algorithm using \ped or \sed, which returns an approximate point (\ie the synchronized point) $P'$ of the moving object at time $t$.
+We then calculate the distance between the actual position $P$ and the approximate position $P'$ to denote the error of the query.}
+\textcolor{blue}{In this set of tests, (a) the actual positions of a moving object are the data points of the original trajectory derived from the moving object, (b) for each point $P$ in an original trajectory, we perform a query taking $P.t$ as input and calculate its error, and (c) we fixed {$m$=$16$} and varied $\epsilon$ from $10$ to $200$ meters on the entire four datasets, respectively.}
+\textcolor{red}{The errors of spatio-temporal queries on compressed trajectories are reported in Figure~\ref{fig:ae-query} and Table~\ref{tab:me-query}.} 
 
+\ni \textcolor{blue}{(1) When using \ped, the max errors of spatio-temporal queries on compressed trajectories are significantly larger than error bounds. However, when using \sed, they are always not more than error bounds. These confirm that \sed is suitable but \ped is not suitable for spatio-temporal queries, as illustrated in Section~\ref{sec-intro}.}
+
+\ni \textcolor{blue}{(2) Given the same error bound, the average errors of these queries on compressed trajectories using \ped are obvious larger than those using \sed, and some times they are even larger than error bounds due to some points having extraordinary large errors.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Summary and Discussion}
