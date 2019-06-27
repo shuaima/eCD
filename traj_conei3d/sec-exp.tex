@@ -12,7 +12,7 @@ Using four real-life trajectory datasets, we conducted sets of experiments to ev
 (3) the running time of algorithms \cist and \cista vs. \dps, \squishe and the optimal algorithm,
 (4) the impacts of polygon intersection algorithms \rpia and \cpia and the edge number $m$ of inscribed regular polygons to the compression ratios, errors and running time of algorithms \cist and \cista,
 (5) the impacts of the distance metrics \ped and \sed on the compression ratios, errors and running time of trajectory simplification algorithms, and
-\textcolor{blue}{(6) the impacts of the distance metrics \ped and \sed on trajectory-based applications like spatio-temporal queries.}
+\textcolor{blue}{(6) the impacts of the distance metrics \ped and \sed on spatio-temporal queries.}
 
 
 \subsection{Experimental Setting}
@@ -45,7 +45,7 @@ The sampling rate was one point per $2$ seconds, and each trajectory has around 
 %{This dataset contains 182 trajectories, one trajectory for each user, with a total distance of about 1.2 million kilometers. }
 
 \vspace{0.5ex}
-As the optimal \lsa algorithm~\cite{Imai:Optimal} has both high time and space complexities, \ie $O(n^3)$ time and $O(n^2)$ space, it is impossible to compress the entire datasets (too slow and out of memory). Hence, we further build four \textit{small datasets} such that each includes 10 middle-size ($10K$ points per trajectory) trajectories selected from \sercar, \geolife, \mopsi and \pricar, respectively.
+As the optimal \lsa algorithm~\cite{Imai:Optimal} has both high time and space complexities, \ie $O(n^3)$ time and $O(n^2)$ space, it is impossible to compress the entire datasets (slow and out of memory). Hence, we further build four \textit{small datasets} such that each includes 10 middle-size ($10K$ points per trajectory) trajectories selected from \sercar, \geolife, \mopsi and \pricar, respectively.
 
 %The details of these datasets are shown in Table~\ref{tab:dataset}.
 
@@ -156,7 +156,7 @@ we fixed the error bound {$\epsilon =60$ meters}, and varied $m$ from $4$ to $40
 
 \ni(2) When varying $m$, the compression ratios of algorithms
 {\cist and \cista} decrease with the increase of $m$ on all datasets.
-\textcolor{blue}{The increase of edge number $m$ of a polygon lets the polygon more closely approximate its corresponding circle, which has higher potential to have common intersections and further leads to a better compression ratio.}
+\textcolor{blue}{The increase of edge number $m$ of a polygon makes the polygon better approximate its corresponding circle, which leads to a higher potential to have common intersections, and has a better compression ratio.}
 
 %The feature is holding on all error bounds $\epsilon$.
 %small error bounds, \eg $\epsilon < 60$ meters, and large error bounds, \eg $\epsilon > 60$ meters.
@@ -175,8 +175,8 @@ The results are reported in Figure~\ref{fig:cr-m16} .
 %Figure~\ref{fig:cr-m10}.  and
 
 
-\ni (1) When increasing $\epsilon$, the compression ratios of all these algorithms decrease on all datasets.
-\textcolor{blue}{It is clear a larger $\epsilon$ will include more points into a line segment and bring a better compression ratio.}
+\ni (1) When increasing $\epsilon$, the compression ratios of all these algorithms decrease on all datasets, 
+\textcolor{blue}{as it is clear that a larger $\epsilon$ makes more points represented by a line segment, and brings a better compression ratio.}
 %\textcolor{blue}{More specifically, the compression ratio $cr$ of each algorithm has approximately an exponential relation to $\epsilon$, \ie $cr=a^\epsilon$, where $a$ is in $(0,1)$.}
 
 \ni (2) Dataset \pricar has the lowest compression ratios, compared with datasets \mopsi, \sercar and \geolife, due to its highest sampling rate,
@@ -189,7 +189,7 @@ The compression ratios of \cist are on average {($79.3\%$, $71.9\%$, $67.3\%$, $
 For example, when $\epsilon$ = $40$ meters, the compression ratios of algorithms
 \squishe, \cist and \dps are
 {($20.0\%$, $8.0\%$, $5.7\%$, $4.9\%$), ($16.1\%$, $5.8\%$, $3.9\%$, $3.6\%$) and ($14.8\%$, $5.4\%$, $3.4\%$, $3.4\%$)} on  {datasets (\sercar, \geolife, \mopsi, \pricar)}, respectively.
-\textcolor{blue}{\cist shows better compression ratios than \squishe because \cist applies a greedy policy, \ie it includes as many points as possible into a line segment during the process, while \squishe applies a loose error prediction policy. This prediction method is not accurate enough, thus, in order to ensure the error bound, it may ignore too many potential points that could be represented by a line segment.}
+\textcolor{blue}{\cist shows better compression ratios than \squishe because \cist applies an approximate policy that includes as many points as possible into a line segment during the process, while \squishe applies a loose error prediction policy, which may ignore too many potential points that could be represented by a line segment  in order to ensure the error bound.}
 
 %\textcolor{blue}{\cist shows better compression ratios than \squishe because \cist applies a greedy policy, \ie it includes as many points as possible into a line segment, while \squishe applies a loose distancce checking policy, \ie it estimates the lowest \sed error and removes the point ``predicted to introduce the lowest amount of error into the compression\cite{Muckell:Compression}" . Its prediction method is not accurate enough, thus, in order to ensure the error bound, it may ignore too many potential points that could be represented by a line segment.}
 
@@ -227,7 +227,7 @@ fixed {$m$=$16$} and $\epsilon$=$60$ meters, and varied the size \trajec{|T|} of
 %
 The results are reported in Figure~\ref{fig:cr-size}.
 
-\ni(1) The compression ratios of these algorithms ordered from the best to the worst are \cista, \dps, \cist and \squishe, on all datasets with all sizes of trajectories, \textcolor{blue}{which is consistent with the above tests}.
+\ni(1) The compression ratios of these algorithms ordered from the best to the worst are \cista, \dps, \cist and \squishe, on all datasets with all sizes of trajectories, \textcolor{blue}{which is consistent with the previous tests}.
 
 \ni(2) The sizes of input trajectories have few impacts on the compression ratios of \lsa algorithms on all datasets.
 
@@ -345,7 +345,7 @@ The results are reported in Figure~\ref{fig:ae-m16}.
 
 \ni(1) Average errors increase with the increase of $\epsilon$.
 \textcolor{blue}{More specifically, the average error of each algorithm has approximately a linear relation to $\epsilon$.}
-\textcolor{blue}{It is clear a larger $\epsilon$ will include more points into a line segment, including points with larger \sed, which brings a better compression ratio as well as a larger average error.}
+\textcolor{blue}{It is clear that a larger $\epsilon$ includes more points into a line segment, including points with larger \sed, which brings a better compression ratio as well as a larger average error.}
 
 \ni(2) The average errors of these algorithms from the largest to the smallest are \cista, \cist, \dps and \squishe, on all datasets and for all $\epsilon$.
 The average errors of algorithms \cist and \cista are on average
@@ -354,7 +354,7 @@ and ($210.1\%$, $207.5\%$, $200.9\%$, $217.5\%$)
 of \dps and ($188.2\%$, $215.2\%$, $212.8\%$, $180.3\%$) and
 ($331.1\%$, $349.7\%$, $356.7\%$, $284.2\%$)
  of \squishe on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
-\textcolor{blue}{Algorithms \cista and \cist apply a greedy policy, \ie, they include as more points as possible into a line segment, this policy would usually lead to a larger average error.}
+\textcolor{blue}{Algorithms \cista and \cist apply an approximate policy, \ie, they include as more points as possible into a line segment, and this policy usually leads to a larger average error.}
 
 \ni(3) When the error bound of algorithm \cista is set as the half of \cist, the
 average errors of \cista are on average ($93.8\%$, $86.0\%$, $81.4\%$, {$79.4\%$}) of \cist on {datasets} (\sercar, \geolife,\mopsi, \pricar), respectively, meaning that the large average errors of algorithm \cista are caused by its cone \wrt $\epsilon$ compared with the narrow cone \wrt $\epsilon/2$ of \cist.
@@ -423,7 +423,7 @@ polygon intersections. For all $m$, the execution time of algorithms \cpia and
 	and ($90.5\%$, $92.5\%$, $91.0\%$, $90.5\%$)} of the entire compression  time on {datasets}
 (\sercar, \geolife, \mopsi, \pricar), respectively.
 
-\ni(2) \rpia runs faster than \cpia on all datasets and for all $m$ \textcolor{blue}{due to the techniques it applied to speed up
+\ni(2) \rpia runs faster than \cpia on all datasets and for all $m$ \textcolor{blue}{due to the techniques that it applies to speed up
 the computation of polygon intersection}. The execution time of algorithms \cist-\rpia and \cista-\rpia is one average $83.74\%$ their counterparts with \cpia.
 
 \ni(3) When varying $m$, the execution time of algorithms \cist-\rpia, \cist-\cpia, \cista-\rpia and \cista-\cpia increases approximately linearly with the increase of $m$ on all the datasets, \textcolor{blue}{\eg the running time of $m=12$ is on average $69.92\%$ of $m=20$ for \cist and \cista on all datasets. This is because the time complexities of \rpia and \cpia are both $O(m)$, and a larger $m$ leads to more comparisons of edges during the computation of  polygon intersection.}
@@ -626,7 +626,7 @@ the compression ratios of algorithm \cist are on average
 ($45.4\%$, $54.5\%$, $60.1\%$, $43.0\%$) of algorithm \kw{SIPED} on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
 \textcolor{blue}{
 The reason behind this is that a \ped of a point is the shortest
-distance from the point to a line segment while a \sed of a point is the distance between the point and its synchronized data point \wrt the line segment, thus, the \sed of a point to a line segment is always not less than the \ped of the point to the line segment. Hence, given the same error bound $\epsilon$, \lsa algorithms using \sed usually include fewer points into a line segment, in other words, they output more line segments.}
+distance from the point to a line segment while a \sed of a point is the distance between the point and its synchronized data point \wrt the line segment. Thus, the \sed of a point to a line segment is always not less than the \ped of the point to the line segment. Hence, given the same error bound $\epsilon$, \lsa algorithms using \sed usually include less points into a line segment. In other words, they generate more line segments.}
 
 \stitle{Exp-4.2: Impacts of distance metrics on average errors}.
 To evaluate the impacts of distance metrics on average errors, we fixed {$m$=$16$} and varied $\epsilon$ from $10$ to $200$ meters on the entire four datasets, respectively.
@@ -639,7 +639,7 @@ The average errors of algorithm \dpa using \ped are on average
 errors of algorithm \kw{SIPED}  are on average
 ($97.5\%$, $78.1\%$, $92.4\%$, $74.2\%$) of algorithm \cist on (\sercar, \geolife, \mopsi, \pricar), respectively.
 \textcolor{blue}{As we know the \ped error is originally caused by the direction changes of a moving object while the
-\sed error is caused by the changes of both the direction and the speed of a moving object. It seems the speed factor introduces an extra error and leads to a larger average error. }
+\sed error is caused by the changes of both the direction and the speed of a moving object. It seems that the speed factor introduces an extra error, and leads to a larger average error. }
 
 
 \stitle{Exp-4.3: Impacts of distance metrics on running time}.
@@ -648,23 +648,23 @@ The results are reported in Figure~\ref{fig:time-ped}.
 
 Given the same error bound $\epsilon$, the running time of \dpa  using \ped is on average
 ($24.3\%$, $119.9\%$, $23.4\%$, $91.3\%$) of \dpa  using \sed.
-\textcolor{blue}{Algorithm \dpa using \ped runs faster than using \sed because \dpa using \ped has a better compression ratio than \sed, which is the result of a fewer trajectory splitting and distance computing operations during the compression.}
+\textcolor{blue}{Algorithm \dpa using \ped runs faster than using \sed because \dpa using \ped has a better compression ratio than \sed, which is the result of less trajectory splitting and distance computing operations during the compression.}
 %
 The running time of algorithm \kw{SIPED} is on average ($7.0\%$, $36.3\%$, $19.9\%$, $69.2\%$)
 of algorithm \cist on datasets (\sercar, \geolife, \mopsi, \pricar), respectively.
-\textcolor{blue}{Algorithm \cist runs slower than \kw{SIPED} partially because
-finding the common intersection of spatial-temporal cones is a heavier work than sectors.
+\textcolor{blue}{Algorithm \cist runs slower than \kw{SIPED} sometimes because
+finding the common intersection of spatial-temporal cones is a heavier computation than sectors.
 }
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{\textcolor{blue}{Evaluation of Spatio-Temporal Queries on Compressed Trajectories}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\textcolor{blue}{We finally evaluate compressed trajectories from the view of trajectory application, \ie spatio-temporal query. The well-known spatio-temporal queries are \emph{where\_at, when\_at, range, nearest\_neighbor} and \emph{spatial\_join} \cite{Cao:Spatio}. Among them, \emph{where\_at} query, \ie ``\emph{the position $P$ of a moving object at time $t$}", is the foundation of \emph{range} and \emph{nearest\_neighbor} queries and also easy to implement.}
-\textcolor{blue}{Hence, for convenience and without losing generality, we choose it to evaluate compressed trajectories simplified by \lsa algorithms using \ped and/or \sed.
+\textcolor{blue}{In the last set of tests, we evaluate compressed trajectories from the viewpoint of trajectory application, \ie spatio-temporal query. The well-known spatio-temporal queries are \emph{where\_at, when\_at, range, nearest\_neighbor} and \emph{spatial\_join} \cite{Cao:Spatio}. Among them, \emph{where\_at} query, \ie ``\emph{the position $P$ of a moving object at time $t$}'', is the foundation of \emph{range} and \emph{nearest\_neighbor} queries.}
+\textcolor{blue}{Hence, we choose it to evaluate compressed trajectories simplified by \lsa algorithms using \ped and/or \sed.
 As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the expected position $P'$ of the moving object at time $t$. Indeed, it is the \emph{synchronized point} of $P$ when the query is performed on simplified trajectories.}
 
-\textcolor{blue}{In this set of tests, we first compress these trajectories using both \ped and \sed. When compressing, we also fixed {$m$=$16$} for \cista and varied $\epsilon$ from $10$ to $200$ meters for all algorithms on the entire four datasets, respectively.}
+\textcolor{blue}{We first compress these trajectories using both \ped and \sed. When compressing, we also fixed {$m$=$16$} for \cista and varied $\epsilon$ from $10$ to $200$ meters for all algorithms on the entire four datasets, respectively.}
 \textcolor{blue}{Then, for each point $P$ in an original trajectory $\dddot{\mathcal{T}}$, we perform a query on each of its compressed trajectories taking time $P.t$ as input, and calculate the distance between the actual position $P$ and the expected position $P'$ to denote the error of query.
 }
 %
@@ -683,9 +683,9 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 \end{figure*}
 
 
-\ni \textcolor{blue}{(1) When using \sed, the max errors of spatio-temporal queries on compressed trajectories are always not larger than error bounds. However, when using \ped, they are more than $10^6$ metres in datasets \sercar, \geolife and \mopsi, and more than $10^3$ metres in dataset \pricar, significantly larger than error bounds. This large-error phenomenon is actually possible. For example, someone traveled from Beijing of China to Sydney of Australia. During the trip, he first closed his mobile when the air plane was ready to take off, then he turned on his mobile after he arrived at a hotel in Sydney, and went to sleep for hours in the hotel. Because the sub-trajectory from his taking off to his waking up includes data points located in two small regions, \ie the location he took off and the hotel he lived in, it is possible that the sub-trajectory is compressed by some \lsa algorithm using \ped to only one line segment, even the error bound $\epsilon$ is set to just $60$ metres. Thus, when a spatio-temporal query runs on the simplified sub-trajectory taking as input the time he arrived at the hotel, it returns the synchronized point between Beijing and Sydney, having a distance significantly larger than error bound to the actual position, \ie the hotel.}
+\ni \textcolor{blue}{(1) When using \sed, the max errors of spatio-temporal queries on compressed trajectories are always not larger than error bounds. However, when using \ped, they are more than $10^6$ metres in datasets \sercar, \geolife and \mopsi, and more than $10^3$ metres in dataset \pricar, significantly larger than error bounds. This large-error phenomenon is actually possible. For example, if someone travels from Beijing of China to Sydney of Australia. During the trip, he first closes his mobile when the air plane is ready to take off, then he turns on his mobile after he arrives at Sydney. Because the sub-trajectory includes data points located in two small regions, \ie the Beijing and Sydney airports, it is possible that the sub-trajectory is compressed by some \lsa algorithm using \ped into a single line segment, even the error bound $\epsilon$ is set to just $60$ metres.}
 %
-\textcolor{blue}{Besides, we also found that the data quality problem of the original trajectory, such as an abnormal change of GPS location or time, \eg the latitude and longitude of a moving object suddenly change from one country to another country, or even somewhere in the ocean, can aggravate the large error phenomenon of spatio-temporal queries on compressed trajectories that are simplified using \ped. These confirm that \sed is more suitable than \ped for spatio-temporal queries.} %, as illustrated in Section~\ref{sec-intro}
+\textcolor{blue}{Besides, we also find that the data quality problem of the original given trajectory, such as an abnormal change of GPS location or time, \eg the latitude and longitude of a moving object suddenly change from one country to another country, or even somewhere in the ocean, can aggravate the large error phenomenon of spatio-temporal queries on compressed trajectories that are simplified using \ped. These confirm that \sed is more suitable than \ped for spatio-temporal queries.} %, as illustrated in Section~\ref{sec-intro}
 
 
 
@@ -717,7 +717,7 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 \end{table}
 
 
-\ni \textcolor{blue}{(2) Given the same error bound, the average errors of these queries on compressed trajectories using \ped are obvious larger than those using \sed, and they are usually larger than error bounds. Moreover, algorithm \cia using \ped has larger spatio-temporal query errors than \dpa using \ped because \cia applies a greedy policy that tries to include more points into a line segment, and some of these ``extra-points" lead to large errors.}
+\ni \textcolor{blue}{(2) Given the same error bound, the average errors of these queries on compressed trajectories using \ped are obvious larger than those using \sed, and they are typically larger than error bounds. Moreover, algorithm \cia using \ped has larger spatio-temporal query errors than \dpa using \ped because \cia applies a greedy policy that tries to include more points into a line segment, and some of these ``extra-points'' lead to large errors.}
 % due to some points having extraordinary large errors
 
 
@@ -749,7 +749,7 @@ The advantage of running time of algorithms \cist and \cista also increases  wit
 
 \sstab \emph{(7) Distance metrics}. Compared with \ped, \sed supports  spatio-temporal queries. However, it comes a price, \eg  the compression ratios of algorithms using \ped are better than those using \sed.}
 
-\sstab \textcolor{blue}{\emph{(8) Trajectory applications}. \sed is more suitable than \ped for spatio-temporal queries.}
+\sstab \textcolor{blue}{\emph{(8) Spatio-Temporal Queries}. \sed is more suitable than \ped for applications like spatio-temporal queries.}
 
 
 \stitle{Discussion}. We next briefly discuss the choice of algorithms to compress trajectories.
