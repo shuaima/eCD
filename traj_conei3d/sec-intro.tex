@@ -13,10 +13,10 @@ Transmitting and storing raw trajectory data consumes too much network bandwidth
 %%%%%%%%%%%%%%%PED%%%%%%%%%%%%%%%%%%
 Originally, line simplification (\lsa) algorithms adopt the \emph{perpendicular Euclidean distance} (\ped) as a metric to compute the errors.
 \textcolor{blue}{Suppose that a sub-trajectory $[P_s, ..., P_e]$ is represented by a line segment $\vv{P_sP_e}$  produced by an error bounded \lsa algorithm using \ped. Then for any point $P \in \{P_s, ..., P_e\}$, its \emph{perpendicular Euclidean distance} to the line segment $\vv{P_sP_e}$  is the shortest distance from $P$ to $\vv{P_sP_e}$.}
-\textcolor{blue}{Indeed, line segment $\vv{P_sP_e}$ represents all points that fall into an effective zone consisting of a rectangle and two half-circles, such that each point in the zone has a \ped to $\vv{P_sP_e}$ no more than $\epsilon$,  as shown in Figure~\ref{fig:distances}(a).}
+\textcolor{blue}{Indeed, line segment $\vv{P_sP_e}$ represents all points that fall into an effective zone consisting of a rectangle and two half-circles, such that each point in the zone has a \ped to $\vv{P_sP_e}$ not more than an predefined error bound $\epsilon$,  as shown in Figure~\ref{fig:distances}(a).}
 \textcolor{blue}{A typical issue of using \ped is that the exact location of a point is hard to tell when the zone is large (we just know it is located in the zone).}
 %
-\textcolor{blue}{That leads to that the answer to a spatio-temporal query ``\emph{the position $P$ of a moving object at time $t$} \cite{Cao:Spatio}'' on the compressed trajectories is not bounded. That is, there is no way to find an approximate point $P'$ of $P$ at $t$ such that their distance bouned within $\epsilon$}.
+\textcolor{blue}{That leads to that the answer to a spatio-temporal query ``\emph{the position $P$ of a moving object at time $t$} \cite{Cao:Spatio}'' on the compressed trajectories is not bounded. That is, there is no way to find an approximate point $P'$ of $P$ at $t$ such that their distance is bouned within $\epsilon$}.
 This shows that trajectory simplification using \ped is not suitable for spatio-temporal queries that are necessary for location based services.
 %
 
@@ -86,11 +86,11 @@ However, these methods still have high time and/or space complexities, which hin
 Observe that one-pass \lsa algorithms using \ped \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve, Lin:Operb} have been developed, and they are more efficient for resource-constrained devices.
 %
 The key idea to achieve one-pass processing is by local distance checking for a single data point in constant time, \eg the \textit{sector intersection} mechanism used in \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} and the \textit{fitting function} approach used in our preview work \cite {Lin:Operb}.
-Unfortunately, these techniques are designed specifically for \ped, and work in a 2D space, not in a spatio-temporal 3D space that \sed needs. Hence, they can hardly be applied for \sed.
+Unfortunately, these techniques are designed specifically for \ped, and  \textcolor{blue}{ work in a 2D space, not in a spatio-temporal 3D space that \sed needs}. Hence, they can hardly be applied for \sed.
 
 
  Indeed, it is even more challenging to design one-pass \lsa algorithms using \sed than using \ped.
- \textcolor{blue}{As \sed introduces the temporal information besides the spatial information, a local distance checking method  in a spatio-temporal 3D space is needed.}
+ \textcolor{blue}{As \sed introduces the temporal information besides the spatial information, a new local distance checking method  in a spatio-temporal 3D space is needed.}
 To our knowledge, no one-pass \lsa algorithms using \sed have been developed in the community yet.
 
 
@@ -120,7 +120,7 @@ However, the current one-pass algorithms are all \ped specific, and to our knowl
 
 
 
-\sstab {(2)} \textcolor{blue}{We develope a method that finds the approximate common intersection of $n$ circles in a linear time and a constant space, whose key idea is to approximate circles by a special class of regular polygons and compute their intersection with a fast regular polygon intersection algorithm. This also has a potential usage as a basic approaximate function though we develop the method for the local synchronous distance checking.}
+\sstab {(2)} \textcolor{blue}{We develop a method that finds the approximate common intersection of $n$ circles in a linear time and a constant space, whose key idea is to approximate circles by a special class of regular polygons and compute their intersection with a fast regular polygon intersection algorithm. This also has a potential usage as a basic approaximate function though we develop the method for the local synchronous distance checking.}
 
 
 %\sstab {(2)} \textcolor{blue}{We then show that an optimal trajectory simplification algorithm using \sed can achieve $O(n^2 \log n)$ time by using our local synchronous distance checking technique, and provide a \textit{near optimal} trajectory simplification algorithm \cisto that achieves $O(n^2)$ time and $O(n)$ space.}
