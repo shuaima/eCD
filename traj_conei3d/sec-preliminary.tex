@@ -2,7 +2,7 @@
 \label{sec-preliminary}
 
 In this section, we first introduce basic concepts for piece-wise line based trajectory compression.
-We then describe the optimal \lsa algorithm and the \textit{sector intersection} mechanism, and show how this mechanism can be used to speed up the \lsa algorithms using \ped and why it cannot work with \sed.
+We then describe the \textcolor{blue}{compression} optimal \lsa algorithm and the \textit{sector intersection} mechanism, and show how this mechanism can be used to speed up the \lsa algorithms using \ped and why it cannot work with \sed.
 Finally, we illustrate a convex polygon intersection algorithm, which serves as one of the fundamental components of our local synchronous distance checking method.
 %
 For convenience, notations used are summarized in Table~\ref{tab:notations}.
@@ -140,7 +140,7 @@ However, for trajectory simplification, the distance based metrics are definitel
 (2) $P'.y$ = $P_s.y +  w\cdot(P_e.y - P_s.y)$ and
 (3) $P'.t$ = $P.t$, where $w= \frac{P.t-P_s.t}{P_e.t-P_s.t}$.
 
-\textcolor{blue}{Synchronized points are essentially virtual points with the assumption that an object moved along a straight line from $P_s$ to $P_e$ with a uniform speed, \ie the average speed $\frac{|\vv{P_sP_e}|}{P_e.t-P_s.t}$ between points $P_s$ and $P_e$ \cite{Cao:Spatio}. Then the \emph{synchronized point} $P'$ of a point $P$ \wrt the line segment $\vv{P_sP_e}$ is the expected position of the moving object on $\vv{P_sP_e}$ at time $P.t$, obtained by a linear interpolation \cite{Cao:Spatio}. More specifically, a synchronized point $P'_i$ of $P_i$ ($s\le i < e$) is a point on $\vv{P_sP_{e}}$ satisfying ${|\vv{P_sP'_i}|} = \frac{P_i.t - P_s.t}{P_e.t - P_s.t}\cdot {|\vv{P_sP_e}|}$, which means that the object moves from $P_s$ to $P_e$ at an average speed $\frac{|\vv{P_sP_e}|}{P_e.t-P_s.t}$, and its position at time $P_i.t$ is the point $P'_i$ on $\overrightarrow{P_sP_{e}}$ having a distance of $\frac{P_i.t - P_s.t}{P_e.t - P_s.t}\cdot|\vv{P_sP_e}|$ to $P_s$~\cite{Cao:Spatio, Meratnia:Spatiotemporal, Chen:Fast, Zhang:Evaluation}.}
+{Synchronized points are essentially virtual points with the assumption that an object moved along a straight line from $P_s$ to $P_e$ with a uniform speed, \ie the average speed $\frac{|\vv{P_sP_e}|}{P_e.t-P_s.t}$ between points $P_s$ and $P_e$ \cite{Cao:Spatio}. Then the \emph{synchronized point} $P'$ of a point $P$ \wrt the line segment $\vv{P_sP_e}$ is the expected position of the moving object on $\vv{P_sP_e}$ at time $P.t$, obtained by a linear interpolation \cite{Cao:Spatio}. More specifically, a synchronized point $P'_i$ of $P_i$ ($s\le i < e$) is a point on $\vv{P_sP_{e}}$ satisfying ${|\vv{P_sP'_i}|} = \frac{P_i.t - P_s.t}{P_e.t - P_s.t}\cdot {|\vv{P_sP_e}|}$, which means that the object moves from $P_s$ to $P_e$ at an average speed $\frac{|\vv{P_sP_e}|}{P_e.t-P_s.t}$, and its position at time $P_i.t$ is the point $P'_i$ on $\overrightarrow{P_sP_{e}}$ having a distance of $\frac{P_i.t - P_s.t}{P_e.t - P_s.t}\cdot|\vv{P_sP_e}|$ to $P_s$~\cite{Cao:Spatio, Meratnia:Spatiotemporal, Chen:Fast, Zhang:Evaluation}.}
 %\textcolor{blue}{This definition assumes that the sub-trajectory $[P_s, ..., P_e]$ is to be represented by or simplified to a line segment $\overrightarrow{P_sP_e}$ and the object is moving from $P_s$ to $P_e$ linearly in a \textit{uniform speed}. This assumption is followed by the subsequent trajectory simplification works\cite{Meratnia:Spatiotemporal, Chen:Fast, Zhang:Evaluation}.}
 %from the start point to the end point of a trajectory .
 
@@ -173,10 +173,10 @@ we say that algorithm $\mathcal{A}$ is error bounded by $\epsilon$ if  for each 
 
 
 
-\subsection{The Optimal \lsa Algorithm}
+\subsection{The \textcolor{blue}{Compression Optimal} \lsa Algorithm}
 \label{subsec-optimal}
 
-Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ and an error bound $\epsilon$, the optimal trajectory simplification problem, as formulated by Imai and Iri in \cite{Imai:Optimal}, can be solved in two steps: (1) construct a reachability graph $G$ of \trajec{T}, and (2) search a shortest path from $P_0$ to $P_{n}$ in graph $G$.
+Given a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ and an error bound $\epsilon$, the \textcolor{blue}{compression optimal (not necessary error optimal)} trajectory simplification problem, as formulated by Imai and Iri in \cite{Imai:Optimal}, can be solved in two steps: (1) construct a reachability graph $G$ of \trajec{T}, and (2) search a shortest path from $P_0$ to $P_{n}$ in graph $G$.
 
 The reachability graph of a trajectory \trajec{T}${[P_0, \ldots, P_n]}$ \wrt a bound $\epsilon$ is an unweighted graph $G(V, E)$, where (1) $V = \{P_0, \ldots, P_n\}$, and (2) for any nodes $P_s$ and $P_{s+k} \in V$ ($s\ge 0, k>0, s+k\le n$), edge $(P_s, P_{s+k}) \in E$ if and only if the distance of each point $P_{s+i}$ $(i\in[0,k])$ to line segment $\vv{P_sP_{s+k}}$ is not greater than $\epsilon$.
 

@@ -12,11 +12,11 @@ Transmitting and storing raw trajectory data consumes too much network bandwidth
 
 %%%%%%%%%%%%%%%PED%%%%%%%%%%%%%%%%%%
 Originally, line simplification (\lsa) algorithms adopt the \emph{perpendicular Euclidean distance} (\ped) as a metric to compute the errors.
-\textcolor{blue}{Suppose that a sub-trajectory $[P_s, ..., P_e]$ is represented by a line segment $\vv{P_sP_e}$  produced by an error bounded \lsa algorithm using \ped. Then for any point $P \in \{P_s, ..., P_e\}$, its \emph{perpendicular Euclidean distance} to the line segment $\vv{P_sP_e}$  is the shortest distance from $P$ to $\vv{P_sP_e}$.}
-\textcolor{blue}{Indeed, line segment $\vv{P_sP_e}$ represents all points that fall into an effective zone consisting of a rectangle and two half-circles, such that each point in the zone has a \ped to $\vv{P_sP_e}$ not more than a predefined error bound $\epsilon$,  as shown in Figure~\ref{fig:distances}(a).}
-\textcolor{blue}{A typical issue of using \ped is that the exact location of a point is hard to tell when the zone is large (we just know it is located in the zone).}
+{Suppose that a sub-trajectory $[P_s, ..., P_e]$ is represented by a line segment $\vv{P_sP_e}$  produced by an error bounded \lsa algorithm using \ped. Then for any point $P \in \{P_s, ..., P_e\}$, its \emph{perpendicular Euclidean distance} to the line segment $\vv{P_sP_e}$  is the shortest distance from $P$ to $\vv{P_sP_e}$.}
+{Indeed, line segment $\vv{P_sP_e}$ represents all points that fall into an effective zone consisting of a rectangle and two half-circles, such that each point in the zone has a \ped to $\vv{P_sP_e}$ not more than a predefined error bound $\epsilon$,  as shown in Figure~\ref{fig:distances}(a).}
+{A typical issue of using \ped is that the exact location of a point is hard to tell when the zone is large (we just know it is located in the zone).}
 %
-\textcolor{blue}{That leads to that the answer to a spatio-temporal query ``\emph{the position $P$ of a moving object at time $t$} \cite{Cao:Spatio}'' on the compressed trajectories is not bounded. That is, there is no way to find an approximate point $P'$ of $P$ at $t$ such that their distance is bounded within $\epsilon$}.
+{That leads to that the answer to a spatio-temporal query ``\emph{the position $P$ of a moving object at time $t$} \cite{Cao:Spatio}'' on the compressed trajectories is not bounded. That is, there is no way to find an approximate point $P'$ of $P$ at $t$ such that their distance is bounded within $\epsilon$}.
 This shows that trajectory simplification using \ped is not suitable for spatio-temporal queries that are necessary for location based services.
 %
 
@@ -63,11 +63,11 @@ However, the use of \sed ensures that the Euclidean distance between a data poin
 
 
 The \emph{synchronous Euclidean distance} (\sed) was then introduced for trajectory compression~\cite{Meratnia:Spatiotemporal, Cao:Spatio, Potamias:Sampling, Muckell:Compression, Chen:Fast} to address the above issue for supporting bounded spatio-temporal queries.
-\textcolor{blue}{The use of \sed highly depends on a notion named \emph{synchronized point} \cite{Meratnia:Spatiotemporal,Cao:Spatio} that could be computed conveniently. As shown in Figure~\ref{fig:distances}(b), the \emph{synchronized point} $P'$ of a point $P$ at time $t$ \wrt a line segment $\vv{P_sP_e}$  is the expected position of the moving object on $\vv{P_sP_e}$ at time $t$ \emph{with the assumption that the object moves along a straight line from points $P_s$ to $P_e$ at a uniform speed} \cite{Cao:Spatio}, \ie the average speed from points $P_s$ to $P_e$.}
-%\textcolor{blue}{Indeed, a moving object in real life is not necessary moving strictly along a line or with a uniform speed, hence, the synchronized points are virtual points.}
-\textcolor{blue}{The \sed of point $P$ to line segment $\vv{P_sP_e}$ is the Euclidean distance between $P$ and its \emph{synchronized point} $P'$  \wrt the line segment $\vv{P_sP_e}$.}
-\textcolor{blue}{When an error bounded \lsa algorithm using \sed is adopted, it requires that a point $P$ is located within a circle with its synchronized point $P'$  as its center and $\epsilon$ as its radius, as shown in Figure~\ref{fig:distances}(b).}
-\textcolor{blue}{Hence, the above spatio-temporal query over the trajectories compressed by \sed can return the synchronized point $P'$ as the approximate point of $P$ at time $t$ such that their distance is bounded within $\epsilon$.}
+{The use of \sed highly depends on a notion named \emph{synchronized point} \cite{Meratnia:Spatiotemporal,Cao:Spatio} that could be computed conveniently. As shown in Figure~\ref{fig:distances}(b), the \emph{synchronized point} $P'$ of a point $P$ at time $t$ \wrt a line segment $\vv{P_sP_e}$  is the expected position of the moving object on $\vv{P_sP_e}$ at time $t$ \emph{with the assumption that the object moves along a straight line from points $P_s$ to $P_e$ at a uniform speed} \cite{Cao:Spatio}, \ie the average speed from points $P_s$ to $P_e$.}
+%{Indeed, a moving object in real life is not necessary moving strictly along a line or with a uniform speed, hence, the synchronized points are virtual points.}
+{The \sed of point $P$ to line segment $\vv{P_sP_e}$ is the Euclidean distance between $P$ and its \emph{synchronized point} $P'$  \wrt the line segment $\vv{P_sP_e}$.}
+{When an error bounded \lsa algorithm using \sed is adopted, it requires that a point $P$ is located within a circle with its synchronized point $P'$  as its center and $\epsilon$ as its radius, as shown in Figure~\ref{fig:distances}(b).}
+{Hence, the above spatio-temporal query over the trajectories compressed by \sed can return the synchronized point $P'$ as the approximate point of $P$ at time $t$ such that their distance is bounded within $\epsilon$.}
 %
 Note that the \sed of a point to a line segment is equal to or less than the \ped of the point to the line segment as illustrated in Figure~\ref{fig:distances}(b), and, hence, \lsa algorithms using \sed typically generate more line segments.
 
@@ -86,41 +86,41 @@ However, these methods still have high time and/or space complexities, which hin
 Observe that one-pass \lsa algorithms using \ped \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve, Lin:Operb} have been developed, and they are more efficient for resource-constrained devices.
 %
 The key idea to achieve one-pass processing is by local distance checking for a single data point in constant time, \eg the \textit{sector intersection} mechanism used in \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} and the \textit{fitting function} approach used in our preview work \cite {Lin:Operb}.
-Unfortunately, these techniques are designed specifically for \ped, and  \textcolor{blue}{ work in a 2D space, not in a spatio-temporal 3D space that \sed needs}. Hence, they can hardly be applied for \sed.
+Unfortunately, these techniques are designed specifically for \ped, and { work in a 2D space, not in a spatio-temporal 3D space that \sed needs}. Hence, they can hardly be applied for \sed.
 
 
- Indeed, it is even more challenging to design one-pass \lsa algorithms using \sed than using \ped.
- \textcolor{blue}{As \sed introduces the temporal information besides the spatial information, a new local distance checking method  in a spatio-temporal 3D space is needed.}
+Indeed, it is even more challenging to design one-pass \lsa algorithms using \sed than using \ped.
+{As \sed introduces the temporal information besides the spatial information, a new local distance checking method  in a spatio-temporal 3D space is needed.}
 To our knowledge, no one-pass \lsa algorithms using \sed have been developed in the community yet.
 
 
 
 \eat{%%%%%%%%%%%%%%%%%%
 %No matter using \ped or \sed,
-\textcolor{blue}{The problem of finding the minimal number of line segments to represent the original polygonal lines \wrt an error bound $\epsilon$ is known as the ``min-\#" problem\cite{Imai:Optimal,Chan:Optimal}.}
+{The problem of finding the minimal number of line segments to represent the original polygonal lines \wrt an error bound $\epsilon$ is known as the ``min-\#" problem\cite{Imai:Optimal,Chan:Optimal}.}
 %
-\textcolor{blue}{An optimal $O(n^3)$  \lsa algorithm was firstly developed in \cite{Imai:Optimal}, where $n$ is the number of the original points. The high time and space complexities of the optimal \lsa algorithm make it impractical.}
+{An optimal $O(n^3)$  \lsa algorithm was firstly developed in \cite{Imai:Optimal}, where $n$ is the number of the original points. The high time and space complexities of the optimal \lsa algorithm make it impractical.}
 %
-\textcolor{blue}{Sub-optimal \lsa algorithms were then developed or used for trajectory compression, including the batch algorithms (\eg Douglas-Peucker \cite{Douglas:Peucker, Meratnia:Spatiotemporal, Cao:Spatio} and Theo~Pavlidis \cite{Pavlidis:Segment}), the online algorithms (\eg \bqsa~\cite{Liu:BQS} and \ \squishe \cite{Muckell:Compression}) and most recently, the one-pass algorithms (\eg sector intersection \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} and \operb \cite {Lin:Operb}). }
+{Sub-optimal \lsa algorithms were then developed or used for trajectory compression, including the batch algorithms (\eg Douglas-Peucker \cite{Douglas:Peucker, Meratnia:Spatiotemporal, Cao:Spatio} and Theo~Pavlidis \cite{Pavlidis:Segment}), the online algorithms (\eg \bqsa~\cite{Liu:BQS} and \ \squishe \cite{Muckell:Compression}) and most recently, the one-pass algorithms (\eg sector intersection \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} and \operb \cite {Lin:Operb}). }
 %
-\textcolor{blue}{Among these algorithms, the one-pass algorithms have linear time and constant space complexities, hence, they are more efficient and suitable for resource-constrained devices that frequently collect and store GPS data points.
+{Among these algorithms, the one-pass algorithms have linear time and constant space complexities, hence, they are more efficient and suitable for resource-constrained devices that frequently collect and store GPS data points.
 However, the current one-pass algorithms are all \ped specific, and to our knowledge, no one-pass \lsa algorithm using \sed has been developed in the community.}
 
 
-\textcolor{blue}{As have been pointed out in \cite {Lin:Operb}, the key idea to achieve a one-pass algorithm is by \emph{local distance checking} in constant time, \eg the \textit{sector intersection} mechanism used in \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} and the \textit{fitting function} approach used in our preview work \cite {Lin:Operb}, however, the design of an effective local synchronous distance checking approach is non-trivial.}
+{As have been pointed out in \cite {Lin:Operb}, the key idea to achieve a one-pass algorithm is by \emph{local distance checking} in constant time, \eg the \textit{sector intersection} mechanism used in \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} and the \textit{fitting function} approach used in our preview work \cite {Lin:Operb}, however, the design of an effective local synchronous distance checking approach is non-trivial.}
 }%%%%%%%%%%%%%%%%%%
 
 
 \stitle{{Contributions}}. To this end, we propose two fast one-pass error bounded \lsa algorithms using \sed for compressing trajectories with good compression ratios. % error bounded
 
-\sstab {(1)} We first \textcolor{blue}{substantially extend the one-pass local distance checking approach from a 2D space to a spatio-temporal 3D space and} develop a novel local synchronous distance checking approach, \ie spatio-temporal \underline{C}one \underline{I}ntersection using the \underline{S}ynchronous \underline{E}uclidean \underline{D}istance (CISED), such that each data point in a trajectory is checked in $O(1)$ time during the entire process of trajectory simplification.
+\sstab {(1)} We first {substantially extend the one-pass local distance checking approach from a 2D space to a spatio-temporal 3D space and} develop a novel local synchronous distance checking approach, \ie spatio-temporal \underline{C}one \underline{I}ntersection using the \underline{S}ynchronous \underline{E}uclidean \underline{D}istance (CISED), such that each data point in a trajectory is checked in $O(1)$ time during the entire process of trajectory simplification.
 %, by extending the sector intersection method \cite{Williams:Longest, Sklansky:Cone, Zhao:Sleeve}\eat{(Section~\ref{sec-localcheck})}.
-\textcolor{blue}{It is the first local distance checking method for trajectory compression using \sed, and it is also the key to develop one-pass trajectory simplification algorithms using \sed.}
+{It is the first local distance checking method for trajectory compression using \sed, and it is also the key to develop one-pass trajectory simplification algorithms using \sed.}
 %To our knowledge, currently, there are only two effective local distance checking methods, the \textit{sector intersection} mechanism used in SI [40] (or Sleeve [11]) and the \textit{fitting function} approach used in OPERB [15], and these methods are both PED specific, and not applicable to SED.
 
 
 
-\sstab {(2)} \textcolor{blue}{We develop a method that finds the approximate common intersection of $n$ circles in a linear time and a constant space, whose key idea is to approximate circles by a special class of regular polygons and compute their intersection with a fast regular polygon intersection algorithm. This also has a potential usage as a basic approximate function though we develop the method for the local synchronous distance checking.}
+\sstab {(2)} {We develop a method that finds the approximate common intersection of $n$ circles in a linear time and a constant space, whose key idea is to approximate circles by a special class of regular polygons and compute their intersection with a fast regular polygon intersection algorithm. This also has a potential usage as a basic approximate function though we develop the method for the local synchronous distance checking.}
 
 
 %\sstab {(2)} \textcolor{blue}{We then show that an optimal trajectory simplification algorithm using \sed can achieve $O(n^2 \log n)$ time by using our local synchronous distance checking technique, and provide a \textit{near optimal} trajectory simplification algorithm \cisto that achieves $O(n^2)$ time and $O(n)$ space.}
@@ -130,11 +130,11 @@ Algorithm \cist belongs to strong simplification that only has original points i
 
 
 \sstab (4) Using four real-life trajectory datasets (\sercar, \geolife, \mopsi, \pricar),
-we finally conduct an extensive experimental study, by comparing our methods \cist and \cista  with the optimal \lsa algorithm using \sed, batch algorithm \dps~\cite{Meratnia:Spatiotemporal} (the existing sub-optimal \lsa algorithm using \sed having the best compression ratios) and online algorithm \squishe \cite{Muckell:Compression} (the fastest existing \lsa algorithm using \sed).
+we finally conduct an extensive experimental study, by comparing our methods \cist and \cista  with the \textcolor{blue}{compression optimal} \lsa algorithm using \sed \textcolor{blue}{(\osed~in short)~\cite{Imai:Optimal}}, batch algorithm \dps~\cite{Meratnia:Spatiotemporal} (the existing sub-optimal \lsa algorithm using \sed having the best compression ratios) and online algorithm \squishe \cite{Muckell:Compression} (the fastest existing \lsa algorithm using \sed).
 %
-For running time, algorithms \cist and \cista are on average $15.0$, $3.2$ and $14345.0$ times faster than \dps, \squishe and the optimal \lsa algorithm on the test datasets, respectively.
+For running time, algorithms \cist and \cista are on average $15.0$, $3.2$ and $14345.0$ times faster than \dps, \squishe and \osed~on the test datasets, respectively.
 %
-For compression ratios, algorithm \cist is better than \squishe and close to \dps. The output sizes of \cist are on average $74.4\%$, $110.4\%$ and $137.9\%$ of \squishe, \dps and the optimal \lsa algorithm on the test datasets, respectively.
+For compression ratios, algorithm \cist is better than \squishe and close to \dps. The output sizes of \cist are on average $74.4\%$, $110.4\%$ and $137.9\%$ of \squishe, \dps and \osed~ on the test datasets, respectively.
 Moreover, algorithm \cista is on average $54.9\%$ and $81.6\%$ better than \squishe and \dps on the test datasets, respectively.
 
 It is worth pointing out that trajectory data is collected by mobile devices from GPS sensors, and these devices have range errors, which leads to data quality issues of  trajectory data~\cite{PfoserJ99,ZufleTPRRLDE17}. However, the problem is beyond the scope of this study, and we focus on lossy simplification of trajectory data only.
