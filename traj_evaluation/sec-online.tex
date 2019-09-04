@@ -49,6 +49,23 @@ The time complexity of \bqsa remains $O(n^2)$. However, its simplified version \
 %The performance of \fbqsa has already been evaluated in work \cite{Lin:Operb}. %our preview work
 
 
+\begin{example}
+	\label{exm-alg-bqs}
+	Figure~\ref{fig:bqs} is an example of \bqsa. The bounding box $c_1c_2c_3c_4$ and the two lines $\vv{P_sP_{h}} = \vv{P_0P_1}$ and $\vv{P_sP_{l}} = \vv{P_0P_2}$ form a convex hull $u_1u_2c_2l_2l_1c_4$. \bqsa computes the distances of $u_1,u_2,c_2,l_2,l_1$ and $c_4$ to line $\vv{P_0P_6}$ when $k=6$ or to line $\vv{P_0P_7}$ when $k=7$.
+	%
+	When $k=6$, all these distances to $\vv{P_0P_6}$  are less than $\epsilon$, hence \bqsa goes on to the next point (case 2); When $k=7$,
+	the max and min distances to $\vv{P_0P_7}$ are larger and less than $\epsilon$, respectively, and \bqsa needs to compress sub-trajectory $[P_0, \ldots, P_7]$ along the same line as \dpa (case 3).
+\end{example}
+
+\begin{figure}[tb!]
+	%\vspace{-1ex}
+	\centering
+	\includegraphics[scale = 0.66]{Figures/Fig-BQS.png}
+	\vspace{-1ex}
+	\caption{{\small Examples for algorithm \bqsa.}}
+	\label{fig:bqs}
+	\vspace{-2ex}
+\end{figure}
 
 
 \stitle{Algorithm SQUISH-E Using \sed~\cite{Muckell:Compression}}.
@@ -80,6 +97,35 @@ The above process repeated until that no points have a priority smaller than $\e
 Thus, \squishe runs in $O(n\log |Q|)$ time and $O(|Q|)$ space.
 %And \squishe only supports \sed.
 
+
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.40]{Figures/Fig-Squishe.png}
+	\vspace{-3ex}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the \squishe algorithm using \sed to five line segments. The size of Q is 6, and the data structure after point $P$ is a tuple $(pre, suc, mmprio, prio)$. }
+	\vspace{-1ex}
+	\label{fig:squishe}
+\end{figure*}
+
+
+
+
+
+\begin{example}
+	\label{exm-alg-squishe}
+	Figure~\ref{fig:squishe} is an example of \squishe.
+	%
+	(1) Initially, $|Q| = 6$ points are read to the list. The tuple $(pre, suc, mmprio, prio)$ for each point is initialized. For example, the tuple of $P_1$ is set to $(0, 2, 0, 0.42\epsilon)$, where $0.42\epsilon$ is the \sed from $P_1$ to $\vv{P_0P_2}$.
+	%
+	(2) The priority of $P_3$ has the minimal value, thus, it is removed from the list.
+	The $mnprio$ properties of $P_2$ and $P_4$ are updated to $max\{mnprio(pre(P_3)), prio(P_3)\}$ = $max\{mnprio(P_2), prio(P_3)\}$ = $max\{0, 0.39\epsilon\}$ = $0.39\epsilon$, and $max\{mnprio(P_4), ~prio(P_3)\}$ = $0.39\epsilon$, respectively.
+	Furthermore, the $prio$ property of $P_4$ is updated to $mnprio(suc(P_j)) + sed(suc(P_j),\vv{pre(P_{j})suc(suc(P_{j}))})$ = $mnprio(P_4) + sed(P_4,\vv{P_2P_5})$ = $0.39\epsilon + 2.50\epsilon$ = $2.89\epsilon$, and the $prio$ property of $P_2$ is updated to $mnprio(P_2) + sed(P_2,\vv{P_1P_4})$ = $0.39\epsilon + 2.12\epsilon$ = $2.51\epsilon$.
+	Then, $P_6$ is read, and the information of $P_5$ is updated.
+	%
+	(3) $P_5$ is removed and $P_7$ is read to the list.
+	%
+	(4) Finally, the algorithm outputs 5 line segments $\vv{P_0P_2},\vv{P_2P_4},\vv{P_4P_7},\vv{P_7P_9}$ and $\vv{P_9P_{10}}$.
+\end{example}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

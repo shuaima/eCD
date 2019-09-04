@@ -129,6 +129,25 @@ Optimizations are developed to achieve better compression ratios.
 
 
 
+\begin{example}
+	\label{exm-alg-operb}
+	Figure~\ref{fig:operb} is a running example of the \operb algorithm compressing the same trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$.
+	(1) It takes $P_0$ as the start point, reads $P_1$ and sets $\mathcal{L}_1$ = $\vv{P_0P_1}$.
+	(2) It reads $P_2$. The distance from $P_2$ to $\mathcal{L}_1$ is less than the threshold, thus, it updates $\mathcal{L}_1$  to $\mathcal{L}_2$ by the fitting function $\mathbb{F}$.
+	(3) It reads $P_3$ and $P_4$, and updates $\mathcal{L}_2$ to $\mathcal{L}_3$ and $\mathcal{L}_3$ to $\mathcal{L}_4$, respectively.
+	(4) It reads $P_5$. The distance from $P_5$ to $\mathcal{L}_4$ is larger than the threshold, thus, it outputs $\vv{P_0P_4}$ and start the next section taking $P_4$ as the new start point.
+	(5) The process continues until all points have been processed. At last, the algorithm outputs two continuous line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.
+\end{example}
+
+
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.66]{Figures/Fig-OPER.png}
+	\vspace{-3ex}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the \operb algorithm using \ped to two line segments.}
+	\vspace{-1ex}
+	\label{fig:operb}
+\end{figure}
 
 
 \stitle{Algorithm \siped Using \ped \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve}}.
@@ -153,6 +172,30 @@ That is, {\em these sector intersection based algorithms can be easily adopted f
 
 The original \siped uses a half sector, $\frac{\epsilon}{2}$-\sector, which may limit its compression performance. However, it can further be extended to a full ${\epsilon}$-\sector ~ by adding a constraint. That is, for any point $P_{s+j}$ ($j \in [1, ... i]$), its \ped to
 line segment $\overline{P_sP_{s+i}}$ is not greater than the error bound $\epsilon$ if $ P_{s+i} \ne {P_s}$ and $P_{s+i}\in \bigsqcap_{j=1}^{i-1}$\sector{(P_s, P_{s+j}, \epsilon)}, \ie $P_{s+i}$ lives in the common intersection of preview full \emph{sectors}.
+
+
+
+
+
+\begin{example}
+	\label{exm-alg-sleeve}
+	Figure~\ref{fig:sleeve} is a running example of algorithm \siped($\frac{\epsilon}{2}$) taking as input the same trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$. At the beginning, $P_0$ is the first start point, and points $P_1$, $P_2$, $P_3$, etc., each has a narrow \emph{sector}.
+	For example, the narrow \emph{sector} $\mathcal{S}$($P_0$, $P_{3}$, $\epsilon/2$) takes $P_0$ as the center point and $\vv{P_0P^u_{3}}$ and $\vv{P_0P^l_{3}}$ as the border lines.
+	Because $\bigsqcap_{i=1}^{4}\mathcal{S}(P_0, P_{0+i}, \epsilon/2) \ne \{P_0\}$ and $\bigsqcap_{i=1}^{5}\mathcal{S}(P_0, P_{0+i}, \epsilon/2) = \{P_0\}$, $\vv{P_0P_4}$ is output and $P_4$ becomes the start point of the next section.
+	At last, the algorithm outputs two continuous line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.
+\end{example}
+
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.66]{Figures/Fig-sleeve.png}
+	\vspace{-3ex}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}$ is compressed by the sector intersection algorithm using \ped to two line segments.}
+	\vspace{-1ex}
+	\label{fig:sleeve}
+\end{figure}
+
+
+
 
 \stitle{Algorithm \cised Using \sed \cite{Lin:Cised}}.
 %\cised  extends the \textit{sector intersection} method from a 2D space to a Spatio-Temporal 3D space so as to get a \textit{Spatio-temporal Cone} method, and further achieves a one-pass process by a carefully designing.
@@ -194,6 +237,32 @@ The original \cised also uses a half cone, $\frac{\epsilon}{2}$-\cone. It can be
 
 
 
+%%%%%%%%%%%%%%% example of Algorithm CISED
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.66]{Figures/Fig-Conest.png}
+	\vspace{-2ex}
+	\caption{\small A running example of the \cised algorithm. The points and the oblique circular cones are projected on an x-y space. }%The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed into four line segments.
+	\vspace{-1ex}
+	\label{fig:exm-conest}
+\end{figure}
+%%%%%%%%%%%%%%%%
+
+\begin{example}
+	\label{exm-alg-conest}
+	Figure~\ref{fig:exm-conest} shows a running example of \cised($\frac{\epsilon}{2}$) for compressing the trajectory \trajec{T} in Figure~\ref{fig:dp}.
+	For convenience, we project the points and the oblique circular cones on a x-y space.
+	%	
+	(1) After initialization, the \cised algorithm reads point $P_1$ and builds a narrow \emph{oblique circular cone}~\cone{(P_0, \mathcal{O}(P_{1}, \epsilon/2))}, taking $P_0$ as its apex and \circle{(P_1, \epsilon/2)} as its base (green dash). The \emph{circular cone} is projected on the plane $P.t-P_1.t=0$, and the inscribe regular polygon $\mathcal{R}_1$ of the projection circle is returned. As $\mathcal{R}^*$ is empty, $\mathcal{R}^*$ is set to $\mathcal{R}_1$.
+	%	
+	(2) The algorithm reads $P_2$ and builds \cone{(P_0, \mathcal{O}(P_{2}, \epsilon/2))} (red dash). The \emph{circular cone} is also projected on the plane $P.t-P_1.t=0$ and the inscribe regular polygon $\mathcal{R}_2$ of the projection circle is returned. As $\mathcal{R}^*=\mathcal{R}_1$ is not empty, $\mathcal{R}^*$ is set to the intersection of $\mathcal{R}_2$ and $\mathcal{R}^*$, which is $\mathcal{R}_1 \bigsqcap \mathcal{R}_2 \ne \emptyset$.
+	%	
+	(3) For point $P_3$, the algorithm runs the same routine as $P_2$ until the intersection of $\mathcal{R}_3$ and $\mathcal{R}^*$ is $\emptyset$. Thus, a line segment $\vv{P_0P_2}$ is generated, and the process of a new line segment is started, taking $P_2$ as the new start point and $P.t-P_3.t=0$ as the new projection plane.
+	%	
+	(4) At last, the algorithm outputs four continuous line segments, \ie $\{\vv{P_0P_2}$, $\vv{P_2P_4}$, $\vv{P_4P_{7}}$, $\vv{P_7P_{10}}\}$. %\eop
+\end{example} 	
+\vspace{-1ex}
+
 
 \stitle{Algorithms \intersec \cite{Long:Direction} and \interval \cite{Ke:Interval} Using \dad.}
 %The \emph{range intersection} method \cite{Long:Direction} is specifically designed for the direction-aware distance \dad, and serves as the foundation of the direction preserveing trajectory simplification algorithms \intersec \cite{Long:Direction} and \interval . This approach is a bit like the \emph{sector intersection} method in that it defines a \emph{direction range} for each line segment connecting two neighbouring points then checks the common intersection of those \emph{direction ranges} as a way similar with the \emph{sector intersection}.
@@ -208,4 +277,26 @@ Algorithm \intersec\cite{Long:Direction} uses a half range, and shows that if th
 Recently, {algorithm \interval \cite{Ke:Interval} extends} \intersec from half to full ranges, by showing that if the {common intersection} $\bigsqcap_{i=1}^{k}range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon)\ne \phi$ and $\vv{P_sP_{s+k}}.\theta$ falls in the {common intersection}, then the angular between $\vv{P_{s+i-1}P_{s+i}}$ and $\vv{P_sP_{s+k}}$ for all $i\in [1, k]$ is not larger than $\epsilon$.
 %
 %Algorithms \intersec and \interval both run in $O(n)$ time and take $O(1)$ space. %, and they both only support \dad.
+
+
+
+\begin{example}
+	\label{exm-alg-interval}
+	Figure~\ref{fig:interval} is a running example of the \emph{interval} method taking as input the same trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$. At the beginning, $P_0$ is the first start point, and points $P_1$, $P_2$, $P_3$, etc., each has a \emph{direction range} $Range(\vv{P_0P_1}, \epsilon)$, $Range(\vv{P_1P_2}, \epsilon)$, $Range(\vv{P_2P_3}, \epsilon)$, etc., respectively.
+	%
+	Because $\bigsqcap_{i=1}^{4}Range(\vv{P_{0+i-1}P_{0+i}}, \epsilon) \ne \phi$ and $\vv{P_0P_{4}}.\theta$ falls in the \emph{common subinterval}, and $\bigsqcap_{i=1}^{5}Range(\vv{P_{0+i-1}P_{0+i}}, \epsilon) = \phi$, $\vv{P_0P_4}$ is output and $P_4$ becomes the start point of the next section.
+	At last, the algorithm outputs two continuous line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.
+\end{example}
+
+
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.66]{Figures/Fig-interval.png}
+	\vspace{-3ex}
+	\caption{\small The trajectory $\dddot{\mathcal{T}}$ is compressed by the interval algorithm using \dad to two line segments.}
+	\vspace{-1ex}
+	\label{fig:interval}
+\end{figure}
+
+
 

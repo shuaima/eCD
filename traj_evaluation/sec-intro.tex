@@ -55,8 +55,19 @@ batch, online and one-pass algorithms.
 
 \stitle{Distance metrics}. Trajectory simplification algorithms are closely coupled with distance metrics, and different techniques are typically needed for different distance metrics.  We consider three widely adopted metrics: \emph{perpendicular Euclidean distances} (\ped), \emph{synchronous Euclidean distances} (\sed) and \emph{direction-aware distances} (\dad).
 
+\eat{
+\begin{figure}[tb!]
+	\centering
+	%\vspace{-1ex}
+	\includegraphics[scale=1.2]{figures/Fig-Distance.png}
+	%\vspace{-1ex}
+	\caption{\small A sub-trajectory $[P_s, \ldots, P_e]$ is simplified using \ped and \sed, respectively. A spatio-temporal query ``\emph{the position $P$ of the moving object at time $t$}'' on the simplified trajectory returns a point (a) in a large zone consisting of a rectangle and two half-circles, or (b) inside a small circle.}
+	\vspace{-3ex}
+	\label{fig:distances}
+\end{figure}
+}
 
-Originally, \lsa algorithms adopt \ped as the distance metric, which brings good compression ratios~\cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey}. (1) \ped does not preserve the temporal information. Hence, \sed was then introduced to preserve temporal information of trajectories and to support spatio-temporal queries\cite{Meratnia:Spatiotemporal}.
+Originally, \lsa algorithms adopt \ped as the distance metric, which brings good compression ratios~\cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey}. (1) \ped does not preserve the temporal information. Hence, \sed was then introduced to preserve temporal information of trajectories and to support spatio-temporal queries\cite{Meratnia:Spatiotemporal,Lin:Cised}.
 (2) \dad~\cite{Long:Direction, Zhang:Evaluation} was introduced to preserve the direction information of moving objects, and was initially called the \emph{direction-based measurement} in \cite{Long:Direction}. It is important for applications such as trajectory clustering and direction-based query processing \cite{Long:Direction,Long:Mining}.
 %
 Note that \lsa algorithms using \sed or \dad may produce more line segments than using \ped. However, the use of \sed and \dad further preserves temporal and direction information, respectively.
@@ -161,8 +172,6 @@ and it provides a good experimental study on compression errors and spatio-tempo
 
 
 
-
-
 \stitle{Contributions}.
 In this paper, we conduct a thorough and systematic evaluation and analyses of the mainstream trajectory compression techniques (\ie error bounded trajectory simplification) for large-scale trajectory data.
 
@@ -183,65 +192,6 @@ Note that online and one-pass algorithms are typically designed for a specific d
 
 
 Essentially, this study is an important complimentary to \cite{Zhang:Evaluation} by providing a thorough and systematic evaluation and analyses of error bounded trajectory simplification algorithms. Further, though  \cite{Zhang:Evaluation} tests the average errors of algorithms from the aspect of applications, \ie spatio-temporal queries, different applications have different requirements, and it is hardly to enumerate all of them. Hence, we focus on revealing the intrinsic characteristics of algorithms, and providing guidelines and suggestions on the choices of algorithms and distance metrics for different scenarios.
-
-
-
-
-
- \eat{%%%%%%%%%%%%%%%%%
- provides a good experimental study on databases usability in terms of spatio-temporal query analyses,
-
-This paper presents an experimental comparison of the state-of-the-art \lsa algorithms for trajectory compression, including \emph{both the optimal and the sub-optimal methods that use either \ped or \sed or \dad}.
-
-
-Using a variety of real trajectory datasets, we evaluated the performance of each technique in terms of its processing time, compression ratio and average error.
-%with up to \textcolor{red}{$2.5$} billion data points
-Our experimental results reveal the characteristics of different techniques.
-%%\textcolor{red}{In addition, some of our findings are not reported in preview work and some are the supplements of or in contradiction with the preview works such as \cite{Zhang:Evaluation}.}
-%
-Based on these findings, we provide guidelines on selecting appropriate methods and distance metrics for various scenarios.
-
-Note algorithms without error bound, \eg the $n^{th}$ point routine and the routine of random-selection of points\cite{Shi:Survey},
-and algorithms using cumulative error, \eg MRPA that uses the  integral square synchronous Euclidean distance \cite{Chen:Fast}, are out of the scope.
-
-%\begin{enumerate}
-\ni (1) Three distance metrics, \ie the \ped and \dad for spatial compression and the \sed \cite{Meratnia:Spatiotemporal} for spatio-temporal compression, which are supported in those algorithms, and what impacts they are on performance, have not been compared systematically under the same experimental platform.
-
-\ni (2) The effectiveness and the room for improvement of sub optimal \lsa algorithms compared with the optimal \lsa algorithms on trajectory data are not comprehensively studied.
-
-\ni (3) The ``sector intersection" algorithms \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} developed in fields of graphic, cartographic and pattern recognition, which run fast as well as have good performance, are still not introduced to the field of trajectory compression.
-
-\ni (4) The recent important progresses in the field of trajectory simplification, \ie online algorithms \squishe~\cite{Muckell:Compression} using \sed and \bqsa~\cite{Liu:BQS} using \ped, and one-pass algorithms \operb~\cite{Lin:Operb} and \siped \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} using \ped, \cised~\cite{Lin:Cised} using \sed and \interval \cite{Ke:Interval} using \dad are not systematically evaluated for trajectory data.
-
-%\end{enumerate}
-\stitle{\textcolor{blue}{Notes: Advantages of Zhang' Evaluation\cite{Zhang:Evaluation}}}.
-
-\textcolor{blue}{(1) Tests a wild list of algorithms}
-
-\textcolor{blue}{(2) Tests the average errors of algorithms from the view of application: Spatio-temporal query}
-
-\stitle{\textcolor{blue}{Notes: Limitations of Zhang' Evaluation\cite{Zhang:Evaluation}}}.
-
-\textcolor{blue}{(1) Algorithms are listed without organizing.}
-
-\textcolor{blue}{(2) Many algorithms are not so important or typical or practical for trajectory simplification, \eg Uniform is not error bounded, Dead Reckoning has really poor compression ratios.}
-% It is easy to conclude these from the natures of these algorithms or from preview works,
-
-\textcolor{blue}{(3) The optimal algorithms of \ped and \sed are not covered in the work.}
-
-\textcolor{blue}{(4) Some important sub-optimal algorithms are not covered, \eg \sleeve, \cised.}
-
-\textcolor{blue}{(5) Distance metrics, especially \ped and \sed, are not comprehensively compared in the work.}
-
-\textcolor{blue}{(6) Compression ratio is not tested and compared, though it is one of the most important metrics of trajectory simplification algorithms.}
-
-\textcolor{blue}{(7) Another metric, runtime time, is not systematically tested in the same environment. Algorithms are implemented in different programming languages, \ie C/C++, Java, Matlab and Python, and the impacts of trajectory sizes and error bounds on running time are not tested.}
-
-\textcolor{blue}{(8) The max distance errors are not discussed in the tests, and it is unjustified to take the average errors as the only quality metric of algorithms and neglect the max distance errors, especially that some algorithms in the tests are not error bounded or use threshold on the accumulate errors.
-Indeed, the average errors and the max errors both are metrics of quality of algorithms. Some algorithms, \eg the optimal algorithms, may have relative larger average errors, however, they are error bounded. Some algorithms, \eg algorithms MRPA and DOTS that apply the accumulate SED error (ISSED), may lead to very large max errors though they have relative small average errors.}
-
-\textcolor{blue}{(9) It is unfair to conclude the guidelines based on the average error only. As we know, the algorithm that outputs the original input points is sure having the best/smallest average errors, but it is nonsense. In other words, algorithm has relative large average error as well as has good compression ratios may be a good choice in some scenarios.}
- }%%%%%%%%%%%%%%%%%
 
 
 
