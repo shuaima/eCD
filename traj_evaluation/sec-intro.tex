@@ -28,17 +28,16 @@ Due to the  limitations (poor compression ratio and data reconstruction overhead
 %, or replace original data points in a trajectory with other places of interests, such as roads and shops.
 
 
-\stitle{Algorithm taxonomy}. \lsa algorithms fall into two categories: \textit{optimal} and \textit{sub-optimal} algorithms.
-\textit{Optimal} methods\cite{Imai:Optimal,Chan:Optimal} are to find the minimum number of points or segments to represent the original polygonal lines \wrt an error bound $\epsilon$, by transforming the problem to search for the shortest path of a graph built from the original trajectory.
-Optimal \lsa algorithms have relative high time/space complexities which make them impractical for large trajectory data.
-Hence, \textit{sub-optimal} \lsa algorithms have been developed and/or introduced for trajectory compression, and they achieve better efficiency at an expense of outputting a little more data points. By the applied distance checking policies, sub-optimal algorithms can further be classified into
-batch, online and one-pass algorithms.
+\stitle{Algorithm taxonomy}. \lsa algorithms fall into two categories: \textit{compression optimal} and \textit{compression sub-optimal} algorithms.
+\textit{Compression optimal} methods\cite{Imai:Optimal,Chan:Optimal} are to find the minimum number of points or segments to represent the original polygonal lines \wrt an error bound $\epsilon$, by transforming the problem to search for the shortest path of a graph built from the original trajectory.
+The optimal \lsa algorithms have relative high time/space complexities which make them impractical for large trajectory data.
+Hence, \textit{compression sub-optimal} \lsa algorithms have been developed and/or introduced for trajectory compression, and they achieve better efficiency at an expense of outputting a little more data points. By the applied distance checking policies, sub-optimal algorithms can further be classified into batch, online and one-pass algorithms.
 
 \sstab (1) {\em Batch algorithms} such as Douglas-Peucker\cite{Douglas:Peucker,Meratnia:Spatiotemporal} and \pavlidis~\cite{Pavlidis:Segment} apply global distance checking policies such that all trajectory points need to be loaded before starting compression, and a point may be checked multiple times to compute its distance to the corresponding line segments.
 
 \sstab (2) {\em Online algorithms} such as \opwa \cite{Meratnia:Spatiotemporal}, \squishe \cite{Muckell:SQUISH} and \bqsa \cite{Liu:BQS} apply local distance checking policies, and need not to have the entire trajectory ready before compressing. They restrict the checking within a window/buffer, but may still check a point  multiple times during the process.
 
-\sstab (3) {\em One-pass algorithms} such as \operb\cite{Lin:Operb}, \siped \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}, \cised \cite{Lin:Cised}, \intersec\cite{Long:Direction} and \interval \cite{Ke:Interval} apply better local distance checking policies, which even do not need a window or buffer the previous read points, and process each point in a trajectory once and only once.
+\sstab (3) {\em One-pass algorithms} such as \operb\cite{Lin:Operb}, \siped \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}, \cised \cite{Lin:Cised}, \intersec\cite{Long:Direction} and \interval \cite{Ke:Interval} apply better local distance checking policies, which even do not need a window or \textcolor{blue}{a buffer to keep} the previous read points, and process each point in a trajectory once and only once.
 
 %By using local distance checking, online and one-pass algorithms are much more efficient than batch algorithms.
 
