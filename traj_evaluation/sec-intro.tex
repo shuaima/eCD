@@ -52,7 +52,7 @@ Hence, \textit{compression sub-optimal} \lsa algorithms have been developed and/
 %Thus, a spatio-temporal query, \eg ``\emph{the position of a moving object at time $t$}", on the compressed trajectories by line simplification algorithms using \ped may return an approximate point $P'$ whose distance to the actual position $P$ of the moving object at time $t$ is unbounded.
 %For example, a query for the position of $P_7$ at time $t_7$ may return an approximate data point $P'_7$ whose distance to $P_7$ is great than the  bound $\epsilon$ in Figure~\ref{fig:notations} (left).
 
-\stitle{Distance metrics}. Trajectory simplification algorithms are closely coupled with distance metrics, and different techniques are typically needed for different distance metrics.  We consider three widely adopted metrics: \emph{perpendicular Euclidean distances} (\ped), \emph{synchronous Euclidean distances} (\sed) and \emph{direction-aware distances} (\dad).
+\stitle{Distance metrics}. Trajectory simplification algorithms are closely coupled with distance metrics, and different techniques are typically needed for different distance metrics. We consider three widely adopted metrics: \emph{perpendicular Euclidean distances} (\ped), \emph{synchronous Euclidean distances} (\sed) and \emph{direction-aware distances} (\dad). 
 
 \eat{
 \begin{figure}[tb!]
@@ -66,11 +66,12 @@ Hence, \textit{compression sub-optimal} \lsa algorithms have been developed and/
 \end{figure}
 }
 
-Originally, \lsa algorithms adopt \ped as the distance metric, which brings good compression ratios~\cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey}. (1) \ped does not preserve the temporal information. Hence, \sed was then introduced to preserve temporal information of trajectories and to support spatio-temporal queries\cite{Meratnia:Spatiotemporal,Lin:Cised}.
+Originally, \lsa algorithms adopt \ped, \textcolor{blue}{the shortest distance from a point to a line segment, as the distance metric. It brings good compression ratios~\cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey} at a cost of losing temporal information of trajectories.}
+\textcolor{blue}{(1) \sed was then introduced to preserve the temporal information.
+The \sed of a point to a line segment is the Euclidean distance between the point and its \emph{synchronized point} \wrt the line segment, the expected position of the moving object on the line segment at the same time \emph{with the assumption that the object moves along a straight line on the line segment at a uniform speed} \cite{Cao:Spatio}. It is important to support applications such as spatio-temporal queries\cite{Meratnia:Spatiotemporal,Lin:Cised}.}
 (2) \dad~\cite{Long:Direction, Zhang:Evaluation} was introduced to preserve the direction information of moving objects, and was initially called the \emph{direction-based measurement} in \cite{Long:Direction}. It is important for applications such as trajectory clustering and direction-based query processing \cite{Long:Direction,Long:Mining}.
 %
 Note that \lsa algorithms using \sed or \dad may produce more line segments than using \ped. However, the use of \sed and \dad further preserves temporal and direction information, respectively.
-
 
 
 \eat{
@@ -110,7 +111,7 @@ Note that \lsa algorithms using \sed or \dad may produce more line segments than
 
 \begin{table*}
 	\renewcommand{\arraystretch}{1.20}
-	%\vspace{-1ex}
+	\vspace{-1ex}
 	\caption{\small Error bounded trajectory simplification algorithms}
 	\label{tab:summary-lsa}
 	\centering
@@ -159,12 +160,12 @@ Note that \lsa algorithms using \sed or \dad may produce more line segments than
         & &\interval\cite{Ke:Interval}				&$\times$ &$\times$ & \checkmark 		& $O (n)$ 	& $O(1)$  &\checkmark & range intersection with $\epsilon$-range \\		
         \hline
 	\end{tabular}
-	{\\  Here ``Rep" means ``Representative", $K$ is the number of the final segments of a trajectory and $|Q|$ is the size of a buffer/window.}
+	{\\  \vspace{0.5ex}Here ``Rep" means ``Representative", $K$ is the number of the final segments of a trajectory and $|Q|$ is the size of a buffer/window.}
 	\vspace{-2ex}
 \end{table*}
 
 \stitle{Motivations}. Empirical studies on trajectory compression algorithms have been conducted~\cite{Muckell:Compression,MuckellHLR10,mThesis}. However, they only discuss a small number of algorithms. The very recent study \cite{Zhang:Evaluation} does evaluate a wide range of trajectory simplification algorithms,
-and it provides a good experimental study on compression errors and spatio-temporal query analyses. However, two important aspects for trajectory simplification (\ie  compression ratios and running time) are not systematically studied. As a consequence, it remains difficult for practitioners to decide which algorithms and distance metrics should be adopted for a specific application.
+and it provides \textcolor{blue}{an experimental study} on compression errors and spatio-temporal query analyses. However, two important aspects for trajectory simplification (\ie  compression ratios and running time) are not systematically studied. As a consequence, it remains difficult for practitioners to decide which algorithms and distance metrics should be adopted for a specific application.
 
 %concerning the compression ratio and error of the result data, and the execution time of these compression algorithms.
 % Thus, these issues call for a more comprehensive evaluation of the existing \lsa techniques. % on trajectory data.
@@ -172,7 +173,7 @@ and it provides a good experimental study on compression errors and spatio-tempo
 
 
 \stitle{Contributions}.
-In this paper, we conduct a thorough and systematic evaluation and analyses of the mainstream trajectory compression techniques (\ie error bounded trajectory simplification) for large-scale trajectory data.
+In this paper, we conduct a thorough and systematic evaluation and analyses of the mainstream trajectory compression techniques (\ie error bounded trajectory simplification) for large-scale trajectory data, \textcolor{blue}{reveal the intrinsic characteristics of algorithms, and provide guidelines and suggestions on the choices of algorithms and distance metrics for different scenarios.}
 
 \stab (1) We classify error bounded \lsa algorithms into different categories, review each category of algorithms, and systematically evaluate the representative algorithms of each category.
 %
@@ -189,8 +190,8 @@ Note that online and one-pass algorithms are typically designed for a specific d
 (iii) Variations of distance metrics are not studied in \cite{Zhang:Evaluation}.
 (iv) Optimal algorithms using \ped and \sed and one-pass algorithms \siped and \cised are not investigated in \cite{Zhang:Evaluation}. Indeed, algorithm \siped is {\em completely overlooked} by existing trajectory compression studies as it is originally developed in fields of computational geometry and pattern recognition~\cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}, and we find that it can be easily adopted for trajectory compression with good performance.
 
-\textcolor{red}{Essentially, this study is an important complimentary to \cite{Zhang:Evaluation} by providing a thorough and systematic evaluation and analyses of error bounded trajectory simplification algorithms.
-Further, though  \cite{Zhang:Evaluation} tests the average errors of algorithms from the aspect of applications, \ie spatio-temporal queries, different applications have different requirements, and it is hardly to enumerate all of them. Hence, we focus on revealing the intrinsic characteristics of algorithms, and providing guidelines and suggestions on the choices of algorithms and distance metrics for different scenarios.}
+\eat{Essentially, this study is an important complimentary to \cite{Zhang:Evaluation} by providing a thorough and systematic evaluation and analyses of error bounded trajectory simplification algorithms.
+Further, though  \cite{Zhang:Evaluation} tests the average errors of algorithms from the aspect of applications, \ie spatio-temporal queries, different applications have different requirements, and it is hardly to enumerate all of them. Hence,} 
 
 
 
