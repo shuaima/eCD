@@ -660,10 +660,10 @@ The computation time of \dad is faster than \ped and \sed, and the computation t
 \subsubsection{\textcolor{blue}{Evaluation and Analyses of Spatio-Temporal Queries on Compressed Trajectories}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 {In the last set of tests, we evaluate compressed trajectories from the viewpoint of trajectory application, \ie spatio-temporal query. The well-known spatio-temporal queries are \emph{where\_at, when\_at, range, nearest\_neighbor} and \emph{spatial\_join} \cite{Cao:Spatio}. Among them, \emph{where\_at} query, \ie ``\emph{the position $P$ of a moving object at time $t$}'', is the foundation of \emph{range} and \emph{nearest\_neighbor} queries.}
-{Hence, we choose it to evaluate compressed trajectories simplified by \lsa algorithms using \ped and/or \sed.
+{Hence, we choose it to evaluate compressed trajectories simplified by \lsa algorithms using \ped, \sed and \dad.
 As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the expected position $P'$ of the moving object at time $t$. Indeed, it is the \emph{synchronized point} of $P$ when the query is performed on simplified trajectories.}
 
-{We first compress these trajectories using \ped and \sed, respectively. When compressing, we also fixed {$m$=$16$} for algorithm \cised and varied $\epsilon$ from $10$ to $200$ meters for all algorithms on the entire four datasets, respectively.}
+{We first compress these trajectories using \ped, \sed and \dad, respectively. }
 {Then, for each point $P$ in an original trajectory $\dddot{\mathcal{T}}$, we perform a query on each of its compressed trajectories taking time $P.t$ as input, and calculate the distance between the actual position $P$ and the expected position $P'$ to denote the error of queries.
 }
 %
@@ -681,22 +681,39 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 %\vspace{-1.0ex}
 \end{figure*}
 
+\ni (1) When using \ped, 
+average errors of spatio-temporal queries from the smallest to the largest are ...
 
-\ni {(1) When using \sed, the max errors of spatio-temporal queries on compressed trajectories are always not larger than error bounds. However, when using \ped, they are more than $10^6$ metres in datasets \ucar, \geolife and \mopsi, significantly larger than error bounds. This large-error phenomenon is actually possible. For example, if someone travels from Beijing of China to Sydney of Australia. During the trip, he first closes his mobile when the air plane is ready to take off, then he turns on his mobile after he arrives at Sydney. Because the sub-trajectory includes data points located in two small regions, \ie the Beijing and Sydney airports, it is possible that the sub-trajectory is compressed by some \lsa algorithm using \ped into a single line segment, even the error bound $\epsilon$ is set to just $60$ metres. When a {\emph where\_at} is performed on the long line segment, it may return an approximate point having a large error to the actual position.}
+For full datasets, algorithms \tpa and \dpa are comparable, and they are on average ($xxx\%$, $xxx\%$,
+$xxx\%$) and ($xxx\%$, $xx\%$, $xxx\%$) of \opt on datasets \dSets, respectively.
+Algorithms \siped($\frac{\epsilon}{2}$) and \operb are comparable, and they are on average
+($xxx\%$, $xx\%$, $xxx\%$) and ($xxx\%$, $xx\%$, $xxx\%$) of \opt on datasets \dSets, respectively.
+%
+Algorithms \siped(${\epsilon}$) and \bqsa are on average ($xxx\%$, $xx\%$, $xxx\%$) and ($xxx\%$, $xx\%$, $xxx\%$) of \opt on datasets \dSets, respectively.
+For example, the average errors of algorithms
+(\opt, \tpa, \dpa, \bqsa, \siped(${\epsilon}$), \siped($\frac{\epsilon}{2}$), \operb ) in the full \mopsi are ($xx$, $xx$, $xx$, $xxx$, $xxx$, $xxx$, $xxx$) metres when $\epsilon$ = $40m$.
+
+
+they are more than $10^6$ metres in datasets \ucar, \geolife and \mopsi, significantly larger than error bounds. This large-error phenomenon is actually possible. For example, if someone travels from Beijing of China to Sydney of Australia. During the trip, he first closes his mobile when the air plane is ready to take off, then he turns on his mobile after he arrives at Sydney. Because the sub-trajectory includes data points located in two small regions, \ie the Beijing and Sydney airports, it is possible that the sub-trajectory is compressed by some \lsa algorithm using \ped into a single line segment, even the error bound $\epsilon$ is set to just $60$ metres. When a {\emph where\_at} is performed on the long line segment, it may return an approximate point having a large error to the actual position.}
 %
 {Besides, we also find that the data quality problem of the original given trajectories, such as an abnormal change of GPS location or time, \eg the latitude and longitude of a moving object suddenly change from one country to another country, or even somewhere in the ocean, can aggravate the large error phenomenon of spatio-temporal queries on compressed trajectories that are simplified using \ped. These confirm that \sed is more suitable than \ped for spatio-temporal queries.} %, as illustrated in Section~\ref{sec-intro}
 
+\ni {(2) When using \sed, 
+	average errors of spatio-temporal queries from the largest to the smallest are ...
+	
+	The max errors of spatio-temporal queries on compressed trajectories are always not larger than error bounds. 
+	
 
+\ni (3) When using \dad, 
 
-
-
-\ni {(2) Given the same error bound, the average errors of these queries on compressed trajectories using \ped are obvious larger than those using \sed, and they are typically larger than error bounds. Moreover, algorithm \siped using \ped has larger spatio-temporal query errors than \dpa using \ped because \siped applies a greedy policy that tries to include as many points into a line segment, and some of these ``extra-points'' lead to large errors.}
-% due to some points having extraordinary large errors
 
 \stitle{Analyses of \lsa algorithms.}
 
 
 \stitle{Analyses of distance metrics.}
+Given the same error bound, the average errors of these queries on compressed trajectories using \ped are obvious larger than those using \sed, and they are typically larger than error bounds. Moreover, algorithm \siped using \ped has larger spatio-temporal query errors than \dpa using \ped because \siped applies a greedy policy that tries to include as many points into a line segment, and some of these ``extra-points'' lead to large errors.}
+% due to some points having extraordinary large errors
+
 
 
 
