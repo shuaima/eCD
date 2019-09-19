@@ -78,15 +78,7 @@ Consider a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}
 
 
 
-\stitle{Min-$\#$ problem}. Given a trajectory \trajec{T}$\left[P_0, \dots, P_n\right]$ and a pre-specified constant $\epsilon$, the \emph{min-$\#$} problem of trajectory simplification is to approximate the trajectory \trajec{T} with $\overline{\mathcal{T}}\left[\mathcal{L}_0, \ldots , \mathcal{L}_m\right]$ ($0< m \le n$), such that
-(1) on each of them the points $\left[P_{s_i}, \dots, P_{e_i}\right]$ are approximated by a line segment $\mathcal{L}_i = \vv{P_{s_i}P_{e_i}}$ with the maximum \ped or \sed \emph{error} of point $P_j$ (or \dad \emph{error} of line segment $|\vv{P_jP_{j+1}}|$) to line segment $\mathcal{L}_i$, $s_i \le j<e_i$,  less than $\epsilon$, and
-(2) $P_{s_i}$ and $P_{e_i} \in$ \trajec{T}.
-
-
-We illustrate the problem and notations with examples.
-
-
-
+We illustrate these notations with examples.
 
 \begin{example}
 	\label{exm-notations}
@@ -115,3 +107,16 @@ We illustrate the problem and notations with examples.
 		\vspace{-2ex}
 	\label{fig:dp}
 \end{figure}
+
+
+Now we can define the Min-$\#$ problem of trajectory simplification.
+
+\stitle{Min-$\#$ problem}. Given a trajectory \trajec{T}$\left[P_0, \dots, P_n\right]$ and a pre-specified constant $\epsilon$, the \emph{min-$\#$} problem of trajectory simplification is to approximate the trajectory \trajec{T} with $\overline{\mathcal{T}}\left[\mathcal{L}_0, \ldots , \mathcal{L}_m\right]$ ($0< m \le n$), such that
+(1) on each of them the points $\left[P_{s_i}, \dots, P_{e_i}\right]$ are approximated by a line segment $\mathcal{L}_i = \vv{P_{s_i}P_{e_i}}$ with the maximum \ped or \sed \emph{error} of point $P_j$ (or \dad \emph{error} of line segment $|\vv{P_jP_{j+1}}|$) to line segment $\mathcal{L}_i$, $s_i \le j<e_i$,  less than $\epsilon$, and
+(2) $P_{s_i}$ and $P_{e_i} \in$ \trajec{T}.
+
+
+
+\textcolor{blue}{The simplified trajectories are stored in data stores. As time goes by, the less precision of them may be necessary\cite{Cao:Spatio}. Thus, they need to be simplified again to get more coarse trajectories as time progresses. Suppose we first compressed a trajectory $\overline{\mathcal{T}_0}$ using an \lsa algorithm $\mathcal{A}$ with error bound $\epsilon_1$ to $\overline{\mathcal{T}}_1$, then we need a coarser trajectory produced from $\overline{\mathcal{T}}_1$  having error bound $\epsilon_2$ corresponding to $\overline{\mathcal{T}}_0$, can we get that by compressing $\overline{\mathcal{T}}_1$ with error bound $\epsilon_2$? The data aging mechanism are introduced in \cite{Cao:Spatio} to answer this question.}
+
+\stitle{Aging friendly \cite{Cao:Spatio}}. \textcolor{blue}{A simplification algorithm $\mathcal{A}$ is aging friendly with respect to a distance metric $D$ if for every $\epsilon_1$ and every $\epsilon_2$ such that $\epsilon_1 < \epsilon_2$, and for every trajectory $\dddot{\mathcal{T}}$, $\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_2, D)= \mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, D), \epsilon_2, D)$}.
