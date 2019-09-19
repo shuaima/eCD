@@ -10,77 +10,64 @@ Reumann-Witkam (\rwa) \cite{Reumann:Strip} is a straightforward one-pass algorit
 Algorithm \operb~\cite{Lin:Operb} recently improves \rwa  by allowing dynamically adjustable strips, together with several detailed optimization techniques.
 %
 There is also algorithm \siped (\emph{sector intersection}) that converts distance tolerances into angle tolerances to speed up the process, which is {\em completely overlooked} by existing trajectory compression studies,  but can be easily adopted for trajectory compression, as it is originally developed in fields of computational geometry and pattern recognition~\cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}.
+\eat{
+	Initially, Williams~\cite{Williams:Longest} and Sklansky and Gonzalez \cite{Sklansky:Cone} proposed linear time algorithms based on the idea of ``cone intersection" in a plane, then Dunham \cite{Dunham:Cone} extended these algorithms, and the Sleeve algorithm \cite{Zhao:Sleeve} in the cartographic discipline essentially applied the same idea as \siped but alternatively called it ``sector intersection".
+}%
 These algorithms are designed for \ped. {\em Algorithms \operb and \siped have good compression ratios, and, hence, we choose them as the representatives of  one-pass algorithms using \ped}.
 
 
-
-\eat{
-There is also {sector intersection (\siped)} method, developed in fields of graphic, cartographic and pattern recognition, that can be easily adopted for trajectory compression although \textit{it has been overlooked by existing trajectory simplification studies}.
-Initially, Williams~\cite{Williams:Longest} and Sklansky and Gonzalez \cite{Sklansky:Cone} proposed linear time algorithms based on the idea of ``cone intersection" in a plane, then Dunham \cite{Dunham:Cone} extended these algorithms, and the Sleeve algorithm \cite{Zhao:Sleeve} in the cartographic discipline
-essentially applied the same idea as \siped but alternatively called it ``sector intersection".
-The sector intersection method is \ped specific, and runs fast as well as has comparable compression ratios in comparing with the \dpa algorithm using \ped.
-}%
-%Moreover, {fast \bqsa \cite{Liu:BQS} (\fbqsa in short), the simplified version of \bqsa, has a linear time complexity.}%
-
-
 Algorithm Linear Dead Reckoning (\ldr) for position tracking \cite{Lange:Tracking,Trajcevski:DDR} follows the similar routine as \rwa except that it uses \sed and assumes a velocity ${\vv{v}}$ for each section.
-%In addition, the authors of \cite{Trajcevski:DDR} proved that \ldr is also suitable for online spatio-temporal compression. % as long as the tolerance threshold is set to $\epsilon/2$.
 It has poor compression ratios because both the value and the direction of velocity ${\vv{v}}$ are pre-defined and fixed between two updates.
 Recently algorithm \cised~\cite{Lin:Cised} extends the \textit{sector intersection} method \siped from a 2D space to a Spatio-Temporal 3D space.
 These one-pass algorithms are designed for \sed. {\em As algorithm \cised has a compression ratio close to algorithm \dpa using \sed, we choose it as the representative of one-pass algorithms using \sed}.
 
 
-
 {Direction range intersection} approaches are similar to  \emph{sector intersection} methods except that they are designed for \dad, we choose \intersec \cite{Long:Direction} and \interval \cite{Ke:Interval} as the representatives of one-pass algorithms using \dad.
-
-%{\em As \interval is an extension of \intersec, we choose \interval as the representative of  one-pass algorithms using \dad}.
 
 
 \eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
-The $n^{th}$ point routine and the routine of random-selection of points \cite{Shi:Survey} are two naive one-pass algorithms.
-In these routines, for every fixed number of consecutive points along the line, the $n^{th}$ point and one random point among them are retained, respectively.
-They run fast, however, they are not error bounded.
+	The $n^{th}$ point routine and the routine of random-selection of points \cite{Shi:Survey} are two naive one-pass algorithms.
+	In these routines, for every fixed number of consecutive points along the line, the $n^{th}$ point and one random point among them are retained, respectively.
+	They run fast, however, they are not error bounded.
 	
-\subsubsection{Reumann-Witkam and LDR}
-
-\begin{figure*}[tb!]
-\centering
-\includegraphics[scale=0.66]{Figures/Fig-LDR.png}
-\vspace{-1ex}
-\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the Reumann-Witkam and Linear Dead Reckoning algorithms to four and eight line segments, respectively.}
-\vspace{-2ex}
-\label{fig:ldr}
-\end{figure*}
-
-In Reumann-Witkam\cite{Reumann:Strip}, the input data is divided into sections by strips.
-Initially, the first strip, with the width of $2*\epsilon$, takes the line $\vv{P_0P_1}$ connecting the first two points, $P_0$ and $P_1$ as its middle line.
-Then the strip is expending over the line into the direction of its initial tangent, covering the succeed points, $P_2, \ldots, P_{j}$, until the strip hits the line $\vv{P_jP_{j+1}}$ (meaning that the next point $P_{j+1}$, $j>1$, is out side of the strip).
-The points, $[P_0, \ldots, P_{j}]$, within this strip compose a section. The first and last points of the section, \ie $P_0,P_{j}$, are output, and those points between them are removed.
-The last point $P_{j}$ is the initial point of the next strip.
-The whole process is repeated until the strip contains the end point $P_n$ of the input data.
-The Reumann-Witkam is a one-pass algorithm.
-
-{The Linear Dead Reckoning (LDR)\cite{Lange:Tracking} for position tracking follows the similar routine as the Reumann-Witkam algorithm except that it assumes a velocity ${\vv{v}}$ for each section and uses \sed instead of \ped in distance checking.
-Moreover, the authors of \cite{Trajcevski:DDR} proved that LDR is also suitable for online spatio-temporal compression as long as the tolerance threshold of the algorithm is set to $\epsilon/2$.}
-
-\begin{example}
-\label{exm-alg-strip}
-In Figure~\ref{fig:ldr}, the trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed
-%
-(1) by the Reumann-Witkam to four line segments $\vv{P_0P_2}$, $\vv{P_2P_4}$, $\vv{P_4P_7}$ and $\vv{P_7P_{10}}$. First, a strip with width $2\epsilon$ is built parallel to the line $\vv{P_0P_1}$, then the strip is extended over the line and includes point $P_2$. Because $P_3$ is outside of the strip, $P_2$ becomes the end point of the first section and the start point of the second section.
-%
-(2) by the Linear Dead Reckoning algorithm to eight line segments $\vv{P_0P_1}$, $\vv{P_1P_2}$, $\vv{P_2P_3}$, $\vv{P_3P_4}$, $\vv{P_4P_5}$, $\vv{P_5P_7}$, $\vv{P_7P_8}$ and $\vv{P_8P_{10}}$. First, an initial velocity ${\vv{v}_0}$ is set to $|P_0P_1|/(t_1-t_0)$. Then the synchronized point $P'_2$ of $P_2$ is estimated based on the velocity ${\vv{v}_0}$ and time of $P_2$, \ie ${v}_0 * (t_2-t_0)$. Because the \sed from $P_2$ to the line $\vv{P_0P'_2}$ , \ie $|P_2P'_2|$, is great than $\epsilon/2$, the algorithm outputs $\vv{P_0P_1}$ and starts the next section.
-\end{example}
-
+	\subsubsection{Reumann-Witkam and LDR}
+	
+	\begin{figure*}[tb!]
+		\centering
+		\includegraphics[scale=0.66]{Figures/Fig-LDR.png}
+		\vspace{-1ex}
+		\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the Reumann-Witkam and Linear Dead Reckoning algorithms to four and eight line segments, respectively.}
+		\vspace{-2ex}
+		\label{fig:ldr}
+	\end{figure*}
+	
+	In Reumann-Witkam\cite{Reumann:Strip}, the input data is divided into sections by strips.
+	Initially, the first strip, with the width of $2*\epsilon$, takes the line $\vv{P_0P_1}$ connecting the first two points, $P_0$ and $P_1$ as its middle line.
+	Then the strip is expending over the line into the direction of its initial tangent, covering the succeed points, $P_2, \ldots, P_{j}$, until the strip hits the line $\vv{P_jP_{j+1}}$ (meaning that the next point $P_{j+1}$, $j>1$, is out side of the strip).
+	The points, $[P_0, \ldots, P_{j}]$, within this strip compose a section. The first and last points of the section, \ie $P_0,P_{j}$, are output, and those points between them are removed.
+	The last point $P_{j}$ is the initial point of the next strip.
+	The whole process is repeated until the strip contains the end point $P_n$ of the input data.
+	The Reumann-Witkam is a one-pass algorithm.
+	
+	{The Linear Dead Reckoning (LDR)\cite{Lange:Tracking} for position tracking follows the similar routine as the Reumann-Witkam algorithm except that it assumes a velocity ${\vv{v}}$ for each section and uses \sed instead of \ped in distance checking.
+		Moreover, the authors of \cite{Trajcevski:DDR} proved that LDR is also suitable for online spatio-temporal compression as long as the tolerance threshold of the algorithm is set to $\epsilon/2$.}
+	
+	\begin{example}
+		\label{exm-alg-strip}
+		In Figure~\ref{fig:ldr}, the trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed
+		%
+		(1) by the Reumann-Witkam to four line segments $\vv{P_0P_2}$, $\vv{P_2P_4}$, $\vv{P_4P_7}$ and $\vv{P_7P_{10}}$. First, a strip with width $2\epsilon$ is built parallel to the line $\vv{P_0P_1}$, then the strip is extended over the line and includes point $P_2$. Because $P_3$ is outside of the strip, $P_2$ becomes the end point of the first section and the start point of the second section.
+		%
+		(2) by the Linear Dead Reckoning algorithm to eight line segments $\vv{P_0P_1}$, $\vv{P_1P_2}$, $\vv{P_2P_3}$, $\vv{P_3P_4}$, $\vv{P_4P_5}$, $\vv{P_5P_7}$, $\vv{P_7P_8}$ and $\vv{P_8P_{10}}$. First, an initial velocity ${\vv{v}_0}$ is set to $|P_0P_1|/(t_1-t_0)$. Then the synchronized point $P'_2$ of $P_2$ is estimated based on the velocity ${\vv{v}_0}$ and time of $P_2$, \ie ${v}_0 * (t_2-t_0)$. Because the \sed from $P_2$ to the line $\vv{P_0P'_2}$ , \ie $|P_2P'_2|$, is great than $\epsilon/2$, the algorithm outputs $\vv{P_0P_1}$ and starts the next section.
+	\end{example}
+	
 }%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%End of Eat
 
-%\subsubsection{\operb Using \ped}
-%\label{sec-operb}
 
-\stitle{{Algorithm \operb Using \ped} \cite{Lin:Operb}}.
-%Authors of \operb  design an approach that depends on a \emph{direction-dynamically-adjusting line segment} to achieve a one-pass process.
-%
+\subsubsection{{Algorithm \operb Using \ped} \cite{Lin:Operb}}
+\textcolor{blue}{It designs a \emph{direction-dynamically-adjusting line segment} to achieve an effective one-pass process.}
+
 Consider an error bound $\epsilon$ and a sub-trajectory $\dddot{\mathcal{T}_s}[P_s,$ $\ldots, P_{s+k}]$.
 \operb dynamically maintains a directed line segment $\mathcal{L}_i$ ($i\in[1,k]$), whose start point is fixed with $P_s$ and its end point is identified (may not in $\{P_s, \ldots, P_{s+i}\}$) to {\em fit} all the previously processed points $\{P_s, \ldots, P_{s+i}\}$.
 The directed line segment $\mathcal{L}_i$ is built by a function named \emph{fitting function $\mathbb{F}$}, such that when a new point $P_{s+i+1}$ is considered, only its distance to the directed line segment $\mathcal{L}_i$ is checked, instead of checking the distances of all or a subset of data points of $\{P_{s}, \ldots, P_{s+i}\}$ to $\mathcal{R}_{i+1}$ = $\vv{P_sP_{s+i+1}}$ as the global distance checking does.
@@ -124,9 +111,6 @@ otherwise, the directed line segment $\mathcal{L}_i$ is updated by the fitting f
 \ni where (a) $1 \le i \le k+1$; (b) $\mathcal{R}_{i-1}$ = $\vv{P_sP_{s+i-1}}$, is the directed line segment whose end point $P_{s+i-1}$ is in $\dddot{\mathcal{T}_s}[P_s, \ldots, P_{s+k}]$; (c) $\mathcal{L}_{i}$ is the directed line segment built by fitting function $\mathbb{F}$ to fit sub-trajectory $\dddot{\mathcal{T}_s}[P_s, \ldots, P_{s+i}]$ and $\mathcal{L}_{0}$ = $\mathcal{R}_{0}$; (d) $j = \lceil(|\mathcal{R}_{i}|*2/\epsilon - 0.5)\rceil$; (e) $f()$ is a sign function such that $ f(\mathcal{R}_i,\mathcal{L}_{i-1})$ = $1$ if the included angle $\angle(\mathcal{R}_{i-1}, \mathcal{R}_{i})$ = $(\mathcal{R}_i.\theta - \mathcal{L}_{i-1}.\theta)$ falls in the range of $(-2\pi, -\frac{3\pi}{2}]$, $[-\pi, -\frac{\pi}{2}]$, $[0, \frac{\pi}{2}]$ and $[\pi, \frac{3\pi}{2})$, and $f(\mathcal{R}_i,\mathcal{L}_{i-1})$ = $-1$, otherwise; (f) $\epsilon/2$ is a step length to control the increment of $|\mathcal{L}|$.
 %
 Optimizations are developed to achieve better compression ratios.
-%Algorithm \operb runs in $O(n)$ time and takes $O(1)$ space. %, and it only supports \ped.
-
-
 
 
 \begin{example}
@@ -150,15 +134,12 @@ Optimizations are developed to achieve better compression ratios.
 \end{figure}
 
 
-\stitle{Algorithm \siped Using \ped \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve}}.
-%The Sector intersection algorithms using \ped (\siped) \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone}, also named \sleeve in \cite{Zhao:Sleeve}, are {the angle-adjustable strips too}.
-%Note that the ``cone intersection" algorithms, developed in fields of graphic, cartographic and pattern recognition, are still not familiar to researchers of trajectory compression.
-%The \siped approach processes the input points in order and produces a simplified poly-line. Instead of using the distance tolerance $\epsilon$ directly as the distance threshold, \siped converts the distance tolerance into a variable angle tolerance for testing the points. It defines the idea of ``Sector" \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} \eat{as shown in Section~\ref{subsec-optped}} and uses it to speed up the process.
+\subsubsection{Algorithm \siped Using \ped \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve}}
+\textcolor{blue}{It defines an idea of ``Sector" \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} and uses it to convert the distance tolerance into a variable angle tolerance for testing the points.}  
+
 Given a sequence of points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$,
-for the start data point $P_s$,
-%%%%%%%%%%%%%
-any point $P_{s+i}$ and $|\vv{P_sP_{s+i}}|>\epsilon$ ($i\in[1, k]$), there are two directed lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ such that $ped(P_{s+i}, \vv{P_sP^u_{s+i}})$ $=$ $ped(P_{s+i}, \vv{P_sP^l_{s+i}}) = \epsilon$ and either ($\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta ~and~\vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta <\pi$) or ($\vv{P_sP^l_{s+i}}.\theta > \vv{P_sP^u_{s+i}}.\theta ~and~ \vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta < -\pi)$. Indeed, they form a \emph{sector} \sector{(P_s, P_{s+i}, \epsilon)} that takes $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the border lines.
-%%%%%%%%%%%
+for the start data point $P_s$, any point $P_{s+i}$ and $|\vv{P_sP_{s+i}}|>\epsilon$ ($i\in[1, k]$), there are two directed lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ such that $ped(P_{s+i}, \vv{P_sP^u_{s+i}})$ $=$ $ped(P_{s+i}, \vv{P_sP^l_{s+i}}) = \epsilon$ and either ($\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta ~and~\vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta <\pi$) or ($\vv{P_sP^l_{s+i}}.\theta > \vv{P_sP^u_{s+i}}.\theta ~and~ \vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta < -\pi)$. Indeed, they form a \emph{sector} \sector{(P_s, P_{s+i}, \epsilon)} that takes $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the border lines.
+%
 There exists a data point $Q$ such that for any data point $P_{s+i}$ ($i \in [1, ... k]$), its perpendicular Euclidean distance to
 directed line $\overline{P_sQ}$ is not greater than the error bound $\epsilon$ if and only if the $k$ sectors \sector{(P_s, P_{s+i}, \epsilon)} ($i\in[1,k]$) share common data points other than $P_s$, \ie $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon)} $\ne \{P_s\}$ \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}.
 %
@@ -167,13 +148,10 @@ However, if $Q$ must be a point selected from the original points, in other word
 for any point $P_{s+j}$ ($j \in [1, ... i]$), its \ped to
 line segment $\overline{P_sP_{s+i}}$ is not greater than the error bound $\epsilon$ if $\bigsqcap_{j=1}^{i}$\sector{(P_s, P_{s+j}, \epsilon/2)} $\ne \{P_s\}$, as pointed out in \cite{Zhao:Sleeve}.
 That is, {\em these sector intersection based algorithms can be easily adopted for trajectory compression}.
-%
-%Algorithm \siped runs in $O(n)$ time and takes $O(1)$ space. %, and \siped also only supports \ped.
+
 
 The original \siped uses a half sector, $\frac{\epsilon}{2}$-\sector, which may limit its compression performance. However, it can further be extended to a full ${\epsilon}$-\sector ~ by adding a constraint. That is, for any point $P_{s+j}$ ($j \in [1, ... i]$), its \ped to
 line segment $\overline{P_sP_{s+i}}$ is not greater than the error bound $\epsilon$ if $ P_{s+i} \ne {P_s}$ and $P_{s+i}\in \bigsqcap_{j=1}^{i-1}$\sector{(P_s, P_{s+j}, \epsilon)}, \ie $P_{s+i}$ lives in the common intersection of preview full \emph{sectors}.
-
-
 
 
 
@@ -197,10 +175,9 @@ line segment $\overline{P_sP_{s+i}}$ is not greater than the error bound $\epsil
 
 
 
-\stitle{Algorithm \cised Using \sed \cite{Lin:Cised}}.
-%\cised  extends the \textit{sector intersection} method from a 2D space to a Spatio-Temporal 3D space so as to get a \textit{Spatio-temporal Cone} method, and further achieves a one-pass process by a carefully designing.
-%Algorithm \cised applies the idea of spatio-temporal cone intersection and runs in the similar routine as \siped.
-%
+\subsubsection{Algorithm \cised Using \sed \cite{Lin:Cised}}
+\textcolor{blue}{It defines an idea of \textit{spatio-temporal cone} that extends the \textit{sector intersection} method from a 2D space to a Spatio-Temporal 3D space.}
+
 Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, any point $P'_{s+i}$ ($0< i \le k$) on the plane $P.t-P_{s+i}.t = 0$ is a synchronized data point of $P_{s+i}$. For all $P'_{s+i}$ in the plane satisfying $|P_{s+i}P'_{s+i}| \le \epsilon$, they form a \textit{synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$} of $P_{s+i}$ with $P_{s+i}$ as its center and $\epsilon$ as its radius.
 %
 A spatio-temporal cone (or simply \textit{cone}) of a data point $P_{s+i}$ ($1\le i\le k$) in $\dddot{\mathcal{T}}_s$ \wrt a point $P_s$ and an error bound $\epsilon$, denoted as \cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))}, or \cone{_{s+i}} in short, is an oblique circular cone such that point $P_s$ is its apex and the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$ is its base.
@@ -211,30 +188,21 @@ Like \textit{sector intersection} methods, point $Q$ may also not belong to $\{P
 line segment $\overline{P_sP_{s+i}}$ is not greater than the error bound $\epsilon$ if
 $\bigsqcap_{j=1}^{i}$\cone{(P_s, P_{s+j}, \epsilon/2)} $\ne \{P_s\}$ as pointed out in \cite{Lin:Cised}.
 
-
-%And its strong simplification version also applies the half $\epsilon$ in building a cone.
-
-\eat{
-\begin{figure}[tb!]
-	\centering
-	\includegraphics[scale=0.66]{Figures/Fig-CIS.png}
-	\vspace{-3ex}
-	\caption{\small Examples of spatio-temporal cones.} % in a 3D Cartesian coordinate system
-	\vspace{-2ex}
-	\label{fig:cis}
-\end{figure}
-}
-
 In addition, because these spatio-temporal cones have the same apex $P_s$, the checking of their intersection can be computed by a much simpler way, \ie the checking of intersection of cone projection circles on a plane, and a circle is further approximated with its $m$-edge inscribed regular polygon, whose intersection can be computed more efficiently. %
-%At last, \cised achieves $O(n)$ time and $O(1)$ space.
-%
-%\cised only supports \sed.
-
-
-%(2) $\vv{P_sP_{s+i}}$ passes through $\bigsqcap_{j=1}^{i-1}$\cone{(P_s, P_{s+j}, \epsilon)}$-\{P_s\}$, the common intersection of the previous cones except $\{P_s\}$.	
 
 The original \cised also uses a half cone, $\frac{\epsilon}{2}$-\cone. It can be extended to ${\epsilon}$-\cone ~ by adding such a constraint, \ie $P_{s+i}$ lives in the common intersection of preview full \emph{cones}.
 
+
+\eat{
+	\begin{figure}[tb!]
+		\centering
+		\includegraphics[scale=0.66]{Figures/Fig-CIS.png}
+		\vspace{-3ex}
+		\caption{\small Examples of spatio-temporal cones.} % in a 3D Cartesian coordinate system
+		\vspace{-2ex}
+		\label{fig:cis}
+	\end{figure}
+}
 
 
 %%%%%%%%%%%%%%% example of Algorithm CISED
@@ -261,7 +229,6 @@ The original \cised also uses a half cone, $\frac{\epsilon}{2}$-\cone. It can be
 	%	
 	(4) At last, the algorithm outputs four continuous line segments, \ie $\{\vv{P_0P_2}$, $\vv{P_2P_4}$, $\vv{P_4P_{7}}$, $\vv{P_7P_{10}}\}$. %\eop
 \end{example} 	
-\vspace{-1ex}
 
 
 \begin{figure}[tb!]
@@ -273,9 +240,12 @@ The original \cised also uses a half cone, $\frac{\epsilon}{2}$-\cone. It can be
 	\label{fig:interval}
 \end{figure}
 
-\stitle{Algorithms \intersec \cite{Long:Direction} and \interval \cite{Ke:Interval} Using \dad.}
-%The \emph{range intersection} method \cite{Long:Direction} is specifically designed for the direction-aware distance \dad, and serves as the foundation of the direction preserveing trajectory simplification algorithms \intersec \cite{Long:Direction} and \interval . This approach is a bit like the \emph{sector intersection} method in that it defines a \emph{direction range} for each line segment connecting two neighbouring points then checks the common intersection of those \emph{direction ranges} as a way similar with the \emph{sector intersection}.
-%
+
+
+
+\subsubsection{Algorithms \intersec \cite{Long:Direction} and \interval \cite{Ke:Interval} Using \dad}
+\textcolor{blue}{They define a \emph{direction range} for each line segment connecting two neighboring points, then check the common intersection of those \emph{direction ranges} as a way similar with the \emph{sector intersection} approach.}
+
 Given a direction line segment $\mathcal{L}$ and an angle $\epsilon$, the \emph{direction range} denoted by $range(\mathcal{L}.\theta, \epsilon)$ is $[\mathcal{L}.\theta-\epsilon, \mathcal{L}.\theta+\epsilon]$, where $[\theta_1, \theta_2]$ denotes the varying range of a directed line segment originated from the origin when it is rotated anti-clockwise from $\theta_1$ to $\theta_2$  \cite{Long:Direction}.
 %
 The {common intersection} of \emph{direction ranges} of directed line segments $\{\vv{P_sP_{s+1}}, \vv{P_{s+1}P_{s+2}}, ..., \vv{P_{s+k-1}P_{s+k}}\}$ \wrt $\epsilon$ is $\bigsqcap_{i=1}^{k}Range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon)$.
@@ -284,10 +254,6 @@ The {common intersection} of \emph{direction ranges} of directed line segments $
 Algorithm \intersec\cite{Long:Direction} uses a half range, and shows that if the {common intersection} $\bigsqcap_{i=1}^{k}range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon/2)$ is not empty, then the angular between $\vv{P_{s+i-1}P_{s+i}}$ and $\vv{P_sP_{s+k}}$ for all $i\in [1, k]$ is not larger than $\epsilon$.
 %
 Recently, algorithm \interval \cite{Ke:Interval} extends \intersec from half to full ranges, by showing that if the {common intersection} $\bigsqcap_{i=1}^{k}range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon)$ is not empty and $\vv{P_sP_{s+k}}.\theta$ falls in the {common intersection}, then the angular between $\vv{P_{s+i-1}P_{s+i}}$ and $\vv{P_sP_{s+k}}$ for all $i\in [1, k]$ is not larger than $\epsilon$.
-%
-%Algorithms \intersec and \interval both run in $O(n)$ time and take $O(1)$ space. %, and they both only support \dad.
-
-
 
 
 \begin{example}
