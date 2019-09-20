@@ -33,7 +33,7 @@ Due to the  limitations (poor compression ratio and data reconstruction overhead
 The optimal \lsa algorithms have relative high time/space complexities which make them impractical for large trajectory data.
 Hence, \textit{compression sub-optimal} \lsa algorithms have been developed and/or introduced for trajectory compression, and they achieve better efficiency at an expense of outputting a little more data points. By the applied distance checking policies, sub-optimal algorithms can further be classified into batch, online and one-pass algorithms.
 
-\sstab (1) {\em Batch algorithms} such as Douglas-Peucker\cite{Douglas:Peucker,Meratnia:Spatiotemporal} and \pavlidis~\cite{Pavlidis:Segment} apply global distance checking policies such that all trajectory points need to be loaded before starting compression, and a point may be checked multiple times to compute its distance to the corresponding line segments.
+\sstab (1) {\em Batch algorithms} such as Douglas-Peucker (\dpa) \cite{Douglas:Peucker,Meratnia:Spatiotemporal} and \pavlidis (\tpa)~\cite{Pavlidis:Segment} apply global distance checking policies such that all trajectory points need to be loaded before starting compression, and a point may be checked multiple times to compute its distance to the corresponding line segments.
 
 \sstab (2) {\em Online algorithms} such as \opwa \cite{Meratnia:Spatiotemporal}, \squishe \cite{Muckell:SQUISH} and \bqsa \cite{Liu:BQS} apply local distance checking policies, and need not to have the entire trajectory ready before compressing. They restrict the checking within a window/buffer, but may still check a point  multiple times during the process.
 
@@ -165,7 +165,9 @@ Note that \lsa algorithms using \sed or \dad may produce more line segments than
 \end{table*}
 
 \stitle{Motivations}. Empirical studies on trajectory compression algorithms have been conducted~\cite{Muckell:Compression,MuckellHLR10,mThesis}. However, they only discuss a small number of algorithms. The very recent study \cite{Zhang:Evaluation} does evaluate a wide range of trajectory simplification algorithms,
-and it provides \textcolor{blue}{an experimental study} on compression errors and spatio-temporal query analyses. However, two important aspects for trajectory simplification (\ie  compression ratios and running time) are not systematically studied. As a consequence, it remains difficult for practitioners to decide which algorithms and distance metrics should be adopted for a specific application.
+and it provides \textcolor{blue}{an experimental study} on compression errors and spatio-temporal query analyses. However, two important aspects for trajectory simplification (\ie  compression ratios and running time) are not systematically studied. As a consequence, it remains difficult for practitioners to decide which algorithms and distance metrics should be adopted for a specific application. 
+
+\textcolor{blue}{Besides, the simplified trajectories are stored in data stores. As time goes by, the less precision of them may be necessary \cite{Cao:Spatio}. Thus, they need to be simplified again to get more coarse trajectories as time progresses. Yet, can we compress simplified trajectories and get trajectories having limited error \wrt the original trajectories by certain \lsa algorithm? This is the so called \emph{data aging} problem, initially introduced, and partially answered, in \cite{Cao:Spatio}. However, it remains an open question for \lsa algorithms other than \opt and \dpa.}
 
 %concerning the compression ratio and error of the result data, and the execution time of these compression algorithms.
 % Thus, these issues call for a more comprehensive evaluation of the existing \lsa techniques. % on trajectory data.
@@ -184,7 +186,9 @@ Note that online and one-pass algorithms are typically designed for a specific d
 %online algorithms \bqsa and \squishe,  and
 %one-pass algorithms \operb, \siped, \cised and \interval.
 
-\stab (2) Using three real-life trajectory datasets, we systematically evaluate and analyze the performance (compression ratio, average error and efficiency) of error bounded \lsa algorithms in terms of trajectory sizes and error bounds.
+\stab (2) \textcolor{red}{data aging}
+
+\stab (3) Using three real-life trajectory datasets, we systematically evaluate and analyze the performance (compression ratio, average error and efficiency) of error bounded \lsa algorithms in terms of trajectory sizes and error bounds.
 %
 (i) For a fair running time analysis, all algorithms are (re)-implemented in Java, unlike \cite{Zhang:Evaluation} that reports running time of algorithms with different programming languages. (ii) compression ratio analyses are not considered in \cite{Zhang:Evaluation}.
 (iii) Variations of distance metrics are not studied in \cite{Zhang:Evaluation}.

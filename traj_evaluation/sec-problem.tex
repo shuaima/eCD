@@ -76,6 +76,12 @@ Consider a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}
 \stitle{Direction-aware distance distance}.The direction-aware distance $dad\left(\mathcal{L}_1, \mathcal{L}_2\right)$ is the direction deviation from $\mathcal{L}_1$ to $\mathcal{L}_2$, \ie $\Delta\left(\mathcal{L}_1.\theta, \mathcal{L}_2.\theta\right) = \min\{|\mathcal{L}_1.\theta - \mathcal{L}_2.\theta|, 2\pi - |\mathcal{L}_1.\theta - \mathcal{L}_2.\theta|\}$, where $\theta \in \left[0, 2\pi\right)$ is the angular of $\mathcal{L}$.
 \textcolor{blue}{Note \dad differs from \ped and \sed in that it is a measure of angle, rather than Euclidean distances, and the temporal information is also lost when using \dad.}
 
+Now we define the Min-$\#$ problem of trajectory simplification.
+
+\stitle{Min-$\#$ problem}. Given a trajectory \trajec{T}$\left[P_0, \dots, P_n\right]$ and a pre-specified constant $\epsilon$, the \emph{min-$\#$} problem of trajectory simplification is to approximate the trajectory \trajec{T} with $\overline{\mathcal{T}}\left[\mathcal{L}_0, \ldots , \mathcal{L}_m\right]$ ($0< m \le n$), such that
+(1) on each of them the points $\left[P_{s_i}, \dots, P_{e_i}\right]$ are approximated by a line segment $\mathcal{L}_i = \vv{P_{s_i}P_{e_i}}$ with the maximum \ped or \sed \emph{error} of point $P_j$ (or \dad \emph{error} of line segment $|\vv{P_jP_{j+1}}|$) to line segment $\mathcal{L}_i$, $s_i \le j<e_i$,  less than $\epsilon$, and
+(2) $P_{s_i}$ and $P_{e_i} \in$ \trajec{T}.
+
 
 
 We illustrate these notations with examples.
@@ -109,15 +115,9 @@ We illustrate these notations with examples.
 \end{figure}
 
 
-Now we can define the Min-$\#$ problem of trajectory simplification.
+\subsection{Data Aging}
 
-\stitle{Min-$\#$ problem}. Given a trajectory \trajec{T}$\left[P_0, \dots, P_n\right]$ and a pre-specified constant $\epsilon$, the \emph{min-$\#$} problem of trajectory simplification is to approximate the trajectory \trajec{T} with $\overline{\mathcal{T}}\left[\mathcal{L}_0, \ldots , \mathcal{L}_m\right]$ ($0< m \le n$), such that
-(1) on each of them the points $\left[P_{s_i}, \dots, P_{e_i}\right]$ are approximated by a line segment $\mathcal{L}_i = \vv{P_{s_i}P_{e_i}}$ with the maximum \ped or \sed \emph{error} of point $P_j$ (or \dad \emph{error} of line segment $|\vv{P_jP_{j+1}}|$) to line segment $\mathcal{L}_i$, $s_i \le j<e_i$,  less than $\epsilon$, and
-(2) $P_{s_i}$ and $P_{e_i} \in$ \trajec{T}.
-
-
-
-\textcolor{blue}{The simplified trajectories are stored in data stores. As time goes by, the less precision of them may be necessary\cite{Cao:Spatio}. Thus, they need to be simplified again to get more coarse trajectories as time progresses. Suppose we first compressed a trajectory $\overline{\mathcal{T}_0}$ using an \lsa algorithm $\mathcal{A}$ with error bound $\epsilon_1$ to $\overline{\mathcal{T}}_1$, then we need a coarser trajectory produced from $\overline{\mathcal{T}}_1$  having error bound $\epsilon_1 + \epsilon_2$ corresponding to $\overline{\mathcal{T}}_0$, can we get that by compressing $\overline{\mathcal{T}}_1$ with error bound $\epsilon_2$?  \emph{Aging feasible} and \emph{aging friendly \cite{Cao:Spatio}} are concepts to answer this question. Note that \emph{aging friendly} was defined in \cite{Cao:Spatio} which also discussed the aging friendliness of algorithms \opt and \dpa with respect to distance metrics \ped and \sed, while \emph{aging feasible} is a new concept.}
+\textcolor{blue}{Suppose we first compressed a trajectory $\overline{\mathcal{T}_0}$ using an \lsa algorithm $\mathcal{A}$ with error bound $\epsilon_1$ to $\overline{\mathcal{T}}_1$, then we need a coarser trajectory produced from $\overline{\mathcal{T}}_1$  having error bound $\epsilon_1 + \epsilon_2$ corresponding to $\overline{\mathcal{T}}_0$, can we get that by compressing $\overline{\mathcal{T}}_1$ with error bound $\epsilon_2$?  \emph{Aging feasible} and \emph{aging friendly \cite{Cao:Spatio}} are concepts to answer this question. Note that \emph{aging friendly} was defined in \cite{Cao:Spatio} which also discussed the aging friendliness of algorithms \opt and \dpa with respect to distance metrics \ped and \sed, while \emph{aging feasible} is a new concept.}
 
 \stitle{Aging feasible}. \textcolor{blue}{A \lsa algorithm $\mathcal{A}$ is aging feasible with respect to a distance metric $D$ if for every $\epsilon_1$ and every $\epsilon_2$, and for every trajectory $\dddot{\mathcal{T}}$, the max error between $\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, D), \epsilon_2, D)$ and $\dddot{\mathcal{T}}$ is not more than $\epsilon_1+ \epsilon_2$.}
 
