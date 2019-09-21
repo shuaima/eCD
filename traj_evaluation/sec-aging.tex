@@ -1,0 +1,63 @@
+
+\textcolor{blue}{\section{Aging of trajectories}}
+
+In this section, we discuss the data aging problem of \lsa algorithms and distance metrics.
+%
+Suppose we first compressed a trajectory $\dddot{\mathcal{T}_0}$ using an \lsa algorithm $\mathcal{A}$ with error bound $\epsilon_1$ to $\overline{\mathcal{T}}_1$, then we need a coarser trajectory produced from $\overline{\mathcal{T}}_1$  having error bound $\epsilon_1 + \epsilon_2$ corresponding to $\dddot{\mathcal{T}}_0$, can we get that by compressing $\overline{\mathcal{T}}_1$ with error bound $\epsilon_2$?  \emph{Aging friendly \cite{Cao:Spatio}} and \emph{Aging feasible} are concepts to answer this question. Note that \emph{aging friendly} was introduced in \cite{Cao:Spatio} while \emph{aging feasible} is a new concept.
+
+\subsection{Aging Friendly}
+	
+\stitle{Aging friendly \cite{Cao:Spatio}}. \textcolor{blue}{A \lsa algorithm $\mathcal{A}$ is aging friendly with respect to a distance metric $D$ if for every $\epsilon_1$ and every $\epsilon_2$ such that $\epsilon_1 < \epsilon_2$, and for every trajectory $\dddot{\mathcal{T}}$, $\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_2, D)= \mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, D), \epsilon_2, D)$.}
+
+	
+Authors in \cite{Cao:Spatio} also discussed the aging friendliness of algorithms \opt and \dpa with respect to distance metrics \ped and \sed. It proved that algorithm \dpa is aging friendly \wrt~\ped and \sed, but algorithm \opt is not. 
+Though \cite{Cao:Spatio} did not discuss \dad, it is easy to find that algorithm \dpa is aging friendly \wrt~\dad and algorithm \opt is still not.
+
+
+
+\begin{theorem}
+\label{theo-aging-tp}
+The bottom-up algorithm \tpa is aging friendly \wrt~\ped, \sed and \dad.
+\end{theorem}
+
+\begin{proof}
+Let $\epsilon_1 < \epsilon_2$ be two error bounds, we will prove the theorem by total induction
+on the number of points of \trajec{T}. 
+%Without losing generality, we use \ped as the distance metric. The proof is easy to be extended to \sed and \dad.
+
+(1) For a trajectory \trajec{T} with one or two points, the simplified result
+is sure identical to the original trajectory. Consider a trajectory \trajec{T} = $[P_0, P_1, P_2]$ has three points. 
+%
+If the distance from $P_1$ to $\overline{P_0P_2}$ is larger than $\epsilon_1$, then
+$\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, D)=$\trajec{T}, hence, $\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, D), \epsilon_2, D)=\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_2, D)$;
+%
+If the distance from $P_1$ to $\overline{P_0P_2}$ is less than $\epsilon_1$, then
+$\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, D) = \overline{P_0P_2}$. Obviously $\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, D), \epsilon_2, D) =\overline{P_0P_2} = \mathcal{A}(\dddot{\mathcal{T}}, \epsilon_2, D)$.
+
+
+(2) Assume that the proposition is true for every trajectory \trajec{T} having $n$ points $(n \ge 3)$.
+Then we consider a trajectory \trajec{T} with $n+1$ points. 
+
+\eat{
+Let dist denote the maximum
+distance between some vertex Pi on T and the straight line P1Pn+1. If
+dist < "2, then S(T, "2,M) and S(S(T, "1,M), "2,M)) are the same straight
+line segment – P1Pn+1.
+On the other hand, if dist > "2 > "1, let Pi be the first vertex that is
+farthest from P1Pn+1. Regardless whether the DP algorithm has "1 or "2
+as a tolerance, it will split the trajectory T into two segments P1Pi and
+PiPn+1, each of which has ≤ n vertices and, consequently, falls into the
+inductive hypothesis case.}
+
+From (1) and (2) we have the conclusion.
+\end{proof}
+
+Theorem \ref{theo-aging-tp} together with theorems in \cite{Cao:Spatio} indicates that two batch algorithms, both top-down approach \dpa and bottom-up approach \tpa, are aging friendly \wrt~\ped, \sed and \dad. 
+\todo{combination?}
+
+
+\subsection{Aging Feasible}
+
+\stitle{Aging feasible}. \textcolor{blue}{A \lsa algorithm $\mathcal{A}$ is aging feasible with respect to a distance metric $D$ if for every $\epsilon_1$ and every $\epsilon_2$, and for every trajectory $\dddot{\mathcal{T}}$, the max error between $\dddot{\mathcal{T}}$ and $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, D), \epsilon_2, D)$ is not more than $\epsilon_1+ \epsilon_2$.}
+
+
