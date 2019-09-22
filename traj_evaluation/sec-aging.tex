@@ -18,7 +18,7 @@ Though \cite{Cao:Spatio} did not discuss \dad, it is easy to find that algorithm
 	\centering
 	\includegraphics[scale=0.66]{Figures/Fig-aging-pavlidis.png}
 
-	\caption{\small Counter example of the aging friendliness of algorithm \tpa, where (1) the original trajectory is compressed using $\epsilon_2=6$ to three points $\{P_0, P_3, P_4\}$; (2) the original trajectory is first compressed using $\epsilon_1=3$ to four points $\{P_0, P_1, P_3, P_4\}$, then compressed using $\epsilon_2=6$ to two points $\{P_0, P_4\}$. }
+	\caption{\small A counter example of the aging friendliness of algorithm \tpa, where (1) the original trajectory is compressed using $\epsilon_2=6$ to three points $\{P_0, P_3, P_4\}$; (2) the original trajectory is first compressed using $\epsilon_1=3$ to four points $\{P_0, P_1, P_3, P_4\}$, then compressed using $\epsilon_2=6$ to two points $\{P_0, P_4\}$. }
 	\vspace{-2ex}
 	\label{fig:aging-pavlidis}
 \end{figure}
@@ -26,7 +26,7 @@ Though \cite{Cao:Spatio} did not discuss \dad, it is easy to find that algorithm
 
 \begin{theorem}
 \label{theo-aging-tp}
-The \tpa algorithm is not aging friendly \wrt~\ped, \sed or \dad.
+The bottom-up algorithm \tpa is not aging friendly \wrt~\ped, \sed or \dad.
 \end{theorem}
 
 \begin{proof}
@@ -42,48 +42,44 @@ In this case, ${\tpa}(\dddot{\mathcal{T}}, 6, \ped) = {\tpa}(\tpa(\dddot{\mathca
 \textcolor{red}{Similarly, we can prove the conclusion of \sed and \dad.}
 \end{proof}
 
+\begin{lemma}
+	The online algorithm \squishe is not aging friendly \wrt~\sed.
+\end{lemma}
 
-\eat{
-(1) For a trajectory \trajec{T} with one or two points, the simplified result
-is sure identical to the original trajectory. Consider a trajectory \trajec{T} = $[P_0, P_1, P_2]$ has three points. 
-%
-If the distance from $P_1$ to $\overline{P_0P_2}$ is larger than $\epsilon_1$, then
-$\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, D)=$\trajec{T}, hence, $\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, D), \epsilon_2, D)=\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_2, D)$;
-%
-If the distance from $P_1$ to $\overline{P_0P_2}$ is less than $\epsilon_1$, then
-$\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, D) = \overline{P_0P_2}$. Obviously $\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, D), \epsilon_2, D) =\overline{P_0P_2} = \mathcal{A}(\dddot{\mathcal{T}}, \epsilon_2, D)$.
+\begin{proof}
+	(In brief) The \squishe algorithm runs in a manner that is a variation of \tpa. 
+\end{proof}
 
-
-(2) Assume that the proposition is true for every trajectory \trajec{T} having $n$ points $(n \ge 3)$.
-Then we consider a trajectory \trajec{T} with $n+1$ points. 
-
-
-Let dist denote the maximum
-distance between some vertex Pi on T and the straight line P1Pn+1. If
-dist < "2, then S(T, "2,M) and S(S(T, "1,M), "2,M)) are the same straight
-line segment – P1Pn+1.
-On the other hand, if dist > "2 > "1, let Pi be the first vertex that is
-farthest from P1Pn+1. Regardless whether the DP algorithm has "1 or "2
-as a tolerance, it will split the trajectory T into two segments P1Pi and
-PiPn+1, each of which has ≤ n vertices and, consequently, falls into the
-inductive hypothesis case.
-
-From (1) and (2) we have the conclusion.
-}
+	
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.66]{Figures/Fig-aging-incre.png}
+	
+	\caption{\small A counter example of the aging friendliness of incremental algorithms (either online or one-pass), where (1) the original trajectory is compressed using $\epsilon_2=6$ to three points $\{P_0, P_3, P_4\}$; (2) the original trajectory is first compressed using $\epsilon_1=3$ to three points $\{P_0, P_3, P_4\}$, and (3) the simplified trajectory of (2) is further compressed using $\epsilon_2=6$ to two points $\{P_0, P_4\}$. }
+	\vspace{-2ex}
+	\label{fig:aging-incre}
+\end{figure}
 
 \begin{theorem}
-	\label{theo-aging-tp}
+	\label{theo-aging-online}
 	The online and one-pass algorithms are not aging friendly \wrt~\ped, \sed or \dad.
-	on the number of points of \trajec{T}. 
-	%Without losing generality, we use \ped as the distance metric. The proof is easy to be extended to \sed and \dad.
-	
+
 \end{theorem}
 
 \begin{proof}
-	\todo...all online and one-pass algorithms runs in a incremental manner.
+	For online algorithm \squishe, it only supports \sed and it is not aging friendly \wrt~\sed.
+	For other online and one-pass algorithms, though they apply different distance checking approaches, they run in a common incremental manner, \ie they incrementally read data points until they can not represent those read points by one line segment, then they output the simplified sub-trajectory and continue to process the rest data points. We next construct a counter example that shows an algorithm $\mathcal{A}$ in the incremental manner is not aging friendly.
+	
+	\underline{(1) ${\mathcal{A}}(\dddot{\mathcal{T}}, 6, \ped)$}. As shown in Figure~\ref{fig:aging-incre}-1, the algorithm $\mathcal{A}$ incrementally reads $\{P_0, P_1, P_2\}$ and finds they can be represented by line segment $\overline{P_0P_2}$ when $\epsilon_2=6$, thus the process progresses. Then, after point $P_3$ is read, it finds that these points can not be represented by any line segment, hence line segment $\overline{P_0P_2}$ is output. At last, the algorithm outputs $\{P_0, P_2, P_3\}$.
+	
+	\underline{(2) ${\mathcal{A}}(\mathcal{A}(\dddot{\mathcal{T}}, 3, \ped), 6, \ped)$}. When $\epsilon=3$, the algorithm also outputs $\{P_0, P_2, P_3\}$. Then $\{P_0, P_2, P_3\}$ is compressed to $\{P_0, P_3\}$ with $\epsilon=6$, as shown in Figure~\ref{fig:aging-incre}-2.
+	
+	Combining (1) and (2), we can find that the incremental algorithm is not aging friendly \wrt~\ped.
+	\textcolor{red}{Similarly, we can prove the conclusion of \sed and \dad.}
 \end{proof}
 
-From the above we can find that only algorithm \dpa is aging friendly, others are not. Indeed, the {aging friendly} is a pretty and rare feature of \lsa algorithms, and it is the result of the specific algorithm nature of the \dpa algorithm.
+From the above we can find that only algorithm \dpa is aging friendly, others are not. Indeed, the {aging friendly} is a pretty and rare feature of \lsa algorithms, and it is the result of the \textcolor{red}{specific algorithm nature} of \dpa.
+
 
 
 \subsection{Aging Feasible}
