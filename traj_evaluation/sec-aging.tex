@@ -13,16 +13,16 @@ Suppose we first compressed a trajectory $\dddot{\mathcal{T}_0}$ using an \lsa a
 Authors in \cite{Cao:Spatio} also discussed the aging friendliness of algorithms \opt and \dpa with respect to distance metrics \ped and \sed. It proved that algorithm \dpa is aging friendly \wrt~\ped and \sed, but algorithm \opt is not. 
 Though \cite{Cao:Spatio} did not discuss \dad, it is easy to find that algorithm \dpa is aging friendly \wrt~\dad and algorithm \opt is still not. Next we discuss the aging friendliness of other algorithms.
 
-\eat{
+
 \begin{figure}[tb!]
 	\centering
-	\includegraphics[scale=0.60]{Figures/Fig-aging-pavlidis.png}
+	\includegraphics[scale=0.66]{Figures/Fig-aging-pavlidis.png}
 
-	\caption{\small Counter example of the aging friendliness of algorithm \tpa, where (1) the original trajectory is compressed using $\epsilon_2=5$ to three points $\{P_0, P_2, P_3\}$; (2) the original trajectory is first compressed using $\epsilon_1=3$ to three points $\{P_0, P_2, P_3\}$, then compressed using $\epsilon_2=5$ to two points $\{P_0, P_3\}$. }
+	\caption{\small Counter example of the aging friendliness of algorithm \tpa, where (1) the original trajectory is compressed using $\epsilon_2=6$ to three points $\{P_0, P_3, P_4\}$; (2) the original trajectory is first compressed using $\epsilon_1=3$ to four points $\{P_0, P_1, P_3, P_4\}$, then compressed using $\epsilon_2=6$ to two points $\{P_0, P_4\}$. }
 	\vspace{-2ex}
 	\label{fig:aging-pavlidis}
 \end{figure}
-}
+
 
 \begin{theorem}
 \label{theo-aging-tp}
@@ -31,9 +31,15 @@ The \tpa algorithm is not aging friendly \wrt~\ped, \sed or \dad.
 
 \begin{proof}
 We will prove the theorem by construction.
-Let error bounds $\epsilon_1 =3$ and $\epsilon_2=5$. 
-%Without losing generality, we use \ped as the distance metric. The proof is easy to be extended to \sed and \dad.
+As shown in Figure~\ref{fig:aging-pavlidis}, we let error bounds $\epsilon_1 =3$ and $\epsilon_2=6$, and without losing generality, we use \ped as the distance metric.
+%The proof is easy to be extended to \sed and \dad.
 
+\underline{(1) ${\tpa}(\dddot{\mathcal{T}}, 6, \ped)$}. In the first step, it merges $\overline{P_1P_2}$ and $\overline{P_2P_3}$ to $\overline{P_1P_3}$ as the merging of them has the lowest cost of $2$, the distance from point $P_2$ to line segment $\overline{P_1P_3}$; then it merges $\overline{P_0P_1}$ and $\overline{P_1P_3}$ to $\overline{P_0P_3}$ with the lowest cost of $4.5$, the distance from point $P_1$ to line segment $\overline{P_0P_3}$; at last, because the merging of $\overline{P_0P_3}$ and $\overline{P_3P_4}$ has a cost of $7$, the distance from point $P_2$ to line segment $\overline{P_0P_4}$, which is larger than the error bound of $6$, it outputs three points $\{P_0, P_3, P_4\}$.
+
+\underline{(2) ${\tpa}(\tpa(\dddot{\mathcal{T}}, 3, \ped), 6, \ped)$}. In the first round ($\epsilon_1=3$), the original trajectory is compressed to four points $\{P_0, P_1, P_3, P_4\}$, and in the second round ($\epsilon_1=6$), because all points in the result trajectory $\{P_0, P_1, P_3, P_4\}$ have distances to line segment $P_0P_4$ less than $6$, it is finally compressed to two points $\{P_0, P_4\}$.
+
+In this case, ${\tpa}(\dddot{\mathcal{T}}, 6, \ped) = {\tpa}(\tpa(\dddot{\mathcal{T}}, 3, \ped), 6, \ped)$. Thus, the \tpa algorithm is not aging friendly \wrt~\ped.
+\textcolor{red}{Similarly, we can prove the conclusion of \sed and \dad.}
 \end{proof}
 
 
@@ -68,19 +74,21 @@ From (1) and (2) we have the conclusion.
 \begin{theorem}
 	\label{theo-aging-tp}
 	The online and one-pass algorithms are not aging friendly \wrt~\ped, \sed or \dad.
-\end{theorem}
-
-\begin{proof}
-	Let $\epsilon_1 < \epsilon_2$ be two error bounds, we will prove the theorem by total induction
 	on the number of points of \trajec{T}. 
 	%Without losing generality, we use \ped as the distance metric. The proof is easy to be extended to \sed and \dad.
 	
+\end{theorem}
+
+\begin{proof}
+	\todo...all online and one-pass algorithms runs in a incremental manner.
 \end{proof}
 
-Only algorithm \dpa is aging friendly, others are not. Indeed, it is the result of the specific algorithm nature of \dpa.
+From the above we can find that only algorithm \dpa is aging friendly, others are not. Indeed, the {aging friendly} is a pretty and rare feature of \lsa algorithms, and it is the result of the specific algorithm nature of the \dpa algorithm.
+
 
 \subsection{Aging Feasible}
+In this section, we define and discuss a widely existing, maybe more practical, feature of \lsa algorithms and distance metrics.
 
-\stitle{Aging feasible}. \textcolor{blue}{A \lsa algorithm $\mathcal{A}$ is aging feasible with respect to a distance metric $D$ if for every $\epsilon_1$ and every $\epsilon_2$, and for every trajectory $\dddot{\mathcal{T}}$, the max error between $\dddot{\mathcal{T}}$ and $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, D), \epsilon_2, D)$ is not more than $\epsilon_1+ \epsilon_2$.}
+\stitle{Aging feasible}. {A \lsa algorithm $\mathcal{A}$ is aging feasible with respect to a distance metric $D$ if for every $\epsilon_1$ and every $\epsilon_2$, and for every trajectory $\dddot{\mathcal{T}}$, the max error between $\dddot{\mathcal{T}}$ and $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, D), \epsilon_2, D)$ is not more than $\epsilon_1+ \epsilon_2$.}
 
 
