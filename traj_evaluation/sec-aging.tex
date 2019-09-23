@@ -39,7 +39,6 @@ The bottom-up algorithm \tpa is not aging friendly \wrt~\ped, \sed or \dad.
 \begin{proof}
 We will prove the theorem by construction.
 As shown in Figure~\ref{fig:aging-pavlidis}, we let error bounds $\epsilon_1 =3$ and $\epsilon_2=6$, and without losing generality, we use \ped as the distance metric.
-%The proof is easy to be extended to \sed and \dad.
 
 \underline{(1) ${\tpa}(\dddot{\mathcal{T}}, 6, \ped)$}. In the first step, it merges $\overline{P_1P_2}$ and $\overline{P_2P_3}$ to $\overline{P_1P_3}$ as the merging of them has the lowest cost of $2$, the distance from point $P_2$ to line segment $\overline{P_1P_3}$; then it merges $\overline{P_0P_1}$ and $\overline{P_1P_3}$ to $\overline{P_0P_3}$ with the lowest cost of $4.5$, the distance from point $P_1$ to line segment $\overline{P_0P_3}$; at last, because the merging of $\overline{P_0P_3}$ and $\overline{P_3P_4}$ has a cost of $7$, the distance from point $P_2$ to line segment $\overline{P_0P_4}$, which is larger than the error bound of $6$, it outputs three points $\{P_0, P_3, P_4\}$.
 
@@ -95,21 +94,31 @@ In this section, we define and discuss a widely existing, maybe more practical, 
 
 \begin{theorem}
 	\label{theo-aging-dp}
-	Given error bounds $\epsilon_2 \le \epsilon_1>0$, for \lsa algorithm \dpa and for every distance metric $\mathcal{D}$ of \ped, \sed and \dad, the max error between the original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is $\epsilon_2$.
+	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, for every distance metric $\mathcal{D}$ of \ped, \sed and \dad, the max error between the original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is $max\{\epsilon_1, \epsilon_2\}$.
 \end{theorem}
 
 \begin{proof}
-	\todo.
+	For $\epsilon_2 \ge \epsilon_1$, as proved in \cite{Cao:Spatio}, $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{D})$, which has the max error of $\epsilon_2$ to the original trajectory $\dddot{\mathcal{T}}$.
+	
+	For $\epsilon_1 > \epsilon_2$, we will first prove $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$ by total induction on the number of points of \trajec{T}.
+	
+	(1)  For a trajectory \trajec{T} with one or two points ($n=1$ or $n=2$), the simplified trajectories with any $\epsilon$ are sure identical to the original trajectory. 
+	Consider a trajectory \trajec{T} =	$[P_0, P_1, P_2]$ ($n = 3$),
+	if the distance from $P_1$ to $\overline{P_0P_2}$ is less than $\epsilon_1$, then $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}) = [P_0, P_2]$. Obviously $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}))$ is $[P_0, P_2]$ too;	 
+	if the distance from $P_1$ to $\overline{P_0P_2}$ is larger than $\epsilon_1$, then $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})=\dddot{\mathcal{T}}$, and $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{D})=\dddot{\mathcal{T}}$.
+
+	(2) Assume it is true for every trajectory \trajec{T} having $n$, $(n \ge 3)$, points.
+	Consider a trajectory with $n+1$ points. Let $d_{max}$ denote the maximum distance between point $P_i$, $i \in [0,n]$, and the line segment $\overline{P_0P_{n}}$. 
+	If $d_{max}<\epsilon_1$, then $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})=[P_0, P_{n}]$, and $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP([P_0, P_{n}], \epsilon_2, \mathcal{D})=[P_0, P_{n}]$.
+	If $d_{max} > \epsilon_1$, then in $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$, point $P_i$ will split the trajectory \trajec{T} into two sub-trajectories, \ie $[P_0, ..., P_i]$ and $[P_{i}, ..., P_{n}]$, and continue to simplify each sub-trajectories. Hence, the result of $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$ is the union of $DP([P_0, ..., P_i], \epsilon_1, \mathcal{D})$ and $DP([P_i, ..., P_n], \epsilon_1, \mathcal{D})$.
+	Obviously, the points $P_0$, $P_i$ and $P_n$ are in the simplified trajectory of $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$, and $P_i$ is still the first spiting point of the \dpa algorithm taking the simplified trajectory and $\epsilon_2$ as input. Hence, $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is the union of $DP(DP([P_0, ..., P_i], \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ and $DP(DP([P_i, ..., P_n], \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$. By the assumption, we have $DP(DP([P_0, ..., P_i], \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP([P_0, ..., P_i], \epsilon_1, \mathcal{D})$ and $DP(DP([P_i, ..., P_n], \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP([P_i, ..., P_n], \epsilon_1, \mathcal{D})$. Thus, $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$.
+	
+	Combining (1) and (2), we have $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$, whose max error to the original trajectory $\dddot{\mathcal{T}}$ is $\epsilon_1$.
+
 \end{proof}
 
-\begin{theorem}
-	\label{theo-aging-dp}
-	Given error bounds $0<\epsilon_2< \epsilon_1$, for \lsa algorithm \dpa and for every distance metric $\mathcal{D}$ of \ped, \sed and \dad, the max error between the original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is ???.
-\end{theorem}
 
-\begin{proof}
-	\todo.
-\end{proof}
+
 
 \begin{theorem}
 	\label{theo-aging-distance}
