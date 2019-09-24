@@ -1,21 +1,24 @@
 
 \textcolor{blue}{\section{Aging of trajectories}}
 
-In this section, we discuss the data aging problem of \lsa algorithms and distance metrics.
+Suppose we first compressed a trajectory $\dddot{\mathcal{T}_0}$ using an \lsa algorithm $\mathcal{A}$ with error bound $\epsilon_1$ to $\overline{\mathcal{T}}_1$, then as time progresses, we need a coarser trajectory $\overline{\mathcal{T}}_2$ derived from $\overline{\mathcal{T}}_1$. 
+What is the relationship among $\overline{\mathcal{T}}_2$, $\overline{\mathcal{T}}_1$ and $\dddot{\mathcal{T}_0}$? And what is the right way to get the coarser trajectory $\overline{\mathcal{T}}_2$?
 %
-Suppose we first compressed a trajectory $\dddot{\mathcal{T}_0}$ using an \lsa algorithm $\mathcal{A}$ with error bound $\epsilon_1$ to $\overline{\mathcal{T}}_1$, then we need a coarser trajectory produced from $\overline{\mathcal{T}}_1$  having error bound $\epsilon_1 + \epsilon_2$ corresponding to $\dddot{\mathcal{T}}_0$, can we get that by compressing $\overline{\mathcal{T}}_1$ with error bound $\epsilon_2$?  \emph{Aging friendly \cite{Cao:Spatio}} and \emph{Aging feasible} are concepts to answer this question. Note that \emph{aging friendly} was introduced in \cite{Cao:Spatio} and seldom discussed in other works, while \emph{aging feasible} is a new concept.
+This section is to answer these questions from the views of friendliness and error.
+Note that if we get $\overline{\mathcal{T}}_1$ and $\overline{\mathcal{T}}_2$ by optimal algorithms, then $\overline{\mathcal{T}}_2$ may not be optimal of $\dddot{\mathcal{T}_0}$ \wrt any $\epsilon$ \cite{Cao:Spatio}. Thus, in this section, we let alone the optimal algorithms.
 
-
-\subsection{Aging Friendly}
+\subsection{Friendliness of Data Aging}
 	
 	
 \stitle{Aging friendly \cite{Cao:Spatio}}. {A \lsa algorithm $\mathcal{A}$ is aging friendly with respect to a distance metric $\mathcal{D}$ if for every $\epsilon_1$ and every $\epsilon_2$ such that $\epsilon_1 < \epsilon_2$, and for every trajectory $\dddot{\mathcal{T}}$, $\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{D})= \mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$.}
 
+
+\begin{theorem}
+	\label{theo-aging-tp}
+	The top-down algorithm \dpa is aging friendly \wrt~\ped and \sed\cite{Cao:Spatio}.
+\end{theorem}
 	
-Authors in \cite{Cao:Spatio} also discussed the aging friendliness of algorithms \opt and \dpa with respect to distance metrics \ped and \sed. It proved that algorithm \dpa is aging friendly \wrt~\ped and \sed, but algorithm \opt is not. 
-Though \cite{Cao:Spatio} did not discuss \dad, it is easy to find that algorithm \dpa is aging friendly \wrt~\dad and algorithm \opt is still not. 
-
-
+Though \cite{Cao:Spatio} did not discuss \dad, it is easy to find that algorithm \dpa is aging friendly \wrt~\dad too. 
 
 
 Next we discuss the aging friendliness of other algorithms.
@@ -88,8 +91,8 @@ From the above we can find that only algorithm \dpa is aging friendly, others ar
 % pretty and rare feature of
 
 
-\subsection{Aging Feasible}
-In this section, we define and discuss a widely existing, maybe more practical, feature of \lsa algorithms and distance metrics.
+\subsection{Error of Data Aging}
+We then discuss the error between $\overline{\mathcal{T}}_2$ and $\dddot{\mathcal{T}_0}$.
 
 
 \begin{theorem}
