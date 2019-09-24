@@ -8,7 +8,7 @@ This section is to answer these questions from the views of friendliness and err
 Note that if we get $\overline{\mathcal{T}}_1$ and $\overline{\mathcal{T}}_2$ by optimal algorithms, then $\overline{\mathcal{T}}_2$ may not be optimal of $\dddot{\mathcal{T}_0}$ \wrt any $\epsilon$ \cite{Cao:Spatio}. Thus, in this section, we let alone the optimal algorithms.
 
 \subsection{Friendliness of Data Aging}
-We first discuss the relationship between $\overline{\mathcal{T}}_1$ and $\overline{\mathcal{T}}_2$ from a view of friendliness.	
+We first discuss the relationship between $\overline{\mathcal{T}}_1$ and $\overline{\mathcal{T}}_2$ from a view of friendliness which was defined in \cite{Cao:Spatio} but seldom discussed in other works.
 	
 \stitle{Aging friendly \cite{Cao:Spatio}}. {A \lsa algorithm $\mathcal{A}$ is aging friendly with respect to a distance metric $\mathcal{D}$ if for every $\epsilon_1$ and every $\epsilon_2$ such that $\epsilon_1 < \epsilon_2$, and for every trajectory $\dddot{\mathcal{T}}$, $\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{D})= \mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$.}
 
@@ -127,8 +127,22 @@ We then discuss the error between $\overline{\mathcal{T}}_2$ and $\dddot{\mathca
 \end{theorem}
 
 \begin{proof}
-	\todo.
-	1. not more than $\epsilon_1+ \epsilon_2$.
-	2. no less than $\epsilon_1+ \epsilon_2$.
+	(1) We first prove that the error bound between them is not more than $\epsilon_1+ \epsilon_2$. Suppose a point $P_k$ is represented by line segment $\overline{P_iP_j}$ with error bound $\epsilon_1$, and points $P_i$ and $P_j$ are further represented by line segment $\overline{P_sP_t}$ with error bound $\epsilon_2$ (Figure~\ref{fig:aging-error}).
+	If the distance metric is \ped, then the distance from $P'_k$ to $\overline{P_sP_t}$ is less than $\epsilon_2$, hence, the distance from $P_k$ to $\overline{P_sP_t}$ is less than $\epsilon_1 + \epsilon_2$.
+	If it is \sed, then $\frac{|P_iP'_k|}{|P'_kP_j|} = \frac{|P''_iP''_k|}{|P''_kP''_j|}$, hence, $|P'_kP''_k|<\epsilon_2$, and the distance from $P_k$ to $\overline{P_sP_t}$, \ie $|P_kP''_k|$, is less than $\epsilon_1 + \epsilon_2$.
+	If it is \dad, then obviously the error between $\overline{P_kP_{k+1}}$ and $\overline{P_sP_t}$ is not more than $\epsilon_1+ \epsilon_2$.
 	
+	(2) We next prove that the  error bound between them is not less than $\epsilon_1+ \epsilon_2$.
+	\todo{bottom-up algorithms, online and one-pass algorithms.}
+	
+	Combining (1) and (2), we have the conclusion.
 \end{proof}
+
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.6]{Figures/Fig-aging-error.png}
+	
+	\caption{\small Examples of aging error.}
+	\vspace{-2ex}
+	\label{fig:aging-error}
+\end{figure}
