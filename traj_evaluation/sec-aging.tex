@@ -22,7 +22,7 @@ Though \cite{Cao:Spatio} did not discuss \dad, it is easy to find that algorithm
 We next discuss the aging friendliness of other algorithms.
 
 
-\begin{figure}[tb!]
+\begin{figure}
 	\centering
 	\includegraphics[scale=0.66]{Figures/Fig-aging-pavlidis.png}
 
@@ -62,9 +62,9 @@ In this case, ${\tpa}(\dddot{\mathcal{T}}, 6, \ped) \ne {\tpa}(\tpa(\dddot{\math
 \begin{figure}[tb!]
 	\centering
 	\includegraphics[scale=0.66]{Figures/Fig-aging-incre.png}
-	
+	\vspace{-1ex}
 	\caption{\small Counter examples of the aging friendliness of incremental algorithms (either online or one-pass).}
-	\vspace{-2ex}
+	\vspace{-1ex}
 	\label{fig:aging-incre}
 \end{figure}
 
@@ -115,7 +115,6 @@ We then discuss the error between $\overline{\mathcal{T}}_2$ and $\dddot{\mathca
 	Obviously, the points $P_0$, $P_i$ and $P_n$ are in the simplified trajectory of $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$, and $P_i$ is still the first spiting point of the \dpa algorithm taking the simplified trajectory and $\epsilon_2$ as input. Hence, $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is the union of $DP(DP([P_0, ..., P_i], \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ and $DP(DP([P_i, ..., P_n], \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$. By the assumption, we have $DP(DP([P_0, ..., P_i], \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP([P_0, ..., P_i], \epsilon_1, \mathcal{D})$ and $DP(DP([P_i, ..., P_n], \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP([P_i, ..., P_n], \epsilon_1, \mathcal{D})$. Thus, $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$.
 	
 	Combining (1) and (2), we have $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$, whose max error to the original trajectory $\dddot{\mathcal{T}}$ is $\epsilon_1$.
-
 \end{proof}
 
 
@@ -126,14 +125,17 @@ We then discuss the error between $\overline{\mathcal{T}}_2$ and $\dddot{\mathca
 	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, for every error bounded and non-optimal \lsa algorithm $\mathcal{A}$ other than \dpa and for every distance metric $\mathcal{D}$ of \ped, \sed and \dad, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is $\epsilon_1+ \epsilon_2$.
 \end{theorem}
 
-\begin{proof}
-	(1) We first prove that the error bound between them is not more than $\epsilon_1+ \epsilon_2$. Suppose a point $P_k$ is represented by line segment $\overline{P_iP_j}$ with error bound $\epsilon_1$, and points $P_i$ and $P_j$ are further represented by line segment $\overline{P_sP_t}$ with error bound $\epsilon_2$ (Figure~\ref{fig:aging-error}).
+\begin{proof} 	
+	(1) We first prove that the  error bound between them is not less than $\epsilon_1+ \epsilon_2$.
+	If $\mathcal{A}$ is a bottom-up algorithm, then from Figure~\ref{fig:aging-pavlidis}-(2) we can find that the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is not less than $\epsilon_1+ \epsilon_2$.
+	If $\mathcal{A}$ is an incremental algorithm, either online or one-pass, then from Figure~\ref{fig:aging-incre} we also have the conclusion.
+	
+	(2) We next prove that the error bound between them is not more than $\epsilon_1+ \epsilon_2$. Suppose a point $P_k$ is represented by line segment $\overline{P_iP_j}$ with error bound $\epsilon_1$, and points $P_i$ and $P_j$ are further represented by line segment $\overline{P_sP_t}$ with error bound $\epsilon_2$ (Figure~\ref{fig:aging-error}).
 	If the distance metric is \ped, then the distance from $P'_k$ to $\overline{P_sP_t}$ is less than $\epsilon_2$, hence, the distance from $P_k$ to $\overline{P_sP_t}$ is less than $\epsilon_1 + \epsilon_2$.
-	If it is \sed, then $\frac{|P_iP'_k|}{|P'_kP_j|} = \frac{|P''_iP''_k|}{|P''_kP''_j|}$, hence, $|P'_kP''_k|<\epsilon_2$, and the distance from $P_k$ to $\overline{P_sP_t}$, \ie $|P_kP''_k|$, is less than $\epsilon_1 + \epsilon_2$.
+	If it is \sed, then $|P_iP''_i|<\epsilon_2$, $|P_jP''_j|<\epsilon_2$, and $\frac{|P_iP'_k|}{|P'_kP_j|} = \frac{|P''_iP''_k|}{|P''_kP''_j|}$, hence, $|P'_kP''_k|<\epsilon_2$, and the distance from $P_k$ to $\overline{P_sP_t}$, \ie $|P_kP''_k|$, is less than $\epsilon_1 + \epsilon_2$.
 	If it is \dad, then obviously the error between $\overline{P_kP_{k+1}}$ and $\overline{P_sP_t}$ is not more than $\epsilon_1+ \epsilon_2$.
 	
-	(2) We next prove that the  error bound between them is not less than $\epsilon_1+ \epsilon_2$.
-	\todo{bottom-up algorithms, online and one-pass algorithms.}
+
 	
 	Combining (1) and (2), we have the conclusion.
 \end{proof}
