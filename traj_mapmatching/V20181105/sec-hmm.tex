@@ -1,0 +1,90 @@
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "gis18"
+%%% End:
+\subsection{Global Route Decoding}
+\label{sec:hmm}
+
+We use hidden markov model to find the global optimal route given the local
+optimal paths produced by the local path recovery component.
+The key of HMM modeling is to define two probabilities, \ie the \emph{emission probabilities} and the \emph{transition probabilities}.
+%
+A emission probability gives the likelihood that an observation is resulted from
+a given state. We adopt the widely used {emission probability estimation} proposed by Newson and Krumm in \cite{Newson2009Hidden}. Note the candidate road segments are selected under the distance constraint, which means that a point would not be matched to a road segment having a distance large than the error bound.
+
+\eat{
+\subsubsection{Emission Probabilities}
+Emission probabilities give the likelihood that an observation is resulted from a given state. For map-matching, it is likely that the vehicle with a GPS point $P_i$ is on a specific road segment $r_i^j$.
+For those candidate road segments close to the GPS point, the emission probability is
+dependent on the distance between the GPS point and the road segment, and is estimated by Equation~\ref{equ:emi-prob} proposed by Newson and Krumm \cite{Newson2009Hidden}:
+%, using a Gaussian kernel. Specifically, emission probability is modeled as:
+\begin{equation}
+  \label{equ:emi-prob}
+  E(r_i^k| P_i) = \frac{1}{\sqrt{2\pi}\sigma} \exp \frac{d(r_i^k, P_i)^2}{2\sigma^2}
+\end{equation}
+where, $d(r_i^k, P_i)$ is the great circle distance on the surface of the earth between the observed location $p_i$ and the candidate road segment $r_i^k$. And
+$\sigma$ is the standard length of GPS measurements, which can be estimated
+from data.
+}
+
+
+
+%\subsubsection{Transition Probabilities}
+A transition probability is the probability of an object moving from
+one road segment to another. The appropriate definition of transition
+probability is the key of HMM modeling.
+In Newson and Krumm's modeling, transition probabilities are modeled based on
+the difference of great circle distance of two observed locations and their
+corresponding road segments.
+% The intuition is that transitions whose driving
+% distance is about the same as the great circle distance is more likely to be the
+% actual route traveled.
+This modeling is reasonable when trajectory is relatively dense, i.e.
+distance between two neighboring points is small. However, when a trajectory is sparse,
+it is possible that more than one route have similar driving distances as the great
+circle distance, thus, roughly choosing the one with the smallest difference may lead
+to a circuitous route.
+%
+To correctly handle this problem, we make use of information from
+simplified lines, and propose a model of transition probability based on
+similarity.
+%
+Specifically, we define the transition probability $T$ of moving from road segment
+$r_{i-1}^j$ to $r_i^k$ as :
+\begin{equation}
+  \label{equ:trans-prob}
+  T(r_i^k| r_{i-1}^j) = \lambda_De^{-\lambda_D\delta_D}\lambda_Re^{-\lambda_R\delta_R}
+\end{equation}
+%
+\begin{equation}
+  \delta_R = |\phi_T -\phi_R|
+\end{equation}
+%
+\begin{equation}
+  \delta_D = d_T(P_i,P_{i-1}) - d_R(P_i,P_{i-1})
+\end{equation}
+%
+\begin{equation}
+  d_T(P_i,P_{i-1}) = \overline{\mathcal{T}}[i].L_L + \overline{\mathcal{T}}[i].L_R
+\end{equation}
+%
+\begin{equation}
+  d_R(P_i,P_{i-1}) =  \sum_{r_j \in R_{i-1, i}}{(r_j.L_L + r_j.L_R)}
+\end{equation}
+%
+where $d_T(P_i,P_{i-1})$ is the length of the raw
+sub-trajectory, $d_R(P_i,P_{i-1})$ is the length of the local optimal path $R_{i-1, i}$ on road network detected by the local path recovery component, $\delta_D $ is the
+difference of $d_T$ and $d_R$, and $\delta_R $ is the difference of the
+ratio of trajectory length residing in the left side of the
+simplified line segment and that of the path.
+
+\eat{
+%After we estimated the emission probabilities and transition probabilities by Equations \ref{equ:emi-prob} and \ref{equ:trans-prob},
+We then use the Viterbi algorithm to search for the optimal route. The Viterbi algorithm is a dynamic programming
+algorithm that can quickly detect a sequence of states that maximizes the joint
+probability, which is the product of the emission probabilities and transition
+probabilities of all the states in the sequence.
+The detected sequence is the route with maximum likelihood and thus the global optimal route.
+}
+

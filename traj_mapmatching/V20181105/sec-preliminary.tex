@@ -1,0 +1,127 @@
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "gis18"
+%%% End:
+
+
+
+\section{Preliminaries}
+\label{sec-pre}
+
+
+
+
+In this section, we first introduce the concepts on simplified trajectories and map-matching, then we introduce the basic HMM-based map-matching method that serves as the fundamental of the work.
+%, followed by statement the problem of map-matching on simplified trajectories.
+
+\subsection{Notations}
+
+
+\stitle{Points ($P$)}. A GPS point is defined as a triple $P(x, y, t)$,
+which represents that a moving object is located at {\em longitude} $x$ and {\em
+  latitude} $y$ at {\em time} $t$.
+
+\stitle{Trajectories ($\dddot{\mathcal{T}}$)}. A trajectory
+$\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is a sequence of data points in a
+monotonically increasing order of their associated time values ($P_i.t <
+P_j.t$ for any $0\le i<j\le n$). Intuitively, a trajectory is the path (or
+track) that a moving object follows through space as a function of time~\cite{physics-trajectory}.
+
+
+\eat{
+\stitle{Simplified line segments ($\mathcal{L}$)}. A Simplified line segment (or
+line segment for simplicity) $\mathcal{L}$ is  defined as $\vv{P_{s}P_{e}}$,
+which represents the  closed line segment that connects the start point $P_s$ and the end point $P_e$.
+There are also two attributes $\mathcal{L}.L_p$ and $\mathcal{L}.L_n$
+representing the length of raw trajectory on each side of the simplified line
+segment respectively.
+}
+
+\stitle{Simplified trajectories ($\overline{\mathcal{T}}$)}. A simplified trajectory $\overline{\mathcal{T}}[\mathcal{L}_0, \ldots , \mathcal{L}_m]$ ($0< m \le n$) of a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ is a sequence of continuous directed line segments $\mathcal{L}_{i}$ = $\vv{P_{s_i}P_{e_i}}$ ($i\in[0,m]$) of $\dddot{\mathcal{T}}$  such that $\mathcal{L}_{0}.P_{s_0} = P_0$, $\mathcal{L}_{m}.P_{e_m} = P_n$ and  $\mathcal{L}_{i}.P_{e_i}$ = $\mathcal{L}_{i+1}.P_{s_{i+1}}$ for all $i\in[0, m-1]$.
+Note that (1) each directed line segment in $\overline{\mathcal{T}}$ essentially represents a continuous sequence of data points in $\dddot{\mathcal{T}}$, and
+(2) the simplified trajectories are referred to {as} error bounded if for each point $P$ in \trajec{T}, there exist points $P_j$ and $P_{j+1}$ in $\overline{\mathcal{T}}$ such that the distance from $P$ to $\mathcal{L}(P_j,P_{j+1}))$ is less than $\epsilon$.
+%error bounded by $\epsilon$ if
+
+\eat{
+\stitle{Error bounded trajectory simplification}. Given a trajectory \trajec{T}, an error bound $\epsilon$ and a simplification algorithm $\mathcal{A}$ that produces another trajectory \trajec{T'},
+we say that algorithm $\mathcal{A}$ is error bounded by $\epsilon$ if  for each point $P$ in \trajec{T}, there exist points $P_j$ and $P_{j+1}$ in \trajec{T'} such that the distance from $P$ to $\mathcal{L}(P_j,P_{j+1}))$ is less than $\epsilon$.
+}
+
+
+
+%\subsection{Terms on map-matching}
+
+
+
+\stitle{Road segments ($r$)}. A road segment is defined as $r = (v_s,v_e)$, representing an edge directly connecting two ending
+points in the map.
+
+
+
+\eat{
+\stitle{Candidate Road Sets ($C$)}. A candidate road set (candidate set in short) $C_i = \{r_i^1,r_i^2,\ldots,r_i^k\}$ of a GPS point $P_i$
+is a set of road segments that are close to the point. The final
+matched road segment is selected from the candidate set.
+%In this paper, we set the search range as a circle centered at point $P_i$ with radius as 200 meters.
+}
+
+\stitle{Routes ($R$)}. A route $R = {[r_0, \ldots,r_m]}$ is a continuous sequence
+of road segment such that $r_i.v_e = r_{i+1}.v_s$, $0\le i<m$.
+
+\stitle{Road network ($G$)}. A road network is a directed graph $G(V,E)$ where $V$ is the set of junction points of roads and $E$
+is the set of road segments between two junction points.
+
+\stitle{Map-matching}. Given a (simplified) trajectory of a user and a road network, the goal of (trajectory simplification aware) map-matching is to find the most likely route in the road network that has been traveled by the user.
+
+
+
+
+\subsection{HMM-based Map-matching}
+In recent years, map-matching is always modeled as a sequence labeling problem and tackled using sequence models such as HMM.
+The authors of \cite{Lamb1999Avoiding} first introduce HMM for map-matching, then a number of works \cite{Newson2009Hidden, Wang:eddy, Osogami:2013:IRL, yin:feature-based} follow this idea.
+%
+In the modeling of HMM-based map-matching, road segments are \emph{hidden states} and GPS points are \emph{observations}.
+For example, in \myfig{fig:hmm-model-a}, GPS points $P_1,P_2,P_3$ are observations of the moving object at timestamps $T_1,T_2,T_3$, respectively,
+and $r_1^1$ and $r_1^2$, two {candidate road segments} of point $P_1$, are the hidden states of the moving object at timestamp $T_1$.
+Moreover, the likelihood of the GPS point residing in a road segment is described by \emph{emission probability} ($E$). For instance, in \myfig{fig:hmm-model-b}, the emission probability of point $P_1$ on road segment {$r_1^2$ is $E_1^2$}.
+
+Then, the map-matching of a sub-trajectory to a road network is
+modeled as a weighted directed graph (\myfig{fig:hmm-model-b}), where a vertex is a hidden state (candidate road segment), an edge is the transition from the previous hidden state to the next hidden state, and the weight of an edge, named \emph{transition probability} ($T$), is the probability that the moving object transitions from one road segment to another. For example, {$T_{2}^3$} is the transition probability from {$r_1^2$ to $r_2^3$}.
+
+Finally, the probability of a sub-trajectory \trajec{T}$[P_s, \ldots, P_{s+u}]$ matched to a route $R$ is defined as the joint probability $J(\dddot{\mathcal{T}}, R) = \prod_{i=1}^u{T(r_{s+i}|r_{s+i-1})\cdot E(P_{s+i}|r_{s+i})}$, $P\in \dddot{\mathcal{T}}$ and $r\in R$, and a path in the graph with the highest joint probability is the matched route of the sub-trajectory.
+Note that most HMM-based methods share the same model except that they have respective definitions of transition probabilities.
+Our \stmm also follows this common model and has specific definition of
+transition probability for simplified {trajectories}.
+
+%\begin{equation}
+%  \label{equ:joint-prob}
+%  P(R,T) = \prod_{i=1}^n{P(r_i|r_{i-1})\cdot P(P_i|r_i)}
+%\end{equation}
+
+
+\begin{figure}[tb!]
+  \centering
+  \begin{subfigure}{0.4\textwidth}
+    \includegraphics[width = \textwidth]{Figures/Fig-HMM-model-road.pdf}
+    \caption{finding the candidate road segments.}\label{fig:hmm-model-a}
+    \vspace{1ex}
+  \end{subfigure}
+  \begin{subfigure}{0.42\textwidth}
+    \includegraphics[width = \textwidth, height = 0.6\textwidth]{Figures/Fig-HMM-model.pdf}
+    \caption{finding the optimal route. }\label{fig:hmm-model-b}
+  \end{subfigure}
+  \vspace{-1ex}
+  \caption{HMM-based map-matching.}
+  \label{fig:hmm-model}
+ \vspace{-4ex}
+\end{figure}
+
+
+
+
+%\subsection{Problem statement}
+%Given a simplified trajectory and a road network($G(V,E)$), the goal of map-matching on simplified trajectories is to find the most likely route ($R$) in the road network that has been traveled by the user.
+
+
+

@@ -1,0 +1,134 @@
+\subsection{Local Path Recovery}
+\label{sec:route}
+
+%The local path recovery module is used to select a most possible path between two neighbouring points of a simplified trajectory.
+The simplified trajectories are sparser than the original ones, which leads to higher uncertainties of map-matching.
+On the other hand, as pointed out in Section \ref{sec-intro}, the simplified trajectories have unique attributes that can be utilized to improve the accuracy of map-matching.
+%\subsubsection{Subgraph Extraction}
+
+First of all, the simplified trajectories are error-bounded. As illustrated in
+\myfig{fig:subgraph}, the error bound of the trajectory simplification algorithm defines a range in which the raw
+trajectory points may reside. We can extract a small part of graph $G_S(V_S,E_S)$
+from the original road network $G(V,E)$ and execute the matching process in the subgraph. This strategy shrinks the searching range and
+improves efficiency.
+More specifically, we set the range of subgraph as a rectangle range
+with the simplified line segment $\mathcal{L}$ as the axis of symmetry, width as $w =
+2\times(\epsilon + r_S)$ and length as $l = \mathcal{L}.L_L + \mathcal{L}.L_R +
+2\times r_S$, in which $\epsilon$ is the error bound used in trajectory
+simplification and $r_S$ is the searching radius used for candidate paths selection.
+
+
+
+
+%\subsubsection{Action Graph Construction and Weight Estimation}
+% Traditional map matching algorithms carry out local route recovery through
+% shortest path searching directly in road network($G(V,E)$). However, because the simplified
+% trajectories are sparse, the results achieved from shortest path
+% searching will not lead to a reasonable route. Hence, other factors considering
+% the rationality of routes should be taken into consideration.
+
+
+
+Then, we extract an \emph{\emph{action graph}} from the road network incorporating the information summarized from the raw and simplified trajectories,  and use it to describe the actions of the user.
+%The optimal pathes can be detected through the shortest path searching in the graph.
+%An action graph is a graph extracted from road network, Osogami and Raymond first proposed it in \cite{Osogami:2013:IRL}.
+The action graph is first proposed in \cite{Osogami:2013:IRL}, as shown in \myfig{fig:action-graph}, a node in the action graph represents  a
+road segment, and an edge describes an action of travelling from one road segment to a neighboring one. An edge is also
+associated with a weight representing the possibility of taking this action, which can be estimated from the features of the
+trajectory and the path.
+%
+In the estimation of action weight, besides the length of road segment and the turning angle between two road segments, we further consider the similarity between the raw sub-trajectory and the path between two neighbouring points of a simplified trajectory, by computing both the distribution of the raw sub-trajectory data points and the ratio of path located on both sides of the simplified line segment.
+%
+Obviously, if we select a path having similar distribution with the raw sub-trajectory \wrt a simplified line segment, then the accuracy of map-matching should be improved.
+%
+To sum up, we estimate the weight of an action by the sum of three terms (Equation~\ref{equ:cost}): %according to the distribution of raw trajectory points by
+\begin{equation}
+    %\vspace{-2ex}
+    \omega = \omega_{L} + \alpha \times \omega_{T} + \beta \times \omega_{\phi}
+    \label{equ:cost}
+\end{equation}
+where $\omega_{L}$ is the length of the ending road segment of the action,
+$\omega_{T}$ is the cost of turning from the starting road segment to the ending
+one in the action, $\omega_{\phi}$ is the similarly
+between two distributions, \ie the distributions of the path and the raw sub-trajectory on the two sides of a simplified
+line segment, and $\alpha$ and $\beta$ are two user defined parameters.
+
+\begin{figure}
+%\vspace{1ex}
+  \begin{subfigure}{0.36\textwidth}
+  \centering
+  \includegraphics[width = \textwidth, height = 0.6\textwidth]{Figures/Fig-subgraph.png}
+  \end{subfigure}
+  \vspace{-2ex}
+  \caption{\small {A subgraph of a road network.}}
+  \label{fig:subgraph}
+\vspace{-2ex}
+\end{figure}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\eat{
+\begin{figure}
+  \begin{subfigure}{0.36\textwidth}
+    \includegraphics[width = \textwidth, height = 0.55\textwidth]{Figures/Fig-traj-side.png}
+  \end{subfigure}
+  \vspace{-2ex}
+  \caption{\small {A sub trajectory is simplified to a line segment, which splits the plane into two parts and most points of the sub trajectory concentrate on one side.}}\vspace{-2ex}
+  \label{fig:traj-sides}
+\end{figure}
+}
+
+More specifically, the cost of turning $\omega_{T}$ is estimated by Equation \ref{equ:turning} defined in \cite{Osogami:2013:IRL}:
+\begin{equation}
+  \omega_{T} = \left\{
+    \begin{aligned}
+      0 & \ \ & \theta_{s,e} < \pi / 4 \\
+      1 & \ \ & \pi / 4 \le \theta_{s,e} < 3\pi /4 \\
+      2 & \ \ & 3\pi / 4 \le \theta_{s,e} \le \pi  \\
+    \end{aligned}
+  \right.
+  \label{equ:turning}
+\end{equation}
+where, $\theta_{s,e}$ is the turning angle from the starting road segment of the action to the ending one.
+
+
+The similarity estimation $\omega_{\phi}$ is modeled using a
+piecewise function (Equation \ref{equ:sim}). The intuition behind this is that the correct path should have similar ratio of travelling distance on each side of the simplified line segment as the raw trajectory.
+%We compute the distance of road segments residing on {one} side of the simplified trajectory and {compare it with the distribution of the corresponding raw sub-trajectory}.
+
+\begin{equation}
+  \omega_{\phi} = \left\{
+    \begin{aligned}
+      1 & \ \ & (\phi_T < 0.25 \wedge \phi_{R} < 0.25) \\
+      1 & \ \ & (\phi_T > 0.75 \wedge \phi_{R} > 0.75) \\
+      10 & \ \ & (\phi_T < 0.25 \wedge \phi_{R} > 0.75) \\
+      10 & \ \ & (\phi_T > 0.75 \wedge \phi_{R} < 0.25) \\
+      5 & \ \ & otherwise \\
+    \end{aligned}
+  \right.
+  \label{equ:sim}
+\end{equation}
+where $\phi_T= \frac{\mathcal{L}.L_L}{\mathcal{L}.L_L + \mathcal{L}.L_R}$ is the ratio of trajectory length residing in the left side of the
+simplified line segments, and $\phi_R= \frac{\sum_{r_j \in R}r_j.L_L}{\sum_{r_j \in R}r_j.L_L + r_j.L_R}$ is that of the {roads/path}.
+
+%\begin{equation}
+%\phi_L = \frac{\mathcal{L}.L_P}{\mathcal{L}.L_P + \mathcal{L}.L_N}
+%\end{equation}
+
+%\begin{equation}
+%\phi_R = \frac{\sum_{r_j \in R}r_j.L_P}{\sum_{r_j \in R}r_j.L_P + r_j.L_N}
+%\end{equation}
+
+Finally, {a local optimal path can be detected by shortest path search on the action graph.}
+%by minimizes the action weight .
+
+\begin{figure}
+    \begin{subfigure}{0.36\textwidth}
+        \centering
+        \includegraphics[width = \textwidth, height = 0.6\textwidth]{Figures/Fig-action-graph-en.pdf}
+    \end{subfigure}
+    \vspace{-2ex}
+    \caption{\small {An example of action graph.}}\label{fig:action-graph}
+    \vspace{-3ex}
+\end{figure}
