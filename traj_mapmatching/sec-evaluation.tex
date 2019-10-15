@@ -1,0 +1,304 @@
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "gis18"
+%%% End:
+\section{evaluation}
+\label{sec-exp}
+
+In this section, we present an extensive experimental study of our \stmm compared with two state-of-the-art algorithms designed for sparse trajectories. %designed for sparse trajectories
+Using two real-life trajectory datasets, we conducted two sets of experiments
+to evaluate the accuracies and running time of these methods.
+%
+%In the rest of this section, we first describe the setup of our experiments and estimating
+%the parameters of models. Subsequently,
+
+\subsection{Datasets and Experimental Setting}
+We first introduce the settings of our experimental study.
+
+\subsubsection{Real-life trajectory datasets}
+We use two real-life datasets \sercar and \pubdata to test algorithms.
+These raw trajectories are first simplified by algorithms, \ie {Sleeve \cite{Zhao:Sleeve}} using PED and CISED \cite{Lin:Cised} using SED, respectively, and then taken as input to map-matching algorithms.
+%shown in Table~\ref{tab:datasets}
+
+\vspace{0.5ex}
+\ni \emph{(1) Service car trajectory data} (\sercar) is the GPS trajectories
+collected by a Chinese car rental company during Apr. 2015 to Nov. 2015. The
+sampling rate was one point per $3$--$5$ seconds, and
+each trajectory has around $65.8K$ points. We manually labeled 100 trajectories
+for the experiments.
+%.We randomly chose $1,000$ cars from them
+
+\vspace{0.5ex}
+\ni \emph{(2) Public available data} (\pubdata) \cite{pubdata} is a set of GPS trajectories
+consisting of 100 trajectories all over the world, and each track is associated
+with  a map and a correctly map matched route.%, which will be used as the label in evaluation.
+The tracks are collected with a sampling rate at one point per second.
+
+
+\eat{
+\begin{table}
+	\vspace{-1ex}
+	\caption{\small Real-life trajectory datasets}
+	\centering
+	\small
+	\begin{tabular}{|l|c|c|c|r|}
+		\hline
+		\kw{Data}& \kw{Number\ of}     &\kw{Sampling}   &\kw{Points~Per}    &\kw{Total} \\
+		\kw{Sets} & \kw{Trajectories}   &\kw{Rates (s)}  &\kw{Trajectory (K)}&\kw{points}\\	\hline
+		\sercar	&{100}	    &5	        &{$\sim42.8$}      &{21.4M} \\	\hline
+		\pubdata	&{100}	    &1	        &{$\sim42.8$}      &{21.4M} \\	\hline
+	\end{tabular}
+	\label{tab:datasets}
+	\vspace{-3ex}
+\end{table}
+}
+
+
+
+\subsubsection{Map-matching algorithms}
+We compare our method (\stmm) with two state-of-the-art HMM-based methods designed for sparse trajectories.
+% and report route mismatch fraction.
+
+\ni \emph{(1) HMM-based map matching (\hmmbased)}\cite{Newson2009Hidden}.
+The HMM-based map matching algorithm that considers noise and sparseness of trajectories.
+%which measures the transition probabilities using difference between great circle distance and road network distance.
+
+\ni \emph{(2) General feature-based map matching (\gfbased)}\cite{yin:feature-based} .
+It extends the HMM-based map matching by using the action graph for route
+recovery and gets better accuracy than the HMM-based method on sparse trajectories.
+% and estimates the transition probability between two road segments by a segment-based strategy.
+
+% \ni \emph{(3) map matching on simplified trajectories (\proposed)}. The map matching algorithm proposed in this paper.
+%It considers the properties of compressed trajectories in local path recovery and the computation of transition probabilities.
+
+Throughout the experiments, for all methods, we set the standard deviation of GPS measurements (in estimating the emission probabilities),
+to 10 meters; for \hmmbased, we set the scaling factor (in estimating the transition probabilities) to 2; and for \gfbased, we set
+the balancing factor $\omega$ to 200.
+
+\eat{
+Setting of alpha and beta of equation 1.
+\begin{table}
+	\vspace{-1ex}
+	\caption{\small Estimated parameters (What's the meaning?}
+	\centering
+	\small
+	\begin{tabular}{|l|c|c|c|c|c|r|}
+		\hline
+    {$\epsilon$}  &10	&40 &200 &400 &800 &1000 \\ \hline
+		{$\alpha$} &{100}	    &100	   &100 &200 &400 &400        \\	\hline
+		{$\beta$} &{0}	    &0.5	   &1.5 &7.0 &3.75 &4.75        \\	\hline
+	\end{tabular}
+	\label{tab:params}
+	\vspace{-3ex}
+\end{table}
+}
+
+
+% All algorithms were implemented with Java.
+% All tests were run on an x64-based  PC with 8 Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz and 32GB of memory.
+%, and each test was repeated over 3 times and the average is reported here.
+
+
+%\subsection{Evaluation metrics}
+
+%We study the accuracies and running time of each method.
+
+%$L_R$ is the length of matched result,
+% As illustrated in \myfig{fig:RMF}
+% \begin{figure}
+%  \centering
+%  \begin{subfigure}{0.4\textwidth}
+%    \includegraphics[width=\textwidth]{Figures/Fig-RMF-EN.pdf}
+%  \end{subfigure}
+%  \caption{Route Mismatch Fraction.}
+%  \label{fig:RMF}
+%  \vspace{-5ex}
+% \end{figure}
+
+% \ni (2) F-score. We also use F-score, usually used to evaluate the accuracy of a
+% classification algorithm, as a measure of matching accuracy. F-score, $F = 2
+% \times \frac{precision \times recall}{precision + recall}$, is the harmonic mean
+% of \emph{precision} and \emph{recall}, where \textcolor{red}{$precision = (L_R -
+%   L_+) / L_R$ of a matched route $R$},
+% is defined by the ratio of the number of the road segments along R that are also
+% contained in ground truth against the total number of road segments in R.
+% $recall = (L_R - L_+) / L_T$ is defined as the ratio of the total distance traversed on
+% the matched route against that of the ground truth route.
+
+% Besides, we use the Running time to show the speed of map-matching.
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsection{Experimental Results}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% We next present our findings.
+
+\subsection{Experimental Results}
+
+%We next present our findings.
+
+% \begin{table}
+% 	\vspace{-1ex}
+% 	\caption{\small Estimated parameters (What's the meaning?}
+% 	\centering
+% 	\small
+% 	\begin{tabular}{|l|c|c|c|c|c|r|}
+% 		\hline
+%     {$\epsilon$}  &10	&40 &200 &400 &800 &1000 \\ \hline
+% 		{$\alpha$} &{100}	    &100	   &100 &200 &400 &400        \\	\hline
+% 		{$\beta$} &{0}	    &0.5	   &1.5 &7.0 &3.75 &4.75        \\	\hline
+% 	\end{tabular}
+% 	\label{tab:params}
+% 	\vspace{-3ex}
+% \end{table}
+
+% \begin{figure*}[tb!]
+% 	\centering
+%   \includegraphics[width=\textwidth]{Figures/Exp-statistics-all.png}
+% 	\vspace{-4ex}
+% 	\caption{\small Evaluation of route mismatch fraction : varying the error bound $\epsilon$.}
+% 	\label{fig:stas-dis}
+% 	\vspace{-3ex}
+% \end{figure*}
+
+% \stitle{Exp 1.1: Impacts of Parameters of path recovery on accuracy.}
+% we use grid search to decide the path recovery parameters.
+% The estimated parameters are shown in Table \ref{tab:params}.
+% We can see that when threshold is set small, the estimated parameters are also
+% small. As threshold increasing, the estimated parameters increases as well.
+% This is because when threshold is small, trajectory is relatively dense, and
+% shortest path is more reasonable.
+
+% \stitle{Exp 1.2: Impacts of Parameters of transition probability on accuracy.}
+% We first estimate the parameters for transition probability using
+% statistics-based estimation.
+% Specifically, we use the statistics from the ground truth routes.
+
+% As can be seen from \myfig{fig:stas-dis}, the difference of distances $\delta_D$ and that of
+% length ratio $\delta_R$ follow an exponential distribution. We estimate the rate parameter $\lambda_D$
+% of the distribution as the inverse of the mean of such values.
+
+% Similar results are achieved using measure of ratio difference as shown in \myfig{fig:stas-ratio}.
+
+% The estimated values of {$\lambda_D$ and $\lambda_R$} are {0.34, 3.46} in
+% \pubdata and {0.49, 2.84} in \sercar, respectively.
+
+% \stitle{Exp 1.1: Impacts of error bounds on accuracy and also the comparison of map-matching algorithms.}
+
+\subsubsection {Evaluation of accuracy}
+To evaluate the accuracy of our map
+matching algorithm compared with the two state-of-the-art algorithms, we set the error bound $\epsilon$
+of simplification algorithm to 40m, 200m, 400m, 600m, 800m and 1000m.
+The accuracy of map-matching method is evaluated using the
+Route Mismatch Fraction(RMF) proposed by Newson and Krumm~\cite{Newson2009Hidden}.
+RMF represents the fraction of the total length of mismatched
+route with regard to that of ground truth route, {$RMF = (L_- + L_+) / L_T$}, where $L_T$ is the length of ground truth
+route, $L_-$ is the total length of the road segments that are in the ground truth route but not in the matched result, while $L_+$ is that of the
+road segments that are not in the ground truth route but in the matched result.
+
+
+
+%%%%%%%%%%%%%RMF
+\begin{figure}[tb!]
+	\centering
+  \includegraphics[scale=0.3]{Figures/Exp-epsilon-rmf-CISED-RPI-Public.png}
+  \includegraphics[scale=0.3]{Figures/Exp-epsilon-rmf-CISED-RPI-SerCar.png}
+  \vspace{-2ex}
+  \caption{\small Evaluation of accuracy (SED).}
+	\label{fig:rmf-epsilon-acc-sed}
+ \vspace{-3ex}
+\end{figure}
+
+\begin{figure}[tb!]
+	\centering
+  \includegraphics[scale=0.3]{Figures/Exp-epsilon-rmf-SIPED-Public.png}
+  \includegraphics[scale=0.3]{Figures/Exp-epsilon-rmf-SIPED-SerCar.png}
+  \vspace{-2ex}
+  \caption{\small Evaluation of accuracy (PED).} \label{fig:rmf-epsilon-acc-ped}
+  \vspace{-3ex}
+\end{figure}
+
+%%%%%%%%%%%%%%%%% F-score %%%%%%%%%%%%
+% \begin{figure*}[tb!]
+% 	\centering
+%   \includegraphics[height=0.3\textwidth]{Figures/Exp-epsilon-f-score-Public.png}\hspace{5ex}
+%   \includegraphics[height=0.3\textwidth]{Figures/Exp-epsilon-f-score-SerCar.png}
+% 	\vspace{-2.5ex}
+% 	\caption{\small Evaluation of route mismatch fraction : varying the error bound $\epsilon$.}
+% 	\label{fig:f-epsilon}
+% 	\vspace{-2ex}
+% \end{figure*}
+
+
+In this test, the raw trajectories are simplified by algorithms \siped using \ped and \cised using \sed, respectively.
+The experimental results are reported in \myfig{fig:rmf-epsilon-acc-sed} and \myfig{fig:rmf-epsilon-acc-ped}.
+From these figures, we can find that:
+
+\ni (1) The accuracies decrease with the increase of $\epsilon$, as a larger $\epsilon$ leads to sparser simplified trajectories. %, vice versa.
+
+\ni (2) When error bound is large ($\epsilon \ge 200m$), algorithm \stmm has the best accuracy on both datasets.
+For example, when using \sed and $\epsilon=1000$ meters, the RMF of algorithms \hmmbased, \gfbased and \stmm are {$(0.364, 0.282, 0.237)$} and
+ {$(0.178, 0.135, 0.131)$} on datasets \sercar and \pubdata, respectively.
+When using \ped and $\epsilon=1000$ meters, the RMF of them are {$(0.423, 0.292, 0.231)$} and
+ {$(0.211, 0.167, 0.157)$} on these datasets, respectively.
+
+\ni (3) When error bound is relatively small ($\epsilon \le 40m$), algorithm \hmmbased has the best
+accuracy, \gfbased is the worst, and \stmm is in the middle.
+For example, when using \sed and $\epsilon=40$ meters, the RMFs of algorithms \hmmbased, \gfbased and \stmm are {$(0.056, 0.131, 0.091)$} and
+{$(0.040, 0.059, 0.029)$} on datasets \sercar and \pubdata, respectively. When using \ped and $\epsilon=40$ meters, the RMFs of them are {$(0.131, 0.174, 0.114)$} and
+{$(0.045, 0.051, 0.034)$} on these datasets, respectively;
+
+\ni (4) Algorithm \stmm has the best accuracy over all distance thresholds on both datasets.
+When using \sed, the RMF of algorithm  \stmm is on average ${(74.1\%, 71.8\%)}$ of \hmmbased and ${(80.0\%, 89.4\%)}$ of \gfbased on datasets \sercar and \pubdata, respectively.
+When using \ped, the RMF of algorithm  \stmm is on average ${(61.5\%, 73.4\%)}$
+of \hmmbased and ${(76.1\%, 91.7\%)}$ of \gfbased on datasets \sercar and \pubdata, respectively.
+% And the F-Score is on average ${(103.6\%, 101.8\%)}$ of algorithm \hmmbased and ${(102.5\%, 100.6\%)}$ of \gfbased on datasets \sercar and \pubdata, respectively.
+
+
+
+
+\subsubsection {Evaluation of running time}
+We then report the running time of each algorithm, as shown in \myfig{fig:rmf-epsilon-time-sed} and \myfig{fig:rmf-epsilon-time-ped}. These figures show that algorithm \stmm is the fastest on both datasets over all error bounds.
+When using \sed, algorithm \stmm is on average {$(1.89, 1.98)$} times faster than \hmmbased
+and \gfbased on dataset \pubdata and {$(2.23, 2.00)$} times on dataset \sercar, respectively.
+When using \ped, algorithm \stmm is on average {$(1.45, 1.63)$} times faster than \hmmbased
+and \gfbased on dataset \pubdata and {$(1.90, 1.87)$} times on dataset \sercar, respectively.
+%
+The efficiency of algorithm \stmm originates from the fact that the error
+bound of trajectory simplification provides a guidance to shrink the searching
+space.
+However, as error bound increases, the distance between two neighboring points
+becomes larger which leads to a larger searching space and makes the algorithm slower to some extent.
+
+
+% \begin{figure*}[tb!]
+% 	\centering
+%   \includegraphics[height=0.3\textwidth]{Figures/Exp-epsilon-time-Public.png}\hspace{5ex}
+%   \includegraphics[height=0.3\textwidth]{Figures/Exp-epsilon-time-SerCar.png}
+% 	\vspace{-2.5ex}
+% 	\caption{\small Evaluation of efficiency: varying the error bound $\epsilon$.}
+% 	\label{fig:time-epsilon}
+% 	\vspace{-2ex}
+% \end{figure*}
+
+
+
+\begin{figure}[tb!]
+	\centering
+  \includegraphics[scale=0.3]{Figures/Exp-epsilon-time-CISED-RPI-Public.png}
+  \includegraphics[scale=0.3]{Figures/Exp-epsilon-time-CISED-RPI-SerCar.png}
+	\vspace{-2ex}
+  \caption{\small Evaluation of running time(SED).}
+	\label{fig:rmf-epsilon-time-sed}
+	\vspace{-3ex}
+\end{figure}
+
+\begin{figure}[tb!]
+	\centering
+  \includegraphics[scale=0.3]{Figures/Exp-epsilon-time-SIPED-Public.png}
+  \includegraphics[scale=0.3]{Figures/Exp-epsilon-time-SIPED-SerCar.png}
+	\vspace{-2ex}
+  \caption{\small Evaluation of running time(PED).}
+	\label{fig:rmf-epsilon-time-ped}
+	\vspace{-3ex}
+\end{figure}
+

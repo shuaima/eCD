@@ -1,0 +1,65 @@
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "gis18"
+%%% End:
+
+\section{introduction}
+\label{sec-intro}
+
+%%%%%\stitle{Map-matching.}
+Map-matching~\cite{Newson2009Hidden,Wang:eddy,yin:feature-based,Hunter2013,liu:st-crf} is the procedure for identifying the correct road a vehicle is travelling using data from sensors and a high resolution spatial road network\cite{Newson2009Hidden}.
+It's an important preprocessing step for many location-based services such as navigation and position tracking systems \cite{Yin:2015:Context, Yin:2015:Exploiting, Gustafsson:2002:Particle, Mohammed:2006:Fuzzy}, functional region analysis~\cite{Yuan:regions}, outlier event detection~\cite{Zhang:2012:Outlier,Chawla:2012:Anomalies}, and real-time traffic volume prediction~\cite{Jenelius:time}.
+It is also used to correct the positions of moving objects if high quality spatial road network data is available\cite{Quddus2003}. Thus, many map-matching methods~\cite{Newson2009Hidden,Wang:eddy,yin:feature-based,Hunter2013,liu:st-crf} have been developed for these purposes.
+%In recent years, map matching is usually modeled as a sequence labeling problem and tackled using sequence models such as Hidden Markov model \myred{[ref]} and conditional random field\myred{[ref]}.
+
+However, \textit{these map-matching methods majorly focus on raw trajectories, few of them focus on {simplified trajectories}.}
+The \emph{simplified trajectories} are normally a small subset of the raw trajectories, and are produced by \emph{trajectory simplification} algorithms \cite{Douglas:Peucker,Meratnia:Spatiotemporal,Muckell:SQUISH,Lin:Operb,Zhang:Evaluation,Lin:Cised} that remove
+redundant points from the raw trajectories and only keep the key points so as to greatly reduce the data size of trajectories.
+As we know the data size of raw trajectories is massive, %and it consumes much resource to transmit and store raw trajectory data or query on them.
+transmitting them to the cloud servers, saving them in the storages and querying on them consume too much network bandwidths, storage capacities and computing resources,
+hence there is a tendency to first simplify the raw trajectories on mobile devices and then transport the simplified trajectories to and save them on cloud servers to save the resources.
+%Besides, \emph{map-matching on simplified trajectories} also reduces the cost of computation of map-matching and speed up the performance of trajectory management systems.
+Thus, map-matching of simplified trajectories is an emerging technique that needs to be further studied.
+
+
+%\stitle{Challenging.}
+Map-matching of simplified trajectories is quite different from that of raw trajectories, no matter dense or sparse.
+Firstly, the simplified trajectories are more sparse than the original ones, which brings difficulty to match data points on the right roads.
+Secondly, the simplified trajectories have some geometric properties caused by those trajectory simplification methods,
+%such as the distances from the raw trajectories to the corresponding simplified trajectories are bounded by a predefined distance threshold,
+which are helpful for map-matching methods to improve the accuracy of the matched results.
+%Of course, they are overlooked by those map-matching methods as those methods are designed for general trajectories.
+Nevertheless, the previous map-matching methods, designed for general
+trajectories or sparse trajectories, do not deal with these features, hence, they lead to limited accuracies of map-matching taking as input the simplified trajectories.
+
+
+
+\stitle{Contributions.}
+To the end, we proposed a novel \underline{T}rajectory \underline{S}implification \underline{A}ware \underline{M}ap-\underline{M}atching (\stmm) method.
+The major contributions of this paper are three folds:
+
+\sstab {(1)} We develop a trajectory simplification aware map-matching framework and implement it based on Hidden Markov model (HMM). To the best of our knowledge, it is the first map-matching method specially designed for simplified trajectories.
+%that achieves better effective on simplified trajectories than the state-of-the-art map-matching algorithms.
+
+\sstab {(2)} {We develop the \emph{local path recovery} and the \emph{global route decoding}, two key components of the HMM-based method, both consider the geometry similarities between the raw/simplified trajectories and the candidate paths/routes, so as to select the most probable path for two neighboring points of a simplified trajectory and the most probable route for a sequence of simplified trajectory points.
+%by calculating the distribution of the raw trajectory points on the both sides of the simplified trajectory
+
+\sstab {(3)} We compare our method \stmm with two state-of-the-art map-matching algorithms (\hmmbased \cite{Newson2009Hidden} and \gfbased \cite{yin:feature-based}) on two large-scale real datasets collected from all over the world.
+%Experimental results justify the efficiency and accuracy of our method.
+The experimental results show that \stmm is on average $27\%$ and $18.4\%$ better than
+\hmmbased and \gfbased on accuracy, and $1.9$ and $1.9$ times faster than \hmmbased and \gfbased, respectively.
+
+% on an action graph constructed from the road
+%  network and simplified trajectory, and consider the geometry similarities between the raw trajectories and the simplified trajectories in the estimation of edge weights. And in the calculation of transition probabilities, we consider the distribution of raw trajectory
+%  points \myred{over candidate routes}. By these ways, we get better matching accuracy.}
+
+
+\stitle{{Organization}}.
+The remainder of the paper is organized as follows:
+Section \ref{sec-pre} introduces the basic concepts and the basic HMM method,
+Section \ref{sec-method} presents our trajectory simplification aware map-matching method,
+Section \ref{sec-exp} reports the experimental results of these methods, followed by related works in Section \ref{sec-related} and conclusion in Section \ref{sec-conclusion}.
+
+
+

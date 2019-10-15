@@ -1,0 +1,59 @@
+\subsection{Algorithm}
+
+With emission probabilities and transition probabilities estimated from Equations
+\ref{equ:emi-prob} and \ref{equ:trans-prob}, we can use the Viterbi algorithm to
+compute the optimal path. The Viterbi algorithm is a dynamic programming
+algorithm that can quickly detect a sequence of states that maximizes the joint
+probability, which is the product of the emission probabilities and transition
+probabilities of all the states in the sequence. The detected sequence is the
+path with maximum likelihood and thus the global optimal path.
+
+
+
+\begin{large}
+\begin{algorithm}
+\caption{The CT-MM Algorithm}\label{alg:viterbi}
+\small
+\begin{algorithmic}[1]
+ \State  \textbf{Input}: $\overline{\mathcal{T}}$,$\epsilon$,G(V,E)
+ \State  \textbf{Output}: map matching result R
+
+ \State $E_1 \gets findCand(G(V,E),p_1)$.
+
+ \State \textbf{Initialize} $f[r_1^k] = p(r_{1}^k|p_{1}), k = 1,2,\cdots,10$.
+
+ % \For{each line segments in $\overline{\mathcal{T}}$}
+ \For{$i = 2 \to n$}
+   % \State extract candidate set of that GPS point from road network.
+   \State $P_i \gets \overline{\mathcal{T}}[i].e$
+   \State $P_{i-1} \gets \overline{\mathcal{T}}[i].s$
+   \State $E_i \gets findCand(G(V,E),P_i)$.\Comment{find candidate set}
+   % \State extract subgraph between the previous and current GPS point.
+   \State $G_s \gets extract(G(V,E),\overline{\mathcal{T}}[i],\epsilon)$.
+   \Comment{extract subgraph}
+   \For{$r_i^j \in E_i$}
+      \State compute $p(r_{i}^j|P_{i})$ by equation (6)
+      \State $f[r_{i}^j] = -\infty$
+      \For{$r_{i-1}^k \in E_{i-1}$}
+      % \State compute shortest path from $r_{i-1}$ to $r_{i})$ in the sub action graph.
+      % \State $sp_i^j\gets shortestPath(r_{i-1},r_{i},sbGraph)$
+      \State $R_{j,k} \gets PathRec(G_s,r_i^j,r_{i-1}^k)$.\Comment{path recovery}
+      \State compute $p(r_{i-1}^k,r_{i}^j)$ by equation (7)
+      \State $Conj\gets f[r_{i-1}^j] * p(r_{i-1}^j,r_{i}^k) * p(r_{i}^j|P_{i})$
+      \If{$Conj \ge f[r_{i}^k]$}
+        \State $f[r_{i}^k] = Conj$
+        \State $Pre[r_{i}^k] = r_{i-1}^j$
+      \EndIf
+    \EndFor
+  \EndFor
+  \EndFor
+  \State $R = \argmax_{r_1^{k_1}\rightarrow r_2^{k_2}\rightarrow \cdots \rightarrow r_n^{k_n}}f[r_{n}^{k_n}]$
+\State \textbf{return} $R$\Comment{The matched result is R}
+
+% \Procedure{getSubGraph}{$p_{i-1},p_i,length,width$}
+% \State get bounding box.
+% \EndProcedure
+\end{algorithmic}
+\end{algorithm}
+\end{large}
+
