@@ -14,7 +14,7 @@ why not integrate one-pass algorithms with GRTS?
 1. one pass algorithm do not need a buffer; 2. a one-pass algorithm runs in a manner similar with ldr, 
 inspire us to develop effective and efficient trajectory tracking methods that combine compression and position tracking into a consistent algorithm, and run in one-pass manner. 
 
-\subsection{Efficient tracking in circles}
+\subsection{One-pass tracking in circular areas}
 
 spatio-temporal cone and uses it to compress traj
 
@@ -37,7 +37,7 @@ Weak tracking:
 
 -- theorem: if ldr is true, then the intersection of those cones must not be \{$P_s$\}.
 means that, if ldr is true, it is sure those points can be represented by a line segment.
-thus, we only need to check ldr during the process.
+thus, we only need to check the intersection after ldr is false, during the process.
 
 -- algorithm
 
@@ -45,13 +45,18 @@ thus, we only need to check ldr during the process.
 
 -- correctness and complexity
 
-\subsection{Efficient tracking in customized regions}
+\subsection{One-pass tracking in non-circular areas}
 
 combine cone, sector, interval with ldr; what's sector, interval
 
+
 strong tracking
 
--- principle, adjust velocity.
+-- principle, adjust velocity...
+	checking \textcolor{blue}{separately} of cone, sector and interval ($P_sP_{s+k-1}$ is the choice), couple with ldr.
+	step 1: check metrics: (if all intersections of one metric are true, then there must be a line segment satisfying all).
+	if any intersection of one metric is false, then new line segment.
+	step 2:	(check ldr) if any ldr is false, then find the common intersection of all metric and adjust velocity; select a point from the common area (or simply $P_{s+k-1}$).
 
 -- algorithm
 
@@ -61,8 +66,11 @@ strong tracking
 
 weak tracking
 
--- theorem: we only need to check ldr during the process?
-
+-- principle, adjust velocity...
+	must checking \textcolor{blue}{consistently} of cone, sector and interval, couple with ldr.
+	if the common intersection of all metrics is false, then new line segment.
+	otherwise, checks ldr, 	if any ldr is false, then adjust velocity, point select from the common area.
+	
 -- algorithm
 
 -- example
