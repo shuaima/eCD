@@ -342,6 +342,7 @@ This is because some \geolife and \mopsi trajectories are collected by individua
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\vspace{-0.5ex}
 \subsubsection{Evaluation and Analyses of Average Error}
+\label{sec-ae}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 The average errors of these algorithms, under varied error bounds $\epsilon$ and trajectory sizes, are reported in Figures~\ref{fig:ae-ped-epsilon},~\ref{fig:ae-sed-epsilon},~\ref{fig:ae-dad-epsilon},~\ref{fig:ae-ped-size},~\ref{fig:ae-sed-size} and~\ref{fig:ae-dad-size}.
 We first report our findings.
@@ -749,37 +750,20 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 
 
 
-\ni (1) When using \ped, 
-average errors of spatio-temporal queries from the smallest to the largest are ...
-
-For full datasets, algorithms \tpa and \dpa are comparable, and they are on average ($xxx\%$, $xxx\%$,
-$xxx\%$) and ($xxx\%$, $xx\%$, $xxx\%$) of \opt on datasets \dSets, respectively.
-Algorithms \siped($\frac{\epsilon}{2}$) and \operb are comparable, and they are on average
-($xxx\%$, $xx\%$, $xxx\%$) and ($xxx\%$, $xx\%$, $xxx\%$) of \opt on datasets \dSets, respectively.
-%
-Algorithms \siped(${\epsilon}$) and \bqsa are on average ($xxx\%$, $xx\%$, $xxx\%$) and ($xxx\%$, $xx\%$, $xxx\%$) of \opt on datasets \dSets, respectively.
-For example, the average errors of algorithms
-(\opt, \tpa, \dpa, \bqsa, \siped(${\epsilon}$), \siped($\frac{\epsilon}{2}$), \operb ) in the full \mopsi are ($xx$, $xx$, $xx$, $xxx$, $xxx$, $xxx$, $xxx$) metres when $\epsilon$ = $40m$.
+\ni (1) When using \ped, the max query errors of all algorithms are more than $10^6$ meters in all datasets, significantly larger than the error bound (40 meters in Table~\ref{tab:query-me}). The large max errors also lead to larger average query errors, \ie they are greater than error bounds in all datasets.
 
 
-they are more than $10^6$ metres in datasets \ucar, \geolife and \mopsi, significantly larger than error bounds. This large-error phenomenon is actually possible. For example, if someone travels from Beijing of China to Sydney of Australia. During the trip, he first closes his mobile when the air plane is ready to take off, then he turns on his mobile after he arrives at Sydney. Because the sub-trajectory includes data points located in two small regions, \ie the Beijing and Sydney airports, it is possible that the sub-trajectory is compressed by some \lsa algorithm using \ped into a single line segment, even the error bound $\epsilon$ is set to just $60$ metres. When a {\emph where\_at} is performed on the long line segment, it may return an approximate point having a large error to the actual position.
-%
-{Besides, we also find that the data quality problem of the original given trajectories, such as an abnormal change of GPS location or time, \eg the latitude and longitude of a moving object suddenly change from one country to another country, or even somewhere in the ocean, can aggravate the large error phenomenon of spatio-temporal queries on compressed trajectories that are simplified using \ped. These confirm that \sed is more suitable than \ped for spatio-temporal queries.} %, as illustrated in Section~\ref{sec-intro}
-
-\ni {(2) When using \sed, 
-	average errors of spatio-temporal queries from the largest to the smallest are ...
-	
-	The max errors of spatio-temporal queries on compressed trajectories are always not larger than error bounds. 
+\ni (2) When using \sed, the max query errors of all algorithms are clear not more than the error bounds, and the average query errors are consistent with those compression errors shown in Section~\ref{sec-ae}.
 	
 
-\ni (3) When using \dad, 
+\ni (3) When using \dad, the max query errors of all algorithms are more than $10^6$ meters in dataset \ucar, and more than $10^5$ meters in datasets \geolife and \mopsi, respectively, also significantly larger than the error bound (40 meters in Table~\ref{tab:query-me}). Moreover, compared with using \ped, it has more points having query errors larger than error bounds, thus, it has the largest average query errors in all algorithms and all datasets.
 
 
 \stitle{Analyses of \lsa algorithms.}
 
 
 \stitle{Analyses of distance metrics.}
-Given the same error bound, the average errors of these queries on compressed trajectories using \ped are obvious larger than those using \sed, and they are typically larger than error bounds. Moreover, algorithm \siped using \ped has larger spatio-temporal query errors than \dpa using \ped because \siped applies a greedy policy that tries to include as many points into a line segment, and some of these ``extra-points'' lead to large errors.}
+Given the same error bound, the average errors of these queries on compressed trajectories using \ped are obvious larger than those using \sed, and they are typically larger than error bounds. Moreover, algorithm \siped using \ped has larger spatio-temporal query errors than \dpa using \ped because \siped applies a greedy policy that tries to include as many points into a line segment, and some of these ``extra-points'' lead to large errors.
 % due to some points having extraordinary large errors
 
 
