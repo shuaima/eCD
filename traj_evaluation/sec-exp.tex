@@ -670,6 +670,37 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 %
 {The max and average errors of the queries are reported in Table~\ref{tab:query-me} and Figures~\ref{fig:query-ped-epsilon}, \ref{fig:query-sed-epsilon}, \ref{fig:query-dad-epsilon}, \ref{fig:query-ped-size},\ref{fig:query-sed-size} and \ref{fig:query-dad-size}, respectively.}
 
+
+\begin{table}
+	%\renewcommand{\arraystretch}{1.2}
+	\vspace{-1ex}
+	\caption{\small The max errors of spatio-temporal queries on compressed trajectories: fixed $\epsilon=40m$.}
+	\centering
+	\scriptsize
+	\begin{tabular}{|l|c|c|c|l|c|c|c|}
+		\hline
+		\bf{Algorithm (PED)}  &\ucar &\geolife &\mopsi & \bf{Algorithm (DAD)}  &\ucar &\geolife &\mopsi \\
+		\hline
+		{\dpa} &	$3.48 \times 10^6$ & $1.83 \times 10^6$ &	$5.03 \times 10^6$	& \dpa	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $4.87 \times 10^5$ \\
+		\hline
+		{\tpa} &	$3.51 \times 10^6$ & $1.91 \times 10^6$ &	$5.03 \times 10^6$	& \tpa	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $5.01 \times 10^5$ \\
+		\hline
+		{\bqsa} &	$3.51 \times 10^6$ & $1.94 \times 10^6$ &	$1.40 \times 10^6$	& \opwa	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $5.01 \times 10^5$ \\
+		\hline
+		{\operb} &	$3.50 \times 10^6$ & $1.56 \times 10^6$ &	$1.39 \times 10^6$	& \interval	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $5.01 \times 10^5$ \\
+		\hline
+		{\siped($\epsilon$)} &	$3.51 \times 10^6$ & $1.02 \times 10^6$ &	$1.39 \times 10^6$	& \intersec	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $4.18 \times 10^5$ \\
+		\hline
+		{\siped($\epsilon/2$)} &	$3.50 \times 10^6$ & $1.02 \times 10^6$ &	$1.39 \times 10^6$	& & & & \\
+		\hline
+	\end{tabular}
+	\label{tab:query-me}
+	\vspace{0.5ex}
+	\\{Note that all algorithms using \sed have the max query errors not more than the error bound, \ie $\epsilon=40m$ here.}
+	\vspace{-2ex}
+\end{table}
+
+
 \begin{figure*}[tb!]
 \centering
 \includegraphics[scale = 0.320]{Figures/Exp-query-PED-error-epsilon-service.png}\hspace{3ex}
@@ -760,43 +791,20 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 
 
 \stitle{Analyses of \lsa algorithms.}
+It is hard to tell regular conclusions of query errors of \lsa algorithms. Roughly speaking, algorithms \intersec using \dad and \squishe using \sed have obviously smaller query errors than other algorithms using the same distance metrics, partially because they have poorer compression ratios; and the average query errors of algorithms \operb and \siped($\epsilon$) using \ped will remarkablely increase when the error bounds are larger then certain value, \eg $40$ meters, in dataset \mopsi, because they may include points that lead to very large query errors. 
+
+
+%Moreover, algorithm \siped using \ped has larger spatio-temporal query errors than \dpa using \ped because \siped applies a greedy policy that tries to include as many points into a line segment, and some of these ``extra-points'' lead to large errors.
+
+%(1) For batch algorithms, algorithm \dpa using \ped usually have better spatio-temporal query errors than \tpa using \ped in all datasets, and they have comparable query errors using \sed and \dad in all datasets.
 
 
 \stitle{Analyses of distance metrics.}
-Given the same error bound, the average errors of these queries on compressed trajectories using \ped are obvious larger than those using \sed, and they are typically larger than error bounds. Moreover, algorithm \siped using \ped has larger spatio-temporal query errors than \dpa using \ped because \siped applies a greedy policy that tries to include as many points into a line segment, and some of these ``extra-points'' lead to large errors.
-% due to some points having extraordinary large errors
+Given the same error bound, the average query errors of algorithms using \ped are enormously larger than those using \sed, brought by some points having extremely large query errors, and they are typically larger than error bounds. 
+Similar as \ped, algorithms using \dad also lead to enormously large query errors. 
+Indeed, the temporal information is lost when using \ped and \dad, thus, they are not suitable for compressing trajectories in the context that spatio-temporal queries will run on the simplified trajectories.
 
 
-
-
-\begin{table}[bt!]
-	%\renewcommand{\arraystretch}{1.2}
-	\vspace{-1ex}
-	\caption{\small The max errors of spatio-temporal queries on compressed trajectories: fixed $\epsilon=40m$.}
-	\centering
-	\scriptsize
-	\begin{tabular}{|l|c|c|c|l|c|c|c|}
-		\hline
-		\bf{Algorithm (PED)}  &\ucar &\geolife &\mopsi & \bf{Algorithm (DAD)}  &\ucar &\geolife &\mopsi \\
-		\hline
-		{\dpa} &	$3.48 \times 10^6$ & $1.83 \times 10^6$ &	$5.03 \times 10^6$	& \dpa	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $4.87 \times 10^5$ \\
-		\hline
-		{\tpa} &	$3.51 \times 10^6$ & $1.91 \times 10^6$ &	$5.03 \times 10^6$	& \tpa	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $5.01 \times 10^5$ \\
-		\hline
-		{\bqsa} &	$3.51 \times 10^6$ & $1.94 \times 10^6$ &	$1.40 \times 10^6$	& \opwa	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $5.01 \times 10^5$ \\
-		\hline
-		{\operb} &	$3.50 \times 10^6$ & $1.56 \times 10^6$ &	$1.39 \times 10^6$	& \interval	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $5.01 \times 10^5$ \\
-		\hline
-		{\siped($\epsilon$)} &	$3.51 \times 10^6$ & $1.02 \times 10^6$ &	$1.39 \times 10^6$	& \intersec	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $4.18 \times 10^5$ \\
-		\hline
-		{\siped($\epsilon/2$)} &	$3.50 \times 10^6$ & $1.02 \times 10^6$ &	$1.39 \times 10^6$	& & & & \\
-		\hline
-	\end{tabular}
-	\label{tab:query-me}
-	\vspace{0.5ex}
-	\\{Note that all algorithms using \sed have the max query errors not more than the error bound, \ie $\epsilon=40m$ here.}
-	\vspace{-2ex}
-\end{table}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{\textcolor{blue}{Evaluation and Analyses of Data Aging}}
