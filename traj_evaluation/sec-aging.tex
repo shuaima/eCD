@@ -12,7 +12,7 @@ Note that if we get $\overline{\mathcal{T}}_1$ and $\overline{\mathcal{T}}_2$ by
 	
 \stitle{Aging friendly \cite{Cao:Spatio}}. {A \lsa algorithm $\mathcal{A}$ is aging friendly with respect to a distance metric $\mathcal{D}$ if for every $\epsilon_1$ and every $\epsilon_2$ such that $\epsilon_1 < \epsilon_2$, and for every trajectory $\dddot{\mathcal{T}}$, $\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{D})= \mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$.}
 
-Cao et al. proved in \cite{Cao:Spatio} that ``the top-down algorithm \dpa is aging friendly \wrt~\ped and \sed" on the premise that the second run of algorithm \dpa takes as input the whole simplified trajectory produced by the first run. 
+Cao et al. also proved in \cite{Cao:Spatio} that ``the top-down algorithm \dpa is aging friendly \wrt~\ped and \sed" on the premise that the second run of algorithm \dpa takes as input the whole simplified trajectory produced by the first run. 
 %, including the same start and end points of trajectories. 
 We then discuss the error between $\overline{\mathcal{T}}_2$ and $\dddot{\mathcal{T}_0}$.
 
@@ -40,11 +40,14 @@ We then discuss the error between $\overline{\mathcal{T}}_2$ and $\dddot{\mathca
 	Combining (1) and (2), we have $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$, whose max error to the original trajectory $\dddot{\mathcal{T}}$ is $\epsilon_1$.
 \end{proof}
 
-\todo{why dp using ped and sed is aging friendly? dp using dad has different performance}
+%From the above we can find that the {aging friendliness} of algorithm \dpa using \ped or \sed is related to the {batch and top-down nature} of \dpa.
+% \ie suppose in the first run, it splits $\dddot{\mathcal{T}_0}$ into two sub-trajectories by point $P_i$, then $P_i$ is saved in $\overline{\mathcal{T}}_1$, and it is the first splitting point in the second run taking $\overline{\mathcal{T}}_1$ as input. 
+%However, when using \dad, the point $P_i$ may be not the splitting point in the second run as \dad is the direction deviation between two line segments and ...
+
 
 \begin{theorem}
 	\label{theo-aging-dp-dad}
-	The top-down algorithm \dpa is not aging friendly \wrt~\dad, and given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, for distance metric $\mathcal{D}$ of \dad, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is $\epsilon_1 + \epsilon_2$.
+	The top-down algorithm \dpa is not aging friendly \wrt~\dad, and given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \dad), \epsilon_2, \dad)$ is $\epsilon_1 + \epsilon_2$.
 \end{theorem}
 
 \begin{proof}
