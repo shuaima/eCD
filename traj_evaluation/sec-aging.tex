@@ -12,14 +12,21 @@ We first discuss the relationship between $\overline{\mathcal{T}}_1$ and $\overl
 	
 \stitle{Aging friendly \cite{Cao:Spatio}}. {A \lsa algorithm $\mathcal{A}$ is aging friendly with respect to a distance metric $\mathcal{D}$ if for every $\epsilon_1$ and every $\epsilon_2$ such that $\epsilon_1 < \epsilon_2$, and for every trajectory $\dddot{\mathcal{T}}$, $\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{D})= \mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$.}
 
+Cao et al. also proved that ``the top-down algorithm \dpa is aging friendly \wrt~\ped and \sed\cite{Cao:Spatio}," on the premise that the second run of algorithm \dpa takes as input the whole simplified trajectory produced by the first run.%, including the same start and end points of trajectories. 
+
+%\cite{Cao:Spatio} did not discuss \dad, 
 
 \begin{theorem}
-	\label{theo-aging-tp}
-	The top-down algorithm \dpa is aging friendly \wrt~\ped and \sed\cite{Cao:Spatio}.
+	\label{theo-aging-tp-dad}
+	The top-down algorithm \dpa is not aging friendly \wrt~\dad.
 \end{theorem}
+
+\begin{proof}
+	\todo{}
 	
-Though \cite{Cao:Spatio} did not discuss \dad, it is easy to find that algorithm \dpa is aging friendly \wrt~\dad too. 
-Also note that \dpa is aging friendly on the premise that the second run of \dpa should take as input the whole simplified trajectory produced by the first run, including the same start and end points of trajectories. 
+\end{proof}
+
+
 We next discuss the aging friendliness of other algorithms.
 
 \begin{figure}
@@ -76,7 +83,7 @@ In this case, ${\tpa}(\dddot{\mathcal{T}}, 6, \ped) \ne {\tpa}(\tpa(\dddot{\math
 
 \begin{proof}
 	For online algorithm \squishe, it only supports \sed and it is not aging friendly \wrt~\sed.
-	For other online and one-pass algorithms, though they apply different distance checking approaches, they run in a common incremental manner, \ie they incrementally read data points until they can not represent those read points by one line segment, then they output the simplified sub-trajectory and continue to process the rest data points. We next construct counter examples to show an incremental algorithm $\mathcal{A}$ is not aging friendly.
+	For other online and one-pass algorithms, though they apply different distance checking approaches, they run in a common incremental manner, \ie they incrementally read data points until they can not represent those read points by one line segment, then they output the simplified sub-trajectory and continue to process the rest data points. We next construct counter examples to show that an incremental algorithm $\mathcal{A}$ is not aging friendly.
 	
 	\underline{(1) ${\mathcal{A}}(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{D})$}. As shown in Figure~\ref{fig:aging-incre}-(1)(3)(5), the algorithm $\mathcal{A}$ incrementally reads $\{P_0, P_1,\dddot, P_5\}$ and finds they can be represented by line segment $\overline{P_0P_4}$, thus the process progresses. Then, after point $P_6$ is read, it finds that these points can not be represented by any line segment, hence $\overline{P_0P_5}$ is output. Finally, the algorithm outputs $\{P_0, P_5, P_6\}$.
 	
@@ -95,7 +102,7 @@ We then discuss the error between $\overline{\mathcal{T}}_2$ and $\dddot{\mathca
 
 \begin{theorem}
 	\label{theo-aging-dp}
-	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, for every distance metric $\mathcal{D}$ of \ped, \sed and \dad, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is $max\{\epsilon_1, \epsilon_2\}$.
+	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, for every distance metric $\mathcal{D}$ of \ped and \sed, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is $max\{\epsilon_1, \epsilon_2\}$.
 \end{theorem}
 
 \begin{proof}
@@ -118,6 +125,14 @@ We then discuss the error between $\overline{\mathcal{T}}_2$ and $\dddot{\mathca
 \end{proof}
 
 
+\begin{theorem}
+	\label{theo-aging-dp-dad}
+	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, for distance metric $\mathcal{D}$ of \dad, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is $\epsilon_1 + \epsilon_2$.
+\end{theorem}
+
+\begin{proof}
+	\todo{}
+\end{proof}
 
 
 \begin{theorem}
