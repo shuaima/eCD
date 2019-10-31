@@ -1,59 +1,49 @@
 
 \textcolor{blue}{\section{Aging of trajectories}}
+\label{sec-aging}
 
 Suppose we first compressed a trajectory $\dddot{\mathcal{T}_0}$ using an \lsa algorithm $\mathcal{A}$ with error bound $\epsilon_1$ to $\overline{\mathcal{T}}_1$, then as time progresses, we need a coarser trajectory $\overline{\mathcal{T}}_2$ derived from $\overline{\mathcal{T}}_1$. 
 What is the relationship among $\overline{\mathcal{T}}_2$, $\overline{\mathcal{T}}_1$ and $\dddot{\mathcal{T}_0}$? And what is the right way to get the coarser trajectory $\overline{\mathcal{T}}_2$?
 %
-This section is to answer these questions from the views of friendliness which was defined in \cite{Cao:Spatio} but seldom discussed in other works.
+This section is to answer these questions from the views of friendliness \cite{Cao:Spatio} and error.
 Note that if we get $\overline{\mathcal{T}}_1$ and $\overline{\mathcal{T}}_2$ by optimal algorithms \wrt error bounds $\epsilon_1$ and $\epsilon_2$ in turn, then $\overline{\mathcal{T}}_2$ may not be optimal of $\dddot{\mathcal{T}_0}$ \wrt any error bound \cite{Cao:Spatio}. Thus, in this section, we let alone the optimal algorithms.
 
-%\subsection{Friendliness of Data Aging}
-%We discuss the relationship between $\overline{\mathcal{T}}_1$ and $\overline{\mathcal{T}}_2$ from a view of friendliness which was defined in \cite{Cao:Spatio} but seldom discussed in other works.
+\subsection{Friendliness of Data Aging}
+We first discuss the relationship between $\overline{\mathcal{T}}_1$ and $\overline{\mathcal{T}}_2$ from a view of friendliness which was defined in \cite{Cao:Spatio} but seldom discussed in other works.
 	
 \stitle{Aging friendly \cite{Cao:Spatio}}. {A \lsa algorithm $\mathcal{A}$ is aging friendly with respect to a distance metric $\mathcal{D}$ if for every $\epsilon_1$ and every $\epsilon_2$ such that $\epsilon_1 < \epsilon_2$, and for every trajectory $\dddot{\mathcal{T}}$, $\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{D})= \mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$.}
 
-Cao et al. also proved in \cite{Cao:Spatio} that ``the top-down algorithm \dpa is aging friendly \wrt~\ped and \sed" on the premise that the second run of algorithm \dpa takes as input the whole simplified trajectory produced by the first run. 
-%, including the same start and end points of trajectories. 
-We then discuss the error between $\overline{\mathcal{T}}_2$ and $\dddot{\mathcal{T}_0}$.
-
-\begin{theorem}
-	\label{theo-aging-dp}
-	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, for every distance metric $\mathcal{D}$ of \ped and \sed, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is $max\{\epsilon_1, \epsilon_2\}$.
-\end{theorem}
-
-\begin{proof}
-	For $\epsilon_2 \ge \epsilon_1$, as proved in \cite{Cao:Spatio}, $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{D})$, which has the max error of $\epsilon_2$ to the original trajectory $\dddot{\mathcal{T}}$.
-	
-	For $\epsilon_1 > \epsilon_2$, we will first prove $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$ by total induction on the number of points of \trajec{T}.
-	
-	(1)  For a trajectory \trajec{T} with one or two points ($n=1$ or $n=2$), the simplified trajectories with any $\epsilon$ are sure identical to the original trajectory. 
-	Consider a trajectory \trajec{T} =	$[P_0, P_1, P_2]$ ($n = 3$),
-	if the distance from $P_1$ to $\overline{P_0P_2}$ is less than $\epsilon_1$, then $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}) = [P_0, P_2]$. Obviously $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}))$ is $[P_0, P_2]$ too;	 
-	if the distance from $P_1$ to $\overline{P_0P_2}$ is larger than $\epsilon_1$, then $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})=\dddot{\mathcal{T}}$, and $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{D})=\dddot{\mathcal{T}}$.
-	
-	(2) Assume it is true for every trajectory \trajec{T} having $n$, $(n \ge 3)$, points.
-	Consider a trajectory with $n+1$ points. Let $d_{max}$ denote the maximum distance between point $P_i$, $i \in [0,n]$, and the line segment $\overline{P_0P_{n}}$. 
-	If $d_{max}<\epsilon_1$, then $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})=[P_0, P_{n}]$, and $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP([P_0, P_{n}], \epsilon_2, \mathcal{D})=[P_0, P_{n}]$.
-	If $d_{max} > \epsilon_1$, then in $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$, point $P_i$ will split the trajectory \trajec{T} into two sub-trajectories, \ie $[P_0, ..., P_i]$ and $[P_{i}, ..., P_{n}]$, and continue to simplify each sub-trajectories. Hence, the result of $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$ is the union of $DP([P_0, ..., P_i], \epsilon_1, \mathcal{D})$ and $DP([P_i, ..., P_n], \epsilon_1, \mathcal{D})$.
-	Obviously, the points $P_0$, $P_i$ and $P_n$ are in the simplified trajectory of $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$, and $P_i$ is still the first spiting point of the \dpa algorithm taking the simplified trajectory and $\epsilon_2$ as input. Hence, $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is the union of $DP(DP([P_0, ..., P_i], \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ and $DP(DP([P_i, ..., P_n], \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$. By the assumption, we have $DP(DP([P_0, ..., P_i], \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP([P_0, ..., P_i], \epsilon_1, \mathcal{D})$ and $DP(DP([P_i, ..., P_n], \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP([P_i, ..., P_n], \epsilon_1, \mathcal{D})$. Thus, $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$.
-	
-	Combining (1) and (2), we have $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$, whose max error to the original trajectory $\dddot{\mathcal{T}}$ is $\epsilon_1$.
-\end{proof}
-
-%From the above we can find that the {aging friendliness} of algorithm \dpa using \ped or \sed is related to the {batch and top-down nature} of \dpa.
-% \ie suppose in the first run, it splits $\dddot{\mathcal{T}_0}$ into two sub-trajectories by point $P_i$, then $P_i$ is saved in $\overline{\mathcal{T}}_1$, and it is the first splitting point in the second run taking $\overline{\mathcal{T}}_1$ as input. 
-%However, when using \dad, the point $P_i$ may be not the splitting point in the second run as \dad is the direction deviation between two line segments and ...
+Cao et al. also proved in \cite{Cao:Spatio} that ``the top-down algorithm \dpa is aging friendly \wrt~\ped and \sed" on the premise that the second run of algorithm \dpa takes as input the whole simplified trajectory produced by the first run. However, when \dpa is coupling with \dad, things are changed.
 
 
 \begin{theorem}
 	\label{theo-aging-dp-dad}
-	The top-down algorithm \dpa is not aging friendly \wrt~\dad, and given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \dad), \epsilon_2, \dad)$ is $\epsilon_1 + \epsilon_2$.
+	The top-down algorithm \dpa is not aging friendly \wrt~\dad.
 \end{theorem}
 
 \begin{proof}
-	\todo{}
+	We will prove the theorem by construction.
+	As shown in Figure~\ref{fig:aging-dp-dad}, we let error bounds $\epsilon_1 =30^o$ and $\epsilon_2=45^o$.
+	
+	\underline{(1) ${\dpa}(\dddot{\mathcal{T}}, 45^o, \dad)$}. It finds that line segment $\overline{P_1P_2}$ has the largest angular deviation to line segment $\overline{P_0P_4}$ which is also larger than the error bound $45^o$, hence it uses point $P_2$ as the splitting point and splits the original trajectory to $\{P_0, P_1, P_2\}$ and $\{P_2, P_3, P_4\}$. At last, it outputs three points $\{P_0, P_2, P_4\}$.
+	
+	\underline{(2) ${\dpa}(\dpa(\dddot{\mathcal{T}}, 30^o, \dad), 45^o, \dad)$}. In the first round ($\epsilon_1=30^o$), the original trajectory is compressed to three points $\{P_0, P_2, P_4\}$, and in the second round ($\epsilon_2=45^o$), because line segments  $\overline{P_0P_2}$ and $\overline{P_2P_4}$ both have angular deviations to line segment $\overline{P_0P_4}$ less than $45^o$, it is finally compressed to two points $\{P_0, P_4\}$.
+	
+	In this case, ${\dpa}(\dddot{\mathcal{T}}, 45^o, \dad) \ne {\dpa}(\dpa(\dddot{\mathcal{T}}, 30^o, \dad), 45^o, \dad)$. Thus, the \dpa algorithm is not aging friendly \wrt~\dad.
 \end{proof}
 
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.66]{Figures/Fig-aging-dp.png}
+	
+	\caption{\small A counter example of the aging friendliness of \dpa using \dad, where (1) the original trajectory is compressed using $\epsilon_2=45^o$ to three points $\{P_0, P_2, P_4\}$, and (2) the original trajectory is first compressed using $\epsilon_1=30^o$ to three points $\{P_0, P_2, P_4\}$, then compressed using $\epsilon_2=45^o$ to two points $\{P_0, P_4\}$. }
+	\vspace{-1ex}
+	\label{fig:aging-dp-dad}
+\end{figure}
+
+%From the above we can find that the {aging friendliness} of algorithm \dpa using \ped or \sed is related to the {batch and top-down nature} of \dpa.
+% \ie suppose in the first run, it splits $\dddot{\mathcal{T}_0}$ into two sub-trajectories by point $P_i$, then $P_i$ is saved in $\overline{\mathcal{T}}_1$, and it is the first splitting point in the second run taking $\overline{\mathcal{T}}_1$ as input. 
+%However, when using \dad, the point $P_i$ may be not the splitting point in the second run as \dad is the direction deviation between two line segments and ...
 
 
 We next discuss the aging friendliness of other algorithms.
@@ -62,7 +52,7 @@ We next discuss the aging friendliness of other algorithms.
 	\centering
 	\includegraphics[scale=0.66]{Figures/Fig-aging-pavlidis.png}
 
-	\caption{\small A counter example of the aging friendliness of algorithm \tpa, where (1) the original trajectory is compressed using $\epsilon_2=6$ to three points $\{P_0, P_3, P_4\}$; (2) the original trajectory is first compressed using $\epsilon_1=3$ to four points $\{P_0, P_1, P_3, P_4\}$, then compressed using $\epsilon_2=6$ to two points $\{P_0, P_4\}$. }
+	\caption{\small A counter example of the aging friendliness of algorithm \tpa, where (1) the original trajectory is compressed using $\epsilon_2=6$ to three points $\{P_0, P_3, P_4\}$, and (2) the original trajectory is first compressed using $\epsilon_1=3$ to four points $\{P_0, P_1, P_3, P_4\}$, then compressed using $\epsilon_2=6$ to two points $\{P_0, P_4\}$. }
 	\vspace{-1ex}
 	\label{fig:aging-pavlidis}
 \end{figure}
@@ -77,9 +67,9 @@ The bottom-up algorithm \tpa is not aging friendly \wrt~\ped, \sed or \dad.
 We will prove the theorem by construction.
 As shown in Figure~\ref{fig:aging-pavlidis}, we let error bounds $\epsilon_1 =3$ and $\epsilon_2=6$, and without losing generality, we use \ped as the distance metric.
 
-\underline{(1) ${\tpa}(\dddot{\mathcal{T}}, 6, \ped)$}. In the first step, it merges $\overline{P_1P_2}$ and $\overline{P_2P_3}$ to $\overline{P_1P_3}$ as the merging of them has the lowest cost of $2$, the distance from point $P_2$ to line segment $\overline{P_1P_3}$; then it merges $\overline{P_0P_1}$ and $\overline{P_1P_3}$ to $\overline{P_0P_3}$ with the lowest cost of $4.5$, the distance from point $P_1$ to line segment $\overline{P_0P_3}$; at last, because the merging of $\overline{P_0P_3}$ and $\overline{P_3P_4}$ has a cost of $7$, the distance from point $P_2$ to line segment $\overline{P_0P_4}$, which is larger than the error bound of $6$, it outputs three points $\{P_0, P_3, P_4\}$.
+\underline{(1) ${\tpa}(\dddot{\mathcal{T}}, 6, \ped)$}. It first merges $\overline{P_1P_2}$ and $\overline{P_2P_3}$ to $\overline{P_1P_3}$ as the merging of them has the lowest cost of $2$, the distance from point $P_2$ to line segment $\overline{P_1P_3}$; then it merges $\overline{P_0P_1}$ and $\overline{P_1P_3}$ to $\overline{P_0P_3}$ with the lowest cost of $4.5$, the distance from point $P_1$ to line segment $\overline{P_0P_3}$; at last, because the merging of $\overline{P_0P_3}$ and $\overline{P_3P_4}$ has a cost of $7$, the distance from point $P_2$ to line segment $\overline{P_0P_4}$, which is larger than the error bound of $6$, it outputs three points $\{P_0, P_3, P_4\}$.
 
-\underline{(2) ${\tpa}(\tpa(\dddot{\mathcal{T}}, 3, \ped), 6, \ped)$}. In the first round ($\epsilon_1=3$), the original trajectory is compressed to four points $\{P_0, P_1, P_3, P_4\}$, and in the second round ($\epsilon_1=6$), because all points in the result trajectory $\{P_0, P_1, P_3, P_4\}$ have distances to line segment $P_0P_4$ less than $6$, it is finally compressed to two points $\{P_0, P_4\}$.
+\underline{(2) ${\tpa}(\tpa(\dddot{\mathcal{T}}, 3, \ped), 6, \ped)$}. In the first round ($\epsilon_1=3$), the original trajectory is compressed to four points $\{P_0, P_1, P_3, P_4\}$, and in the second round ($\epsilon_2=6$), because all points in the result trajectory $\{P_0, P_1, P_3, P_4\}$ have distances to line segment $P_0P_4$ less than $6$, it is finally compressed to two points $\{P_0, P_4\}$.
 
 In this case, ${\tpa}(\dddot{\mathcal{T}}, 6, \ped) \ne {\tpa}(\tpa(\dddot{\mathcal{T}}, 3, \ped), 6, \ped)$. Thus, the \tpa algorithm is not aging friendly \wrt~\ped.
 \textcolor{blue}{Similarly, we can prove that \tpa is not aging friendly \wrt~ \sed or \dad. Hence, we have the conclusion.}
@@ -121,12 +111,45 @@ In this case, ${\tpa}(\dddot{\mathcal{T}}, 6, \ped) \ne {\tpa}(\tpa(\dddot{\math
 	Combining (1) and (2), it is clear that the incremental algorithms are not aging friendly \wrt~distance metric \ped, \sed or \dad.
 \end{proof}
 
-\todo{From the above we can find that only algorithm \dpa is aging friendly, others are not. Indeed, {aging friendly} is the result of the {specific nature}, \ie batch and top-down, of algorithm \dpa.}
+%\todo{From the above we can find that only algorithms \dpa using \ped and \sed are aging friendly, others are not. Indeed, {aging friendly} is the result of the {specific nature}, \ie batch and top-down, of algorithm \dpa.}
 % pretty and rare feature of
 
+\subsection{Error of data aging}
+We next discuss the error between $\overline{\mathcal{T}}_2$ and $\dddot{\mathcal{T}_0}$.
+
+\begin{theorem}
+	\label{theo-aging-dp}
+	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, for every distance metric $\mathcal{D}$ of \ped and \sed, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is $max\{\epsilon_1, \epsilon_2\}$.
+\end{theorem}
+
+\begin{proof}
+	For $\epsilon_2 \ge \epsilon_1$, as proved in \cite{Cao:Spatio}, $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{D})$, which has the max error of $\epsilon_2$ to the original trajectory $\dddot{\mathcal{T}}$.
+	
+	For $\epsilon_1 > \epsilon_2$, we will first prove $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$ by total induction on the number of points of \trajec{T}.
+	
+	(1)  For a trajectory \trajec{T} with one or two points ($n=1$ or $n=2$), the simplified trajectories with any $\epsilon$ are sure identical to the original trajectory. 
+	Consider a trajectory \trajec{T} =	$[P_0, P_1, P_2]$ ($n = 3$),
+	if the distance from $P_1$ to $\overline{P_0P_2}$ is less than $\epsilon_1$, then $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}) = [P_0, P_2]$. Obviously $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}))$ is $[P_0, P_2]$ too;	 
+	if the distance from $P_1$ to $\overline{P_0P_2}$ is larger than $\epsilon_1$, then $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})=\dddot{\mathcal{T}}$, and $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{D})=\dddot{\mathcal{T}}$.
+	
+	(2) Assume it is true for every trajectory \trajec{T} having $n$, $(n \ge 3)$, points.
+	Consider a trajectory with $n+1$ points. Let $d_{max}$ denote the maximum distance between point $P_i$, $i \in [0,n]$, and the line segment $\overline{P_0P_{n}}$. 
+	If $d_{max}<\epsilon_1$, then $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})=[P_0, P_{n}]$, and $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP([P_0, P_{n}], \epsilon_2, \mathcal{D})=[P_0, P_{n}]$.
+	If $d_{max} > \epsilon_1$, then in $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$, point $P_i$ will split the trajectory \trajec{T} into two sub-trajectories, \ie $[P_0, ..., P_i]$ and $[P_{i}, ..., P_{n}]$, and continue to simplify each sub-trajectories. Hence, the result of $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$ is the union of $DP([P_0, ..., P_i], \epsilon_1, \mathcal{D})$ and $DP([P_i, ..., P_n], \epsilon_1, \mathcal{D})$.
+	Obviously, the points $P_0$, $P_i$ and $P_n$ are in the simplified trajectory of $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$, and $P_i$ is still the first spiting point of the \dpa algorithm taking the simplified trajectory and $\epsilon_2$ as input. Hence, $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is the union of $DP(DP([P_0, ..., P_i], \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ and $DP(DP([P_i, ..., P_n], \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$. By the assumption, we have $DP(DP([P_0, ..., P_i], \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP([P_0, ..., P_i], \epsilon_1, \mathcal{D})$ and $DP(DP([P_i, ..., P_n], \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP([P_i, ..., P_n], \epsilon_1, \mathcal{D})$. Thus, $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$.
+	
+	Combining (1) and (2), we have $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$, whose max error to the original trajectory $\dddot{\mathcal{T}}$ is $\epsilon_1$.
+\end{proof}
 
 
+\begin{theorem}
+	\label{theo-aging-dp-dad}
+	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \dad), \epsilon_2, \dad)$ is $\epsilon_1 + \epsilon_2$.
+\end{theorem}
 
+\begin{proof}
+	\todo{}
+\end{proof}
 
 
 \begin{theorem}
