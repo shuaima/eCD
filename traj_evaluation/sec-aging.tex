@@ -41,13 +41,8 @@ Cao et al. also proved in \cite{Cao:Spatio} that ``the top-down algorithm \dpa i
 	\label{fig:aging-dp-dad}
 \end{figure}
 
-The \dpa using \dad is different with \ped and \sed in that \dad is the deviation between two line segments rather than the deviation between a point and a line segment. For example, in Figure \ref{fig:aging-dp-dad}-2, the angular deviations of $\overline{P_1P_2}$ and $\overline{P_0P_2}$ to line segment $\overline{P_0P_4}$ are certainly different though they pass through the same point $P_2$, thus, in the first round of run ($\epsilon_1=30^o$), the point $P_2$ serves as a splitting point while in the second round of run ($\epsilon_2=45^o$), it is no more a splitting point. This difference is the key that lets \dpa using \dad not aging friendly.
-
-%From the above we can find that the {aging friendliness} of algorithm \dpa using \ped or \sed is related to the {batch and top-down nature} of \dpa.
-% \ie suppose in the first run, it splits $\dddot{\mathcal{T}_0}$ into two sub-trajectories by point $P_i$, then $P_i$ is saved in $\overline{\mathcal{T}}_1$, and it is the first splitting point in the second run taking $\overline{\mathcal{T}}_1$ as input. 
-%However, when using \dad, the point $P_i$ may be not the splitting point in the second run as \dad is the direction deviation between two line segments and ...
-
-
+The \dpa using \dad is different with \ped and \sed in that \dad is the deviation between two line segments rather than the deviation between a point and a line segment. For example, in Figure \ref{fig:aging-dp-dad}-(2), the angular deviations of line segments $\overline{P_1P_2}$ and $\overline{P_0P_2}$ to line segment $\overline{P_0P_4}$ are certainly different though they pass through the same point $P_2$, thus, in the first round of run ($\epsilon_1=30^o$), the point $P_2$ serves as a splitting point while in the second round of run ($\epsilon_2=45^o$), it is no more a splitting point. This difference is the key that lets \dpa using \dad not aging friendly.
+%
 We next discuss the aging friendliness of other algorithms.
 
 \begin{figure}
@@ -145,23 +140,13 @@ We next discuss the error between $\overline{\mathcal{T}}_2$ and $\dddot{\mathca
 
 
 \begin{theorem}
-	\label{theo-aging-dp-dad}
-	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \dad), \epsilon_2, \dad)$ is $\epsilon_1 + \epsilon_2$.
-\end{theorem}
-
-\begin{proof}
-	\todo{}
-\end{proof}
-
-
-\begin{theorem}
 	\label{theo-aging-distance}
-	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, for every error bounded and non-optimal \lsa algorithm $\mathcal{A}$ other than \dpa and for every distance metric $\mathcal{D}$ of \ped, \sed and \dad, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is $\epsilon_1+ \epsilon_2$.
+	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, for any non-optimal \lsa algorithm $\mathcal{A}$ and distance metric $\mathcal{D}$ of \ped, \sed and \dad other than \dpa using \ped and \sed, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is $\epsilon_1+ \epsilon_2$.
 \end{theorem}
 
 \begin{proof} 	
 	(1) We first prove that the  error bound between them is not less than $\epsilon_1+ \epsilon_2$.
-	If $\mathcal{A}$ is a bottom-up algorithm, then from Figure~\ref{fig:aging-pavlidis}-(2) we can find that the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is not less than $\epsilon_1+ \epsilon_2$.
+	If $\mathcal{A}$ is a top-down algorithm using \dad or a bottom-up algorithm using any distance metric, then from Figures~\ref{fig:aging-dp-dad}-(2) and Figure~\ref{fig:aging-pavlidis}-(2) we can find that the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is not less than $\epsilon_1+ \epsilon_2$.
 	If $\mathcal{A}$ is an incremental algorithm, either online or one-pass, then from Figure~\ref{fig:aging-incre} we also have the conclusion.
 	
 	(2) We next prove that the error bound between them is not more than $\epsilon_1+ \epsilon_2$. Suppose a point $P_k$ is represented by line segment $\overline{P_iP_j}$ with error bound $\epsilon_1$, and points $P_i$ and $P_j$ are further represented by line segment $\overline{P_sP_t}$ with error bound $\epsilon_2$ (Figure~\ref{fig:aging-error}).
