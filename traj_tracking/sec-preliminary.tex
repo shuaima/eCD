@@ -32,9 +32,37 @@ dad (..., another distance metric)
 
 \subsection{Position tracking in circular areas}
 
-position tracking: ldr
+Position tracking aims at informing the MOD about the current position of an object, \eg ships, vehicles and so on, and currently the most simple and nevertheless efficient position tracking protocols is linear dead reckoning.
 
-summary: excepting position -> sed; circular area the excepting position.
+\eat{
+A. Leonhardi and K. Rothermel. A Comparison of Protocols
+for Updating Location Information. Cluster Comput-
+ing: The Journal of Networks, Software Tools and Ap-
+plications, 4(4):355{367, 2001}
+	
+	30. A. Civilis, C. S. Jensen, and S. Pakalnis. Techniques for
+	Ecient Road-Network-Based Tracking of Moving Objects.
+	IEEE Trans. on Knowledge and Data Engineering
+	(TKDE), 17(5):698{712, 2005.}
+		
+		31. O. Wolfson, A. P. Sistla, S. Chamberlain, and Y. Yesha.
+		Updating and Querying Databases that Track Mobile
+		Units. Distr. and Parallel Databases, 7(3):257{287, 1999.}
+
+Efficient Real-Time Trajectory Tracking
+Ralph Lange Frank Durr Kurt Rothermel
+The VLDB Journal, Volume 20, Number 5 (2011), 641{642}
+}
+
+Linear dead-reckoning (\ldr) is essentially an agreement between a given moving object and the MOD server whose purpose is to tracking a moving object with less communication between them at an expense of imprecise of the position within an error bound $\epsilon$.  
+%
+Initially, the moving object sends its initial location $P_s$ and the expected velocity $\vv{v}$
+(including value and direction) to the MOD server, meaning that it will move from $P_s$ along the direction of $\vv{v}$ at a speed of $|\vv{v}|$, such that the expecting position of the object at time $t>P_s.t$ can be extrapolated from them as long as no subsequent update is sent to the MOD server.
+%
+The moving object periodically collects its actual location by sampling its on-board sensor, \eg GPS, and compares the actual location of time $t$ with the expecting location of time $t$ extrapolated from the initial location $P_s$ and the velocity $\vv{v}$. If its actual location at a given time $t$ does not deviate by more than $\epsilon$ from the expecting location $P$ of $t$, then the object does not transmit any new updates to MOD, otherwise, an update of (location $P$, velocity $\vv{v}$) will be sent.
+%
+Here the expecting location/point is indeed the synchronous data point \wrt of time $t$, and the deviation from the actual location to the expecting location is sure the synchronized Euclidean distance (\sed) as defined above. We can also find that the \ldr mechanism ensures that no message is sent as long as the moving object is in the circular area around the excepting location of time $t$ with a radius of $\epsilon$, \ie~\emph{\ldr tracks the position of a moving object in a circular area.}
+
 
 \subsection{Trajectory tracking in circular areas}
 summary: 
