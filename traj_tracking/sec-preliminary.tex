@@ -32,7 +32,7 @@ dad (..., another distance metric)
 
 \subsection{Position tracking in circular areas}
 
-Position tracking aims at informing the MOD about the current position of an object, \eg ships, vehicles and so on. Currently, the most simple yet efficient position tracking protocols is linear dead reckoning (\ldr) \cite{Lange:Tracking, Leonhardi:Comparison,Civilis:Techniques,Wolfson:Databases}, which is essentially an agreement between a given moving object and the MOD server whose purpose is to tracking a moving object with less communication between them at an expense of imprecise of position within an error bound $\epsilon$.  
+Position tracking aims at informing the MOD about the current position of an object. Currently, the most simple yet efficient position tracking protocols is linear dead reckoning (\ldr) \cite{Lange:Tracking, Leonhardi:Comparison, Civilis:Techniques, Wolfson:Databases}, which is essentially an agreement between a given moving object and the MOD server whose purpose is to tracking a moving object with less communication between them at an expense of imprecise of position within an error bound $\epsilon$.  
 %
 Initially, the moving object sends its initial location $P_s$ and the expected velocity $\vv{v}$
 (including value and direction) to the MOD server, meaning that it will move from $P_s$ along the direction of $\vv{v}$ at a speed of $|\vv{v}|$, such that the expecting position of the object at time $t>t_s$ can be extrapolated from them as long as no subsequent update is sent to the MOD server.
@@ -42,18 +42,15 @@ Then the moving object periodically collects its actual location by sampling its
 By this way, though the MOD server receives less position information about a moving object, it still alway knows the current position of the moving object with a bounded error of $\epsilon$.
 
 
-Note the expecting location/point is indeed the synchronous data point \wrt of time $t$, and the deviation from the actual location to the expecting location is sure the synchronized Euclidean distance (\sed) as defined above. We can also find that the \ldr mechanism ensures that no message is sent as long as the moving object is in the circular area around the excepting location of time $t$ with a radius of $\epsilon$, \ie~\emph{\ldr tracks the position of a moving object in a circular area.}
+Note the expecting location is indeed the synchronous data point \wrt of time $t$, and the deviation from the actual location to the expecting location is sure the synchronized Euclidean distance (\sed) as defined above. We can also find that the \ldr mechanism ensures that no message is sent as long as the moving object is in the circular area around the excepting location of time $t$ with a radius of $\epsilon$, \ie~\emph{\ldr always tracks the position of a moving object in a floating circular area.}
 
 
 \subsection{Trajectory tracking in circular areas}
-summary: 
-where line simplification is ...
+Though \ldr is originally used to track the position of a moving object, Trajcevski et al. in \cite{Trajcevski:LDRH} proved that \ldr with some small variations, named \ldrh in \cite{Lange:Tracking}, can also be used to compress trajectories. 
+\ldrh supports both position tracking and trajectory simplification, thus, it is a trajectory tracking algorithm.
 
-ldrh: (1). new start point, the point before the deviation point. (2). half epsilon
-(The pre-set and solid velocity, and half epsilon make it have poor compression ratio)
-
-%grts
-
+Given error bound $\epsilon$, \ldrh runs the same routine as \ldr except that (1) it uses half $\epsilon$ as the threshold in distance checking; (2) when the current point $P_k$ has a \sed larger than $\epsilon/2$ to its expecting location (synchronous data point), it sends the preview point $P_{k-1}$ and a new $\vv{v}$ to the MOD server and continues trajectory tracking taking $P_{k-1}$ as the new start point. \ldrh is simple and efficient, having a linear time and a constant space. However, it has a poor effectiveness in terms of compression ratio, as the half $\epsilon$ is conservative \cite{Lange:Tracking}, and more important, the algorithm is sensitive to the initial velocity which is set only once at the updating time but it is hard to be appropriate at that time.
+ 
 
 
 
