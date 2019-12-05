@@ -5,8 +5,7 @@
 Observing one-pass algorithms, \cised using \sed, having low time complexity and good compression ratios, this inspires us to develop an efficient as well as effective trajectory tracking algorithm.
 
 \subsection{Tracking by spatio-temporal cone}
-\cised \cite{Lin:Cised} is a one-pass trajectory simplification algorithm using \sed, using a local synchronous distance
-checking approach based on a concept of spatio-temporal cone that converts the \sed distance tolerance into the intersection of spatio-temporal cones, defined in a 3D Cartesian coordinate system whose $x$-axis, $y$-axis and $t$-axis are longitude, latitude and time, respectively, for testing the successive data points.
+\cised \cite{Lin:Cised} is a one-pass trajectory simplification algorithm using \sed, using a local synchronous distance checking approach based on a concept of spatio-temporal cone, defined in a 3D Cartesian coordinate system whose $x$-axis, $y$-axis and $t$-axis are longitude, latitude and time, respectively, that converts the \sed distance tolerance into the intersection of cones for testing the successive points.
 
 
 
@@ -41,18 +40,22 @@ Given a start point $P_s$ of sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, 
 
 
 \cite{Lin:Cised} proves that the \sed distance tolerance can be checked by finding the common intersection of spatio-temporal cones, \ie~\emph{given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P_{s+i}, \vv{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if  $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$}.
-It also projects the cones on a plane so as to convert the checking of cones intersection into a much simpler way, \ie the checking of circles intersection on the plane. Finally a one-pass trajectory simplification algorithm is developed based on the spatio-temporal cone intersection. The cones intersection approach is much more effective than the policy used in \ldrh. Actually, the latter is just a special case of the former.
+It also projects the cones on a plane so as to convert the checking of cones intersection into a much simpler way, \ie the checking of circles intersection on the plane. Finally a one-pass trajectory simplification algorithm \cised is developed based on the spatio-temporal cone intersection. 
+
+%We next show that the cones intersection approach is much more effective than the policy used in \ldrh. Actually, the latter is just a special case of the former.
 
 \begin{theorem}
 \label{theo-ldrh-cised}
-Given a sub-trajectory $[P_s,...,P_{s+k}]$, an error bound $\epsilon$ and a velocity $\vv{v}$, if $|P_{s+i}P'_{s+i}|\le \epsilon/2$ for each $i \in [1,k]$, then $\vv{v}$ must live in the common intersection of cones $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)}, where $P'_{s+i}$ is the synchronized point of $P_{s+i}$ \wrt $\vv{v}$.
+Given a sub-trajectory $\dddot{\mathcal{T}}_s[P_s,...,P_{s+k}]$, an error bound $\epsilon$ and a velocity $\vv{v}$, if $\dddot{\mathcal{T}}_s$ can be represented by line segment $\vv{P_sP_{s+k}}$ through algorithm \ldrh, then it can also be represented by the line segment through algorithm \cised.
 \end{theorem}
 
 \begin{proof}
+\todo{1. $\vv{v}$ in 3D space; 2...}
 
+if $|P_{s+i}P'_{s+i}|\le \epsilon/2$ for each $i \in [1,k]$, then $\vv{v}$ must live in the common intersection of cones $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)}, where $P'_{s+i}$ is the synchronized point of $P_{s+i}$ \wrt $\vv{v}$.
 \end{proof}
 
-Theorem \ref{theo-ldrh-cised} tells that if a sub trajectory can be represented by a line segment by algorithm \ldrh, then it can also be represented by a line segment by algorithm \cised. On the contrary, it is not. Hence, \ldrh is a special case of, and has worse effective than, \cised.
+Theorem \ref{theo-ldrh-cised} tells that \ldrh is a special case of, and has worse effective than, \cised. Hence, the spatio-temporal cone intersection is a better way to develop a one-pass trajectory tracking algorithm. 
 %
 We next present two trajectory tracking algorithms, strong tracking and weak tracking, based on spatio-temporal cones.
 
@@ -61,13 +64,21 @@ We next present two trajectory tracking algorithms, strong tracking and weak tra
 
 -- principle, adjust velocity.
 
--- full cone with constraint: theory and proof
-
--- algorithm
+-- algorithm CITT-S(e/2), spatio-temporal cone intersection based trajectory tracking (CITT) pcode and desc.
 
 -- example
 
 -- correctness and complexity
+
+------------------------------
+
+--- extend from half cone to full cone
+
+-- full cone with constraint: theory and proof
+
+-- algorithm CITT-S(e)
+
+-- example
 
 \subsection{Weak tracking}
 
@@ -75,7 +86,7 @@ We next present two trajectory tracking algorithms, strong tracking and weak tra
 means that, if ldr is true, it is sure those points can be represented by a line segment.
 thus, we only need to check the intersection after ldr is false, during the process.
 
--- algorithm
+-- algorithm CITT-W(e)
 
 -- example
 
