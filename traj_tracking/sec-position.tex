@@ -1,19 +1,62 @@
 \section{Effective one-pass tracking in circular areas}
 \label{sec:circular}
 
-ldrh is a efficient traj tracking algorithm, suffer in compression ratio.
-Observing one-pass algorithms, cised using sed, having
-low time complexities and good compression ratios.
+\ldrh is an efficient trajectory tracking algorithm but suffer in effectiveness (compression ratios).
+Observing one-pass algorithms, \cised using \sed, having low time complexity and good compression ratios, this inspires us to develop an efficient as well as effective trajectory tracking algorithm.
 
 \subsection{Tracking by spatio-temporal cone}
+\cised \cite{Lin:Cised} is a one-pass trajectory simplification algorithm using \sed, using a local synchronous distance
+checking approach based on a concept of spatio-temporal cone that converts the \sed distance tolerance into the intersection of spatio-temporal cones for testing the successive data points.
 
-spatio-temporal cone
 
-ldr/ldrh is a sub set of cone/half-cone: theory and proof
 
-uses spatio-temporal cone in traj tracking, two versions: strong and weak.
 
-\subsection{strong tracking}
+\stitle{Spatio-temporal cones (\cone{}) \cite{Lin:Cised}}. Given a start point $P_s$ of sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, P_{s+k}]$ and an error bound $\epsilon$, the spatio-temporal cone (or simply \textit{cone}) of a data point $P_{s+i}$ ($1\le i\le k$) in $\dddot{\mathcal{T}_s}$ \wrt $P_s$ and $\epsilon$, denoted as \cone{(P_s, P_{s+i}, \epsilon)}, or \cone{_{s+i}} in short, is an oblique circular cone such that point $P_s$ is its apex and the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$ of point $P_{s+i}$, or \circle{_{s+i}} in short, a circle on the plane $P.t-P_{s+i}.t = 0$ such that $P_{s+i}$ is its center and $\epsilon$ is its radius, is its base.
+
+
+\begin{example}
+	\label{exm-circles-cones}
+	Figure~\ref{fig:cis} shows 
+	(1) two synchronous circles, \circle{(P_{s+i}, \epsilon)} of point $P_{s+i}$ and \circle{(P_{s+k}, \epsilon)} of point $P_{s+k}$.
+	It is easy to see that for any point in the area of a circle \circle{(P_{s+i}, \epsilon)}, its distance to $P_{s+i}$ is not greater than $\epsilon$, 
+	and (2) two example spatio-temporal cones, \cone{(P_s, P_{s+i}, \epsilon)} {(purple)} and \cone{(P_s, P_{s+k}, \epsilon)} (red), with the same apex $P_s$ and error bound $\epsilon$. %\eop
+\end{example}
+
+%Note that in this definition, a \emph{synchronous circle} $\mathcal{O}(P_i, \epsilon)$ is only defined by a central point $P_i$ and a constant $\epsilon$. Indeed, it is nothing to do with any start point $P_s$ or end point $P_e$.
+
+
+%\textcolor{blue}{We define \textit{synchronous circles and Spatio-temporal cones} in a \emph{x-y-t} 3D coordinate system, and build the connection between \textit{synchronous circles} and \textit{synchronous distances}.}
+
+
+
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.66]{figures/Fig-CIS.png}
+	%	\vspace{-1ex}
+	\caption{\small Examples of spatio-temporal cones in a 3D Cartesian coordinate system, where (1) $P_s$, $P_{s+i}$ and $P_{s+k}$ are three points, (2) \circle{_{s+i}} and \circle{_{s+k}} are two synchronous circles, (3) \cone{_{s+i}} and \cone{_{s+k}} are two spatio-temporal cones, (4) $Q$ is a point in synchronous circle \circle{_{s+k}}, and (5) $P'_{s+i}$ is the intersection point of line $\protect\vv{P_sQ}$ and synchronous circle \circle{_{s+i}}.}
+	%\vspace{-1ex}
+	\label{fig:cis}
+\end{figure}
+
+
+\cite{Lin:Cised} proves that the \sed distance tolerance can be checked by finding the common intersection of spatio-temporal cones, \ie~\emph{given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P_{s+i}, \vv{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if  $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$}.
+It also projects the cones on a plane so as to convert the checking of cones intersection into a much simpler way, \ie the checking of circles intersection on the plane. Finally a one-pass trajectory simplification algorithm is developed based on the cone intersection based local distance checking approach. The cones intersection approach is much more effective than the policy used in \ldrh. Actually, the latter is just a special case of the former.
+
+\begin{theorem}
+\label{theo-ldrh-cised}
+Given a sub-trajectory $[P_s,...,P_{s+k}]$, an error bound $\epsilon$ and a velocity $\vv{v}$, if $|P_{s+i}P'_{s+i}|\le \epsilon/2$ for each $i \in [1,k]$, then $\vv{v}$ must live in the common intersection of cones $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)}, where $P'_{s+i}$ is the synchronized point of $P_{s+i}$ \wrt $\vv{v}$.
+\end{theorem}
+
+\begin{proof}
+
+\end{proof}
+
+Theorem \ref{theo-ldrh-cised} tells that if a sub trajectory can be represented by a line segment through algorithm \ldrh, then it also can be represented by a line segment through algorithm \cised. On the contrary, it is not. Hence, \ldrh is a special case of \cised, and \cised has better effective than \ldrh.
+%
+We next present two trajectory tracking algorithms, strong tracking and weak tracking, based on spatio-temporal cones.
+
+
+\subsection{Strong tracking}
 
 -- principle, adjust velocity.
 
