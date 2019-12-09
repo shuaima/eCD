@@ -69,30 +69,21 @@ We now present a {\em trajectory tracking} approach based on spatio-temporal con
 %We now present algorithm \cist.
 It is an extension of \ldrh that uses half-$\epsilon$ cones to check the distance deviations. As shown in Figure~\ref{alg:citt-s-half}, it takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and outputs a simplified  trajectory $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$ and a set of velocities.
 
+The algorithm first initializes the start point $P_s$ to $P_0$,  the intersection polygon $\mathcal{R}^*$ to $\emptyset$, the index $i$ of the current point to $P_1$, and $t_c$ to $P_1.t$, respectively (lines 1--2). It also sets the expected velocity $\vv{v}$ based on $\vv{P_0P_1}$, and sends its initial location $P_s$ and the velocity $\vv{v}$ to the MOD server (lines 3--4), meaning that it is supposed to move from $P_s$ along the direction of $\vv{v}.\theta$ at a speed of $|\vv{v}|$.
+%, such that the expecting position of the object at time $t>P_s.t$ can be extrapolated from them as long as no subsequent update is sent to the MOD server.
 
-
-The algorithm first initializes the start point $P_s$ to $P_0$, the index $i$ of the current data point to $1$, the intersection polygon $\mathcal{R}^*$ to $\emptyset$, the output $\overline{\mathcal{T}}$ to $\emptyset$, and $t_c$ to $P_1.t$, respectively (line 1).
-
-It sends its initial location $P_s$ and the expected velocity $\vv{v}$ to the MOD server, still meaning that it will move from $P_s$ along the direction of $\vv{v}$ at a speed of $|\vv{v}|$, such that the expecting position of the object at time $t>P_s.t$ can be extrapolated from them as long as no subsequent update is sent to the MOD server.
-
-
-The algorithm sequentially processes the data points of the trajectory one by one  (lines 2--10). 
-
-For the current point $P$, it gets the $m$-edge inscribed regular polygon \wrt the current point $P_i$ (line 3) by calling procedure $\kw{getRegularPolygon}$. 
-
-it compares the actual location of the time with the expecting location of time $t$ extrapolated from the initial location $P_s$ and the velocity $\vv{v}$. 
-
-If its actual location at a given time $t$ does not deviate by more than $\epsilon/2$ from the expecting location $P$ of $t$, then the algorithm goes on to process the next point, otherwise, 
-it computes the common intersection of cones built from those points, if the common intersection is not null, 
-
-When $\mathcal{R}^* = \emptyset$, the intersection polygon $\mathcal{R}^*$ is simply initialized as $\mathcal{R}$ (lines 4, 5). Otherwise,
-$\mathcal{R}^*$ is  the intersection of the current regular polygon $\mathcal{R}$ with $\mathcal{R}^*$ (line 7). If the resulting intersection $\mathcal{R}^*$ is empty, then a new line segment $\vv{P_sP_{i-1}}$ is generated (lines 8--10). then an update of velocity $\vv{v}$ will be sent while the start point is still the start point $P_s$,
-
- otherwise, other update of (start point $P_{s+k-1}$, velocity $\vv{v}$) will be sent, meaning a new tracking started from $P_{s+k-1}$ is triggered.
-
-
-The process repeats until all points have been processed (line 11).
-After the  final line segment $\vv{P_sP_{n}}$ is generated (line 12), it returns the simplified  piece-wise line representation $\overline{\mathcal{T}}$ (line 13).
+The algorithm sequentially processes the data points of the trajectory one by one (lines 5--17). 
+For the current point $P$, it gets the $m$-edge inscribed regular polygon \wrt the current point $P_i$ by calling procedure $\kw{getRegularPolygon}$ \cite{Lin:Cised}, and gets the common intersection $\mathcal{R}^*$ by calling procedure $\kw{getIntersection}$ \cite{Lin:Cised}. When $\mathcal{R}^* = \emptyset$, the intersection polygon $\mathcal{R}^*$ is simply initialized as $\mathcal{R}$. Otherwise, $\mathcal{R}^*$ is  the intersection of the current regular polygon $\mathcal{R}$ with $\mathcal{R}^*$ (lines 6--8). 
+%
+If the common intersection $\mathcal{R}^*$ is not empty, meaning that it can not includes any points into a line segment, then a line segment $\vv{P_sP_{i-1}}$ and a new section start from  $P_{i-1}$ is generated, hence, point $P_{i-1}$ and a new velocity $\vv{v}$ are sent to the MOD server (lines 9--13).
+%
+Otherwise, it calculates the distance from the actual location $P$ with the expecting location $P'$ of the current time extrapolated from the initial location $P_s$ and the velocity $\vv{v}$. 
+If the common intersection $\mathcal{R}^*$ is not empty and the distance does not deviate by more than $\epsilon/2$ from the expecting location $P'$, meaning it can includes more points into a line segment while the velocity need to be updated. Hence, it updates velocity $\vv{v}$ based on $P_s$ and $P_i$ and sends it to the MOD server (lines 14--16). 
+%
+Anyway, the algorithm goes on to process the next point (line 17).
+%
+The process repeats until all points have been processed.
+At last, it outputs the last point $P_{n}$ (line 18).
 
 
 
@@ -106,21 +97,26 @@ After the  final line segment $\vv{P_sP_{n}}$ is generated (line 12), it returns
 				\myhrule
 				%\vspace{-1ex}
 				\mat{0ex}{
-					{\bf Algorithm}~\cittsh$(\dddot{\mathcal{T}}[P_0,\ldots,P_n],~\epsilon,~m)$\\
+					{\bf Algorithm}~\cittsh $(\dddot{\mathcal{T}}[P_0,\ldots,P_n],~\epsilon,~m)$\\
 					%	\sstab
-					\bcc \hspace{1ex}\= $P_s := P_0$; ~$i := 1$;  ~$\mathcal{R}^* := \emptyset$;  ~$\overline{\mathcal{T}} := \emptyset$; ~$t_c$ := $P_1.t$;\\
+					\bcc \hspace{1ex}\= $P_s := P_0$; ~$\mathcal{R}^* := \emptyset$;~~~~// $\mathcal{R}^*$ saves the common intersection of polygons \\
+					\icc \hspace{1ex}\= $i := 1$; ~$t_c$ := $P_1.t$;\\
+					\icc \hspace{1ex}\= $|\vv{v}|:=\frac{|P_i-P_s|}{P_i.t-P_s.t}$; ~$\vv{v}.\theta:=\vv{|P_i-P_s|}.\theta$; \\
+					\icc \hspace{1ex}\= update ($P_{s}, \vv{v}$); \\
 					\icc \hspace{1ex}\= while $i \le n$ do \\
-					\icc \>\hspace{2ex} $\mathcal{R}$ := \kw{getRegularPolygon}($P_s$, $P_i$, $\epsilon/2$, $m$, $t_c$); \\
-					\icc \>\hspace{2ex} if $\mathcal{R}^* = \emptyset$  then \hspace{3ex} /* $\mathcal{R}^*$ needs to be initialized */\\
-					\icc \>\hspace{2ex} \ \ \ $\mathcal{R}^* :=\mathcal{R};$ \\
-					\icc \>\hspace{2ex} else \\
-					\icc \>\hspace{2ex}\ \ \ \ $\mathcal{R}^*$ := \kw{getIntersection}$(\mathcal{R}^*, ~\mathcal{R})$; \\
-					\icc \>\hspace{4ex} if $\mathcal{R}^* = \emptyset$ then \hspace{1ex} /* generate a new line segment */\\
-					\icc \> \hspace{4ex} \ \ \ $i$ := $i - 1$;\ \ $\overline{\mathcal{T}} := \overline{\mathcal{T}}\cup \{\vv{P_sP_{i}}\}$; \\
-					\icc \> \hspace{4ex} \ \ \ $P_s := P_{i}$; \ \ $t_c$ := $P_{i+1}.t$;\\
-					\icc \>\hspace{2ex} $i$ := $i +1$;\\
-					\icc \> \hspace{0ex} $\overline{\mathcal{T}}$ := $\overline{\mathcal{T}}\cup \{\vv{P_sP_{n}}\}$; \\
-					\icc \hspace{1ex} return $\overline{\mathcal{T}}$. \\
+					\icc \>\hspace{3ex} $\mathcal{R}$ := \kw{getRegularPolygon}($P_s$, $P_i$, $\epsilon/2$, $m$, $t_c$); \\
+					\icc \>\hspace{3ex} if $\mathcal{R}^* = \emptyset$  then $\mathcal{R}^* :=\mathcal{R};$ \\
+					\icc \>\hspace{3ex} else $\mathcal{R}^*$ := \kw{getIntersection}$(\mathcal{R}^*, ~\mathcal{R})$; \\
+					\icc \>\hspace{3ex} if $\mathcal{R}^* = \emptyset$ then  // updates velocity and location \\
+					\icc \>\hspace{7ex}    $P_s := P_{i-1}$; \\
+					\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_{i}-P_s|}{P_{i}.t-P_s.t}$; ~$\vv{v}.\theta:=\vv{|P_{i}-P_s|}.\theta$; \\
+					\icc \>\hspace{7ex}    update ($P_{s}, \vv{v}$); \\
+					\icc \>\hspace{7ex}    $t_c$ := $P_{i}.t$; ~$i$ := $i - 1$;		\\
+					\icc \>\hspace{3ex} else if $\mathcal{R}^* \ne \emptyset$ ~and~ $|P_iP'_i| \ge \epsilon/2 $ then   ~// updates velocity \\
+					\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_i-P_s|}{P_i.t-P_s.t}$; ~$\vv{v}.\theta:=\vv{|P_i-P_s|}.\theta$; \\
+					\icc \>\hspace{7ex}    update ($\vv{v}$); \\
+					\icc \>\hspace{3ex} $i$ := $i +1$;	\\
+					\icc \>\hspace{0ex} update ($P_{n}$); 
 				}
 				\vspace{-2ex}
 				\myhrule
@@ -136,17 +132,13 @@ After the  final line segment $\vv{P_sP_{n}}$ is generated (line 12), it returns
 
 
 
-
-
-
-
-
-
 -- example
 
 -- correctness and complexity
 
 ------------------------------
+
+\stitle{Algorithm \cittsf()}.
 
 --- extend from half cone to full cone
 
