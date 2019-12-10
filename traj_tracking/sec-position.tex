@@ -39,35 +39,60 @@ Given a start point $P_s$ of sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, 
 \end{figure}
 
 
-\cite{Lin:Cised} proves that the \sed distance tolerance can be checked by finding the common intersection of spatio-temporal cones, \ie~\emph{given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P_{s+i}, \vv{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if  $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$}.
-It also projects the cones on a plane so as to convert the checking of cones intersection into a much simpler way, \ie the checking of circles intersection on the plane. Finally a one-pass trajectory simplification algorithm \cised is developed based on the spatio-temporal cone intersection. 
+
+
+\begin{theorem}
+\label{theo-half-cone}
+{Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P_{s+i}, \vv{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if  $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$} \cite{Lin:Cised}.
+\end{theorem}
+
+Theorem \ref{theo-half-cone} tells that the \sed distance tolerance can be checked by finding the common intersection of spatio-temporal cones, and it serves as the foundation of a one-pass trajectory simplification algorithm \cised~\cite{Lin:Cised}. And for efficiency consideration, \cised projects the cones on a plane so as to convert the checking of cones intersection into a much simpler way, \ie the checking of circles intersection on the plane. For the same reason, a circle is approximated by its inscribe regular polygon and the intersecting of circles is approximated by the intersecting of these polygons.
 
 %We next show that the cones intersection approach is much more effective than the policy used in \ldrh. Actually, the latter is just a special case of the former.
 
 \begin{theorem}
 \label{theo-ldrh-cised}
-Given a sub-trajectory $\dddot{\mathcal{T}}_s[P_s,...,P_{s+k}]$, an error bound $\epsilon$ and a velocity $\vv{v}$, if $\dddot{\mathcal{T}}_s$ can be represented by line segment $\vv{P_sP_{s+k}}$ through algorithm \ldrh, then it can also be represented by the line segment through algorithm \cised.
+Given a sub-trajectory $\dddot{\mathcal{T}}_s[P_s,...,P_{s+k}]$, an error bound $\epsilon$ and a velocity $\vv{v}$, if $\dddot{\mathcal{T}}_s$ can be represented by line segment $\vv{P_sP_{s+k}}$ through algorithm \ldrh, then it can also be represented by approaches based on spatio-temporal cones.
 \end{theorem}
 
 \begin{proof}
 \todo{1. $\vv{v}$ in 3D space; 2...}
 
-if $|P_{s+i}P'_{s+i}|\le \epsilon/2$ for each $i \in [1,k]$, then $\vv{v}$ must live in the common intersection of half-$\epsilon$ cones $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)}, where $P'_{s+i}$ is the synchronized point of $P_{s+i}$ \wrt $\vv{v}$.
+If $|P_{s+i}P'_{s+i}|\le \epsilon/2$ for each $i \in [1,k]$, then $\vv{v}$ must live in the common intersection of half-$\epsilon$ cones $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)}, where $P'_{s+i}$ is the synchronized point of $P_{s+i}$ \wrt $\vv{v}$.
 \end{proof}
 
-Theorem \ref{theo-ldrh-cised} tells that \ldrh is a special case of, and has worse effective than, \cised. Hence, the spatio-temporal cone intersection is a better way to develop a one-pass trajectory tracking algorithm. 
-%
-We next present two trajectory tracking algorithms, strong tracking and weak tracking, based on spatio-temporal cones.
+Theorem \ref{theo-ldrh-cised} tells that \ldrh is a special case of, and has worse effective than, approaches based on spatio-temporal cones. Hence, the latter is a more effective way to develop one-pass trajectory tracking algorithms. 
+The half-$\epsilon$ cone in the above is still a little conservative. Fortunately, it can be extended to a full-$\epsilon$ cone with some constrains so as to get a better effectiveness.
 
 
-\subsection{Strong tracking}
+\begin{theorem}
+	\label{theo-full-cone}
+	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P_{s+i}, \vv{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if $P_{s+i} \in \bigsqcap_{i=1}^{k-1}$\cone{(P_s, P_{s+i}, \epsilon)}.
+\end{theorem}
 
-We now present a {\em trajectory tracking} approach based on spatio-temporal cones, including two variations, algorithms \cittsh using half-$\epsilon$ cones and \cittsf using full-$\epsilon$ cones. These algorithms share a similar routine, in a nutshell, a moving object first initializes its velocity $\vv{v}$ (including value and direction) and sends it coupling with a start position $P_s$ to the MOD server. Then it iteratively checks the deviation of its actual position $P_{s+k}$ to its synchronized point $P'_{s+k}$ built from the start point $P_s$, velocity $\vv{v}$ and time $P_{s+k}.t$, as well as the common intersection of spatio-temporal cones built from points $P_{s+i}$, $i \in [1, k]$. If the deviation is lager than a given threshold or the common intersection except $P_s$ is null, then an update is sent to the MOD server.
+\begin{proof}
+	\todo.
+\end{proof}
+
+Theorem \ref{theo-full-cone} 
+
+\begin{theorem}
+	\label{theo-cone-vs}
+	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, if $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$, then $P_{s+i} \in \bigsqcap_{i=1}^{k-1}$\cone{(P_s, P_{s+i}, \epsilon)}; the opposite is not always true.
+\end{theorem}
+
+\begin{proof}
+	\todo.
+\end{proof}
+
+\subsection{Implementation}
+
+We next present a {\em trajectory tracking} algorithm based on spatio-temporal cones. This algorithm runs on moving objects and uses half-$\epsilon$ cones to check the distance deviations. In a nutshell, it first initializes its velocity $\vv{v}$ (including value and direction) and sends it coupling with a start position $P_s$ to the MOD server. Then it iteratively checks the deviation of its actual position $P_{s+k}$ to its synchronized point $P'_{s+k}$ built from the start point $P_s$, velocity $\vv{v}$ and time $P_{s+k}.t$, as well as the common intersection of spatio-temporal cones built from points $P_{s+i}$, $i \in [1, k]$. If the deviation is lager than a given threshold or the common intersection except $P_s$ is null, then an update is sent to the MOD server.
 
 
 \stitle{Algorithm \cittsh()}.
 %We now present algorithm \cist.
-It is an extension of \ldrh that uses half-$\epsilon$ cones to check the distance deviations. As shown in Figure~\ref{alg:citt-s-half}, it takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and outputs a simplified  trajectory $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$ and a set of velocities.
+As shown in Figure~\ref{alg:citt-s-half}, it takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and outputs a simplified  trajectory $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$ and a set of velocities.
 
 The algorithm first initializes the start point $P_s$ to $P_0$,  the intersection polygon $\mathcal{R}^*$ to $\emptyset$, the index $i$ of the current point to $P_1$, and $t_c$ to $P_1.t$, respectively (lines 1--2). It also sets the expected velocity $\vv{v}$ based on $\vv{P_0P_1}$, and sends its initial location $P_s$ and the velocity $\vv{v}$ to the MOD server (lines 3--4), meaning that it is supposed to move from $P_s$ along the direction of $\vv{v}.\theta$ at a speed of $|\vv{v}|$.
 %, such that the expecting position of the object at time $t>P_s.t$ can be extrapolated from them as long as no subsequent update is sent to the MOD server.
@@ -130,23 +155,33 @@ At last, it outputs the last point $P_{n}$ (line 18).
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{example}
+	\todo.
+\end{example}
 
 
--- example
+\stitle{Correctness and complexity.} 
+\todo{correctness.}
+Every point is processed only once in \cittsh, and for each point, it needs $O(1)$ time as getRegularPolygon(), getIntersection(), update() and other operations all have a time complexity of $O(1)$. Hence, \cittsh has a time complexity of $O(n)$.
 
--- correctness and complexity
 
-------------------------------
+
+
+
+
+\eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+\subsection{Extension from half-$\epsilon$ cone to full-$\epsilon$ cone}
+
 
 \stitle{Algorithm \cittsf()}.
 
---- extend from half cone to full cone
+\begin{example}
+\todo.
+\end{example}	
 
--- full cone with constraint: theory and proof
+\stitle{Correctness and complexity.} 
 
--- algorithm CITT-S(e)
-
--- example
 
 \subsection{Weak tracking}
 
@@ -159,4 +194,4 @@ thus, we only need to check the intersection after ldr is false, during the proc
 -- example
 
 -- correctness and complexity
-
+}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
