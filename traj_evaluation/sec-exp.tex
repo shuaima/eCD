@@ -4,7 +4,7 @@
 \label{sec-exp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 In this section, we present extensive and systematic experimental studies and analyses of eleven representative \lsa algorithms.
-Using four real-life datasets, we conduct three sets of tests to evaluate compression ratios, errors and efficiency of these representative algorithms using distance metrics \ped, \sed and \dad, and the impacts of error bounds $\epsilon$ and trajectory sizes.
+Using four real-life datasets, we conduct three sets of tests to evaluate compression ratios, errors, efficiency, \textcolor{blue}{aging and query friendliness} of these representative algorithms using distance metrics \ped, \sed and \dad, and the impacts of error bounds $\epsilon$ and trajectory sizes.
 %
 %(1) the effectiveness of these algorithms, and
 %(2) the efficiency of them.
@@ -909,6 +909,7 @@ It is hard to tell regular conclusions of query errors of \lsa algorithms. Rough
 
 
 \stitle{Analyses of distance metrics.}
+\sed is spatio-temporal queries friendly while the others are not.
 Given the same error bound, the average query errors of algorithms using \ped are enormously larger than those using \sed, brought by some points having extremely large query errors, and they are typically larger than error bounds. 
 Similar as \ped, algorithms using \dad also lead to enormously large query errors. 
 Indeed, the temporal information is lost when using \ped and \dad, thus, they are not suitable for compressing trajectories in the context that spatio-temporal queries will run on the simplified trajectories.
@@ -939,19 +940,21 @@ Top-down algorithms also run faster than bottom-up algorithms in high sampling d
 The full $\epsilon$ \emph{sector/cone/range} combining with a position/direction constraint always have better compression ratios and also larger average errors than the half $\epsilon$ \emph{sector/cone/range}. %and they are comparable with the best sub-optimal algorithms.
 %
 One-pass algorithms show a linear running time and they are not very sensitive to error bound $\epsilon$, and also scale well with the increase of trajectory sizes.
-
 %The average errors of algorithms as a whole are on the contrary of compression ratios. The optimal algorithm usually is the worst algorithm in term of average error, followed by one pass algorithms and then batch algorithms. Online algorithms have varied average errors, ranging from the best to the worst.
-
+%
+(5) \textcolor{blue}{Algorithms \dpa using \ped and/or \sed are aging friendly, others are not. All the algorithms have bounded error in data aging, where the aging bounds of \dpa using \ped and \sed are $max\{\epsilon_1, \epsilon_2\}$ while others are $\epsilon_1 + \epsilon_2$.}
 
 \stitle{Distance Metrics}.
-The output sizes of algorithms using \sed are approximately twice of \ped, and in practice (\eg $\epsilon <100$ meters and $\epsilon < 60$ degrees), \ped and \sed usually bring obvious better compression ratios than \dad, especially in high sampling data sets.
+(1) The output sizes of algorithms using \sed are approximately twice of \ped, and in practice (\eg $\epsilon <100$ meters and $\epsilon < 60$ degrees), \ped and \sed usually bring obvious better compression ratios than \dad, especially in high sampling data sets.
 %
-The average errors of algorithms using \sed are a bit larger than using \ped.
+(2) The average errors of algorithms using \sed are a bit larger than using \ped.
 %, and in practical, the average errors of algorithms using \dad, in terms of \ped, are obvious larger than algorithms using \ped and \sed.
 %
-Using \dad is in general faster than using \ped and \sed, and, indeed, the computation time of \ped and \sed is 2.3 and 1.7 times of \dad, respectively.
-
-
+(3) Simplification using \dad is in general faster than \ped and \sed, and, indeed, the computation time of \ped and \sed is 2.3 and 1.7 times of \dad, respectively.
+%
+\textcolor{blue}{(4) \dad is not aging friendly \wrt any algorithm.}
+%
+\textcolor{blue}{(5) \sed is spatio-temporal queries friendly while the others are not. Notice that algorithms using \ped and/or \dad may lead to enormously large query errors.}
 
 %%********************************* The End **********************************
 
