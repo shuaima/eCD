@@ -19,13 +19,13 @@ We use three real-life datasets shown in \mytable{tab:datasets}, namely, Service
 These data sets come from different sources, where \ucar are collected by cars in urban, and \geolife and \mopsi are a mixing of cars and individuals. They also have \textcolor{blue} {typical sampling rates often used in practice, ranging from one point per second to one point every five seconds.}
 The data source and sampling rate also affect the performance of \lsa algorithms using certain distance metrics.
 
-\begin{table}[b!]
+\begin{table}[tb!]
 	%\vspace{-1ex}
 	\caption{\small Real-life trajectory datasets}
 	\centering
 	%\small
 	\footnotesize
-	\begin{tabular}{|l|c|c|c|r|}
+	\begin{tabular}{|l|c|c|c|c|}
 		\hline
 		\bf{Data sets}& \bf{Number\ of Trajectories}     &\bf{Sampling Rates (s)}   &\bf{Points~Per Trajectory}    &\bf{Total Points} \\	\hline
 		%\taxi	&{500}	    &60	        &{$\sim42.8$K}      &{21.4M} \\	\hline
@@ -33,8 +33,8 @@ The data source and sampling rate also affect the performance of \lsa algorithms
 		%\ucar	&11,000	    &3-5	    &$\sim119.1$   &1.31G\\		\hline
 		%
 		\ucar	&200	    &3-5	&$\sim114.0$K   &22.8M 	\\	\hline
-		\geolife &182	    &1-5	&$\sim131.4$K   &24.2M	\\	\hline
-		\mopsi   &51	    	&2	    &$\sim153.9$K   &7.9M	\\	\hline
+		\geolife \cite{Web:Geolife}&182	    &1-5	&$\sim131.4$K   &24.2M	\\	\hline
+		\mopsi \cite{Web:Mopsi}  &51	    	&2	    &$\sim153.9$K   &7.9M	\\	\hline
 		%\act	& 10	    &1	    &$\sim11.8$    &112.8K	\\	\hline
 	\end{tabular}
 	\label{tab:datasets}
@@ -316,7 +316,7 @@ $50.88\%$, $64.50\%$) of algorithms \tpa and \dpa using \sed on datasets \dSets,
 %
 %and in Figure~\ref{fig:cr-ped-size} and Figure~\ref{fig:cr-sed-size}, the compression ratios of algorithms \opt, \tpa and \dpa using \ped are on average {($56.03\%$, $33.42\%$, $33.12\%$, $72.42\%$),	($55.78\%$, $31.88\%$, $34.27\%$, $69.44\%$) and ($58.09\%$, $34.82\%$,	$40.91\%$, $75.06\%$)} of algorithms \opt, \tpa and \dpa using \sed on datasets \dSets, respectively.
 %
-This result shows ~\sed saves temporal information at a price with twice more points.
+This result shows ~\sed saves temporal information at a price of twice more data points.
 
 
 Secondly, in practice (\eg $\epsilon <100$ meters and $\epsilon < 60$ degrees), \sed have obviously better compression ratios than \dad in datasets \geolife and \mopsi and a bit poorer than \dad in \ucar.
@@ -661,13 +661,13 @@ The computation time of \dad is faster than \ped and \sed, and the computation t
 \subsubsection{\textcolor{blue}{Evaluation and Analyses of Aging Friendliness}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-In this set of tests, we compare the error and compression ratios of algorithms in data aging. We set $\epsilon_1=40m$ (or $\epsilon_1=30^o$) in the first run and $\epsilon_2=60m$ (or $\epsilon_2=50^o$) in the second run. Besides, we also run these algorithms on the raw trajectories, setting $\epsilon_3=\epsilon_1 + \epsilon_2=100m$ (or $\epsilon_3=80^o$). The max errors are reported in Table \ref{tab:aging-me}, and the compression ratios are reported in Tables \ref{tab:aging-cr} and \ref{tab:cr}, respectively.
+In this set of tests, we compare the error and compression ratios of algorithms in data aging. We set $\epsilon_1=40m$ (or $\epsilon_1=30^o$) in the first run and $\epsilon_2=60m$ (or $\epsilon_2=50^o$) in the second run. Besides, we also run these algorithms on the raw trajectories, setting $\epsilon_3=\epsilon_1 + \epsilon_2=100m$ (or $\epsilon_3=80^o$). The max errors are reported in \mytable{tab:aging-me}, and the compression ratios are reported in \mytable{tab:aging-cr} and \mytable{tab:cr}, respectively.
 
 \ni (1) Algorithms \dpa using \ped and \sed both have max errors less than $\epsilon_2 = 60m$, confirming that they are aging friendly and their max errors are consistent with Theorem ~\ref{theo-aging-error-dp}, while algorithm \dpa using \dad and other algorithms have max error larger than $\epsilon_2 = 60m$ or $\epsilon_2 = 50^o$, confirming that they are not aging friendly and their max errors are consistent with Theorems ~\ref{theo-aging-dp-dad}, \ref{theo-aging-tp}, \ref{theo-aging-squishe} and \ref{theo-aging-online}.
 
 \ni (2) Algorithm \dpa using \dad and other algorithms have max error less than $\epsilon_1 + \epsilon_2 = 100m$ or $\epsilon_1 + \epsilon_2 = 80^o$, which is consistent with Theorem ~\ref{theo-aging-distance}.
 
-\ni (3) Tables \ref{tab:aging-cr} and \ref{tab:cr} tell that, if algorithms other than \dpa compress data using $\epsilon_1$ and $\epsilon_2$ in turn, then they have a bit poorer compression ratios than their simplification directly using $\epsilon_3=\epsilon_1 + \epsilon_2$, \ie they may loss some compression ratios during data aging. 
+\ni (3) \mytable{tab:aging-cr} and \mytable{tab:cr} tell that, if algorithms other than \dpa compress data using $\epsilon_1$ and $\epsilon_2$ in turn, then they have a bit poorer compression ratios than simplification directly using $\epsilon_3=\epsilon_1 + \epsilon_2$, \ie they may loss some compression ratios during data aging. 
 In the contrast, algorithms \dpa using \ped and \sed do not loss that. Hence, given the same final error bound (\eg $100m$) of data aging, algorithm \dpa using \ped (or \sed) shows a bit advantages in terms of compression ratios.   
 
 
@@ -778,16 +778,16 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 {Then, for each point $P$ in an original trajectory $\dddot{\mathcal{T}}$, we perform a query on each of its compressed trajectories taking time $P.t$ as input, and calculate the distance between the actual position $P$ and the expected position $P'$ to denote the error of queries.
 }
 %
-{The max and average errors of the queries are reported in Table~\ref{tab:query-me} and Figures~\ref{fig:query-ped-epsilon}, \ref{fig:query-sed-epsilon}, \ref{fig:query-dad-epsilon}, \ref{fig:query-ped-size},\ref{fig:query-sed-size} and \ref{fig:query-dad-size}, respectively.}
+{The max and average errors of the queries are reported in \mytable{tab:query-me} and Figures~\ref{fig:query-ped-epsilon}, \ref{fig:query-sed-epsilon}, \ref{fig:query-dad-epsilon}, \ref{fig:query-ped-size},\ref{fig:query-sed-size} and \ref{fig:query-dad-size}, respectively.}
 
 
-\ni (1) When using \ped, the max query errors of all algorithms are more than $10^6$ meters in all datasets, significantly larger than the error bound (40 meters in Table~\ref{tab:query-me}). The large max errors also lead to larger average query errors, \ie they are greater than error bounds in all datasets.
+\ni (1) When using \ped, the max query errors of all algorithms are more than $10^6$ meters in all datasets, significantly larger than the error bound (40 meters in \mytable{tab:query-me}). The large max errors also lead to larger average query errors, \ie they are greater than error bounds in all datasets.
 
 
 \ni (2) When using \sed, the max query errors of all algorithms are clear not more than the error bounds, and the average query errors are consistent with those compression errors shown in Section~\ref{sec-ae}.
 
 
-\ni (3) When using \dad, the max query errors of all algorithms are more than $10^6$ meters in dataset \ucar, and more than $10^5$ meters in datasets \geolife and \mopsi, respectively, also significantly larger than the error bound (40 meters in Table~\ref{tab:query-me}). Moreover, compared with using \ped, it has more points having query errors larger than error bounds, thus, it has the largest average query errors in all algorithms and all datasets.
+\ni (3) When using \dad, the max query errors of all algorithms are more than $10^6$ meters in dataset \ucar, and more than $10^5$ meters in datasets \geolife and \mopsi, respectively, also significantly larger than the error bound (40 meters in \mytable{tab:query-me}). Moreover, compared with using \ped, it has more points having query errors larger than error bounds, thus, it has the largest average query errors in all algorithms and all datasets.
 
 
 \begin{table}
@@ -957,7 +957,7 @@ One-pass algorithms show a linear running time and they are not very sensitive t
 %
 \textcolor{blue}{(4) \dad is not aging friendly \wrt any algorithm.}
 %
-\textcolor{blue}{(5) \sed is spatio-temporal queries friendly while the others are not. Notice that algorithms using \ped and/or \dad may lead to enormously large query errors.}
+\textcolor{blue}{(5) \sed is spatio-temporal queries friendly while the others are not. Note that algorithms using \ped and/or \dad may lead to enormously large query errors.}
 
 %%********************************* The End **********************************
 
