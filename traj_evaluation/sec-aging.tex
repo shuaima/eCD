@@ -13,16 +13,19 @@ We first discuss the relationship between $\overline{\mathcal{T}}_1$ and $\overl
 	
 \stitle{Aging friendly \cite{Cao:Spatio}}. {A \lsa algorithm $\mathcal{A}$ is aging friendly with respect to a distance metric $\mathcal{D}$ if for every $\epsilon_1$ and every $\epsilon_2$ such that $\epsilon_1 < \epsilon_2$, and for every trajectory $\dddot{\mathcal{T}}$, $\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{D})= \mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$.}
 
-Cao et al. also proved in \cite{Cao:Spatio} that ``the top-down algorithm \dpa is aging friendly \wrt~\ped and \sed" on the premise that the second run of algorithm \dpa takes as input the whole simplified trajectory produced by the first run. However, when \dpa is coupling with \dad, things are changed.
+Cao et al. proved in \cite{Cao:Spatio} that ``the top-down algorithm \dpa is aging friendly \wrt~\ped and \sed" on the premise that the second run of \dpa takes as input the whole simplified trajectory produced by the first run. 
+In spite of that, algorithms other than \dpa and distance metrics other than \ped and \sed are not discussed in \cite{Cao:Spatio}, thus, their effectiveness in data aging remains an open problem. 
+In the rest of the section, we will fully discuss this problem, start from \dpa coupling with \dad.
+%And, when \dpa is coupling with \dad, things are changed.
 
 
-\begin{theorem}
+\begin{proposition}
 	\label{theo-aging-dp-dad}
 	The top-down algorithm \dpa is not aging friendly \wrt~\dad.
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
-	We will prove the theorem by construction.
+	We will prove the proposition by construction.
 	As shown in Figure~\ref{fig:aging-dp-dad}, we let error bounds $\epsilon_1 =30^o$ and $\epsilon_2=45^o$.
 	
 	\underline{(1) ${\dpa}(\dddot{\mathcal{T}}, 45^o, \dad)$}. It finds that line segment $\overline{P_1P_2}$ has the largest angular deviation to line segment $\overline{P_0P_4}$ which is also larger than the error bound $45^o$, hence it uses point $P_2$ as the splitting point and splits the original trajectory to $\{P_0, P_1, P_2\}$ and $\{P_2, P_3, P_4\}$. At last, it outputs three points $\{P_0, P_2, P_4\}$.
@@ -55,13 +58,13 @@ We next discuss the aging friendliness of other algorithms.
 \end{figure}
 
 
-\begin{theorem}
+\begin{proposition}
 \label{theo-aging-tp}
 The bottom-up algorithm \tpa is not aging friendly \wrt~\ped, \sed or \dad.
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
-We will prove the theorem by construction.
+We will prove the proposition by construction.
 As shown in Figure~\ref{fig:aging-pavlidis}, we let error bounds $\epsilon_1 =3$ and $\epsilon_2=6$, and without losing generality, we use \ped as the distance metric.
 
 \underline{(1) ${\tpa}(\dddot{\mathcal{T}}, 6, \ped)$}. It first merges $\overline{P_1P_2}$ and $\overline{P_2P_3}$ to $\overline{P_1P_3}$ as the merging of them has the lowest cost of $2$, the distance from point $P_2$ to line segment $\overline{P_1P_3}$; then it merges $\overline{P_0P_1}$ and $\overline{P_1P_3}$ to $\overline{P_0P_3}$ with the lowest cost of $4.5$, the distance from point $P_1$ to line segment $\overline{P_0P_3}$; at last, because the merging of $\overline{P_0P_3}$ and $\overline{P_3P_4}$ has a cost of $7$, the distance from point $P_2$ to line segment $\overline{P_0P_4}$, which is larger than the error bound of $6$, it outputs three points $\{P_0, P_3, P_4\}$.
@@ -72,10 +75,10 @@ In this case, ${\tpa}(\dddot{\mathcal{T}}, 6, \ped) \ne {\tpa}(\tpa(\dddot{\math
 \textcolor{blue}{Similarly, \tpa is not aging friendly \wrt~ \sed or \dad. Hence, we have the conclusion.}
 \end{proof}
 
-\begin{lemma}
+\begin{proposition}
 	\label{theo-aging-squishe}
 	The online algorithm \squishe is not aging friendly \wrt~\sed.
-\end{lemma}
+\end{proposition}
 
 \begin{proof}
 	\textcolor{blue}{(In brief) The \squishe algorithm runs in a bottom-up manner that is a slight variation of algorithm \tpa. As \tpa, it is not aging friendly \wrt~\sed.}
@@ -91,11 +94,11 @@ In this case, ${\tpa}(\dddot{\mathcal{T}}, 6, \ped) \ne {\tpa}(\tpa(\dddot{\math
 	\label{fig:aging-incre}
 \end{figure}
 
-\begin{theorem}
+\begin{proposition}
 	\label{theo-aging-online}
 	The online and one-pass algorithms are not aging friendly \wrt~\ped, \sed or \dad.
 
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
 	For online algorithm \squishe, it only supports \sed and it is not aging friendly \wrt~\sed.
@@ -115,10 +118,10 @@ As the most algorithms are not aging friendly, are they error bounded in data ag
 if so, what are the bounds?
 This section focuses on these problems and discusses the error between the simplified trajectory $\overline{\mathcal{T}}_2$ and the original trajectory $\dddot{\mathcal{T}_0}$.
 
-\begin{theorem}
+\begin{proposition}
 	\label{theo-aging-error-dp}
 	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, for every distance metric $\mathcal{D}$ of \ped and \sed, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is $max\{\epsilon_1, \epsilon_2\}$.
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
 	For $\epsilon_2 \ge \epsilon_1$, as proved in \cite{Cao:Spatio}, $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{D})$, which has the max error of $\epsilon_2$ to the original trajectory $\dddot{\mathcal{T}}$.
@@ -140,10 +143,10 @@ This section focuses on these problems and discusses the error between the simpl
 \end{proof}
 
 
-\begin{theorem}
+\begin{proposition}
 	\label{theo-aging-distance}
 	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, for any non-optimal \lsa algorithm $\mathcal{A}$ and distance metric $\mathcal{D}$ of \ped, \sed and \dad other than \dpa using \ped and \sed, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is $\epsilon_1+ \epsilon_2$.
-\end{theorem}
+\end{proposition}
 
 \begin{proof} 	
 	(1) We first prove that the error bound between them is not more than $\epsilon_1+ \epsilon_2$. Suppose a point $P_k$ is represented by line segment $\overline{P_iP_j}$ with error bound $\epsilon_1$, and points $P_i$ and $P_j$ are further represented by line segment $\overline{P_sP_t}$ with error bound $\epsilon_2$ (Figure~\ref{fig:aging-error}).
