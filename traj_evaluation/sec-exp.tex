@@ -4,7 +4,7 @@
 \label{sec-exp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 In this section, we present extensive and systematic experimental studies and analyses of eleven representative \lsa algorithms.
-Using four real-life datasets, we conduct three sets of tests to evaluate compression ratios, errors, efficiency, \textcolor{blue}{aging and query friendliness} of these representative algorithms using distance metrics \ped, \sed and \dad, and the impacts of error bounds $\epsilon$ and trajectory sizes.
+Using four real-life datasets, we conduct three sets of tests to evaluate \textcolor{blue}{the effectiveness (compression ratios and errors), efficiency (running time), aging friendliness and query friendliness} of these representative algorithms using distance metrics \ped, \sed and \dad, and the impacts of error bounds $\epsilon$ and trajectory sizes.
 %
 %(1) the effectiveness of these algorithms, and
 %(2) the efficiency of them.
@@ -15,9 +15,20 @@ Using four real-life datasets, we conduct three sets of tests to evaluate compre
 %We first introduce the settings of our experimental study.
 
 \stitle{Real-life Trajectory Datasets}.
-We use three real-life datasets shown in \mytable{tab:datasets}, namely, Service car trajectory data (\ucar) collected by a Chinese car rental company, Geolife trajectory data (\geolife) collected in GeoLife project~\cite{Web:Geolife} and \mopsi trajectory data (\mopsi) collected in Mopsi project \cite{Web:Mopsi}, to evaluate those \lsa algorithms.
+We use three real-life datasets shown in \mytable{tab:datasets}, namely, Service car trajectory data (\ucar), Geolife trajectory data (\geolife)~\cite{Web:Geolife} and \mopsi trajectory data (\mopsi)~\cite{Web:Mopsi}, to evaluate those \lsa algorithms.
 These data sets come from different sources, where \ucar are collected by cars in urban, and \geolife and \mopsi are a mixing of cars and individuals. They also have \textcolor{blue} {typical sampling rates often used in practice, ranging from one point per second to one point every five seconds.}
 The data source and sampling rate also affect the performance of \lsa algorithms using certain distance metrics.
+
+%\vspace{0.5ex}
+\ni \textcolor{blue}{(1) \ucar is the GPS trajectories collected by a Chinese car rental company during Apr. 2015 to Nov. 2015. Most routes are in big cities. The sampling rate was one point per $3$--$5$ seconds, and each trajectory has around $114.1K$ points.}
+%.We randomly chose $1,000$ cars from them
+
+%\vspace{0.5ex}
+\ni \textcolor{blue}{(2) \geolife is the GPS trajectories collected in GeoLife project~\cite{Web:Geolife} by 182 users in a period from Apr. 2007 to Oct. 2011. These trajectories have a variety of sampling rates, among which 91\% are logged in each 1-5 seconds per point. The longest trajectory has 2,156,994 points.}
+
+%\vspace{0.5ex}
+\ni \textcolor{blue}{(3) \mopsi is the GPS trajectories collected in Mopsi project~\cite{Web:Mopsi} by 51 users in a period from 2008 to 2014. Most routes are in Joensuu region, Finland. The sampling rate was one point per $2$ seconds, and each trajectory has around $153.9K$ points.}
+
 
 \begin{table}[tb!]
 	%\vspace{-1ex}
@@ -46,18 +57,7 @@ The data source and sampling rate also affect the performance of \lsa algorithms
 % during a period from Mar. 2015 to Oct. 2015. The sampling rate varied from 1s to 60s.
 %Trajectories mostly have around $50$ to $90$ thousand data points.
 
-%\vspace{0.5ex}
-%\ni \emph{(1) Service car trajectory data} (\ucar) is the GPS trajectories collected by a Chinese car rental company during Apr. 2015 to Nov. 2015. The sampling rate was one point per $3$--$5$ seconds, and each trajectory has around $114.1K$ points.
-%.We randomly chose $1,000$ cars from them
 
-%\vspace{0.5ex}
-%\ni \emph{(2) GeoLife trajectory data} (\geolife) is the GPS trajectories collected in GeoLife project~\cite{Web:Geolife} by 182 users in a period from Apr. 2007 to Oct. 2011. These trajectories have a variety of sampling rates, among which 91\% are logged in each 1-5 seconds per point. %or each 5-10 meters
-%This dataset contains 182 trajectories, one trajectory for each user, with a total distance of about 1.2 million kilometers.
-%The longest trajectory has 2,156,994 points.
-
-%\vspace{0.5ex}
-%\ni \emph{(3) Mopsi trajectory data} (\mopsi) is the GPS trajectories collected in Mopsi project~\cite{Web:Mopsi} by 51 users in a period from 2008 to 2014. Most routes are in Joensuu region, Finland. The sampling rate was one point per $2$ seconds, and each trajectory has around $153.9K$ points.
-%exist on every continent.
 
 %\vspace{0.5ex}
 %\ni \emph{(4) Act trajectory data} (\act) is a small set GPS trajectories collected with a high sampling rate of one point per second by our team members in 2017. There are 10 trajectories and each trajectory has around 11.8K points.
@@ -100,15 +100,17 @@ We test these algorithms under varied error bounds $\epsilon$ and trajectory siz
 
 
 \subsection{Evaluation Metrics}
-Compression ratios, errors and running time are the most popular metrics to evaluate \lsa algorithms.
+
+\textcolor{blue}{Compression ratios and errors are the most popular metrics to evaluate the effectiveness of \lsa algorithms, and they are also metrics to evaluate the aging friendliness and query friendliness of \lsa algorithms.
+Besides, running time reflects the efficiency of \lsa algorithms.}
 
 \stitle{Compression ratios.}
-For trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations $\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$,
+For trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piece-wise line representations $\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$,
 the compression ratio is $(\sum_{j=1}^{M} |\overline{\mathcal{T}}_j |)/(\sum_{j=1}^{M} |\dddot{\mathcal{T}}_j |)$.
 By this definition, algorithms with lower compression ratios are better.
 
 \stitle{Average Errors.}
-All these algorithms in \mytable{tab:summary-lsa} are error bounded, \ie the max errors are bounded. Hence, we only evaluate the average errors here. Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations
+All these algorithms in \mytable{tab:summary-lsa} are error bounded, \ie the max errors are bounded. Hence, we only evaluate the average errors here. Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piece-wise line representations
 $\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$, and $P_{j,i}$ denoting
 a point in trajectory $\dddot{\mathcal{T}}_j$ contained in a line segment $\mathcal{L}_{l,i}\in\overline{\mathcal{T}_l}$ ($l\in[1,M]$),
 then the average error is $\sum_{j=1}^{M}\sum_{i=0}^{M} d(P_{j,i},
@@ -117,6 +119,7 @@ then the average error is $\sum_{j=1}^{M}\sum_{i=0}^{M} d(P_{j,i},
 \stitle{Running time.}
 It is the efficiency of algorithms.
 %We load and compress trajectories one by one, and only count the running time of the compressing process.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Experimental Results and Analyses}
@@ -143,10 +146,10 @@ The compression ratios of these algorithms under varied error bounds $\epsilon$ 
 {Note that the optimal algorithm using \sed and \dad is not reported in Figures~\ref{fig:cr-ped-epsilon},~\ref{fig:cr-sed-epsilon} and~\ref{fig:cr-dad-epsilon} as it runs out of memory when compressing the full dataset}. We first report our findings.
 
 
-
-
 %%%%%%%%%%%%%%%%%
-\sstab(1) The compression ratios of algorithms using \ped from the best
+\sstab(1) \textcolor{blue}{Datasets have some impacts on the compression ratios of \lsa algorithms. Datasets having higher sampling rates have better compression ratios when use \ped and \sed, while it is on the contrary when use \dad. Datasets collected by cars (\eg~\ucar) also have better compression ratios than datasets partially collected by individuals (\eg~\geolife and \mopsi). }
+
+\sstab(2) The compression ratios of algorithms using \ped from the best
 to the worst are the optimal algorithm \opt, online algorithm \bqsa, one-pass algorithm \siped($\epsilon$), batch algorithms \tpa and \dpa, and one-pass algorithms \siped($\frac{\epsilon}{2}$) and \operb.
 The output sizes of algorithms \bqsa and \siped({$\epsilon$}) are on average
 ($113.32\%$, $120.22\%$, $120.83\%$) and ($116.04\%$, $124.46\%$, $124.24\%$) of algorithm \opt
@@ -162,7 +165,7 @@ For example, in \mopsi, the compression ratios of algorithms
 %
 
 %%%%%%%%%%%%%%%%%
-\sstab(2) The compression ratios of algorithms using \sed from the best
+\sstab(3) The compression ratios of algorithms using \sed from the best
 to the worst are the \opt algorithm, one-pass algorithm \cised($\epsilon$), batch algorithms \tpa and
 \dpa, one-pass algorithm \cised($\frac{\epsilon}{2}$), and online algorithm \squishe.
 %
@@ -186,7 +189,7 @@ are ($3.45\%$, $3.41\%$, $5.75\%$, $3.02\%$, $3.86\%$), respectively, when $\eps
 %
 
 %%%%%%%%%%%%%%%%%
-\sstab(3) The compression ratios of algorithms using \dad from the best
+\sstab(4) The compression ratios of algorithms using \dad from the best
 to the worst are the \opt algorithm, batch algorithm \tpa and
 one-pass algorithm \interval, online algorithm \opwa, one-pass algorithm \intersec and batch algorithm \dpa.
 %
@@ -387,7 +390,9 @@ We first report our findings.
 	\vspace{-2ex}
 \end{figure*}
 
-\sstab (1) When using \ped, the average errors from the smallest
+\sstab (1) \textcolor{blue}{Datasets have few impacts on the errors of \lsa algorithms.}
+
+\sstab (2) When using \ped, the average errors from the smallest
 to the largest are batch algorithms \tpa and \dpa, one-pass
 algorithms \siped($\frac{\epsilon}{2}$) and \operb, the optimal algorithm \opt and one-pass algorithm \siped(${\epsilon}$), and online algorithm \bqsa.
 %
@@ -453,7 +458,7 @@ of \opt on datasets \dSets, respectively.
 \end{figure*}
 
 
-\sstab (2) When using \sed, the average errors from the smallest
+\sstab (3) When using \sed, the average errors from the smallest
 to the largest are online algorithm \squishe, batch algorithms \tpa and \dpa,
 one-pass algorithm \cised($\frac{\epsilon}{2}$), and one-pass algorithms \cised(${\epsilon}$) and the \opt algorithm.
 %
@@ -466,7 +471,7 @@ For example, the average errors of algorithms
 %
 
 
-\sstab {(3) When using \dad, the average errors from the smallest
+\sstab {(4) When using \dad, the average errors from the smallest
 to the largest are one-pass algorithm \intersec, batch algorithms \dpa and \tpa, one-pass algorithm \interval and online algorithm \opwa, and the optimal algorithm \opt.
 \eat{%%%%%%%%%%%%%
 For example, in Figure~\ref{fig:ae-dad-ped-epsilon}, in \mopsi, the average errors of algorithms
@@ -531,9 +536,9 @@ The results are reported in Figures~\ref{fig:time-epsilon-ped},~\ref{fig:time-ep
 Note that even on the small datasets, \emph{the running time of algorithm \opt  is thousands of times slower than one-pass algorithms}. As it is not clear to show all these algorithms in a single figure, only the results of sub-optimal algorithms are shown in these figures.
 We first report our findings.
 
+\sstab (1) \textcolor{blue}{Datasets do not have obviously impacts on the running time of \lsa algorithms.}
 
-
-\sstab (1) When using \ped, in most cases, the running time from the smallest to the largest is one-pass algorithms \siped and \operb, batch algorithms \tpa and \dpa, and online algorithm \bqsa.
+\sstab (2) When using \ped, in most cases, the running time from the smallest to the largest is one-pass algorithms \siped and \operb, batch algorithms \tpa and \dpa, and online algorithm \bqsa.
 Algorithms \siped($\frac{\epsilon}{2}$) and \operb are comparable, algorithm \siped(${\epsilon}$) is $(0.92, 0.92, 0.91)$ times of \siped($\frac{\epsilon}{2}$), and algorithms \tpa, \dpa and \bqsa are on average
 ($26.79$, $28.25$, $29.87$), ($16.32$, $15.40$, $11.02$) and ($37.73$, $62.23$, $61.29$)
 times slower than one-pass algorithm \siped($\frac{\epsilon}{2}$) on datasets \dSets, respectively.
@@ -541,14 +546,14 @@ times slower than one-pass algorithm \siped($\frac{\epsilon}{2}$) on datasets \d
 For example, in \mopsi, the running time of algorithms
 (\tpa, \dpa, \bqsa, \siped(${\epsilon}$), \siped($\frac{\epsilon}{2}$), \operb ) is ($232.9$, $124.2$, $469.4$, $6.89$, $7.6$, $8.6$) seconds when $\epsilon$ = $40m$.
 
-\sstab (2) When using \sed, the running time from the smallest to the largest is one-pass algorithm \cised, online algorithm \squishe, and batch algorithms \tpa and \dpa. Algorithm \cised(${\epsilon}$) is $(1.17, 1.17, 0.91)$ times of \cised($\frac{\epsilon}{2}$), and algorithms \tpa, \dpa and \squishe are on average
+\sstab (3) When using \sed, the running time from the smallest to the largest is one-pass algorithm \cised, online algorithm \squishe, and batch algorithms \tpa and \dpa. Algorithm \cised(${\epsilon}$) is $(1.17, 1.17, 0.91)$ times of \cised($\frac{\epsilon}{2}$), and algorithms \tpa, \dpa and \squishe are on average
 ($13.33$, $15.81$, $13.09$), ($12.93$, $10.64$, $8.79$) and
 ($2.75$, $2.78$, $2.57$) times slower than \cised($\frac{\epsilon}{2}$) on datasets \dSets, respectively.
 %
 For example, in \mopsi, the running time of algorithms
 (\tpa, \dpa, \squishe, \cised($\epsilon$), \cised($\frac{\epsilon}{2}$)) is ($156.6$, $104.8$, $27.2$, $11.6$, $9.7$) seconds when $\epsilon$ = $40m$.
 
-\sstab {(3) When using \dad,} the running time from the smallest to the
+\sstab {(4) When using \dad,} the running time from the smallest to the
 largest is one-pass algorithms \intersec and \interval, batch algorithms \tpa and \dpa, and online algorithm \opwa.
 %
 %Algorithm \interval is a bit slower than \intersec, and algorithms \tpa and \dpa are on average
