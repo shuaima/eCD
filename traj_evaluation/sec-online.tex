@@ -7,10 +7,10 @@ To design more efficient online algorithms, techniques typically need to be desi
 Indeed, \bqsa \cite{Liu:BQS} and \squishe \cite{Muckell:Compression} propose to utilize convex hulls and priority queues, respectively, and they speed up trajectory simplification using \ped and \sed, respectively. To our knowledge, no specific techniques have been developed for \dad.
 Hence, {\em we choose algorithms \bqsa, \squishe and \opwa as the representatives of online algorithms using \ped, \sed and \dad, respectively}.
 
-\subsubsection{\textcolor{blue}{Algorithm \opwa \cite{Meratnia:Spatiotemporal}}.}
-It combines the Top-down and opening window strategies, and enforces the constrained global checking in the window. Like \dpa, it supports \ped, \sed and \dad.
+\subsubsection{Algorithm \opwa \cite{Meratnia:Spatiotemporal}.}
+It combines the top-down and opening window strategies, and enforces the constrained global checking in the window. Like \dpa, it supports \ped, \sed and \dad.
 
-Given a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ and an error bound $\epsilon$, algorithm \opwa~\cite{Meratnia:Spatiotemporal} maintains a window $W[P_s, \ldots, P_k]$, where $P_s$ and $P_k$ are the start and end points, respectively. Initially, $P_s$ = $P_0$ and $P_k$ = $P_1$, and the window $W$ is gradually expanded by adding new points one by one. \opwa tries to compress all points in $W[P_s, \ldots, P_k]$ to a single line segment $\mathcal{L}(P_{s}, P_{k})$. If the distances $ped(P_i, {\mathcal{L}})\le \epsilon$ for all points $P_i$ ($i\in[s, k]$), it simply expands $W$ to $[P_s, \ldots, P_k, P_{k+1}]$ $(k+1\le n)$ by adding a new point $P_{k+1}$. Otherwise, it produces a new line segment $\mathcal{L}(P_{s}, P_{k-1})$, and replaces $W$ with a new window $[P_{k-1},\ldots,P_{k+1}]$. The above process repeats until all points in $\dddot{\mathcal{T}}$ have been considered.
+Given a trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_n]$ and an error bound $\epsilon$, algorithm \opwa~\cite{Meratnia:Spatiotemporal} maintains a window $W[P_s, \ldots, P_k]$, where $P_s$ and $P_k$ are the start and end points, respectively. Initially, $P_s$ = $P_0$ and $P_k$ = $P_1$, and the window $W$ is gradually expanded by adding new points one by one. \opwa tries to compress all points in $W[P_s, \ldots, P_k]$ to a single line segment $\mathcal{L}(P_{s}, P_{k})$. If the distances $ped(P_i, {\mathcal{L}})\le \epsilon$ for all points $P_i$ ($i\in[s, k]$), it simply expands $W$ to $[P_s, \ldots, P_k, P_{k+1}]$ $(k+1\le n)$ by adding a new point $P_{k+1}$. Otherwise, it produces a new line segment $\mathcal{L}(P_{s}, P_{k-1})$, and replaces $W$ with a new window $[P_{k-1},\ldots,P_{k+1}]$. It is similar for \sed and \dad. The above process repeats until all points in $\dddot{\mathcal{T}}$ have been considered.
 %
 %\textcolor[rgb]{0.00,0.07,1.00}{According to the different methods of selecting the end points of a line segment, Open Window can further be divided into Normal Penning Window and Before Opening Window~\cite{Meratnia:Spatiotemporal}. When the distance of the point to compressed trajectory exceeds a certain threshold, Normal Opening Window algorithm select that point as the end point, while Before Opening Window select the last point within the window as the end point of the current trajectory.}
 %
@@ -53,7 +53,7 @@ The time complexity of \bqsa remains $O(n^2)$. However, its simplified version \
 
 
 \subsubsection{Algorithm SQUISH-E Using \sed~\cite{Muckell:Compression}}
-It is an online bottom-up algorithm \textcolor{blue}{specific for \sed}, and has two forms: \squishe($\lambda$) ensuring the compression ratio $\lambda$, and \squishe($\epsilon$) ensuring the \sed error bound $\epsilon$. We use \squishe($\epsilon$), as we focus on error bounded trajectory simplification.
+It is an online bottom-up algorithm that is {specific for \sed}, and has two forms: \squishe($\lambda$) ensuring the compression ratio $\lambda$, and \squishe($\epsilon$) ensuring the \sed error bound $\epsilon$. Here we adopt \squishe($\epsilon$), as we focus on error bounded trajectory simplification.
 
 \eat{%%%%%%%%%%%%%%%%
 taking as input a trajectory \trajec{T} and two additional parameters $\lambda$ and $\epsilon$.
@@ -75,7 +75,7 @@ Next, the properties $prio$ of $pre(P_j)$ and $suc(P_j)$ are further updated to 
 %
 After that, a new point is read to the list and the information of its predecessor in the list is updated.
 %
-The above process repeated until that no points have a priority smaller than $\epsilon$. 
+The above process repeated until that no points have a priority smaller than $\epsilon$.
 %
 \squishe finds and removes a point from $Q$ that has the lowest priority in $O(\log |Q|)$ time, where $|Q|$ denotes the number of points stored in $Q$.
 Thus, \squishe runs in $O(n\log |Q|)$ time and $O(|Q|)$ space.
