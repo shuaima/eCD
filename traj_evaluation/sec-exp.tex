@@ -4,7 +4,7 @@
 \label{sec-exp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 In this section, we present extensive and systematic experimental studies and analyses of eleven representative \lsa algorithms.
-Using four real-life datasets, we conduct three sets of tests to evaluate \textcolor{blue}{the effectiveness (compression ratios and errors), efficiency (running time), aging friendliness and query friendliness} of these representative algorithms using distance metrics \ped, \sed and \dad, and the impacts of error bounds $\epsilon$ and trajectory sizes.
+Using four real-life datasets, we conduct five sets of tests to evaluate  the effectiveness in terms of compression ratios and errors, efficiency (running time), aging friendliness and query friendliness of these representative algorithms using distance metrics \ped, \sed and \dad, and the impacts of error bounds $\epsilon$ and trajectory sizes.
 %
 %(1) the effectiveness of these algorithms, and
 %(2) the efficiency of them.
@@ -16,18 +16,18 @@ Using four real-life datasets, we conduct three sets of tests to evaluate \textc
 
 \stitle{Real-life Trajectory Datasets}.
 We use three real-life datasets shown in \mytable{tab:datasets}, namely, Service car trajectory data (\ucar), Geolife trajectory data (\geolife)~\cite{Web:Geolife} and \mopsi trajectory data (\mopsi)~\cite{Web:Mopsi}, to evaluate those \lsa algorithms.
-These data sets come from different sources, where \ucar are collected by cars in urban, and \geolife and \mopsi are a mixing of cars and individuals. They also have \textcolor{blue} {typical sampling rates often used in practice, ranging from one point per second to one point every five seconds.}
+These data sets come from different sources, where \ucar are collected by cars in urban, and \geolife and \mopsi are a mixing of cars and individuals. They also have {typical sampling rates used in practice, ranging from one point per second to one point per five seconds.}
 The data source and sampling rate also affect the performance of \lsa algorithms using certain distance metrics.
 
 %\vspace{0.5ex}
-\ni \textcolor{blue}{(1) \ucar is the GPS trajectories collected by a Chinese car rental company during Apr. 2015 to Nov. 2015. Most routes are in big cities. The sampling rate was one point per $3$--$5$ seconds, and each trajectory has around $114.1K$ points.}
+\ni {(1) \ucar is the GPS trajectories collected by a Chinese car rental company during Apr. 2015 to Nov. 2015. Most routes are located in big cities. The sampling rate is one point per $3$--$5$ seconds, and each trajectory has around $114.1K$ points.}
 %.We randomly chose $1,000$ cars from them
 
 %\vspace{0.5ex}
-\ni \textcolor{blue}{(2) \geolife is the GPS trajectories collected in GeoLife project~\cite{Web:Geolife} by 182 users in a period from Apr. 2007 to Oct. 2011. These trajectories have a variety of sampling rates, among which 91\% are logged in each 1-5 seconds per point. The longest trajectory has 2,156,994 points.}
+\ni {(2) \geolife is the GPS trajectories collected in GeoLife project~\cite{Web:Geolife} by 182 users in a period from Apr. 2007 to Oct. 2011. These trajectories have a variety of sampling rates, among which 91\% are logged at one  point  per 1-5 seconds. The longest trajectory has 2,156,994 points.}
 
 %\vspace{0.5ex}
-\ni \textcolor{blue}{(3) \mopsi is the GPS trajectories collected in Mopsi project~\cite{Web:Mopsi} by 51 users in a period from 2008 to 2014. Most routes are in Joensuu region, Finland. The sampling rate was one point per $2$ seconds, and each trajectory has around $153.9K$ points.}
+\ni {(3) \mopsi is the GPS trajectories collected in Mopsi project~\cite{Web:Mopsi} by 51 users in a period from 2008 to 2014. Most routes are located in Joensuu region, Finland. The sampling rate is one point per $2$ seconds, and each trajectory has around $153.9K$ points.}
 
 
 \begin{table}[tb!]
@@ -65,11 +65,11 @@ The data source and sampling rate also affect the performance of \lsa algorithms
 %The details of these datasets are shown in Table~\ref{tab:dataset}.
 
 \stitle{Algorithms and implementation}.
-We implement the representative algorithms of \mytable{tab:summary-lsa}.
+We have implemented the representative algorithms shown in \mytable{tab:summary-lsa}.
  They are optimal algorithm \opt, batch algorithms \dpa and \tpa, online algorithms  \opwa, \bqsa and \squishe, and one-pass algorithms  \operb, \siped, \cised, \intersec and \interval.
 For one-pass algorithms \siped and \cised, we implement two versions of them (half and full $\epsilon$), denoted as \siped($\epsilon$), \siped($\frac{\epsilon}{2}$), \cised($\epsilon$) and \cised($\frac{\epsilon}{2}$).
 For algorithm \cised($\epsilon$) and \cised($\frac{\epsilon}{2}$), we fixed parameter $m=16$ as evaluated in \cite{Lin:Cised}, \ie 16-edges inscribe regular polygon.
-\textcolor{blue}{For algorithm \operb, the fifth optimization technique ``absorbing data points after $P_{s+k}$" is removed.}
+{For algorithm \operb, we remove its fifth optimization technique to make it fit for the definition of error bounded algorithms.}
 % For algorithm \nopts, we fixed parameter $m=32$.
 All algorithms are implemented with Java.
 All tests are run on an x64-based  PC with 4 Intel(R) Core(TM) i7-6700 CPU @
@@ -101,8 +101,8 @@ We test these algorithms under varied error bounds $\epsilon$ and trajectory siz
 
 \subsection{Evaluation Metrics}
 
-\textcolor{blue}{Compression ratios and errors are the most popular metrics to evaluate the effectiveness of \lsa algorithms, and they are also metrics to evaluate the aging friendliness and query friendliness of \lsa algorithms.
-Besides, running time reflects the efficiency of \lsa algorithms.}
+{Compression ratios and errors are the most popular metrics to evaluate the effectiveness of \lsa algorithms, and they are also the metrics to evaluate the aging friendliness and query friendliness of \lsa algorithms.
+And the running time  is used to evaluate the efficiency of \lsa algorithms.}
 
 \stitle{Compression ratios.}
 For trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piece-wise line representations $\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$,
@@ -147,7 +147,7 @@ The compression ratios of these algorithms under varied error bounds $\epsilon$ 
 
 
 %%%%%%%%%%%%%%%%%
-\sstab(1) \textcolor{blue}{Datasets have some impacts on the compression ratios of \lsa algorithms. Datasets having higher sampling rates have better compression ratios when use \ped and \sed, while it is on the contrary when use \dad. Datasets collected by cars (\eg~\ucar) also have better compression ratios than datasets partially collected by individuals (\eg~\geolife and \mopsi). }
+\sstab(1)  {Datasets may have impacts on the compression ratios of \lsa algorithms. Datasets with higher sampling rates typically have better compression ratios for \ped and \sed, while it is opposite for \dad. Datasets collected by cars (\eg~\ucar) also have better compression ratios than datasets partially collected by individuals (\eg~\geolife and \mopsi), as cares typically move more regular than individuals. }
 
 \sstab(2) The compression ratios of algorithms using \ped from the best
 to the worst are the optimal algorithm \opt, online algorithm \bqsa, one-pass algorithm \siped($\epsilon$), batch algorithms \tpa and \dpa, and one-pass algorithms \siped($\frac{\epsilon}{2}$) and \operb.
@@ -390,7 +390,7 @@ We first report our findings.
 	\vspace{-2ex}
 \end{figure*}
 
-\sstab (1) \textcolor{blue}{Datasets have few impacts on the errors of \lsa algorithms.}
+\sstab (1) {Datasets are insensitive to the errors of \lsa algorithms.}
 
 \sstab (2) When using \ped, the average errors from the smallest
 to the largest are batch algorithms \tpa and \dpa, one-pass
@@ -536,7 +536,7 @@ The results are reported in Figures~\ref{fig:time-epsilon-ped},~\ref{fig:time-ep
 Note that even on the small datasets, \emph{the running time of algorithm \opt  is thousands of times slower than one-pass algorithms}. As it is not clear to show all these algorithms in a single figure, only the results of sub-optimal algorithms are shown in these figures.
 We first report our findings.
 
-\sstab (1) \textcolor{blue}{Datasets do not have obviously impacts on the running time of \lsa algorithms.}
+\sstab (1) {Datasets do not have obvious impacts on the running time of \lsa algorithms.}
 
 \sstab (2) When using \ped, in most cases, the running time from the smallest to the largest is one-pass algorithms \siped and \operb, batch algorithms \tpa and \dpa, and online algorithm \bqsa.
 Algorithms \siped($\frac{\epsilon}{2}$) and \operb are comparable, algorithm \siped(${\epsilon}$) is $(0.92, 0.92, 0.91)$ times of \siped($\frac{\epsilon}{2}$), and algorithms \tpa, \dpa and \bqsa are on average
@@ -664,19 +664,20 @@ The computation time of \dad is faster than \ped and \sed, and the computation t
 {It is also worth pointing out that algorithms \dpa using \ped, \sed and \dad have similar running time in all datasets, though the computation of \ped is much heavier than \sed and \dad. The reason is that \dpa using \ped has the best compression ratios which instead leads to the least splitting processes in the top-down manner. Combining these two factors, \ie the computing of distance/direction deviation and the processing of trajectory splitting, finally, algorithm \dpa using \ped has similar running time as \dpa using \dad or \sed.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{\textcolor{blue}{Evaluation and Analyses of Aging Friendliness}}
+\subsubsection{{Evaluation and Analyses of Aging Friendliness}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-In this set of tests, we compare the error and compression ratios of algorithms in data aging. We set $\epsilon_1=40m$ (or $\epsilon_1=30^o$) in the first run and $\epsilon_2=60m$ (or $\epsilon_2=50^o$) in the second run. Besides, we also run these algorithms on the raw trajectories, setting $\epsilon_3=\epsilon_1 + \epsilon_2=100m$ (or $\epsilon_3=80^o$). The max errors are reported in \mytable{tab:aging-me}, and the compression ratios are reported in \mytable{tab:aging-cr} and \mytable{tab:cr}, respectively.
+In this set of tests, we compare the errors and compression ratios of algorithms in data aging. We set $\epsilon_1=40m$ (or $\epsilon_1=30^o$) in the first run and $\epsilon_2=60m$ (or $\epsilon_2=50^o$) in the second run. Besides, we also run these algorithms on the raw trajectories, setting $\epsilon_3=\epsilon_1 + \epsilon_2=100m$ (or $\epsilon_3=80^o$). The max errors are reported in \mytable{tab:aging-me}, and the compression ratios are reported in \mytable{tab:aging-cr} and \mytable{tab:cr}, respectively.
 
-\ni (1) Algorithms \dpa using \ped and \sed both have max errors less than $\epsilon_2 = 60m$, confirming that they are aging friendly and their max errors are consistent with Theorem ~\ref{theo-aging-error-dp}, while algorithm \dpa using \dad and other algorithms have max error larger than $\epsilon_2 = 60m$ or $\epsilon_2 = 50^o$, confirming that they are not aging friendly and their max errors are consistent with Theorems ~\ref{theo-aging-dp-dad}, \ref{theo-aging-tp}, \ref{theo-aging-squishe} and \ref{theo-aging-online}.
+\ni (1) Algorithms \dpa using \ped and \sed both have max errors less than $\epsilon_2 = 60m$, confirming that they are aging friendly and their max errors are consistent with Theorem ~\ref{theo-aging-error-dp}; w
+hile algorithm \dpa using \dad and other algorithms have max error larger than $\epsilon_2 = 60m$ or $\epsilon_2 = 50^o$, confirming that they are not aging friendly and their max errors are consistent with Theorems ~\ref{theo-aging-dp-dad}, \ref{theo-aging-tp}, \ref{theo-aging-squishe} and \ref{theo-aging-online}.
 
 \ni (2) Algorithm \dpa using \dad and other algorithms have max error less than $\epsilon_1 + \epsilon_2 = 100m$ or $\epsilon_1 + \epsilon_2 = 80^o$, which is consistent with Theorem ~\ref{theo-aging-distance}.
 
-\ni (3) \mytable{tab:aging-cr} and \mytable{tab:cr} tell that, if algorithms compress data using $\epsilon_1$ and $\epsilon_2$ in turn, then they have a bit poorer compression ratios than simplification directly using $\epsilon_3=\epsilon_1 + \epsilon_2$.
-Note that the causes of this phenomenon are varied. For algorithm \dpa using \ped or \sed, it is caused by the shorten of the final error bound, which is $max\{\epsilon_1, \epsilon_2\}$, less than $\epsilon_3=\epsilon_1 + \epsilon_2$; while for the other algorithms, they loss some compression ratios because of data aging. 
+\ni (3) \mytable{tab:aging-cr} and \mytable{tab:cr} tell that, if algorithms compress data using $\epsilon_1$ and $\epsilon_2$ in turn, then they have a bit poorer compression ratios than directly using $\epsilon_3=\epsilon_1 + \epsilon_2$.
+Note that the causes of this phenomenon are varied. For algorithm \dpa using \ped or \sed, it is caused by the shorten of the final error bound, which is $max\{\epsilon_1, \epsilon_2\}$, less than $\epsilon_3=\epsilon_1 + \epsilon_2$; while for the other algorithms, they loss some compression ratios because of data aging.
 
-%In the contrast, algorithms \dpa using \ped and \sed do not loss that. Hence, given the same final error bound (\eg $100m$) of data aging, algorithm \dpa using \ped (or \sed) shows a bit advantages in terms of compression ratios.   
+%In the contrast, algorithms \dpa using \ped and \sed do not loss that. Hence, given the same final error bound (\eg $100m$) of data aging, algorithm \dpa using \ped (or \sed) shows a bit advantages in terms of compression ratios.
 
 
 
@@ -714,7 +715,7 @@ Note that the causes of this phenomenon are varied. For algorithm \dpa using \pe
 \end{table}
 
 
-   	 	 
+   	 	
 \begin{table}
 	%\renewcommand{\arraystretch}{1.2}
 	\caption{\small The final compression ratios of algorithms in data aging that set $\epsilon_1=40m$ (or $\epsilon_1=30^o$ when using \dad) in the first run and $\epsilon_2=60m$ (or $\epsilon_2=50^o$ when using \dad) in the second run.}
@@ -724,7 +725,7 @@ Note that the causes of this phenomenon are varied. For algorithm \dpa using \pe
 	\begin{tabular}{|l|c|c|c|l|c|c|c|l|c|c|c|}
 		\hline
 		\bf{Alg. (PED)}  &\ucar &\geolife &\mopsi & \bf{Alg. (SED)}  &\ucar &\geolife &\mopsi &\bf{Alg. (DAD)}  &\ucar &\geolife &\mopsi \\
-		\hline  		 
+		\hline  		
 		{\dpa} &	$4.67$ & $1.94 $ &	$1.68$	&\dpa &$10.03$ &$3.83$ & $2.78 $ & \dpa	& $12.75$	& $22.20$	& $20.34 $ \\
 		\hline
 		{\tpa} &	$4.66$ & $	2.07 $ &	$1.74 $	&\tpa 	& $10.09$& $3.78$ &$2.76$ & \tpa	& $3.80$	& $13.28$	& $11.30$ \\
@@ -742,8 +743,8 @@ Note that the causes of this phenomenon are varied. For algorithm \dpa using \pe
 	\vspace{-2ex}
 \end{table}
 
- 	 	 
-   	 	 
+ 	 	
+   	 	
 \begin{table}
 	%\renewcommand{\arraystretch}{1.2}
 	\caption{\small The compression ratios of algorithms running on the raw trajectories that set $\epsilon_3=\epsilon_1+\epsilon_2=100m$ (or $\epsilon_3=80^o$ when using \dad).}
@@ -772,13 +773,13 @@ Note that the causes of this phenomenon are varied. For algorithm \dpa using \pe
 \end{table}
  	 	
  	 	
- 	 	 
+ 	 	
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{\textcolor{blue}{Evaluation and Analyses of Queries Friendliness}}
+\subsubsection{{Evaluation and Analyses of Queries Friendliness}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-{We finally evaluate compressed trajectories from the viewpoint of trajectory application, \ie spatio-temporal query. The well-known spatio-temporal queries are \emph{where\_at, when\_at, range, nearest\_neighbor} and \emph{spatial\_join} \cite{Cao:Spatio}. Among them, \emph{where\_at} query, \ie ``\emph{the position $P$ of a moving object at time $t$}'', is the foundation of \emph{range} and \emph{nearest\_neighbor} queries.}
+{We finally evaluate those compressed trajectories from the viewpoint of trajectory application, \ie spatio-temporal query. The well-known spatio-temporal queries are \emph{where\_at, when\_at, range, nearest\_neighbor} and \emph{spatial\_join} \cite{Cao:Spatio}. Among them, \emph{where\_at} query, \ie ``\emph{the position $P$ of a moving object at time $t$}'', is the foundation of \emph{range} and \emph{nearest\_neighbor} queries.}
 {Hence, we choose it to evaluate compressed trajectories simplified by \lsa algorithms using \ped, \sed and \dad.
 As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the expected position $P'$ of the moving object at time $t$. Indeed, it is the \emph{synchronized point} of $P$ when the query is performed on simplified trajectories.}
 
@@ -911,7 +912,7 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 
 
 \stitle{Analyses of \lsa algorithms.}
-It is hard to tell regular conclusions of query errors of \lsa algorithms. Roughly speaking, algorithms \intersec using \dad and \squishe using \sed have obviously smaller query errors than other algorithms using the same distance metrics, partially because they have poorer compression ratios; and the average query errors of algorithms \operb and \siped($\epsilon$) using \ped will remarkablely increase when the error bounds are larger then certain value, \eg $40$ meters, in dataset \mopsi, because they may include points that lead to very large query errors. 
+It is hard to tell regular conclusions of query errors of \lsa algorithms. Roughly speaking, algorithms \intersec using \dad and \squishe using \sed have obviously smaller query errors than other algorithms using the same distance metrics, partially because they have poorer compression ratios; and the average query errors of algorithms \operb and \siped($\epsilon$) using \ped will remarkablely increase when the error bounds are larger then certain value, \eg $40$ meters, in dataset \mopsi, because they may include points that lead to very large query errors.
 
 
 %Moreover, algorithm \siped using \ped has larger spatio-temporal query errors than \dpa using \ped because \siped applies a greedy policy that tries to include as many points into a line segment, and some of these ``extra-points'' lead to large errors.
@@ -921,8 +922,8 @@ It is hard to tell regular conclusions of query errors of \lsa algorithms. Rough
 
 \stitle{Analyses of distance metrics.}
 \sed is spatio-temporal query friendly while the others are not.
-Given the same error bound, the average query errors of algorithms using \ped are enormously larger than those using \sed, brought by some points having extremely large query errors, and they are typically larger than error bounds. 
-Similar as \ped, algorithms using \dad also lead to enormously large query errors. 
+Given the same error bound, the average query errors of algorithms using \ped are enormously larger than those using \sed, brought by some points having extremely large query errors, and they are typically larger than error bounds.
+Similar as \ped, algorithms using \dad also lead to enormously large query errors.
 Indeed, the temporal information is lost when using \ped and \dad, thus, they are not suitable for compressing trajectories in the context that spatio-temporal queries will run on the simplified trajectories.
 
 
@@ -953,7 +954,7 @@ The full $\epsilon$ \emph{sector/cone/range} combining with a position/direction
 One-pass algorithms show a linear running time and they are not very sensitive to error bound $\epsilon$, and also scale well with the increase of trajectory sizes.
 %The average errors of algorithms as a whole are on the contrary of compression ratios. The optimal algorithm usually is the worst algorithm in term of average error, followed by one pass algorithms and then batch algorithms. Online algorithms have varied average errors, ranging from the best to the worst.
 %
-(5) \textcolor{blue}{Algorithms \dpa using \ped and \sed are aging friendly, while others are not. All the algorithms have bounded errors in data aging, where the error bounds of \dpa using \ped and \sed are $max\{\epsilon_1, \epsilon_2\}$ and others are $\epsilon_1 + \epsilon_2$.}
+(5) {Algorithms \dpa using \ped and \sed are aging friendly, while others are not. All the tested algorithms have bounded errors in data aging, where the error bounds of \dpa using \ped and \sed are $max\{\epsilon_1, \epsilon_2\}$ and the others are $\epsilon_1 + \epsilon_2$.}
 
 \stitle{Distance Metrics}.
 (1) The output sizes of algorithms using \sed are approximately twice of \ped, and in practice (\eg $\epsilon <100$ meters and $\epsilon < 60$ degrees), \ped and \sed usually bring obvious better compression ratios than \dad, especially in high sampling data sets.
@@ -963,9 +964,9 @@ One-pass algorithms show a linear running time and they are not very sensitive t
 %
 (3) Simplification using \dad is in general faster than \ped and \sed, and, indeed, the computation time of \ped and \sed is 2.3 and 1.7 times of \dad, respectively.
 %
-\textcolor{blue}{(4) \dad is not aging friendly \wrt any algorithm.}
+{(4) \dad is not aging friendly \wrt any tested algorithm.}
 %
-\textcolor{blue}{(5) \sed is spatio-temporal queries friendly while the others are not. Note that algorithms using \ped and/or \dad may lead to enormously large query errors.}
+{(5) \sed is spatio-temporal queries friendly while the others are not. Note that algorithms using \ped and/or \dad may lead to very large query errors.}
 
 %%********************************* The End **********************************
 
