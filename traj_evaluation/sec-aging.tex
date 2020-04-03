@@ -6,19 +6,28 @@ Suppose that we have compressed a trajectory $\dddot{\mathcal{T}_0}$ to $\overli
 What is the relationship among $\overline{\mathcal{T}}_2$, $\overline{\mathcal{T}}_1$ and $\dddot{\mathcal{T}_0}$? And what is the right way to get the coarser trajectory $\overline{\mathcal{T}}_2$?
 %
 This section is to answer these questions from the views of friendliness \cite{Cao:Spatio} and errors.
-Note that if we get $\overline{\mathcal{T}}_1$ and $\overline{\mathcal{T}}_2$ by optimal algorithms \wrt error bounds $\epsilon_1$ and $\epsilon_2$, respectively, then $\overline{\mathcal{T}}_2$ may not be the optimal one of $\dddot{\mathcal{T}_0}$ \wrt any error bound \cite{Cao:Spatio}. Hence, we focus on sub-optimal error bounded trajectory simplification algorithms only.
+Note that if we get $\overline{\mathcal{T}}_1$ and $\overline{\mathcal{T}}_2$ by optimal algorithms \wrt error bounds $\epsilon_1$ and $\epsilon_2$, respectively, then $\overline{\mathcal{T}}_2$ may not be the optimal one of $\dddot{\mathcal{T}_0}$ \wrt any error bound \cite{Cao:Spatio}. 
+%Hence, we focus on sub-optimal error bounded trajectory simplification algorithms only.
 
 \subsection{Friendliness of Data Aging}
 We first discuss the relationship between $\overline{\mathcal{T}}_1$ and $\overline{\mathcal{T}}_2$ from the view of friendliness, which was defined in \cite{Cao:Spatio}, but was seldomly discussed in other works.
 	
-\stitle{Aging friendly \cite{Cao:Spatio}}. {A \lsa algorithm $\mathcal{A}$ is aging friendly with respect to a distance metric $\mathcal{D}$ if for every $\epsilon_1$ and every $\epsilon_2$ such that $\epsilon_1 < \epsilon_2$, and for every trajectory $\dddot{\mathcal{T}}$, $\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{D})= \mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$.}
+\stitle{Aging friendly \cite{Cao:Spatio}}. {A \lsa algorithm $\mathcal{A}$ is aging friendly with respect to a distance metric $\mathcal{M}$ if for every $\epsilon_1$ and every $\epsilon_2$ such that $\epsilon_1 < \epsilon_2$, and for every trajectory $\dddot{\mathcal{T}}$, $\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{M})= \mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M})$.}
 
-Cao et al. proved in \cite{Cao:Spatio} that ``the top-down algorithm \dpa is aging friendly \wrt~\ped and \sed" on the premise that the second run of \dpa takes as input the whole simplified trajectory produced by the first run.
-In spite of that, algorithms other than \dpa and distance metrics other than \ped and \sed are not discussed in \cite{Cao:Spatio}, thus, their effectiveness in data aging remains an open problem.
+Cao et al. proved in \cite{Cao:Spatio} that ``an optimal line simplification algorithm is not aging-friendly \wrt~the \ped and \sed", and ``the top-down algorithm \dpa is aging friendly \wrt~\ped and \sed" on the premise that the second run of \dpa takes as input the whole simplified trajectory produced by the first run.
+In spite of that, algorithms other than the optimal algorithms and the top-down algorithm \dpa with distance metrics other than \ped and \sed are not discussed in \cite{Cao:Spatio}, thus, their effectiveness in data aging remains an open problem.
 In the rest of the section, we will fully discuss this problem, start from \dpa coupling with \dad.
 %And, when \dpa is coupling with \dad, things are changed.
 
+\begin{proposition}
+	\label{theo-aging-dp-dad}
+	An optimal algorithm is not aging friendly \wrt~\dad too.
+\end{proposition}
 
+\begin{proof}
+	\todo{We will prove the proposition by construction.}
+\end{proof}	
+	
 \begin{proposition}
 	\label{theo-aging-dp-dad}
 	The top-down algorithm \dpa is not aging friendly \wrt~\dad.
@@ -106,9 +115,9 @@ In this case, ${\tpa}(\dddot{\mathcal{T}}, 6, \ped) \ne {\tpa}(\tpa(\dddot{\math
 	For online algorithm \squishe, it supports \sed only and runs in a bottom-up manner that is a slight variation of algorithm \tpa. As \tpa, it is not aging friendly \wrt~\sed.
 	For other online and one-pass algorithms, though they apply different distance checking approaches, they run in a common incremental manner, \ie they incrementally read data points until they can not represent those read points by one line segment, then they output the simplified sub-trajectory and continue to process the rest data points. We next construct counter examples to show that an incremental algorithm $\mathcal{A}$ is not aging friendly.
 	
-	\underline{(1) ${\mathcal{A}}(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{D})$}. As shown in Figure~\ref{fig:aging-incre}-(1)(3)(5), the algorithm $\mathcal{A}$ incrementally reads $\{P_0, P_1,\dddot, P_5\}$ and finds they can be represented by line segment $\overline{P_0P_4}$, thus the process progresses. Then, after point $P_6$ is read, it finds that these points can not be represented by any line segment, hence $\overline{P_0P_5}$ is output. Finally, the algorithm outputs $\{P_0, P_5, P_6\}$.
+	\underline{(1) ${\mathcal{A}}(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{M})$}. As shown in Figure~\ref{fig:aging-incre}-(1)(3)(5), the algorithm $\mathcal{A}$ incrementally reads $\{P_0, P_1,\dddot, P_5\}$ and finds they can be represented by line segment $\overline{P_0P_4}$, thus the process progresses. Then, after point $P_6$ is read, it finds that these points can not be represented by any line segment, hence $\overline{P_0P_5}$ is output. Finally, the algorithm outputs $\{P_0, P_5, P_6\}$.
 	
-	\underline{(2) ${\mathcal{A}}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$}. When using $\epsilon_1=4$ or $\epsilon_1=30^o $, the algorithm also outputs $\{P_0, P_5, P_6\}$. Then $\{P_0, P_5, P_6\}$ is compressed using $\epsilon_2=6$ or $\epsilon_2=45^o$ to $\{P_0, P_6\}$, as shown in Figure~\ref{fig:aging-incre}-(2)(4)(6).
+	\underline{(2) ${\mathcal{A}}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M})$}. When using $\epsilon_1=4$ or $\epsilon_1=30^o $, the algorithm also outputs $\{P_0, P_5, P_6\}$. Then $\{P_0, P_5, P_6\}$ is compressed using $\epsilon_2=6$ or $\epsilon_2=45^o$ to $\{P_0, P_6\}$, as shown in Figure~\ref{fig:aging-incre}-(2)(4)(6).
 	
 	Combining (1) and (2), it is clear that the incremental algorithms are not aging friendly \wrt~distance metric \ped, \sed or \dad.
 \end{proof}
@@ -122,32 +131,32 @@ This section focuses on these problems and discusses the error between the simpl
 
 \begin{proposition}
 	\label{theo-aging-error-dp}
-	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, for every distance metric $\mathcal{D}$ of \ped and \sed, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is $max\{\epsilon_1, \epsilon_2\}$.
+	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, for every distance metric $\mathcal{M}$ of \ped and \sed, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M})$ is $max\{\epsilon_1, \epsilon_2\}$.
 \end{proposition}
 
 \begin{proof}
-	For $\epsilon_2 \ge \epsilon_1$, as proved in \cite{Cao:Spatio}, $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{D})$, which has the max error of $\epsilon_2$ to the original trajectory $\dddot{\mathcal{T}}$.
+	For $\epsilon_2 \ge \epsilon_1$, as proved in \cite{Cao:Spatio}, $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M}) = DP(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{M})$, which has the max error of $\epsilon_2$ to the original trajectory $\dddot{\mathcal{T}}$.
 	
-	For $\epsilon_1 > \epsilon_2$, we will first prove $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$ by total induction on the number of points of \trajec{T}.
+	For $\epsilon_1 > \epsilon_2$, we will first prove $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M}) = DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M})$ by total induction on the number of points of \trajec{T}.
 	
 	(1)  For a trajectory \trajec{T} with one or two points ($n=1$ or $n=2$), the simplified trajectories with any $\epsilon$ are sure identical to the original trajectory.
 	Consider a trajectory \trajec{T} =	$[P_0, P_1, P_2]$ ($n = 3$),
-	if the distance from $P_1$ to $\overline{P_0P_2}$ is less than $\epsilon_1$, then $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}) = [P_0, P_2]$. Obviously $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}))$ is $[P_0, P_2]$ too;	
-	if the distance from $P_1$ to $\overline{P_0P_2}$ is larger than $\epsilon_1$, then $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})=\dddot{\mathcal{T}}$, and $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{D})=\dddot{\mathcal{T}}$.
+	if the distance from $P_1$ to $\overline{P_0P_2}$ is less than $\epsilon_1$, then $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}) = [P_0, P_2]$. Obviously $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M}))$ is $[P_0, P_2]$ too;	
+	if the distance from $P_1$ to $\overline{P_0P_2}$ is larger than $\epsilon_1$, then $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M})=\dddot{\mathcal{T}}$, and $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M}) = DP(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{M})=\dddot{\mathcal{T}}$.
 	
 	(2) Assume it is true for every trajectory \trajec{T} having $n$, $(n \ge 3)$, points.
 	Consider a trajectory with $n+1$ points. Let $d_{max}$ denote the maximum distance between point $P_i$, $i \in [0,n]$, and the line segment $\overline{P_0P_{n}}$.
-	If $d_{max}<\epsilon_1$, then $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})=[P_0, P_{n}]$, and $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP([P_0, P_{n}], \epsilon_2, \mathcal{D})=[P_0, P_{n}]$.
-	If $d_{max} > \epsilon_1$, then in $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$, point $P_i$ will split the trajectory \trajec{T} into two sub-trajectories, \ie $[P_0, ..., P_i]$ and $[P_{i}, ..., P_{n}]$, and continue to simplify each sub-trajectories. Hence, the result of $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$ is the union of $DP([P_0, ..., P_i], \epsilon_1, \mathcal{D})$ and $DP([P_i, ..., P_n], \epsilon_1, \mathcal{D})$.
-	Obviously, the points $P_0$, $P_i$ and $P_n$ are in the simplified trajectory of $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$, and $P_i$ is still the first spiting point of the \dpa algorithm taking the simplified trajectory and $\epsilon_2$ as input. Hence, $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is the union of $DP(DP([P_0, ..., P_i], \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ and $DP(DP([P_i, ..., P_n], \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$. By the assumption, we have $DP(DP([P_0, ..., P_i], \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP([P_0, ..., P_i], \epsilon_1, \mathcal{D})$ and $DP(DP([P_i, ..., P_n], \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP([P_i, ..., P_n], \epsilon_1, \mathcal{D})$. Thus, $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$.
+	If $d_{max}<\epsilon_1$, then $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M})=[P_0, P_{n}]$, and $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M}) = DP([P_0, P_{n}], \epsilon_2, \mathcal{M})=[P_0, P_{n}]$.
+	If $d_{max} > \epsilon_1$, then in $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M})$, point $P_i$ will split the trajectory \trajec{T} into two sub-trajectories, \ie $[P_0, ..., P_i]$ and $[P_{i}, ..., P_{n}]$, and continue to simplify each sub-trajectories. Hence, the result of $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M})$ is the union of $DP([P_0, ..., P_i], \epsilon_1, \mathcal{M})$ and $DP([P_i, ..., P_n], \epsilon_1, \mathcal{M})$.
+	Obviously, the points $P_0$, $P_i$ and $P_n$ are in the simplified trajectory of $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M})$, and $P_i$ is still the first spiting point of the \dpa algorithm taking the simplified trajectory and $\epsilon_2$ as input. Hence, $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M})$ is the union of $DP(DP([P_0, ..., P_i], \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M})$ and $DP(DP([P_i, ..., P_n], \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M})$. By the assumption, we have $DP(DP([P_0, ..., P_i], \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M}) = DP([P_0, ..., P_i], \epsilon_1, \mathcal{M})$ and $DP(DP([P_i, ..., P_n], \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M}) = DP([P_i, ..., P_n], \epsilon_1, \mathcal{M})$. Thus, $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M}) = DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M})$.
 	
-	Combining (1) and (2), we have $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D}) = DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D})$, whose max error to the original trajectory $\dddot{\mathcal{T}}$ is $\epsilon_1$.
+	Combining (1) and (2), we have $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M}) = DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M})$, whose max error to the original trajectory $\dddot{\mathcal{T}}$ is $\epsilon_1$.
 \end{proof}
 
 
 \begin{proposition}
 	\label{theo-aging-distance}
-	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, for any non-optimal \lsa algorithm $\mathcal{A}$ and distance metric $\mathcal{D}$ of \ped, \sed and \dad other than \dpa using \ped and \sed, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is $\epsilon_1+ \epsilon_2$.
+	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, for any \lsa algorithm $\mathcal{A}$ and distance metric $\mathcal{M}$ of \ped, \sed and \dad other than \dpa using \ped and \sed, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M})$ is $\epsilon_1+ \epsilon_2$.
 \end{proposition}
 
 \begin{proof} 	
@@ -157,7 +166,7 @@ This section focuses on these problems and discusses the error between the simpl
 	If it is \dad, then obviously the error between $\overline{P_kP_{k+1}}$ and $\overline{P_sP_t}$ is not more than $\epsilon_1+ \epsilon_2$.
 	
 	(2) We then prove that the  error bound between them is not less than $\epsilon_1+ \epsilon_2$.
-	If $\mathcal{A}$ is a top-down algorithm using \dad, then from Figures~\ref{fig:aging-dp-dad}-(2) we can find that the error from $\overline{P_3P_4}$ to $\overline{P_0P_4}$ is $\angle{P_3P_4P_0} = \angle{P_3P_4P_2} + \angle{P_2P_4P_0}$, whose bound is not less than $\epsilon_1 + \epsilon_2$, thus the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{D}), \epsilon_2, \mathcal{D})$ is not less than $\epsilon_1+ \epsilon_2$.
+	If $\mathcal{A}$ is a top-down algorithm using \dad, then from Figures~\ref{fig:aging-dp-dad}-(2) we can find that the error from $\overline{P_3P_4}$ to $\overline{P_0P_4}$ is $\angle{P_3P_4P_0} = \angle{P_3P_4P_2} + \angle{P_2P_4P_0}$, whose bound is not less than $\epsilon_1 + \epsilon_2$, thus the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M})$ is not less than $\epsilon_1+ \epsilon_2$.
 	If $\mathcal{A}$ is a bottom-up algorithm or an incremental algorithm, either online or one-pass, then from Figure~\ref{fig:aging-pavlidis}-(2) or Figure~\ref{fig:aging-incre} we also have the conclusion.
 	
 	
