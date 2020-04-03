@@ -16,7 +16,7 @@ We first discuss the relationship between $\overline{\mathcal{T}}_1$ and $\overl
 
 Cao et al. proved in \cite{Cao:Spatio} that ``an optimal line simplification algorithm is not aging-friendly \wrt~the \ped and \sed", and ``the top-down algorithm \dpa is aging friendly \wrt~\ped and \sed" on the premise that the second run of \dpa takes as input the whole simplified trajectory produced by the first run.
 In spite of that, algorithms other than the optimal algorithms and the top-down algorithm \dpa with distance metrics other than \ped and \sed are not discussed in \cite{Cao:Spatio}, thus, their effectiveness in data aging remains an open problem.
-In the rest of the section, we will fully discuss this problem, start from \dpa coupling with \dad.
+In the rest of the section, we will fully discuss this problem, start from algorithm \opt coupling with \dad.
 %And, when \dpa is coupling with \dad, things are changed.
 
 \begin{proposition}
@@ -25,9 +25,28 @@ In the rest of the section, we will fully discuss this problem, start from \dpa 
 \end{proposition}
 
 \begin{proof}
-	\todo{We will prove the proposition by construction.}
+	We will prove the proposition by construction.
+	As shown in Figure~\ref{fig:aging-opt-dad}, we let error bounds $\epsilon_1 =30^o$ and $\epsilon_2=45^o$.
+	
+	\underline{(1) ${\opt}(\dddot{\mathcal{T}}, 45^o, \dad)$}. 
+	It first constructs the reachability graph of the trajectory that $P_0$ has arcs to $P_1$ and $P_2$, $P_1$ has arcs to $P_2$ and $P_3$, and $P_2$ has a arc to $P_3$. At last, it outputs a shortest path of three points $\{P_0, P_2, P_3\}$. 
+	
+	\underline{(2) ${\opt}(\opt(\dddot{\mathcal{T}}, 30^o, \dad), 45^o, \dad)$}. In the first round ($\epsilon_1=30^o$), the original trajectory is compressed to three points $\{P_0, P_2, P_3\}$, and in the second round ($\epsilon_2=45^o$), because line segments  $\overline{P_0P_2}$ and $\overline{P_2P_3}$ both have angular deviations to line segment $\overline{P_0P_3}$ less than $45^o$, it is finally compressed to two points $\{P_0, P_3\}$.
+	
+	In this case, ${\opt}(\dddot{\mathcal{T}}, 45^o, \dad) \ne {\opt}(\opt(\dddot{\mathcal{T}}, 30^o, \dad), 45^o, \dad)$. Thus, algorithm \opt is not aging friendly \wrt~\dad.
 \end{proof}	
 	
+\begin{figure}
+		\centering
+		\includegraphics[scale=0.68]{Figures/Fig-aging-opt.png}
+		
+		\caption{\small A counter example of the aging friendliness of \opt using \dad, where (1) the original trajectory $\{P_0, P_1, P_2, P_3\}$ is compressed using $\epsilon_2=45^o$ to three points $\{P_0, P_2, P_3\}$, and (2) the original trajectory is first compressed using $\epsilon_1=30^o$ to three points $\{P_0, P_2, P_3\}$, then compressed using $\epsilon_2=45^o$ to two points $\{P_0, P_3\}$. }
+		\vspace{-1ex}
+		\label{fig:aging-opt-dad}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%% DP + DAD
+
 \begin{proposition}
 	\label{theo-aging-dp-dad}
 	The top-down algorithm \dpa is not aging friendly \wrt~\dad.
