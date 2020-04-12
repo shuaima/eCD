@@ -1,5 +1,5 @@
 
-\textcolor{blue}{\section{Trajectory Aging}}
+{\section{Trajectory Aging}}
 \label{sec-aging}
 
 Suppose that we have compressed a trajectory $\dddot{\mathcal{T}_0}$ to $\overline{\mathcal{T}}_1$ using any \lsa algorithm $\mathcal{A}$ with error bound $\epsilon_1$. As time evolves, we may need to further compress $\overline{\mathcal{T}}_1$ to an even coarser trajectory $\overline{\mathcal{T}}_2$ derived from .
@@ -199,7 +199,7 @@ This section focuses on these problems and discusses the error between the simpl
 	if the distance from $P_1$ to $\overline{P_0P_2}$ is less than $\epsilon_1$, then $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}) = [P_0, P_2]$. Obviously $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M}))$ is $[P_0, P_2]$ too;	
 	if the distance from $P_1$ to $\overline{P_0P_2}$ is larger than $\epsilon_1$, then $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M})=\dddot{\mathcal{T}}$, and $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M}) = DP(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{M})=\dddot{\mathcal{T}}$.
 	
-	\item Assume that it is true for every trajectory \trajec{T} having $n$, $(n \ge 3)$, points.
+	\item Assume that it is true for every trajectory \trajec{T} having $n \ge 3$ points.
 	Consider a trajectory with $n+1$ points. Let $d_{max}$ denote the maximum distance between point $P_i$, $i \in [0,n]$, and the line segment $\overline{P_0P_{n}}$.
 	If $d_{max}<\epsilon_1$, then $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M})=[P_0, P_{n}]$, and $DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M}) = DP([P_0, P_{n}], \epsilon_2, \mathcal{M})=[P_0, P_{n}]$.
 	If $d_{max} > \epsilon_1$, then in $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M})$, point $P_i$ will split the trajectory \trajec{T} into two sub-trajectories, \ie $[P_0, ..., P_i]$ and $[P_{i}, ..., P_{n}]$, and continue to simplify each sub-trajectories. Hence, the result of $DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M})$ is the union of $DP([P_0, ..., P_i], \epsilon_1, \mathcal{M})$ and $DP([P_i, ..., P_n], \epsilon_1, \mathcal{M})$.
@@ -217,7 +217,9 @@ Combining (1) with (2), we have the conclusion.
 	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, for any \lsa algorithm $\mathcal{A}$ and distance metric $\mathcal{M}$ of \ped, \sed and \dad other than \dpa using \ped and \sed, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M})$ is $\epsilon_1+ \epsilon_2$.
 \end{proposition}
 
-\begin{proof} 	
+\begin{proof} 	We shall prove this by showing that the error bound is neither more than $\epsilon_1+ \epsilon_2$  nor less than $\epsilon_1+ \epsilon_2$,
+from which we have that the error bound is exactly $\epsilon_1+ \epsilon_2$.
+
 	(1) We first prove that the error bound is not more than $\epsilon_1+ \epsilon_2$. Suppose that a point $P_k$ is represented by line segment $\overline{P_iP_j}$ with error bound $\epsilon_1$, and points $P_i$ and $P_j$ are further represented by line segment $\overline{P_sP_t}$ with error bound $\epsilon_2$ (Figure~\ref{fig:aging-error}).
 	If the distance metric is \ped, then the distance from $P'_k$ to $\overline{P_sP_t}$ is less than $\epsilon_2$, hence, the distance from $P_k$ to $\overline{P_sP_t}$ is less than $\epsilon_1 + \epsilon_2$.
 	If it is \sed, then $|P_iP''_i|<\epsilon_2$, $|P_jP''_j|<\epsilon_2$, and $\frac{|P_iP'_k|}{|P'_kP_j|} = \frac{|P''_iP''_k|}{|P''_kP''_j|}$, hence, $|P'_kP''_k|<\epsilon_2$, and the distance from $P_k$ to $\overline{P_sP_t}$, \ie $|P_kP''_k|$, is less than $\epsilon_1 + \epsilon_2$.
