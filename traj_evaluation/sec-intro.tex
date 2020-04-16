@@ -30,12 +30,12 @@ Due to the  limitations (poor compression ratio and data reconstruction overhead
 
 \stitle{Algorithm taxonomy}. \lsa algorithms fall into two categories: \textit{compression optimal} and \textit{compression sub-optimal} algorithms.
 \textit{Compression optimal} methods \cite{Imai:Optimal,Chan:Optimal} are to find the minimum number of points or segments to represent the original polygonal lines \wrt an error bound $\epsilon$, by transforming the problem to search for the shortest path of a graph built from the original trajectory.
-The optimal \lsa algorithms have relative high time/space complexities which make them impractical for large trajectory data.
+The optimal \lsa algorithms have relatively high time/space complexities which make them impractical for large trajectory data.
 Hence, \textit{compression sub-optimal} \lsa algorithms have been developed and/or introduced for trajectory compression, and they achieve better efficiency at an expense of outputting a little more data points. By the applied distance checking policies, sub-optimal algorithms can further be classified into batch, online and one-pass algorithms.
 
 \sstab (1) {\em Batch algorithms} are divided into top-down methods, \eg Douglas-Peucker (\dpa) \cite{Douglas:Peucker,Meratnia:Spatiotemporal} and bottom-up methods, \eg\ \pavlidis (\tpa)~\cite{Pavlidis:Segment}, and apply global distance checking policies such that all trajectory points need to be loaded before starting compression such that a point may be checked multiple times to compute its distance to the corresponding line segments.
 
-\sstab (2) {\em Online algorithms}, such as \opwa \cite{Meratnia:Spatiotemporal}, \squishe \cite{Muckell:SQUISH} and \bqsa \cite{Liu:BQS}, apply local distance checking policies, and need not to have the entire trajectory ready before compressing. They restrict the checking within a window/buffer, but may still check a point  multiple times during the process.
+\sstab (2) {\em Online algorithms}, such as \opwa \cite{Meratnia:Spatiotemporal}, \squishe \cite{Muckell:SQUISH} and \bqsa \cite{Liu:BQS}, apply local distance checking policies, and need not have the entire trajectory ready before compressing. They restrict the checking within a window/buffer, but may still check a point  multiple times during the process.
 
 \sstab (3) {\em One-pass algorithms}, such as \operb\cite{Lin:Operb}, \siped \cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}, \cised \cite{Lin:Cised}, \intersec\cite{Long:Direction} and \interval \cite{Ke:Interval}, apply better local distance checking policies, which even do not need a window or buffer for the previously read points, and process each point in a trajectory once and only once.
 
@@ -102,7 +102,7 @@ Note that it is easy to know that \lsa algorithms using \sed or \dad may produce
         & &\tpa\cite{Pavlidis:Segment}			&\checkmark &\checkmark  &\checkmark  	& $O(n^2/K)$ & $O(n)$  &\checkmark & bottom-up \\		
         \cline{2-10}
 
-        &\multirow{4}*{\rotatebox{90}{\bf{online}}}	&\opwa \cite{Meratnia:Spatiotemporal} 	&\checkmark &\checkmark  &\checkmark   	& $O(n^2)$	& $O(n)$  &\checkmark &top-down in openning window	\\		
+        &\multirow{4}*{\rotatebox{90}{\bf{online}}}	&\opwa \cite{Meratnia:Spatiotemporal} 	&\checkmark &\checkmark  &\checkmark   	& $O(n^2)$	& $O(n)$  &\checkmark &top-down in opening window	\\		
         \cline{3-10}
 		& &\bqsa\cite{Liu:BQS}					&\checkmark &$\times$ &$\times$ 		& $O(n^2)$  & $O(|n|)$   &\checkmark &{top-down, window and convex hull} \\		
         \cline{3-10}
@@ -134,7 +134,7 @@ Note that it is easy to know that \lsa algorithms using \sed or \dad may produce
 
 
 \stitle{Motivations}. Empirical studies of trajectory compression algorithms have been conducted~\cite{Muckell:Compression,MuckellHLR10,mThesis}. However, they only discuss a small number of algorithms. The very recent study \cite{Zhang:Evaluation} does evaluate a wide range of trajectory simplification algorithms.
-However, it provides {an experimental study} on compression errors and spatio-temporal query analyses only, and important aspects of trajectory simplification (compression ratios, running time and aging friendliness) are not systematically studied. Besides, the simplified trajectories are stored in data stores. As time goes by, less precisions may become acceptable for old trajectories \cite{Cao:Spatio}, and they are further simplified to coarse trajectories to save storage. However, can these simplified trajectories be further compressed by \lsa algorithms to coarse trajectories while still having bounded errors \wrt the original trajectories? This is referred to as the \emph{data aging} problem, which is initially introduced and partially discussed for algorithms \opt and \dpa only in \cite{Cao:Spatio}.
+However, it provides {an experimental study} on compression errors and spatio-temporal query analyses only, and important aspects of trajectory simplification (compression ratios, running time and aging friendliness) are not systematically studied. Besides, the simplified trajectories are stored in data stores. As time goes by, less precision may become acceptable for old trajectories \cite{Cao:Spatio}, and they are further simplified to coarse trajectories to save storage. However, can these simplified trajectories be further compressed by \lsa algorithms to coarse trajectories while still having bounded errors \wrt the original trajectories? This is referred to as the \emph{data aging} problem, which is initially introduced and partially discussed for algorithms \opt and \dpa only in \cite{Cao:Spatio}.
 That is to say, a systematic experimental evaluation of line simplification algorithms for trajectory compression remains necessary for practitioners to decide the appropriate algorithms and distance metrics for specific applications.
 
 
