@@ -31,7 +31,7 @@ Due to the  limitations (poor compression ratio and data reconstruction overhead
 \stitle{Algorithm taxonomy}. \lsa algorithms fall into two categories: \textit{compression optimal} and \textit{compression sub-optimal} algorithms.
 \textit{Compression optimal} methods \cite{Imai:Optimal,Chan:Optimal} are to find the minimum number of points or segments to represent the original polygonal lines \wrt an error bound $\epsilon$, by transforming the problem to search for the shortest path of a graph built from the original trajectory.
 The optimal \lsa algorithms have relatively high time/space complexities which make them impractical for large trajectory data.
-Hence, \textit{compression sub-optimal} \lsa algorithms have been developed and/or introduced for trajectory compression, and they achieve better efficiency at an expense of outputting a little more data points. By the applied distance checking policies, compression sub-optimal algorithms can further be classified into batch, online and one-pass algorithms.
+Hence, \textit{compression sub-optimal} algorithms have been developed and/or introduced for trajectory compression, and they achieve better efficiency at an expense of outputting a little more data points. By the applied distance checking policies, compression sub-optimal algorithms can further be classified into batch, online and one-pass algorithms.
 
 \sstab (1) {\em Batch algorithms} are divided into top-down methods, \eg Douglas-Peucker (\dpa) \cite{Douglas:Peucker,Meratnia:Spatiotemporal} and bottom-up methods, \eg\ \pavlidis (\tpa)~\cite{Pavlidis:Segment}, and apply global distance checking policies such that all trajectory points need to be loaded before starting compression such that a point may be checked multiple times to compute its distance to the corresponding line segments.
 
@@ -68,11 +68,11 @@ Hence, \textit{compression sub-optimal} \lsa algorithms have been developed and/
 
 Originally, \lsa algorithms adopt \ped, {the shortest Euclidean distance from a point to a line segment, as the distance metric. It brings good compression ratios~\cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey} at a cost of losing temporal information of trajectories.}
 {(1) \sed was then introduced to preserve the temporal information \cite{Meratnia:Spatiotemporal,Cao:Spatio}.
-The \sed of a point to a line segment is the Euclidean distance between the point and its \emph{synchronized point} \wrt the line segment, the expected position of the moving object on the line segment at the same time \emph{with an assumption that the object moves along a straight line on the line segment at a uniform speed} \cite{Cao:Spatio}. It kindly supports applications such as spatio-temporal queries \cite{Meratnia:Spatiotemporal,Lin:Cised}, or in other words, it is \emph{query friendly}, \ie a spatio-temporal query like \emph{where\_at}~\cite{Cao:Spatio} on a simplified trajectory will return an expected point that has a distance less than the error bound used in the simplification algorithm.}
+The \sed of a point to a line segment is the Euclidean distance between the point and its \emph{synchronized point} \wrt the line segment, the expected position of the moving object on the line segment at the same time \emph{with an assumption that the object moves straightly along the line segment at a uniform speed} \cite{Cao:Spatio}. It kindly supports applications such as spatio-temporal queries \cite{Meratnia:Spatiotemporal,Lin:Cised}, or in other words, it is \emph{query friendly}, \ie a spatio-temporal query like \emph{where\_at}~\cite{Cao:Spatio} on a simplified trajectory will return an expected point that has a distance less than the error bound used in the simplification algorithm.}
 % it is \emph{query friendly}
 (2) \dad was introduced to preserve the direction information of moving objects~\cite{Long:Direction, Zhang:Evaluation}, and was initially called the \emph{direction-based measurement} in \cite{Long:Direction}. It is important for applications such as trajectory clustering and direction-based query processing \cite{Long:Direction,Long:Mining}.
 %
-Note that it is easy to know that \lsa algorithms using \sed or \dad may produce more line segments than using \ped. However, the use of \sed and \dad further preserves temporal and direction information, respectively.
+Note that it is easy to know that given the same input, \lsa algorithms using \sed or \dad may produce more line segments than using \ped. However, the use of \sed and \dad further preserves temporal and direction information, respectively.
 
 
 
@@ -134,7 +134,7 @@ Note that it is easy to know that \lsa algorithms using \sed or \dad may produce
 
 
 \stitle{Motivations}. Empirical studies of trajectory compression algorithms have been conducted~\cite{Muckell:Compression,MuckellHLR10,mThesis}. However, they only discuss a small number of algorithms. The very recent study \cite{Zhang:Evaluation} does evaluate a wide range of trajectory simplification algorithms.
-However, it provides {an experimental study} on compression errors and spatio-temporal query analyses only, and important aspects of trajectory simplification (compression ratios, running time and aging friendliness) are not systematically studied. Besides, the simplified trajectories are stored in data stores. As time goes by, less precision may become acceptable for old trajectories \cite{Cao:Spatio}, and they are further simplified to coarse trajectories to save storage. However, can these simplified trajectories be further compressed by \lsa algorithms to coarse trajectories while still having bounded errors \wrt the original trajectories? This is referred to as the \emph{data aging} problem, which is initially introduced and partially discussed for algorithms \opt and \dpa only in \cite{Cao:Spatio}.
+However, it provides {an experimental study} on compression errors and spatio-temporal query analyses only, and important aspects of trajectory simplification (compression ratios, running time and aging friendliness) are not systematically studied. Besides, the simplified trajectories are stored in data stores. As time goes by, less precision may become acceptable for old trajectories \cite{Cao:Spatio}, and they need to be further simplified to coarse trajectories to save storage. However, can these simplified trajectories be further compressed by \lsa algorithms to coarse trajectories while still having bounded errors \wrt the original trajectories? This is referred to as the \emph{data aging} problem, which is initially introduced and partially discussed for algorithms \opt and \dpa only in \cite{Cao:Spatio}.
 That is to say, a systematic experimental evaluation of line simplification algorithms for trajectory compression remains necessary for practitioners to decide the appropriate algorithms and distance metrics for specific applications.
 
 
@@ -164,9 +164,9 @@ Our study reveals the characteristics of these algorithms, which lead to guideli
 
 Essentially, this study is a necessary complement to existing studies by providing a systematic evaluation and analyses of error bounded trajectory simplification algorithms. More specifically, (1) for a fair running time analysis, all algorithms are (re)-implemented in Java, unlike \cite{Zhang:Evaluation} that reports running time of algorithms with different programming languages,
 (2) compression ratio analyses are not considered in \cite{Zhang:Evaluation},
-(3) variations of distance metrics are not studied in \cite{Zhang:Evaluation}, and
-(4) {Data aging of \lsa algorithms is not studied in \cite{Zhang:Evaluation}.}
-(5) Optimal algorithms using \ped and \sed and one-pass algorithms \siped and \cised are not investigated in \cite{Zhang:Evaluation}.
+(3) variations of distance metrics are not studied in \cite{Zhang:Evaluation}, 
+(4) {data aging of \lsa algorithms is not studied in \cite{Zhang:Evaluation}}, and
+(5) optimal algorithms using \ped and \sed and one-pass algorithms \siped and \cised are not investigated in \cite{Zhang:Evaluation}.
 Indeed, algorithm \siped is {\em completely overlooked} by existing trajectory compression studies as it is originally developed in fields of computational geometry and pattern recognition~\cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}, and we recently find that it can be easily adopted for trajectory compression with good performance. %\cite{Lin:Cised}.
 
 \eat{Essentially, this study is an important complimentary to \cite{Zhang:Evaluation} by providing a thorough and systematic evaluation and analyses of error bounded trajectory simplification algorithms.
