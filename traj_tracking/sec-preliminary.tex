@@ -144,15 +144,63 @@ By this way, though the MOD server receives less position information about a mo
 Note the expecting position is indeed the synchronous data point \wrt of time $t$, and the deviation from the actual position to the expecting position is sure the synchronized Euclidean distance (\sed) as defined above. We can also find that the \ldr mechanism ensures that no message is sent as long as the moving object is in the circular area around the excepting position of time $t$ with a radius of $\epsilon$, \ie~\emph{\ldr always tracks the position of a moving object in a floating circular area.}
 
 
-\subsection{Trajectory tracking in circular areas}
-Though \ldr is originally used to track the position of a moving object, Authors in \cite{Trajcevski:LDRH} proved that \ldr with some small variations, named \ldrh in \cite{Lange:Tracking}, can also be used to compress trajectories. 
-\ldrh supports both position tracking and trajectory simplification, thus, it is a trajectory tracking algorithm.
 
+
+\subsection{Trajectory tracking in circular areas}
+Though \ldr is originally designed to track the position of a moving object, Authors in \cite{Trajcevski:LDRH} proved that \ldr with some small variations, named \ldrh in \cite{Lange:Tracking}, is also a line simplification algorithm such that it can be used to compress trajectories, \ie~\ldrh supports both position tracking and trajectory simplification, thus, it is a trajectory tracking algorithm.
+%
 Given an error bound $\epsilon$, \ldrh runs the same routine as \ldr except that (1) it uses half $\epsilon$ as the threshold in distance checking; (2) when the current point $P_k$ has a \sed larger than $\epsilon/2$ to its expecting location (synchronous data point), it sends the preview point $P_{k-1}$ and a new $\vv{v}$ to the MOD server and continues trajectory tracking taking $P_{k-1}$ as the new start point. \ldrh is simple and efficient, having a linear time and a constant space. However, it has a poor effectiveness in terms of compression ratio, as the half $\epsilon$ is conservative \cite{Lange:Tracking}, and more important, the algorithm is sensitive to the initial velocity which is set only once at the updating time but it is hard to be appropriate at that time.
- 
+
+%%%%%%
+\eat{ 
 \textcolor{blue}{ 
 Lange et al. in \cite{Lange:GRTS, Lange:Tracking} introduced \grts framework that aimed at improving the effectiveness, in terms of compression ratio, of trajectory tracking by logically separating position tracking and trajectory simplification into two sub-processes, where position tracking is implemented by \ldr and trajectory simplification is enforced by integrating the third party line simplification algorithms \cite{Zhang:Evaluation, Lin:Cised}. \grts is effective than \ldrh, however, it is much more complex as it includes two sub-processes and introduces a buffer to temporarily save data points for the purpose of compression.
-Like \ldr, these algorithms use \sed to check distance, hence, they also track a moving object in a floating circular area.
+Like \ldr, algorithms \ldrh and \grts both use \sed to check distances, hence, they also track a moving object in a floating circular area.}
 }
+%%%%%%eat
 
+\subsection{Trajectory simplification in circular areas}
+Recently, a one-pass trajectory simplification algorithm using \sed, namely \cised \cite{Lin:Cised} is developed. It uses a local synchronous distance checking approach based on a concept of spatio-temporal cone, defined in a 3D Cartesian coordinate system whose $x$-axis, $y$-axis and $t$-axis are longitude, latitude and time, respectively, that converts the \sed distance tolerance into the intersection of cones for testing the successive points.
+
+
+
+
+\stitle{Spatio-temporal cones (\cone{}) \cite{Lin:Cised}}. 
+Given a start point $P_s$ of sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, P_{s+k}]$ and an error bound $\epsilon$, the spatio-temporal cone (or simply \textit{cone}) of a data point $P_{s+i}$ ($1\le i\le k$) in $\dddot{\mathcal{T}_s}$ \wrt $P_s$ and $\epsilon$, denoted as \cone{(P_s, P_{s+i}, \epsilon)}, or \cone{_{s+i}} in short, is an oblique circular cone such that point $P_s$ is its apex and the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$ of point $P_{s+i}$, or \circle{_{s+i}} in short, a circle on the plane $P.t-P_{s+i}.t = 0$ such that $P_{s+i}$ is its center and $\epsilon$ is its radius, is its base.
+
+
+\begin{example}
+	\label{exm-circles-cones}
+	Figure~\ref{fig:cis} shows 
+	(1) two synchronous circles, \circle{(P_{s+i}, \epsilon)} of point $P_{s+i}$ and \circle{(P_{s+k}, \epsilon)} of point $P_{s+k}$.
+	It is easy to see that for any point in the area of a circle \circle{(P_{s+i}, \epsilon)}, its distance to $P_{s+i}$ is not greater than $\epsilon$, 
+	and (2) two example spatio-temporal cones, \cone{(P_s, P_{s+i}, \epsilon)} {(purple)} and \cone{(P_s, P_{s+k}, \epsilon)} (red), with the same apex $P_s$ and error bound $\epsilon$. %\eop
+\end{example}
+
+%Note that in this definition, a \emph{synchronous circle} $\mathcal{O}(P_i, \epsilon)$ is only defined by a central point $P_i$ and a constant $\epsilon$. Indeed, it is nothing to do with any start point $P_s$ or end point $P_e$.
+
+
+%\textcolor{blue}{We define \textit{synchronous circles and Spatio-temporal cones} in a \emph{x-y-t} 3D coordinate system, and build the connection between \textit{synchronous circles} and \textit{synchronous distances}.}
+
+
+
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.66]{figures/Fig-CIS.png}
+	%	\vspace{-1ex}
+	\caption{\small Examples of spatio-temporal cones in a 3D Cartesian coordinate system taking point $P_s$ as the origin, where (1) $P_{s+i}$ and $P_{s+k}$ are two points, (2) \circle{_{s+i}} and \circle{_{s+k}} are two synchronous circles, (3) \cone{_{s+i}} and \cone{_{s+k}} are two spatio-temporal cones, (4) $Q$ is a point in synchronous circle \circle{_{s+k}}, and (5) $P'_{s+i}$ is the intersection point of line $\protect\vv{P_sQ}$ and synchronous circle \circle{_{s+i}}.}
+	%\vspace{-1ex}
+	\label{fig:cis}
+\end{figure}
+
+
+
+
+\begin{proposition}
+	\label{theo-half-cone}
+	{Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P_{s+i}, \vv{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if  $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$} \cite{Lin:Cised}.
+\end{proposition}
+
+Proposition \ref{theo-half-cone} tells that the \sed distance tolerance can be checked by finding the common intersection of spatio-temporal cones (half-$\epsilon$), and it serves as the foundation of a one-pass trajectory simplification algorithm \cised~\cite{Lin:Cised}. And for efficiency consideration, {\cised projects the cones on a plane so as to convert the checking of cones intersection into a much simpler way, \ie the checking of circles intersection on the plane.} 
+%For the same reason, a circle is approximated by its inscribe regular polygon and the intersecting of circles is approximated by the intersecting of these polygons.
 
