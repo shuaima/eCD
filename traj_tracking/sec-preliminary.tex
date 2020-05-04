@@ -168,7 +168,7 @@ Like \ldr, algorithms \ldrh and \grts both use \sed to check distances, hence, t
 %%%%%%eat
 
 \subsection{Trajectory simplification in circular areas}
-Recently, a one-pass trajectory simplification algorithm using \sed, namely \cised \cite{Lin:Cised} is developed. It uses a local synchronous distance checking approach based on a concept of spatio-temporal cone, defined in a 3D Cartesian coordinate system whose $x$-axis, $y$-axis and $t$-axis are longitude, latitude and time, respectively, that converts the \sed distance tolerance into the intersection of cones for testing the successive points.
+Recently, a one-pass trajectory simplification algorithm using \sed, namely \cised \cite{Lin:Cised} is developed. It uses a local synchronous distance checking approach based on a concept of spatio-temporal cone, defined in a 3D Cartesian coordinate system whose $x$-axis, $y$-axis and $t$-axis are longitude, latitude and time, respectively, that converts the \sed distance tolerance into the intersection of cones for testing the successive points such that it is possible to achieve a linear time complexity.
 
 
 
@@ -202,6 +202,7 @@ Given a start point $P_s$ of sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, 
 \end{figure}
 
 
+Based on the notion of spatio-temporal cone, authors in \cite{Lin:Cised} prove that the \sed distance tolerance can be checked by finding the common intersection of spatio-temporal cones  (half-$\epsilon$) built from points of a sub-trajectory $[P_s,...,P_{s+k}]$, as shown in Proposition \ref{theo-half-cone}. That is, if these cones do have a common intersection, then line segment $\vv{P_sP_{s+k}}$ can represent the sub-trajectory.
 
 
 \begin{proposition}
@@ -209,6 +210,6 @@ Given a start point $P_s$ of sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, 
 	{Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P_{s+i}, \vv{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if  $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$} \cite{Lin:Cised}.
 \end{proposition}
 
-Proposition \ref{theo-half-cone} tells that the \sed distance tolerance can be checked by finding the common intersection of spatio-temporal cones (half-$\epsilon$), and it serves as the foundation of a one-pass trajectory simplification algorithm \cised~\cite{Lin:Cised}. And for efficiency consideration, {\cised projects the cones on a plane so as to convert the checking of cones intersection into a much simpler way, \ie the checking of circles intersection on the plane.} 
-%For the same reason, a circle is approximated by its inscribe regular polygon and the intersecting of circles is approximated by the intersecting of these polygons.
 
+Proposition \ref{theo-half-cone} serves as the foundation of the one-pass trajectory simplification algorithm \cised~\cite{Lin:Cised}, and for efficiency consideration, \cised projects those cones on a plane so as to convert the checking of cones intersection into a much simpler way, \ie the checking of circles intersection on the plane.
+For the same reason, a circle is approximated by its inscribe regular polygon and the intersecting of circles is approximated by the intersecting of these polygons, which can be computed in linear time.
