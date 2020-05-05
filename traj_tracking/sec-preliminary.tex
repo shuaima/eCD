@@ -140,24 +140,42 @@ After that, the actual speed of the moving object may be varied, and different f
 %
 By this way, though the MOD server receives less position information about a moving object, it still knows the expecting position of the moving object with a bounded error of $\epsilon$ to its actual position.
 
+
+
+Note the expecting position is indeed the synchronous data point \wrt of time $t$, and the deviation from the actual position to the expecting position is sure the synchronized Euclidean distance (\sed) as defined above. We can also find that the \ldr mechanism ensures that no message is sent as long as the moving object is in the circular area around the excepting position of time $t$ with a radius of $\epsilon$, \ie~\emph{\ldr always tracks the position of a moving object in a floating circular area.}
+
+\begin{example}
+	\label{exm-ldr}
+	\todo.
+\end{example}
+
 \begin{figure}[tb!]
 	\centering
-	%\includegraphics[scale=0.66]{figures/Fig-CIS.png}
+	\includegraphics[scale=1.0]{figures/Fig-LDR.png}
 	\vspace{-1ex}
-	\caption{\small \todo Examples of linear dead reckoning.}
+	\caption{\small A running example of linear dead reckoning (LDR).}
 	\vspace{-2ex}
 	\label{fig:ldr}
 \end{figure}
 
-Note the expecting position is indeed the synchronous data point \wrt of time $t$, and the deviation from the actual position to the expecting position is sure the synchronized Euclidean distance (\sed) as defined above. We can also find that the \ldr mechanism ensures that no message is sent as long as the moving object is in the circular area around the excepting position of time $t$ with a radius of $\epsilon$, \ie~\emph{\ldr always tracks the position of a moving object in a floating circular area.}
-
-
-
-
 \subsection{Trajectory tracking in circular areas}
-Though \ldr is originally designed to track the position of a moving object, Authors in \cite{Trajcevski:LDRH} proved that \ldr with some small variations, named \ldrh in \cite{Lange:Tracking}, is also a line simplification algorithm such that it can be used to compress trajectories, \ie~\ldrh supports both position tracking and trajectory simplification, thus, it is a trajectory tracking algorithm.
+Though \ldr is originally designed to track the position of a moving object, Authors in \cite{Trajcevski:LDRH} proved that \ldr with some small variations, named linear dead reckoning with half $\epsilon$ (\ldrh) in \cite{Lange:Tracking}, is also a line simplification algorithm such that it can be used to compress trajectories, \ie~\ldrh supports both position tracking and trajectory simplification, thus, it is a trajectory tracking algorithm.
 %
 Given an error bound $\epsilon$, \ldrh runs the same routine as \ldr except that (1) it uses half $\epsilon$ as the threshold in distance checking; (2) when the current point $P_k$ has a \sed larger than $\epsilon/2$ to its expecting location (synchronous data point), it sends the preview point $P_{k-1}$ and a new $\vv{v}$ to the MOD server and continues trajectory tracking taking $P_{k-1}$ as the new start point. \ldrh is simple and efficient, having a linear time and a constant space. However, it has a poor effectiveness in terms of compression ratio, as the half $\epsilon$ is conservative \cite{Lange:Tracking}, and more important, the algorithm is sensitive to the initial velocity which is set only once at the updating time but it is hard to be appropriate at that time.
+
+\begin{example}
+	\label{exm-ldrh}
+	\todo.
+\end{example}
+
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=1.0]{figures/Fig-LDRH.png}
+	\vspace{-1ex}
+	\caption{\small A running example of LDR with half $\epsilon$ (LDRH).}
+	\vspace{-2ex}
+	\label{fig:ldr}
+\end{figure}
 
 %%%%%%
 \eat{ 
@@ -211,5 +229,20 @@ Based on the notion of spatio-temporal cone, authors in \cite{Lin:Cised} prove t
 \end{proposition}
 
 
-Proposition \ref{theo-half-cone} serves as the foundation of the one-pass trajectory simplification algorithm \cised~\cite{Lin:Cised}, and for efficiency consideration, \cised projects those cones on a plane so as to convert the checking of cones intersection into a much simpler way, \ie the checking of circles intersection on the plane.
+Proposition \ref{theo-half-cone} serves as the foundation of the one-pass trajectory simplification algorithm \cised~\cite{Lin:Cised}, and for efficiency consideration, \cised projects those cones on a plane,\eg plane $t=P_{s+1}.t$, so as to convert the checking of cones intersection into a much simpler way, \ie checking of circles intersection on the plane.
 For the same reason, a circle is approximated by its inscribe regular polygon and the intersecting of circles is approximated by the intersecting of these polygons, which can be computed in linear time.
+
+
+\begin{example}
+	\label{exm-cised-sh}
+	\todo.
+\end{example}
+
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=1.0]{figures/Fig-CISED-SH.png}
+	\vspace{-1ex}
+	\caption{\small A running example of CISED.}
+	\vspace{-2ex}
+	\label{fig:ldr}
+\end{figure}
