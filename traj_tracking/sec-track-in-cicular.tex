@@ -49,29 +49,29 @@ Proposition \ref{theo-cone-vs} tells that the full-$\epsilon$ cone approach brin
 
 \subsection{Implementation}
 
-We then present a {\em trajectory tracking} algorithm based on full-$\epsilon$ spatio-temporal cones (\citt). This algorithm runs on moving objects and uses full-$\epsilon$ cones to check the distance deviations. In a nutshell, it first initializes its velocity $\vv{v}$ (including value and direction) and sends it coupling with a start position $P_s$ to the MOD server. Then it iteratively checks the deviation of its actual position $P_{s+k}$ to its synchronized point $P'_{s+k}$ built from the start point $P_s$, velocity $\vv{v}$ and time $P_{s+k}.t$, as well as the common intersection of spatio-temporal cones built from points $P_{s+i}$, $i \in [1, k]$. If the deviation is lager than a given threshold or the common intersection except $P_s$ is null, then an update is sent to the MOD server. Note that like \cised, this algorithm also transforms the intersection of cones to the intersection of regular polygons.
+We then present a {\em trajectory tracking} algorithm based on full-$\epsilon$ spatio-temporal cones (\citt). This algorithm runs on moving objects and uses full-$\epsilon$ cones to check the distance deviations. In a nutshell, it first initializes its velocity $\vv{v}$ (including value and direction) and sends it coupling with a start position $P_s$ to the MOD server. Then it iteratively checks the deviation of its actual position $P_{s+k}$ to its synchronized point $P'_{s+k}$ built from the start point $P_s$, velocity $\vv{v}$ and time $P_{s+k}.t$, as well as the common intersection of spatio-temporal cones built from points $P_{s+i}$, $i \in [1, k]$. If the deviation is lager than a given threshold or the common intersection except $P_s$ is null, then \textcolor{red}{an update} is sent to the MOD server. Note that like \cised, this algorithm also transforms the intersection of cones to the intersection of regular polygons.
 
 
 \stitle{Algorithm \citt}.
-%We now present algorithm \cist.
-As shown in Figure~\ref{alg:citt-s-half}, it takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and outputs a set of velocities and a simplified  trajectory $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$.
+%We now present algorithm \citt.
+As shown in Figure~\ref{alg:citt-s-full}, it takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and outputs a set of velocities and a simplified  trajectory $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$.
 
-The algorithm first initializes the start point $P_s$ to $P_0$, the common intersection of polygons $\mathcal{R}^*$ to $\emptyset$ and the expected velocity $(|\vv{v}|, \vv{v}.\theta)$ to ($\frac{|P_{s}P_{s+1}|}{P_{s+1}.t-P_s.t},\vv{P_{s}P_{s+1}}.\theta$) (lines 1--2), then it sends its initial location $P_s$ and the velocity $\vv{v}$ to the MOD server (line 3), meaning that it is supposed to move from point $P_s$ along the direction of $\vv{v}.\theta$ at a speed of $|\vv{v}|$.
+The algorithm first initializes the start point $P_s$ to $P_0$, the common intersection of polygons $\mathcal{R}^*$ to \textcolor{red}{$\emptyset$} and the expected velocity $(|\vv{v}|, \vv{v}.\theta)$ to ($\frac{|P_{s}P_{s+1}|}{P_{s+1}.t-P_s.t},\vv{P_{s}P_{s+1}}.\theta$) (lines 1--2), then it sends its initial location $P_s$ and the velocity $\vv{v}$ to the MOD server (line 3), meaning that it is supposed to move from point $P_s$ along the direction of $\vv{v}.\theta$ at a speed of $|\vv{v}|$.
 %, such that the expecting position of the object at time $t>P_s.t$ can be extrapolated from them as long as no subsequent update is sent to the MOD server.
 
 The algorithm sequentially processes the rest points of the trajectory one by one (lines 4--15). 
-For the current point $P_{s+i}$, if $\vv{P_sP_{s+i}}$ passes through the common intersection $\mathcal{R}^*$, meaning that it can not includes more points into a line segment, then a line segment $\vv{P_sP_{i-1}}$ and a new section started from  $P_{i-1}$ is generated, and $P_{i-1}$ and a new velocity $\vv{v}$ are sent to the MOD server (lines 6--9).
+For the current point $P_{i}$, if $\vv{P_sP_{i}}$ passes through the common intersection $\mathcal{R}^*$, meaning that it can not includes more points into a line segment, then a line segment $\vv{P_sP_{i-1}}$ and a new section started from  $P_{i-1}$ is generated, and $P_{i-1}$ and a new velocity $\vv{v}$ are sent to the MOD server (lines 6--9).
 %
-Otherwise, it calculates the distance from the actual location $P_{s+i}$ to the expecting location $P'_{s+i}$ extrapolated from the initial location $P_s$ and the velocity $\vv{v}$, and checks whether $\vv{P_sP_{s+i}}$ passes through the common intersection $\mathcal{R}^*$ of preview points.
-If it passes through and the distance $|P_{s+i}P'_{s+i}|<\epsilon$, meaning that more points can be included into a line segment while the velocity $\vv{v}$ needs to be updated. Hence, it updates velocity $\vv{v}$ based on $P_s$ and $P_{s+i}$, and sends it to the MOD server (lines 10--12). 
+Otherwise, it calculates the distance from the actual location $P_{i}$ to the expecting location $P'_{i}$ extrapolated from the initial location $P_s$ and the velocity $\vv{v}$, and checks whether $\vv{P_sP_{i}}$ passes through the common intersection $\mathcal{R}^*$ of preview points.
+If it passes through and the distance $|P_{i}P'_{i}|<\epsilon$, meaning that more points can be included into a line segment while the velocity $\vv{v}$ needs to be updated. Hence, it updates velocity $\vv{v}$ based on $P_s$ and $P_{i}$, and sends it to the MOD server (lines 10--12). 
 %
-Anyway, the algorithm gets the $m$-edge inscribed regular polygon \wrt the current point $P_{s+i}$ by calling procedure $\kw{getRegularPolygon}$ \cite{Lin:Cised} and gets the common intersection $\mathcal{R}^*$ of the preview cones (lines 13--14). The process repeats until all points have been processed (line 15).
+Anyway, the algorithm gets the $m$-edge inscribed regular polygon \wrt the current point $P_{i}$ by calling procedure $\kw{getRegularPolygon}$ \cite{Lin:Cised} and gets the common intersection $\mathcal{R}^*$ of the preview cones (lines 13--14). The process repeats until all points have been processed (line 15).
 At last, it outputs the last point $P_{n}$ (line 16).
 
 
 
 
-	\begin{figure}[tb!]   % full cones
+\begin{figure}[tb!]   % full cones
 		\begin{center}
 			{\small
 				\begin{minipage}{3.3in}
@@ -81,19 +81,19 @@ At last, it outputs the last point $P_{n}$ (line 16).
 						{\bf Algorithm}~\citt $(\dddot{\mathcal{T}}[P_0,\ldots,P_n],~\epsilon,~m)$\\
 						%	\sstab
 						\bcc \hspace{1ex}\= $P_s := P_0$; ~~~~$\mathcal{R}^*$ := \kw{getRegularPolygon}($P_s$, $P_{s+1}$, $\epsilon$, $m$, $P_{s+1}.t$); \\
-						\icc \hspace{1ex}\= $|\vv{v}|:=\frac{|P_{s}P_{s+1}|}{P_{s+1}.t-P_s.t}$; ~$\vv{v}.\theta:=\vv{P_{s}P_{s+1}}.\theta$; \\
+						\icc \hspace{1ex}\= $|\vv{v}|:=\frac{|P_{s}P_{s+1}|}{P_{s+1}.t-P_s.t}$; ~~~~$\vv{v}.\theta:=\vv{P_{s}P_{s+1}}.\theta$; \\
 						\icc \hspace{1ex}\= update ($P_{s}, \vv{v}$); \\
 						\icc \hspace{1ex}\= $i := 2$; 	\\
 						\icc \hspace{1ex}\= while $i \le n$ do \\
-						\icc \>\hspace{3ex} if $\vv{P_sP_{s+i}}$ does not pass through $\mathcal{R}^*$ then \\ % // updates velocity and location \\
-						\icc \>\hspace{7ex}    $P_s := P_{s+i-1}$; ~~~~$\mathcal{R}^*$ := $\emptyset$; \\
-						\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_{s}P_{s+i}|}{P_{s+i}.t-P_s.t}$; ~$\vv{v}.\theta:=\vv{P_{s}P_{s+i}}.\theta$; \\
+						\icc \>\hspace{3ex} if $\vv{P_sP_{i}}$ does not pass through $\mathcal{R}^*$ then \\ % // updates velocity and location \\
+						\icc \>\hspace{7ex}    $P_s := P_{i-1}$; ~~~~$\mathcal{R}^*$ := $\emptyset$; \\
+						\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_{s}P_{i}|}{P_{i}.t-P_s.t}$; ~~~~~$\vv{v}.\theta:=\vv{P_{s}P_{i}}.\theta$; \\
 						\icc \>\hspace{7ex}    update ($P_{s}, \vv{v}$); \\
-						\icc \>\hspace{3ex} else if $\vv{P_sP_{s+i}}$ passes through $\mathcal{R}^*$ ~and~ $|P_{s+i}P'_{s+i}| \ge \epsilon $ then  \\ %~// updates velocity only 
-						\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_sP_{s+i}|}{P_{s+i}.t-P_s.t}$; ~$\vv{v}.\theta:=\vv{P_sP_{s+i}}.\theta$; \\
+						\icc \>\hspace{3ex} else if $\vv{P_sP_{i}}$ passes through $\mathcal{R}^*$ ~and~ $sed(P_{i},\vv{v}) \ge \epsilon $ then  \\ %~// updates velocity only 
+						\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_sP_{i}|}{P_{i}.t-P_s.t}$; ~~~~~$\vv{v}.\theta:=\vv{P_sP_{i}}.\theta$; \\
 						\icc \>\hspace{7ex}    update ($\vv{v}$); \\
-						\icc \>\hspace{3ex} if $\mathcal{R}^*=\emptyset$ then $\mathcal{R}^*:=$ \kw{getRegularPolygon}($P_s$, $P_{s+i}$, $\epsilon$, $m$, $P_{s+1}.t$); \\
-						\icc \>\hspace{3ex} else $\mathcal{R}^*$ := $\mathcal{R}^*\bigsqcap$ \kw{getRegularPolygon}($P_s$, $P_{s+i}$, $\epsilon$, $m$, $P_{s+1}.t$); \\
+						\icc \>\hspace{3ex} if $\mathcal{R}^*=\emptyset$ then $\mathcal{R}^*:=$ \kw{getRegularPolygon}($P_s$, $P_{i}$, $\epsilon$, $m$, $P_{s+1}.t$); \\
+						\icc \>\hspace{3ex} else $\mathcal{R}^*$ := $\mathcal{R}^*\bigsqcap$ \kw{getRegularPolygon}($P_s$, $P_{i}$, $\epsilon$, $m$, $P_{s+1}.t$); \\
 						\icc \>\hspace{3ex} $i$ := $i +1$;	\\
 						\icc \>\hspace{0ex} update ($P_{n}$); 
 					}
@@ -104,7 +104,7 @@ At last, it outputs the last point $P_{n}$ (line 16).
 		\end{center}
 		\vspace{-1ex}
 		\caption{\small Trajectory tracking based on spatio-temporal cone.}
-		\label{alg:citt-s-half}
+		\label{alg:citt-s-full}
 		\vspace{-1ex}
 	\end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

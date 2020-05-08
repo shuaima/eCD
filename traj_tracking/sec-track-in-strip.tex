@@ -9,7 +9,7 @@
 
 
 Position tracking and trajectory tracking both use \sed as the distance metric to check data points that confirms the actual position of a moving object at time $t$ lives in a circular area around the excepting position of the moving object at that time.
-Though \sed is currently the only distance metric used in tracking moving objects, we argue that another distance metric, \ped that is wildly used trajectory compression, can also be applied in tracking moving objects that confirms a moving object lives in strip areas, \eg a school boy is doubtless on his way home no matter the speed of his movement.
+Though \sed is currently the only distance metric used in tracking moving objects, we argue that another distance metric, \ped that is wildly used trajectory compression and always has remarkable better compression ratios than \sed, can also be applied in tracking moving objects that confirms a moving object lives in strip areas, \eg a school boy is expected on his way home no matter the speed of his movement.
 This section introduces novel methods that use \ped to track moving object in strip areas.
 
 \subsection{Position tracking in strip areas}
@@ -60,18 +60,60 @@ Proposition \ref{theo-full-sector} tells that full-$\epsilon$ sectors with some 
 Proposition \ref{theo-sector-vs} tells that the full-$\epsilon$ sector approach also brings a better effectiveness than the half-$\epsilon$ sector in trajectory simplification and/or tracking.
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Algorithm: Traj tracking based on section intersection using full sectors.
+\begin{figure}[tb!]   
+	\begin{center}
+		{\small
+			\begin{minipage}{3.3in}
+				\myhrule
+				%\vspace{-1ex}
+				\mat{0ex}{
+					{\bf Algorithm}~\sitt $(\dddot{\mathcal{T}}[P_0,\ldots,P_n],~\epsilon)$\\
+					%	\sstab
+					\bcc \hspace{1ex}\= $P_s := P_0$; ~~~~$\mathcal{S}^*$ := \kw{getSector}($P_s$, $P_{s+1}$, $\epsilon$); ~~~~$l_{max} = |P_sP_{s+1}|$;\\
+					\icc \hspace{1ex}\= $\vv{v}.\theta:=\vv{P_{s}P_{s+1}}.\theta$;  \\
+					\icc \hspace{1ex}\= update ($P_{s}, \vv{v}$); 	\\
+					\icc \hspace{1ex}\= $i:= 2$;  	\\
+					\icc \hspace{1ex}\= while $i \le n$ do \\
+					\icc \>\hspace{3ex} if $\vv{P_sP_{i}}$ ~does not pass through~ $\mathcal{S}^*$ or $|P_sP_{i}| \le l_{max} - \epsilon$ then \\ % // updates velocity and location \\
+					\icc \>\hspace{7ex}    $P_s := P_{i-1}$; ~~~~$\mathcal{S}^*$ := $\emptyset$; ~~~~$l_{max} = |P_sP_{i}|$;\\
+					\icc \>\hspace{7ex}    $\vv{v}.\theta:=\vv{P_{s}P_{i}}.\theta$;  \\
+					\icc \>\hspace{7ex}    update ($P_{s}, \vv{v}$); 	\\
+					\icc \>\hspace{3ex} else if $\vv{P_sP_{i}}$ ~passes through~ $\mathcal{S}^*$ ~and~ $|P_sP_{i}| \ge l_{max} - \epsilon$ \\ \hspace{9ex} ~and~ $ped(P_i, \vv{v}) \ge \epsilon $ then  \\ %~// updates velocity only 
+					\icc \>\hspace{7ex}    $\vv{v}.\theta:=\vv{P_sP_{i}}.\theta$; \\
+					\icc \>\hspace{7ex}    update ($\vv{v}$); \\
+					\icc \>\hspace{3ex} if $\mathcal{S}^*=\emptyset$ then $\mathcal{S}^*:=$ \kw{getSector}($P_s$, $P_{i}$, $\epsilon$); \\
+					\icc \>\hspace{3ex} else $\mathcal{S}^*$ := $\mathcal{S}^*\bigsqcap$ \kw{getSector}($P_s$, $P_{i}$, $\epsilon$); $l_{max} = \max\{|P_sP_{i}|, l_{max}\}$;\\
+					\icc \>\hspace{3ex} $i$ := $i +1$;\\
+					\icc \>\hspace{0ex} update ($P_{n}$); 
+				}
+				\vspace{-2ex}
+				\myhrule
+			\end{minipage}
+		}
+	\end{center}
+	\vspace{-1ex}
+	\caption{\small Trajectory tracking based on sector.}
+	\label{alg:sitt}
+	\vspace{-1ex}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %proposition 2: full-sector is better than half sector.
 
-\todo{algorithm}. section intersection based trajectory tracking (SITT), the similar as CITT, fig.
+\todo{algorithm}. section intersection based trajectory tracking (SITT), similar as CITT, fig.
 
 \todo{for those points having distances to $P_s$ smaller than $\epsilon$ .}
 
--- example
+\begin{example}
+	\todo.
+\end{example}
 
--- correctness and complexity
 
+\stitle{Correctness and complexity.} 
+\todo.
 
 
 \eat{%%%%%%%%
