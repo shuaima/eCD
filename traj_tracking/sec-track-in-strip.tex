@@ -12,25 +12,35 @@ Position tracking and trajectory tracking both use \sed as the distance metric t
 Though \sed is currently the only distance metric used in tracking moving objects, we argue that another distance metric, \ped that is wildly used in trajectory simplification and always has remarkable better compression ratios than \sed, is also important in tracking moving objects that confirms moving objects lives in strip areas, \eg a school boy is expected on his way home no matter the speed of his movement.
 This section introduces novel methods that use \ped to track moving object in strip areas.
 
-\subsection{Position tracking in strip areas}
-based on ldr, a direction is needed, no speed;
+
+%\subsection{Position tracking in strip areas}
+%based on ldr, a direction is needed, no speed;
+%  --  distance checking during computing, ped: from a point to a ray.
   
-  --  distance checking during computing, ped: from a point to a ray.
-  
 
+\subsection{Sector and its use in trajectory simplification}
 
-
-\subsection{Trajectory tracking in strip areas}
-
-
-One-pass trajectory simplification in strip areas can be implemented by a notion of \emph{sector intersection} \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} developed in fields of computational geometry and cartographic, where a \emph{sector} is largely a simplified version of a spatio-temporal cone in an x--y 2D space that the temporal information is ignored, that converts the \ped distance tolerance into an angle tolerance for efficiently checking data points.
+\emph{Sector intersection} \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} is developed in fields of computational geometry and cartographic, where a \emph{sector} is largely a simplified version of a spatio-temporal cone in an x--y 2D space that the temporal information is ignored, that converts the \ped distance tolerance into an angle tolerance for efficiently checking data points.
 %
 Given a sequence of points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$,
 for the start data point $P_s$, any point $P_{s+i}$ and $|\vv{P_sP_{s+i}}|>\epsilon$ ($i\in[1, k]$), there are two directed lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ such that $ped(P_{s+i}, \vv{P_sP^u_{s+i}})$ $=$ $ped(P_{s+i}, \vv{P_sP^l_{s+i}}) = \epsilon$ and either ($\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta ~and~\vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta <\pi$) or ($\vv{P_sP^l_{s+i}}.\theta > \vv{P_sP^u_{s+i}}.\theta ~and~ \vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta < -\pi)$. Indeed, they form a \emph{sector} \sector{(P_s, P_{s+i}, \epsilon)} that takes $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the borderlines.
+
+The sector intersection approach is the key of one-pass trajectory simplification algorithms using \ped. Like the checking of the common intersection of spatio-temporal cones in \cised, these algorithms check the common intersection of sectors, \ie $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon)} $\ne \{P_s\}$ \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}, to know whether the sub-trajectory can be represented by a line segment $\overline{P_sQ}$ \wrt error bound $\epsilon$, where $Q$ is a point that may not belong to the sub-trajectory. However, if $Q$ must be $P_{s+k}$, the last point of the sub-trajectory, then (1) the full-$\epsilon$ sectors should be replaced by half-$\epsilon$ sectors, and (2) $P_{s+k}$ should be one of the points have the furthest distances to $P_s$, \ie $|P_sP_{s+k}| > max\{|P_sP_{s+i}|\} - \epsilon$ for each $i \in (0, k)$. 
 %
-Then, like the checking of the common intersection of spatio-temporal cones, it checks the common intersection of sectors, \ie $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon)} $\ne \{P_s\}$ \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}, to know whether the sub-trajectory can be represented by a line segment $\overline{P_sQ}$ \wrt error bound $\epsilon$, where $Q$ is a point that may not belong to the sub-trajectory. However, if $Q$ must be $P_{s+k}$, the last point of the sub-trajectory, then (1) the full-$\epsilon$ sectors should be replaced by half-$\epsilon$ sectors, and (2) $P_{s+k}$ should be one of the points have the furthest distances to $P_s$, \ie $|P_sP_{s+k}| > max\{|P_sP_{s+i}|\} - \epsilon$ for each $i \in (0, k)$. 
-%
+
+\todo{figure}
+
+\begin{example}
+	\label{exm-sleeve}
+	\todo.
+\end{example}
+
+\subsection{Tracking by sectors}
+
+\todo{sectors can be used in trajectory tracking. }
+
 Because the half-$\epsilon$ sectors may limit its compression performance, we also extend it to full-$\epsilon$ sectors for a better performance.
+
 
 %, that is, for any data point $P_{s+i}$ ($i \in [1, ... k]$), its perpendicular Euclidean distance to line segment $\overline{P_sP_{s+k}}$ is not greater than the error bound $\epsilon$.
 
@@ -100,6 +110,7 @@ We next present a {\em trajectory tracking} algorithm based on full-$\epsilon$ s
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\subsection{Implementation}
 
 %proposition 2: full-sector is better than half sector.
 
