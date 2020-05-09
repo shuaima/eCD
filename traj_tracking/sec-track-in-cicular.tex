@@ -50,21 +50,32 @@ Theorem \ref{theo-cone-vs} tells that the full-$\epsilon$ cone approach brings a
 %as shown in Proposition \ref{theo-ldrh-cised}
 
 \subsection{Implementation}
-We then provide a one-pass trajectory tracking algorithm based on spatio-temporal cone, named \underline{C}one \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (\citt). This algorithm runs on mobile devices and uses full-$\epsilon$ cones to check the distance deviations. In a nutshell, it first initializes its velocity $\vv{v}$ (including value and direction) and sends it coupling with a start position $P_s$ to the MOD server. Then it iteratively checks the deviation of its actual position $P_{s+k}$ to its synchronized point $P'_{s+k}$ built from the start point $P_s$, velocity $\vv{v}$ and time $P_{s+k}.t$, as well as the common intersection of spatio-temporal cones built from points $P_{s+i}$, $i \in [1, k]$. If the deviation is lager than a given threshold or the common intersection except $P_s$ is null, then \textcolor{red}{an update} is sent to the MOD server. Note that like \cised, this algorithm also transforms the intersection of cones to the intersection of regular polygons.
+We then provide a one-pass trajectory tracking algorithm based on spatio-temporal cone, named \underline{C}one \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (\citt). This algorithm runs on mobile devices and uses full-$\epsilon$ cones to help check the distance deviations. In a nutshell, when a distance deviation occurs, unlike \ldr and \ldrh, algorithm \citt does not roughly send an update of a new start position $P_s$ and a new velocity $\vv{v}$ to the MOD server. Instead, it quickly finds out a new feasible velocity $\vv{v}$ by the intersection of spatio-temporal cones such that only the new velocity $\vv{v}$ is sent to the MOD while the start point $P_s$ keeps the same. By this way, a line segment clearly represents a longer sub-trajectory than \ldrh, and the storage and network bandwidth are saved.
+
+More specifically, \citt initializes its velocity $\vv{v}$ (including value and direction) and sends it coupling with the start position $P_s$ to the MOD server. Then it iteratively (1) checks the deviation of the actual position $P_{s+i}$ to its synchronized point $P'_{s+i}$ built from the start point $P_s$, velocity $\vv{v}$ and time $P_{s+i}.t$, for the purpose of position tracking, and (2) checks the common intersection of spatio-temporal cones built from points $P_{s+j}$, $j \in [1, i]$, for the purpose of trajectory simplification.
+%
+If the common intersection is $\{P_s\}$, meaning it can not find a new feasible velocity,
+then an update of $(P_s, \vv{v})$ is sent to the MOD server and the algorithm goes on to the next sub-trajectory.
+%
+If the common intersection is not $\{P_s\}$ but the position deviation is lager than the given threshold, meaning it can find a new feasible velocity, then an update of $\vv{v}$ is sent to the MOD server and the algorithm goes on processing the same sub-trajectory.
+%
+Otherwise, no deviation occurs, no update is sent and the algorithm goes on processing the same sub-trajectory.
+
+%Note that like \cised, this algorithm also transforms the intersection of cones to the intersection of regular polygons.
 
 
 \stitle{Algorithm \citt}.
 %We now present algorithm \citt.
 As shown in Figure~\ref{alg:citt-s-full}, it takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and outputs a set of velocities and a simplified  trajectory $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$.
-
-The algorithm first initializes the start point $P_s$ to $P_0$, the common intersection of polygons $\mathcal{R}^*$ to \textcolor{red}{$\emptyset$} and the expected velocity $(|\vv{v}|, \vv{v}.\theta)$ to ($\frac{|P_{s}P_{s+1}|}{P_{s+1}.t-P_s.t},\vv{P_{s}P_{s+1}}.\theta$) (lines 1--2), then it sends its initial location $P_s$ and the velocity $\vv{v}$ to the MOD server (line 3), meaning that it is supposed to move from point $P_s$ along the direction of $\vv{v}.\theta$ at a speed of $|\vv{v}|$.
+%
+The algorithm first initializes the start point $P_s$ to $P_0$, the common intersection of polygons $\mathcal{R}^*$ to the polygon of $P_1$ by calling procedure $\kw{getRegularPolygon}$ \cite{Lin:Cised}, and the expected velocity $(|\vv{v}|, \vv{v}.\theta)$ to ($\frac{|P_{s}P_{s+1}|}{P_{s+1}.t-P_s.t},\vv{P_{s}P_{s+1}}.\theta$) (lines 1--2), then it sends its initial location $P_s$ and the velocity $\vv{v}$ to the MOD server (line 3), meaning that it is supposed to move from point $P_s$ along the direction of $\vv{v}.\theta$ at a speed of $|\vv{v}|$.
 %, such that the expecting position of the object at time $t>P_s.t$ can be extrapolated from them as long as no subsequent update is sent to the MOD server.
 
 The algorithm sequentially processes the rest points of the trajectory one by one (lines 4--15). 
-For the current point $P_{i}$, if $\vv{P_sP_{i}}$ passes through the common intersection $\mathcal{R}^*$, meaning that it can not includes more points into a line segment, then a line segment $\vv{P_sP_{i-1}}$ and a new section started from  $P_{i-1}$ is generated, and $P_{i-1}$ and a new velocity $\vv{v}$ are sent to the MOD server (lines 6--9).
+For the current point $P_{i}$, if $\vv{P_sP_{i}}$ passes through the common intersection $\mathcal{R}^*$, meaning that it can not includes more points into a line segment, then a line segment $\vv{P_sP_{i-1}}$ and a new section started from  $P_{i-1}$ is generated, the common intersection of cones is set to null, and $P_{i-1}$ and a new velocity $\vv{v}$ are sent to the MOD server (lines 6--9).
 %
 Otherwise, it calculates the distance from the actual location $P_{i}$ to the expecting location $P'_{i}$ extrapolated from the initial location $P_s$ and the velocity $\vv{v}$, and checks whether $\vv{P_sP_{i}}$ passes through the common intersection $\mathcal{R}^*$ of preview points.
-If it passes through and the distance $|P_{i}P'_{i}|<\epsilon$, meaning that more points can be included into a line segment while the velocity $\vv{v}$ needs to be updated. Hence, it updates velocity $\vv{v}$ based on $P_s$ and $P_{i}$, and sends it to the MOD server (lines 10--12). 
+If it passes through and the distance $|P_{i}P'_{i}| \ge \epsilon$, meaning that more points can be included into a line segment while the velocity $\vv{v}$ needs to be updated. Hence, it updates velocity $\vv{v}$ based on $P_s$ and $P_{i}$, and sends it to the MOD server (lines 10--12). 
 %
 Anyway, the algorithm gets the $m$-edge inscribed regular polygon \wrt the current point $P_{i}$ by calling procedure $\kw{getRegularPolygon}$ \cite{Lin:Cised} and gets the common intersection $\mathcal{R}^*$ of the preview cones (lines 13--14). The process repeats until all points have been processed (line 15).
 At last, it outputs the last point $P_{n}$ (line 16).
@@ -96,7 +107,7 @@ At last, it outputs the last point $P_{n}$ (line 16).
 						\icc \>\hspace{3ex} if $\mathcal{R}^*=\emptyset$ then $\mathcal{R}^*:=$ \kw{getRegularPolygon}($P_s$, $P_{i}$, $\epsilon$, $m$, $P_{s+1}.t$); \\
 						\icc \>\hspace{3ex} else $\mathcal{R}^*$ := $\mathcal{R}^*\bigsqcap$ \kw{getRegularPolygon}($P_s$, $P_{i}$, $\epsilon$, $m$, $P_{s+1}.t$); \\
 						\icc \>\hspace{3ex} $i$ := $i +1$;	\\
-						\icc \>\hspace{0ex} update ($P_{n}$); 
+						\icc \>\hspace{0ex} update $(P_{n}, 0)$; 
 					}
 					\vspace{-2ex}
 					\myhrule
