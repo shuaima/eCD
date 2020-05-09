@@ -1,12 +1,14 @@
 \section{Effective one-pass tracking in circular areas}
 \label{sec:circular}
 
-\ldrh is a one-pass trajectory tracking algorithm, having linear time and constant space complexities, while suffers in effectiveness (compression ratios).
+\ldrh is a one-pass trajectory tracking algorithm, having linear time and constant space complexities, yet suffering in effectiveness (compression ratios).
 Observing the recently trajectory simplification algorithm \cised using \sed is also one-pass, which is important for a trajectory tracking algorithm that is supposed to run on mobile devices, and at the same time, it has good compression ratios, these inspire us to develop an efficient and effective trajectory tracking algorithm using \sed.
 
 \subsection{Tracking by spatio-temporal cone}
 
-In this section, we will first show that the counterpart of \ldrh is just a special case of, and has worse effective in terms of compression ratio than, the approach of spatio-temporal cone intersection (even it uses a half-$\epsilon$ cone), thus, the latter is obviously a more effective way to develop trajectory tracking algorithms. Then, we further extend the half-$\epsilon$ cone used in \cised to a full-$\epsilon$ cone so as to get an even better effectiveness.
+In this section, we will first show that the counterpart of \ldrh is just a special case of, and has worse effective in terms of compression ratio than the approach of spatio-temporal cone intersection (even it uses a half-$\epsilon$ cone), thus, the latter is obviously a more effective way to develop trajectory tracking algorithms. Then, we further extend the half-$\epsilon$ cone used in \cised to a full-$\epsilon$ cone so as to get an even better effectiveness.
+
+
 
 \begin{proposition}
 \label{theo-ldrh-cised}
@@ -19,7 +21,7 @@ Given a sub-trajectory $\dddot{\mathcal{T}}_s[P_s,...,P_{s+k}]$, an error bound 
 If $|P_{s+i}P'_{s+i}|\le \epsilon/2$ for each $i \in [1,k]$, then $\vv{v}$ must live in the common intersection of half-$\epsilon$ cones $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)}, where $P'_{s+i}$ is the synchronized point of $P_{s+i}$ \wrt velocity $\vv{v}$.
 \end{proof}
 
-Proposition \ref{theo-ldrh-cised} tells that \ldrh is a special case of, and has a worse effectiveness than, approaches based on the intersection of spatio-temporal cones. Hence, the latter is a more effective way to develop one-pass trajectory tracking algorithms. 
+Proposition \ref{theo-ldrh-cised} tells that (1) \todo{cone can be used in tracking}, and (2) \ldrh is a special case of and has a worse effectiveness than approaches based on the intersection of spatio-temporal cones. Hence, the latter is a more effective way to develop one-pass trajectory tracking algorithms. 
 %
 Moreover, observe that the half-$\epsilon$ cone in the above is still a little conservative, we next extend it to a full-$\epsilon$ cone with certain constrain to get an even better effectiveness.
 
@@ -48,8 +50,7 @@ Proposition \ref{theo-cone-vs} tells that the full-$\epsilon$ cone approach brin
 %as shown in Proposition \ref{theo-ldrh-cised}
 
 \subsection{Implementation}
-
-We then present a {\em trajectory tracking} algorithm based on full-$\epsilon$ spatio-temporal cones (\citt). This algorithm runs on mobile devices and uses full-$\epsilon$ cones to check the distance deviations. In a nutshell, it first initializes its velocity $\vv{v}$ (including value and direction) and sends it coupling with a start position $P_s$ to the MOD server. Then it iteratively checks the deviation of its actual position $P_{s+k}$ to its synchronized point $P'_{s+k}$ built from the start point $P_s$, velocity $\vv{v}$ and time $P_{s+k}.t$, as well as the common intersection of spatio-temporal cones built from points $P_{s+i}$, $i \in [1, k]$. If the deviation is lager than a given threshold or the common intersection except $P_s$ is null, then \textcolor{red}{an update} is sent to the MOD server. Note that like \cised, this algorithm also transforms the intersection of cones to the intersection of regular polygons.
+We then provide a one-pass trajectory tracking algorithm based on spatio-temporal cone, named \underline{C}one \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (\citt). This algorithm runs on mobile devices and uses full-$\epsilon$ cones to check the distance deviations. In a nutshell, it first initializes its velocity $\vv{v}$ (including value and direction) and sends it coupling with a start position $P_s$ to the MOD server. Then it iteratively checks the deviation of its actual position $P_{s+k}$ to its synchronized point $P'_{s+k}$ built from the start point $P_s$, velocity $\vv{v}$ and time $P_{s+k}.t$, as well as the common intersection of spatio-temporal cones built from points $P_{s+i}$, $i \in [1, k]$. If the deviation is lager than a given threshold or the common intersection except $P_s$ is null, then \textcolor{red}{an update} is sent to the MOD server. Note that like \cised, this algorithm also transforms the intersection of cones to the intersection of regular polygons.
 
 
 \stitle{Algorithm \citt}.
