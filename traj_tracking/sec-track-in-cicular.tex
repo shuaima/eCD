@@ -10,10 +10,10 @@ In this section, we will first show that the counterpart of \ldrh is just a spec
 
 
 
-\begin{proposition}
+\begin{theorem}
 \label{theo-ldrh-cised}
 Given a sub-trajectory $\dddot{\mathcal{T}}_s[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, if $\dddot{\mathcal{T}}_s$ can be represented by line segment $\vv{P_sP_{s+k}}$ through algorithm \ldrh, then it can also be represented by approaches based on spatio-temporal cones.
-\end{proposition}
+\end{theorem}
 
 \begin{proof}
 \todo{1. $\vv{v}$ in 3D space; 2...}
@@ -21,32 +21,32 @@ Given a sub-trajectory $\dddot{\mathcal{T}}_s[P_s,...,P_{s+k}]$ and an error bou
 If $|P_{s+i}P'_{s+i}|\le \epsilon/2$ for each $i \in [1,k]$, then $\vv{v}$ must live in the common intersection of half-$\epsilon$ cones $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)}, where $P'_{s+i}$ is the synchronized point of $P_{s+i}$ \wrt velocity $\vv{v}$.
 \end{proof}
 
-Proposition \ref{theo-ldrh-cised} tells that (1) {spatio-temporal cone can also be used in trajectory tracking}, and (2) \ldrh is just a special case of and has a worse effectiveness than approaches based on spatio-temporal cones. Indeed, \ldrh assumes an initial velocity before the simplification or tracking of a sub-trajectory, while the spatio-temporal cone based methods do not, instead, it has an ability to find out the potentially feasible velocities to fit the moving object. Thus, the latter is sure a more effective way to develop one-pass trajectory tracking algorithms. 
+Theorem \ref{theo-ldrh-cised} tells that (1) {spatio-temporal cone can also be used in trajectory tracking}, and (2) \ldrh is just a special case of and has a worse effectiveness than approaches based on spatio-temporal cones. Indeed, \ldrh assumes an initial velocity before the simplification or tracking of a sub-trajectory, while the spatio-temporal cone based methods do not, instead, it has an ability to find out the potentially feasible velocities to fit the movement of the object when it simplifies the sub-trajectory. Thus, the latter is sure a more effective way to develop one-pass trajectory tracking algorithms. 
 %
-Moreover, observe that the half-$\epsilon$ cone in the above is still a little conservative, we next extend it to a full-$\epsilon$ cone with certain constrain to get an even better effectiveness.
+Moreover, observe that the half-$\epsilon$ cone in the above is still a little conservative, we next extend it to a full-$\epsilon$ cone plus certain constrain to get an even better effectiveness.
 
 
-\begin{proposition}
+\begin{theorem}
 	\label{theo-full-cone}
 	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P_{s+i}, \vv{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if $\vv{P_sP_{s+i}}$ passes through $\bigsqcap_{j=1}^{i-1}$\cone{(P_s, P_{s+j}, \epsilon)} - \{$P_s$\}.
-\end{proposition}
+\end{theorem}
 
 \begin{proof}
 	\todo.
 \end{proof}
 
-Proposition \ref{theo-full-cone} tells that full-$\epsilon$ cones, with a constrain that the line segment $\vv{P_sP_{s+i}}$ passes through the common intersection of the preview full cones other than the start point $P_s$, can also be used in trajectory simplification and/or tracking. 
+Theorem \ref{theo-full-cone} tells that full-$\epsilon$ spatio-temporal cones, with a constrain that the line segment $\vv{P_sP_{s+i}}$ passes through the common intersection of all the preview full cones can also be used in trajectory simplification and/or tracking. 
 
-\begin{proposition}
+\begin{theorem}
 	\label{theo-cone-vs}
 	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, if $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$, then for each $i \in [2, k]$, line segment $\vv{P_sP_{s+i}}$ passes through $\bigsqcap_{j=1}^{i-1}$\cone{(P_s, P_{s+j}, \epsilon)}-$\{P_s\}$; and the opposite is not always true.
-\end{proposition}
+\end{theorem}
 
 \begin{proof}
 	\todo.
 \end{proof}
 
-Proposition \ref{theo-cone-vs} tells that the full-$\epsilon$ cone approach brings a better effectiveness than the half-$\epsilon$ cone, which is in turn better than \ldrh, in trajectory simplification and/or tracking.
+Theorem \ref{theo-cone-vs} tells that the full-$\epsilon$ cone approach brings a better effectiveness than the half-$\epsilon$ cone, which is in turn better than \ldrh, in trajectory simplification and/or tracking. Thus, we will use the full-$\epsilon$ cones to develop trajectory tracking algorithms.
 %as shown in Proposition \ref{theo-ldrh-cised}
 
 \subsection{Implementation}

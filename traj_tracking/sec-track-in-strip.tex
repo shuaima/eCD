@@ -9,7 +9,7 @@
 
 
 Position tracking and trajectory tracking both use \sed as the distance metric to check data points that confirms the actual position of a moving object at time $t$ lives in a circular area around the excepting position of the moving object at that time.
-Though \sed is currently the only distance metric used in tracking moving objects, we argue that another distance metric, \ped that is wildly used trajectory compression and always has remarkable better compression ratios than \sed, can also be applied in tracking moving objects that confirms a moving object lives in strip areas, \eg a school boy is expected on his way home no matter the speed of his movement.
+Though \sed is currently the only distance metric used in tracking moving objects, we argue that another distance metric, \ped that is wildly used in trajectory simplification and always has remarkable better compression ratios than \sed, is also important in tracking moving objects that confirms moving objects lives in strip areas, \eg a school boy is expected on his way home no matter the speed of his movement.
 This section introduces novel methods that use \ped to track moving object in strip areas.
 
 \subsection{Position tracking in strip areas}
@@ -37,27 +37,27 @@ Because the half-$\epsilon$ sectors may limit its compression performance, we al
 
 
 
-\begin{proposition}
+\begin{theorem}
 	\label{theo-full-sector}
-	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $ped(P_{s+i}, \vv{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if line segment $\vv{P_sP_{s+i}}$ passes through $\bigsqcap_{j=1}^{i-1}$\sector{(P_s, P_{s+j}, \epsilon)} - \{$P_s$\} and $|P_sP_{s+i}| > max\{|P_sP_{s+j}|\} - \epsilon$ for each $j \in (0, i)$.
-\end{proposition}
+	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $ped(P_{s+i}, \vv{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if line segment $\vv{P_sP_{s+i}}$ passes through $\bigsqcap_{j=1}^{i-1}$\sector{(P_s, P_{s+j}, \epsilon)} - \{$P_s$\} ~and~ $|P_sP_{s+i}| > max\{|P_sP_{s+j}|\} - \epsilon$ for each $j \in (0, i)$.
+\end{theorem}
 
 \begin{proof}
 	\todo.
 \end{proof}
 
-Proposition \ref{theo-full-sector} tells that full-$\epsilon$ sectors with some constrains can also be used in trajectory simplification and/or tracking. 
+Theorem \ref{theo-full-sector} tells that full-$\epsilon$ sectors with some constrains can also be used in trajectory simplification and/or tracking. 
 
-\begin{proposition}
+\begin{theorem}
 	\label{theo-sector-vs}
 	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, if $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$, then for each $i \in [2, k]$, line segment $\vv{P_sP_{s+i}}$ passes through $\bigsqcap_{j=1}^{i-1}$\sector{(P_s, P_{s+j}, \epsilon)}-$\{P_s\}$; and the opposite is not always true.
-\end{proposition}
+\end{theorem}
 
 \begin{proof}
 	\todo.
 \end{proof}
 
-Proposition \ref{theo-sector-vs} tells that the full-$\epsilon$ sector approach also brings a better effectiveness than the half-$\epsilon$ sector in trajectory simplification and/or tracking.
+Theorem \ref{theo-sector-vs} tells that the full-$\epsilon$ sector approach also brings a better effectiveness than the half-$\epsilon$ sector in trajectory simplification and/or tracking.
 We next present a {\em trajectory tracking} algorithm based on full-$\epsilon$ sectors (\sitt) that runs in a similar routine as \citt. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
