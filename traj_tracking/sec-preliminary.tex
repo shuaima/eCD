@@ -12,9 +12,9 @@
 
 \begin{figure*}[tb!]
 	\centering
-	\includegraphics[scale=0.6]{Figures/Fig-DP.png}\vspace{-1ex}
+	\includegraphics[scale=0.7]{Figures/Fig-DP.png}\vspace{-1ex}
 	%\caption{\small A trajectory is simplified by algorithm \dpa using distance metrics \ped, \sed and \dad, respectively.}
-	\caption{\small  A trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ with 11 points is compressed by the Douglas--Peucker algorithm \cite{Douglas:Peucker} using distance metrics \ped, \sed and \dad, respectively.}
+	\caption{\small  A trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ with 11 points is compressed by the Douglas--Peucker algorithm \cite{Douglas:Peucker} using \ped and \sed, respectively.}
 	\vspace{-2ex}
 	\label{fig:dp}
 \end{figure*}
@@ -44,7 +44,7 @@ Note that each directed line segment in $\overline{\mathcal{T}}$ essentially rep
 
 
 
-For trajectory simplification, three distance metrics are commonly used, namely, the \emph{perpendicular Euclidean distance} (\ped), the \emph{synchronous Euclidean distance} \cite{Meratnia:Spatiotemporal} (\sed) and the \emph{direction-aware distance}\cite{Long:Direction, Zhang:Evaluation} (\dad). For position tracking, the common distance metric is \sed.
+For trajectory simplification, two Euclidean distance metrics are commonly used, namely, the \emph{perpendicular Euclidean distance} (\ped) and the \emph{synchronous Euclidean distance} \cite{Meratnia:Spatiotemporal} (\sed). For position tracking, the default distance metric is \sed.
 %
 Consider a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$.
 
@@ -56,19 +56,6 @@ Consider a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}
 (c) $P'.t$ = $P.t$, where $c= \frac{P.t-P_s.t}{P_e.t-P_s.t}$.
 
 \textcolor{blue}{Synchronized points are essentially virtual points with the assumption that an object moved along a straight line segment from $P_s$ to $P_e$ with a uniform speed, \ie the average speed $\frac{|\vv{P_sP_e}|}{P_e.t-P_s.t}$ between points $P_s$ and $P_e$ \cite{Cao:Spatio,Lin:Cised}. Then the \emph{synchronized point} $P'$ of a point $P$ \wrt the line segment $\vv{P_sP_e}$ is the expected position of the moving object on $\vv{P_sP_e}$ at time $P.t$, obtained by a linear interpolation \cite{Cao:Spatio}. More specifically, a synchronized point $P'_i$ of $P_i$ ($s\le i < e$) \wrt the line segment $\vv{P_sP_e}$ is a point on $\vv{P_sP_{e}}$ satisfying ${|\vv{P_sP'_i}|} = \frac{P_i.t - P_s.t}{P_e.t - P_s.t}\cdot {|\vv{P_sP_e}|}$, which means that the object moves from $P_s$ to $P_e$ at an average speed $\frac{|\vv{P_sP_e}|}{P_e.t-P_s.t}$, and its position at time $P_i.t$ is the point $P'_i$ on $\overrightarrow{P_sP_{e}}$ having a distance of $\frac{P_i.t - P_s.t}{P_e.t - P_s.t}\cdot|\vv{P_sP_e}|$ to $P_s$~\cite{Cao:Spatio, Lin:Cised,Meratnia:Spatiotemporal, Chen:Fast, Zhang:Evaluation}.}
-
-\stitle{Direction-aware distance distance}.The direction-aware distance $dad\left(\mathcal{L}_1, \mathcal{L}_2\right)$ is the direction deviation from $\mathcal{L}_1$ to $\mathcal{L}_2$, \ie $\Delta\left(\mathcal{L}_1.\theta, \mathcal{L}_2.\theta\right) = \min\{|\mathcal{L}_1.\theta - \mathcal{L}_2.\theta|, 2\pi - |\mathcal{L}_1.\theta - \mathcal{L}_2.\theta|\}$, where $\theta \in \left[0, 2\pi\right)$ is the angular of $\mathcal{L}$.
-\textcolor{blue}{Note \dad differs from \ped and \sed in that it is a measure of angle, rather than Euclidean distances, and the temporal information is also lost when using \dad.}
-
-\stitle{Trajectory simplification (Min-$\#$ problem).}
-Given a trajectory \trajec{T}$\left[P_0, \dots, P_n\right]$ and a pre-specified constant $\epsilon$, the \emph{min-$\#$} problem of trajectory simplification is to approximate the trajectory \trajec{T} with $\overline{\mathcal{T}}\left[\mathcal{L}_0, \ldots , \mathcal{L}_m\right]$ ($0< m \le n$), such that
-(1) on each of them the points $\left[P_{s_i}, \dots, P_{e_i}\right]$ are approximated by a line segment $\mathcal{L}_i = \vv{P_{s_i}P_{e_i}}$ with the maximum \ped or \sed \emph{error} of point $P_j$ (or \dad \emph{error} of line segment $|\vv{P_jP_{j+1}}|$) to line segment $\mathcal{L}_i$, $s_i \le j<e_i$,  less than $\epsilon$, and
-(2) $P_{s_i}$ and $P_{e_i} \in$ \trajec{T}.
-
-
-\stitle{Position tracking}. \textcolor{blue}{Given an error bound $\epsilon$, the position tracking is an agreement between a moving object and a MOD server such that the MOD server can infer the current position of the object with an deviation less than $\epsilon$ to its actual position.}
-
-\stitle{Trajectory tracking}. It is a method implementing both trajectory simplification and position tracking.
 
 
 \begin{table}
@@ -87,7 +74,7 @@ Given a trajectory \trajec{T}$\left[P_0, \dots, P_n\right]$ and a pre-specified 
 		$\mathcal{L}$ & a directed line segment  \\		\hline
 		$ped\left(P, \mathcal{L}\right)$ &  {the perpendicular Euclidean distance of point $P$ to line segment $\mathcal{L}$}	\\	\hline
 		$sed\left(P, \mathcal{L}\right)$ & {the synchronous Euclidean distance of point $P$ to line segment $\mathcal{L}$} 	\\		\hline
-		$dad\left(\mathcal{L}_1, \mathcal{L}_2\right)$ & {the direction-aware distance of line segment $\mathcal{L}_1$ to line segment $\mathcal{L}_2$} 	\\		\hline
+		%$dad\left(\mathcal{L}_1, \mathcal{L}_2\right)$ & {the direction-aware distance of line segment $\mathcal{L}_1$ to line segment $\mathcal{L}_2$} 	%\\		\hline
 		$\epsilon$ & the error bound \\		\hline
 		%\sector{} & a sector \\		\hline
 		%		$\vv{A} \times \vv{B}$ & the cross product of (vectors) $\vv{A}$ and $\vv{B}$\\		\hline
@@ -123,12 +110,24 @@ We illustrate these notations with examples.
 	(4) For $P_4$, its synchronized point $P'_4$ \wrt $\vv{P_0P_{10}}$ satisfies $\frac{|\vv{P_0P'_4}|}{|\vv{P_0P_{10}}|} = \frac{P_4.t - P_0.t}{P_{10}.t-P_0.t} = \frac{4-0}{10-0}= \frac{2}{5}$,
 	%
 	(5) $sed\left(P_4, \vv{P_0P_{10}}\right)= |\vv{P_4P'_4}|$, $sed\left(P_2, \vv{P_0P_{4}}\right)= |\vv{P_2P'_2}|$ and $sed\left(P_7, \vv{P_4P_{10}}\right)$ $=$ $|\vv{P_7P'_7}|$,
-	where points $P'_4$, $P'_2$ and $P'_7$ are the synchronized points of $P_4$, $P_2$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$, $\vv{P_0P_{4}}$ and $\vv{P_4P_{10}}$, respectively.  and
-	%
-	(6) $dad\left(\vv{P_5P_6}, \vv{P_0P_{10}}\right)=\theta_{56}$ is the \dad of line segment $\vv{P_5P_6}$ to $\vv{P_0P_{10}}$.
+	where points $P'_4$, $P'_2$ and $P'_7$ are the synchronized points of $P_4$, $P_2$ and $P_7$ \wrt line segments $\vv{P_0P_{10}}$, $\vv{P_0P_{4}}$ and $\vv{P_4P_{10}}$, respectively.  
 \end{example}
 
 
+\eat{%%%%%%%%%%%%%%%%%%
+\stitle{Direction-aware distance distance}.The direction-aware distance $dad\left(\mathcal{L}_1, \mathcal{L}_2\right)$ is the direction deviation from $\mathcal{L}_1$ to $\mathcal{L}_2$, \ie $\Delta\left(\mathcal{L}_1.\theta, \mathcal{L}_2.\theta\right) = \min\{|\mathcal{L}_1.\theta - \mathcal{L}_2.\theta|, 2\pi - |\mathcal{L}_1.\theta - \mathcal{L}_2.\theta|\}$, where $\theta \in \left[0, 2\pi\right)$ is the angular of $\mathcal{L}$.
+\textcolor{blue}{Note \dad differs from \ped and \sed in that it is a measure of angle, rather than Euclidean distances, and the temporal information is also lost when using \dad.}
+
+\stitle{Trajectory simplification (Min-$\#$ problem).}
+Given a trajectory \trajec{T}$\left[P_0, \dots, P_n\right]$ and a pre-specified constant $\epsilon$, the \emph{min-$\#$} problem of trajectory simplification is to approximate the trajectory \trajec{T} with $\overline{\mathcal{T}}\left[\mathcal{L}_0, \ldots , \mathcal{L}_m\right]$ ($0< m \le n$), such that
+(1) on each of them the points $\left[P_{s_i}, \dots, P_{e_i}\right]$ are approximated by a line segment $\mathcal{L}_i = \vv{P_{s_i}P_{e_i}}$ with the maximum \ped or \sed \emph{error} of point $P_j$ (or \dad \emph{error} of line segment $|\vv{P_jP_{j+1}}|$) to line segment $\mathcal{L}_i$, $s_i \le j<e_i$,  less than $\epsilon$, and
+(2) $P_{s_i}$ and $P_{e_i} \in$ \trajec{T}.
+
+
+\stitle{Position tracking}. \textcolor{blue}{Given an error bound $\epsilon$, the position tracking is an agreement between a moving object and a MOD server such that the MOD server can infer the current position of the object with an deviation less than $\epsilon$ to its actual position.}
+
+\stitle{Trajectory tracking}. It is a method implementing both trajectory simplification and position tracking.
+}%%%%%%%%%%End EAT
 
 \subsection{Position tracking in circular areas}
 
@@ -158,9 +157,13 @@ Note the expecting position is indeed the synchronous data point \wrt of time $t
 	\label{fig:ldr}
 \end{figure}
 
+
+
 \subsection{Trajectory tracking in circular areas}
-Though \ldr is originally designed to track the position of a moving object, Authors in \cite{Trajcevski:LDRH} proved that \ldr with some small variations, named linear dead reckoning with half $\epsilon$ (\ldrh) in \cite{Lange:Tracking}, is also a line simplification algorithm such that it can be used to compress trajectories, \ie~\ldrh supports both position tracking and trajectory simplification, thus, it is a trajectory tracking algorithm.
+Trajectory tracking aims to implement both position tracking and trajectory simplification in one routine \cite{Lange:Tracking}. Currently, the only one-pass trajectory tracking algorithm is a variation of \ldr, developed in \cite{Trajcevski:LDRH} and formally named as linear dead reckoning with half $\epsilon$ (\ldrh) in \cite{Lange:Tracking}.
 %
+Authors in \cite{Trajcevski:LDRH} proved that \ldr with some small variations, is also a line simplification algorithm. Thus, \ldrh supports both position tracking and trajectory simplification and is a trajectory tracking algorithm.
+
 Given an error bound $\epsilon$, \ldrh runs the same routine as \ldr except that (1) it uses half $\epsilon$ as the threshold in distance checking; (2) when the current point $P_k$ has a \sed larger than $\epsilon/2$ to its expecting location (synchronous data point), it sends the preview point $P_{k-1}$ and a new $\vv{v}$ to the MOD server and continues trajectory tracking taking $P_{k-1}$ as the new start point. \ldrh is simple and efficient, having a linear time and a constant space. However, it has a poor effectiveness in terms of compression ratio, as the half $\epsilon$ is conservative \cite{Lange:Tracking}, and more important, the algorithm is sensitive to the initial velocity which is set only once at the updating time but it is hard to be appropriate at that time.
 
 \begin{example}
@@ -179,16 +182,15 @@ Given an error bound $\epsilon$, \ldrh runs the same routine as \ldr except that
 
 %%%%%%
 \eat{ 
-\textcolor{blue}{ 
-Lange et al. in \cite{Lange:GRTS, Lange:Tracking} introduced \grts framework that aimed at improving the effectiveness, in terms of compression ratio, of trajectory tracking by logically separating position tracking and trajectory simplification into two sub-processes, where position tracking is implemented by \ldr and trajectory simplification is enforced by integrating the third party line simplification algorithms \cite{Zhang:Evaluation, Lin:Cised}. \grts is effective than \ldrh, however, it is much more complex as it includes two sub-processes and introduces a buffer to temporarily save data points for the purpose of compression.
-Like \ldr, algorithms \ldrh and \grts both use \sed to check distances, hence, they also track a moving object in a floating circular area.}
+	\textcolor{blue}{ 
+		Lange et al. in \cite{Lange:GRTS, Lange:Tracking} introduced \grts framework that aimed at improving the effectiveness, in terms of compression ratio, of trajectory tracking by logically separating position tracking and trajectory simplification into two sub-processes, where position tracking is implemented by \ldr and trajectory simplification is enforced by integrating the third party line simplification algorithms \cite{Zhang:Evaluation, Lin:Cised}. \grts is effective than \ldrh, however, it is much more complex as it includes two sub-processes and introduces a buffer to temporarily save data points for the purpose of compression.
+		Like \ldr, algorithms \ldrh and \grts both use \sed to check distances, hence, they also track a moving object in a floating circular area.}
 }
 %%%%%%eat
 
 
-
-\subsection{Trajectory simplification in circular areas}
-Recently, a novel one-pass trajectory simplification algorithm using \sed, namely \cised \cite{Lin:Cised} is developed. It uses a local synchronous distance checking approach based on a concept of spatio-temporal cone, defined in a 3D Cartesian coordinate system whose $x$-axis, $y$-axis and $t$-axis are longitude, latitude and time, respectively, that converts the \sed distance tolerance into the intersection of cones for testing the successive points such that it is possible to achieve a linear time complexity.
+\subsection{Spatio-temporal cone and its use in trajectory simplification}
+Recently, a novel one-pass trajectory simplification algorithm using \sed, namely \cised \cite{Lin:Cised}, is developed. It uses a local synchronous distance checking approach based on a concept of spatio-temporal cone, defined in a 3D Cartesian coordinate system whose $x$-axis, $y$-axis and $t$-axis are longitude, latitude and time, respectively, that converts the \sed distance tolerance into the intersection of cones for testing the successive points to achieve a linear time.
 
 \stitle{Spatio-temporal cones (\cone{}) \cite{Lin:Cised}}. 
 Given a start point $P_s$ of sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, P_{s+k}]$ and an error bound $\epsilon$, the spatio-temporal cone (or simply \textit{cone}) of a data point $P_{s+i}$ ($1\le i\le k$) in $\dddot{\mathcal{T}_s}$ \wrt $P_s$ and $\epsilon$, denoted as \cone{(P_s, P_{s+i}, \epsilon)}, or \cone{_{s+i}} in short, is an oblique circular cone such that point $P_s$ is its apex and the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$ of point $P_{s+i}$, or \circle{_{s+i}} in short, a circle on the plane $P.t-P_{s+i}.t = 0$ such that $P_{s+i}$ is its center and $\epsilon$ is its radius, is its base.
@@ -222,7 +224,8 @@ Given a start point $P_s$ of sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, 
 Based on the notion of spatio-temporal cone, authors in \cite{Lin:Cised} prove that the \sed distance tolerance can be checked by finding the common intersection of spatio-temporal cones  (half-$\epsilon$) built from points of a sub-trajectory $[P_s,...,P_{s+k}]$, \ie ``{given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P_{s+i}, \vv{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if  $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$}."
 In other words, if these cones do have a common intersection, then line segment $\vv{P_sP_{s+k}}$ can represent the sub-trajectory. And for efficiency consideration, \cised projects those cones on a plane,\eg plane $t=P_{s+1}.t$, so as to convert the checking of cones intersection into a much simpler way, \ie~\textit{checking of circles intersection on the plane}.
 For the same reason, a circle is approximated by its inscribe regular polygon and the intersecting of circles is approximated by the intersecting of these polygons, which can be computed in linear time.
-
+%
+Note that though the cone intersection approach outperform the counterpart of \ldr and \ldrh, it is still not introduced to trajectory tracking.
 
 \begin{example}
 	\label{exm-cised-sh}
@@ -237,6 +240,9 @@ For the same reason, a circle is approximated by its inscribe regular polygon an
 	\vspace{-2ex}
 	\label{fig:ldr}
 \end{figure}
+
+
+
 
 
 %\subsection{Trajectory simplification in strip areas}
