@@ -20,12 +20,12 @@ This section introduces novel methods that use \ped to track moving object in st
 
 \subsection{Sector and its use in trajectory simplification}
 
-\emph{Sector intersection} \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} is developed in fields of computational geometry and cartographic, where a \emph{sector} is largely a simplified version of a spatio-temporal cone in an x--y 2D space that the temporal information is ignored, that converts the \ped distance tolerance into an angle tolerance for efficiently checking data points.
+\emph{Sector intersection} \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} is developed in fields of computational geometry and cartography, where a \emph{sector} is largely a simplified version of a spatio-temporal cone projecting on an x--y 2D space that the temporal information is ignored, that converts the \ped distance tolerance into an angle tolerance for efficiently checking data points.
 %
 Given a sequence of points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$,
 for the start data point $P_s$, any point $P_{s+i}$ and $|\vv{P_sP_{s+i}}|>\epsilon$ ($i\in[1, k]$), there are two directed lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ such that $ped(P_{s+i}, \vv{P_sP^u_{s+i}})$ $=$ $ped(P_{s+i}, \vv{P_sP^l_{s+i}}) = \epsilon$ and either ($\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta ~and~\vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta <\pi$) or ($\vv{P_sP^l_{s+i}}.\theta > \vv{P_sP^u_{s+i}}.\theta ~and~ \vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta < -\pi)$. Indeed, they form a \emph{sector} \sector{(P_s, P_{s+i}, \epsilon)} that takes $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the borderlines.
 
-The sector intersection approach is the key of one-pass trajectory simplification algorithms using \ped. Like the checking of the common intersection of spatio-temporal cones in \cised, these algorithms check the common intersection of sectors, \ie $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon)} $\ne \{P_s\}$ \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}, to know whether the sub-trajectory can be represented by a line segment $\overline{P_sQ}$ \wrt error bound $\epsilon$, where $Q$ is a point that may not belong to the sub-trajectory. However, if $Q$ must be $P_{s+k}$, the last point of the sub-trajectory, then (1) the full-$\epsilon$ sectors should be replaced by half-$\epsilon$ sectors, and (2) $P_{s+k}$ should be one of the points have the furthest distances to $P_s$, \ie $|P_sP_{s+k}| > max\{|P_sP_{s+i}|\} - \epsilon$ for each $i \in (0, k)$. 
+The sector intersection approach is originally developed for one-pass line simplification algorithms using \ped \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} to simplify the border lines of a geometric or cartographic shape in digital format. However, it can also be applied to simplify trajectories as pointed out in \cite{Lin:Cised}. Like the checking of the common intersection of spatio-temporal cones in \cised, these sector-based algorithms check the common intersection of sectors, \ie $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon)} $\ne \{P_s\}$ \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}, to know whether the sub-trajectory can be represented by a line segment $\overline{P_sQ}$ \wrt error bound $\epsilon$, where $Q$ is a point that may not belong to the sub-trajectory. However, if $Q$ must be $P_{s+k}$, the last point of the sub-trajectory, then (1) the full-$\epsilon$ sectors should be replaced by half-$\epsilon$ sectors, and (2) $P_{s+k}$ should be one of the points have the furthest distances to $P_s$, \ie $|P_sP_{s+k}| > max\{|P_sP_{s+i}|\} - \epsilon$ for each $i \in (0, k)$. 
 %
 
 \todo{figure}
@@ -35,11 +35,11 @@ The sector intersection approach is the key of one-pass trajectory simplificatio
 	\todo.
 \end{example}
 
-\subsection{Tracking by sectors}
+\subsection{Tracking by sector}
 
-\todo{sectors can be used in trajectory tracking. }
-
-Because the half-$\epsilon$ sectors may limit its compression performance, we also extend it to full-$\epsilon$ sectors for a better performance.
+Similar as spatio-temporal cones used in trajectory tracking using \sed, the sectors is applicable to track moving objects using \ped. 
+%
+Because the half-$\epsilon$ sectors may limit its compression performance, we also extend it to full-$\epsilon$ sectors for better performance.
 
 
 %, that is, for any data point $P_{s+i}$ ($i \in [1, ... k]$), its perpendicular Euclidean distance to line segment $\overline{P_sP_{s+k}}$ is not greater than the error bound $\epsilon$.
@@ -68,7 +68,7 @@ Theorem \ref{theo-full-sector} tells that full-$\epsilon$ sectors with some cons
 \end{proof}
 
 Theorem \ref{theo-sector-vs} tells that the full-$\epsilon$ sector approach also brings a better effectiveness than the half-$\epsilon$ sector in trajectory simplification and/or tracking.
-We next present a {\em trajectory tracking} algorithm based on full-$\epsilon$ sectors (\sitt) that runs in a similar routine as \citt. 
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Algorithm: Traj tracking based on section intersection using full sectors.
@@ -112,7 +112,7 @@ We next present a {\em trajectory tracking} algorithm based on full-$\epsilon$ s
 
 \subsection{Implementation}
 
-%proposition 2: full-sector is better than half sector.
+We next present a {\em trajectory tracking} algorithm based on full-$\epsilon$ sectors (\sitt) that runs in a similar routine as \citt. \todo{vs cised}
 
 \stitle{Algorithm \sitt.}
 \todo{description; and tips for those points having distances to $P_s$ smaller than $\epsilon$ ...}
