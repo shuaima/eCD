@@ -126,7 +126,7 @@ Otherwise, no deviation occurs, no update is sent and the algorithm goes on proc
 %We now present algorithm \citt.
 As shown in Figure~\ref{alg:citt-s-full}, it takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and outputs a set of velocities and a simplified  trajectory $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$.
 %
-The algorithm first initializes the start point $P_s$ to $P_0$, the common intersection of polygons $\mathcal{R}^*$ to the polygon of $P_1$ by calling procedure $\kw{getRegularPolygon}$ \cite{Lin:Cised}, and the expected velocity $(|\vv{v}|, \vv{v}.\theta)$ to ($\frac{|P_{s}P_{s+1}|}{P_{s+1}.t-P_s.t},\vv{P_{s}P_{s+1}}.\theta$) (lines 1--2), then it sends its initial location $P_s$ and the velocity $\vv{v}$ to the MOD server (line 3), meaning that it is supposed to move from point $P_s$ along the direction of $\vv{v}.\theta$ at a speed of $|\vv{v}|$.
+The algorithm first initializes the start point $P_s$ to $P_0$, the common intersection of polygons $\mathcal{R}^*$ to the regular inner polygon of $P_1$ by calling procedure $\kw{getRPolygon}$ \cite{Lin:Cised}, and the expected velocity $(|\vv{v}|, \vv{v}.\theta)$ to ($\frac{|P_{s}P_{s+1}|}{P_{s+1}.t-P_s.t},\vv{P_{s}P_{s+1}}.\theta$) (lines 1--2), then it sends its initial location $P_s$ and the velocity $\vv{v}$ to the MOD server (line 3), meaning that it is supposed to move from point $P_s$ along the direction of $\vv{v}.\theta$ at a speed of $|\vv{v}|$.
 %, such that the expecting position of the object at time $t>P_s.t$ can be extrapolated from them as long as no subsequent update is sent to the MOD server.
 
 The algorithm sequentially processes the rest points of the trajectory one by one (lines 4--15). 
@@ -135,7 +135,7 @@ For the current point $P_{i}$, if $\vv{P_sP_{i}}$ passes through the common inte
 Otherwise, it calculates the distance from the actual location $P_{i}$ to the expecting location $P'_{i}$ extrapolated from the initial location $P_s$ and the velocity $\vv{v}$, and checks whether $\vv{P_sP_{i}}$ passes through the common intersection $\mathcal{R}^*$ of preview points.
 If it passes through and the distance $|P_{i}P'_{i}| \ge \epsilon$, meaning that more points can be included into a line segment while the velocity $\vv{v}$ needs to be updated. Hence, it updates velocity $\vv{v}$ based on $P_s$ and $P_{i}$, and sends it to the MOD server (lines 10--12). 
 %
-Anyway, the algorithm gets the $m$-edge inscribed regular polygon \wrt the current point $P_{i}$ by calling procedure $\kw{getRegularPolygon}$ \cite{Lin:Cised} and gets the common intersection $\mathcal{R}^*$ of the preview cones (lines 13--14). The process repeats until all points have been processed (line 15).
+Anyway, the algorithm gets the $m$-edge inscribed regular polygon \wrt the current point $P_{i}$ by calling procedure $\kw{getRPolygon}$ \cite{Lin:Cised} and gets the common intersection $\mathcal{R}^*$ of the preview cones (lines 13--14). The process repeats until all points have been processed (line 15).
 At last, it outputs the last point $P_{n}$ (line 16).
 
 
@@ -150,20 +150,20 @@ At last, it outputs the last point $P_{n}$ (line 16).
 					\mat{0ex}{
 						{\bf Algorithm}~\citt $(\dddot{\mathcal{T}}[P_0,\ldots,P_n],~\epsilon,~m)$\\
 						%	\sstab
-						\bcc \hspace{1ex}\= $P_s := P_0$; ~~~~$\mathcal{R}^*$ := \kw{getRegularPolygon}($P_s$, $P_{s+1}$, $\epsilon$, $m$, $P_{s+1}.t$); \\
+						\bcc \hspace{1ex}\= $P_s := P_0$; ~~~~$\mathcal{R}^*$ := \kw{getRPolygon}($P_s$, $P_{s+1}$, $\epsilon$, $m$, $P_{s+1}.t$); \\
 						\icc \hspace{1ex}\= $|\vv{v}|:=\frac{|P_{s}P_{s+1}|}{P_{s+1}.t-P_s.t}$; ~~~~$\vv{v}.\theta:=\vv{P_{s}P_{s+1}}.\theta$; \\
 						\icc \hspace{1ex}\= update ($P_{s}, \vv{v}$); \\
 						\icc \hspace{1ex}\= $i := 2$; 	\\
 						\icc \hspace{1ex}\= while $i \le n$ do \\
-						\icc \>\hspace{3ex} if $\vv{P_sP_{i}}$ does not pass through $\mathcal{R}^*$ then \\ % // updates velocity and location \\
+						\icc \>\hspace{3ex} if $\vv{P_sP_{i}}$ ~does not pass~ $\mathcal{R}^*$ then \\ % // updates velocity and location \\
 						\icc \>\hspace{7ex}    $P_s := P_{i-1}$; ~~~~$\mathcal{R}^*$ := $\emptyset$; \\
 						\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_{s}P_{i}|}{P_{i}.t-P_s.t}$; ~~~~~$\vv{v}.\theta:=\vv{P_{s}P_{i}}.\theta$; \\
 						\icc \>\hspace{7ex}    update ($P_{s}, \vv{v}$); \\
-						\icc \>\hspace{3ex} else if $\vv{P_sP_{i}}$ passes through $\mathcal{R}^*$ ~and~ $sed(P_{i},\vv{v}) \ge \epsilon $ then  \\ %~// updates velocity only 
+						\icc \>\hspace{3ex} else if $\vv{P_sP_{i}}$ ~passes~ $\mathcal{R}^*$ ~and~ $sed(P_{i},\vv{v}) \ge \epsilon $ then  \\ %~// updates velocity only 
 						\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_sP_{i}|}{P_{i}.t-P_s.t}$; ~~~~~$\vv{v}.\theta:=\vv{P_sP_{i}}.\theta$; \\
 						\icc \>\hspace{7ex}    update ($\vv{v}$); \\
-						\icc \>\hspace{3ex} if $\mathcal{R}^*=\emptyset$ then $\mathcal{R}^*:=$ \kw{getRegularPolygon}($P_s$, $P_{i}$, $\epsilon$, $m$, $P_{s+1}.t$); \\
-						\icc \>\hspace{3ex} else $\mathcal{R}^*$ := $\mathcal{R}^*\bigsqcap$ \kw{getRegularPolygon}($P_s$, $P_{i}$, $\epsilon$, $m$, $P_{s+1}.t$); \\
+						\icc \>\hspace{3ex} if $\mathcal{R}^*=\emptyset$ then $\mathcal{R}^*:=$ \kw{getRPolygon}($P_s$, $P_{i}$, $\epsilon$, $m$, $P_{s+1}.t$); \\
+						\icc \>\hspace{3ex} else $\mathcal{R}^*$ := $\mathcal{R}^*\bigsqcap$ \kw{getRPolygon}($P_s$, $P_{i}$, $\epsilon$, $m$, $P_{s+1}.t$); \\
 						\icc \>\hspace{3ex} $i$ := $i +1$;	\\
 						\icc \>\hspace{0ex} update $(P_{n}, 0)$; 
 					}

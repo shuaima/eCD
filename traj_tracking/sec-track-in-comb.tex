@@ -17,28 +17,71 @@ In this section, we combine \sed and \ped to track a moving object in an alterna
 %based on ldr, double check.
 
 
-\subsection{Tracking by cone and sector}
+%\subsection{Tracking by cone and sector}
 
 \begin{theorem}
 	\label{theo-full-sector}
-	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and two error bounds $\epsilon_{sed}$ and $\epsilon_{ped}$, it can be tracked in circular and strip areas by spatio-temporal cones and sectors.
+	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and two error bounds $\epsilon_{sed}$ and $\epsilon_{ped}$, it can be tracked in combined areas of circulars and strips by spatio-temporal cones and sectors.
 \end{theorem}
 
 \begin{proof}
 	\todo.
 	1. traj simplification by cones and sectors.
-	2. position tracking: one velocity, from cones.
+	2. position tracking: one velocity, from the intersection of cones.
 \end{proof}
 
 
--- principle, adjust velocity...
-	checking \textcolor{blue}{separately} of cone and sector ($P_sP_{s+k-1}$ is the choice), couple with ldr.
-	step 1: check metrics: (if all intersections of one metric are true, then there must be a line segment satisfying all).
-	if any intersection of one metric is false, then new line segment.
-	step 2:	(check ldr) if any ldr is false, then find the common intersection of all metric and adjust velocity; select a point from the common area (or simply $P_{s+k-1}$).
 
-\subsection{Implementation}
--- algorithm. intersection based trajectory tracking (BITT)
+
+\stitle{Implementation.}
+We now present the algorithm of \underline{B}inary \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (BITT) that tracks moving objects in combined areas of circular and strip by \sed and \ped, as shown in Figure~\ref{alg:bitt}. 
+%
+Indeed, it is a double check of cone intersection and sector intersection for each point for the purpose of trajectory simplification, and a double check of distance deviations for position tracking. And for position tracking, it uses a uniform velocity $\vv{v}$ for both checks of \sed and \ped. %If either \sed or \ped deviation breaks the threshold, then an update is triggered.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Algorithm: Traj tracking based on section intersection using full sectors.
+\begin{figure}[tb!]   
+	\begin{center}
+		{\small
+			\begin{minipage}{3.3in}
+				\myhrule
+				%\vspace{-1ex}
+				\mat{0ex}{
+					{\bf Algorithm}~\bitt $(\dddot{\mathcal{T}}[P_0,\ldots,P_n], ~\epsilon_{sed}, m, ~\epsilon_{ped})$\\
+					%	\sstab
+					\bcc \hspace{1ex}\= $P_s := P_0$; ~~~~$\mathcal{R}^*$ := \kw{getRPolygon}($P_s$, $P_{s+1}$, $\epsilon_{sed}$, $m$, $P_{s+1}.t$); \\
+					\icc \hspace{1ex}\= $\mathcal{S}^*$ := \kw{getSector}($P_s$, $P_{s+1}$, $\epsilon_{ped}$); ~~~~$l_{m} = |P_sP_{s+1}|$;\\
+					\icc \hspace{1ex}\= $|\vv{v}|:=\frac{|P_{s}P_{s+1}|}{P_{s+1}.t-P_s.t}$; ~~~~$\vv{v}.\theta:=\vv{P_{s}P_{s+1}}.\theta$;  \\
+					\icc \hspace{1ex}\= update ($P_{s}, \vv{v}$); 	\\
+					\icc \hspace{1ex}\= $i:= 2$;  	\\
+					\icc \hspace{1ex}\= while $i \le n$ do \\
+					\icc \>\hspace{3ex} if $\vv{P_sP_{i}}$ ~does not pass~ $\mathcal{S}^*~or~\mathcal{R}^*$, or $|P_sP_{i}| \le l_{m} - \epsilon$ then \\ % // updates velocity and location \\
+					\icc \>\hspace{7ex}    $P_s := P_{i-1}$; ~~~~$\mathcal{R}^*$ := $\emptyset$;~~~~$\mathcal{S}^*$ := $\emptyset$; ~~~~$l_{m} = |P_sP_{i}|$;\\
+					\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_sP_{i}|}{P_{i}.t-P_s.t}$; ~~~~$\vv{v}.\theta:=\vv{P_{s}P_{i}}.\theta$;  \\
+					\icc \>\hspace{7ex}    update ($P_{s}, \vv{v}$); 	\\
+					\icc \>\hspace{3ex} else if $\vv{P_sP_{i}}$ ~passes ~ $\mathcal{R}^*$ and $\mathcal{S}^*$, $|P_sP_{i}| > l_{m} - \epsilon$ \\ \hspace{9ex} ~and~ ($ped(P_i, \vv{v}) \ge \epsilon_{ped} ~or~ sed(P_i, \vv{v}) \ge \epsilon_{sed}) $ then  \\ %~// updates velocity only 
+					\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_sP_{i}|}{P_{i}.t-P_s.t}$; ~~~~$\vv{v}.\theta:=\vv{P_sP_{i}}.\theta$; \\
+					\icc \>\hspace{7ex}    update ($\vv{v}$); \\
+					\icc \>\hspace{3ex} if $\mathcal{S}^*=\emptyset$ then $\mathcal{R}^*:=$ \kw{getRPolygon}($P_s$, $P_{i}$, $\epsilon_{sed}$, $m$, $P_{s+1}.t$); \\
+					\icc \>\hspace{7ex}    $\mathcal{S}^*:=$ \kw{getSector}($P_s$, $P_{i}$, $\epsilon_{ped}$); \\
+					\icc \>\hspace{3ex} else $\mathcal{R}^*:=$ \kw{getRPolygon}($P_s$, $P_{i}$, $\epsilon_{sed}$, $m$, $P_{s+1}.t$); \\
+					\icc \>\hspace{7ex}    $\mathcal{S}^*$ := $\mathcal{S}^*\bigsqcap$ \kw{getSector}($P_s$, $P_{i}$, $\epsilon_{ped}$); $l_{m} = \max\{|P_sP_{i}|, l_{m}\}$;\\
+					\icc \>\hspace{3ex} $i$ := $i +1$;\\
+					\icc \>\hspace{0ex} update ($P_{n}$); 
+				}
+				\vspace{-2ex}
+				\myhrule
+			\end{minipage}
+		}
+	\end{center}
+	\vspace{-1ex}
+	\caption{\small Trajectory tracking based on sector and cone.}
+	\label{alg:bitt}
+	\vspace{-1ex}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 
 \begin{example}
 	\todo.
