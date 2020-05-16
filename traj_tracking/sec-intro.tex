@@ -7,23 +7,24 @@
 \section{introduction}
 \label{sec-intro}
 
-\eat{
-The moving object and the wide use of global location service.
-Tracking moving objects = position tracking and/or trajectory tracking.
-1. position tracking.
-comes from...
-ldr is an agreement between moving objects (MOs) and moving objects databases (MODs), initial position and velocity, ...
-}
 
-Trajectory tracking \cite{Lange:Tracking} is a combination of position tracking \cite{Wolfson:PositionTracking} and trajectory simplification in one routine, where position tracking is an agreement between a moving object and a MOD server such that the MOD server can infer the current position of the object with an deviation to its actual position less than a user specified threshold,
-and trajectory simplification is to approximate a fine trajectory with a coarse one (whose corresponding data points are a subset of the original one), such that the size of the trajectory is clearly reduced under a constrain that the maximum distance of the former to the latter is also bounded by a user specified threshold.
-\todo{The importance of traj tracking.}
+Trajectory tracking \cite{Lange:Tracking} is a combination of position tracking \cite{Wolfson:PositionTracking,Leonhardi:Comparison} and trajectory simplification in one routine, 
+where position tracking is a fundamental service that lets the server know the current position of a moving object effectively and efficiently, that is, transmits as few messages
+as possible to and still achieves the desired accuracy of the location information on the server \cite{Leonhardi:Comparison}. Linear dead reckoning (\ldr) \cite{Wolfson:PositionTracking} is such a position tracking method that is widely used in practice;
+%
+and trajectory simplification is to approximate a fine trajectory with a coarse one (whose corresponding data points are a subset of the original one), such that the size of the trajectory is reduced under a constrain that the maximum distance of the former to the latter is bounded by a user specified threshold. Linear simplification is such an effective and efficient approach that is also widely used in practice.
 
-LDRH is the first work that find LDR with a small modification can be used to both track the position of moving objects and simplify the trajectories. LDRH combines position tracking and line simplification into one consistent process. Limitation of LDRH: poor compression ratios. 
-GRTS formally defines the notion of traj tracking, and presents a framework GRTS that has a better compression ratio than LDRH, by separates traj tracking process in to two sub-processes, simplification operation and position tracking operation. GRTS tracks positions of moving objects by ldr, and utilizes a third party algorithm to implement line simplification that simplify data points saved in a buffer.
-\todo{traj tracking algorithm should be light, low time and space complexities that suitable to run on mobile devices}
+Observing that position tracking and trajectory simplification both are the fundamental technologies of trajectory management and they also share some common target and strategy, \ie, reduce the number of messages or the size of trajectory data by discarding some location information that seems not that important, researchers are trying to combine them in one routine that is suitable to run in mobile devices.
+%
+The authors of \cite{Trajcevski:LDRH} find that the position tracking algorithm \ldr with some tiny modifications can be used to both track the positions of a moving object and simplify the trajectory. The modified \ldr,  called \ldrh in \cite{Lange:Tracking}, is the first trajectory tracking algorithm that combines position tracking and trajectory simplification into one consistent process. It is concise and efficient, and is particularly suitable to run in resource constraint mobile devices. However, it suffers in effectiveness in terms of compression ratio and communication cost, due to the nature of \ldr. 
+%
+Generic remote trajectory simplification (GRTS) \cite{Lange:GRTS,Lange:Tracking} is a method that tries to improve the effectiveness of \ldrh by provide a generic framework that separates position tracking and trajectory simplification into two sub-processes, where the positions of a moving object is tracked by \ldr, and some third-party line simplification algorithm is equipped to simplify those data points (positions) saved in a buffer. GRTS is more effective than \ldrh at a cost of giving up the conciseness and efficiency of \ldrh.
+%
+
+
 
 \stitle{\todo{Motivations}.}
+\todo{traj tracking algorithm should be light, low time and space complexities that suitable to run on mobile devices}
 
 1. The current works only compress trajectory or track moving objects in circular areas. vs application requirements that need to track moving objects in other areas, such as strips, or combinations of circulars and strips.
 The necessity and possibility to track in circular and strip areas.
@@ -50,7 +51,7 @@ The necessity and possibility to design efficient and effective track algorithm,
 \stitle{\todo{Contributions}.}
 To the end, we proposed a novel 
 
-1. a way that customize region by sed, plus ped and/or dad. and implement it in position tracking LDR and trajectory tracking framework GRTS. advantage...
+1. a way that customize region by sed and ped. and implement it in position tracking LDR and trajectory tracking framework GRTS. advantage...
 
 2. a one-pass trajectory tracking algorithm supporting sed, ped and dad, by a combination cone intersection, sector intersection and interval intersection, \ie co-design of position tracking and trajectory simplification, effective and low time and space complexity, suitable running in resource constraint devices.
 
