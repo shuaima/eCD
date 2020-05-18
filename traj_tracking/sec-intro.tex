@@ -8,15 +8,14 @@
 \label{sec-intro}
 
 
-Trajectory tracking \cite{Lange:Tracking} is a combination of position tracking \cite{Wolfson:PositionTracking,Leonhardi:Comparison} and trajectory simplification \cite{Lin:Cised,Zhang:Evaluation} in one routine, where position tracking is a fundamental service that lets the server know the current position of a moving object effectively and efficiently, that is, transmits as few messages
-as possible to and still achieves the desired accuracy of the location information on the server \cite{Leonhardi:Comparison}. Linear dead reckoning (\ldr) \cite{Wolfson:PositionTracking} is such a position tracking method that is widely used in practice;
+\textit{Trajectory tracking} \cite{Lange:Tracking} is a combination of \textit{position tracking} \cite{Wolfson:PositionTracking,Leonhardi:Comparison} and \textit{trajectory simplification} \cite{Lin:Cised,Zhang:Evaluation} in one routine, where \textit{position tracking} is an approach that lets the moving objects database (MOD) server know the current position of a moving object effectively and efficiently, that is, it achieves the desired accuracy of the location information on the server by transmitting as few messages as possible \cite{Leonhardi:Comparison}. Linear dead reckoning (\ldr) \cite{Wolfson:PositionTracking} is such a widely used position tracking method, which is essentially an agreement between a given moving object and a MOD server such that the server could infer the current, excepted position of the moving object whose distance to the actual position of the object is bounded by a user specified threshold;
 %
-and trajectory simplification \cite{Lin:Cised,Zhang:Evaluation} is to approximate a fine trajectory with a coarse one (whose corresponding data points are a subset of the original one), such that the size of the trajectory is reduced under a constrain that the maximum distance of the former to the latter is bounded by a user specified threshold. 
+and \textit{trajectory simplification} \cite{Lin:Cised,Zhang:Evaluation} is to approximate a fine trajectory with a coarse one (whose corresponding data points are a subset of the original one), such that the size of the trajectory is reduced under a constrain that the maximum distance of the former to the latter is bounded by a user specified threshold. 
 %Linear simplification \cite{Lin:Cised,Zhang:Evaluation} is such an effective and efficient approach that is also widely used in practice.
 %
 Position tracking and trajectory simplification both are the fundamental technologies of trajectory management and they also share some common target and strategy, \ie, reduce the number of messages or the size of trajectory data by discarding some location information that seems not that important, hence, researchers are trying to combine them in one routine and make it be suitable to run in resource constraint devices.
 
-The authors of \cite{Trajcevski:LDRH} find that the position tracking algorithm \ldr with some tiny modifications can be used to both track the positions of a moving object and simplify the trajectory built by the positions. The modified \ldr,  called \ldrh in \cite{Lange:Tracking}, is the first trajectory tracking algorithm that combines position tracking and trajectory simplification into one consistent process. It is concise and efficient, and is suitable for mobile devices. However, it suffers in effectiveness in terms of compression ratio and communication cost, due to the nature of \ldr. 
+The authors of \cite{Trajcevski:LDRH} find that the position tracking algorithm \ldr with some tiny modifications is applicable to both track the positions of a moving object and simplify the trajectory built out of these positions. The modified \ldr,  called \ldrh in \cite{Lange:Tracking}, is the first trajectory tracking algorithm that combines position tracking and trajectory simplification into one consistent process. It is concise and efficient, and is suitable for mobile devices. However, it suffers in effectiveness in terms of compression ratio and communication cost, due to the nature of \ldr. 
 %
 Then, a framework, named the generic remote trajectory simplification (GRTS) \cite{Lange:GRTS,Lange:Tracking}, is developed to improve the effectiveness of trajectory tracking by separate position tracking and trajectory simplification into two sub-processes, where the positions of a moving object is also tracked by \ldr, and these positions are temporarily saved in a buffer and then simplified by some third-party line simplification algorithm. Indeed, it is more effective than \ldrh at a cost of weakening the conciseness and efficiency of \ldrh.
 %
@@ -24,25 +23,14 @@ Then, a framework, named the generic remote trajectory simplification (GRTS) \ci
 
 
 \stitle{\todo{Motivations}.}
-\todo{traj tracking algorithm should be light, low time and space complexities that suitable to run on mobile devices}
 
-1. The emerging of one pass trajectory simplification algorithms. These algorithms can be integrated into grts, one pass position tracking + one pass trajectory simplification = one pass and effective trajectory tracking algorithm, however, it is not good... co-design, like LDRH, yet more effective...... 
-The necessity and possibility to design efficient and effective track algorithm, at the same time supports the track in circular and strip areas.
+\ni(1) Trajectory track algorithms are supposed to run in resource-constraint mobile devices, thus, besides good performance of efficiency and effectiveness, they should also be simple and light, \ie having low time and space complexities, otherwise, they are not suitable to run in those mobile devices. In response to these requirements, \ldrh is light, simple and efficient, but not effective; and \grts is effective, but not efficient and light enough. That is, neither of them is the ideal solution for trajectory tracking.
+%The emerging of one pass trajectory simplification algorithms. These algorithms can be integrated into grts, however, it is not a natural way to implement a one-pass trajectory tracking algorithm like this way. Acutually, one pass position tracking + one pass trajectory simplification = one pass and effective trajectory tracking algorithm......co-design, like LDRH, yet more effective.
 
-2. The current works only compress trajectory or track moving objects in circular areas. vs application requirements that need to track moving objects in other areas, such as strips, or combinations of circulars and strips.
-The necessity and possibility to track in circular and strip areas.
 
-the distance metric used in tracking ``the distance between the expecting position and the actual position" ... it is SED in trajectory simplification. 
+\ni(2) The current works, \ie~\ldrh and \grts, only compress a trajectory or track a moving object in circular areas, \ie the moving object is supposed to locate in a circular taking the expected position of the object as the center. However, in practical, there is a need to track moving objects in other areas, such as strip or rectangular-like areas. \todo{examples and figures of areas,}
 
-scope: It is  a CIRCLE around the expecting position. fig.
 
-Limitations.
-
-we can make these regions more flexible as soon as we include another distance metric, PED, in trajectory simplification with a little modification.
-
-scope: fig.
-
-advantages and applications.
 
 
 
