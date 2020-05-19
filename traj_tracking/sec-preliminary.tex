@@ -130,27 +130,26 @@ Given a trajectory \trajec{T}$\left[P_0, \dots, P_n\right]$ and a pre-specified 
 \subsection{Position tracking in circular areas}
 
 Position tracking aims at informing the MOD about the current position of an object. Currently, the most simple yet efficient position tracking protocols is linear dead reckoning (\ldr) \cite{ Wolfson:PositionTracking}, which is essentially an agreement between a given moving object and the MOD server whose purpose is to let the MOD server track a moving object with less communication between them at an expense of imprecise of position within an error bound $\epsilon$.  
+
+Given an error bound $\epsilon$, the moving object sends its initial location $P_s$ and the expected velocity $\vv{v}$
+(including value and direction) to the MOD server, meaning that it is supposed to move from $P_s$ along the direction of $\vv{v}$ at a speed of $|\vv{v}|$, such that the expected position of the object at time $t>t_s$ can be extrapolated from them as long as no subsequent update is sent to the MOD server. 
+After that, the actual speed of the moving object may be varied and different from the supposed speed of $|\vv{v}|$, thus, the moving object periodically collects its actual position by sampling its on-board sensor, \eg GPS, and compares the actual position of time $t$ with the expected position of time $t$ extrapolated from the initial position $P_s$ and the velocity $\vv{v}$. If its actual position at a given time $t$ does not deviate by more than $\epsilon$ from the expected position $P$ of $t$, then the object does not transmit any new updates to MOD, otherwise, an update of new ($P_s$, $\vv{v}$) will be sent.
 %
-Initially, the moving object sends its initial location $P_s$ and the expected velocity $\vv{v}$
-(including value and direction) to the MOD server, meaning that it is supposed to move from $P_s$ along the direction of $\vv{v}$ at a speed of $|\vv{v}|$, such that the expecting position of the object at time $t>t_s$ can be extrapolated from them as long as no subsequent update is sent to the MOD server. 
-After that, the actual speed of the moving object may be varied, and different from the supposed speed of $|\vv{v}|$, thus, the moving object periodically collects its actual position by sampling its on-board sensor, \eg GPS, and compares the actual position of time $t$ with the expecting position of time $t$ extrapolated from the initial position $P_s$ and the velocity $\vv{v}$. If its actual position at a given time $t$ does not deviate by more than $\epsilon$ from the expecting position $P$ of $t$, then the object does not transmit any new updates to MOD, otherwise, an update of new ($P_s$, $\vv{v}$) will be sent.
-%
-By this way, though the MOD server receives less position information about a moving object, it still knows the expecting position of the moving object with a bounded error of $\epsilon$ to its actual position.
+By this way, though the MOD server receives less position information about a moving object, it still knows the expected position of the moving object with a bounded error of $\epsilon$ to its actual position.
 
 
+Figure \ref{fig:ldr} is a running example of \ldr, from which we can find that (1) the expected position is indeed the synchronized point of the moving object at time $t$, (2) the deviation from the actual position to the expected position is sure the synchronous Euclidean distance (\sed), and (3) the \ldr mechanism ensures that no message is sent as long as the actual position $P$ is in the circular area around the excepted position $P'$ with a radius of $\epsilon$. That is, \emph{\ldr always tracks a moving object in a floating circle of velocity $\vv{v}$.}
 
-Note the expecting position is indeed the synchronous data point \wrt of time $t$, and the deviation from the actual position to the expecting position is sure the synchronized Euclidean distance (\sed) as defined above. We can also find that the \ldr mechanism ensures that no message is sent as long as the moving object is in the circular area around the excepting position of time $t$ with a radius of $\epsilon$, \ie~\emph{\ldr always tracks the position of a moving object in a floating circular area.}
-
-\begin{example}
-	\label{exm-ldr}
-	\todo.
-\end{example}
+%\begin{example}
+%	\label{exm-ldr}
+%	\todo.
+%\end{example}
 
 \begin{figure}[tb!]
 	\centering
 	\includegraphics[scale=0.9]{figures/Fig-LDR.png}
 	\vspace{-1ex}
-	\caption{\small A running example of linear dead reckoning (LDR).}
+	\caption{\small A running example of linear dead reckoning (\ldr). Initially, point $P_0$ is set as $P_s$ and $\vec{v}$ is set to $\vec{v}_0$. Then, (1) points $P_1$ and $P_2$ have \sed distances less than $\epsilon$ to their expected points $P'_1$ and $P'_2$, respectively, and (2) $|P_3P'_3| > \epsilon$, meaning $P_3$ breaks the distance threshold, thus, a new update is triggered and $P_3$ is the new start point of the next section of position tracking.}
 	\vspace{-2ex}
 	\label{fig:ldr}
 \end{figure}
@@ -160,22 +159,17 @@ Note the expecting position is indeed the synchronous data point \wrt of time $t
 \subsection{Trajectory tracking in circular areas}
 Trajectory tracking aims to implement both position tracking and trajectory simplification in one routine \cite{Lange:Tracking}. Currently, the one-pass trajectory tracking algorithm is a variation of \ldr, originally developed in \cite{Trajcevski:LDRH} and formally named as linear dead reckoning with half $\epsilon$ (\ldrh) in \cite{Lange:Tracking}.
 %
-Authors in \cite{Trajcevski:LDRH} proved that \ldr with some small variations, is also a line simplification algorithm. Thus, \ldrh supports both position tracking and trajectory simplification and is a trajectory tracking algorithm.
+Authors in \cite{Trajcevski:LDRH} proved that \ldr with some small variations is also a line simplification algorithm. Thus, \ldrh supports both position tracking and trajectory simplification, meaning it is a trajectory tracking algorithm.
 
-Given an error bound $\epsilon$, \ldrh runs the same routine as \ldr except that (1) it uses half $\epsilon$ as the threshold in distance checking; (2) when the current point $P_k$ has a \sed larger than $\epsilon/2$ to its expecting location (synchronous data point), it sends the preview point $P_{k-1}$ and a new $\vv{v}$ to the MOD server and continues trajectory tracking taking $P_{k-1}$ as the new start point. \ldrh is simple and efficient, having a linear time and a constant space. However, it has a poor effectiveness in terms of compression ratio, as the half $\epsilon$ is conservative \cite{Lange:Tracking}, and more important, the algorithm is sensitive to the initial velocity which is set only once at the updating time but it is hard to be appropriate at that time.
-
-\begin{example}
-	\label{exm-ldrh}
-	\todo.
-\end{example}
+Given an error bound $\epsilon$, \ldrh runs the same routine as \ldr except that (1) it uses half $\epsilon$ as the threshold in distance checking; (2) when the current point $P_k$ has a \sed larger than $\epsilon/2$ to its expected location (synchronous data point), it sends the preview point $P_{k-1}$ and a new $\vv{v}$ to the MOD server and continues trajectory tracking taking $P_{k-1}$ as the new start point. \ldrh is simple and efficient, having a linear time and a constant space. However, it has a poor effectiveness in terms of compression ratio, as the half $\epsilon$ is conservative, and more important, the algorithm is sensitive to the initial velocity which is set at the updating time but it is hard to be appropriate when the process goes on, as shown in Figure~\ref{fig:ldrh}.
 
 \begin{figure}[tb!]
 	\centering
 	\includegraphics[scale=0.9]{figures/Fig-LDRH.png}
 	\vspace{-1ex}
-	\caption{\small A running example of LDR with half $\epsilon$ (LDRH).}
+	\caption{\small A running example of linear dead reckoning with half $\epsilon$ (LDRH) taking the same trajectory as input. Initially, point $P_0$ is set as $P_s$ and $\vec{v}$ is set to $\vec{v}_0$. Then, (1) points $P_1$ and $P_2$ have \sed distances less than $\epsilon/2$ to their expected points $P'_1$ and $P'_2$, respectively, (2) $|P_3P'_3| > \epsilon/2$, meaning $P_3$ breaks the distance threshold, thus, a new update is triggered and $P_2$ is the new start point of the next section of trajectory tracking. Finally, this algorithm in turn sends points $P_0, P_2, P_4, P_6$ and $P_8$ to the MOD server.}
 	\vspace{-2ex}
-	\label{fig:ldr}
+	\label{fig:ldrh}
 \end{figure}
 
 %%%%%%
