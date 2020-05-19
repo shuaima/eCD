@@ -15,9 +15,9 @@ and \textit{trajectory simplification} \cite{Lin:Cised,Zhang:Evaluation} is to a
 %
 Position tracking and trajectory simplification both are the fundamental technologies of trajectory management and they also share some common target and strategy, \ie, reduce the number of messages or the size of trajectory data by discarding some location information that seems not that important, hence, researchers are trying to combine them in one routine and make it be suitable to run in resource constraint devices.
 
-The authors of \cite{Trajcevski:LDRH} find that the position tracking algorithm \ldr with some tiny modifications is applicable to both track the positions of a moving object and simplify the trajectory built of these positions. The modified \ldr,  called \ldrh in \cite{Lange:Tracking}, is the first trajectory tracking algorithm that combines position tracking and trajectory simplification into one consistent process. It is concise and efficient, and is suitable for mobile devices. However, it suffers in effectiveness in terms of compression ratio and communication cost, due to the nature of \ldr. 
+The authors of \cite{Trajcevski:LDRH} find that the position tracking algorithm \ldr with some tiny modifications is applicable to both track the positions of a moving object and simplify the trajectory built of these positions. The modified \ldr,  called \ldrh in \cite{Lange:Tracking}, is the first trajectory tracking algorithm that combines position tracking and trajectory simplification into one consistent process. It is concise and efficient, and is suitable for resource-constraint mobile devices. However, it suffers in effectiveness in terms of compression ratio compared with other trajectory simplification algorithms.%, due to the nature of \ldr. 
 %
-Then, a framework, named the generic remote trajectory simplification (GRTS) \cite{Lange:GRTS,Lange:Tracking}, is developed to improve the effectiveness of trajectory tracking by separate position tracking and trajectory simplification into two sub-processes, where the positions of a moving object is also tracked by \ldr, and these positions are temporarily saved in a buffer and then simplified by some third-party line simplification algorithm. Indeed, it is more effective than \ldrh at a cost of weakening the conciseness and efficiency of \ldrh.
+Then, a framework, named the generic remote trajectory simplification (\grts) \cite{Lange:GRTS,Lange:Tracking}, is developed to improve the effectiveness of trajectory tracking. \grts separates position tracking and trajectory simplification into two sub-processes, where the positions of a moving object is also tracked by \ldr, and these positions are temporarily saved in a buffer and then simplified by some third-party line simplification algorithm. Indeed, it is more effective than \ldrh at a cost of weakening the conciseness and efficiency of \ldrh.
 %
 
 
@@ -25,7 +25,7 @@ Then, a framework, named the generic remote trajectory simplification (GRTS) \ci
 \stitle{Motivations}. Consider the deployment environment and the varied application requirements of trajectory tracking, the current works, \ie~\ldrh and \grts, are far to be sufficient. Firstly, trajectory track algorithms are supposed to be deployed in resource-constraint mobile devices, thus, besides good performance of efficiency and effectiveness, they should also be simple and light, \ie having low time and space complexities, otherwise, they are not suitable to run in those mobile devices. In response to these characters, \ldrh is light, simple and efficient, but not effective; and \grts is effective, but not efficient or light. That is, neither of them is good enough for trajectory tracking.
 %The emerging of one pass trajectory simplification algorithms. These algorithms can be integrated into grts, however, it is not a natural way to implement a one-pass trajectory tracking algorithm like this way. Acutually, one pass position tracking + one pass trajectory simplification = one pass and effective trajectory tracking algorithm......co-design, like LDRH, yet more effective.
 %
-Secondly, the current works only track a moving object in circular areas, \ie the moving object is supposed to locate in a circular area taking the expected position of the object as its center (see Figure \ref{fig:areas}(1)). However, in practical, there is a need to track a moving object in other areas, such as strip and rectangle-like areas, \eg a school boy is expected on a straight road home that his perpendicular deviation to the road is strict restricted while his horizontal deviation on the road is not such strict (meaning tracking in a rectangle-like area as shown in Figure \ref{fig:areas}(3)) or totally not restricted (meaning tracking in a strip area, Figure \ref{fig:areas}(2)). The current position and/or trajectory tracking algorithms are fail to satisfy these varied requirements.
+Secondly, the current works only track a moving object in circular areas, \ie the moving object is supposed to locate in a circular area taking the expected position of the object as its center (see Figure \ref{fig:areas}-(1)). However, in practical, there is a need to track a moving object in other areas, such as strip and rectangle-like areas, \eg a school boy is expected on a straight road home that his perpendicular deviation to the road is strict restricted while his horizontal deviation on the road is not such strict (meaning tracking in a rectangle-like area as shown in Figure \ref{fig:areas}-(3)) or totally not restricted (meaning tracking in a strip area, Figure \ref{fig:areas}-(2)). The current position and/or trajectory tracking algorithms are fail to satisfy these varied requirements.
 
 
 
@@ -38,18 +38,16 @@ Secondly, the current works only track a moving object in circular areas, \ie th
 	\label{fig:areas}
 \end{figure}
 
-\stitle{\todo{Contributions}.}
-To the end, we design ways for trajectory tracking in varied areas, including strip and combined areas, and provide three novel one-pass algorithms tracking moving objects effectively and efficiently. 
+\stitle{{Contributions}.}
+To the end, we explore ways to track moving objects in areas such as circular, strip and rectangle-like areas, and design three novel one-pass trajectory tracking algorithms that run effectively and efficiently in those areas, respectively. 
 
-1. one-pass tracking moving object in circular, citt, effectively and efficiently.
+\ni (1) We develop a one-pass trajectory tracking algorithm, named \citt, based on the intersection of spatio-temporal cones that tracks a moving object in a circular area. \citt is as concise and efficient as \ldrh, and as effective as \grts, that is, it outperforms them.
 
-2. one-pass tracking in strips using ped. sitt.
-a way that customize region by sed and ped. and implement it in position tracking LDR and trajectory tracking framework GRTS. advantage...
+\ni (2) We develop a one-pass trajectory tracking algorithm, named \sitt, based on the intersection of sectors that tracks a moving object in a strip area. \sitt is the first algorithm that tracks a moving in a strip area, and is as concise and efficient as \citt. %, and has a better compression ratio than \citt with a cost of a poorer accuracy.
 
-3. one-pass tracking in combined areas using sed and ped. bitt.  
-A one-pass trajectory tracking algorithm supporting sed and ped, by a combination cone intersection and sector intersection, \ie co-design of position tracking and trajectory simplification, effective and low time and space complexity, suitable running in resource constraint devices.
+\ni (3) We provide a natural way to design a rectangle-like area, and develop a one-pass trajectory tracking algorithm, named \bitt, based on the intersections of sectors and spatio-temporal cones that  effectively and efficiently tracks a moving object in such an area. \bitt is the first algorithm that tracks a moving in a rectangle-like area, and it takes the advantages of both \citt and \sitt. 
 
-4. experiments
+\ni (4) Using three real-life trajectory datasets (ServiceCar, GeoLife, Mopsi), we finally conduct an extensive experimental study that compares our methods \citt, \sitt and \bitt with  representative trajectory tracking algorithms \ldrh (the first and the most efficient) and \grts (the most effective). \todo.
 
 \stitle{{Organization}}.
 The remainder of the paper is organized as follows:
