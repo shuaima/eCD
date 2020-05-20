@@ -8,10 +8,10 @@
 \label{sec:strip}
 
 
-Currently, position tracking and trajectory tracking both use \sed as the distance metric to check data points that confirms the actual position of a moving object at time $t$ lives in a circular area around the excepting position of the moving object at that time.
+Currently, position tracking and trajectory tracking methods both use \sed as the distance metric to check data points and confirm the actual position of a moving object at time $t$ lives in a circle around the excepting position of the moving object at that time.
 However, as mentioned in Section~\ref{sec-intro}, there is a need of tracking a moving object in strip areas.
 %Though \sed is currently the only distance metric used in tracking moving objects, we argue that another distance metric, \ped that is wildly used in trajectory simplification and always has remarkable better compression ratios than \sed, is also important in tracking moving objects that confirms moving objects lives in strip areas, \eg a school boy is expected on his way home no matter the speed of his movement.
-This section introduces a novel one-pass algorithm that uses \ped to track a moving object in strip areas.
+This section introduces a novel \ped-based method that tracks a moving object in strip areas.
 
 
 %\subsection{Position tracking in strip areas}
@@ -19,15 +19,19 @@ This section introduces a novel one-pass algorithm that uses \ped to track a mov
 %  --  distance checking during computing, ped: from a point to a ray.
   
 
-\subsection{Sector and its use in trajectory simplification}
+\subsection{\ped, sector and trajectory simplification}
 \label{sec:sector-in-simp}
 
-\emph{Sector intersection} \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} is developed in fields of computational geometry and cartography, where a \emph{sector} is largely a simplified version of a spatio-temporal cone projecting on an x--y 2D space that the temporal information is ignored, that converts the \ped distance tolerance into an angle tolerance for efficiently checking data points.
+Though \ped is not seemed in position and trajectory tracking, it is familiar in trajectory simplification, where an error-bounded algorithm using \ped always ensures that the original data points live in strip-like areas built from the simplified trajectory. 
+%Actually, it is the first distance metric of trajectory simplification, earlier than \sed. 
+Thus, \ped is of cause the distance metric to track a moving object in strip areas.
 %
+Next, for \ped based data simplification, the most efficient and effective way to check the data points is undoubted \textit{sector intersection} \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve}, which is originally developed in fields of computational geometry and cartography to efficient simplifies the border lines of a geometric or cartographic shape in digital format, yet is applicable to simplify trajectories as pointed out in \cite{Lin:Cised}. Here, a \emph{sector} is largely a simplified version of a spatio-temporal cone projected on an x--y 2D space that the temporal information is ignored, that converts the \ped distance tolerance into an angle tolerance for efficiently checking the successive data points.
+
 Given a sequence of points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$,
 for the start data point $P_s$, any point $P_{s+i}$ and $|\vv{P_sP_{s+i}}|>\epsilon$ ($i\in[1, k]$), there are two directed lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ such that $ped(P_{s+i}, \vv{P_sP^u_{s+i}})$ $=$ $ped(P_{s+i}, \vv{P_sP^l_{s+i}}) = \epsilon$ and either ($\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta ~and~\vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta <\pi$) or ($\vv{P_sP^l_{s+i}}.\theta > \vv{P_sP^u_{s+i}}.\theta ~and~ \vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta < -\pi)$. Indeed, they form a \emph{sector} \sector{(P_s, P_{s+i}, \epsilon)} that takes $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the borderlines.
-
-The sector intersection approach is originally developed for one-pass line simplification algorithms using \ped \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} to simplify the border lines of a geometric or cartographic shape in digital format. However, it can also be applied to simplify trajectories as pointed out in \cite{Lin:Cised}. Like the checking of the common intersection of spatio-temporal cones in \cised, these sector-based algorithms check the common intersection of sectors, \ie $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon)} $\ne \{P_s\}$ \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}, to find out whether the sub-trajectory can be represented by a line segment $\overline{P_sQ}$ \wrt error bound $\epsilon$, where $Q$ is a point that may not belong to the sub-trajectory. However, if $Q$ must be $P_{s+k}$, the last point of the sub-trajectory, then (1) the full-$\epsilon$ sectors should be replaced by half-$\epsilon$ sectors, and (2) $P_{s+k}$ should be one of the points have the furthest distances to $P_s$, \ie $|P_sP_{s+k}| > max\{|P_sP_{s+i}|\} - \epsilon$ for each $i \in (0, k)$. 
+%
+Then, like the checking of the common intersection of spatio-temporal cones in \cised, these sector-based algorithms check the common intersection of sectors, \ie $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon)} $\ne \{P_s\}$ \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}, to find out whether the sub-trajectory can be represented by a line segment $\overline{P_sQ}$ \wrt error bound $\epsilon$, where $Q$ is a point that may not belong to the sub-trajectory. However, if $Q$ must be $P_{s+k}$, the last point of the sub-trajectory, then (1) the full-$\epsilon$ sectors should be replaced by half-$\epsilon$ sectors, and (2) $P_{s+k}$ should be one of the points have the furthest distances to $P_s$, \ie $|P_sP_{s+k}| > max\{|P_sP_{s+i}|\} - \epsilon$ for each $i \in (0, k)$. 
 %
 
 \todo{figure}
