@@ -22,31 +22,31 @@ Then we introduce position and trajectory tracking algorithms \ldr and \ldrh tha
 
 
 \eat{
-	A \textit{directed line segment} (or line segment for simplicity) $\mathcal{L}$ is defined as $\vv{P_{s}P_{e}}$, which represents the closed line segment that connects the start point $P_s$ and the end point $P_e$.
-	We also use $|\mathcal{L}|$ and $\mathcal{L}.\theta\in [0, 2\pi)$ to denote the length of a directed line segment $\mathcal{L}$, and its angle with the $x$-axis of the coordinate system $(x, y)$, where $x$ and $y$ are the longitude and latitude, respectively.
-	That is, a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$ can be treated as a triple $(P_s, |\mathcal{L}|, \mathcal{L}.\theta)$.
+	A \textit{line segment} (or line segment for simplicity) $\mathcal{L}$ is defined as $\overline{P_{s}P_{e}}$, which represents the closed line segment that connects the start point $P_s$ and the end point $P_e$.
+	We also use $|\mathcal{L}|$ and $\mathcal{L}.\theta\in [0, 2\pi)$ to denote the length of a line segment $\mathcal{L}$, and its angle with the $x$-axis of the coordinate system $(x, y)$, where $x$ and $y$ are the longitude and latitude, respectively.
+	That is, a line segment $\mathcal{L}$ = $\overline{P_{s}P_{e}}$ can be treated as a triple $(P_s, |\mathcal{L}|, \mathcal{L}.\theta)$.
 }
 
-%Intuitively, a trajectory can also be represented by a continuous $n$-pieces directed line segments (or line segment for simplicity) $\mathcal{L}_i$, $0\le i < n$, where  $\mathcal{L}_i = \vv{P_{i}P_{i+1}}$, represents the closed line segment that connects the start point $P_{i}$ and the end point $P_{i+1}$.
+%Intuitively, a trajectory can also be represented by a continuous $n$-pieces line segments (or line segment for simplicity) $\mathcal{L}_i$, $0\le i < n$, where  $\mathcal{L}_i = \overline{P_{i}P_{i+1}}$, represents the closed line segment that connects the start point $P_{i}$ and the end point $P_{i+1}$.
 
-\stitle{Piece-wise line representation}. A \textit{piece-wise line representation} $\overline{\mathcal{T}}\left[\mathcal{L}_0, \ldots, \mathcal{L}_m\right]$ ($0< m \le n$) of a trajectory $\dddot{\mathcal{T}}\left[P_0, \ldots, P_n\right]$ is a sequence of continuous \textit{directed line segments} (or line segment for simplicity) $\mathcal{L}_{i}$ = $\vv{P_{s_i}P_{e_i}}$ ($i\in\left[0,m\right]$) of $\dddot{\mathcal{T}}$ such that $\mathcal{L}_{0}.P_{s_0} = P_0$, $\mathcal{L}_{m}.P_{e_m} = P_n$ and  $\mathcal{L}_{i}.P_{e_i}$ = $\mathcal{L}_{i+1}.P_{s_{i+1}}$ for all $i\in\left[0, m-1\right]$.
-Note that each directed line segment in $\overline{\mathcal{T}}$ essentially represents a continuous sequence of data points in trajectory $\dddot{\mathcal{T}}$.
+\stitle{Piece-wise line representation}. A \textit{piece-wise line representation} $\overline{\mathcal{T}}\left[\mathcal{L}_0, \ldots, \mathcal{L}_m\right]$ ($0< m \le n$) of a trajectory $\dddot{\mathcal{T}}\left[P_0, \ldots, P_n\right]$ is a sequence of continuous \textit{line segments} $\mathcal{L}_{i}$ = $\overline{P_{s_i}P_{e_i}}$ ($i\in\left[0,m\right]$) of $\dddot{\mathcal{T}}$ such that $\mathcal{L}_{0}.P_{s_0} = P_0$, $\mathcal{L}_{m}.P_{e_m} = P_n$ and  $\mathcal{L}_{i}.P_{e_i}$ = $\mathcal{L}_{i+1}.P_{s_{i+1}}$ for all $i\in\left[0, m-1\right]$.
+Note that each line segment in $\overline{\mathcal{T}}$ essentially represents a continuous sequence of data points in trajectory $\dddot{\mathcal{T}}$.
 
 
 
 For trajectory simplification, two Euclidean distance metrics are commonly used, namely, the \emph{perpendicular Euclidean distance} (\ped) and the \emph{synchronous Euclidean distance} \cite{Meratnia:Spatiotemporal} (\sed). Among them, \sed is also used in position and trajectory tracking.
 %
-Consider a data point $P$ and a directed line segment $\mathcal{L}$ = $\vv{P_{s}P_{e}}$.
+Consider a data point $P$ and a line segment $\mathcal{L}$ = $\overline{P_{s}P_{e}}$.
 
-\stitle{Perpendicular Euclidean distance}. The perpendicular Euclidean distance $ped\left(P, \mathcal{L}\right)$ of point $P$ to line segment $\mathcal{L}$ is $\min\{|PQ|\}$ for any point $Q$ on $\vv{P_{s}P_{e}}$.
+\stitle{Perpendicular Euclidean distance}. The perpendicular Euclidean distance $ped\left(P, \mathcal{L}\right)$ of point $P$ to line segment $\mathcal{L}$ is $\min\{|PQ|\}$ for any point $Q$ on $\overline{P_{s}P_{e}}$.
 
-\stitle{Synchronous Euclidean distance}. The synchronous Euclidean distance $sed\left(P, \mathcal{L}\right)$ of point $P$ to line segment $\mathcal{L}$ is $|\vv{PP'}|$ that is the Euclidean distance from $P$ to its \textit{synchronized data point} $P'$ \wrt $\mathcal{L}$, where the synchronized data point $P'$ \wrt $\mathcal{L}$ is defined as follows:
+\stitle{Synchronous Euclidean distance}. The synchronous Euclidean distance $sed\left(P, \mathcal{L}\right)$ of point $P$ to line segment $\mathcal{L}$ is $|\overline{PP'}|$ that is the Euclidean distance from $P$ to its \textit{synchronized data point} $P'$ \wrt $\mathcal{L}$, where the synchronized data point $P'$ \wrt $\mathcal{L}$ is defined as follows:
 (a) $P'.x$ = $P_s.x +  c\cdot\left(P_e.x - P_s.x\right)$,
 (b) $P'.y$ = $P_s.y +  c\cdot\left(P_e.y - P_s.y\right)$ and
 (c) $P'.t$ = $P.t$, where $c= \frac{P.t-P_s.t}{P_e.t-P_s.t}$.
 
-Synchronized points are essentially virtual points with the assumption that an object moved along a straight line from $P_s$ to $P_e$ with a uniform speed, \ie the average speed $\frac{|\vv{P_sP_e}|}{P_e.t-P_s.t}$ between points $P_s$ and $P_e$ \cite{Cao:Spatio,Lin:Cised}. Then the \emph{synchronized point} $P'$ of a point $P$ \wrt the line segment $\vv{P_sP_e}$ is the expected position of the moving object on $\vv{P_sP_e}$ at time $P.t$, obtained by a linear interpolation \cite{Cao:Spatio}. 
-%More specifically, a synchronized point $P'_i$ of $P_i$ ($s\le i < e$) \wrt the line segment $\vv{P_sP_e}$ is a point on $\vv{P_sP_{e}}$ satisfying ${|\vv{P_sP'_i}|} = \frac{P_i.t - P_s.t}{P_e.t - P_s.t}\cdot {|\vv{P_sP_e}|}$, which means that the object moves from $P_s$ to $P_e$ at an average speed $\frac{|\vv{P_sP_e}|}{P_e.t-P_s.t}$, and its position at time $P_i.t$ is the point $P'_i$ on $\overrightarrow{P_sP_{e}}$ having a distance of $\frac{P_i.t - P_s.t}{P_e.t - P_s.t}\cdot|\vv{P_sP_e}|$ to $P_s$~\cite{Cao:Spatio, Lin:Cised,Meratnia:Spatiotemporal, Chen:Fast, Zhang:Evaluation}.
+Synchronized points are essentially virtual points with the assumption that an object moved along a straight line from $P_s$ to $P_e$ with a uniform speed, \ie the average speed $\frac{|\overline{P_sP_e}|}{P_e.t-P_s.t}$ between points $P_s$ and $P_e$ \cite{Cao:Spatio,Lin:Cised}. Then the \emph{synchronized point} $P'$ of a point $P$ \wrt the line segment $\overline{P_sP_e}$ is the expected position of the moving object on $\overline{P_sP_e}$ at time $P.t$, obtained by a linear interpolation \cite{Cao:Spatio}. 
+%More specifically, a synchronized point $P'_i$ of $P_i$ ($s\le i < e$) \wrt the line segment $\overline{P_sP_e}$ is a point on $\overline{P_sP_{e}}$ satisfying ${|\overline{P_sP'_i}|} = \frac{P_i.t - P_s.t}{P_e.t - P_s.t}\cdot {|\overline{P_sP_e}|}$, which means that the object moves from $P_s$ to $P_e$ at an average speed $\frac{|\overline{P_sP_e}|}{P_e.t-P_s.t}$, and its position at time $P_i.t$ is the point $P'_i$ on $\overrightarrow{P_sP_{e}}$ having a distance of $\frac{P_i.t - P_s.t}{P_e.t - P_s.t}\cdot|\overline{P_sP_e}|$ to $P_s$~\cite{Cao:Spatio, Lin:Cised,Meratnia:Spatiotemporal, Chen:Fast, Zhang:Evaluation}.
 
 
 \begin{table}
@@ -62,13 +62,13 @@ Synchronized points are essentially virtual points with the assumption that an o
 		$P$ & a data point \\		\hline
 		$\dddot{\mathcal{T}}$ & a trajectory $\dddot{\mathcal{T}}$ is a sequence of data points\\		\hline
 		$\overline{\mathcal{T}}$&  {a piece-wise line representation of a trajectory $\dddot{\mathcal{T}}$}	\\		\hline
-		$\mathcal{L}$ & a directed line segment  \\		\hline
+		$\mathcal{L}$ & a line segment  \\		\hline
 		$\epsilon$ & the error bound \\		\hline
 		$ped\left(P, \mathcal{L}\right)$ &  {the perpendicular Euclidean distance of point $P$ to line segment $\mathcal{L}$}	\\	\hline
 		$sed\left(P, \mathcal{L}\right)$ & {the synchronous Euclidean distance of point $P$ to line segment $\mathcal{L}$} 	\\		\hline
 		%$dad\left(\mathcal{L}_1, \mathcal{L}_2\right)$ & {the direction-aware distance of line segment $\mathcal{L}_1$ to line segment $\mathcal{L}_2$} 	%\\		\hline
 		\sector{} & a sector \\		\hline
-		%		$\vv{A} \times \vv{B}$ & the cross product of (vectors) $\vv{A}$ and $\vv{B}$\\		\hline
+		%		$\overline{A} \times \overline{B}$ & the cross product of (vectors) $\overline{A}$ and $\overline{B}$\\		\hline
 		%		$\mathcal{H}(\mathcal{L})$ & The open half-plane to the left of $\mathcal{L}$ \\		\hline
 		%		$\mathcal{R}$& a convex polygon \\		\hline
 		%		$\mathcal{R}^*$ & the intersection of convex polygons \\		\hline
@@ -89,31 +89,35 @@ Synchronized points are essentially virtual points with the assumption that an o
 \end{table}
 
 
-We illustrate these notations with examples.
+We illustrate these notations with examples shown in {Figure}~\ref{fig:concepts}.
 
 \begin{figure}[tb!]
 	\centering
 	\includegraphics[scale=0.9]{Figures/Fig-Concepts.png}\vspace{-1ex}
-	%\caption{\small A trajectory is simplified by algorithm \dpa using distance metrics \ped, \sed and \dad, respectively.}
-	\caption{\small  A trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{8}]$ with 9 points is simplified by the Douglas--Peucker algorithm \cite{Douglas:Peucker} using \ped and \sed, respectively.}
+	\caption{\small  A trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{8}]$ with 9 points is simplified to (or represented by) two continuous line segments $ \overline{\mathcal{T}}[\overline{P_0P_4}, \overline{P_4P_{8}}] $ using \ped and \sed, respectively. In which, (1) $ped(P_4, \overline{P_0P_{8}})=|\overline{P_4P^*_4}|$, where $P^*_4$ is the perpendicular point of $P_4$ \wrt line segment $\overline{P_0P_{8}}$, and (2) $sed(P_4, \overline{P_0P_{8}})= |\overline{P_4P'_4}|$, where $P'_4$ is the synchronized point of $P_4$ \wrt $\overline{P_0P_{8}}$ satisfies ${|\overline{P_0P'_4}|}/{|\overline{P_0P_{8}}|} = \frac{(P_4.t - P_0.t)}{(P_{8}.t-P_0.t)} = \frac{(4-0)}{(8-0)}= \frac{1}{2}$.}
 	\vspace{-2ex}
 	\label{fig:concepts}
 \end{figure}
 
+ 
+ 
+
+
+\eat{%%%%%%%%%%%%%%
 \begin{example}
 	\label{exm-notations}
 	Consider {Figure}~\ref{fig:concepts}, in which
 	%
 	(1) $\dddot{\mathcal{T}}\left[P_0, \ldots, P_{8}\right]$ is a trajectory having 9 data points,
 	%
-	(2) a set of two continuous line segments $\{\vv{P_0P_4}$, $\vv{P_4P_{8}}$\} is a piece-wise line representation of trajectory $\dddot{\mathcal{T}}$,
+	(2) a set of two continuous line segments $\{\overline{P_0P_4}$, $\overline{P_4P_{8}}$\} is a piece-wise line representation of trajectory $\dddot{\mathcal{T}}$,
 	%
-	(3) $ped\left(P_4, \vv{P_0P_{8}}\right)=|\vv{P_4P^*_4}|$, where $P^*_4$ is the perpendicular point of $P_4$ \wrt line segment $\vv{P_0P_{8}}$, and 
+	(3) $ped\left(P_4, \overline{P_0P_{8}}\right)=|\overline{P_4P^*_4}|$, where $P^*_4$ is the perpendicular point of $P_4$ \wrt line segment $\overline{P_0P_{8}}$, and 
 	%
-	(4) $sed\left(P_4, \vv{P_0P_{8}}\right)= |\vv{P_4P'_4}|$,
-	where $P'_4$ is the synchronized point of $P_4$ \wrt $\vv{P_0P_{8}}$ satisfies $\frac{|\vv{P_0P'_4}|}{|\vv{P_0P_{8}}|} = \frac{P_4.t - P_0.t}{P_{8}.t-P_0.t} = \frac{4-0}{8-0}= \frac{1}{2}$.
+	(4) $sed\left(P_4, \overline{P_0P_{8}}\right)= |\overline{P_4P'_4}|$,
+	where $P'_4$ is the synchronized point of $P_4$ \wrt $\overline{P_0P_{8}}$ satisfies $\frac{|\overline{P_0P'_4}|}{|\overline{P_0P_{8}}|} = \frac{P_4.t - P_0.t}{P_{8}.t-P_0.t} = \frac{4-0}{8-0}= \frac{1}{2}$.
 \end{example}
-
+}%%%%%%%%%%%%eat
 
 \eat{%%%%%%%%%%%%%%%%%%
 \stitle{Direction-aware distance distance}.The direction-aware distance $dad\left(\mathcal{L}_1, \mathcal{L}_2\right)$ is the direction deviation from $\mathcal{L}_1$ to $\mathcal{L}_2$, \ie $\Delta\left(\mathcal{L}_1.\theta, \mathcal{L}_2.\theta\right) = \min\{|\mathcal{L}_1.\theta - \mathcal{L}_2.\theta|, 2\pi - |\mathcal{L}_1.\theta - \mathcal{L}_2.\theta|\}$, where $\theta \in \left[0, 2\pi\right)$ is the angular of $\mathcal{L}$.
@@ -121,7 +125,7 @@ We illustrate these notations with examples.
 
 \stitle{Trajectory simplification (Min-$\#$ problem).}
 Given a trajectory \trajec{T}$\left[P_0, \dots, P_n\right]$ and a pre-specified constant $\epsilon$, the \emph{min-$\#$} problem of trajectory simplification is to approximate the trajectory \trajec{T} with $\overline{\mathcal{T}}\left[\mathcal{L}_0, \ldots , \mathcal{L}_m\right]$ ($0< m \le n$), such that
-(1) on each of them the points $\left[P_{s_i}, \dots, P_{e_i}\right]$ are approximated by a line segment $\mathcal{L}_i = \vv{P_{s_i}P_{e_i}}$ with the maximum \ped or \sed \emph{error} of point $P_j$ (or \dad \emph{error} of line segment $|\vv{P_jP_{j+1}}|$) to line segment $\mathcal{L}_i$, $s_i \le j<e_i$,  less than $\epsilon$, and
+(1) on each of them the points $\left[P_{s_i}, \dots, P_{e_i}\right]$ are approximated by a line segment $\mathcal{L}_i = \overline{P_{s_i}P_{e_i}}$ with the maximum \ped or \sed \emph{error} of point $P_j$ (or \dad \emph{error} of line segment $|\overline{P_jP_{j+1}}|$) to line segment $\mathcal{L}_i$, $s_i \le j<e_i$,  less than $\epsilon$, and
 (2) $P_{s_i}$ and $P_{e_i} \in$ \trajec{T}.
 
 
@@ -152,7 +156,7 @@ Figure \ref{fig:ldr} is a running example of \ldr, from which we can find that (
 	\centering
 	\includegraphics[scale=0.9]{figures/Fig-LDR.png}
 	\vspace{-1ex}
-	\caption{\small A running example of linear dead reckoning (\ldr). Initially, point $P_0$ is set as $P_s$ and $\vec{v}$ is set to $\vec{v}_0$. Then, (1) points $P_1$ and $P_2$ have \sed distances less than $\epsilon$ to their expected points $P'_1$ and $P'_2$, respectively, and (2) $|P_3P'_3| > \epsilon$, meaning $P_3$ breaks the distance threshold, thus, a new update is triggered and $P_3$ is the new start point of the next section of position tracking.}
+	\caption{\small A running example of position tracking by \ldr. Initially, point $P_0$ is set as $P_s$ and $\vec{v}$ is set to $\vec{v}_0$. Then, (1) points $P_1$ and $P_2$ have \sed distances less than $\epsilon$ to their expected points $P'_1$ and $P'_2$, respectively, and (2) $|P_3P'_3| > \epsilon$, meaning $P_3$ breaks the distance threshold, thus, a new update is triggered and $P_3$ is the new start point of the next section of position tracking.}
 	\vspace{-2ex}
 	\label{fig:ldr}
 \end{figure}
@@ -170,7 +174,7 @@ Given an error bound $\epsilon$, \ldrh runs the same routine as \ldr except that
 	\centering
 	\includegraphics[scale=0.9]{figures/Fig-LDRH.png}
 	\vspace{-1ex}
-	\caption{\small A running example of linear dead reckoning with half $\epsilon$ (LDRH) taking the same trajectory as input. Initially, point $P_0$ is set as $P_s$ and $\vec{v}$ is set to $\vec{v}_0$. Then, (1) points $P_1$ and $P_2$ have \sed distances less than $\epsilon/2$ to their expected points $P'_1$ and $P'_2$, respectively, (2) $|P_3P'_3| > \epsilon/2$, thus, a new update is triggered and $P_2$ is the new start point of the next section of trajectory tracking. Finally, this algorithm in turn sends 5 points, $P_0, P_2, P_4, P_6$ and $P_8$, and 4 velocities, $\vec{v_0}$, $\vec{v_1}$, $\vec{v_2}$ and $\vec{v_3}$, to the MOD server.}
+	\caption{\small A running example of trajectory tracking by \ldrh taking the same trajectory as input. Initially, point $P_0$ is set as $P_s$ and $\vec{v}$ is set to $\vec{v}_0$. Then, (1) points $P_1$ and $P_2$ have \sed distances less than $\epsilon/2$ to their expected points $P'_1$ and $P'_2$, respectively, (2) $|P_3P'_3| > \epsilon/2$, thus, a new update is triggered and $P_2$ is the new start point of the next section of trajectory tracking. Finally, this algorithm in turn sends 5 points, $P_0, P_2, P_4, P_6$ and $P_8$, and 4 velocities, $\vec{v_0}$, $\vec{v_1}$, $\vec{v_2}$ and $\vec{v_3}$, to the MOD server.}
 	\vspace{-2ex}
 	\label{fig:ldrh}
 \end{figure}

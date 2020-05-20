@@ -29,7 +29,7 @@ Thus, \textit{\ped is the potential distance metric to track a moving object in 
 Next, for data simplification using \ped, the most efficient and effective way to check the data points is undoubted \textit{sector intersection} \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve}, which is originally developed in fields of computational geometry and cartography to efficient simplifies the border lines of a geometric or cartographic shape in digital format, yet is applicable to simplify trajectories as pointed out in \cite{Lin:Cised}. Here, a \emph{sector} is largely a simplified version of a spatio-temporal cone projected on an x--y 2D space that the temporal information is ignored, that converts the \ped distance tolerance into an angle tolerance for efficiently checking the successive data points.
 
 Given a sequence of points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$,
-for the start data point $P_s$, any point $P_{s+i}$ and $|\vv{P_sP_{s+i}}|>\epsilon$ ($i\in[1, k]$), there are two directed lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ such that $ped(P_{s+i}, \vv{P_sP^u_{s+i}})$ $=$ $ped(P_{s+i}, \vv{P_sP^l_{s+i}}) = \epsilon$ and either ($\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta ~and~\vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta <\pi$) or ($\vv{P_sP^l_{s+i}}.\theta > \vv{P_sP^u_{s+i}}.\theta ~and~ \vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta < -\pi)$. Indeed, they form a \emph{sector} \sector{(P_s, P_{s+i}, \epsilon)} that takes $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the borderlines (Figure~\ref{fig:sleeve}-(1)).
+for the start data point $P_s$, any point $P_{s+i}$ and $|\overline{P_sP_{s+i}}|>\epsilon$ ($i\in[1, k]$), there are two directed lines $\overline{P_sP^u_{s+i}}$ and $\overline{P_sP^l_{s+i}}$ such that $ped(P_{s+i}, \overline{P_sP^u_{s+i}})$ $=$ $ped(P_{s+i}, \overline{P_sP^l_{s+i}}) = \epsilon$ and either ($\overline{P_sP^l_{s+i}}.\theta < \overline{P_sP^u_{s+i}}.\theta ~and~\overline{P_sP^u_{s+i}}.\theta - \overline{P_sP^l_{s+i}}.\theta <\pi$) or ($\overline{P_sP^l_{s+i}}.\theta > \overline{P_sP^u_{s+i}}.\theta ~and~ \overline{P_sP^u_{s+i}}.\theta - \overline{P_sP^l_{s+i}}.\theta < -\pi)$. Indeed, they form a \emph{sector} \sector{(P_s, P_{s+i}, \epsilon)} that takes $P_s$ as the center point and $\overline{P_sP^u_{s+i}}$ and $\overline{P_sP^l_{s+i}}$ as the borderlines (Figure~\ref{fig:sleeve}-(1)).
 %
 Then, like the checking of the common intersection of spatio-temporal cones in \cised, these sector-based algorithms check the common intersection of sectors (Figure~\ref{fig:sleeve}-(2)), \ie $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon)} $\ne \{P_s\}$ \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}, to find out whether the sub-trajectory can be represented by a line segment $\overline{P_sQ}$ \wrt error bound $\epsilon$, where $Q$ is a point that may not belong to the sub-trajectory. However, if $Q$ must be $P_{s+k}$, the last point of the sub-trajectory, \eg $P_3$ in Figure~\ref{fig:sleeve}-(3),  then (1) the full-$\epsilon$ sectors should be replaced by half-$\epsilon$ sectors, and (2) $P_{s+k}$ should be one of the points having the furthest distances to $P_s$, \ie $|P_sP_{s+k}| > max\{|P_sP_{s+i}|\} - \epsilon$~for each $i \in (0, k)$. 
 %
@@ -72,7 +72,7 @@ Moreover, because the half-$\epsilon$ sectors may limit its compression performa
 
 \begin{theorem}
 	\label{theo-full-sector}
-	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $ped(P_{s+i}, \vv{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if line segment $\vv{P_sP_{s+i}}$ passes through $\bigsqcap_{j=1}^{i-1}$\sector{(P_s, P_{s+j}, \epsilon)} - \{$P_s$\} ~and~ $|P_sP_{s+i}| > max\{|P_sP_{s+j}|\} - \epsilon$ for each $j \in (0, i)$.
+	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $ped(P_{s+i}, \overline{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if line segment $\overline{P_sP_{s+i}}$ passes through $\bigsqcap_{j=1}^{i-1}$\sector{(P_s, P_{s+j}, \epsilon)} - \{$P_s$\} ~and~ $|P_sP_{s+i}| > max\{|P_sP_{s+j}|\} - \epsilon$ for each $j \in (0, i)$.
 \end{theorem}
 
 \begin{proof}
@@ -83,7 +83,7 @@ Theorem \ref{theo-full-sector} tells that full-$\epsilon$ sectors with some cons
 
 \begin{theorem}
 	\label{theo-sector-vs}
-	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, if $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$, then for each $i \in [2, k]$, line segment $\vv{P_sP_{s+i}}$ passes through $\bigsqcap_{j=1}^{i-1}$\sector{(P_s, P_{s+j}, \epsilon)}-$\{P_s\}$; and the opposite is not always true.
+	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, if $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$, then for each $i \in [2, k]$, line segment $\overline{P_sP_{s+i}}$ passes through $\bigsqcap_{j=1}^{i-1}$\sector{(P_s, P_{s+j}, \epsilon)}-$\{P_s\}$; and the opposite is not always true.
 \end{theorem}
 
 \begin{proof}
@@ -105,16 +105,16 @@ Theorem \ref{theo-sector-vs} tells that the full-$\epsilon$ sector approach also
 					{\bf Algorithm}~\sitt $(\dddot{\mathcal{T}}[P_0,\ldots,P_n],~\epsilon)$\\
 					%	\sstab
 					\bcc \hspace{1ex}\= $P_s := P_0$; ~~~~$\mathcal{S}^*$ := \kw{getSector}($P_s$, $P_{s+1}$, $\epsilon$); ~~~~$l_{m} = |P_sP_{s+1}|$;\\
-					\icc \hspace{1ex}\= $\vv{v}.\theta:=\vv{P_{s}P_{s+1}}.\theta$;  \\
+					\icc \hspace{1ex}\= $\vv{v}.\theta:=\overline{P_{s}P_{s+1}}.\theta$;  \\
 					\icc \hspace{1ex}\= update ($P_{s}, \vv{v}$); 	\\
 					\icc \hspace{1ex}\= $i:= 2$;  	\\
 					\icc \hspace{1ex}\= while $i \le n$ do \\
-					\icc \>\hspace{3ex} if $\vv{P_sP_{i}}$ ~does not pass~ $\mathcal{S}^*$ or $|P_sP_{i}| \le l_{m} - \epsilon$ then \\ % // updates velocity and location \\
+					\icc \>\hspace{3ex} if $\overline{P_sP_{i}}$ ~does not pass~ $\mathcal{S}^*$ or $|P_sP_{i}| \le l_{m} - \epsilon$ then \\ % // updates velocity and location \\
 					\icc \>\hspace{7ex}    $P_s := P_{i-1}$; ~~~~$\mathcal{S}^*$ := $\emptyset$; ~~~~$l_{m} = |P_sP_{i}|$;\\
-					\icc \>\hspace{7ex}    $\vv{v}.\theta:=\vv{P_{s}P_{i}}.\theta$;  \\
+					\icc \>\hspace{7ex}    $\vv{v}.\theta:=\overline{P_{s}P_{i}}.\theta$;  \\
 					\icc \>\hspace{7ex}    update ($P_{s}, \vv{v}$); 	\\
-					\icc \>\hspace{3ex} else if $\vv{P_sP_{i}}$ ~passes~ $\mathcal{S}^*$ ~and~ $|P_sP_{i}| > l_{m} - \epsilon$ \\ \hspace{9ex} ~and~ $ped(P_i, \vv{v}) \ge \epsilon $ then  \\ %~// updates velocity only 
-					\icc \>\hspace{7ex}    $\vv{v}.\theta:=\vv{P_sP_{i}}.\theta$; \\
+					\icc \>\hspace{3ex} else if $\overline{P_sP_{i}}$ ~passes~ $\mathcal{S}^*$ ~and~ $|P_sP_{i}| > l_{m} - \epsilon$ \\ \hspace{9ex} ~and~ $ped(P_i, \vv{v}) \ge \epsilon $ then  \\ %~// updates velocity only 
+					\icc \>\hspace{7ex}    $\vv{v}.\theta:=\overline{P_sP_{i}}.\theta$; \\
 					\icc \>\hspace{7ex}    update ($\vv{v}$); \\
 					\icc \>\hspace{3ex} if $\mathcal{S}^*=\emptyset$ then $\mathcal{S}^*:=$ \kw{getSector}($P_s$, $P_{i}$, $\epsilon$); \\
 					\icc \>\hspace{3ex} else $\mathcal{S}^*$ := $\mathcal{S}^*\bigsqcap$ \kw{getSector}($P_s$, $P_{i}$, $\epsilon$); $l_{m} = \max\{|P_sP_{i}|, l_{m}\}$;\\
@@ -152,9 +152,9 @@ We then present a one-pass trajectory tracking algorithm based on full-$\epsilon
 	\begin{example}
 		\label{exm-alg-sleeve}
 		Figure~\ref{fig:sleeve} is a running example of algorithm \siped($\frac{\epsilon}{2}$) taking as input the same trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$. At the beginning, $P_0$ is the first start point, and points $P_1$, $P_2$, $P_3$, etc., each has a narrow \emph{sector}.
-		For example, the narrow \emph{sector} $\mathcal{S}$($P_0$, $P_{3}$, $\epsilon/2$) takes $P_0$ as the center point and $\vv{P_0P^u_{3}}$ and $\vv{P_0P^l_{3}}$ as the borderlines.
-		Because $\bigsqcap_{i=1}^{4}\mathcal{S}(P_0, P_{0+i}, \epsilon/2) \ne \{P_0\}$ and $\bigsqcap_{i=1}^{5}\mathcal{S}(P_0, P_{0+i}, \epsilon/2) = \{P_0\}$, $\vv{P_0P_4}$ is output and $P_4$ becomes the start point of the next section.
-		At last, the algorithm outputs two continuous line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.
+		For example, the narrow \emph{sector} $\mathcal{S}$($P_0$, $P_{3}$, $\epsilon/2$) takes $P_0$ as the center point and $\overline{P_0P^u_{3}}$ and $\overline{P_0P^l_{3}}$ as the borderlines.
+		Because $\bigsqcap_{i=1}^{4}\mathcal{S}(P_0, P_{0+i}, \epsilon/2) \ne \{P_0\}$ and $\bigsqcap_{i=1}^{5}\mathcal{S}(P_0, P_{0+i}, \epsilon/2) = \{P_0\}$, $\overline{P_0P_4}$ is output and $P_4$ becomes the start point of the next section.
+		At last, the algorithm outputs two continuous line segments $\overline{P_0P_4}$ and $\overline{P_4P_{10}}$.
 	\end{example}
 	
 	\begin{figure}[tb!]
