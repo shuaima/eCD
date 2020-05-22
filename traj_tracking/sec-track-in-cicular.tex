@@ -123,7 +123,8 @@ If it passes through and the distance $|P_{i}P'_{i}| \ge \epsilon$, meaning that
 %
 Anyway, the algorithm gets the $m$-edge inscribed regular polygon \wrt the current point $P_{i}$ by calling procedure $\kw{getRPolygon}$ \cite{Lin:Cised} and gets the common intersection $\mathcal{R}^*$ of the preview cones (lines 13--14). The process repeats until all points have been processed (line 15).
 At last, it outputs the last point $P_{n}$ (line 16).
-
+%
+Figure~\ref{fig:citt} is a running example of this algorithm.
 
 
 
@@ -145,7 +146,7 @@ At last, it outputs the last point $P_{n}$ (line 16).
 						\icc \>\hspace{7ex}    $P_s := P_{i-1}$; ~~~~$\mathcal{R}^*$ := $\emptyset$; \\
 						\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_{s}P_{i}|}{P_{i}.t-P_s.t}$; ~~~~~$\vv{v}.\theta:=\overline{P_{s}P_{i}}.\theta$; \\
 						\icc \>\hspace{7ex}    update ($P_{s}, \vv{v}$); \\
-						\icc \>\hspace{3ex} else if $\overline{P_sP_{i}}$ ~passes~ $\mathcal{R}^*$ ~and~ $sed(P_{i},\vv{v}) \ge \epsilon $ then  \\ %~// updates velocity only 
+						\icc \>\hspace{3ex} else if $sed(P_{i},\vv{v}) \ge \epsilon $ then  \\ %~$\overline{P_sP_{i}}$ ~passes~ $\mathcal{R}^*$ and
 						\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_sP_{i}|}{P_{i}.t-P_s.t}$; ~~~~~$\vv{v}.\theta:=\overline{P_sP_{i}}.\theta$; \\
 						\icc \>\hspace{7ex}    update ($\vv{v}$); \\
 						\icc \>\hspace{3ex} if $\mathcal{R}^*=\emptyset$ then $\mathcal{R}^*:=$ \kw{getRPolygon}($P_s$, $P_{i}$, $\epsilon$, $m$, $P_{s+1}.t$); \\
@@ -165,52 +166,14 @@ At last, it outputs the last point $P_{n}$ (line 16).
 	\end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\eat{ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% delete, half cones
 \begin{figure}[tb!]
-	\begin{center}
-		{\small
-			\begin{minipage}{3.3in}
-				\myhrule
-				%\vspace{-1ex}
-				\mat{0ex}{
-					{\bf Algorithm}~\citt $(\dddot{\mathcal{T}}[P_0,\ldots,P_n],~\epsilon,~m)$\\
-					%	\sstab
-					\bcc \hspace{1ex}\= $P_s := P_0$; ~$\mathcal{R}^* := \emptyset$;~~~~// $\mathcal{R}^*$ saves the common intersection of polygons \\
-					\icc \hspace{1ex}\= $i := 1$; ~$t_c$ := $P_1.t$;\\
-					\icc \hspace{1ex}\= $|\vv{v}|:=\frac{|P_i-P_s|}{P_i.t-P_s.t}$; ~$\vv{v}.\theta:=\overline{|P_i-P_s|}.\theta$; \\
-					\icc \hspace{1ex}\= update ($P_{s}, \vv{v}$); \\
-					\icc \hspace{1ex}\= while $i \le n$ do \\
-					\icc \>\hspace{3ex} $\mathcal{R}$ := \kw{getRegularPolygon}($P_s$, $P_i$, $\epsilon/2$, $m$, $t_c$); \\
-					\icc \>\hspace{3ex} if $\mathcal{R}^* = \emptyset$  then $\mathcal{R}^* :=\mathcal{R};$ \\
-					\icc \>\hspace{3ex} else $\mathcal{R}^*$ := \kw{getIntersection}$(\mathcal{R}^*, ~\mathcal{R})$; \\
-					\icc \>\hspace{3ex} if $\mathcal{R}^* = \emptyset$ then  // updates velocity and location \\
-					\icc \>\hspace{7ex}    $P_s := P_{i-1}$; \\
-					\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_{i}-P_s|}{P_{i}.t-P_s.t}$; ~$\vv{v}.\theta:=\overline{|P_{i}-P_s|}.\theta$; \\
-					\icc \>\hspace{7ex}    update ($P_{s}, \vv{v}$); \\
-					\icc \>\hspace{7ex}    $t_c$ := $P_{i}.t$; ~$i$ := $i - 1$;		\\
-					\icc \>\hspace{3ex} else if $\mathcal{R}^* \ne \emptyset$ ~and~ $|P_iP'_i| \ge \epsilon/2 $ then   ~// updates velocity \\
-					\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_i-P_s|}{P_i.t-P_s.t}$; ~$\vv{v}.\theta:=\overline{|P_i-P_s|}.\theta$; \\
-					\icc \>\hspace{7ex}    update ($\vv{v}$); \\
-					\icc \>\hspace{3ex} $i$ := $i +1$;	\\
-					\icc \>\hspace{0ex} update ($P_{n}$); 
-				}
-				\vspace{-2ex}
-				\myhrule
-			\end{minipage}
-		}
-	\end{center}
-	\vspace{-1ex}
-	\caption{\small Trajectory tracking based on cone intersection (half-$\epsilon$).}
-	\label{alg:citt-s-half}
-	\vspace{-1ex}
+	\centering
+	\includegraphics[scale=1.0]{figures/Fig-CITT.png}
+	\vspace{-2ex}
+	\caption{\small A running example of \citt. It takes the same input and sets the same start point and initial velocity as Figure~\ref{fig:ldr}, and uses full-$\epsilon$ cones to simplify the trajectory. (1) $P_3$ lives in the common intersection of \cone{_{1}} and \cone{_{2}} and it has a distance larger than $\epsilon$ to its expected position $P'_3$ \wrt $\vec{v_1}$, thus this algorithm adjusts the velocity to $\vec{v_3}$ and the process goes on, and (2) $P_5$ is outside of the common intersection of the preview cones, thus, $P_4$ serves as the new start point, and an update is triggered. Finally, this algorithm sends three points, $P_0, P_4$ and $P_8$, and four velocities to the MOD server. }
+	\vspace{-2ex}
+	\label{fig:citt}
 \end{figure}
-}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{example}
-	\todo.
-\end{example}
-
 
 \stitle{Correctness and complexity.} 
 The correctness of algorithm \citt follows from Theorems \ref{theo-ldrh-cised} and \ref{theo-full-cone}.
@@ -223,18 +186,6 @@ It is easy to find that every point is processed only once in \citt, and for eac
 
 \eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
-\subsection{Extension from half-$\epsilon$ cone to full-$\epsilon$ cone}
-
-
-\stitle{Algorithm \cittsf()}.
-
-\begin{example}
-\todo.
-\end{example}	
-
-\stitle{Correctness and complexity.} 
-
-
 \subsection{Weak tracking}
 
 -- theorem: if ldr is true, then the intersection of those cones must not be \{$P_s$\}.
