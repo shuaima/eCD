@@ -42,12 +42,11 @@ Given a start point $P_s$ of sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, 
 Based on the spatio-temporal cone, authors in \cite{Lin:Cised} prove that the \sed distance tolerance can be checked by finding the common intersection of spatio-temporal cones  (half-$\epsilon$) built from points of a sub-trajectory $[P_s,...,P_{s+k}]$, \ie ``{given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P_{s+i}, \overline{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if  $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$}."
 In other words, if these cones do have a common intersection, then line segment $\overline{P_sP_{s+k}}$ can represent the sub-trajectory. And for efficiency consideration, \cised projects those cones on a plane, \eg plane $t=P_{s+1}.t$, so as to convert the checking of cones intersection into a much simpler way, \ie~\textit{checking of circles intersection on the plane}.
 For the same reason, a circle is further approximated by its inscribe regular polygon and the intersecting of circles is approximated by the intersecting of these polygons, which can be computed in linear time.
-
-Figure~\ref{fig:cised} is a running example of \cised. In this case, it outperforms \ldrh in terms of compression ratio.
-
 %
 %Note that though the cone intersection approach outperform the counterpart of \ldr and \ldrh, it is still not introduced to trajectory tracking.
 
+\eat{%%%%%%%%%%%%%%%%%% Delete because of the page limitation.
+Figure~\ref{fig:cised} is a running example of \cised. In this case, it outperforms \ldrh in terms of compression ratio.
 
 \begin{figure}[tb!]
 	\centering
@@ -57,7 +56,7 @@ Figure~\ref{fig:cised} is a running example of \cised. In this case, it outperfo
 	\vspace{-2ex}
 	\label{fig:cised}
 \end{figure}
-
+}%%%%%%%%%%%%%%%%%%%%%%
 
 
 
@@ -94,7 +93,7 @@ Theorem \ref{theo-cone-vs} tells that the full-$\epsilon$ cone approach brings a
 %as shown in Proposition \ref{theo-ldrh-cised}
 
 \subsection{Implementation}
-We then provide a one-pass trajectory tracking algorithm based on spatio-temporal cone, named \underline{C}one \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (\citt). This algorithm runs on mobile devices and uses full-$\epsilon$ cones to help check the distance deviations. In a nutshell, when a distance deviation occurs, unlike \ldr and \ldrh, algorithm \citt does not roughly send an update of a new start position $P_s$ and a new velocity $\vv{v}$ to the MOD server. Instead, it quickly finds out a new feasible velocity $\vv{v}$ by the intersection of spatio-temporal cones such that only the new velocity $\vv{v}$ is sent to the MOD while the start point $P_s$ keeps the same. By this way, a line segment clearly represents a longer sub-trajectory than \ldrh, and the storage and network bandwidth are saved.
+We then provide a one-pass trajectory tracking algorithm based on spatio-temporal cone, named \underline{C}one \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (\citt). This algorithm runs on mobile devices and uses full-$\epsilon$ cones to help check the distance deviations. In a nutshell, when a distance deviation occurs, unlike \ldr and \ldrh, algorithm \citt does not roughly send an update of a new start position $P_s$ and a new velocity $\vv{v}$ to the MOD server. Instead, it quickly finds out a new feasible velocity $\vv{v}$ by the intersection of spatio-temporal cones such that only the new velocity $\vv{v}$ is sent to the MOD server while the start point $P_s$ keeps the same. By this way, a line segment clearly represents a longer sub-trajectory than \ldrh, and therefor the storage and network bandwidth are saved.
 
 More specifically, \citt initializes its velocity $\vv{v}$ (including value and direction) and sends it coupling with the start position $P_s$ to the MOD server. Then it iteratively (1) checks the deviation of the actual position $P_{s+i}$ to its synchronized point $P'_{s+i}$ built from the start point $P_s$, velocity $\vv{v}$ and time $P_{s+i}.t$, for the purpose of position tracking, and (2) checks the common intersection of spatio-temporal cones built from points $P_{s+j}$, $j \in [1, i]$, for the purpose of trajectory simplification.
 %
