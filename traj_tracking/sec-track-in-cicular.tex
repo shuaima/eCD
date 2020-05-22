@@ -72,9 +72,9 @@ In this section, we will first show that the counterpart of \ldrh is just a spec
 Given a sub-trajectory $\dddot{\mathcal{T}}_s[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, if $\dddot{\mathcal{T}}_s$ can be represented by line segment $\overline{P_sP_{s+k}}$ through algorithm \ldrh, then it can also be represented by approaches based on spatio-temporal cones.
 \end{theorem}
 
-Theorem \ref{theo-ldrh-cised} tells that (1) {spatio-temporal cone can also be applied to trajectory tracking}, and (2) \ldrh is just a special case of and has a worse effectiveness than approaches based on spatio-temporal cones. Indeed, \ldrh assumes an initial velocity before the simplification or tracking of a sub-trajectory, while the spatio-temporal cone based methods do not, instead, it has an ability to find out the potentially feasible velocities to fit the movement of the object when it simplifies the sub-trajectory. Thus, the latter is sure a more effective way to develop one-pass trajectory tracking algorithms. 
+Theorem \ref{theo-ldrh-cised} tells that (1) {the spatio-temporal cone is also applicable to trajectory tracking}, and (2) \ldrh is just a special case of and has a worse effectiveness than approaches based on spatio-temporal cones. Indeed, \ldrh assumes an initial velocity before the simplification or tracking of a sub-trajectory, while the spatio-temporal cone based methods do not, instead, it has an ability to find out the potentially feasible velocities to fit the movement of the object when it simplifies the sub-trajectory. Thus, the latter is sure a more effective way to develop one-pass trajectory tracking algorithms. 
 %
-Moreover, observe that the half-$\epsilon$ cone in the above is still a little conservative, we next extend it to a full-$\epsilon$ cone plus certain constrain to get an even better effectiveness.
+Moreover, observe that the half-$\epsilon$ cone in the above is still a little conservative, we next extend it to a full-$\epsilon$ cone.% plus certain constrain to get an even better effectiveness.
 
 
 \begin{theorem}
@@ -82,7 +82,7 @@ Moreover, observe that the half-$\epsilon$ cone in the above is still a little c
 	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P_{s+i}, \overline{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if $\overline{P_sP_{s+i}}$ passes through $\bigsqcap_{j=1}^{i-1}$\cone{(P_s, P_{s+j}, \epsilon)} - \{$P_s$\}.
 \end{theorem}
 
-Theorem \ref{theo-full-cone} tells that full-$\epsilon$ spatio-temporal cones, with a constrain that the line segment $\overline{P_sP_{s+i}}$ passes through the common intersection of all the preview full cones can also be used in trajectory simplification and/or tracking. 
+Theorem \ref{theo-full-cone} tells that full-$\epsilon$ spatio-temporal cones, with a constrain that the line segment $\overline{P_sP_{s+i}}$ passes through the common intersection of all the preview cones, can also be used in trajectory simplification and/or tracking. 
 
 \begin{theorem}
 	\label{theo-cone-vs}
@@ -90,7 +90,7 @@ Theorem \ref{theo-full-cone} tells that full-$\epsilon$ spatio-temporal cones, w
 \end{theorem}
 
 
-Theorem \ref{theo-cone-vs} tells that the full-$\epsilon$ cone approach brings a better effectiveness than the half-$\epsilon$ cone, which is in turn better than \ldrh, in trajectory simplification and/or tracking. Thus, we will use the full-$\epsilon$ cones to develop trajectory tracking algorithms.
+Theorem \ref{theo-cone-vs} tells that the full-$\epsilon$ cone approach brings a better effectiveness than the half-$\epsilon$ cone, which is in turn better than \ldrh, in trajectory simplification and/or tracking. Thus, it is better to use the full-$\epsilon$ cones to develop trajectory tracking algorithms.
 %as shown in Proposition \ref{theo-ldrh-cised}
 
 \subsection{Implementation}
@@ -213,8 +213,8 @@ At last, it outputs the last point $P_{n}$ (line 16).
 
 
 \stitle{Correctness and complexity.} 
-\todo{correctness.}
-Every point is processed only once in \citt, and for each point, it needs $O(1)$ time as getRegularPolygon(), update(), intersecting of polygons and other operations all have a time complexity of $O(1)$. Hence, \citt has a time complexity of $O(n)$, where $n$ is the number of data points.
+The correctness of algorithm \citt follows from Theorems \ref{theo-ldrh-cised} and \ref{theo-full-cone}.
+It is easy to find that every point is processed only once in \citt, and for each point, it needs $O(1)$ time as getRPolygon() \cite{Lin:Cised}, intersecting of polygons \cite{Lin:Cised} and \textcolor{red}{update()} all have a time complexity of $O(1)$. Hence, \citt has a time complexity of $O(n)$, where $n$ is the number of data points.
 
 
 
