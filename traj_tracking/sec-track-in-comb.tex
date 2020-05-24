@@ -30,10 +30,13 @@ For the same example of ``the school boy on his way home" mentioned in Section \
 \end{theorem}
 
 
-\subsection{Implementation.}
-We now present the algorithm of \underline{B}inary \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (BITT) that tracks moving objects in combined areas of circular and strip by \sed and \ped, as shown in Figure~\ref{alg:bitt}. 
-%
-Indeed, it is a double check of cone intersection and sector intersection for each point for the purpose of trajectory simplification, and a double check of distance deviations for position tracking. And for position tracking, it uses a uniform velocity $\vv{v}$ for both checks of \sed and \ped. %If either \sed or \ped deviation breaks the threshold, then an update is triggered.
+\todo{Could ``$|P_sP_{i}| \le l_{m} - \epsilon$" be replaced by a more relaxed constrain, by benefiting from \sed?}
+
+
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Algorithm: Traj tracking based on section intersection using full sectors.
@@ -78,11 +81,16 @@ Indeed, it is a double check of cone intersection and sector intersection for ea
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\subsection{Implementation.}
+We now present the algorithm of \underline{B}inary \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (BITT) that tracks moving objects in combined areas of circular and strip by \sed and \ped, as shown in Figure~\ref{alg:bitt}. 
+%
+Indeed, it is a double check of cone intersection and sector intersection for each point for the purpose of trajectory simplification, and a double check of \sed and \ped distance deviations for position tracking. In addition to that, it uses a uniform velocity $\vv{v}$ for both position tracks of \sed and \ped such that either deviation of \ped or \sed distance will cause an update of velocity $\vv{v}$. 
+%
+\bitt is the super version of \citt and \sitt, that is, if $\epsilon_{sed} >> \epsilon_{ped}$, then ``$\overline{P_sP_{i}}$ does not pass $\mathcal{R}^*$" of line 7 and ``$sed(P_i, \vv{v}) \ge \epsilon_{sed}$" of line 11 are always false, thus \bitt falls back to \sitt. \todo{Similarly, if $\epsilon_{sed} \le \epsilon_{ped}$, then it falls back to \citt.}
+Figure {\todo.} is a running example of \bitt. 
 
 
-\begin{example}
-	\todo.
-\end{example}
+
 
 \stitle{Correctness and complexity.} 
 The correctness of algorithm \bitt follows from Theorem \ref{theo-binary}.
