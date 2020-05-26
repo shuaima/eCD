@@ -31,7 +31,7 @@ Given a start point $P_s$ of sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, 
 
 \begin{figure}[tb!]
 	\centering
-	\includegraphics[scale=0.66]{figures/Fig-CIS.png}
+	\includegraphics[scale=0.70]{figures/Fig-CIS.png}
 	\vspace{-1ex}
 	\caption{\small Examples of spatio-temporal cones in a 3D Cartesian coordinate system taking point $P_s$ as the origin, where (1) $P_{s+i}$ and $P_{s+k}$ are two points, (2) \circle{_{s+i}} and \circle{_{s+k}} are two synchronous circles, (3) \cone{_{s+i}} and \cone{_{s+k}} are two spatio-temporal cones.}
 	\vspace{-2ex}
@@ -106,6 +106,43 @@ Otherwise, no deviation occurs, no update is sent and the algorithm goes on proc
 
 %Note that like \cised, this algorithm also transforms the intersection of cones to the intersection of regular polygons.
 
+\begin{figure}[tb!]   % full cones
+	\begin{center}
+		{\small
+			\begin{minipage}{3.3in}
+				\myhrule
+				%\vspace{-1ex}
+				\mat{0ex}{
+					{\bf Algorithm}~\citt $(\dddot{\mathcal{T}}[P_0,\ldots,P_n],~\epsilon,~m)$\\
+					%	\sstab
+					\bcc \hspace{1ex}\= $P_s := P_0$; ~~~~$\mathcal{R}^*$ := \kw{getRPolygon}($P_s$, $P_{s+1}$, $\epsilon$, $m$, $P_{s+1}.t$); \\
+					\icc \hspace{1ex}\= $|\vv{v}|:=\frac{|P_{s}P_{s+1}|}{P_{s+1}.t-P_s.t}$; ~~~~$\vv{v}.\theta:=\overline{P_{s}P_{s+1}}.\theta$; \\
+					\icc \hspace{1ex}\= update ($P_{s}, \vv{v}$); \\
+					\icc \hspace{1ex}\= $i := 2$; 	\\
+					\icc \hspace{1ex}\= while $i \le n$ do \\
+					\icc \>\hspace{3ex} if $\overline{P_sP_{i}}$ ~does not pass~ $\mathcal{R}^*$ then \\ % // updates velocity and location \\
+					\icc \>\hspace{7ex}    $P_s := P_{i-1}$; ~~~~$\mathcal{R}^*$ := $\emptyset$; \\
+					\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_{s}P_{i}|}{P_{i}.t-P_s.t}$; ~~~~~$\vv{v}.\theta:=\overline{P_{s}P_{i}}.\theta$; \\
+					\icc \>\hspace{7ex}    update ($P_{s}, \vv{v}$); \\
+					\icc \>\hspace{3ex} else if $sed(P_{i},\vv{v}) \ge \epsilon $ then  \\ %~$\overline{P_sP_{i}}$ ~passes~ $\mathcal{R}^*$ and
+					\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_sP_{i}|}{P_{i}.t-P_s.t}$; ~~~~~$\vv{v}.\theta:=\overline{P_sP_{i}}.\theta$; \\
+					\icc \>\hspace{7ex}    update ($\vv{v}$); \\
+					\icc \>\hspace{3ex} if $\mathcal{R}^*=\emptyset$ then $\mathcal{R}^*:=$ \kw{getRPolygon}($P_s$, $P_{i}$, $\epsilon$, $m$, $P_{s+1}.t$); \\
+					\icc \>\hspace{3ex} else $\mathcal{R}^*$ := $\mathcal{R}^*\bigsqcap$ \kw{getRPolygon}($P_s$, $P_{i}$, $\epsilon$, $m$, $P_{s+1}.t$); \\
+					\icc \>\hspace{3ex} $i$ := $i +1$;	\\
+					\icc \>\hspace{0ex} update $(P_{n}, 0)$; 
+				}
+				\vspace{-2ex}
+				\myhrule
+			\end{minipage}
+		}
+	\end{center}
+	\vspace{-1ex}
+	\caption{\small Trajectory tracking based on spatio-temporal cone.}
+	\label{alg:citt-s-full}
+	\vspace{-1ex}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \stitle{Algorithm \citt}.
 %We now present algorithm \citt.
@@ -123,56 +160,25 @@ If it passes through and the distance $|P_{i}P'_{i}| \ge \epsilon$, meaning that
 Anyway, the algorithm gets the $m$-edge inscribed regular polygon \wrt the current point $P_{i}$ by calling procedure $\kw{getRPolygon}$ \cite{Lin:Cised} and gets the common intersection $\mathcal{R}^*$ of the preview cones (lines 13--14). The process repeats until all points have been processed (line 15).
 At last, it outputs the last point $P_{n}$ (line 16).
 %
-Figure~\ref{fig:citt} is a running example of this algorithm.
 
 
 
-\begin{figure}[tb!]   % full cones
-		\begin{center}
-			{\small
-				\begin{minipage}{3.3in}
-					\myhrule
-					%\vspace{-1ex}
-					\mat{0ex}{
-						{\bf Algorithm}~\citt $(\dddot{\mathcal{T}}[P_0,\ldots,P_n],~\epsilon,~m)$\\
-						%	\sstab
-						\bcc \hspace{1ex}\= $P_s := P_0$; ~~~~$\mathcal{R}^*$ := \kw{getRPolygon}($P_s$, $P_{s+1}$, $\epsilon$, $m$, $P_{s+1}.t$); \\
-						\icc \hspace{1ex}\= $|\vv{v}|:=\frac{|P_{s}P_{s+1}|}{P_{s+1}.t-P_s.t}$; ~~~~$\vv{v}.\theta:=\overline{P_{s}P_{s+1}}.\theta$; \\
-						\icc \hspace{1ex}\= update ($P_{s}, \vv{v}$); \\
-						\icc \hspace{1ex}\= $i := 2$; 	\\
-						\icc \hspace{1ex}\= while $i \le n$ do \\
-						\icc \>\hspace{3ex} if $\overline{P_sP_{i}}$ ~does not pass~ $\mathcal{R}^*$ then \\ % // updates velocity and location \\
-						\icc \>\hspace{7ex}    $P_s := P_{i-1}$; ~~~~$\mathcal{R}^*$ := $\emptyset$; \\
-						\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_{s}P_{i}|}{P_{i}.t-P_s.t}$; ~~~~~$\vv{v}.\theta:=\overline{P_{s}P_{i}}.\theta$; \\
-						\icc \>\hspace{7ex}    update ($P_{s}, \vv{v}$); \\
-						\icc \>\hspace{3ex} else if $sed(P_{i},\vv{v}) \ge \epsilon $ then  \\ %~$\overline{P_sP_{i}}$ ~passes~ $\mathcal{R}^*$ and
-						\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_sP_{i}|}{P_{i}.t-P_s.t}$; ~~~~~$\vv{v}.\theta:=\overline{P_sP_{i}}.\theta$; \\
-						\icc \>\hspace{7ex}    update ($\vv{v}$); \\
-						\icc \>\hspace{3ex} if $\mathcal{R}^*=\emptyset$ then $\mathcal{R}^*:=$ \kw{getRPolygon}($P_s$, $P_{i}$, $\epsilon$, $m$, $P_{s+1}.t$); \\
-						\icc \>\hspace{3ex} else $\mathcal{R}^*$ := $\mathcal{R}^*\bigsqcap$ \kw{getRPolygon}($P_s$, $P_{i}$, $\epsilon$, $m$, $P_{s+1}.t$); \\
-						\icc \>\hspace{3ex} $i$ := $i +1$;	\\
-						\icc \>\hspace{0ex} update $(P_{n}, 0)$; 
-					}
-					\vspace{-2ex}
-					\myhrule
-				\end{minipage}
-			}
-		\end{center}
-		\vspace{-1ex}
-		\caption{\small Trajectory tracking based on spatio-temporal cone.}
-		\label{alg:citt-s-full}
-		\vspace{-1ex}
-	\end{figure}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 \begin{figure}[tb!]
 	\centering
 	\includegraphics[scale=1.0]{figures/Fig-CITT.png}
 	\vspace{-2ex}
-	\caption{\small A running example of \citt. It takes the same input and sets the same start point and initial velocity as Figure~\ref{fig:ldr}, and uses full-$\epsilon$ cones to simplify the trajectory. (1) $P_3$ lives in the common intersection of \cone{_{1}} and \cone{_{2}} and it has a distance larger than $\epsilon$ to its expected position $P'_3$ \wrt $\vec{v_1}$, thus, \citt updates the velocity from $\vec{v_1}$ to $\vec{v_3}$ and the process goes on, and (2) $P_5$ is outside of the common intersection of the preview cones, thus, $P_4$ serves as the new start point, and an update is triggered. Finally, this algorithm sends three points, $P_0, P_4$ and $P_8$ (not shown), and four velocities, $\vec{v_1}$, $\vec{v_3}$, $\vec{v_5}$ (not shown) and $\vec{v_8}$ (not shown), to the MOD server. }
+	\caption{\small A running example of \citt. It takes the same input and sets the same start point and initial velocity as Figure~\ref{fig:ldr}, and uses full-$\epsilon$ cones to simplify the trajectory.}
 	\vspace{-2ex}
 	\label{fig:citt}
 \end{figure}
+
+
+\begin{example}
+	Figure~\ref{fig:citt} is a running example of this algorithm. (1) $P_3$ lives in the common intersection of \cone{_{1}} and \cone{_{2}} and it has a distance larger than $\epsilon$ to its expected position $P'_3$ \wrt $\vec{v_1}$, thus, \citt updates the velocity from $\vec{v_1}$ to $\vec{v_3}$ and the process goes on, and (2) $P_5$ is outside of the common intersection of the preview cones, thus, $P_4$ serves as the new start point, and an update is triggered. Finally, this algorithm sends three points, $P_0, P_4$ and $P_8$ (not shown), and four velocities, $\vec{v_1}$, $\vec{v_3}$, $\vec{v_5}$ (not shown) and $\vec{v_8}$ (not shown), to the MOD server. 
+\end{example}
+
 
 \stitle{Correctness and complexity.} 
 The correctness of algorithm \citt follows from Theorems \ref{theo-ldrh-cised} and \ref{theo-full-cone}.
