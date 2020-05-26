@@ -71,7 +71,7 @@ In this section, we will first show that the counterpart of \ldrh is just a spec
 Given a sub-trajectory $\dddot{\mathcal{T}}_s[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, if $\dddot{\mathcal{T}}_s$ can be represented by line segment $\overline{P_sP_{s+k}}$ through algorithm \ldrh, then it can also be represented by approaches based on spatio-temporal cones.
 \end{theorem}
 
-Theorem \ref{theo-ldrh-cised} tells that (1) {the spatio-temporal cone is also applicable to trajectory tracking}, and (2) \ldrh is just a special case of and has a worse effectiveness than approaches based on spatio-temporal cones. Indeed, \ldrh assumes an initial velocity before the simplification or tracking of a sub-trajectory, while the spatio-temporal cone based methods do not, instead, it has an ability to find out the potentially feasible velocities to fit the movement of the object when it simplifies the sub-trajectory. Thus, the latter is sure a more effective way to develop one-pass trajectory tracking algorithms. 
+Theorem \ref{theo-ldrh-cised} tells that (1) {approaches based on the spatio-temporal cone are also applicable to do trajectory tracking in a circular area}, and (2) \ldrh is just a special case of and has a worse effectiveness than approaches based on spatio-temporal cones. Indeed, \ldrh assumes an initial velocity before the simplification or tracking of a sub-trajectory, while the spatio-temporal cone based methods do not, instead, it has an ability to find out the potentially feasible velocities to fit the movement of the object when it simplifies the sub-trajectory. Thus, the latter is sure a more effective way to develop one-pass trajectory tracking algorithms. 
 %
 Moreover, observe that the half-$\epsilon$ cone in the above is still a little conservative, we next extend it to a full-$\epsilon$ cone.% plus certain constrain to get an even better effectiveness.
 
@@ -81,11 +81,11 @@ Moreover, observe that the half-$\epsilon$ cone in the above is still a little c
 	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P_{s+i}, \overline{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if $\overline{P_sP_{s+k}}$ passes through $\bigsqcap_{i=1}^{k-1}$\cone{(P_s, P_{s+i}, \epsilon)} - \{$P_s$\}.
 \end{theorem}
 
-Theorem \ref{theo-full-cone} tells that full-$\epsilon$ spatio-temporal cones, with a constrain that the line segment $\overline{P_sP_{s+i}}$ passes through the common intersection of all the preview cones, can also be used in trajectory simplification and/or tracking. Thus we get two ways of trajectory tracking. The question is, which one is the better?
+Theorem \ref{theo-full-cone} tells that full-$\epsilon$ spatio-temporal cones, with a constrain that the line segment $\overline{P_sP_{s+i}}$ passes through the common intersection of all the preview cones, can also be used in trajectory simplification and/or tracking. Thus we get two ways of trajectory tracking in a circle. The question is, which one is the better?
 
 \begin{theorem}
 	\label{theo-cone-vs}
-	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, if $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$, then $\overline{P_sP_{s+k}}$ passes through $\bigsqcap_{i=1}^{k-1}$\cone{(P_s, P_{s+i}, \epsilon)}-$\{P_s\}$; and the opposite is not always true.
+	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, if $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$, then $\overline{P_sP_{s+k}}$ passes through $\bigsqcap_{i=1}^{k-1}$\cone{(P_s, P_{s+i}, \epsilon)}-$\{P_s\}$; and the opposite is not necessarily true.
 \end{theorem}
 
 
@@ -137,10 +137,10 @@ Otherwise, no deviation occurs, no update is sent and the algorithm goes on proc
 			\end{minipage}
 		}
 	\end{center}
-	\vspace{-1ex}
+	\vspace{-2ex}
 	\caption{\small Trajectory tracking based on spatio-temporal cone.}
 	\label{alg:citt-s-full}
-	\vspace{-1ex}
+	\vspace{-3ex}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -169,14 +169,14 @@ At last, it outputs the last point $P_{n}$ (line 16).
 	\centering
 	\includegraphics[scale=1.0]{figures/Fig-CITT.png}
 	\vspace{-2ex}
-	\caption{\small A running example of \citt. It takes the same input and sets the same start point and initial velocity as Figure~\ref{fig:ldr}, and uses full-$\epsilon$ cones to simplify the trajectory.}
-	\vspace{-2ex}
+	\caption{\small A running example of \citt. }
+	\vspace{-3ex}
 	\label{fig:citt}
 \end{figure}
 
 
 \begin{example}
-	Figure~\ref{fig:citt} is a running example of this algorithm. (1) $P_3$ lives in the common intersection of \cone{_{1}} and \cone{_{2}} and it has a distance larger than $\epsilon$ to its expected position $P'_3$ \wrt $\vec{v_1}$, thus, \citt updates the velocity from $\vec{v_1}$ to $\vec{v_3}$ and the process goes on, and (2) $P_5$ is outside of the common intersection of the preview cones, thus, $P_4$ serves as the new start point, and an update is triggered. Finally, this algorithm sends three points, $P_0, P_4$ and $P_8$ (not shown), and four velocities, $\vec{v_1}$, $\vec{v_3}$, $\vec{v_5}$ (not shown) and $\vec{v_8}$ (not shown), to the MOD server. 
+	Figure~\ref{fig:citt} is a running example of this algorithm. It takes the same input and sets the same start point and initial velocity as Figure~\ref{fig:ldr}, and uses full-$\epsilon$ cones to simplify the trajectory. (1) $P_3$ lives in the common intersection of \cone{_{1}} and \cone{_{2}} and it has a distance larger than $\epsilon$ to its expected position $P'_3$ \wrt $\vec{v_1}$, thus, \citt updates the velocity from $\vec{v_1}$ to $\vec{v_3}$ and the process goes on, and (2) $P_5$ is outside of the common intersection of the preview cones, thus, $P_4$ serves as the new start point, and an update is triggered. Finally, this algorithm sends three points, $P_0, P_4$ and $P_8$ (not shown), and four velocities, $\vec{v_1}$, $\vec{v_3}$, $\vec{v_5}$ (not shown) and $\vec{v_8}$ (not shown), to the MOD server. Also note that, no matter during the tracking or after the simplification, this algorithm ensures that any removed point is located in a circle around its expected position \wrt a velocity or a line segment connecting two data points. 
 \end{example}
 
 
