@@ -146,9 +146,9 @@ Otherwise, no deviation occurs, no update is sent and the algorithm goes on proc
 
 \stitle{Algorithm \citt}.
 %We now present algorithm \citt.
-As shown in Figure~\ref{alg:citt-s-full}, it takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for inscribed regular polygons, and outputs a set of velocities and a simplified  trajectory $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$.
+As shown in Figure~\ref{alg:citt-s-full}, it takes as input a trajectory \trajec{T}${[P_0, \ldots, P_n]}$, an error bound $\epsilon$ and the number $m$ of edges for an inscribed regular polygon (recall that a circle is approximated by its $m$--edges inscribe regular polygon and accordingly the intersecting of circles is approximated by the intersecting of these polygons), and outputs a set of velocities and a simplified  trajectory $\overline{\mathcal{T}}$ of $\dddot{\mathcal{T}}$.
 %
-The algorithm first initializes the start point $P_s$ to $P_0$, the common intersection of polygons $\mathcal{R}^*$ to the regular inner polygon of $P_1$ by calling procedure $\kw{getRPolygon}$ \cite{Lin:Cised}, and the expected velocity $(|\vv{v}|, \vv{v}.\theta)$ to ($\frac{|P_{s}P_{s+1}|}{P_{s+1}.t-P_s.t},\overline{P_{s}P_{s+1}}.\theta$) (lines 1--2), then it sends its initial location $P_s$ and the velocity $\vv{v}$ to the MOD server (line 3), meaning that it is supposed to move from point $P_s$ along the direction of $\vv{v}.\theta$ at a speed of $|\vv{v}|$.
+The algorithm first initializes the start point $P_s$ to $P_0$, the common intersection of polygons $\mathcal{R}^*$ to the regular inner polygon of $P_1$ by calling procedure $\kw{getRPolygon}()$ \cite{Lin:Cised}, and the expected velocity $(|\vv{v}|, \vv{v}.\theta)$ to ($\frac{|P_{s}P_{s+1}|}{P_{s+1}.t-P_s.t},\overline{P_{s}P_{s+1}}.\theta$) (lines 1--2), then it sends its initial location $P_s$ and the velocity $\vv{v}$ to the MOD server (line 3), meaning that it is supposed to move from point $P_s$ along the direction of $\vv{v}.\theta$ at a speed of $|\vv{v}|$.
 %, such that the expecting position of the object at time $t>P_s.t$ can be extrapolated from them as long as no subsequent update is sent to the MOD server.
 
 The algorithm sequentially processes the rest points of the trajectory one by one (lines 4--15). 
@@ -157,7 +157,7 @@ For the current point $P_{i}$, if $\overline{P_sP_{i}}$ passes through the commo
 Otherwise, it calculates the distance from the actual location $P_{i}$ to the expecting location $P'_{i}$ extrapolated from the initial location $P_s$ and the velocity $\vv{v}$, and checks whether $\overline{P_sP_{i}}$ passes through the common intersection $\mathcal{R}^*$ of preview points.
 If it passes through and the distance $|P_{i}P'_{i}| \ge \epsilon$, meaning that more points can be included into a line segment while the velocity $\vv{v}$ needs to be updated. Hence, it updates velocity $\vv{v}$ based on $P_s$ and $P_{i}$, and sends it to the MOD server (lines 10--12). 
 %
-Anyway, the algorithm gets the $m$-edge inscribed regular polygon \wrt the current point $P_{i}$ by calling procedure $\kw{getRPolygon}$ \cite{Lin:Cised} and gets the common intersection $\mathcal{R}^*$ of the preview cones (lines 13--14). The process repeats until all points have been processed (line 15).
+Anyway, the algorithm gets the $m$-edge inscribed regular polygon \wrt the current point $P_{i}$ by calling procedure $\kw{getRPolygon()}$ \cite{Lin:Cised} and gets the common intersection $\mathcal{R}^*$ of the preview cones (lines 13--14). The process repeats until all points have been processed (line 15).
 At last, it outputs the last point $P_{n}$ (line 16).
 %
 
@@ -182,7 +182,7 @@ At last, it outputs the last point $P_{n}$ (line 16).
 
 \stitle{Correctness and complexity.} 
 The correctness of algorithm \citt follows from Theorems \ref{theo-ldrh-cised} and \ref{theo-full-cone}.
-It is easy to find that every point is processed only once in \citt, and for each point, it needs $O(1)$ time as getRPolygon() \cite{Lin:Cised}, intersecting of polygons \cite{Lin:Cised} and \textcolor{red}{other operations} all have a time complexity of $O(1)$. Hence, \citt has a time complexity of $O(n)$, where $n$ is the number of data points.
+It is easy to find that every point is processed only once in \citt, and for each point, it needs $O(1)$ time as getRPolygon() \cite{Lin:Cised}, intersecting of polygons \cite{Lin:Cised} and {other operations} all have a time complexity of $O(1)$. Hence, \citt has a time complexity of $O(n)$, where $n$ is the number of data points.
 
 
 
