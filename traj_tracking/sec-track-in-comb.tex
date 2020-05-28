@@ -7,14 +7,14 @@
 \section{Tracking in a rectangle-like area}
 \label{sec:rectangle}
 
-This section develops an effective and efficient way to track a moving object in a rectangle-like area. Note that though it is possible to do a tracking in a rectangular area, however, it is really hard to design such a shape and at the same time develop such an efficient algorithm. Thus, we alternatively define a rectangle-like area.
+This section develops an effective and efficient way to track a moving object in a rectangle-like area. Though it is possible to do a tracking in a rectangular area, however, it is really hard to design such a shape and at the same time develop such an efficient algorithm. Thus, we alternatively define a rectangle-like area.
 
 
 \subsection{Building the rectangle-like areas}
 
 Like the circular area related to \sed and the strip area related to \ped, a rectangle-like area is also related to a Euclidean distance metric, namely the binary Euclidean distances of \sed and \ped.
 
-\stitle{Binary Euclidean distances of \sed and \ped}, shortly \bed (\sed, \ped), is the combination of distance metrics \sed and \ped where their error bounds are set separately to $\epsilon_{sed}$ and $\epsilon_{ped}$, such that (1) if $\epsilon_{ped} \ge \epsilon_{sed}$, then it falls back to the \sed, \ie tracking in a circular area, otherwise, (2) it is the double effects of \ped and \sed, and forms a rectangle-like shape whose short sides are replaced by circular arcs of \sed as shown in {Figure~\ref{fig:areas}-(3)}. Note that if $\epsilon_{ped} << \epsilon_{sed}$, then its effect is actually approximate to a \ped.
+\stitle{Binary Euclidean distances of \sed and \ped}, shortly \bed (\sed, \ped), is the combination of distance metrics \sed and \ped where their error bounds are set separately to $\epsilon_{sed}$ and $\epsilon_{ped}$, such that (1) if $\epsilon_{ped} \ge \epsilon_{sed}$, then it falls back to the \sed, \ie tracking in a circular area, otherwise, (2) it is the double effects of \ped and \sed, and forms a rectangle-like shape whose short sides are replaced by circular arcs of \sed as shown in {Figure~\ref{fig:areas}-(3)}. Obviously, if $\epsilon_{ped} << \epsilon_{sed}$, then its effect is actually approximate to a \ped.
 
 %By combining \sed and \ped, we get a 
 The shape of a rectangle-like area is controlled by two independent parameters, $\epsilon_{ped}$ and $\epsilon_{sed}$, thus, by carefully setting them, we not only build such rectangle-line areas that satisfy the needs of varied applications but also balance two performance metrics, the compression ratios and the errors of spatio-temporal queries, of trajectory simplification/tracking algorithms. 
@@ -74,10 +74,10 @@ For the same example of ``the school boy on his way home" mentioned in Section \
 			\end{minipage}
 		}
 	\end{center}
-	\vspace{-1ex}
+	\vspace{-2ex}
 	\caption{\small Trajectory tracking based on sector and cone.}
 	\label{alg:bitt}
-	\vspace{-1ex}
+	\vspace{-2ex}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -88,29 +88,29 @@ Indeed, it is a double check of cone intersection and sector intersection for ea
 %
 \bitt is the super version of \citt and \sitt, that is, if $\epsilon_{sed} >> \epsilon_{ped}$, then ``$\overline{P_sP_{i}}$ does not pass $\mathcal{R}^*$" of line 7 and ``$sed(P_i, \vv{v}) \ge \epsilon_{sed}$" of line 11 are always false, thus \bitt falls back to \sitt. \todo{Similarly, if $\epsilon_{sed} \le \epsilon_{ped}$, then it falls back to \citt.}
 
+
+
+
 \begin{example}
-Figure {\todo.} is a running example of \bitt. 
+	Figure~\ref{fig:bitt} is a running example of \bitt. It takes as inputs the same trajectory as the above, the same $\epsilon_{sed}$ as Figure~\ref{fig:citt} and an $\epsilon_{ped}$ of half that of Figure~\ref{fig:sitt}. Because, its $\epsilon_{sed}$ is the same as Figure~\ref{fig:citt}, its effectiveness is also the same as Figure~\ref{fig:citt}. We do not show those cones on the figure for the purpose of clearness.
+	%
+	\bitt uses full-$\epsilon_{sed}$ cones and full-$\epsilon_{ped}$ sectors to simplify the trajectory. Initially, it sets the same start point and initial velocity as Figure~\ref{fig:citt}, 
+	Then, (1) $P_3$ lives in the common intersection of the preview cones and sectors, and it has both \sed and \ped distances larger than $\epsilon_{sed}$ and $\epsilon_{ped}$, respectively, \ie $|P_3P'_3| \ge \epsilon_{sed}$ and $|P_3P^*_3| \ge \epsilon_{ped}$, thus, \bitt updates the velocity from $\vec{v_1}$ to $\vec{v_3}$ and the process goes on, (2) $P_5$ is outside of the common intersections of the preview cones and sectors, thus, $P_4$ serves as the new start point, and an update is triggered, and (3) $P_7$ lives in the common intersections of the preview cones and sectors, and it has a \ped distance larger than $\epsilon_{ped}$, thus, \bitt updates the velocity from $\vec{v_5}$ to $\vec{v_7}$ (not shown) and the process goes on. Finally, this algorithm sends three points, $P_0, P_4$ and $P_8$, and four velocities, $\vec{v_1}$, $\vec{v_3}$, $\vec{v_5}$ and $\vec{v_7}$, to the MOD server. 
+	\bitt ensures that any removed point is located in a rectangle-like area around its expected position \wrt a velocity of trajectory tracking or a line segment connecting two neighboring data points of the simplified trajectory, \eg $P_2$ is in the rectangle-like area around its synchronized point $P'_2$ \wrt line segment $\overline{P_0P_4}$. 
 \end{example}
 
-
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=1.0]{figures/Fig-BITT.png}
+	\vspace{-2ex}
+	\caption{\small A running example of \bitt. The spatio-temporal cones and their intersections are not shown here, because in this case, their are the same as Figure~\ref{fig:citt}. }
+	\vspace{-2ex}
+	\label{fig:bitt}
+\end{figure}
 
 \stitle{Correctness and complexity.} 
 The correctness of algorithm \bitt follows from Theorem \ref{theo-binary}.
 It is also easy to find that it has a linear time complexity like \citt and \sitt.
 
-\eat{%%%%%%%%%%%%
-weak tracking
 
--- principle, adjust velocity...
-	must checking \textcolor{blue}{consistently} of cone, sector and interval, couple with ldr.
-	if the common intersection of all metrics is false, then new line segment.
-	otherwise, checks ldr, 	if any ldr is false, then adjust velocity, point select from the common area.
-	
--- algorithm. intersection based trajectory tracking (ITT-W)
-
--- example
-
--- correctness and complexity
-}%%%%%%%%%%%%eat
-
-\stitle{Discuss.} Relations to position tracking and traj simplification. 
+%\stitle{Discuss.} Relations to position tracking and traj simplification. 
