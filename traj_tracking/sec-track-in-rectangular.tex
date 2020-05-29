@@ -24,13 +24,15 @@ For the same example of ``the school boy on his way home" mentioned in Section \
 
 \subsection{Tracking by cone and sector}
 
+Is there an effective and efficient trajectory algorithm implementing \bed that tracks a moving object in a rectangle-like area? Theorem \ref{theo-binary} is the answer to this question.
 \begin{theorem}
 	\label{theo-binary}
 	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and two error bounds $\epsilon_{sed}$ and $\epsilon_{ped}$, it can be tracked in rectangle-like areas by combining sectors and spatio-temporal cones.
 \end{theorem}
 
+To track the positions and simplify the trajectory at the same time in a rectangle-like area, it is important to make sure that during the processing of a sub-trajectory $[P_s,...,P_{s+k}]$, there are the same start point $P_s$ and the same velocity $\vec{v}$ for each technique of spatio-temporal cones, sectors, and position tracking of \ped and \sed, such that a strip and a circle \wrt a velocity $\vec{v}$ or a line segment $\overline{P_sP_{s+i}}$, $0<i\le k$, exactly form a rectangle-like area. This is the guideline to develop such a trajectory tracking algorithm. 
 
-\todo{Could ``$|P_sP_{i}| \le l_{m} - \epsilon$" be replaced by a more relaxed constrain, by benefiting from \sed?}
+
 
 
 
@@ -55,11 +57,11 @@ For the same example of ``the school boy on his way home" mentioned in Section \
 					\icc \hspace{1ex}\= update ($P_{s}, \vv{v}$); 	\\
 					\icc \hspace{1ex}\= $i:= 2$;  	\\
 					\icc \hspace{1ex}\= while $i \le n$ do \\
-					\icc \>\hspace{3ex} if $\overline{P_sP_{i}}$ ~does not pass~ $\mathcal{S}^*~or~\mathcal{R}^*$, or $|P_sP_{i}| \le l_{m} - \epsilon$ then \\ % // updates velocity and location \\
+					\icc \>\hspace{3ex} if $\overline{P_sP_{i}}$ ~does not pass~ $\mathcal{R}^*~or~\mathcal{S}^*$, or $|P_sP_{i}| \le l_{m} - \epsilon_{ped}$ then \\ % // updates velocity and location \\
 					\icc \>\hspace{7ex}    $P_s := P_{i-1}$; ~~~~$\mathcal{R}^*$ := $\emptyset$;~~~~$\mathcal{S}^*$ := $\emptyset$; ~~~~$l_{m} = |P_sP_{i}|$;\\
 					\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_sP_{i}|}{P_{i}.t-P_s.t}$; ~~~~$\vv{v}.\theta:=\overline{P_{s}P_{i}}.\theta$;  \\
 					\icc \>\hspace{7ex}    update ($P_{s}, \vv{v}$); 	\\
-					\icc \>\hspace{3ex} else if $ped(P_i, \vv{v}) \ge \epsilon_{ped}$ ~or~ $sed(P_i, \vv{v}) \ge \epsilon_{sed}$ then  \\ %$\overline{P_sP_{i}}$ ~passes ~ $\mathcal{R}^*$ and $\mathcal{S}^*$, $|P_sP_{i}| > l_{m} - \epsilon$ \\ \hspace{9ex} ~and~
+					\icc \>\hspace{3ex} else if $sed(P_i, \vv{v}) \ge \epsilon_{sed}$ ~or~ $ped(P_i, \vv{v}) \ge \epsilon_{ped}$ then  \\ %$\overline{P_sP_{i}}$ ~passes ~ $\mathcal{R}^*$ and $\mathcal{S}^*$, $|P_sP_{i}| > l_{m} - \epsilon$ \\ \hspace{9ex} ~and~
 					\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_sP_{i}|}{P_{i}.t-P_s.t}$; ~~~~$\vv{v}.\theta:=\overline{P_sP_{i}}.\theta$; \\
 					\icc \>\hspace{7ex}    update ($\vv{v}$); \\
 					\icc \>\hspace{3ex} if $\mathcal{S}^*=\emptyset$ then $\mathcal{R}^*:=$ \kw{getRPolygon}($P_s$, $P_{i}$, $\epsilon_{sed}$, $m$, $P_{s+1}.t$); \\
@@ -82,13 +84,13 @@ For the same example of ``the school boy on his way home" mentioned in Section \
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Implementation.}
-We now present the algorithm of \underline{B}inary \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (BITT) that tracks moving objects in combined areas of circular and strip by \sed and \ped, as shown in Figure~\ref{alg:bitt}. 
+We now present the algorithm of \underline{B}inary \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (BITT) that tracks moving objects in a rectangle-like area of \bed, as shown in Figure~\ref{alg:bitt}. 
 %
 Indeed, it is a double check of cone intersection and sector intersection for each point for the purpose of trajectory simplification, and a double check of \sed and \ped distance deviations for position tracking. In addition to that, it uses a uniform velocity $\vv{v}$ for both position tracks of \sed and \ped such that either deviation of \ped or \sed distance will cause an update of velocity $\vv{v}$. 
 %
-\bitt is the super version of \citt and \sitt, that is, if $\epsilon_{sed} >> \epsilon_{ped}$, then ``$\overline{P_sP_{i}}$ does not pass $\mathcal{R}^*$" of line 7 and ``$sed(P_i, \vv{v}) \ge \epsilon_{sed}$" of line 11 are always false, thus \bitt falls back to \sitt. \todo{Similarly, if $\epsilon_{sed} \le \epsilon_{ped}$, then it falls back to \citt.}
+\bitt is the super version of \citt and \sitt, that is, if $\epsilon_{sed} >> \epsilon_{ped}$, then ``$\overline{P_sP_{i}}$ does not pass $\mathcal{R}^*$" of line 7 and ``$sed(P_i, \vv{v}) \ge \epsilon_{sed}$" of line 11 are always false, thus \bitt falls back to \sitt. {Similarly, if $\epsilon_{sed} \le \epsilon_{ped}$, then it falls back to \citt.}
 
-
+\todo{Could ``$|P_sP_{i}| \le l_{m} - \epsilon$" be replaced by a more relaxed constrain, by benefiting from \sed?}
 
 
 \begin{example}
