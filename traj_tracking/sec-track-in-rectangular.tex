@@ -30,7 +30,7 @@ Is there an effective and efficient trajectory algorithm implementing \bed that 
 	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and two error bounds $\epsilon_{sed}$ and $\epsilon_{ped}$ satisfying $\epsilon_{sed} > \epsilon_{ped}$, it can be tracked in rectangle-like areas by combining sectors and spatio-temporal cones.
 \end{theorem}
 
-To track the positions and simplify the trajectory at the same time in a rectangle-like area, it is important to make sure that during the processing of a sub-trajectory $[P_s,...,P_{s+k}]$, there are the same start point $P_s$ and the same velocity $\vec{v}$ for each technique of spatio-temporal cones, sectors, and position tracking of \ped and \sed, such that a strip and a circle \wrt a velocity $\vec{v}$ or a line segment $\overline{P_sP_{s+i}}$, $0<i\le k$, exactly form a rectangle-like area. This is the guideline to develop such a trajectory tracking algorithm. 
+To track the positions and at the same time simplify the trajectory in a rectangle-like area, it is important to make sure that during the processing of a sub-trajectory $[P_s,...,P_{s+k}]$, there are the same start point $P_s$ and the same velocity $\vec{v}$ for each technique of spatio-temporal cones, sectors, and position tracking of \ped and \sed, such that a strip and a circle \wrt a velocity $\vec{v}$ or a line segment $\overline{P_sP_{s+i}}$, $0<i\le k$, exactly form a rectangle-like area. This is the guideline to develop such a trajectory tracking algorithm. 
 
 
 
@@ -78,11 +78,11 @@ To track the positions and simplify the trajectory at the same time in a rectang
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Implementation.}
-We now present the algorithm of \underline{B}inary \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (BITT) that tracks moving objects in a rectangle-like area of \bed, as shown in Figure~\ref{alg:bitt}. 
+We now present the algorithm of \underline{B}inary \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (BITT) that tracks moving objects in a rectangle-like area of \bed (see Figure~\ref{alg:bitt}). 
 %
-Indeed, it is a double check of cone intersection and sector intersection for each point for the purpose of trajectory simplification, and a double check of \sed and \ped distance deviations for position tracking. In addition to that, it uses a uniform velocity $\vv{v}$ for both position tracks of \sed and \ped such that either deviation of \ped or \sed distance will cause an update of velocity $\vv{v}$. 
+\bitt is the double checks of cone intersection and sector intersection for each point for the purpose of trajectory simplification, and the double checks of \sed and \ped distance deviations for position tracking. In addition to that, it uses a uniform velocity $\vv{v}$ for both position tracks of \sed and \ped such that either deviation of \ped or \sed distance will cause an update of velocity $\vv{v}$. 
 %
-\bitt is the super version of \citt and \sitt, that is, if $\epsilon_{sed} >> \epsilon_{ped}$, then ``$\overline{P_sP_{i}}$ does not pass $\mathcal{R}^*$" of line 7 and ``$sed(P_i, \vv{v}) \ge \epsilon_{sed}$" of line 11 are always false, thus \bitt falls back to \sitt. {Similarly, if $\epsilon_{sed} \le \epsilon_{ped}$, then it falls back to \citt.}
+Indeed, \bitt is the super version of \citt and \sitt, that is, if $\epsilon_{sed} >> \epsilon_{ped}$, then ``$\overline{P_sP_{i}}$ does not pass $\mathcal{R}^*$" of line 7 and ``$sed(P_i, \vv{v}) \ge \epsilon_{sed}$" of line 11 are always false, thus \bitt falls back to \sitt. {Similarly, if $\epsilon_{sed} \le \epsilon_{ped}$, then it falls back to \citt.}
 
 
 
