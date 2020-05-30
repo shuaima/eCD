@@ -52,23 +52,23 @@ To track the positions and simplify the trajectory at the same time in a rectang
 					{\bf Algorithm}~\bitt $(\dddot{\mathcal{T}}[P_0,\ldots,P_n], ~\epsilon_{sed}, m, ~\epsilon_{ped})$\\
 					%	\sstab
 					\bcc \hspace{1ex}\= $P_s := P_0$; ~~~~$\mathcal{R}^*$ := \kw{getRPolygon}($P_s$, $P_{s+1}$, $\epsilon_{sed}$, $m$, $P_{s+1}.t$); \\
-					\icc \hspace{1ex}\= $\mathcal{S}^*$ := \kw{getSector}($P_s$, $P_{s+1}$, $\epsilon_{ped}$); ~~~~$l_{m} = |P_sP_{s+1}|$;\\
+					\icc \hspace{1ex}\= $\mathcal{S}^*$ := \kw{getSector}($P_s$, $P_{s+1}$, $\epsilon_{ped}$); \\
 					\icc \hspace{1ex}\= $|\vv{v}|:=\frac{|P_{s}P_{s+1}|}{P_{s+1}.t-P_s.t}$; ~~~~$\vv{v}.\theta:=\overline{P_{s}P_{s+1}}.\theta$;  \\
 					\icc \hspace{1ex}\= update ($P_{s}, \vv{v}$); 	\\
-					\icc \hspace{1ex}\= $i:= 2$;  	\\
+					\icc \hspace{1ex}\= $l_{m} := |P_sP_{s+1}|$; ~~~~$i:= 2$;  	\\
 					\icc \hspace{1ex}\= while $i \le n$ do \\
-					\icc \>\hspace{3ex} if $\overline{P_sP_{i}}$ ~does not pass~ $\mathcal{R}^*~or~\mathcal{S}^*$, or $|P_sP_{i}| < l_{m}$ then \\ % // updates velocity and location \\
-					\icc \>\hspace{7ex}    $P_s := P_{i-1}$; ~~~~$\mathcal{R}^*$ := $\emptyset$;~~~~$\mathcal{S}^*$ := $\emptyset$; ~~~~$l_{m} = |P_sP_{i}|$;\\
+					\icc \>\hspace{3ex} if $\overline{P_sP_{i}}$ ~does not pass~ $\mathcal{R}^*~or~\mathcal{S}^*$, or $|P_sP_{i}| < l_{m}$ ~then \\ % // updates velocity and location \\
+					\icc \>\hspace{7ex}    $P_s := P_{i-1}$; ~~~~$\mathcal{R}^*$ := $\emptyset$;~~~~$\mathcal{S}^*$ := $\emptyset$; ~~~~$l_{m} := 0$;\\
 					\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_sP_{i}|}{P_{i}.t-P_s.t}$; ~~~~$\vv{v}.\theta:=\overline{P_{s}P_{i}}.\theta$;  \\
 					\icc \>\hspace{7ex}    update ($P_{s}, \vv{v}$); 	\\
-					\icc \>\hspace{3ex} else if $sed(P_i, \vv{v}) \ge \epsilon_{sed}$ ~or~ $ped(P_i, \vv{v}) \ge \epsilon_{ped}$ then  \\ %$\overline{P_sP_{i}}$ ~passes ~ $\mathcal{R}^*$ and $\mathcal{S}^*$, $|P_sP_{i}| > l_{m} - \epsilon$ \\ \hspace{9ex} ~and~
+					\icc \>\hspace{3ex} else if $sed(P_i, \vv{v}) \ge \epsilon_{sed}$ ~or~ $ped(P_i, \vv{v}) \ge \epsilon_{ped}$ ~then  \\ %$\overline{P_sP_{i}}$ ~passes ~ $\mathcal{R}^*$ and $\mathcal{S}^*$, $|P_sP_{i}| > l_{m} - \epsilon$ \\ \hspace{9ex} ~and~
 					\icc \>\hspace{7ex}    $|\vv{v}|:=\frac{|P_sP_{i}|}{P_{i}.t-P_s.t}$; ~~~~$\vv{v}.\theta:=\overline{P_sP_{i}}.\theta$; \\
 					\icc \>\hspace{7ex}    update ($\vv{v}$); \\
-					\icc \>\hspace{3ex} if $\mathcal{S}^*=\emptyset$ then $\mathcal{R}^*:=$ \kw{getRPolygon}($P_s$, $P_{i}$, $\epsilon_{sed}$, $m$, $P_{s+1}.t$); \\
-					\icc \>\hspace{7ex}    $\mathcal{S}^*:=$ \kw{getSector}($P_s$, $P_{i}$, $\epsilon_{ped}$); \\
+					\icc \>\hspace{3ex} if $\mathcal{S}^*=\emptyset$ ~then~ $\mathcal{S}^*:=$ \kw{getSector}($P_s$, $P_{i}$, $\epsilon_{ped}$);\\
+					\icc \>\hspace{7ex}     $\mathcal{R}^*:=\mathcal{R}^*\bigsqcap$ \kw{getRPolygon}($P_s$, $P_{i}$, $\epsilon_{sed}$, $m$, $P_{s+1}.t$); \\
 					\icc \>\hspace{3ex} else $\mathcal{R}^*:=$ \kw{getRPolygon}($P_s$, $P_{i}$, $\epsilon_{sed}$, $m$, $P_{s+1}.t$); \\
-					\icc \>\hspace{7ex}    $\mathcal{S}^*$ := $\mathcal{S}^*\bigsqcap$ \kw{getSector}($P_s$, $P_{i}$, $\epsilon_{ped}$); $l_{m} = \max\{|P_sP_{i}|, l_{m}\}$;\\
-					\icc \>\hspace{3ex} $i$ := $i +1$;\\
+					\icc \>\hspace{7ex}    $\mathcal{S}^*$ := $\mathcal{S}^*\bigsqcap$ \kw{getSector}($P_s$, $P_{i}$, $\epsilon_{ped}$); \\
+					\icc \>\hspace{3ex} $l_{m} := \max\{|P_sP_{i}|, l_{m}\}$;  ~~~~$i$ := $i +1$;\\
 					\icc \>\hspace{0ex} update ($P_{n}$); 
 				}
 				\vspace{-2ex}
