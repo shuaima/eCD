@@ -31,7 +31,7 @@ Next, for data simplification using \ped, the most efficient and effective way t
 Given a sequence of points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$,
 for the start data point $P_s$, any point $P_{s+i}$ and $|\overline{P_sP_{s+i}}|>\epsilon$ ($i\in[1, k]$), there are two directed lines $\overline{P_sP^u_{s+i}}$ and $\overline{P_sP^l_{s+i}}$ such that $ped(P_{s+i}, \overline{P_sP^u_{s+i}})$ $=$ $ped(P_{s+i}, \overline{P_sP^l_{s+i}}) = \epsilon$ and either ($\overline{P_sP^l_{s+i}}.\theta < \overline{P_sP^u_{s+i}}.\theta ~and~\overline{P_sP^u_{s+i}}.\theta - \overline{P_sP^l_{s+i}}.\theta <\pi$) or ($\overline{P_sP^l_{s+i}}.\theta > \overline{P_sP^u_{s+i}}.\theta ~and~ \overline{P_sP^u_{s+i}}.\theta - \overline{P_sP^l_{s+i}}.\theta < -\pi)$. Indeed, they form a \emph{sector} \sector{(P_s, P_{s+i}, \epsilon)} that takes $P_s$ as the center point and $\overline{P_sP^u_{s+i}}$ and $\overline{P_sP^l_{s+i}}$ as the borderlines (Figure~\ref{fig:sleeve}-(1)).
 %
-Then, like the checking of the common intersection of spatio-temporal cones in \cised, these sector-based algorithms check the common intersection of sectors, \ie $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon)} $\ne \{P_s\}$ \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}, to find out whether the sub-trajectory can be represented by a line segment $\overline{P_sQ}$ \wrt error bound $\epsilon$, where $Q$ is a point that may not belong to the sub-trajectory. However, if $Q$ must be $P_{s+k}$, the last point of the sub-trajectory, \eg $P_3$ in Figure~\ref{fig:sleeve}-(2), then (1) the full-$\epsilon$ sectors should be replaced by half-$\epsilon$ sectors, and (2) $P_{s+k}$ should be one of the points having the furthest distances to $P_s$, \ie $|P_sP_{s+k}| > max\{|P_sP_{s+i}|\} - \epsilon$~for each $i \in (0, k)$. 
+Then, like the checking of the common intersection of spatio-temporal cones in \cised, these sector-based algorithms check the common intersection of sectors, \ie $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon)} $\ne \{P_s\}$ \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}, to find out whether the sub-trajectory can be represented by a line segment $\overline{P_sQ}$ \wrt error bound $\epsilon$, where $Q$ is a point that may not belong to the sub-trajectory. However, if $Q$ must be $P_{s+k}$, the last point of the sub-trajectory, \eg $P_3$ in Figure~\ref{fig:sleeve}-(2), then (1) the full-$\epsilon$ sectors should be replaced by half-$\epsilon$ sectors, and (2) $P_{s+k}$ should be one of the points having the furthest distances to $P_s$, \ie $|P_sP_{s+k}| \ge max\{|P_sP_{s+i}|\}$~for each $i \in (0, k)$. 
 %
 
 \begin{figure}[tb!]
@@ -60,7 +60,7 @@ Because the half-$\epsilon$ sectors may limit its performance of compression rat
 
 \begin{theorem}
 	\label{theo-full-sector}
-	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $ped(P_{s+i}, \overline{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if line segment $\overline{P_sP_{s+k}}$ passes through $\bigsqcap_{i=1}^{k-1}$\sector{(P_s, P_{s+i}, \epsilon)} - \{$P_s$\} ~and~ $|P_sP_{s+k}| > (max\{|P_sP_{s+i}|\} - \epsilon)$ for each $i \in (0, k)$.
+	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $ped(P_{s+i}, \overline{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if line segment $\overline{P_sP_{s+k}}$ passes through $\bigsqcap_{i=1}^{k-1}$\sector{(P_s, P_{s+i}, \epsilon)} - \{$P_s$\} ~and~ $|P_sP_{s+k}| \ge max\{|P_sP_{s+i}|\}$ for each $i \in (0, k)$.
 \end{theorem}
 
 Theorem \ref{theo-full-sector} tells that full-$\epsilon$ sectors with a constrain that $\overline{P_sP_{s+k}}$ passes through the common intersection of the preview sectors, can also be used to track a moving object in a strip area.
@@ -89,7 +89,7 @@ Theorem \ref{theo-sector-vs} tells that the full-$\epsilon$ sector approach also
 					\icc \hspace{1ex}\= update ($P_{s}, \vv{v}$); 	\\
 					\icc \hspace{1ex}\= $i:= 2$;  	\\
 					\icc \hspace{1ex}\= while $i \le n$ do \\
-					\icc \>\hspace{3ex} if $\overline{P_sP_{i}}$ ~does not pass~ $\mathcal{S}^*$ or $|P_sP_{i}| \le l_{m} - \epsilon$ then \\ % // updates velocity and location \\
+					\icc \>\hspace{3ex} if $\overline{P_sP_{i}}$ ~does not pass~ $\mathcal{S}^*$ or $|P_sP_{i}| < l_{m}$ then \\ % // updates velocity and location \\
 					\icc \>\hspace{7ex}    $P_s := P_{i-1}$; ~~~~$\mathcal{S}^*$ := $\emptyset$; ~~~~$l_{m} = |P_sP_{i}|$;\\
 					\icc \>\hspace{7ex}    $\vv{v}.\theta:=\overline{P_{s}P_{i}}.\theta$;  \\
 					\icc \>\hspace{7ex}    update ($P_{s}, \vv{v}$); 	\\
