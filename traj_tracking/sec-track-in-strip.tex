@@ -123,7 +123,7 @@ We then present a one-pass trajectory tracking algorithm based on full-$\epsilon
 	\includegraphics[scale=1.0]{figures/Fig-SITT.png}
 	\vspace{-2ex}
 	\caption{\small A running example of trajectory tracking by \sitt.  }
-	\vspace{-1ex}
+	\vspace{-2ex}
 	\label{fig:sitt}
 \end{figure}
 
@@ -132,9 +132,6 @@ Figure~\ref{fig:sitt} is a running example of \sitt taking the same input as Fig
 Note that during tracking, the moving object is in a strip around the velocity; and after simplification, those removed points are located in $2\epsilon$--width strips around those saved points.
 \end{example}
 
-%\todo{tips for points having distances to $P_s$ smaller than $\epsilon$.}
-
-
 
 
 \stitle{Correctness and complexity.} 
@@ -142,21 +139,4 @@ The correctness of algorithm \sitt follows from Theorems \ref{theo-half-sector} 
 It is also easy to find that every point is processed only once in \sitt, and for each point, it needs $O(1)$ time as getSector() \cite{Zhao:Sleeve}, intersecting of sectors \cite{Zhao:Sleeve} and {other operations} all have a time complexity of $O(1)$. Hence, \sitt has a time complexity of $O(n)$, where $n$ is the number of data points.
 
 
-\eat{%%%%%%%%
-	\begin{example}
-		\label{exm-alg-sleeve}
-		Figure~\ref{fig:sleeve} is a running example of algorithm \siped($\frac{\epsilon}{2}$) taking as input the same trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$. At the beginning, $P_0$ is the first start point, and points $P_1$, $P_2$, $P_3$, etc., each has a narrow \emph{sector}.
-		For example, the narrow \emph{sector} $\mathcal{S}$($P_0$, $P_{3}$, $\epsilon/2$) takes $P_0$ as the center point and $\overline{P_0P^u_{3}}$ and $\overline{P_0P^l_{3}}$ as the borderlines.
-		Because $\bigsqcap_{i=1}^{4}\mathcal{S}(P_0, P_{0+i}, \epsilon/2) \ne \{P_0\}$ and $\bigsqcap_{i=1}^{5}\mathcal{S}(P_0, P_{0+i}, \epsilon/2) = \{P_0\}$, $\overline{P_0P_4}$ is output and $P_4$ becomes the start point of the next section.
-		At last, the algorithm outputs two continuous line segments $\overline{P_0P_4}$ and $\overline{P_4P_{10}}$.
-	\end{example}
-	
-	\begin{figure}[tb!]
-		\centering
-		\includegraphics[scale=0.66]{Figures/Fig-sleeve.jpg}
-		\vspace{-2ex}
-		\caption{\small The trajectory $\dddot{\mathcal{T}}$ is compressed by the sector intersection algorithm using \ped to two line segments.}
-		\vspace{-1ex}
-		\label{fig:sleeve}
-	\end{figure}
-}%%%%%%%%
+
