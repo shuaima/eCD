@@ -117,6 +117,7 @@ Theorem \ref{theo-sector-vs} tells that the full-$\epsilon$ sector approach also
 
 We then present a one-pass trajectory tracking algorithm based on full-$\epsilon$ sector, named \underline{S}ector \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (\sitt). As shown in Figure ~\ref{alg:sitt}, \sitt runs in a similar routine as \citt excepts that (1) \sed and spatio-temporal cone are replaces by \ped and sector, (2) only the direction information of $\vv{v}$ is needed while the speed information is not, such that when a distance deviation occurs, \sitt quickly finds out a new feasible direction of velocity $\vv{v}$ by the intersection of sectors and sends it to the MOD server, and (3) it temporarily saves the maximum length of $|P_sP_{s+j}|$, $j\in (0, i)$, in $l_m$ and compares it with the length $|P_sP_{s+i}|$ of the current point $P_{s+i}$ during the process, as mentioned in Theorem \ref{theo-full-sector}. 
 %
+During tracking, the moving object is in a strip around the velocity. And after simplification, those removed points are located in $2\epsilon$--width strips around those saved points.
 
 \begin{figure}[tb!]
 	\centering
@@ -128,8 +129,7 @@ We then present a one-pass trajectory tracking algorithm based on full-$\epsilon
 \end{figure}
 
 \begin{example}
-Figure~\ref{fig:sitt} is a running example of \sitt taking the same input as Figure~\ref{fig:citt}. It uses full-$\epsilon$ sectors, (1) $P_4$ lives in the common intersection of \sector{_{1}}, \sector{_{2}} and \sector{_{3}} and it has a \ped distance larger than $\epsilon$ to $\vec{v_1}$, thus, \sitt updates the velocity from $\vec{v_1}$ to $\vec{v_4}$ and the process goes on, and (2) $P_5$ is outside of the common intersection of the preview sectors, thus, $P_4$ serves as the new start point, and an update is triggered. Finally, this algorithm sends three points, $P_0, P_4$ and $P_8$, and three velocities, $\vec{v_1}$, $\vec{v_4}$ and $\vec{v_5}$, to the MOD server. 
-Note that during tracking, the moving object is in a strip around the velocity; and after simplification, those removed points are located in $2\epsilon$--width strips around those saved points.
+Figure~\ref{fig:sitt} is a running example of \sitt taking the same input as Figure~\ref{fig:citt}. It uses full-$\epsilon$ sectors, (1) $P_4$ lives in the common intersection of \sector{_{1}}, \sector{_{2}} and \sector{_{3}} and it has a \ped distance larger than $\epsilon$ to $\vec{v_1}$, thus, \sitt updates the velocity from $\vec{v_1}$ to $\vec{v_4}$ and the process goes on, and (2) $P_5$ is outside of the common intersection of the preview sectors, thus, $P_4$ serves as the new start point, and an update is triggered. Finally, \sitt sends three points, $P_0, P_4$ and $P_8$, and three velocities, $\vec{v_1}$, $\vec{v_4}$ and $\vec{v_5}$, to the MOD server. 
 \end{example}
 
 
