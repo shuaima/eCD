@@ -44,6 +44,8 @@
 
 \newcommand{\vv}{\overrightarrow}
 
+
+\newcommand{\todo}[1]{\textcolor{red}{Todo...#1}}
 \begin{document}
 
 
@@ -94,6 +96,26 @@ We have fixed this bug and added ``weak simplification" algorithms that allow in
 Thanks!
 
 \textbf{[R1C3]} \emph{ For trajectories that capture the moving objects' movement along the road network, the points are normally mapped to road networks. In other words, it is not necessary to use piece-wise line representation. It looks like the authors have not considered this case, which is actually one of the most common cases. Can the authors please explain why map-matching step is not considered even for trajectories that capture the movements in road networks? }
+
+
+We do not consider map-matching as the pre-process of trajectory simplification for some serious considerations:
+
+(1) First of all, \emph{any original trajectory is naturally a sequence of piece-wise line segments}, and from the point of views of data management and data analysis, saving a trajectory as a sequence of data points (either original or simplified) is a lighter, easier and more efficient way than saving the map-matched data. Thus, \emph{map-matching is not necessary the pre-process of trajectory simplification.} 
+%On the contrary, presenting a trajectory on roads needs extra information (road network) and extra heavy computation (map-matching).
+
+
+(2) Moving objects often move in areas not on roads or without fine road network. For example, human being, wild animals, bikes, air plane may move on ground, at gardens, in countryside and in the atmosphere, where no fine road information is available. In these cases, \emph{map-matching should not be the pre-step of trajectory simplification.}
+
+(3) In urban having road network, of cause, the data points could be mapped to road networks. However, this is not a work must be done. In some server-side applications like moving object monitoring, it just shows the piece-wise line trajectory on a map without map-matching in the consideration of efficiency. Besides, map-matching is most likely an application-level task called by application such as navigation. As we known, trajectory simplification as a fundamental functionality should (better) not depend on these high-level applications. Thus, \emph{map-matching should not be the pre-step of trajectory simplification too.}
+%
+We also know that there is a kind of trajectory compression called road-aware trajectory compression [ref song:press, Gotsman:Dilution] that either first maps a trajectory to road network then simplifies those mapped data points by \emph{numerical streams} method[Elmeleegy:Numerical], such as PRESS [ref song:press], or first simplifies the trajectory by some line simplification method then maps the result to roads, such as the Dilution-matching-encoding method [ref Gotsman:Dilution]. In the first case, there is no line simplification, and in the second case, line simplification is before, and hence independence of, map-matching. 
+
+(4) Let map-matching be the pre-step will require extra information (road network) and extra heavy computation (map-matching), and introduce extra error and running time, which make it hard to compare trajectory simplification and/or compression algorithms in a fair circumstance.
+
+Thus, in this paper, we focus on line simplification and let alone map-matching.
+
+[r]"Hazem Elmeleegy, et al., Online Piece-wise Linear Approximation of Numerical Streams with Precision Guarantees"
+
 
 \textbf{[R1C4]} \emph{ In Page 6 (line 19), it is stated "all points in the simplified trajectory belong to the original trajectory"? Why? If the error bound is the requirement, why we are not allowed to introduce new points, if it helps to improve the compression rate without violating the error bound defined? This is related to my comment C1. }
 
