@@ -108,24 +108,35 @@ We do not consider map-matching as the pre-process of trajectory simplification 
 
 (3) In urban having road network, of cause, the data points could be mapped to road networks. However, this is not a work must be done. In some server-side applications like moving object monitoring, it just shows the piece-wise line trajectory on a map without map-matching in the consideration of efficiency. Besides, map-matching is most likely an application-level task called by application such as navigation. As we known, trajectory simplification as a fundamental functionality should (better) not depend on these high-level applications. Thus, \emph{map-matching should not be the pre-step of trajectory simplification too.}
 %
-We also know that there is a kind of trajectory compression called road-aware trajectory compression [ref song:press, Gotsman:Dilution] that either first maps a trajectory to road network then simplifies those mapped data points by \emph{numerical streams} method[Elmeleegy:Numerical], such as PRESS [ref song:press], or first simplifies the trajectory by some line simplification method then maps the result to roads, such as the Dilution-matching-encoding method [ref Gotsman:Dilution]. In the first case, there is no line simplification, and in the second case, line simplification is before, and hence independence of, map-matching. 
+We also know that there is a kind of trajectory compression called road-aware trajectory compression [r1, r2] that either first maps a trajectory to road network then simplifies those mapped data points by \emph{numerical streams} method[r3], such as PRESS [r1], or first simplifies the trajectory by some line simplification method then maps the result to roads, such as the Dilution-matching-encoding method [r2]. In the first case, there is no line simplification, and in the second case, line simplification is before, and hence independence of, map-matching. 
 
 (4) Let map-matching be the pre-step will require extra information (road network) and extra heavy computation (map-matching), and introduce extra error and running time, which make it hard to compare trajectory simplification and/or compression algorithms in a fair circumstance.
 
 Thus, in this paper, we focus on line simplification and let alone map-matching.
 
-[r]"Hazem Elmeleegy, et al., Online Piece-wise Linear Approximation of Numerical Streams with Precision Guarantees"
+[r1] R. Song, W. Sun, B. Zheng, and Y. Zheng. Press: A novel framework of trajectory compression in road networks. PVLDB, 7(9):661--672, 2014.
+
+[r2] R. Gotsman and Y. Kanza. A dilution-matching-encoding compaction of trajectories over road networks.
+GeoInformatica, 2015.
+
+[r3] H. Elmeleegy, A. K. Elmagarmid, E. Cecchet and W. G. Aref. Online Piece-wise Linear Approximation of Numerical Streams with Precision Guarantees. PVLDB, 2009.
 
 
 \textbf{[R1C4]} \emph{ In Page 6 (line 19), it is stated "all points in the simplified trajectory belong to the original trajectory"? Why? If the error bound is the requirement, why we are not allowed to introduce new points, if it helps to improve the compression rate without violating the error bound defined? This is related to my comment C1. }
 
-Yes, we have extended the scope of the paper and allowed insert new data points. Sentences in Page 6 (line 19) have been revised to meet the new scope.
+Yes, we have extended the scope of the paper and allowed insert new data points. Sentences in Page 6 (line 19) have been revised to meet the new scope. Thank you!
+
+
+
 
 \textbf{[R1C5]} \emph{The three distance metrics used in this paper are mainly for line simplification. However, if we apply line simplification to compress trajectories, some of the metrics are no longer that useful. For example, perpendicular distance metric (PED) does not consider temporal dimension, which means the error bounds based on PED consider spatial distances only. However, temporal dimension is very important to trajectories. I think it is necessary to revisit the metrics and highlight their limitations. Particularly, the error-bounds provided by these metrics could be misleading as the metrics do not fully reflect the loss of information. }
 
 \textbf{[R1C6]} \emph{ The reason that we decide to store the trajectories (or the compressed version of raw trajectories to save storage space) is mainly to support some applications if required later, which might not require $100\%$ accuracy. For example, in order to find out the witness of a fatal car accident, police might want to locate all the drivers who pass by a specific location within a given time window by querying the trajectories. I am not very sure whether the error bounds based on different distance metrics are still valid for specific types of queries. This survey does not consider the applications to be supported by the compressed trajectories at all. However, personally I think it is very important. The authors did include one set of experiments towards the end of the paper. However, I think it is very important to explain the criteria of trajectory compression in the beginning of the paper, to offer the audience a complete image. In this paper, what are the key considerations when we compress trajectories? Is the compression ratio the only requirement? Is it necessary to support certain applications with error bounds? }
 
 \textbf{[R1C7]} \emph{ The definition of Error Bounded Algorithms is not precise as the error bounds are not presented. }
+
+
+
 
 \textbf{[R1C8]} \emph{ Fig.2 in Page 7 gives an example of reachability graph. However, that graph is incomplete. For example, there is no link between $P_0$ and $P_5$ but they are reachable. This is very misleading. }
 
@@ -217,77 +228,6 @@ Namely, [28] considers what happens with compression if the trajectories are con
 
 \emph{3. p.33: the authors make a claim to the effect of: "These methods lack the capability of compressing..." when describing the min-$\epsilon$ variant. The statement needs to be clarified, or put in the more appropriate contexts: the min-$\epsilon$  is a complementary one to min-\# and, as such, it never makes any other claim that it will yield the minimum error, given a fixed "budget" of m points. However, that does not mean that this variant of the problem, and the algorithmic solution, doesn't have its own merits.}
 
-
-
-
-***************************************************************************
-
-
-************************ To be deleted.
-
-\textbf{[R1Ca]} \emph{The scholarship in the paper remains very sloppy and I do not find that {R2W1} or {R3C1} were addressed adequately in the revision only rather begrudgingly in the response letter. Without this, the paper remains a delta off their PED work [15]. The novelty rests on an adequate justification for SED over PED.}
-
-Yes, we totally agree that the novelty also depends on an adequate justification for SED over PED.  For convenience, we also list R3C1 and R2W1 below.
-
-\begin{itemize}
-  \item {{[R3C1]} \emph{From the example in Fig. 1, it is really difficult to tell the difference between PED and SED. It seems that SED will use more line segments due to the given constraint enforced by epsilon. However, why is the compression using SED better than that using PED? If PED is good enough, why do we care about SED? Essentially, the motivation of leaning towards SED is never clear from a practical perspective. I think it all depends on the tolerance at the application level. So I would like the authors to evaluate some real applications on top of the compressed trajectory data, to demonstrate the benefits of using SED. At least, the authors should give some convincing arguments on that.} (Note the latter part of R3C1 is identical to R3C4-2)}
-  \item {{[R2W1]} \emph{The contribution of the paper seems to be limited; the key idea is to approximate circles intersection with polygons intersection to determine when to start a new line segment in the summarized trajectory.}}
-\end{itemize}
-
-We have further clarified these as follows.
-
-(1) For R3C1, we have rewritten the 2nd and 3rd paragraphs of Section 1 to better explain SED and show the benefits of using SED compared with PED.
-More specifically, in the 2nd paragraph, we have introduced PED and explained why it is not suitable for applications like spatio-temporal queries, and in the 3rd paragraph, we have introduced the key idea of SED and explained why it is more suitable for spatio-temporal queries.
-We have also added a new figure (Fig.1 in the revised paper) to help readers to understand the difference between SED and PED. In addition, in the 5th and 6th paragraphs of Section 1, we have further summarized the key difference between one-pass line simplification algorithms using SED and PED, \ie PED works in a 2D space while SED works in a spatio-temporal 3D space, which makes it a new study to design a one-pass line simplification algorithm using SED.
-
-(2) For R2W1, we have rewritten the contributions of the paper in Section 1, and merged the responses of {R2W1} into the revised contributions (contributions 1 and 2). Note the above new introduction and comparison of SED and PED also reveal the novelty of the work.
-
-Thanks very much for your advice!
-
-
-\textbf{[R1Cb]} \emph{Too many of the reviewer comments were addressed exclusively in response letter, not in the paper itself (e.g., {R3C4-2}).}
-
-We have confirmed that all the necessary comments have been addressed in both response letter and the paper. In particular, we list R2C7 and R3C4-2 below:
-\begin{itemize}
-
-  \item {{[R2C7]} \emph{Theorem 8 is not really needed.}}
-
-  \item {{[R3C4-2]} \emph{Also, I am not convinced by just using compression ratio as the single metric for measuring effectiveness. As I mentioned, I recommend using the compressed data to evaluate some real applications.}
-}
-\end{itemize}
-
-Now, we have further revised the paper according to the two comments:
-
-(1) For {R2C7}, we have clarified the importance of Theorem 8 (Theorem 7 in the revised version) at the begin of Section 4, where the response to R2C7 in the previous response letter is combined.
-
-(2) For {R3C4-2}, we have evaluated an application, \ie the well-known spatio-temporal query ``\emph{the position $P$ of a moving object at time $t$}'', on compressed trajectories that are simplified by line simplification algorithms using distance metrics SED and PED, respectively. This also justifies the benefits of SED. Please refer to Section 5.2.5 (a new section) for more details.
-
-Thanks for pointing out these!
-
-
-
-\textbf{[R2Ca]} \emph{The reviewers have pointed out that the paper lacks intuition from over-formalization. Reading the revised paper, I still see many places where intuition is missing.}
-\emph{(1) When introducing SED in the introduction (3rd paragraph), instead of defining SED using notation, it would be better to define it using plain English.}
-\emph{(2) In Sec. 2.1 (2nd paragraph on Page 4), the author sate ``Intuitively..." but what's following is not intuitive at all.}
-\emph{Both are pointed out by {R3C2}.}
-
-Yes, we have rewritten the 3rd paragraph of Section 1 to better explain SED. We have introduced SED using plain English, instead of defining SED with notation, and added a new figure (Fig.1 in this submission) to help readers to understand SED.
-{In Section 2.1 (2nd paragraph on Page 4), we have also introduced SED using plain English first, followed by formal definitions using notations.}
-Thanks very much for pointing out this!
-
-
-\textbf{[R2Cb]} \emph{{R3C1} pointed out that the example in the introduction is not convincing because it is really difficult to tell the difference between PED and SED. In the response, the authors explained the motivation of SED, however, did not directly address the comment. From the example (Fig. 1), it is still hard to tell the difference. Ideally, I wish the motivating example could illustrate the ``unbounded" error of using PED (claimed at the end of 2nd paragraph in Sec. 1), and allow the readers to observe that SED provides a huge improvement over PED.}
-
-We have added a new figure (Fig.1) to explain and compare PED and SED. More specifically, we have rewritten the 2nd paragraph of Section 1 to introduce PED and to explain why it is not suitable for spatio-temporal queries, \ie the ``unbounded error'' of using PED in spatio-temporal queries. And in the revised 3rd paragraph of Section 1, we have also explained why SED is more suitable for spatio-temporal queries.
-Thank you!
-
-\textbf{[R2Cc]} \emph{The experiments are comprehensive, however, still seem to lack meaningful discussion. For example, I wish to understand why in Fig.16, the average error increases with larger $m$, as this is somewhat counter-intuitive as larger $m$ leads to longer running time (Fig.20). The discussion in Exp-2.1 does not offer an explanation but simply describes what's in the plot. If applicable, I suggest the authors to remove the pervasive ``listings" of numerical results (e.g., ``The average errors of algorithms CISED-S and CISED-W are on average $(119.3\%, 127.7\%, 119.9\%, 138.0\%)$"), as they are already given in the plots, and add more in-depth discussion on why the results are what they are by linking back to the algorithms. }
-
-Yes, we have added ``more in-depth discussion on why the results are what they are by linking back to the algorithms" in Exp\_1.1-(2), Exp\_1.2-(1)(3)(4), Exp\_2.1-(2), Exp\_2.2-(1)(2), Exp\_3.1-(2)(3), Exp\_4.1, Exp\_4.2 and Exp\_4.3 in Section 5.
-
-%In addition, the numerical results are to be reserved as it is convenient for readers to refer them.
-
-Thanks!
 
 
 \line(1,0){500}
