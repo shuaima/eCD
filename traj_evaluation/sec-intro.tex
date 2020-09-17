@@ -53,7 +53,6 @@ Hence, \textit{compression sub-optimal} algorithms have been developed and/or in
 
 %, such as the convex hull in \bqsa~\cite{Liu:BQS}, the priority queue in \squishe \cite{Muckell:Compression}, the {fitting function} in \operb \cite {Lin:Operb} and the spatio-temporal cone intersection in \cised \cite {Lin:Cised}.
 
-
 %This work focus on the piece-wise line simplification (\lsa) methods of trajectory compression, more specially, the \emph{min-$\#$ problem} \cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment} of the piece-wise line based trajectory simplification.
 %In trajectory compression, the \lsa algorithms commonly use two distance metrics, \ie the \emph{perpendicular Euclidean distances} (\ped) and the \emph{synchronous Euclidean distances} (\sed).
 %Originally, \lsa algorithms adopt \ped as a distance metric.
@@ -62,7 +61,18 @@ Hence, \textit{compression sub-optimal} algorithms have been developed and/or in
 %Thus, a spatio-temporal query, \eg ``\emph{the position of a moving object at time $t$}", on the compressed trajectories by line simplification algorithms using \ped may return an approximate point $P'$ whose distance to the actual position $P$ of the moving object at time $t$ is unbounded.
 %For example, a query for the position of $P_7$ at time $t_7$ may return an approximate data point $P'_7$ whose distance to $P_7$ is great than the  bound $\epsilon$ in Figure~\ref{fig:notations} (left).
 
-\stitle{Distance metrics}. Trajectory simplification algorithms are closely coupled with distance metrics, and different techniques are typically needed for different distance metrics. We consider three widely adopted metrics: \emph{perpendicular Euclidean distances} (\ped), \emph{synchronous Euclidean distances} (\sed) and \emph{direction-aware distances} (\dad).
+\stitle{\textcolor{blue}{Quality criteria and} distance metrics}. 
+\textcolor{blue}{When we design a line simplification algorithm, there is a need to meet some requirements from the management or application of trajectories. These requirements, named quality criteria here, are largely \emph{efficiency, compression ratio} and \emph{errors (including simplification errors and query error)}, where 
+(1) \emph{efficiency} is measured by the time needed by a \lsa algorithm to simplify the input trajectories,
+(2) \emph{compression ratio} is the percentage of data size of the output compared with the input of a \lsa algorithm, 
+(3) \emph{simplification errors} are the \emph{maximal, average} and/or \emph{accumulative} distances of the output trajectory to the input trajectory of a \lsa algorithm. Because of the increasing needs of trajectory applications, distance metrics constantly enrich over time. Nowadays, they are \emph{perpendicular Euclidean distances} (\ped), \emph{synchronous Euclidean distances} (\sed) and \emph{direction-aware distances} (\dad), and}
+\textcolor{blue}{(4) \emph{query error} is the Euclidean distance from the return of a spatio-temporal query \cite{Meratnia:Spatiotemporal, Lin:Cised} on the simplified trajectory to the original trajectory.}
+
+%, and different techniques are typically needed for different distance metrics. 
+%We consider three widely adopted metrics: \emph{perpendicular Euclidean distances} (\ped), \emph{synchronous Euclidean distances} (\sed) and \emph{direction-aware distances} (\dad).
+% aging friendliness and query friendliness of these representative algorithms. 
+%The importance of each quality criterion is varied with the passage of time.
+
 
 \eat{
 \begin{figure}[tb!]
@@ -76,15 +86,24 @@ Hence, \textit{compression sub-optimal} algorithms have been developed and/or in
 \end{figure}
 }
 
-Originally, \lsa algorithms adopt \ped, {the shortest Euclidean distance from a point to a line segment, as the distance metric. It brings good compression ratios~\cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey} at a cost of losing temporal information of trajectories.}
-{(1) \sed was then introduced to preserve the temporal information \cite{Meratnia:Spatiotemporal,Cao:Spatio}.
-The \sed of a point to a line segment is the Euclidean distance between the point and its \emph{synchronized point} \wrt the line segment, the expected position of the moving object on the line segment at the same time \emph{with an assumption that the object moves straightly along the line segment at a uniform speed} \cite{Cao:Spatio}. It kindly supports applications such as spatio-temporal queries \cite{Meratnia:Spatiotemporal,Lin:Cised}, or in other words, it is \emph{query friendly}, \ie a spatio-temporal query like \emph{where\_at}~\cite{Cao:Spatio} on a simplified trajectory will return an expected point that has a distance less than the error bound used in the simplification algorithm.}
-% it is \emph{query friendly}
-(2) \dad was introduced to preserve the direction information of moving objects~\cite{Long:Direction, Zhang:Evaluation}, and was initially called the \emph{direction-based measurement} in \cite{Long:Direction}. It is important for applications such as trajectory clustering and direction-based query processing \cite{Long:Direction,Long:Mining}.
+Originally, \lsa algorithms adopt \ped, {the shortest Euclidean distance from a point to a line segment, as the distance metric, \textcolor{blue}{and most of these algorithms ensure that the maximal distance from the output trajectory to the input trajectory is bounded the a preset \ped error bound. When researchers introduced it to simplify trajectories, they simply treated the input trajectory as a sequence of spatial data points. As the result, \lsa algorithms using \ped} bring good compression ratios~\cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey} at a cost of losing temporal information of trajectories.} \textcolor{blue}{Note that, though it is error bounded by \ped, it is not spatio-temporal \emph{query friendly}, \ie a spatio-temporal query like \emph{where\_at}~\cite{Cao:Spatio} on such a simplified trajectory is possible return a point that has a distance great larger than the error bound used in the simplification algorithm.}
+
+{ \sed was then introduced to preserve the temporal information \cite{Meratnia:Spatiotemporal,Cao:Spatio}.
+The \sed of a point to a line segment is the Euclidean distance between the point and its \emph{synchronized point} \wrt the line segment, the expected position of the moving object on the line segment at the same time \emph{with an assumption that the object moves straightly along the line segment at a uniform speed} \cite{Cao:Spatio}. \textcolor{blue}{Most of these algorithms ensure that the \emph{maximal} \sed from the output trajectory to the input trajectory is bounded the a preset error bound.} They kindly support applications such as spatio-temporal queries, or in other words, they are \emph{query friendly}, \ie a spatio-temporal query like \emph{where\_at}~\cite{Cao:Spatio} on such a simplified trajectory will return the expected (synchronized) point that has a distance less than the error bound used in the simplification algorithm.
 %
-Note that it is easy to know that given the same input, \lsa algorithms using \sed or \dad may produce more line segments than using \ped. However, the use of \sed and \dad further preserves temporal and direction information, respectively.
+\textcolor{blue}{Besides, a number of algorithms \cite{Chen:Fast, Wu:Graph,Cao:Dots} alternatively use an accumulation of square \sed, named the integral square synchronous Euclidean distance (\kw{ISSED}) \cite{Chen:Fast}, as the error bound to speed up the simplification, \cite{Wu:Graph} follows the ideas of \cite{Chen:Fast} and Dots \cite{Cao:Dots} is an online algorithm that uses \kw{ISSED}.
+Note that the use of \kw{ISSED} will no longer ensure the \emph{query friendliness}.}
 
 
+\dad was introduced to preserve the direction information of moving objects~\cite{Long:Direction, Zhang:Evaluation}, and was initially called the \emph{direction-based measurement} in \cite{Long:Direction}. 
+It is important for applications such as trajectory clustering and direction-based query processing \cite{Long:Direction,Long:Mining}.
+\textcolor{blue}{Differ from \ped and \sed, \dad is the direction deviation of the moving object, measured by angular rather than Euclidean distances.}
+\textcolor{blue}{The temporal information is also lost when using \dad, therefor, it is not \emph{query friendliness} too.}
+
+%
+\sout{Note that it is easy to know that given the same input, \lsa algorithms using \sed or \dad may produce more line segments than using \ped. However, the use of \sed and \dad further preserves temporal and direction information, respectively.}
+
+\todo{\cite{Agarwal:Metric} studies the problem under the $L_1$ and uniform (also known as Chebyshev) metric.} % while this study focuses on the $L_2$ metric.
 
 \begin{table*}
 	\renewcommand{\arraystretch}{1.20}
