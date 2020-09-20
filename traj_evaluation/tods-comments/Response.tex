@@ -6,6 +6,9 @@
 \usepackage{color}
 \usepackage{amsfonts}
 \usepackage{cite}
+\usepackage{graphicx}
+
+
 
 \newcommand{\marked}[1]{\textcolor{red}{#1}}
 
@@ -47,6 +50,8 @@
 
 \newcommand{\todo}[1]{\textcolor{red}{Todo...#1}}
 \begin{document}
+
+
 
 
 
@@ -130,16 +135,26 @@ Yes, we have extended the scope of the paper and allowed insert new data points.
 
 \textbf{[R1C5]} \emph{The three distance metrics used in this paper are mainly for line simplification. However, if we apply line simplification to compress trajectories, some of the metrics are no longer that useful. For example, perpendicular distance metric (PED) does not consider temporal dimension, which means the error bounds based on PED consider spatial distances only. However, temporal dimension is very important to trajectories. I think it is necessary to revisit the metrics and highlight their limitations. Particularly, the error-bounds provided by these metrics could be misleading as the metrics do not fully reflect the loss of information. }
 
-Yes, each distance metric has its advantages and limitations. We have revisited them and highlighted their limitations in Section \todo{.}
+Yes, each distance metric has its advantages and limitations. To clarify this, we have revisited the descriptions of them and highlighted their limitations in the part of ``quality criteria and distance metrics", in Section 1.
 
-\textbf{[R1C6]} \emph{ The reason that we decide to store the trajectories (or the compressed version of raw trajectories to save storage space) is mainly to support some applications if required later, which might not require $100\%$ accuracy. For example, in order to find out the witness of a fatal car accident, police might want to locate all the drivers who pass by a specific location within a given time window by querying the trajectories. I am not very sure whether the error bounds based on different distance metrics are still valid for specific types of queries. This survey does not consider the applications to be supported by the compressed trajectories at all. However, personally I think it is very important. The authors did include one set of experiments towards the end of the paper. However, I think it is very important to explain the criteria of trajectory compression in the beginning of the paper, to offer the audience a complete image. In this paper, what are the key considerations when we compress trajectories? Is the compression ratio the only requirement? Is it necessary to support certain applications with error bounds? }
+\textbf{[R1C6]} \emph{ The reason that we decide to store the trajectories (or the compressed version of raw trajectories to save storage space) is mainly to support some applications if required later, which might not require $100\%$ accuracy. For example, in order to find out the witness of a fatal car accident, police might want to locate all the drivers who pass by a specific location within a given time window by querying the trajectories. I am not very sure whether the error bounds based on different distance metrics are still valid for specific types of queries. \textcolor{red}{This survey does not consider the applications to be supported by the compressed trajectories at all. However, personally I think it is very important.} The authors did include one set of experiments towards the end of the paper. However, I think it is very important to explain the criteria of trajectory compression in the beginning of the paper, to offer the audience a complete image. In this paper, what are the key considerations when we compress trajectories? Is the compression ratio the only requirement? Is it necessary to support certain applications with error bounds? }
+
+We have explained the criteria of trajectory compression, namely \emph{compression ratio, efficiency} and \emph{errors (including simplification errors and query error)}, in the part of ``quality criteria and distance metrics", in Section 1. Thanks for pointing out this.
 
 \textbf{[R1C7]} \emph{ The definition of Error Bounded Algorithms is not precise as the error bounds are not presented. }
 
-
+Yes, we have revised the definition in the penultimate paragraph of Section 2. Thanks!
 
 
 \textbf{[R1C8]} \emph{ Fig.2 in Page 7 gives an example of reachability graph. However, that graph is incomplete. For example, there is no link between $P_0$ and $P_5$ but they are reachable. This is very misleading. }
+
+As shown below, if we connect $P_0$ and $P_5$, then the \kw{PED} from $P_4$ to line segment $\overline{P_0P_5}$, \ie $|P_4P'_4|$, is a bit larger than the error bound $\epsilon$ (exact two frames in the figure). Thus,  $P_0$ and $P_5$ are not reachable, and there should be no link between them. Thanks for your seriousness and meticulousness!
+
+\begin{center}
+	%\includegraphics[width=1.\textwidth]{example-image}
+	\includegraphics[scale=0.8]{reachgraph.png}
+	\label{fig:rgraph}
+\end{center}
 
 \textbf{[R1C9]} \emph{ The datasets used in the experimental study were rather small. With 20M+ points, there is no need to compress them. Much larger datasets will be more realistic for the topic of trajectory compression.  }
 
