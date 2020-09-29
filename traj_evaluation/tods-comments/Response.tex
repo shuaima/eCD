@@ -147,7 +147,7 @@ Yes, we have revised the definition in the penultimate paragraph of Section 2. T
 
 \textbf{[R1C8]} \emph{ Fig.2 in Page 7 gives an example of reachability graph. However, that graph is incomplete. For example, there is no link between $P_0$ and $P_5$ but they are reachable. This is very misleading. }
 
-As shown below, if we connect $P_0$ and $P_5$, then the \kw{PED} from $P_4$ to line segment $\overline{P_0P_5}$, \ie $|P_4P'_4|$, is a bit larger than the error bound $\epsilon$ (exact two frames in the figure). Thus,  $P_0$ and $P_5$ are not reachable, and there should be no link between them. Thanks for your seriousness and meticulousness!
+As shown below, if we connect $P_0$ and $P_5$, then the \kw{PED} from $P_4$ to line segment $\overline{P_0P_5}$, \ie $|P_4P'_4|$, is a bit larger than the error bound $\epsilon$ (exact two frames in the figure). Thus, $P_5$ is not reachable from $P_0$, and there should be no link between them. Thanks for your seriousness and meticulousness!
 
 \begin{center}
 	%\includegraphics[width=1.\textwidth]{example-image}
@@ -158,7 +158,7 @@ As shown below, if we connect $P_0$ and $P_5$, then the \kw{PED} from $P_4$ to l
 \textbf{[R1C9]} \emph{ The datasets used in the experimental study were rather small. With 20M+ points, there is no need to compress them. Much larger datasets will be more realistic for the topic of trajectory compression.  }
 
 We have replaced UCar with a larger dataset which has 1000 trajectories and \textcolor{red}{1000M} points (please see Table 4). Besides, we have already used the full datasets of Geolife and Mopsi, which have 182 and 51 trajectories, respectively.
-It is worth pointing out that, due to the high time complexity of batch algorithms, \ie $O(n^2)$ of both Douglas-Peucker and Theo-Pavlidis, they need \textcolor{red}{weeks} to run the tests listed in Section 6. 
+It is worth pointing out that, due to the high time complexity of batch algorithms, \ie $O(n^2)$ of both Douglas-Peucker and Theo-Pavlidis, they need \textcolor{red}{days} to run the tests listed in Section 6. 
 
 \textbf{[R1C10]} \emph{The average errors introduced in Page 20 are derived based on ONLY points contained in a line segment of a piece-wise line representation. Why? Why not consider all the points in the original trajectories? }
 
@@ -195,7 +195,15 @@ Indeed, when calculate the average errors, we do consider all the points in the 
 
 \line(1,0){100}
 
-\textbf{[R2D1]} \emph{In page 2, the authors mention that “important aspects of trajectory simplification (compression ratios, running time and aging friendliness) are not systematically studied” for [41]. Not sure which “important aspects” the authors refer to, as I found running time and the tradeoff between compression ratios and errors have been reported in [41].}
+\textbf{[R2D1]} \emph{In page 2, the authors mention that “important aspects of trajectory simplification (compression ratios, running time and aging friendliness) are not systematically studied” for [41]. Not sure which “important aspects” the authors refer to, as I found running time and the trade-off between compression ratios and errors have been reported in [41].}
+
+As we know, the \emph{error bounds} and \emph{trajectories} are the basic inputs of trajectory simplification algorithms solving the ``min-\#" problem, thus, a comprehensive evaluation should test the impacts of them on the effectiveness and efficiency of those algorithms.  
+%
+However, we have notice that (1) [41] only has a limited evaluation on running time. It does show a table that lists \emph{compression time per trajectory point} of each algorithm, but it is not sufficient or reasonable, as the impacts of both the sizes of trajectories and the error bounds is ignored by [41], and (2) [41] only has a limited evaluation on compression ratios. It does report the relationship between compression ratios and errors (not error bounds),  but the most important aspect in practice, the impacts of the error bounds on the compression ratios, is ignored. Thus, it does not fully test the compression ratios of algorithm and it is hard to guide users to set reasonable error bounds.
+%
+These are the reasons that we say ``important aspects of trajectory simplification (compression ratios, running time and aging friendliness) are not \emph{systematically} studied” for [41]. 
+
+To clarify this, we have revised \todo.
 
 \textbf{[R2D2]} \emph{In page 3: $epsilon_1$ and $epsilon_2$ appeared without explanation.}
 
