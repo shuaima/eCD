@@ -164,8 +164,18 @@ It is important for applications such as trajectory clustering and direction-bas
 
 
 
-\stitle{Motivations}. Empirical studies of trajectory compression algorithms have been conducted~\cite{Muckell:Compression,MuckellHLR10,mThesis}. However, they only discuss a small number of algorithms. The very recent study \cite{Zhang:Evaluation} does evaluate a wide range of trajectory simplification algorithms.
-However, it provides {an experimental study} on compression errors and spatio-temporal query analyses only, and important aspects of trajectory simplification (compression ratios, running time and aging friendliness) are not systematically studied. Besides, the simplified trajectories are stored in data stores. As time goes by, less precision may become acceptable for old trajectories \cite{Cao:Spatio}, and they need to be further simplified to coarse trajectories to save storage. However, can these simplified trajectories be further compressed by \lsa algorithms to coarse trajectories while still having bounded errors \wrt the original trajectories? This is referred to as the \emph{data aging} problem, which is initially introduced and partially discussed for algorithms \opt and \dpa only in \cite{Cao:Spatio}.
+\stitle{Motivations}. Empirical studies of trajectory compression algorithms have been conducted~\cite{Muckell:Compression,MuckellHLR10,mThesis}. However, they only discuss a small number of algorithms. 
+%
+The very recent study \cite{Zhang:Evaluation} does evaluate a wide range of trajectory simplification algorithms.
+However, it provides {an experimental study} on compression errors and spatio-temporal query analyses only, and important aspects of trajectory simplification (compression ratios, running time \sout{and aging friendliness} \textcolor{blue}{and the impacts of error bounds and data sizes}) are not systematically studied. 
+\textcolor{blue}{More specifically, }
+\textcolor{blue}{(1) it has a limited evaluation on running time: it shows a table that lists \emph{compression time per trajectory point} of each algorithm on four datasets, but the impacts of both the sizes of trajectories and the error bounds on the running time is not reported;}
+%
+\textcolor{blue}{(2) it has a limited evaluation on compression ratios: it only reports the relationship between compression ratios and errors, but the impacts of the error bounds on the compression ratios, is also ignored; and }
+%
+\textcolor{blue}{(3) some important algorithms are not investigated: optimal algorithms using \ped and \sed and one-pass algorithms \siped and \cised are not investigated in \cite{Zhang:Evaluation}. Indeed, algorithm \siped is {\em completely overlooked} by existing trajectory compression studies as it is originally developed in fields of computational geometry and pattern recognition~\cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}, and we recently find that it can be easily adopted for trajectory compression with good performance.}%\cite{Lin:Cised}.
+
+Besides, the simplified trajectories are stored in data stores. As time goes by, less precision may become acceptable for old trajectories \cite{Cao:Spatio}, and they need to be further simplified to coarse trajectories to save storage. However, can these simplified trajectories be further compressed by \lsa algorithms to coarse trajectories while still having bounded errors \wrt the original trajectories? This is referred to as the \emph{data aging} problem, which is initially introduced and partially discussed for algorithms \opt and \dpa only in \cite{Cao:Spatio}.
 That is to say, a systematic experimental evaluation of line simplification algorithms for trajectory compression remains necessary for practitioners to decide the appropriate algorithms and distance metrics for specific applications.
 
 
@@ -193,12 +203,14 @@ Note that online and one-pass algorithms are typically designed for a specific d
 Our study reveals the characteristics of these algorithms, which lead to guidelines for practitioners to choose appropriate algorithms and distance metrics for specific applications.
 
 
-Essentially, this study is a necessary complement to existing studies by providing a systematic evaluation and analyses of error bounded trajectory simplification algorithms. More specifically, (1) for a fair running time analysis, all algorithms are (re)-implemented in Java, unlike \cite{Zhang:Evaluation} that reports running time of algorithms with different programming languages,
-(2) compression ratio analyses are not considered in \cite{Zhang:Evaluation},
-(3) variations of distance metrics are not studied in \cite{Zhang:Evaluation}, 
-(4) {data aging of \lsa algorithms is not studied in \cite{Zhang:Evaluation}}, and
-(5) optimal algorithms using \ped and \sed and one-pass algorithms \siped and \cised are not investigated in \cite{Zhang:Evaluation}.
-Indeed, algorithm \siped is {\em completely overlooked} by existing trajectory compression studies as it is originally developed in fields of computational geometry and pattern recognition~\cite{Williams:Longest,Sklansky:Cone,Dunham:Cone, Zhao:Sleeve}, and we recently find that it can be easily adopted for trajectory compression with good performance. %\cite{Lin:Cised}.
+Essentially, this study is a necessary complement to existing studies by providing a systematic evaluation and analyses of error bounded trajectory simplification algorithms. \sout{More specifically,
+(1) for a fair running time analysis, all algorithms are (re)-implemented in Java, unlike \cite{Zhang:Evaluation} that reports running time of algorithms with different programming languages,}
+\textcolor{blue}{In comparison with \cite{Zhang:Evaluation},
+(1) compression ratio analyses are systematicly considered,
+(2) variations of distance metrics are studied, 
+(3) optimal algorithms using \ped and \sed and one-pass algorithms \siped and \cised are investigated, and
+(4) data aging of \lsa algorithms is studied.}
+\sout{Indeed, algorithm \siped is {\em completely overlooked} by existing trajectory compression studies as it is originally developed in fields of computational geometry and pattern recognition, and we recently find that it can be easily adopted for trajectory compression with good performance.} %\cite{Lin:Cised}.
 
 \eat{Essentially, this study is an important complimentary to \cite{Zhang:Evaluation} by providing a thorough and systematic evaluation and analyses of error bounded trajectory simplification algorithms.
 Further, though  \cite{Zhang:Evaluation} tests the average errors of algorithms from the aspect of applications, \ie spatio-temporal queries, different applications have different requirements, and it is hardly to enumerate all of them. Hence,}
