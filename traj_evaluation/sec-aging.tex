@@ -5,12 +5,13 @@
 Suppose that we have compressed a trajectory $\dddot{\mathcal{T}_0}$ to $\overline{\mathcal{T}}_1$ using any \lsa algorithm $\mathcal{A}$ with error bound $\epsilon_1$. As time evolves, we may need to further compress $\overline{\mathcal{T}}_1$ to an even coarser trajectory $\overline{\mathcal{T}}_2$.
 What is the relationship among $\overline{\mathcal{T}}_2$, $\overline{\mathcal{T}}_1$ and $\dddot{\mathcal{T}_0}$? And what is the right way to get the coarser trajectory $\overline{\mathcal{T}}_2$?
 %
-This section is to answer these questions from the views of friendliness \cite{Cao:Spatio} and errors.
+This section is to answer these questions from the views of friendliness \cite{Cao:Spatio} (Section \ref{sec-aging-friend}) and \textcolor{blue}{safety} (Section \ref{sec-aging-safe}).
 Note that if we get $\overline{\mathcal{T}}_1$ and $\overline{\mathcal{T}}_2$ by optimal algorithms \wrt error bounds $\epsilon_1$ and $\epsilon_2$, respectively, then $\overline{\mathcal{T}}_2$ may not be the optimal one of $\dddot{\mathcal{T}_0}$ \wrt any error bound \cite{Cao:Spatio}. The major results are summarized in \mytable{tab:summary-data-aging}.
 %Hence, we focus on sub-optimal error bounded trajectory simplification algorithms only.
 
 
 \subsection{Friendliness of Data Aging}
+\label{sec-aging-friend}
 We first discuss the relationship between $\overline{\mathcal{T}}_1$ and $\overline{\mathcal{T}}_2$ from the view of friendliness, which was defined in \cite{Cao:Spatio}, but was seldom discussed later.
 	
 \stitle{Aging friendly \cite{Cao:Spatio}}. {An \lsa algorithm $\mathcal{A}$ is aging friendly with respect to a distance metric $\mathcal{M}$ if for every $\epsilon_1$ and every $\epsilon_2$ such that $\epsilon_1 < \epsilon_2$, and for every trajectory $\dddot{\mathcal{T}}$, $\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_2, \mathcal{M})= \mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M})$.}
@@ -26,28 +27,30 @@ In the rest, we  present a full picture of this problem, starting from the optim
 	\label{tab:summary-data-aging}
 	\centering
 	\scriptsize
-	\begin{tabular}{|c|c|c|c|c|}
+	\begin{tabular}{|c|c|c|c|c|c|}
 		\hline
-		{\bf{Algorithms}} &\bf{Distance Metrics} & \bf{Aging Friendliness} & {\bf{Error Bounds}}  \\		
-		\hline
-
-		{\multirow{2}*{{\opt} algorithms}} &\ped or \sed	& \hspace{2ex} $\times$ (\cite{Cao:Spatio}) & $\epsilon_1 + \epsilon_2$  (Prop. \ref{theo-aging-distance})	\\
-		\cline{2-4}
-		&\dad	& $\times$  (Prop. \ref{theo-aging-opt-dad})	& $\epsilon_1 + \epsilon_2$  (Prop. \ref{theo-aging-distance})\\
-		\hline
-		
-		{\multirow{2}*{Batch algorithm \dpa}} &\ped or \sed	&\checkmark (\cite{Cao:Spatio}) & $\max(\epsilon_1, \epsilon_2)$   (Prop. \ref{theo-aging-error-dp})\\
-		\cline{2-4}
-		&\dad	& $\times$  (Prop. \ref{theo-aging-dp-dad}) & $\epsilon_1 + \epsilon_2$   (Prop. \ref{theo-aging-distance})\\
-		\hline
-		
-		{Batch algorithm \tpa}	& \ped, \sed or \dad & $\times$  (Prop. \ref{theo-aging-tp}) & $\epsilon_1 + \epsilon_2$  (Prop. \ref{theo-aging-distance})  \\
-		\hline
-		
-		{Online algorithms}	& \ped, \sed or \dad & $\times$  (Prop. \ref{theo-aging-online})& $\epsilon_1 + \epsilon_2$  (Prop. \ref{theo-aging-distance})  \\
+		{\bf{Algorithms}} &\bf{Distance Metrics} & \bf{Aging Friendliness} & \bf{\textcolor{blue}{Aging Safety}} & {\bf{Error Bounds}}  \\		
 		\hline
 
-		{One-pass algorithms}	& \ped, \sed or \dad & $\times$ (Prop. \ref{theo-aging-online})& $\epsilon_1 + \epsilon_2$  (Prop. \ref{theo-aging-distance})  \\
+		{\multirow{2}*{{\opt} algorithms}} &\ped or \sed	& \hspace{2ex} $\times$ (\cite{Cao:Spatio}) & \checkmark (Prop. \ref{theo-aging-distance}) & $\epsilon_1 + \epsilon_2$  (Prop. \ref{theo-aging-distance})	\\
+		\cline{2-5}
+		
+		&\dad	& $\times$  (Prop. \ref{theo-aging-opt-dad})	& \checkmark (Prop. \ref{theo-aging-distance}) &$\epsilon_1 + \epsilon_2$  (Prop. \ref{theo-aging-distance})\\
+		\hline
+		
+		{\multirow{2}*{Batch algorithm \dpa}} &\ped or \sed	&\checkmark (\cite{Cao:Spatio}) &\checkmark (Prop. \ref{theo-aging-error-dp}) & $\max(\epsilon_1, \epsilon_2)$   (Prop. \ref{theo-aging-error-dp})\\
+		\cline{2-5}
+		
+		&\dad	& $\times$  (Prop. \ref{theo-aging-dp-dad}) & \checkmark (Prop. \ref{theo-aging-distance}) & $\epsilon_1 + \epsilon_2$   (Prop. \ref{theo-aging-distance})\\
+		\hline
+		
+		{Batch algorithm \tpa}	& \ped, \sed or \dad & $\times$  (Prop. \ref{theo-aging-tp}) & \checkmark (Prop. \ref{theo-aging-distance}) &$\epsilon_1 + \epsilon_2$  (Prop. \ref{theo-aging-distance})  \\
+		\hline
+		
+		{Online algorithms}	& \ped, \sed or \dad & $\times$  (Prop. \ref{theo-aging-online})& \checkmark (Prop. \ref{theo-aging-distance}) &$\epsilon_1 + \epsilon_2$  (Prop. \ref{theo-aging-distance})  \\
+		\hline
+
+		{One-pass algorithms}	& \ped, \sed or \dad & $\times$ (Prop. \ref{theo-aging-online})&\checkmark (Prop. \ref{theo-aging-distance}) &$\epsilon_1 + \epsilon_2$  (Prop. \ref{theo-aging-distance})  \\
 
 		\hline
 	\end{tabular}
@@ -178,10 +181,14 @@ Similarly, \tpa is not aging friendly \wrt~ \sed or \dad. Hence, we have the con
 
 
 
-\subsection{Error of Data Aging}
+\subsection{\sout{Error} \textcolor{blue}{Safety} of Data Aging}
+\label{sec-aging-safe}
 As most algorithms are not aging friendly, are they error bounded in data aging?
 if so, what are the bounds?
 This section focuses on these problems and discusses the error between the simplified trajectory $\overline{\mathcal{T}}_2$ and the original trajectory $\dddot{\mathcal{T}_0}$.
+
+\stitle{\textcolor{blue}{Aging safe}}. \textcolor{blue}{Let $\mathcal{A}$ be a line simplification algorithm,  $\mathcal{M}$ be a distance metric, and $\epsilon_1>0$ and $\epsilon_2>0$ be error bounds, algorithm $\mathcal{A}$ is \emph{aging safe} if the errors between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M})$ are not more than $\epsilon_1+ \epsilon_2$. }
+
 
 \begin{proposition}
 	\label{theo-aging-error-dp}
@@ -241,3 +248,5 @@ from which we have that the error bound is exactly $\epsilon_1+ \epsilon_2$.
 	\vspace{-2ex}
 	\label{fig:aging-error}
 \end{figure}
+
+\textcolor{blue}{From Propositions \ref{theo-aging-error-dp} and \ref{theo-aging-distance}, it is clear that all the above algorithms are  \emph{aging safe}, thus, {we can freely re-compress trajectories by any algorithm as long as we use the same distance metric.}}
