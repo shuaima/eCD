@@ -122,31 +122,41 @@ It is important for applications such as trajectory clustering and direction-bas
         \cline{3-10}
         \multicolumn{2}{|c|}{}&\optp\cite{Chan:Optimal}             		&\checkmark &$\times$ &$\times$ & $O(n^2)$	& {$O(n^2)$} & & {reachability graph \& sector intersection}  \\		
         \cline{3-10}
-        \multicolumn{2}{|c|}{}& \textcolor{blue}{\optss\cite{Chen:Fast} } 		&$\times$ & \checkmark & $\times$ & $O(n^2)$	& {$O(n^2)$} & & {reachability graph \& integral square SED} \\		
+        \multicolumn{2}{|c|}{}& \textcolor{blue}{\optss\cite{Chen:Fast} } 		&$\times$ & \sout\checkmark & $\times$ & $O(n^2)$	& {$O(n^2)$} & & {reachability graph \& integral square SED} \\		
         \cline{3-10}
         \multicolumn{2}{|c|}{}&\kw{SP} \cite{Long:Direction}          &$\times$ &$\times$ & \checkmark & $O(n^2)$	& {$O(n^2)$} & & {reachability graph \& range intersection}  \\		
         \hline
-
+        
+        %%%%%%%%%%%%%%%%%%%%% batch %%%%%%%%%%
+        
         \multirow{14}*{\rotatebox{90}{\bf{sub}-\bf{optimal}}}
         &\multirow{3}*{\rotatebox{90}{\bf{batch}}}  &{\kw{Ramer} \cite{Ramer:Split}}		&\checkmark &\checkmark & \checkmark   & $O(n^2)$ & $O(n)$  & & top-down \\		
         \cline{3-10}
+        
 		& &\dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal}	&\checkmark &\checkmark &\checkmark   & $O(n^2)$ & $O(n)$  &\checkmark & top-down \\		
 		\cline{3-10}
+		
         & &\tpa\cite{Pavlidis:Segment}			&\checkmark &\checkmark  &\checkmark  	& $O(n^2/K)$ & $O(n)$  &\checkmark & bottom-up \\		
         \cline{2-10}
 
+        %%%%%%%%%%%%%%%%%%% online %%%%%%%%%%%%
+        
         &\multirow{4}*{\rotatebox{90}{\bf{online}}}	&\opwa \cite{Meratnia:Spatiotemporal} 	&\checkmark &\checkmark  &\checkmark   	& $O(n^2)$	& $O(n)$  &\checkmark &top-down in opening window	\\		
         \cline{3-10}
-		& &\bqsa\cite{Liu:BQS}					&\checkmark &$\times$ &$\times$ 		& $O(n^2)$  & $O(|n|)$   &\checkmark &{top-down, window \& convex hull} \\		
+        
+		& &\bqsa\cite{Liu:BQS}					&\checkmark &$\times$ &$\times$ 		& $O(n^2)$  & $O(|n|)$   &\checkmark &{top-down, window \& convex hull} \\	
+			
         \cline{3-10}
 		& &\kw{SWAB} \cite{Keogh:online} 	        &\checkmark &\checkmark  &\checkmark   	& $O(n*|Q|)$	& $O(|Q|)$  & &bottom-up in sliding window	\\		
 
         \cline{3-10}
 	    & &\squishe\cite{Muckell:Compression}		&$\times$ &\checkmark  &$\times$  	& $O(n\log|Q|)$ & $O(|Q|)$  &\checkmark & bottom-up \& priority queue \\		
         \cline{3-10}
-		& &\textcolor{blue}{\dagots\cite{Cao:Dots}}		&$\times$ &\checkmark  &$\times$  	& $O(n^2/K)$ & { $O(n)$}  &\checkmark &integral square SED \& incremental DAG\\		
+		& &\textcolor{blue}{\dagots\cite{Cao:Dots}}		&$\times$ &\sout{\checkmark} &$\times$  	& $O(n^2/K)$ & { $O(n)$}  &\checkmark &integral square SED \& incremental DAG\\		
 		\cline{2-10}
 
+        %%%%%%%%%%%%%%%%% one pass %%%%%%%%%%%%%%
+		
         &\multirow{4}*{\rotatebox{90}{\bf{one}-\bf{pass}~~~ }}&\rwa \cite{Reumann:Strip}              &\checkmark &$\times$ &$\times$ 		& $O(n)$ 	& $O(1)$  & & strip  \\		
         \cline{3-10}
 		& &\ldr\cite{Lange:Tracking,Trajcevski:DDR} &$\times$ &\checkmark &$\times$ 		& $O (n)$ 	& $O(1)$  & & linear dead reckoning  \\		
@@ -162,7 +172,7 @@ It is important for applications such as trajectory clustering and direction-bas
         & &\interval\cite{Ke:Interval}				&$\times$ &$\times$ & \checkmark 		& $O (n)$ 	& $O(1)$  &\checkmark & range intersection with $\epsilon$-range \\		
         \hline
 	\end{tabular}
-	{\\ \vspace{2ex} Here, (1) `Rep" means ``Representative" \textcolor{blue}{(in each category, we comprehensively consider the effectiveness and the supporting of distance metrics of algorithms, as well as the novelty of their key ideas)},  $K$ is the number of the final segments of a trajectory and $|Q|$ is the size of a buffer/window, and (2) batch and top-down algorithms \dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal} and \kw{Ramer} \cite{Ramer:Split} are aging friendly, while other algorithms are not.   }
+	{\\ \vspace{2ex} Here, (1) `Rep" means ``Representative" \textcolor{blue}{(in each category, we comprehensively consider the effectiveness and the supporting of distance metrics of algorithms, as well as the novelty of their key ideas)},  $K$ is the number of the final segments of a trajectory and $|Q|$ is the size of a buffer/window, \textcolor{blue}{(2) \optss and \dagots actually use the local integral square \sed (\lissed)}, and (3) batch and top-down algorithms \dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal} and \kw{Ramer} \cite{Ramer:Split} are aging friendly, while other algorithms are not.   }
 	\vspace{-2ex}
 \end{table*}
 
