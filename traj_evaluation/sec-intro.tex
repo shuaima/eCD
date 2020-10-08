@@ -22,7 +22,7 @@ Due to the  limitations (poor compression ratio and data reconstruction overhead
 \sout{The idea of piece-wise line simplification (\lsa) comes from computational geometry, whose target is to approximate a fine piece-wise linear curve with a coarse one (whose corresponding data points are a subset of the original one), such that the maximum distance of the former to the latter is bounded by a user specified threshold. }
 %\textcolor{blue}{The idea of piece-wise line simplification (\lsa) comes from computational geometry, whose target is to solve the \emph{min-$\#$} problem \cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment}, \ie given a curve and an $\epsilon$, construct an approximate curve with error within $\epsilon$ and having the minimum number of line segments. }
 %
-\textcolor{blue}{The idea of piece-wise line simplification (\lsa) comes from computational geometry, which indeed has two types of optimization problems \cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment}. (1) The \emph{min-$\#$} problem: given an $\epsilon$, construct an approximate curve with error within $\epsilon$ and having the minimum number of line segments. Most \lsa algorithms such as \cite{Douglas:Peucker, Hershberger:Speeding, Keogh:online,Liu:BQS, Chen:Trajectory, Chen:Fast, Cao:Spatio, Shi:Survey} and \squishe($\epsilon$) \cite{Muckell:Compression} fall in this category.} 
+\textcolor{blue}{The idea of piece-wise line simplification (\lsa) comes from graphic and computational geometry, which indeed has two types of optimization problems \cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment}. (1) The \emph{min-$\#$} problem: given an $\epsilon$, construct an approximate curve with error within $\epsilon$ and having the minimum number of line segments. Most \lsa algorithms such as \cite{Douglas:Peucker, Hershberger:Speeding, Keogh:online,Liu:BQS, Chen:Trajectory, Chen:Fast, Cao:Spatio, Shi:Survey} and \squishe($\epsilon$) \cite{Muckell:Compression} fall in this category.} 
 \textcolor{blue}{(2) The \emph{min-$\epsilon$} problem: given $m$, constructs an approximate curve consisting of at most $m$ line segments with the minimum error. SQUISH($\lambda$) \cite{Muckell:SQUISH} and SQUISH-E($\lambda$) \cite{Muckell:Compression} are such algorithms that compress a trajectory of length $n$ into a trajectory of length at most $n/\lambda$. }
 %These methods lack the capability of compressing trajectories while ensuring that errors are within a user-specified bound \cite{Muckell:Compression}.
 \textcolor{blue}{Anyway, line simplification has wide usage due to its beneficial features: (a) simple and easy to implement, (b) no need of extra knowledge and suitable for freely  moving  objects \cite{Popa:Spatio}, and (c) bounded errors with good compression ratios (refer to algorithms focusing on the \emph{min-$\#$} problem). }
@@ -150,9 +150,13 @@ It is important for applications such as trajectory clustering and direction-bas
 		& &\kw{SWAB} \cite{Keogh:online} 	        &\checkmark &\checkmark  &\checkmark   	& $O(n*|Q|)$	& $O(|Q|)$  & &bottom-up in sliding window	\\		
 
         \cline{3-10}
-	    & &\squishe\cite{Muckell:Compression}		&$\times$ &\checkmark  &$\times$  	& $O(n\log|Q|)$ & $O(|Q|)$  &\checkmark & bottom-up \& priority queue \\		
+	    & &\squishe\cite{Muckell:Compression}		&$\times$ &\checkmark  &$\times$  	& $O(n\log|Q|)$ & $O(|Q|)$  &\checkmark & bottom-up \& priority queue \\	
+	    	
         \cline{3-10}
-		& &\textcolor{blue}{\dagots\cite{Cao:Dots}}		&$\times$ &\sout{\checkmark} &$\times$  	& $O(n^2/K)$ & { $O(n)$}  &\checkmark &integral square SED \& incremental DAG\\		
+		& &\textcolor{blue}{\dagots\cite{Cao:Dots}}		&$\times$ &\sout{\checkmark} &$\times$  	& $O(n^2/K)$ & { $O(n)$}  &\checkmark &integral square SED \& incremental DAG\\	
+		
+		\cline{3-10}
+		& &\textcolor{blue}{\olts\cite{Wu:Graph}}		&$\times$ &\sout{\checkmark} &$\times$  	& $O(n^2/K)$ & { $O(n)$}  & &integral square SED \& incremental DAG\\		
 		\cline{2-10}
 
         %%%%%%%%%%%%%%%%% one pass %%%%%%%%%%%%%%
@@ -172,7 +176,7 @@ It is important for applications such as trajectory clustering and direction-bas
         & &\interval\cite{Ke:Interval}				&$\times$ &$\times$ & \checkmark 		& $O (n)$ 	& $O(1)$  &\checkmark & range intersection with $\epsilon$-range \\		
         \hline
 	\end{tabular}
-	{\\ \vspace{2ex} Here, (1) `Rep" means ``Representative" \textcolor{blue}{(in each category, we comprehensively consider the effectiveness and the supporting of distance metrics of algorithms, as well as the novelty of their key ideas)},  $K$ is the number of the final segments of a trajectory and $|Q|$ is the size of a buffer/window, \textcolor{blue}{(2) \optss and \dagots actually use the local integral square \sed (\lissed)}, and (3) batch and top-down algorithms \dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal} and \kw{Ramer} \cite{Ramer:Split} are aging friendly, while other algorithms are not.   }
+	{\\ \vspace{2ex} Here, (1) `Rep" means ``Representative" \textcolor{blue}{(in each category, we comprehensively consider the effectiveness and the supporting of distance metrics of algorithms, as well as the novelty of their key ideas)},  $K$ is the number of the final segments of a trajectory and $|Q|$ is the size of a buffer/window, \textcolor{blue}{(2) \optss, \dagots and \olts actually use the local integral square \sed (\lissed)}, and (3) batch and top-down algorithms \dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal} and \kw{Ramer} \cite{Ramer:Split} are aging friendly, while other algorithms are not.   }
 	\vspace{-2ex}
 \end{table*}
 
