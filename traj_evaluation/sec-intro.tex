@@ -122,7 +122,7 @@ It is important for applications such as trajectory clustering and direction-bas
         \cline{3-10}
         \multicolumn{2}{|c|}{}&\optp\cite{Chan:Optimal}             		&\checkmark &$\times$ &$\times$ & $O(n^2)$	& {$O(n^2)$} & & {reachability graph \& sector intersection}  \\		
         \cline{3-10}
-        \multicolumn{2}{|c|}{}& \textcolor{blue}{\optss\cite{Chen:Fast} } 		&$\times$ & \sout\checkmark & $\times$ & $O(n^2)$	& {$O(n^2)$} & & {reachability graph \& integral square SED} \\		
+        \multicolumn{2}{|c|}{}& \textcolor{blue}{\optss\cite{Chen:Fast} } 		&$\times$ & \sout\checkmark & $\times$ & $O(n^2)$	& {$O(n^2)$} & & {reachability graph \& \lissed} \\		
         \cline{3-10}
         \multicolumn{2}{|c|}{}&\kw{SP} \cite{Long:Direction}          &$\times$ &$\times$ & \checkmark & $O(n^2)$	& {$O(n^2)$} & & {reachability graph \& range intersection}  \\		
         \hline
@@ -137,8 +137,11 @@ It is important for applications such as trajectory clustering and direction-bas
 		\cline{3-10}
 		
         & &\tpa\cite{Pavlidis:Segment}			&\checkmark &\checkmark  &\checkmark  	& $O(n^2/K)$ & $O(n)$  &\checkmark & bottom-up \\		
-        \cline{2-10}
-
+        
+	    \cline{3-10}
+	    & &\textcolor{blue}{\bumr\cite{Chen:Fast}}		&$\times$ &\sout{\checkmark} &$\times$  	& $O(n)$ & { $O(n)$}  & & \lissed \& bottom-up\\	
+		\cline{2-10}
+		
         %%%%%%%%%%%%%%%%%%% online %%%%%%%%%%%%
         
         &\multirow{4}*{\rotatebox{90}{\bf{online}}}	&\opwa \cite{Meratnia:Spatiotemporal} 	&\checkmark &\checkmark  &\checkmark   	& $O(n^2)$	& $O(n)$  &\checkmark &top-down in opening window	\\		
@@ -152,11 +155,13 @@ It is important for applications such as trajectory clustering and direction-bas
         \cline{3-10}
 	    & &\squishe\cite{Muckell:Compression}		&$\times$ &\checkmark  &$\times$  	& $O(n\log|Q|)$ & $O(|Q|)$  &\checkmark & bottom-up \& priority queue \\	
 	    	
+
+	    
         \cline{3-10}
-		& &\textcolor{blue}{\dagots\cite{Cao:Dots}}		&$\times$ &\sout{\checkmark} &$\times$  	& $O(n^2/K)$ & { $O(n)$}  &\checkmark &integral square SED \& incremental DAG\\	
+		& &\textcolor{blue}{\dagots\cite{Cao:Dots}}		&$\times$ &\sout{\checkmark} &$\times$  	& $O(n^2/K)$ & { $O(|Q|^2)$}  &\checkmark &\lissed \& incremental DAG\\	
 		
 		\cline{3-10}
-		& &\textcolor{blue}{\olts\cite{Wu:Graph}}		&$\times$ &\sout{\checkmark} &$\times$  	& $O(n^2/K)$ & { $O(n)$}  & &integral square SED \& incremental DAG\\		
+		& &\textcolor{blue}{\olts\cite{Wu:Graph}}		&$\times$ &\sout{\checkmark} &$\times$  	& $O(n^2/K)$ & { $O(|Q|^2)$}  & &\lissed \& incremental DAG\\		
 		\cline{2-10}
 
         %%%%%%%%%%%%%%%%% one pass %%%%%%%%%%%%%%
@@ -176,7 +181,7 @@ It is important for applications such as trajectory clustering and direction-bas
         & &\interval\cite{Ke:Interval}				&$\times$ &$\times$ & \checkmark 		& $O (n)$ 	& $O(1)$  &\checkmark & range intersection with $\epsilon$-range \\		
         \hline
 	\end{tabular}
-	{\\ \vspace{2ex} Here, (1) `Rep" means ``Representative" \textcolor{blue}{(in each category, we comprehensively consider the effectiveness and the supporting of distance metrics of algorithms, as well as the novelty of their key ideas)},  $K$ is the number of the final segments of a trajectory and $|Q|$ is the size of a buffer/window, \textcolor{blue}{(2) \optss, \dagots and \olts actually use the local integral square \sed (\lissed)}, and (3) batch and top-down algorithms \dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal} and \kw{Ramer} \cite{Ramer:Split} are aging friendly, while other algorithms are not.   }
+	{\\ \vspace{2ex} Here, (1) `Rep" means ``Representative" \textcolor{blue}{(in each category, we comprehensively consider the effectiveness and the supporting of distance metrics of algorithms, as well as the novelty of their key ideas)},  $K$ is the number of the final segments of a trajectory and $|Q|$ is the size of a buffer/window, \textcolor{blue}{(2) \optss, \bumr, \dagots and \olts actually use the Local Integral Square \sed (\lissed)}, and (3) batch and top-down algorithms \dpa\cite{Douglas:Peucker, Meratnia:Spatiotemporal} and \kw{Ramer} \cite{Ramer:Split} are aging friendly, while other algorithms are not.   }
 	\vspace{-2ex}
 \end{table*}
 

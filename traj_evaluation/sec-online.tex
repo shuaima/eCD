@@ -116,7 +116,16 @@ Thus, \squishe runs in $O(n\log |Q|)$ time and $O(|Q|)$ space.
 \end{example}
 
 \subsubsection{\textcolor{blue}{Algorithm DOTS Using \lissed~\cite{Cao:Dots}}}
-\todo{.}
+It is a directed acyclic graph based online trajectory simplification method that supports \lissed. Other than those optimal algorithms that first construct the reachability graph then find a shortest path from it, \dagots determines part of the shortest path before the whole graph is completely constructed \cite{Cao:Dots}, \ie it runs in a recursive manner.
+
+It first shows that in this problem, the reachability graph finally retrogrades to a tree structure and each layer of the tree can be added without feeding the entire trajectory. 
+It also observes that the local approximation error $lissed(P_s,P_{s+k})$ is growing with respect to $k$. Thus, it is reasonable to assume that $k$ should not be too large. 
+By this assumption, the shortest path could be determined recursively, \ie layer by layer.
+%
+The first layer $V_0$ is always initialized as $\{P_0\}$. Then, let $0<c<d$, \dagots updates status of layer $V_c$ to layer $V_d$ as long as the new layer $V_{d+1}$ is constructed. It marks points having descendants as \emph{alive}, while others are \emph{dead}.
+It checks if $V_c$ and layers afterwards contains only 1 single \emph{alive} point. Those 1-alive-element layers will decode and output that single point to the simplified trajectory step by step.
+
+\todo{Example.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
