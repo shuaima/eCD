@@ -6,8 +6,7 @@ Though these algorithms support the three distance metrics \ped, \sed and \dad, 
 \textcolor{blue}{Besides, in the context of trajectory data reduction in wireless sensor networks, it is reported ``context-dependent" in online algorithms, \ie the high communication overhead and energy consumption of sensors, along with the complementary aspect of "freshness" of the compressed data in the respective sink \cite{Ghica:DTracking}.}
 To design more efficient online algorithms, techniques typically need to be designed closely coupled with distance metrics.
 Indeed, \bqsa \cite{Liu:BQS} and \squishe \cite{Muckell:Compression} propose to utilize convex hulls and priority queues, respectively, and they speed up trajectory simplification using \ped and \sed, respectively. 
-{\todo{\dagots...}}
-\textcolor{blue}{\olts~\cite{Wu:Graph} has the same ideas as \dagots.}
+\textcolor{blue}{\dagots~\cite{Cao:Dots} is an online method that supports \lissed which could be computed in an incremental way, and \olts~\cite{Wu:Graph} has the same ideas as \dagots.}
 To our knowledge, no specific techniques have been developed for \dad.
 Hence, {\em we choose algorithms \bqsa, \squishe, \textcolor{blue}{\dagots} and \opwa as the representatives of online algorithms using \ped, \sed, \textcolor{blue}{\lissed} and \dad, respectively}.
 
@@ -118,12 +117,12 @@ Thus, \squishe runs in $O(n\log |Q|)$ time and $O(|Q|)$ space.
 \subsubsection{\textcolor{blue}{Algorithm DOTS Using \lissed~\cite{Cao:Dots}}}
 It is a directed acyclic graph based online trajectory simplification method that supports \lissed. Other than those optimal algorithms that first construct the reachability graph then find a shortest path from it, \dagots determines part of the shortest path before the whole graph is completely constructed \cite{Cao:Dots}, \ie it runs in a recursive manner.
 
-It first shows that in this problem, the reachability graph finally retrogrades to a tree structure and each layer of the tree can be added without feeding the entire trajectory. 
+It first shows that in this problem, the reachability graph of an input trajectory finally retrogrades to a tree structure and each layer of the tree can be added without feeding the entire trajectory. 
 It also observes that the local approximation error $lissed(P_s,P_{s+k})$ is growing with respect to $k$. Thus, it is reasonable to assume that $k$ should not be too large. 
 By this assumption, the shortest path could be determined recursively, \ie layer by layer.
 %
-The first layer $V_0$ is always initialized as $\{P_0\}$. Then, let $0<c<d$, \dagots updates status of layer $V_c$ to layer $V_d$ as long as the new layer $V_{d+1}$ is constructed. It marks points having descendants as \emph{alive}, while others are \emph{dead}.
-It checks if $V_c$ and layers afterwards contains only 1 single \emph{alive} point. Those 1-alive-element layers will decode and output that single point to the simplified trajectory step by step.
+The first layer $Q_0$ is always initialized as $\{P_0\}$. Then, let $0<c<d$, \dagots updates status of layer $Q_c$ to layer $Q_d$ as long as the new layer $Q_{d+1}$ is constructed. It marks points having descendants as \emph{alive}, while others are \emph{dead}.
+It checks if $Q_c$ and layers afterwards contains only 1 single \emph{alive} point. Those 1-alive-element layers will decode and output that single point to the simplified trajectory step by step. The time complexity of \dagots is $O(n^2/K)$, where K is the number of output points, and the space complexity of \dagots is $O(|Q|^2)$, where $|Q|$ is the size of a layer.
 
 \todo{Example.}
 
