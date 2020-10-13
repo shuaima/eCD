@@ -115,21 +115,26 @@ Thus, \squishe runs in $O(n\log |Q|)$ time and $O(|Q|)$ space.
 \end{example}
 
 \subsubsection{\textcolor{blue}{Algorithm DOTS Using \lissed~\cite{Cao:Dots}}}
-\textcolor{blue}{It is a directed acyclic graph based online trajectory simplification method that supports \lissed. Other than those optimal algorithms and near optimal algorithms \cite{Chen:Fast,Daescu:metric} that first construct the reachability graph then find a shortest path from it, \dagots determines part of the shortest path before the whole graph is completely constructed \cite{Cao:Dots}.}
+\textcolor{blue}{It is a directed acyclic graph based online trajectory simplification method that supports \lissed. Other than optimal algorithms and other near optimal algorithms \cite{Chen:Fast,Daescu:metric} that first construct the reachability graph then find a shortest path from it, \dagots determines part of the shortest path when constructing preceding part of the whole graph \cite{Cao:Dots}.}
 %, \ie it runs in a recursive manner.
+%before the whole graph is completely constructed, 
 
-It first shows that in this problem, the reachability graph of an input trajectory finally retrogrades to a tree structure and each layer of the tree can be added without feeding the entire trajectory. 
-It also observes that the local approximation error $lissed(P_s,P_{s+k})$ is growing with respect to $k$. Thus, it is reasonable to assume that $k$ should not be too large. 
-By this assumption, the shortest path could be determined recursively, \ie layer by layer.
+It first shows that in this problem, the reachability graph of an input trajectory finally retrogrades to a tree structure. It also observes that the local approximation error $lissed(P_s,P_{s+k})$ is growing with respect to $k$, thus, it is reasonable to assume that $k$ should not be too large. 
+By this assumption, each layer of the tree could be added without feeding the entire trajectory, and the shortest path could also be determined recursively, \ie layer by layer.
 %
-The first layer $Q_0$ is always initialized as $\{P_0\}$. Then, let $0<c<d$, \dagots updates status of layer $Q_c$ to layer $Q_d$ as long as the new layer $Q_{d+1}$ is constructed. It marks points having descendants as \emph{alive}, while others are \emph{dead}.
-It checks if $Q_c$ and layers afterwards contains only 1 single \emph{alive} point. Those 1-alive-element layers will decode and output that single point to the simplified trajectory step by step. The time complexity of \dagots is $O(n^2/K)$, where K is the number of output points, and the space complexity of \dagots is $O(|Q|^2)$, where $|Q|$ is the size of a layer.
+For each node (point) in each layer, \dagots marks those having descendants as \emph{alive} and others as \emph{dead}.
+Initially, the first layer $Q_0$ is $\{P_0\}$, and it is \emph{alive}. 
+%
+Then, let $c>0$ and $Q_c$ is the current layer under constructing, 
+\dagots in turn adds point $P_{s+k}$, having \lissed distance to any point of $Q_{c-1}$ less than error bound, to $Q_c$, until no point can be added to $Q_c$ (remember $k$ should not be too large). After that, it updates status of each layer that has \emph{alive} points: the parent of an active point may be adjusted to minimize the total integral square \sed of the path, points without descendants will be marked as \emph{dead}, those 1-alive-element layers will be decoded and their \emph{alive} points will be output to the simplified trajectory. 
+%
+The time complexity of \dagots is $O(n^2/K)$, where K is the number of output points, and the space complexity of \dagots is $O(|Q|^2)$, where $|Q|$ is the size of a layer.
 
 \begin{figure*}[tb!]
 	\centering
 	\includegraphics[scale=0.8]{Figures/Fig-DOTS.jpg}
 	\vspace{-2ex}
-	\caption{\small The trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$ is compressed by the \dagots algorithm using \lissed to four line segments. }
+	\caption{\small \textcolor{blue}{Example of algorithm \dagots using \lissed, where (1) left is the supposed reachability graph of trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$, and (2) right is incremental construction of the reachability graph and online decoding of the shortest path. Finally, the trajectory is compressed to four line segments.} }
 	\vspace{-1ex}
 	\label{fig:dots}
 \end{figure*}
@@ -138,18 +143,15 @@ It checks if $Q_c$ and layers afterwards contains only 1 single \emph{alive} poi
 
 \begin{example}
 	\label{exm-alg-dots}
-	\todo{Figure~\ref{fig:dots} is an example of \dagots.}
+	\textcolor{blue}{Figure~\ref{fig:dots} is an example of \dagots. The reachability graph is constructed layer by layer incrementally, and part of the shortest path is determined before the whole graph is completely constructed. }
 	%
-	(1) Initially, $|Q| = 6$ points are read to the list. The tuple $(pre, suc, mmprio, prio)$ for each point is initialized. For example, the tuple of $P_1$ is set to $(0, 2, 0, 0.42\epsilon)$, where $0.42\epsilon$ is the \sed from $P_1$ to $\vv{P_0P_2}$.
+	(a) \textcolor{blue}{Initially, $P_0$ is added to the first layer $Q_0$, and its the only element in the layer.}
 	%
-	(2) The priority of $P_3$ has the minimal value, thus, it is removed from the list.
-	The $mnprio$ properties of $P_2$ and $P_4$ are updated to $max\{mnprio(pre(P_3)), prio(P_3)\}$ = $max\{mnprio(P_2), prio(P_3)\}$ = $max\{0, 0.39\epsilon\}$ = $0.39\epsilon$, and $max\{mnprio(P_4), ~prio(P_3)\}$ = $0.39\epsilon$, respectively.
-	Furthermore, the $prio$ property of $P_4$ is updated to $mnprio(suc(P_j)) + sed(suc(P_j),\vv{pre(P_{j})suc(suc(P_{j}))})$ = $mnprio(P_4) + sed(P_4,\vv{P_2P_5})$ = $0.39\epsilon + 2.50\epsilon$ = $2.89\epsilon$, and the $prio$ property of $P_2$ is updated to $mnprio(P_2) + sed(P_2,\vv{P_1P_4})$ = $0.39\epsilon + 2.12\epsilon$ = $2.51\epsilon$.
-	Then, $P_6$ is read, and the information of $P_5$ is updated.
+	(b) \textcolor{blue}{Then, points $P_1$, $P_2$ and $P_3$ are in turn added to the second layer $Q_1$. Because $P_0$ does not have any new child point, \dagots updates the status from $Q_0$ to $Q_1$, and outputs $P_0$ as it is the only \emph{alive} point in $Q_0$.}
 	%
-	(3) $P_5$ is removed and $P_7$ is read to the list.
+	(c) \textcolor{blue}{$P_4$ and $P_5$ are added to the next layer, $Q_2$. After that, $Q_1$ does not have new descendants, hence, status of $Q_1$ and $Q_2$ is updated. The parent of $P_4$ is adjusted to $P_3$ as path [$P_0$, $P_3$, $P_4$] has smaller total integral square \sed. Besides, $P_1$ and $P_2$ are marked as \emph{dead} as they do not have any descendant, and $P_3$ is output as it is the only \emph{alive} element in layer $Q_1$.}
 	%
-	(4) Finally, the algorithm outputs 5 line segments $\vv{P_0P_2},\vv{P_2P_4},\vv{P_4P_7},\vv{P_7P_9}$ and $\vv{P_9P_{10}}$.
+	(d) \textcolor{blue}{The process repeat. Finally, it outputs 4 line segments $\vv{P_0P_3},\vv{P_3P_5},\vv{P_5P_7}$ and $\vv{P_7P_{10}}$.}
 \end{example}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
