@@ -111,11 +111,11 @@ We do not consider map-matching as the pre-process of trajectory simplification 
 
 (2) Moving objects often move in areas not on roads or without fine road network. For example, human being, wild animals, bikes, air plane may move on ground, at gardens, in countryside and in the atmosphere, where no fine road information is available. In these cases, \emph{map-matching should not be the pre-step of trajectory simplification.}
 
-(3) In urban having road network, of cause, the data points could be mapped to road networks. However, this is not a work must be done. In some server-side applications like moving object monitoring, it just shows the piece-wise line trajectory on a map without map-matching in the consideration of efficiency. Besides, map-matching is most likely an application-level task called by application such as navigation. As we known, trajectory simplification as a fundamental functionality should (better) not depend on these high-level applications. Thus, \emph{map-matching should not be the pre-step of trajectory simplification too.}
-%
-We also know that there is a kind of trajectory compression called road-aware trajectory compression [r1, r2] that either first maps a trajectory to road network then simplifies those mapped data points by \emph{numerical streams} method[r3], such as PRESS [r1], or first simplifies the trajectory by some line simplification method then maps the result to roads, such as the Dilution-matching-encoding method [r2]. In the first case, there is no line simplification, and in the second case, line simplification is before, and hence independence of, map-matching. 
+(3) In urban having road network, of cause, the data points could be mapped to road networks. However, this is not necessary a work must be done. For example, in some server-side applications like moving object monitoring, it just shows the piece-wise line trajectory on a map without map-matching in the consideration of efficiency. Indeed, \emph{map-matching is more likely a task parallel to trajectory simplification.}
+%Besides, map-matching is most likely an application-level task called by application such as navigation. As we known, trajectory simplification as a fundamental functionality should (better) not depend on these high-level applications. 
+We also know that there is a kind of trajectory compression called road-aware trajectory compression [r1, r2] that either first maps a trajectory to road network then simplifies those mapped data points by \emph{numerical streams} method[r3], such as PRESS [r1], or first simplifies the trajectory by some line simplification method then maps the result to roads, such as the Dilution-matching-encoding method [r2]. In the first case, there is no line simplification, and in the second case, line simplification is the pre-step of, and hence independence of, map-matching. 
 
-(4) Let map-matching be the pre-step will require extra information (road network) and extra heavy computation (map-matching), and introduce extra error and running time, which make it hard to compare trajectory simplification and/or compression algorithms in a fair circumstance.
+(4) Let map-matching be the pre-step of trajectory simplification will require extra information (road network) and extra heavy computation (map-matching), and introduce extra error and running time, which make it hard to compare trajectory simplification and/or compression algorithms in a fair circumstance.
 
 Thus, in this paper, we focus on line simplification and let alone map-matching.
 
@@ -129,7 +129,7 @@ GeoInformatica, 2015.
 
 \textbf{[R1C4]} \emph{ In Page 6 (line 19), it is stated "all points in the simplified trajectory belong to the original trajectory"? Why? If the error bound is the requirement, why we are not allowed to introduce new points, if it helps to improve the compression rate without violating the error bound defined? This is related to my comment C1. }
 
-Yes, we have extended the scope of the paper and allowed insert new data points. Sentences in Page 6 (line 19) have been revised to meet the new scope. Thank you!
+In the revised version, we have extended the scope of the paper and allowed insert new data points. Weak versions of algorithms SIPED, OPERB and CISED have been tested in Section 6, and sentences in Page 6 (line 19) have also been revised to meet the new scope. Thank you!
 
 
 \textbf{[R1C5]} \emph{The three distance metrics used in this paper are mainly for line simplification. However, if we apply line simplification to compress trajectories, some of the metrics are no longer that useful. For example, perpendicular distance metric (PED) does not consider temporal dimension, which means the error bounds based on PED consider spatial distances only. However, temporal dimension is very important to trajectories. I think it is necessary to revisit the metrics and highlight their limitations. Particularly, the error-bounds provided by these metrics could be misleading as the metrics do not fully reflect the loss of information. }
@@ -142,7 +142,7 @@ We have explained the criteria of trajectory compression, namely \emph{compressi
 
 \textbf{[R1C7]} \emph{ The definition of Error Bounded Algorithms is not precise as the error bounds are not presented. }
 
-Yes, we have revised the definition in the penultimate paragraph of Section 2. Thanks!
+We have revised the definition in the penultimate paragraph of Section 2. Thanks!
 
 
 \textbf{[R1C8]} \emph{ Fig.2 in Page 7 gives an example of reachability graph. However, that graph is incomplete. For example, there is no link between $P_0$ and $P_5$ but they are reachable. This is very misleading. }
@@ -157,8 +157,8 @@ As shown below, if we connect $P_0$ and $P_5$, then the \kw{PED} from $P_4$ to l
 
 \textbf{[R1C9]} \emph{ The datasets used in the experimental study were rather small. With 20M+ points, there is no need to compress them. Much larger datasets will be more realistic for the topic of trajectory compression.  }
 
-We have replaced UCar with a larger dataset which has 1000 trajectories and \textcolor{red}{1000M} points (please see Table 4). Besides, we have already used the full datasets of Geolife and Mopsi, which have 182 and 51 trajectories, respectively.
-It is worth pointing out that, due to the high time complexity of batch algorithms, \ie $O(n^2)$ of both Douglas-Peucker and Theo-Pavlidis, they need \textcolor{red}{days} to run the tests listed in Section 6. 
+We have replaced UCar with a larger dataset which has 1000 trajectories and \textcolor{red}{1000M} points (please see Table 4). Besides, we had already used the full datasets of Geolife and Mopsi, which have 182 and 51 trajectories, respectively.
+\textcolor{blue}{It is worth pointing out that, due to the high time complexity of batch algorithms, \ie $O(n^2)$ of both Douglas-Peucker and Theo-Pavlidis, they need \textcolor{red}{days} to run the tests listed in Section 6. }
 
 \textbf{[R1C10]} \emph{The average errors introduced in Page 20 are derived based on ONLY points contained in a line segment of a piece-wise line representation. Why? Why not consider all the points in the original trajectories? }
 
@@ -197,7 +197,7 @@ Indeed, when calculate the average errors, we do consider all the points in the 
 
 \textbf{[R2D1]} \emph{In page 2, the authors mention that “important aspects of trajectory simplification (compression ratios, running time and aging friendliness) are not systematically studied” for [41]. Not sure which “important aspects” the authors refer to, as I found running time and the trade-off between compression ratios and errors have been reported in [41].}
 
-As we know, the \emph{error bounds} and \emph{trajectories} are the basic inputs of trajectory simplification algorithms solving the ``min-\#" problem, thus, a comprehensive evaluation should test the impacts of them on the effectiveness and efficiency of those algorithms.  
+As we know, \emph{error bounds} and \emph{trajectories} are the basic two inputs of trajectory simplification algorithms solving the ``min-\#" problem, thus, a comprehensive evaluation should test the impacts of them on the effectiveness and efficiency of those algorithms.  
 %
 However, we have notice that [41] (1) only has a limited evaluation on running time. It does show a table that lists \emph{compression time per trajectory point} of each algorithm, but it is not sufficient to guide users, as the impacts of both the sizes of trajectories and the error bounds is ignored by [41], and (2) only has a limited evaluation on compression ratios. It does report the relationship between compression ratios and errors (not error bounds),  but the more important aspect in practice, the impacts of the error bounds on the compression ratios, is ignored. Thus, it is also hard to guide users to set reasonable error bounds.
 %
@@ -211,7 +211,8 @@ We have fixed it. Thanks for pointing out this!
 
 \textbf{[R2D3]} \emph{ In page 4: It’s better to move the comparison with [41] to the motivation part, in order to assure the necessity of a new empirical study.}
 
-Yes, we have moved some comparison with [41] that is helpful to elaborate the motivation of the work to the motivation part. Thanks for your advice!
+Yes, we have moved some comparison with [41] to the motivation part. Thanks for your advice!
+%that is helpful to elaborate the motivation of the work
 
 \textbf{[R2D4]} \emph{The authors mention that one of the main contributions is to re-implement the methods with Java. So compared with the running time results reported in [41], any new or different findings are revealed?}
 
@@ -294,7 +295,13 @@ Namely, [28] considers what happens with compression if the trajectories are con
 
 \emph{3. p.33: the authors make a claim to the effect of: "These methods lack the capability of compressing..." when describing the min-$\epsilon$ variant. The statement needs to be clarified, or put in the more appropriate contexts: the min-$\epsilon$  is a complementary one to min-\# and, as such, it never makes any other claim that it will yield the minimum error, given a fixed "budget" of m points. However, that does not mean that this variant of the problem, and the algorithmic solution, doesn't have its own merits.}
 
+We have revised these texts, more specially, 
 
+(1) \todo.
+
+(2) \todo.
+
+(3) \todo.
 
 \line(1,0){500}
 
