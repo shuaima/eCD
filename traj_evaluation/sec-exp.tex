@@ -77,7 +77,7 @@ All tests are run on an x64-based  PC with 4 Intel(R) Core(TM) i7-6700 CPU @
 %, and each test was repeated over 3 times and the average is reported here.
 
 
-We test these algorithms under varied error bounds $\epsilon$ and trajectory sizes, respectively. We first vary $\epsilon$ from $10m$ to $100m$ in \ped and \sed (or from $15^o$ to $90^o$ in \dad) on the entire four datasets, respectively. We then choose $10$ trajectories from each dataset, and vary the size \trajec{|T|} of a trajectory from $1,000$ points to $10,000$ points while fixing the error bound $\epsilon=40$ metres or $\epsilon=45$ degrees.
+We test these algorithms under varied error bounds $\epsilon$ and trajectory sizes, respectively. We first vary $\epsilon$ from $10m$ to $100m$ in \ped and \sed (or from $15^o$ to $90^o$ in \dad) on the entire four datasets, respectively. We then choose $10$ trajectories from each dataset, and vary the size \trajec{|T|} of a trajectory from $1,000$ points to $10,000$ points \textcolor{blue}{(\ie from top $1,000$ to top $10,000$ points of the trajectory)} while fixing the error bound $\epsilon=40$ metres or $\epsilon=45$ degrees.
 
 \eat{%%%%%%%%%%%%%%%%%%%
 	\stitle{Real-life Trajectory Datasets}.
@@ -148,9 +148,11 @@ The compression ratios of these algorithms under varied error bounds $\epsilon$ 
 
 
 %%%%%%%%%%%%%%%%%
-\sstab(1)  {Datasets may have impacts on the compression ratios of \lsa algorithms. Datasets with higher sampling rates typically have better compression ratios for \ped and \sed, while it is opposite for \dad. The dataset collected by cars (\eg~\ucar) also has better compression ratios than the datasets partially collected by individuals (\eg~\geolife and \mopsi), as cares typically move more regularly than individuals. }
+\sstab(1)  {Datasets may have impacts on the compression ratios of \lsa algorithms. Datasets with higher sampling rates typically have better compression ratios for \ped and \sed, while it is opposite for \dad. \textcolor{blue}{When using \dad, the} dataset collected by cars (\eg~\ucar) \sout{also} has better compression ratios than the datasets partially collected by individuals (\eg~\geolife and \mopsi), as cars typically move more regularly \textcolor{blue}{in direction} than individuals. }
 
-\sstab(2) The compression ratios of algorithms using \ped from the best
+\sstab(2) \textcolor{blue}{Data sizes do not have apparent and regular impacts on compression ratios.}
+
+\sstab(3) The compression ratios of algorithms using \ped from the best
 to the worst are the optimal algorithm \opt, online algorithm \bqsa, one-pass algorithm \siped($\epsilon$), batch algorithms \tpa and \dpa, and one-pass algorithms \siped($\frac{\epsilon}{2}$) and \operb.
 The output sizes of algorithms \bqsa and \siped({$\epsilon$}) are on average
 ($113.32\%$, $120.22\%$, $120.83\%$) and ($116.04\%$, $124.46\%$, $124.24\%$) of algorithm \opt
@@ -201,7 +203,7 @@ For example, in \mopsi, the compression ratios of algorithms
 \end{figure*}
 
 %%%%%%%%%%%%%%%%%
-\sstab(3) The compression ratios of algorithms using \sed from the best
+\sstab(4) The compression ratios of algorithms using \sed from the best
 to the worst are the \opt algorithm, one-pass algorithm \cised($\epsilon$), batch algorithms \tpa and
 \dpa, one-pass algorithm \cised($\frac{\epsilon}{2}$), and online algorithm \squishe.
 %
@@ -224,7 +226,7 @@ are ($3.45\%$, $3.41\%$, $5.75\%$, $3.02\%$, $3.86\%$), respectively, when $\eps
 %
 
 %%%%%%%%%%%%%%%%%
-\sstab(4) The compression ratios of algorithms using \dad from the best
+\sstab(5) The compression ratios of algorithms using \dad from the best
 to the worst are the \opt algorithm, batch algorithm \tpa and
 one-pass algorithm \interval, online algorithm \opwa, one-pass algorithm \intersec and batch algorithm \dpa.
 %
@@ -318,7 +320,7 @@ That is, a moving object, like an individual or a car, usually keeps moving forw
 Though \ped, \sed and \dad are different distances, the comparison of their compression ratios is helpful to choose an effective distance metric.
 %whose usages are mainly decided by application requirements
 %
-First, given the same error bound $\epsilon$, the compression ratios of algorithms using \ped are obviously better
+First, \textcolor{blue}{because \sed saves temporal information while \ped does not}, given the same error bound $\epsilon$, the compression ratios of algorithms using \ped are obviously better
 than using \sed. More specifically, \emph{the output sizes of using \sed are approximately twice of \ped.}
 %
 As shown in Figures~\ref{fig:cr-ped-epsilon} and~\ref{fig:cr-sed-epsilon}, the output sizes of algorithms \tpa and \dpa
@@ -330,11 +332,10 @@ $50.88\%$, $64.50\%$) of algorithms \tpa and \dpa using \sed on datasets \dSets,
 This result shows ~\sed saves temporal information at a price of twice more data points.
 
 
-Secondly, in practice (\eg $\epsilon <100$ meters and $\epsilon < 60$ degrees), \sed have obviously better compression ratios than \dad in datasets \geolife and \mopsi and a bit poorer than \dad in \ucar.
+Secondly, \textcolor{blue}{in practice, we find that \sed have obviously better compression ratios than \dad in datasets \geolife and \mopsi and a bit poorer than \dad in \ucar (indeed, it is hard to compare them under absolutely fair conditions, as \sed is a Euclidean distance metric, having a value in $[0, \infty]$ meters, and DAD is a direction metric,  having a value in $[0,360)$ degrees. Alternatively, we suppose there are two practical scenarios, one uses \sed with $\epsilon  \le  100$ meters, and the other uses \dad with $\epsilon \le 60$ degrees, then we compare the performance of them, \eg the performance of \sed with $\epsilon=100$ meters \emph{vs.} \dad with $\epsilon=60$ degrees. The same below).}
 This is because some \geolife and \mopsi trajectories are collected by individuals that are in transportation modes of walking, running and riding, and moving objects in those modes may change their directions with a considerable range (\eg large than $60$ degrees) more frequently than cars in urban. Moreover, \geolife and \mopsi have higher sampling rates than \ucar, which capture more direction changes, \ie direction changes in a small time interval.
 
 %It seems that it is a normal phenomenon that a moving object frequently changes its direction with a considerable range (\eg large than $60$ degrees) during a trip.
-
 
 
 
@@ -359,7 +360,7 @@ This is because some \geolife and \mopsi trajectories are collected by individua
 The average errors of these algorithms, under varied error bounds $\epsilon$ and trajectory sizes, are reported in Figures~\ref{fig:ae-ped-epsilon},~\ref{fig:ae-sed-epsilon},~\ref{fig:ae-dad-epsilon},~\ref{fig:ae-ped-size},~\ref{fig:ae-sed-size} and~\ref{fig:ae-dad-size}.
 We first report our findings.
 
-\sstab (1) {Datasets are insensitive to the errors of \lsa algorithms.}
+\sstab (1) {Datasets \textcolor{blue}{and data sizes} are insensitive to the errors of \lsa algorithms.}
 
 \sstab (2) When using \ped, the average errors from the smallest
 to the largest are batch algorithms \tpa and \dpa, one-pass
@@ -625,8 +626,7 @@ For example, in \mopsi, the running time of algorithms
 For example, in \mopsi, the running time of algorithms
 (\tpa, \dpa, \squishe, \cised($\epsilon$), \cised($\frac{\epsilon}{2}$)) is ($156.6$, $104.8$, $27.2$, $11.6$, $9.7$) seconds when $\epsilon$ = $40m$.
 
-\sstab {(4) When using \dad,} the running time from the smallest to the
-largest is one-pass algorithms \intersec and \interval, batch algorithms \tpa and \dpa, and online algorithm \opwa.
+\sstab {(4) When using \dad,} \textcolor{blue}{one-pass algorithms \intersec and \interval run prominently fast than batch algorithms \tpa and \dpa and online algorithm \opwa.}
 %
 %Algorithm \interval is a bit slower than \intersec, and algorithms \tpa and \dpa are on average
 %($6.66$, $13.55$, $12.73$, $12.73$) and ($11.67$, $14.24$, $16.51$, $17.59$)
@@ -802,7 +802,7 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 
 \begin{table}
 	%\renewcommand{\arraystretch}{1.2}
-	\caption{\small The max errors of spatio-temporal queries on compressed trajectories: fixed $\epsilon=40m$.}
+	\caption{\small The max errors of \textcolor{blue}{\emph{where\_at}} queries on compressed trajectories: fixed $\epsilon=40m$.}
 	\centering
 	\scriptsize
 	\vspace{-1ex}
@@ -836,7 +836,7 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 	\includegraphics[scale = 0.400]{Figures/Exp-query-PED-error-epsilon-geolife.jpg}\hspace{2ex}
 	\includegraphics[scale = 0.400]{Figures/Exp-query-PED-error-epsilon-mopsi.jpg}
 	\vspace{-1ex}
-	\caption{\small Evaluation of spatio-temporal queries (PED) on full datasets: varying error bound $\epsilon$.}
+	\caption{\small Evaluation of \textcolor{blue}{\emph{where\_at}} queries (PED) on full datasets: varying error bound $\epsilon$.}
 	\label{fig:query-ped-epsilon}
 	\vspace{-1.0ex}
 \end{figure*}
@@ -847,7 +847,7 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 	\includegraphics[scale = 0.400]{Figures/Exp-query-SED-error-epsilon-geolife.jpg}\hspace{2ex}
 	\includegraphics[scale = 0.400]{Figures/Exp-query-SED-error-epsilon-mopsi.jpg}
 	\vspace{-1ex}
-	\caption{\small Evaluation of spatio-temporal queries (SED) on full datasets: varying error bound $\epsilon$.}
+	\caption{\small Evaluation of \textcolor{blue}{\emph{where\_at}} queries (SED) on full datasets: varying error bound $\epsilon$.}
 	\label{fig:query-sed-epsilon}
 	\vspace{-1.0ex}
 \end{figure*}
@@ -858,7 +858,7 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 	\includegraphics[scale = 0.400]{Figures/Exp-query-DAD-error-epsilon-geolife.jpg}\hspace{2ex}
 	\includegraphics[scale = 0.400]{Figures/Exp-query-DAD-error-epsilon-mopsi.jpg}
 	\vspace{-1ex}
-	\caption{\small Evaluation of spatio-temporal queries (DAD) on full datasets: varying error bound $\epsilon$.}
+	\caption{\small Evaluation of \textcolor{blue}{\emph{where\_at}} queries (DAD) on full datasets: varying error bound $\epsilon$.}
 	\label{fig:query-dad-epsilon}
 	\vspace{-1.0ex}
 \end{figure*}
@@ -871,7 +871,7 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 	\includegraphics[scale=0.400]{Figures/Exp-query-PED-error-size-geolife.jpg}	\hspace{2ex}
 	\includegraphics[scale=0.400]{Figures/Exp-query-PED-error-size-mopsi.jpg}		
 	\vspace{-2ex}
-	\caption{\small Evaluation of spatio-temporal queries (\ped) on small datasets: varying the size of
+	\caption{\small Evaluation of \textcolor{blue}{\emph{where\_at}} queries (\ped) on small datasets: varying the size of
 		trajectories.}
 	\label{fig:query-ped-size}
 	\vspace{-1ex}
@@ -883,7 +883,7 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 	\includegraphics[scale=0.400]{Figures/Exp-query-SED-error-size-geolife.jpg}	\hspace{2ex}
 	\includegraphics[scale=0.400]{Figures/Exp-query-SED-error-size-mopsi.jpg}		
 	\vspace{-2ex}
-	\caption{\small Evaluation of spatio-temporal queries (\sed) on small datasets: varying the size of
+	\caption{\small Evaluation of \textcolor{blue}{\emph{where\_at}} queries (\sed) on small datasets: varying the size of
 		trajectories.}
 	\label{fig:query-sed-size}
 	\vspace{-1ex}
@@ -896,7 +896,7 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 	\includegraphics[scale=0.400]{Figures/Exp-query-DAD-error-size-geolife.jpg}	\hspace{2ex}
 	\includegraphics[scale=0.400]{Figures/Exp-query-DAD-error-size-mopsi.jpg}	
 	\vspace{-2ex}
-	\caption{\small Evaluation of spatio-temporal queries (\dad) on small datasets: varying the size of trajectories.}
+	\caption{\small Evaluation of \textcolor{blue}{\emph{where\_at}} queries (\dad) on small datasets: varying the size of trajectories.}
 	\label{fig:query-dad-size}
 	\vspace{-1ex}
 \end{figure*}
@@ -969,7 +969,9 @@ One-pass algorithms show a linear running time and they are not very sensitive t
 %
 {(4) \dad is not aging friendly \wrt any tested algorithm.}
 %
-{(5) \sed is spatio-temporal queries friendly while the others are not. Note that algorithms using \ped and/or \dad may lead to very large query errors.}
+{(5) \sed is spatio-temporal queries friendly while the others are not. }
+\textcolor{blue}{Note that, \emph{though algorithms using \ped and/or \dad are error bounded by \ped and/or \dad, respectively, they are not able to guarantee the error bounds of spatio-temporal queries}. Indeed, they might lead to very large query errors.}
+
 
 
 \textcolor{blue}{Comparing with the recent experimental study \cite{Zhang:Evaluation}, this work has the following new findings: (1) compression ratios and efficiency of optimal, batch, online and one-pass algorithms are systematicly evaluated \wrt distance metrics (\ped, \sed and \dad), error bounds and data sizes, as summarized in the above, (2) data friendliness and safety are comprehensively evaluated, as reported in Section \ref{sec:exp-data-aging}, (3) one-pass algorithm \siped is efficient as well as has good compression ratios, hence, it is a good choice in scenarios that only spacial information is concerned, and (4) one-pass algorithm \cised using \sed is significantly better than \dagots using \lissed (which is recommended in \cite{Zhang:Evaluation}) in terms of compression ratios and efficiency, and they have similar quality (compression error and query error), hence, \cised is the recommended algorithm in scenarios that temporal information is concerned (\eg spatio-temporal queries). }

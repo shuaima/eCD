@@ -167,19 +167,41 @@ Indeed, when calculate the average errors, we do consider all the points in the 
 
 \textbf{[R1C11a]} \emph{ In Page 21 (lines 18-19), it is stated that "We then choose 10 trajectories from each dataset, and vary the size |T| of a trajectory from 1,000 points to 10,000 points while fixing the error bound $\epsilon = 40$ metres or $\epsilon = 45$ degrees". It is not clear how points are selected. For example, a raw trajectory contains 100 points (p1, p2, ..., p100). If we want to only consider 10 points, do you consider a sub-trajectory of 10 points (say p1, p2, ..., p10) or a trajectory of much lower sampling rate (say p1, p11, p21, ..., p91). Please state it clearly!}
 
+Yes, we have clarified this in the last paragraph of Section 6.1.
+
 \textbf{[R1C11b]} \emph{ In Page 21 (lines 44 - 46), it is stated that "The dataset collected by cars (e.g., UCar) also has better compression ratios than the datasets partially collected by individuals (e.g., Geolife and Mopsi), as cares typically move more regularly than individuals." However, this is different from our everyday observation. Because of the traffic light, cars are not expected to move so regularly. Second, it is different from the observations we could make from Figures 15, 16, 17, 18, 19, and 20. Based on the results reported in those six figures, compression ratios under Geolife and Mopsi are lower than that under UCar, which means the dataset collected by cars has poorer compression ratios. Third, it shall be 'cars' but not 'cares'. }
+
+Indeed, this statement refers to the compression ratios of algorithms using DAD. We have clarified this in the text.
+
 
 \textbf{[R1C12]} \emph{ The impact of error bounds on compression ratios is straightforward. The bigger the error bounds, the better the compression ratio. However, the size of trajectory on the compression ratio is not that straightforward. Can the authors please comment on the observations we could make from Figures 18 -20? }
 
+Yes, it seems that data size does not have apparent and regular impacts on compression ratios.
+We have clarified this in Section 6.3.1 (the 2{nd} item).
+
 \textbf{[R1C13]} \emph{ In Page 23 (lines 24 - 31), it is stated that "given the same error bound $\epsilon$, the compression ratios of algorithms using PED are obviously better than using SED". This is actually misleading. Although the observation is that algorithms using PED could achieve higher compression ratios, the statement ignores the fact the PED does not consider the temporal dimension at all while SED does. The comparison is not fair at all! If the higher compression ratio is achieved by ignoring the error in the temporal dimension, it has to be stated clearly.} 
+
+We have clarified this in the penultimate paragraph of Section 6.3.1. Thanks!
 
 \textbf{[R1C14]} \emph{ In Page 27 (lines 44 - 45), it is stated that "When using DAD, the running time from the smallest to the largest is one-pass algorithms Intersect and Interval, batch algorithms TP and DP, and online algorithm OPW." However, algorithms actually perform slightly different at various datasets. It's not accurate to state that online algorithm OPW is always the worst, as it actually performs much better than TP and DP in the dataset Geolife (as shown in Figure 32(2)).}
 
+We have corrected the statement. Thanks!
+
 \textbf{[R1C15]} \emph{ When evaluating the running time of different algorithms under various error bounds, different algorithms demonstrate different trends. The authors might want to explain why algorithms change the trends in certain ways (e.g., why error bounds do not have any impact on the running time of SIPED, why TP, OPW, BQS incur longer running time as error bounds increase, why ......).}
 
-\textbf{[R1C16]} \emph{ Figures 33 - 38 report the average errors of where\_at queries based on trajectories compressed using different line simplification algorithms. The title of 'Evaluation of spatio-temporal queries' is misleading as only one type of queries is considered. In addition, it is necessary to consider when\_at query as it is a critical building block for many applications too.} 
+\todo{what's the problem?}
+
+\textbf{[R1C16a]} \emph{ Figures 33 - 38 report the average errors of where\_at queries based on trajectories compressed using different line simplification algorithms. The title of 'Evaluation of spatio-temporal queries' is misleading as only one type of queries is considered.} 
+
+We have fixed this bug. Thanks for pointing out this!
+
+\textbf{[R1C16b]} \emph{In addition, it is necessary to consider when\_at query as it is a critical building block for many applications too.} 
+
+\todo{when\_at query}
 
 \textbf{[R1C17]} \emph{ Based on the results reported in Figures 33 -38, PED and DAD are actually not proper distance metrics that should be considered when we apply line simplification to compress the trajectories and meanwhile want to preserve the utility of the compressed trajectories. Especially, Figure 21 (avg PED errors under different error bounds) and Figure 33 (avg PED query errors under different error bounds) have different trends (Figure 23 and Figure 35 have different trends too), which further demonstrates that PED and DAD are actually misleading. An algorithm that can achieve good performance in terms of PED/DAD might not be able to guarantee its performance in real applications. }
+
+Yes, an algorithm using PED/DAD is not able to guarantee the error bounds of spatio-temporal queries, which makes it inappropriate in scenarios that spatio-temporal queries are required. We have highlighted this in the penultimate paragraph of Section 6.3.6. Thanks!
 
 \textbf{[R1C18]} \emph{ This paper focuses on applying line simplification for trajectory compression. Given the fact that there are different ways to compress trajectories (e.g., [1], [2]), it might be very helpful to give a brief introduction on different trajectory compression techniques, which could help audience to understand the pros/cons of applying line simplification to compress trajectories. }
 
@@ -187,6 +209,7 @@ Indeed, when calculate the average errors, we do consider all the points in the 
 
 \emph{ [2] COMPRESS: A Comprehensive Framework of Trajectory Compression in Road Networks. Yunheng Han, Weiwei Sun, Baihua Zheng. TODS 2017.}
 
+\todo{introduction of road network based methods.} 
 
 %******************* reviewer 2 ***********************************************
 \line(1,0){500}
@@ -241,6 +264,11 @@ We have included the local integral square SED (LISSED) and evaluated algorithms
 Also note that, in this revision, we tend to treat LISSED as a special SED-based error measure or a methodology of quickly computing errors, rather than a new kind of distance metric.
 
 \textbf{[R2D8]} \emph{In page 23: the authors mentioned that “in practice, SED has obviously better compression ratios than DAD..”. This is confusing to me because the distance unit for SED is meter and unit for DAD is degree. How can they be compared? It seems like the effect of epsilon=100m in SED is similar to epsilon=60 degree in DAD?}
+
+First of all, it is helpful to give readers an intuitive impression about the performance of DAD compared with SED. However, as you have mentioned, SED is a Euclidean distance metric, having a value in $[0, \infty]$, and DAD is a direction metric, having a value in $[0, 360]$ degrees, hence, it is hard to compare them under absolutely fair conditions. 
+Alternatively, we suppose there are two practical scenarios, one uses SED with $\epsilon  \le  100$ meters, and the other uses DAD with $\epsilon \le 60$ degrees, then we compare the performance of them, \eg the performance of SED with $\epsilon=100$ meters vs. that of DAD with $\epsilon=60$ degrees. We find that in these comparisons, SED usually have obviously better compression ratios than DAD.
+
+{We have revised the last paragraph of Section 6.3.1 to clarify this. Thanks!}
 
 \textbf{[R2D9]} \emph{Besides clarifying the differences with [41] in the introduction, it’s better to summarize the differences of experimental findings at the end of the paper, e.g., from the experimental results, what are the new insights not covered in [41] and what are the different/conflicting findings?}
 
