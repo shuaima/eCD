@@ -788,12 +788,13 @@ Note that the causes of this phenomenon are varied. For algorithm \dpa using \pe
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{{Evaluation and Analyses of Queries Friendliness}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-{We finally evaluate those compressed trajectories from the viewpoint of trajectory application, \ie spatio-temporal query. The well-known spatio-temporal queries are \emph{where\_at, when\_at, range, nearest\_neighbor} and \emph{spatial\_join} \cite{Cao:Spatio}. Among them, \emph{where\_at} query, \ie ``\emph{the position $P$ of a moving object at time $t$}'', is the foundation of \emph{range} and \emph{nearest\_neighbor} queries.}
-{Hence, we choose it to evaluate compressed trajectories simplified by \lsa algorithms using \ped, \sed and \dad.
+We finally evaluate those compressed trajectories from the viewpoint of trajectory application, \ie spatio-temporal query. The well-known spatio-temporal queries are \emph{where\_at, when\_at, range, nearest\_neighbor} and \emph{spatial\_join} \cite{Cao:Spatio}. Among them, \emph{where\_at} query, \ie ``\emph{the position $P$ of a moving object at time $t$}" \cite{Cao:Spatio}, is the foundation of \emph{range} and \emph{nearest\_neighbor} queries, \textcolor{blue}{and \emph{when\_at} query, \ie ``\emph{the time $t$ at which a moving object on a trajectory is expected to be at position $P$}" \cite{Cao:Spatio}, is also a critical building block for many applications.}
+{Hence, we choose them to evaluate compressed trajectories simplified by \lsa algorithms using \ped, \sed and \dad.
 As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the expected position $P'$ of the moving object at time $t$. Indeed, it is the \emph{synchronized point} of $P$ when the query is performed on simplified trajectories.}
 
+\stitle{\textcolor{blue}{Exp-1: \emph{where\_at} queries.}}
 {We first compress these trajectories using \ped, \sed and \dad, respectively. }
-{Then, for each point $P$ in an original trajectory $\dddot{\mathcal{T}}$, we perform a query on each of its compressed trajectories taking time $P.t$ as input, and calculate the distance between the actual position $P$ and the expected position $P'$ to denote the error of queries.
+{Then, for each point $P$ in an original trajectory $\dddot{\mathcal{T}}$, we perform a \emph{where\_at} query on each of its compressed trajectories taking time $P.t$ as input, and calculate the distance between the actual position $P$ and the expected position $P'$ to denote the error of queries.
 }
 %
 {The max and average errors of the queries are reported in \mytable{tab:query-me} and Figures~\ref{fig:query-ped-epsilon}, \ref{fig:query-sed-epsilon}, \ref{fig:query-dad-epsilon}, \ref{fig:query-ped-size},\ref{fig:query-sed-size} and \ref{fig:query-dad-size}, respectively.}
@@ -912,7 +913,123 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 \ni (3) When using \dad, the max query errors of all algorithms are more than $10^6$ meters in dataset \ucar, and more than $10^5$ meters in datasets \geolife and \mopsi, respectively, also significantly larger than the error bound (40 meters in \mytable{tab:query-me}). Moreover, compared with using \ped, it has more points having query errors larger than error bounds, thus, it has the largest average query errors in all algorithms and all datasets.
 
 
+\stitle{\textcolor{blue}{Exp-2: \emph{when\_at} queries.}}
+\textcolor{blue}{For each point $P$ in an original trajectory $\dddot{\mathcal{T}}$, we do a \emph{when\_at} query on the simplified trajectory. Because lots of the original points are not on the route of the simplified trajectory, we first map each point $P$ to the closest point $P'$ on the route (having the minimal Euclidean distance) \cite{Cao:Spatio}, then we perform a \emph{when\_at} query taking $(P'.x, P'.y)$ as input, and calculate the absolute time differ between the actual time $P.t$ and the expected time $P'.t$ to denote the error of the query.}
+%
+\textcolor{blue}{The max and average errors of the queries are reported in \mytable{tab:query-when-me} and Figures~\ref{fig:query-when-ped-epsilon}, \ref{fig:query-when-sed-epsilon}, \ref{fig:query-when-dad-epsilon}, \ref{fig:query-when-ped-size},\ref{fig:query-when-sed-size} and \ref{fig:query-when-dad-size}, respectively.}
 
+
+
+\begin{table}
+	%\renewcommand{\arraystretch}{1.2}
+	\caption{\small \textcolor{blue}{The max errors of \emph{when\_at} queries on compressed trajectories: fixed $\epsilon=40m$.}}
+	\centering
+	\scriptsize
+	\vspace{-1ex}
+	\begin{tabular}{|l|c|c|c|l|c|c|c|}
+		\hline
+		\bf{Alg. (PED)}  &\ucar &\geolife &\mopsi & \bf{Alg. (DAD)}  &\ucar &\geolife &\mopsi \\
+		\hline
+		{\dpa} &	$3.48 \times 10^6$ & $1.83 \times 10^6$ &	$5.03 \times 10^6$	& \dpa	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $4.87 \times 10^5$ \\
+		\hline
+		{\tpa} &	$3.51 \times 10^6$ & $1.91 \times 10^6$ &	$5.03 \times 10^6$	& \tpa	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $5.01 \times 10^5$ \\
+		\hline
+		{\bqsa} &	$3.51 \times 10^6$ & $1.94 \times 10^6$ &	$1.40 \times 10^6$	& \opwa	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $5.01 \times 10^5$ \\
+		\hline
+		{\siped($\epsilon$)} &	$3.51 \times 10^6$ & $1.02 \times 10^6$ &	$1.39 \times 10^6$	& \interval	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $5.01 \times 10^5$ \\
+		\hline
+		{\siped($\epsilon/2$)} &	$3.50 \times 10^6$ & $1.02 \times 10^6$ &	$1.39 \times 10^6$	& \intersec	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $4.18 \times 10^5$ \\
+		\hline
+		{\operb} &	$3.50 \times 10^6$ & $1.56 \times 10^6$ &	$1.39 \times 10^6$	& / & -  & - & -  \\
+		\hline
+	\end{tabular}
+	\label{tab:query-when-me}
+	\vspace{0.5ex}
+	\\{Note that all algorithms using \sed have the max query errors not more than the error bound, \ie $\epsilon=40m$ here.}
+	\vspace{-1ex}
+\end{table}
+
+
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale = 0.400]{Figures/Exp-query-PED-error-epsilon-service.jpg}\hspace{2ex}
+	\includegraphics[scale = 0.400]{Figures/Exp-query-PED-error-epsilon-geolife.jpg}\hspace{2ex}
+	\includegraphics[scale = 0.400]{Figures/Exp-query-PED-error-epsilon-mopsi.jpg}
+	\vspace{-1ex}
+	\caption{\small \textcolor{blue}{Evaluation of \emph{when\_at} queries (PED) on full datasets: varying error bound $\epsilon$.}}
+	\label{fig:query-when-ped-epsilon}
+	\vspace{-1.0ex}
+\end{figure*}
+
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale = 0.400]{Figures/Exp-query-SED-error-epsilon-service.jpg}\hspace{2ex}
+	\includegraphics[scale = 0.400]{Figures/Exp-query-SED-error-epsilon-geolife.jpg}\hspace{2ex}
+	\includegraphics[scale = 0.400]{Figures/Exp-query-SED-error-epsilon-mopsi.jpg}
+	\vspace{-1ex}
+	\caption{\small \textcolor{blue}{Evaluation of \emph{when\_at} queries (SED) on full datasets: varying error bound $\epsilon$.}}
+	\label{fig:query-when-sed-epsilon}
+	\vspace{-1.0ex}
+\end{figure*}
+
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale = 0.400]{Figures/Exp-query-DAD-error-epsilon-service.jpg}\hspace{2ex}
+	\includegraphics[scale = 0.400]{Figures/Exp-query-DAD-error-epsilon-geolife.jpg}\hspace{2ex}
+	\includegraphics[scale = 0.400]{Figures/Exp-query-DAD-error-epsilon-mopsi.jpg}
+	\vspace{-1ex}
+	\caption{\small \textcolor{blue}{Evaluation of \emph{when\_at} queries (DAD) on full datasets: varying error bound $\epsilon$.}}
+	\label{fig:query-when-dad-epsilon}
+	\vspace{-1.0ex}
+\end{figure*}
+
+
+
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.400]{Figures/Exp-query-PED-error-size-service.jpg} 	\hspace{2ex}
+	\includegraphics[scale=0.400]{Figures/Exp-query-PED-error-size-geolife.jpg}	\hspace{2ex}
+	\includegraphics[scale=0.400]{Figures/Exp-query-PED-error-size-mopsi.jpg}		
+	\vspace{-2ex}
+	\caption{\small \textcolor{blue}{Evaluation of \emph{when\_at} queries (\ped) on small datasets: varying the size of
+		trajectories.}}
+	\label{fig:query-when-ped-size}
+	\vspace{-1ex}
+\end{figure*}
+
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.400]{Figures/Exp-query-SED-error-size-service.jpg} 	\hspace{2ex}
+	\includegraphics[scale=0.400]{Figures/Exp-query-SED-error-size-geolife.jpg}	\hspace{2ex}
+	\includegraphics[scale=0.400]{Figures/Exp-query-SED-error-size-mopsi.jpg}		
+	\vspace{-2ex}
+	\caption{\small \textcolor{blue}{Evaluation of \emph{when\_at} queries (\sed) on small datasets: varying the size of
+		trajectories.}}
+	\label{fig:query-when-sed-size}
+	\vspace{-1ex}
+\end{figure*}
+
+
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.400]{Figures/Exp-query-DAD-error-size-service.jpg}	\hspace{2ex}
+	\includegraphics[scale=0.400]{Figures/Exp-query-DAD-error-size-geolife.jpg}	\hspace{2ex}
+	\includegraphics[scale=0.400]{Figures/Exp-query-DAD-error-size-mopsi.jpg}	
+	\vspace{-2ex}
+	\caption{\small \textcolor{blue}{Evaluation of \emph{when\_at} queries (\dad) on small datasets: varying the size of trajectories.}}
+	\label{fig:query-when-dad-size}
+	\vspace{-1ex}
+\end{figure*}
+
+
+
+\ni \textcolor{blue}{(1) When using \ped, the max query errors of all algorithms are more than $10^6$ meters in all datasets, significantly larger than the error bound (40 meters in \mytable{tab:query-when-me}). The large max errors also lead to larger average query errors, \ie they are greater than error bounds in all datasets.}
+
+
+\ni \textcolor{blue}{(2) When using \sed, the max query errors of all algorithms are clear not more than the error bounds, and the average query errors are consistent with those compression errors shown in Section~\ref{sec-ae}.}
+
+
+\ni \textcolor{blue}{(3) When using \dad, the max query errors of all algorithms are more than $10^6$ meters in dataset \ucar, and more than $10^5$ meters in datasets \geolife and \mopsi, respectively, also significantly larger than the error bound (40 meters in \mytable{tab:query-when-me}). Moreover, compared with using \ped, it has more points having query errors larger than error bounds, thus, it has the largest average query errors in all algorithms and all datasets.}
 
 \stitle{Analyses of \lsa algorithms.}
 It is hard to tell regular conclusions of query errors of \lsa algorithms. Roughly speaking, algorithms \intersec using \dad and \squishe using \sed have obviously smaller query errors than other algorithms using the same distance metrics, partially because they have poorer compression ratios; and the average query errors of algorithms \operb and \siped($\epsilon$) using \ped will remarkably increase when the error bounds are larger than certain value, \eg $40$ meters, in dataset \mopsi, because they may include points that lead to very large query errors.
