@@ -113,7 +113,7 @@ By this definition, algorithms with lower compression ratios are better.
 \stitle{Average Errors.}
 All these algorithms in \mytable{tab:summary-lsa} are error bounded, \ie the max errors are bounded. Hence, we only evaluate the average errors here. Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piece-wise line representations
 $\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$, and $P_{j,i}$ denoting
-\sout{a point} \textcolor{blue}{one of the points} in trajectory $\dddot{\mathcal{T}}_j$ \sout{contained in} \textcolor{blue}{represented by} a line segment $\mathcal{L}_{l,i}\in\overline{\mathcal{T}_l}$ ($l\in[1,M]$),
+\textcolor{blue}{one of the points} in trajectory $\dddot{\mathcal{T}}_j$ \textcolor{blue}{represented by} a line segment $\mathcal{L}_{l,i}\in\overline{\mathcal{T}_l}$ ($l\in[1,M]$),
 then the average error is $\sum_{j=1}^{M}\sum_{i=0}^{M} d(P_{j,i},
 \mathcal{L}_{l,i})/\sum_{j=1}^{M}{|\dddot{\mathcal{T}}_j |}$.
 \textcolor{blue}{Note that each point in the original trajectories are counted.}
@@ -659,7 +659,7 @@ The running time from the fastest to the slowest is one-pass algorithms, online 
 For batch algorithms, the running time of \dpa and \tpa decreases or increases with the increase of error bound $\epsilon$, respectively, due to the top-down and bottom-up approaches that they apply. When using \ped or \sed, top-down algorithm usually runs faster than bottom-up algorithm when the error bound $\epsilon$~is large (\eg in \geolife, $\epsilon >10$ metres when using \ped and $\epsilon >30$ metres when using \sed), which means that top-down (bottom-up) algorithm needs to split (merge) the original trajectory fewer (more) times in these cases, vice versa. When using \dad,  top-down algorithms are normally a bit slower than bottom-up algorithms (recall that top-down algorithms have poorer compression ratios compared with bottom-up algorithms, which means that it needs more time to split the raw trajectory into more sub trajectories).
 In addition to error bounds, sampling rates also have impacts on the efficiency of batch algorithms. A dataset with high sampling rate likely needs more merging processes than splitting processes, thus, top-down algorithms run faster than bottom-up algorithms in high sampling datasets when using \ped or \sed.
 
-For online algorithms, \squishe is faster than \bqsa and \opwa at a cost of poorer compression ratios, and it is still a few times slower than one-pass algorithms. \bqsa and \opwa both have poor efficiency as they finally need batch approaches to simplify buffered data, and batch approaches running in a buffer are still time consuming. \textcolor{blue}{\dagots~runs slowly in full datasets, partially because it is implemented in Java, in which the frequent copy of memory wastes a lot of time (it is fast in C/C++) and becomes the efficiency bottleneck of this algorithm.}
+For online algorithms, \squishe is faster than \bqsa and \opwa at a cost of poorer compression ratios, and it is still a few times slower than one-pass algorithms. \bqsa and \opwa both have poor efficiency as they finally need batch approaches to simplify buffered data, and batch approaches running in a buffer are still time consuming. \textcolor{blue}{\dagots~runs slowly in full datasets, partially because it is implemented in Java, in which the frequent copy of memory wastes a lot of time (it is fast in C/C++ as reported in \cite{Zhang:Evaluation}) and becomes the efficiency bottleneck of this algorithm.}
 
 For one-pass algorithms, \operb, \siped, \cised and \interval show a linear running time that is consistent with their time complexity analyses. They are not very sensitive to error bound $\epsilon$, and also scale well with the increase of trajectory size on all datasets as a data point is processed only one time during the whole process.
 Algorithms \siped, \operb and \interval have similar running time, and algorithm \cised runs a bit slower than them, partially because finding the common intersection of spatial-temporal cones is a heavier work than sectors or ranges. 
@@ -688,9 +688,9 @@ Note that the causes of this phenomenon are varied. For algorithm \dpa using \pe
 
 
 
-\stitle{Analyses of \lsa algorithms.} \dpa is the only algorithm that is aging friendly \wrt ~\ped and \sed. Indeed, {aging friendly} is a result of the {specific nature} of algorithm \dpa, \ie batch and top-down, that always splits a trajectory into two sub trajectories by the same splitting point when it uses any \ped or \sed larger than the error bound.
+\stitle{Analyses of \lsa algorithms.} \myblue{All algorithms are aging safety, and} \dpa is the only algorithm that is aging friendly \wrt ~\ped and \sed. Indeed, {aging friendly} is a result of the {specific nature} of algorithm \dpa, \ie batch and top-down, that always splits a trajectory into two sub trajectories by the same splitting point when it uses any \ped or \sed larger than the error bound.
 
-\stitle{Analyses of \lsa distance metrics.} \dad is not aging friendly \wrt to any algorithm. It is different with \ped and \sed in that, the \dad of a point is closely related to its neighbor point while \ped and \sed are not, thus, once its neighbor point is removed, its \dad is also changed. This character makes it not aging friendly \wrt the \dpa algorithm.
+\stitle{Analyses of \lsa distance metrics.} \myblue{All distance metrics are aging safety \wrt any algorithms supporting them.} \dad is not aging friendly \wrt to any algorithm. It is different with \ped and \sed in that, the \dad of a point is closely related to its neighbor point while \ped and \sed are not, thus, once its neighbor point is removed, its \dad is also changed. This character makes it not aging friendly \wrt the \dpa algorithm.
 
 
 \begin{table}
@@ -920,7 +920,7 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 
 
 \stitle{\textcolor{blue}{Exp-2: \emph{when\_at} queries.}}
-\textcolor{blue}{For each point $P$ in an original trajectory $\dddot{\mathcal{T}}$, we do a \emph{when\_at} query on the simplified trajectory. Because lots of the original points are not on the route of the simplified trajectory, we first map each point $P$ to the closest point $P'$ on the route (having the minimal Euclidean distance) \cite{Cao:Spatio}, then we perform a \emph{when\_at} query taking $(P'.x, P'.y)$ as input, and calculate the absolute time differ between the actual time $P.t$ and the expected time $P'.t$ to denote the error of the query.}
+\textcolor{blue}{For each point $P$ in an original trajectory $\dddot{\mathcal{T}}$, we do a \emph{when\_at} query on the simplified trajectory. Because lots of the original points are not exactly on the route of the simplified trajectory, we first map each original point $P$ to its closest point $P'$ (having the minimal Euclidean distance) on the line segment representing this point \cite{Cao:Spatio}, then we get the expected time $P'.t$ of $P'$ \wrt this line segment in a way inverse of finding a synchronized point, and calculate the absolute time differ between the actual time $P.t$ and the expected time $P'.t$ to denote the error of the query.}
 %
 \textcolor{blue}{The max and average errors of the queries are reported in \mytable{tab:query-when-me} and Figures~\ref{fig:query-when-ped-epsilon}, \ref{fig:query-when-sed-epsilon}, \ref{fig:query-when-dad-epsilon}, \ref{fig:query-when-ped-size},\ref{fig:query-when-sed-size} and \ref{fig:query-when-dad-size}, respectively.}
 
@@ -1027,33 +1027,12 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 	\vspace{-1ex}
 \end{figure*}
 
+\ni \textcolor{blue}{(1) The max time error of \emph{when\_at} queries on simplified trajectories is unbounded, indeed, it depends on the length of time interval between two neighboring points of a simplified trajectory. We will explain this by an example, say, suppose some one moves from the front door, quickly pass through living room and goes to bed for a long sleep. Because this house is not so big, no matter uses any distance metric, his trajectory is possible simplified to two points, \ie $P_s$ at the front door and $P_e$ on the bed. In this case, a \emph{when\_at} query taking a point $P$ in his living room as input may return the excepted time $t'$ having hours of error \wrt the actual time $P.t$.}
 
-
-\ni \textcolor{blue}{(1) When using \ped, the max query errors of all algorithms are more than $10^6$ meters in all datasets, significantly larger than the error bound (40 meters in \mytable{tab:query-when-me}). The large max errors also lead to larger average query errors, \ie they are greater than error bounds in all datasets.}
-
-
-\ni \textcolor{blue}{(2) When using \sed, the max query errors of all algorithms are clear not more than the error bounds, and the average query errors are consistent with those compression errors shown in Section~\ref{sec-ae}.}
-
-
-\ni \textcolor{blue}{(3) When using \dad, the max query errors of all algorithms are more than $10^6$ meters in dataset \ucar, and more than $10^5$ meters in datasets \geolife and \mopsi, respectively, also significantly larger than the error bound (40 meters in \mytable{tab:query-when-me}). Moreover, compared with using \ped, it has more points having query errors larger than error bounds, thus, it has the largest average query errors in all algorithms and all datasets.}
-
-\stitle{Analyses of \lsa algorithms.}
-It is hard to tell regular conclusions of query errors of \lsa algorithms. Roughly speaking, algorithms \intersec using \dad and \squishe using \sed have obviously smaller query errors than other algorithms using the same distance metrics, partially because they have poorer compression ratios; and the average query errors of algorithms \operb and \siped($\epsilon$) using \ped will remarkably increase when the error bounds are larger than certain value, \eg $40$ meters, in dataset \mopsi, because they may include points that lead to very large query errors.
-
-
-%Moreover, algorithm \siped using \ped has larger spatio-temporal query errors than \dpa using \ped because \siped applies a greedy policy that tries to include as many points into a line segment, and some of these ``extra-points'' lead to large errors.
-
-%(1) For batch algorithms, algorithm \dpa using \ped usually have better spatio-temporal query errors than \tpa using \ped in all datasets, and they have comparable query errors using \sed and \dad in all datasets.
-
-
-\stitle{Analyses of distance metrics.}
-\sed is spatio-temporal query friendly while the others are not.
-Given the same error bound, the average query errors of algorithms using \ped are enormously larger than those using \sed, brought by some points having extremely large query errors, and they are typically larger than error bounds.
-Similar to \ped, algorithms using \dad also lead to enormously large query errors.
-Indeed, the temporal information is lost when using \ped and \dad, thus, they are not suitable for compressing trajectories in the context that spatio-temporal queries will run on the simplified trajectories.
-
-
-
+\ni \textcolor{blue}{(2) The average error of \emph{when\_at} queries increases with the increasing of error bounds. It is clear that the increasing of error bound will enlarge the average length of time interval between two neighboring points of a simplified trajectory, such that increase the average error of the query. Similarly, algorithms having better compression ratios will result in larger \emph{when\_at} query errors.}
+	
+\ni \textcolor{blue}{(3) \sed algorithms have smaller average \emph{when\_at} query errors than \ped algorithms, majorly because \sed has smaller \emph{where\_at} query errors and poorer compression ratios compared with \ped. \dad algorithms also have smaller average \emph{when\_at} query errors than \ped algorithms, partially because its poorer compression ratios compared with \ped. }
+	
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\stitle{Summary}.
@@ -1062,42 +1041,47 @@ Indeed, the temporal information is lost when using \ped and \dad, thus, they ar
 From these tests we find the followings.
 
 \stitle{\lsa Algorithms}.
-(1) The optimal algorithms have the best compression ratios, large average errors and the worst efficiencies.
+\emph{(1)} The optimal algorithms have the best compression ratios, large average errors and the worst efficiencies.
 %
-(2) Batch algorithms, except \dpa using \dad, have good compression ratios, normal average errors and poor efficiency.
+\emph{(2)} Batch algorithms, except \dpa using \dad, have good compression ratios, normal average errors and poor efficiency.
 %
 The bottom-up (\tpa) and top-down (\dpa) algorithms have the similar compression ratios and average errors when using either \ped or \sed. The bottom-up method has obviously better compression ratios than the top-down method when using \dad.
 %
 The running time of batch algorithms \dpa and \tpa decreases and increases with the increase of error bound $\epsilon$, respectively. When using \ped or \sed, top-down algorithm \dpa usually runs faster than bottom-up algorithm \tpa when the error bound $\epsilon$~is large  (\eg in \geolife, $\epsilon >10$ metres when using \ped and $\epsilon >30$ metres when using \sed). When using \dad, the top-down algorithm is normally a bit slower than the bottom-up algorithm.
 Top-down algorithms also run faster than bottom-up algorithms in high sampling datasets when using \ped or \sed.
 %
-(3) Online algorithms \opwa and \bqsa usually have better compression ratios than batch algorithms, the worst average errors, and poorer efficiency than batch algorithms. Algorithm \squishe is on the other side of \opwa and \bqsa.
+\emph{(3)} Online algorithms \opwa and \bqsa usually have better compression ratios than batch algorithms, the worst average errors, and poorer efficiency than batch algorithms. Algorithm \squishe is on the other side of \opwa and \bqsa, 
+\myblue{and algorithm \dagots~has poor compression ratios, the best average errors and varied efficiency. When \dagots~is processing long trajectories, it needs to frequently copy memory, this will make it even slower than batch algorithms if it is implemented in Java.}
 %
-(4) One-pass algorithms \operb, \siped, \cised, \intersec and \interval have good compression ratios (comparable with the best sub-optimal algorithms), poor average errors and the best efficiency.
+\emph{(4)} One-pass algorithms \operb, \siped, \cised, \intersec and \interval have good compression ratios (comparable with the best sub-optimal algorithms), poor average errors and the best efficiency. 
 %
 The full $\epsilon$ \emph{sector/cone/range} combining with a position/direction constraint always have better compression ratios and also larger average errors than the half $\epsilon$ \emph{sector/cone/range}. %and they are comparable with the best sub-optimal algorithms.
 %
+\myblue{Weak simplifications show a bit better compression ratios compared with strong simplifications, especially when the \sed/\ped error bound is set to a small value, \eg less than 40 meters in this tests.}
 One-pass algorithms show a linear running time and they are not very sensitive to error bound $\epsilon$, and also scale well with the increase of trajectory sizes.
 %The average errors of algorithms as a whole are on the contrary of compression ratios. The optimal algorithm usually is the worst algorithm in term of average error, followed by one pass algorithms and then batch algorithms. Online algorithms have varied average errors, ranging from the best to the worst.
 %
-(5) {Algorithms \dpa using \ped and \sed are aging friendly, while others are not. All the tested algorithms have bounded errors in data aging, where the error bounds of \dpa using \ped and \sed are $max\{\epsilon_1, \epsilon_2\}$ and the others are $\epsilon_1 + \epsilon_2$.}
+\emph{(5)} {All the tested algorithms have bounded errors in data aging, where the error bounds of \dpa using \ped and \sed are $max\{\epsilon_1, \epsilon_2\}$ and the others are $\epsilon_1 + \epsilon_2$, \myblue{hence, they are all \emph{aging safe}}. Moreover, algorithms \dpa using \ped and \sed are \emph{aging friendly}, while others are not. }
 
 \stitle{Distance Metrics}.
-(1) The output sizes of algorithms using \sed are approximately twice of \ped, and in practice (\eg $\epsilon <100$ meters and $\epsilon < 60$ degrees), \ped and \sed usually bring obvious better compression ratios than \dad, especially in high sampling data sets.
+\emph{(1)} The output sizes of algorithms using \sed are approximately twice of \ped, and in practice (\eg $\epsilon <100$ meters and $\epsilon < 60$ degrees), \ped and \sed usually bring obvious better compression ratios than \dad, especially in high sampling data sets.
 %
-(2) The average errors of algorithms using \sed are a bit larger than using \ped.
+\emph{(2)} The average errors of algorithms using \sed are a bit larger than using \ped.
 %, and in practical, the average errors of algorithms using \dad, in terms of \ped, are obvious larger than algorithms using \ped and \sed.
 %
-(3) Simplification using \dad is in general faster than \ped and \sed, and, indeed, the computation time of \ped and \sed is 2.3 and 1.7 times of \dad, respectively.
+\emph{(3)} Simplification using \dad is in general faster than \ped and \sed, and, indeed, the computation time of \ped and \sed is 2.3 and 1.7 times of \dad, respectively.
 %
-{(4) \dad is not aging friendly \wrt any tested algorithm.}
+{\emph{(4)} \dad is not aging friendly \wrt any tested algorithm.}
 %
-{(5) \sed is spatio-temporal queries friendly while the others are not. }
+{\emph{(5)} \sed is queries friendly \myblue{\wrt the \emph{where\_at} query,}  while the others are not. }
 \textcolor{blue}{Note that, \emph{though algorithms using \ped and/or \dad are error bounded by \ped and/or \dad, respectively, they are not able to guarantee the error bounds of spatio-temporal queries}. Indeed, they might lead to very large query errors.}
+\myblue{Besides, all algorithms and all distance metrics may result in unbound \emph{when\_at} queries.}
 
 
 
-\textcolor{blue}{Comparing with the recent experimental study \cite{Zhang:Evaluation}, this work has the following new findings: (1) compression ratios and efficiency of optimal, batch, online and one-pass algorithms are systematicly evaluated \wrt distance metrics (\ped, \sed and \dad), error bounds and data sizes, as summarized in the above, (2) data friendliness and safety are comprehensively evaluated, as reported in Section \ref{sec:exp-data-aging}, (3) one-pass algorithm \siped is efficient as well as has good compression ratios, hence, it is a good choice in scenarios that only spacial information is concerned, and (4) one-pass algorithm \cised using \sed is significantly better than \dagots using \lissed (which is recommended in \cite{Zhang:Evaluation}) in terms of compression ratios and efficiency, and they have similar quality (compression error and query error), hence, \cised is the recommended algorithm in scenarios that temporal information is concerned (\eg spatio-temporal queries). }
+\textcolor{blue}{Comparing with the recent experimental study \cite{Zhang:Evaluation}, this work has the following new findings: (1) compression ratios and efficiency of optimal, batch, online and one-pass algorithms are systematicly evaluated \wrt distance metrics (\ped, \sed and \dad), error bounds and data sizes, as summarized in the above, (2) data friendliness and safety are comprehensively evaluated, as reported in Section \ref{sec:exp-data-aging}, (3) one-pass algorithm \siped is efficient as well as has good compression ratios, hence, it is a good choice in scenarios that only spacial information is concerned, and (4) one-pass algorithm \cised using \sed is significantly better than online algorithm \dagots~using \lissed (which is recommended in \cite{Zhang:Evaluation}) in terms of compression ratios and efficiency, and it is suitable to run in both server and end sides. Hence, we strong advise users consider \cised in scenarios that temporal information is concerned.}
+
+%, and they have similar quality (compression error and query error), hence, \cised is the recommended algorithm in scenarios that temporal information is concerned (\eg where\_at query)
 
 %%********************************* The End **********************************
 
