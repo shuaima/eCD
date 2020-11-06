@@ -320,7 +320,7 @@ That is, a moving object, like an individual or a car, usually keeps moving forw
 Though \ped, \sed and \dad are different distances, the comparison of their compression ratios is helpful to choose an effective distance metric.
 %whose usages are mainly decided by application requirements
 %
-First, \textcolor{blue}{because \sed saves temporal information while \ped does not}, given the same error bound $\epsilon$, the compression ratios of algorithms using \ped are obviously better
+First, \textcolor{blue}{because \sed saves temporal information while \ped does not (this will lead to larger query error compared with \sed, see Section \ref{sec-exp-query})}, given the same error bound $\epsilon$, the compression ratios of algorithms using \ped are obviously better
 than using \sed. More specifically, \emph{the output sizes of using \sed are approximately twice of \ped.}
 %
 As shown in Figures~\ref{fig:cr-ped-epsilon} and~\ref{fig:cr-sed-epsilon}, the output sizes of algorithms \tpa and \dpa
@@ -794,6 +794,7 @@ Note that the causes of this phenomenon are varied. For algorithm \dpa using \pe
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{{Evaluation and Analyses of Queries Friendliness}}
+\label{sec-exp-query}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 We finally evaluate those compressed trajectories from the viewpoint of trajectory application, \ie spatio-temporal query. The well-known spatio-temporal queries are \emph{where\_at, when\_at, range, nearest\_neighbor} and \emph{spatial\_join} \cite{Cao:Spatio}. Among them, \emph{where\_at} query, \ie ``\emph{the position $P$ of a moving object at time $t$}" \cite{Cao:Spatio}, is the foundation of \emph{range} and \emph{nearest\_neighbor} queries, \textcolor{blue}{and \emph{when\_at} query, \ie ``\emph{the time $t$ at which a moving object on a trajectory is expected to be at position $P$}" \cite{Cao:Spatio}, is also a critical building block for many applications.}
 {Hence, we choose them to evaluate compressed trajectories simplified by \lsa algorithms using \ped, \sed and \dad.
@@ -1040,6 +1041,7 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\stitle{Summary}.
 \subsubsection{Summary}
+\label{sec-exp-summary}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 From these tests we find the followings.
 
@@ -1082,7 +1084,12 @@ One-pass algorithms show a linear running time and they are not very sensitive t
 
 
 
-\textcolor{blue}{Comparing with the recent experimental study \cite{Zhang:Evaluation}, this work has the following new findings: (1) compression ratios and efficiency of optimal, batch, online and one-pass algorithms are systematicly evaluated \wrt distance metrics (\ped, \sed and \dad), error bounds and data sizes, as summarized in the above, (2) aging friendliness and safety are comprehensively evaluated, as reported in Section \ref{sec:exp-data-aging}, (3) one-pass algorithm \siped is efficient as well as has good compression ratios, hence, it is a good choice in scenarios that only spacial information is concerned, and (4) one-pass algorithm \cised, either \cised($\epsilon$) or \cised-W, is better than batch and online algorithms (online algorithm \dagots~is recommended in \cite{Zhang:Evaluation}) in terms of compression ratios and efficiency.}
+\textcolor{blue}{Comparing with the recent experimental study \cite{Zhang:Evaluation}, this work has the following new or different findings: 
+	(1) compression ratios and efficiency of optimal, batch, online and one-pass algorithms are systematicly evaluated \wrt distance metrics (\ped, \sed and \dad), error bounds and data sizes, as summarized in the above, 
+	(2) aging friendliness and safety are comprehensively evaluated, as reported in Section \ref{sec:exp-data-aging},
+	(3) though online algorithm \dagots shows better trade-off between compression ratio and average error \cite{Zhang:Evaluation}, it is not effective in terms of compression ratios. Besides its Java implementation is not efficient in large datasets,  
+	(4) one-pass algorithm \siped ($\epsilon$) is efficient as well as has good compression ratios, hence, it is a good choice in scenarios that only spacial information is concerned, and 
+	(5) one-pass algorithm \cised, either \cised($\epsilon$) or \cised-W, is better than batch and online algorithms (online algorithm \dagots~is recommended in \cite{Zhang:Evaluation}) in terms of compression ratios and efficiency.}
 %, and it is suitable to run in both server and end sides. Hence, we strong advise users consider \cised in scenarios that temporal information is concerned.
 %, and they have similar quality (compression error and query error), hence, \cised is the recommended algorithm in scenarios that temporal information is concerned (\eg where\_at query)
 
