@@ -25,7 +25,7 @@ Due to the  limitations (poor compression ratio and data reconstruction overhead
 \textcolor{blue}{(2) the \emph{min-$\epsilon$} problem: given $m$, constructs an approximate curve consisting of at most $m$ line segments with the minimum error. Quite few \lsa algorithms for trajectory compression solve this problem, most notable, SQUISH($\lambda$) \cite{Muckell:SQUISH} and SQUISH-E($\lambda$) \cite{Muckell:Compression} are such algorithms that compress a trajectory of size $n$ into a trajectory at most $n/\lambda$ points. }
 %These methods lack the capability of compressing trajectories while ensuring that errors are within a user-specified bound \cite{Muckell:Compression}.
 %
-\textcolor{blue}{Line simplification has wide usage due to its beneficial features: (a) simple and easy to implement, (b) no need of extra knowledge such that it is applicable to resource constrained end devices, (c) suitable for freely  moving  objects \cite{Popa:Spatio} that move in gardens, sky, countryside and wild areas as well as in urban, and (d) bounded errors (refer to algorithms focusing on the \emph{min-$\#$} problem) with good compression ratios. }
+\textcolor{blue}{Anyway, line simplification has wide usage due to its beneficial features: (a) simple and easy to implement, (b) no need of extra knowledge such that it is applicable to resource constrained end devices, (c) suitable for freely  moving  objects \cite{Popa:Spatio} that move in gardens, sky, countryside and wild areas as well as in urban, and (d) bounded errors (refer to algorithms focusing on the \emph{min-$\#$} problem) with good compression ratios. }
 %
 \textcolor{blue}{In this paper, we focus on \lsa algorithms solving the \emph{min-$\#$} problem. For algorithms solving the \emph{min-$\#$} problem \wrt trajectory data, please refer to \cite{Muckell:SQUISH,Muckell:Compression,Zhang:Evaluation}.}
 %
@@ -64,7 +64,7 @@ Hence, \textit{compression sub-optimal} algorithms have been developed and/or in
 %For example, a query for the position of $P_7$ at time $t_7$ may return an approximate data point $P'_7$ whose distance to $P_7$ is great than the  bound $\epsilon$ in Figure~\ref{fig:notations} (left).
 
 \stitle{\textcolor{blue}{Quality criteria and} distance metrics}. 
-\textcolor{blue}{When we design a line simplification algorithm, there is a need to meet some requirements from the management or applications of trajectories. These requirements, named quality criteria here, are largely \emph{compression ratio, efficiency} and \emph{errors (including simplification errors and query errors)}, where 
+\textcolor{blue}{When we design a line simplification algorithm, there is a need to meet some requirements from the management or applications of trajectories. These requirements, namely quality criteria here, are largely \emph{compression ratio, efficiency} and \emph{errors (including simplification errors and query errors)}, where 
 (1) \emph{compression ratio} is the percentage of data size of the output compared with the input of a \lsa algorithm, 
 (2) \emph{efficiency} is measured by the time needed by a \lsa algorithm to simplify the input trajectories,
 (3) \emph{simplification errors} are the \emph{maximal, average} and/or \emph{accumulative} distances from the input trajectory to the output trajectory of a \lsa algorithm. The distance is originally measured by the \emph{perpendicular Euclidean distances} (\ped), and is constantly enriching over time because of the increasing needs of trajectory applications. Nowadays, they are \ped, \emph{synchronous Euclidean distances} (\sed) and \emph{direction-aware distances} (\dad), and}
@@ -92,7 +92,7 @@ As mentioned, \lsa algorithms originally adopt \ped, {the shortest Euclidean dis
 
 { \sed was then introduced to preserve the temporal information \cite{Meratnia:Spatiotemporal,Cao:Spatio}. 
 The \sed of a point to a line segment is the Euclidean distance between the point and its \emph{synchronized point} \wrt the line segment, the expected position of the moving object on the line segment at the same time \emph{with an assumption that the object moves straightly along the line segment at a uniform speed} \cite{Cao:Spatio}. \textcolor{blue}{Most of these algorithms ensure that the \emph{maximal} \sed from the output trajectory to the input trajectory is bounded by a preset error bound.} 
-They kindly support applications such as spatio-temporal queries, or in other words, they are \emph{query friendly}, \ie a spatio-temporal query like \emph{where\_at}~\cite{Cao:Spatio} on such a simplified trajectory will return the expected (synchronized) point that has a distance less than the error bound used in the simplification algorithm.
+They friendly support applications such as spatio-temporal queries, \ie a spatio-temporal query like \emph{where\_at}~\cite{Cao:Spatio} on such a simplified trajectory will return the expected (synchronized) point that has a (\sed) distance less than the error bound used in the simplification algorithm.
 \textcolor{blue}{Obviously, given the same error bound, algorithms using \sed will output more points than \ped as they also save temporal information.}
 %
 %\textcolor{blue}{Besides, in order to speed up the simplification, a few algorithms \cite{Chen:Fast, Wu:Graph,Cao:Dots} alternatively use an accumulation of square \sed, named Local Integral Square Synchronous Euclidean Distance (\lissed) \cite{Chen:Fast}, as the error bound. \bumr~\cite{Chen:Fast} is such a batch algorithm, and \dagots~\cite{Cao:Dots} follows the ideas of \cite{Chen:Fast} and provides an online version. These \lissed-equipped algorithms ensure that any \lissed from data points to their representing line segment is limited by a preset \lissed error bound.}
@@ -190,7 +190,7 @@ It is important for applications such as trajectory clustering and direction-bas
 \stitle{Motivations}. Empirical studies of trajectory compression algorithms have been conducted~\cite{Muckell:Compression,MuckellHLR10,mThesis}. However, they only discuss a small number of algorithms. 
 %
 The very recent study \cite{Zhang:Evaluation} does evaluate a wide range of trajectory simplification algorithms.
-However, it provides {an experimental study} on compression errors and spatio-temporal query analyses only, and important aspects of trajectory simplification (compression ratios, running time, \sout{and aging friendliness} \textcolor{blue}{and the impacts of error bounds and data sizes}) are not systematically studied. 
+However, it provides {an experimental study} on compression errors and spatio-temporal query analyses only, and important aspects of trajectory simplification (compression ratios, running time, \textcolor{blue}{and the impacts of error bounds and data sizes}) are not systematically studied. 
 \textcolor{blue}{More specifically, }
 \textcolor{blue}{(1) it has a limited evaluation on running time: it shows a table that lists \emph{compression time per trajectory point} of each algorithm on four datasets, but the impacts of both the sizes of trajectories and the error bounds on the running time is not reported;}
 %
@@ -220,18 +220,19 @@ Note that online and one-pass algorithms are typically designed for a specific d
 %online algorithms \bqsa and \squishe,  and
 %one-pass algorithms \operb, \siped, \cised and \interval.
 
-\stab (2) {We study the data aging problem of \lsa algorithms and distance metrics from the views of \emph{aging friendliness} and \emph{aging safety}, and prove that (a) only algorithms running in both batch and top-down manners and using \ped and/or \sed are aging friendly, having an error bound of $\max{\{\epsilon_1, \epsilon_2\}}$ \wrt the original trajectory, and (b) other algorithms \textcolor{blue}{are aging safe}, having an error bound of ${\epsilon_1+\epsilon_2}$ for data aging, \textcolor{blue}{where $\epsilon_1$ and $\epsilon_2$ are the error bounds set in the first and second times of simplification, respectively}.  These together provide a full picture of the data aging problem.}
+\stab (2) {We study the data aging problem of \lsa algorithms and distance metrics from the views of \emph{aging friendliness} and \emph{aging safety}, and prove that (a) only algorithms running in both batch and top-down manners and using \ped and/or \sed are \emph{aging friendly}, having an error bound of $\max{\{\epsilon_1, \epsilon_2\}}$ \wrt the original trajectory, and (b) other algorithms \textcolor{blue}{are \emph{aging safe}}, having an error bound of ${\epsilon_1+\epsilon_2}$ for data aging, \textcolor{blue}{where $\epsilon_1$ and $\epsilon_2$ are the error bounds set in the first and second times of simplification, respectively}.  These together provide a full picture of the data aging problem.}
 
 \stab (3) Using real-life trajectory datasets, we systematically evaluate and analyze the performance (compression ratio, average error, running time, {aging friendliness and query friendliness}) of error bounded line simplification algorithms with respect to {distance metrics,} trajectory sizes and error bounds.
 Our study reveals the characteristics of these algorithms, which lead to guidelines for practitioners to choose appropriate algorithms and distance metrics for specific applications.
 
 
 Essentially, this study is a necessary complement to existing studies by providing a systematic evaluation and analyses of error bounded trajectory simplification algorithms. 
-\textcolor{blue}{In comparison with \cite{Zhang:Evaluation},
+\textcolor{blue}{In comparison with the recent study \cite{Zhang:Evaluation},
 (1) compression ratio analyses are systematicly considered,
 (2) variations of distance metrics are studied, 
-(3) optimal algorithms using \ped and \sed and one-pass algorithms \siped and \cised are investigated, and
-(4) data aging of \lsa algorithms is studied.}
+(3) optimal algorithms using \ped and \sed and one-pass algorithms \siped and \cised are investigated, 
+(4) data aging of \lsa algorithms is studied, and
+(5) some new and different findings are revealed.}
 
 
 \eat{Essentially, this study is an important complimentary to \cite{Zhang:Evaluation} by providing a thorough and systematic evaluation and analyses of error bounded trajectory simplification algorithms.
@@ -244,7 +245,7 @@ Section 3 and Section 4 systematically review optimal and sub-optimal \lsa metho
 {Section 5 analyzes the data aging of \lsa algorithms and}
 Section 6 reports and analyzes the experimental results, followed by
 conclusions in Section 7.
-{Additional line simplification algorithms are discussed in the appendix.}
+{Additional \myblue{trajectory compression methods} are discussed in the appendix.}
 % and experimental results.% on algorithm \nopts compared with \opt.
 
 
