@@ -76,7 +76,7 @@ The paper has been substantially revised according to the comments of you, Dr. S
 	(c) experimental studies on an additional application named ``when\_at" query, 
 	(d) a larger dataset of UCar in the experimental studies, and
 	(e) a brief introduction to map-matching-based trajectory compression methods in appendix.}
-All advices from you and referees have been fully adopted except that map-matching is still not considered as a pre-processing step of trajectory simplification, the reasons please refer to {[R1C3]}.
+Besides, an explaination on ``why map-matching is not considered as a pre-processing step of trajectory simplification" is provided in {[R1C3]}.
 
 
 We would like to thank you, Dr. Seeger and all the referees for your earnestness and conscientiousness, and for your valuable comments.
@@ -95,34 +95,38 @@ Below please find our detailed responses to the comments.
 
 \textbf{[R1C1]} \emph{What is ``min-\# problem" mentioned in Section 1 (second paragraph)?}
 
+
+The \emph{$min-\#$ problem} of trajectory simplification is, given a curve (\ie an original trajectory) and an $\epsilon$, to construct an approximate curve with error within $\epsilon$ and, at the same time, having the minimum number of line segments.
+
 We have explained it in Section 1 (the second paragraph). 
-Namely, the \emph{$min-\#$ problem} of trajectory simplification is, given a curve (\ie an original trajectory) and an $\epsilon$, to construct an approximate curve with error within $\epsilon$ and, at the same time, having the minimum number of line segments.
 Thanks for pointing out this!
 
 \textbf{[R1C2]} \emph{It is stated in the paper that "The idea of piece-wise line simplification (LS) comes from computational geometry, whose target is to approximate a fine piece-wise linear curve with a coarse one (whose corresponding data points are a subset of the original one), such that the maximum distance of the former to the latter is bounded by a user specified threshold." This is actually misleading. Line simplification actually could be performed by using points other than original ones to represent the original line. The authors did mention those algorithms which consider points outside the original trajectories in the appendix. However, to make sure the correctness of the statements, it's better to mention that in the beginning of the paper. In addition, it is necessary to explain why this paper only considers the line simplification algorithms that consider the original points only. }
 
-We have added two ``weak simplification" algorithms (OPERB-A and CISED-W) that allow insert new data points into the output trajectories. Please refer to the second paragraph of Section 1, the last paragraph of Section 2 and Section 6 for more details.
-Thanks!
+Yes, line simplification could use points other than original ones to represent the original line. Indeed, they are \emph{strong simplification} that outputs data points only belonging to the input trajectory, and \emph{weak simplification} that allows insert new data points into the output trajectories.
+
+(1) We have correct the statements in the begning of the paper (the second paragraph of Section 1), where ``(whose corresponding data points are a subset of the original one)" is replaced by ``(if all data points of the coase curve are a subset of the original curve, then it's a strong simplification; otherwise, it's a weak simplificatoin)".
+
+(2) Now, this paper has covered both strong and weak simplifications, more specifically, we have tested and analyzed two ``weak simplification" algorithms (OPERB-A and CISED-W) in Section 6. 
+
+Thanks for pointing out this!
 
 \textbf{[R1C3]} \emph{For trajectories that capture the moving objects' movement along the road network, the points are normally mapped to road networks. In other words, it is not necessary to use piece-wise line representation. It looks like the authors have not considered this case, which is actually one of the most common cases. Can the authors please explain why map-matching step is not considered even for trajectories that capture the movements in road networks?}
 
 
-We have added a brief introduction to map-matching-based trajectory compression techniques in ``Appendix: Additional Trajectory Compression Algorithms". However, the map-matching-based techniques are still not experimentally tested in this evaluation, that is, we focus on line simplification and do not consider map-matching as the pre-process. This decision has some serious considerations:
+We strong believe that \emph{map-matching is a task parallel to line simplification}, and should not be the pre-processing step of the later. The reasons are as follows:
 
-(1) First of all, \emph{any original trajectory is naturally a sequence of piece-wise line segments as well as a sequence of data points}, no matter they are along the road network or not. And saving a trajectory as a sequence of line segments or data points (either original or simplified) is a lighter, more convenient and efficient way than saving the map-matched data. Indeed, \emph{map-matching is not necessary the pre-process of trajectory simplification.} 
-%On the contrary, presenting a trajectory on roads needs extra information (road network) and extra heavy computation (map-matching).
+(1) Trajectory simplification is better performed as ealy as possible, \ie it's better to run trajectory simplification on mobile devides that collect GPS points, such that not only storages of data servers but also network bandwith between mobile devices and data servers is saved. 
+In this case, line simplification is more suitable to run on those resource-constrained end devices than road-aware trajectory compression, as it is  simple and easy to implement, and does not require extra information like road network. Thus, map-matching is not necessary the pre-step of trajectory simplification.
 
-(2) Moving objects often move in areas not on roads or without fine road network, \eg human being, wild animals, bikes, air plane may move on ground, at gardens, in countryside and in the atmosphere. In these cases, \emph{map-matching should not be the pre-step of trajectory simplification.}
+(2) Line representation is a simple and natural way to repreent a trajectory, and we can freely match an original or simplified trajectory to road network at anytime, which means map-matching is not necessary the pre-processing step of trajectory simplification too. We have also observed that there is a kind of trajectory compression called road-aware trajectory compression [r1, r2] that is used to compress trajectories that capture the moving objects' movement along the road network. However, it has at least two kind of works, the first one maps a trajectory onto roads then simplifies those mapped data points by \emph{numerical streams} method [r3], such as PRESS [r1] does, and the second one first simplifies the trajectory by some line simplification method, then maps the result onto roads, such as the dilution-matching-encoding method [r2] does. In the first case, map-matching is the pre-step of compression, but in the second case, line simplification is the pre-step of map-matching. 
 
-(3) In urban having road network, of cause, the data points could be mapped to road networks, however, \emph{this is not necessary a work must be done}. For example, in some server-side applications like moving object monitoring, it just needs to show trajectories on a map without map-matching in the consideration of efficiency. 
+(3) Moving objects often move from city to wild, or move in areas outside urban where no fine or up-to-date road network is available. In these cases, if we let map-matching be the pre-step of trajectory simplification, it will introduce errors caused by mis-map-matching. However, if we save the line representations of these trajectories (simplified), then once the road network is available or updated (this can happen many times), they can also be matched onto roads when we need. Here, map-matching is better not the pre-step of trajectory simplification.
+%By this way, the mis-map-matching is alleviated.
 
-(4) \emph{Map-matching is more likely a task parallel to trajectory simplification,} and neither is necessary the pre-step of the other.
-%Besides, map-matching is most likely an application-level task called by application such as navigation. As we known, trajectory simplification as a fundamental functionality should (better) not depend on these high-level applications. 
-We observe that there is a kind of trajectory compression called road-aware trajectory compression [r1, r2] that either first maps a trajectory onto roads then simplifies those mapped data points by \emph{numerical streams} method [r3], such as PRESS [r1], or first simplifies the trajectory by some line simplification method then maps the result onto roads, such as the dilution-matching-encoding method [r2]. In the first case, only numerical streams method is needed, and in the second case, line simplification is the pre-step of, and hence independence of, map-matching. 
+Thus, in this evaluation, we focus on line simplification and let alone map-matching. 
+%To clearify this, we have added a brief introduction to map-matching-based trajectory compression techniques in ``Appendix: Additional Trajectory Compression Algorithms". 
 
-(5) Finally, let map-matching be the pre-step of trajectory simplification will require extra information (road network) and extra heavy computation (map-matching), and introduce extra error (mismatching) and running time, which make it hard to compare trajectory compression algorithms in a fair condition.
-
-Thus, in this evaluation, we focus on line simplification and let alone map-matching.
 
 [r1] R. Song, W. Sun, B. Zheng, and Y. Zheng. Press: A novel framework of trajectory compression in road networks. PVLDB, 7(9):661--672, 2014.
 
