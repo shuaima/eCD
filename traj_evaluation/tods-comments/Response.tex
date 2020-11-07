@@ -114,7 +114,7 @@ Thanks for pointing out this!
 \textbf{[R1C3]} \emph{For trajectories that capture the moving objects' movement along the road network, the points are normally mapped to road networks. In other words, it is not necessary to use piece-wise line representation. It looks like the authors have not considered this case, which is actually one of the most common cases. Can the authors please explain why map-matching step is not considered even for trajectories that capture the movements in road networks?}
 
 
-We strong believe that \emph{map-matching is a task parallel to line simplification}, and should not be the pre-processing step of the later. The reasons are as follows:
+We strongly believe that \emph{map-matching is a task parallel to line simplification}, and should not be the pre-processing step of the later. The reasons are as follows:
 
 (1) Trajectory simplification is better performed as ealy as possible, \ie it's better to run trajectory simplification on mobile devides that collect GPS points, such that not only storages of data servers but also network bandwith between mobile devices and data servers is saved. 
 In this case, line simplification is more suitable to run on those resource-constrained end devices than road-aware trajectory compression, as it is  simple and easy to implement, and does not require extra information like road network. Thus, map-matching is not necessary the pre-step of trajectory simplification.
@@ -145,9 +145,25 @@ Yes, we have allowed interpolate new points into the output trajectories, and we
 
 \textbf{[R1C5]} \emph{The three distance metrics used in this paper are mainly for line simplification. However, if we apply line simplification to compress trajectories, some of the metrics are no longer that useful. For example, perpendicular distance metric (PED) does not consider temporal dimension, which means the error bounds based on PED consider spatial distances only. However, temporal dimension is very important to trajectories. I think it is necessary to revisit the metrics and highlight their limitations. Particularly, the error-bounds provided by these metrics could be misleading as the metrics do not fully reflect the loss of information. }
 
-Yes, each distance metric has its advantages and limitations. To clarify this, we have revisited the descriptions of them and explained their characters in the part of ``quality criteria and distance metrics", in Section 1.
+Yes, when researchers introduce PED to simplify trajectories, they basically treat the input trajectory as a sequence of spatial data points. As the result, \emph{line simplification algorithms using PED bring good compression ratios at a cost of losing temporal information of trajectories}. Hence, though it is error bounded by PED, it is not spatio-temporal \emph{query friendly}, \ie a spatio-temporal query like \emph{where\_at} on such a simplified trajectory is possible return a point that has a (SED) distance great larger than the PED error bound used in the simplification algorithm. DAD is the direction deviation of the moving object, and 
+temporal information is also lost when using DAD, therefor, it is \emph{not spatio-temporal query friendly} too.
+
+To clarify this, we have revised the descriptions of distance metrics PED, SED and DAD, and also highlighted their limitations, in the part of ``quality criteria and distance metrics", in Section 1. Thanks!
 
 \textbf{[R1C6]} \emph{ The reason that we decide to store the trajectories (or the compressed version of raw trajectories to save storage space) is mainly to support some applications if required later, which might not require $100\%$ accuracy. For example, in order to find out the witness of a fatal car accident, police might want to locate all the drivers who pass by a specific location within a given time window by querying the trajectories. I am not very sure whether the error bounds based on different distance metrics are still valid for specific types of queries. {This survey does not consider the applications to be supported by the compressed trajectories at all. However, personally I think it is very important.} The authors did include one set of experiments towards the end of the paper. However, I think it is very important to explain the criteria of trajectory compression in the beginning of the paper, to offer the audience a complete image. In this paper, what are the key considerations when we compress trajectories? Is the compression ratio the only requirement? Is it necessary to support certain applications with error bounds? }
+
+(1) The above example is indeed a case of spatio-tempporal \emph{intersect} query (also called a spatio-temporal \emph{range} query) [r4], defined in $intersect$ ($T$, \emph{Poly}, $t_1$, $t_2$), that returns \emph{true} if the trajectory $T$ intersects the polygon \emph{Poly} between the times $t_1$ and $t_2$. Authors in [r4] have proved that the SED-simplified trajectory is answer-error-bound for spatio-temporal queries (\emph{query friendly} in short) of \emph{where\_at, intersect} and \emph{nearest\_neighbor}, \ie if the simplification is SED error bounded by $\epsilon$, then the answer to such query is also error bounded by $\epsilon$.
+However, if PED is used, then the answer to a spatio-temporal query is not error bounded, \ie PED is not query friendly. Though DAD is not discussed in [r4] (DAD is developed after the publish of [r4]), it's obviouly not spatio-temporal query friendly too. 
+
+(2) Yes, it important to consider applications on the simplified trajectories. Thus, we have evaluated line simplification algorithms and distance metrics with respect to spatio-temporal queries \emph{where\_at} and \emph{when\_at}, two fundamental block of spatio-temporal queries. Note [r4] have proved that ``the errors of the \emph{intersect} and \emph{nearest\_neighbor} query types are bounded if and only if the error of \emph{where\_at} is bounded", which indicates that the test of \emph{where\_at} query is a key to test spatio-temporal queries. And \emph{when\_at} is another important functional block.
+
+(3) \todo{criteria of trajectory compression.}
+    -- from the views of simplification
+    -- applications
+    --
+
+[r4] Cao, W., and Li, Y. Dots: An online and near-optimal trajectory simplification algorithm. Journal of Systems and
+Software 126(Supplement C) (2017), 34–44.
 
 We have explained the distance metrics and quality criteria of trajectory compression in the part of ``quality criteria and distance metrics" in Section 1. 
 Following the mainstream works in this area, the quality criteria here are \emph{compression ratio, efficiency} and \emph{errors (including simplification errors and query errors)}, where query errors are calculated from the applications of \emph{where\_at} and \emph{when\_at} queries.
@@ -155,7 +171,10 @@ Thanks for your advice!
 
 \textbf{[R1C7]} \emph{ The definition of Error Bounded Algorithms is not precise as the error bounds are not presented. }
 
-We have revised the definition in the penultimate paragraph of Section 2. Thanks!
+We have revised the definition of error bounded algorithms in the penultimate paragraph of Section 2. That is, given a trajectory $\dddot{\mathcal{T}}\left[P_0, \dots, P_n\right]$ and a pre-specified bound $\epsilon$,
+trajectory simplification algorithm $\mathcal{A}$ using PED (respectively, SED and DAD) is \emph{error bounded} by $\epsilon$ if for each point $P_k$ ($k\in[0,n]$) in $\dddot{\mathcal{T}}$, there exists a line segment $\mathcal{L}_i = \vv{P'_{s_i}P'_{e_i}}$ in $\overline{\mathcal{T}}$ with $s_i \le k \le e_i$ ($0\le i\le m$) such that the PED distance $ped\left(P_k, \mathcal{L}_i\right)$  (respectively the SED distance $sed\left(P_k, \mathcal{L}_i\right)$ and the DAD distance $dad\left(\vv{P_{k}P_{k+1}}, \mathcal{L}_i\right)$) is no more than  $\epsilon$.
+
+Thanks for pointing out this!
 
 
 \textbf{[R1C8]} \emph{ Fig.2 in Page 7 gives an example of reachability graph. However, that graph is incomplete. For example, there is no link between $P_0$ and $P_5$ but they are reachable. This is very misleading. }
