@@ -153,21 +153,21 @@ To clarify this, we have revised the descriptions of distance metrics PED, SED a
 \textbf{[R1C6]} \emph{ The reason that we decide to store the trajectories (or the compressed version of raw trajectories to save storage space) is mainly to support some applications if required later, which might not require $100\%$ accuracy. For example, in order to find out the witness of a fatal car accident, police might want to locate all the drivers who pass by a specific location within a given time window by querying the trajectories. I am not very sure whether the error bounds based on different distance metrics are still valid for specific types of queries. {This survey does not consider the applications to be supported by the compressed trajectories at all. However, personally I think it is very important.} The authors did include one set of experiments towards the end of the paper. However, I think it is very important to explain the criteria of trajectory compression in the beginning of the paper, to offer the audience a complete image. In this paper, what are the key considerations when we compress trajectories? Is the compression ratio the only requirement? Is it necessary to support certain applications with error bounds? }
 
 (1) The above example is indeed a case of spatio-tempporal \emph{intersect} query (also called a spatio-temporal \emph{range} query) [r4], defined in $intersect$ ($T$, \emph{Poly}, $t_1$, $t_2$), that returns \emph{true} if the trajectory $T$ intersects the polygon \emph{Poly} between the times $t_1$ and $t_2$. Authors in [r4] have proved that the SED-simplified trajectory is answer-error-bound for spatio-temporal queries (\emph{query friendly} in short) of \emph{where\_at, intersect} and \emph{nearest\_neighbor}, \ie if the simplification is SED error bounded by $\epsilon$, then the answer to such query is also error bounded by $\epsilon$.
-However, if PED is used, then the answer to a spatio-temporal query is not error bounded, \ie PED is not query friendly. Though DAD is not discussed in [r4] (DAD is developed after the publish of [r4]), it's obviouly not spatio-temporal query friendly too. 
+However, if PED is used, then the answer to a spatio-temporal query on simplified trajectories is not error bounded [r4], \ie PED is not query friendly. Though DAD is not discussed in [r4] (DAD is developed after the publish of [r4]), it's obviouly not spatio-temporal query friendly too. Our tests in Section 6.3.5 also support these statements.
 
-(2) Yes, it important to consider applications on the simplified trajectories. Thus, we have evaluated line simplification algorithms and distance metrics with respect to spatio-temporal queries \emph{where\_at} and \emph{when\_at}, two fundamental block of spatio-temporal queries. Note [r4] have proved that ``the errors of the \emph{intersect} and \emph{nearest\_neighbor} query types are bounded if and only if the error of \emph{where\_at} is bounded", which indicates that the test of \emph{where\_at} query is a key to test spatio-temporal queries. And \emph{when\_at} is another important functional block.
+(2) Yes, it's important to consider applications on the top of simplified trajectories. Thus, we have evaluated line simplification algorithms and distance metrics with respect to spatio-temporal queries \emph{where\_at} and \emph{when\_at}, two fundamental blocks of spatio-temporal queries. Note that [r4] have proved that ``the errors of the \emph{intersect} and \emph{nearest\_neighbor} query types are bounded if and only if the error of \emph{where\_at} is bounded", which indicates that the \emph{where\_at} query is one of the keys to test spatio-temporal queries; and \emph{when\_at} is another important functional block that is often discussed in comparing with \emph{where\_at}.
+We have clarified this in Section 6.3.5.
 
-(3) \todo{criteria of trajectory compression.}
-    -- from the views of simplification
-    -- applications
-    --
+(3) {Yes, it is important to explain the criteria of trajectory compression to offer the audience a complete image.} Thus, we have added ``Quality criteria" in Section 1. Indeed, when we talk about the queliaty criteria of trajectory simplification, there are two aspects, (a) the first one is from the point of view of trajectory simplification itself, including compression ratio, efficiency and errors of simplification. The recent works in this area all test their works by a part or all of these criteria, 
+and (b) the second one is from the points of views of trajectory applications, such as spatio-temporal queries, trajectory clustering, and so on. Indeed, every trajectoty application is appliable to evaluate the simplified trajectories from its point of view, such as spatio-temporal queries concern the answer-errors and usabilities, a trajectory clustering method concerns the similarity between the clusters of original and simplified trajectories, and so on.
+%
+In this paper, we follow the mainstream works in this area, and test the compression ratios, efficiency and errors of simplification algorithms. For trajectory application, we choose spatio-temporal queries as the presentative as they are well-known and commonly used. Besides, as mentioned in Section 5, data aging is a potential challenge of trajectory management, thus, the safety and friendliness of line simplification algorithms and distance metrics are tested.
+%
+Also note that compression ratio is not the only requirement as mentioned above, and we argue that some applications may not such care about error bounds as applications are diverse.
 
-[r4] Cao, W., and Li, Y. Dots: An online and near-optimal trajectory simplification algorithm. Journal of Systems and
-Software 126(Supplement C) (2017), 34–44.
+Thanks for your great advice!
 
-We have explained the distance metrics and quality criteria of trajectory compression in the part of ``quality criteria and distance metrics" in Section 1. 
-Following the mainstream works in this area, the quality criteria here are \emph{compression ratio, efficiency} and \emph{errors (including simplification errors and query errors)}, where query errors are calculated from the applications of \emph{where\_at} and \emph{when\_at} queries.
-Thanks for your advice!
+[r4] Cao, H., Wolfson, O., and Trajcevski, G. Spatio-temporal data reduction with deterministic error bounds. VLDBJ 15, 3 (2006), 211–228.
 
 \textbf{[R1C7]} \emph{ The definition of Error Bounded Algorithms is not precise as the error bounds are not presented. }
 
