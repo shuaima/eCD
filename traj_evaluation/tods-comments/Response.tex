@@ -76,7 +76,7 @@ The paper has been substantially revised according to the comments of you, Dr. S
 	(c) experimental studies on an additional application named ``when\_at" query, 
 	(d) a larger dataset of UCar in the experimental studies, and
 	(e) a brief introduction to map-matching-based trajectory compression methods in appendix.}
-Besides, an explaination on ``why map-matching is not considered as a pre-processing step of trajectory simplification" is provided in {[R1C3]}.
+Besides, an explanation on ``why map-matching is not considered as a pre-processing step of trajectory simplification" is provided in {[R1C3]}.
 
 
 We would like to thank you, Dr. Seeger and all the referees for your earnestness and conscientiousness, and for your valuable comments.
@@ -105,7 +105,7 @@ Thanks for pointing out this!
 
 Yes, line simplification could use points other than original ones to represent the original line. Indeed, they are \emph{strong simplification} that outputs data points only belonging to the input trajectory, and \emph{weak simplification} that allows insert new data points into the output trajectories.
 
-(1) We have correct the statements in the begning of the paper (the second paragraph of Section 1), where ``(whose corresponding data points are a subset of the original one)" is replaced by ``(if all data points of the coase curve are a subset of the original curve, then it's a strong simplification; otherwise, it's a weak simplificatoin)".
+(1) We have correct the statements in the beginning of the paper (the second paragraph of Section 1), where ``(whose corresponding data points are a subset of the original one)" is replaced by ``(if all data points of the coarse curve are a subset of the original curve, then it's a strong simplification; otherwise, it's a weak simplification)".
 
 (2) Now, this paper has covered both strong and weak simplifications, more specifically, we have tested and analyzed ``weak simplification" algorithms (OPERB-A and CISED-W) in Section 6. 
 
@@ -116,10 +116,10 @@ Thanks for pointing out this!
 
 We strongly believe that \emph{map-matching is a task parallel to line simplification}, and should not be the pre-processing step of the later. The reasons are as follows:
 
-(1) Trajectory simplification is better performed as ealy as possible, \ie it's better to run trajectory simplification on mobile devides that collect GPS points, such that not only storages of data servers but also network bandwith between mobile devices and data servers is saved. 
+(1) Trajectory simplification is better performed as early as possible, \ie it's better to run trajectory simplification on mobile devices that collect GPS points, such that not only storage of data servers but also network bandwidth between mobile devices and data servers is saved. 
 In this case, line simplification is more suitable to run on those resource-constrained end devices than road-aware trajectory compression, as it is  simple and easy to implement, and does not require extra information like road network. Thus, map-matching is not necessary the pre-step of trajectory simplification.
 
-(2) Line representation is a simple and natural way to repreent a trajectory, and we can freely match an original or simplified trajectory onto road network at anytime. This is important as moving objects often move from city to wild, or move in areas outside urban where no fine or up-to-date road network is available. In these cases, if we let map-matching be the pre-step of trajectory simplification, it may introduce errors caused by mis-map-matching. However, if we save the line representation of these trajectories (simplified), then once the road network is available or updated (this can happen many times), they can also be matched onto roads when we need. Here, map-matching is better not the pre-processing step of trajectory simplification too. 
+(2) Line representation is a simple and natural way to represent a trajectory, and we can freely match an original or simplified trajectory onto road network at anytime. This is important as moving objects often move from city to wild, or move in areas outside urban where no fine or up-to-date road network is available. In these cases, if we let map-matching be the pre-step of trajectory simplification, it may introduce errors caused by mis-map-matching. However, if we save the line representation of these trajectories (simplified), then once the road network is available or updated (this can happen many times), they can also be matched onto roads when we need. Here, map-matching is better not the pre-processing step of trajectory simplification too. 
 
 (3) We have also observed that there is a kind of trajectory compression called road-aware trajectory compression [r1, r2] that is used to compress trajectories that capture the moving objects' movement along the road network. Indeed, it has at least two technical routines, the first one maps a trajectory onto roads then simplifies those mapped data points by \emph{numerical streams} method [r3], such as PRESS [r1] does; and the second one first simplifies the trajectory by some line simplification method, then maps the result onto roads, such as the dilution-matching-encoding method [r2] does. In the first case, map-matching is the pre-step of compression, while \emph{in the second case, line simplification is the pre-step of map-matching.} 
 %
@@ -148,22 +148,22 @@ Yes, we have allowed interpolate new points into the output trajectories, and we
 Yes, when researchers introduce PED to simplify trajectories, they basically treat the input trajectory as a sequence of spatial data points. As the result, \emph{line simplification algorithms using PED bring good compression ratios at a cost of losing temporal information of trajectories}. Hence, though it is error bounded by PED, it is not spatio-temporal \emph{query friendly}, \ie a spatio-temporal query like \emph{where\_at} on such a simplified trajectory is possible return a point that has a (SED) distance great larger than the PED error bound used in the simplification algorithm. DAD is the direction deviation of the moving object, and 
 temporal information is also lost when using DAD, therefor, it is \emph{not spatio-temporal query friendly} too.
 
-To clarify this, we have revised the descriptions of distance metrics PED, SED and DAD, and also highlighted their limitations, in the part of ``quality criteria and distance metrics", in Section 1. Thanks!
+To clarify this, we have revised the descriptions of distance metrics PED, SED and DAD, and also highlighted their limitations, in the part of ``distance metrics", in Section 1. Thanks!
 
 \textbf{[R1C6]} \emph{ The reason that we decide to store the trajectories (or the compressed version of raw trajectories to save storage space) is mainly to support some applications if required later, which might not require $100\%$ accuracy. For example, in order to find out the witness of a fatal car accident, police might want to locate all the drivers who pass by a specific location within a given time window by querying the trajectories. I am not very sure whether the error bounds based on different distance metrics are still valid for specific types of queries. {This survey does not consider the applications to be supported by the compressed trajectories at all. However, personally I think it is very important.} The authors did include one set of experiments towards the end of the paper. However, I think it is very important to explain the criteria of trajectory compression in the beginning of the paper, to offer the audience a complete image. In this paper, what are the key considerations when we compress trajectories? Is the compression ratio the only requirement? Is it necessary to support certain applications with error bounds? }
 
 (1) The above example is indeed a case of spatio-tempporal \emph{intersect} query (also called a spatio-temporal \emph{range} query) [r4], defined in $intersect$ ($T$, \emph{Poly}, $t_1$, $t_2$), that returns \emph{true} if the trajectory $T$ intersects the polygon \emph{Poly} between the times $t_1$ and $t_2$. Authors in [r4] have proved that the SED-simplified trajectory is answer-error-bound for spatio-temporal queries (\emph{query friendly} in short) of \emph{where\_at, intersect} and \emph{nearest\_neighbor}, \ie if the simplification is SED error bounded by $\epsilon$, then the answer to such query is also error bounded by $\epsilon$.
-However, if PED is used, then the answer to a spatio-temporal query on simplified trajectories is not error bounded [r4], \ie PED is not query friendly. Though DAD is not discussed in [r4] (DAD is developed after the publish of [r4]), it's obviouly not spatio-temporal query friendly too. Our tests in Section 6.3.5 also support these statements.
+However, if PED is used, then the answer to a spatio-temporal query on simplified trajectories is not error bounded [r4], \ie PED is not query friendly. Though DAD is not discussed in [r4] (DAD is developed after the publish of [r4]), it's obviously not spatio-temporal query friendly too. Our tests in Section 6.3.5 also support these statements.
 
 (2) Yes, it's important to consider applications on the top of simplified trajectories. Thus, we have evaluated line simplification algorithms and distance metrics with respect to spatio-temporal queries \emph{where\_at} and \emph{when\_at}, two fundamental blocks of spatio-temporal queries. Note that [r4] have proved that ``the errors of the \emph{intersect} and \emph{nearest\_neighbor} query types are bounded if and only if the error of \emph{where\_at} is bounded", which indicates that the \emph{where\_at} query is one of the keys to test spatio-temporal queries; and \emph{when\_at} is another important functional block that is often discussed in comparing with \emph{where\_at}.
 We have clarified this in Section 6.3.5.
 
-(3) {Yes, it is important to explain the criteria of trajectory compression to offer the audience a complete image.} Thus, we have added ``Quality criteria" in Section 1. Indeed, when we talk about the queliaty criteria of trajectory simplification, there are two aspects, (a) the first one is from the point of view of trajectory simplification itself, including compression ratio, efficiency and errors of simplification. The recent works in this area all test their works by a part or all of these criteria, 
-and (b) the second one is from the points of views of trajectory applications, such as spatio-temporal queries, trajectory clustering, and so on. Indeed, every trajectoty application is appliable to evaluate the simplified trajectories from its point of view, such as spatio-temporal queries concern the answer-errors and usabilities, a trajectory clustering method concerns the similarity between the clusters of original and simplified trajectories, and so on.
+(3) {Yes, it is important to explain the criteria of trajectory compression to offer the audience a complete image.} Thus, we have added a part of content named ``Quality criteria" in Section 1. Indeed, when we talk about the quality criteria of trajectory simplification, there are two aspects, (a) the first one is from the point of view of trajectory simplification itself, including compression ratio, efficiency and errors of simplification. The recent works in this area all test their works by a part or all of these criteria, 
+and (b) the second one is from the points of views of trajectory applications, such as spatio-temporal queries, trajectory clustering, and so on. Indeed, every trajectory application is applicable to evaluate the simplified trajectories from its point of view, such as spatio-temporal queries concern the answer-errors, a trajectory clustering method concerns the similarity between the clusters of original and simplified trajectories, and so on.
 %
-In this paper, we follow the mainstream works in this area, and test the compression ratios, efficiency and errors of simplification algorithms. For trajectory application, we choose spatio-temporal queries as the presentative as they are well-known and commonly used. Besides, as mentioned in Section 5, data aging is a potential challenge of trajectory management, thus, the safety and friendliness of line simplification algorithms and distance metrics are tested.
+In this paper, we follow the mainstream works in this area, and test the compression ratios, efficiency and errors of simplification algorithms. For trajectory application, we choose spatio-temporal queries as the representative as they are well-known and commonly used. Besides, as mentioned in Section 5, data aging is a potential challenge of trajectory management, thus, the safety and friendliness of line simplification algorithms and distance metrics are tested.
 %
-Also note that compression ratio is not the only requirement as mentioned above, and we argue that some applications may not such care about error bounds as applications are diverse.
+Also note that compression ratio is not the only requirement as mentioned above, and it is sure necessary to support certain applications with error bounds, \eg spatio-temporal queries like \emph{where\_at}, \emph{intersect} and \emph{nearest\_neighbor}.
 
 Thanks for your great advice!
 
@@ -367,7 +367,8 @@ We have revised the second paragraph of Section 1 with respect to the above comm
 
 Your sincerely,
 
-Xuelian Lin, Shuai Ma, Yanchen Hou, Yihao Fu and Tianyu Wo
+Anonymous authors
+%Xuelian Lin, Shuai Ma, Yanchen Hou, Yihao Fu and Tianyu Wo
 
 %\bibliographystyle{abbrv}
 %\bibliography{sec-ref}
