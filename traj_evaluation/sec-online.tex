@@ -69,7 +69,7 @@ Meanwhile, \squishe($\lambda$) is the case where $\epsilon$ is set to $0$ and th
 In this paper, we only discuss \squishe($\epsilon$).
 }%%%%%%%%%%%%%%%%%%%%
 
-Algorithm \squishe optimizes algorithm \tpa with a doubly linked list $Q$. Each node in the list is a tuple $P(pre, suc, prio, mnprio)$, where $P$ is a trajectory data point, $pre$ and $suc$ are the predecessive  and successive points of $P$, respectively,  $prio$ is the priority of $P$ defined as an upper bound of the \sed error that the removal of $P$ introduces, and $mnprio$ is the max priority of its predecessive and successive points removed from the list.
+Algorithm \squishe optimizes algorithm \tpa with a doubly linked list $Q$. Each node in the list is a tuple $P(pre, suc, mnprio, prio )$, where $P$ is a trajectory data point, $pre$ and $suc$ are the predecessive  and successive points of $P$, respectively,  $prio$ is the priority of $P$ defined as an upper bound of the \sed error that the removal of $P$ introduces, and $mnprio$ is the max priority of its predecessive and successive points removed from the list.
 %
 Initially, trajectory points are loaded to $Q$ one by one.
 At the same time, $mnprio$ of each point is set to $zero$ as no node has been removed from the list.
@@ -104,14 +104,14 @@ Thus, \squishe runs in $O(n\log |Q|)$ time and $O(|Q|)$ space.
 	%
 	(1) Initially, $|Q| = 6$ points are read to the list. The tuple $(pre, suc, mmprio, prio)$ for each point is initialized. For example, the tuple of $P_1$ is set to $(0, 2, 0, 0.42\epsilon)$, where $0.42\epsilon$ is the \sed from $P_1$ to $\vv{P_0P_2}$.
 	%
-	(2) The priority of $P_3$ has the minimal value, thus, it is removed from the list.
-	The $mnprio$ properties of $P_2$ and $P_4$ are updated to $max\{mnprio(pre(P_3)), prio(P_3)\}$ = $max\{mnprio(P_2), prio(P_3)\}$ = $max\{0, 0.39\epsilon\}$ = $0.39\epsilon$, and $max\{mnprio(P_4), ~prio(P_3)\}$ = $0.39\epsilon$, respectively.
-	Furthermore, the $prio$ property of $P_4$ is updated to $mnprio(suc(P_j)) + sed(suc(P_j),\vv{pre(P_{j})suc(suc(P_{j}))})$ = $mnprio(P_4) + sed(P_4,\vv{P_2P_5})$ = $0.39\epsilon + 2.50\epsilon$ = $2.89\epsilon$, and the $prio$ property of $P_2$ is updated to $mnprio(P_2) + sed(P_2,\vv{P_1P_4})$ = $0.39\epsilon + 2.12\epsilon$ = $2.51\epsilon$.
+	(2) The priority of $P_1$ has the minimal value, thus, it is removed from the list.
+	The $mnprio$ properties of $P_0$ and $P_2$ are updated to $max\{mnprio(pre(P_1)), prio(P_1)\}$ = $max\{mnprio(P_0), prio(P_1)\}$ = $max\{0, 0.42\epsilon\}$ = $0.42\epsilon$, and $max\{mnprio(P_2), ~prio(P_1)\}$ = $0.42\epsilon$, respectively.
+	Furthermore, the $prio$ property of $P_2$ is updated to $mnprio(suc(P_j)) + sed(suc(P_j),\vv{pre(P_{j})suc(suc(P_{j}))})$ = $mnprio(P_2) + sed(P_2,\vv{P_0P_3})$ = $0.42\epsilon + 0.71\epsilon$ = $1.13\epsilon$, and the $prio$ property of $P_0$ is still $\infty$.
 	Then, $P_6$ is read, and the information of $P_5$ is updated.
 	%
 	(3) $P_5$ is removed and $P_7$ is read to the list.
 	%
-	(4) Finally, the algorithm outputs 5 line segments $\vv{P_0P_2},\vv{P_2P_4},\vv{P_4P_7},\vv{P_7P_9}$ and $\vv{P_9P_{10}}$.
+	(4) \todo{Finally, the algorithm outputs 5 line segments $\vv{P_0P_2},\vv{P_2P_4},\vv{P_4P_7},\vv{P_7P_9}$ and $\vv{P_9P_{10}}$}.
 \end{example}
 
 \subsubsection{\textcolor{blue}{Algorithm DOTS Using \lissed~\cite{Cao:Dots}}}
