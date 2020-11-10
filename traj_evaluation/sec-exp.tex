@@ -332,7 +332,7 @@ $50.88\%$, $64.50\%$) of algorithms \tpa and \dpa using \sed on datasets \dSets,
 This result shows ~\sed saves temporal information at a price of twice more data points.
 
 
-Secondly, \textcolor{blue}{in practice, we find that \sed have obviously better compression ratios than \dad in datasets \geolife and \mopsi and a bit poorer than \dad in \ucar (indeed, it is hard to compare them under absolutely fair conditions, as \sed is a Euclidean distance metric, having a value in $[0, \infty]$ meters, and DAD is a direction metric,  having a value in $[0,360)$ degrees. Alternatively, we suppose there are two practical scenarios, one uses \sed with $\epsilon  \le  100$ meters, and the other uses \dad with $\epsilon \le 60$ degrees, then we compare the performance of them, \eg the performance of \sed with $\epsilon=100$ meters \emph{vs.} \dad with $\epsilon=60$ degrees. The same below).}
+Secondly, \textcolor{blue}{in practice, we find that \sed have obviously better compression ratios than \dad in datasets \geolife and \mopsi and a bit poorer than \dad in \ucar (indeed, it is hard to compare them under absolutely fair conditions, as \sed is a Euclidean distance metric, having a value in $[0, \infty]$ meters, and DAD is a direction metric,  having a value in $[0,360)$ degrees. Alternatively, we suppose there are two practical scenarios, one uses \sed with $\epsilon  \le  100$ meters, and the other uses \dad with $\epsilon \le 60$ degrees, then we compare the performance of them, \eg the performance of \sed with $\epsilon=100/k$ meters \emph{vs.} \dad with $\epsilon=60/k$ degrees ($k \ge 1$). The same below).}
 This is because some \geolife and \mopsi trajectories are collected by individuals that are in transportation modes of walking, running and riding, and moving objects in those modes may change their directions with a considerable range (\eg large than $60$ degrees) more frequently than cars in urban. Moreover, \geolife and \mopsi have higher sampling rates than \ucar, which capture more direction changes, \ie direction changes in a small time interval.
 
 %It seems that it is a normal phenomenon that a moving object frequently changes its direction with a considerable range (\eg large than $60$ degrees) during a trip.
@@ -611,6 +611,7 @@ We first report our findings.
 
 \sstab (1) {Datasets do not have obvious impacts on the running time of \lsa algorithms except \dagots. }
 
+	
 \sstab (2) When using \ped, in most cases, the running time from the smallest to the largest is one-pass algorithms \siped, \operb and \myblue{\operb-A}, batch algorithms \tpa and \dpa, and online algorithm \bqsa.
 Algorithms \siped($\frac{\epsilon}{2}$), {\operb} and \myblue{\operb-A} are comparable, algorithm \siped(${\epsilon}$) is $(0.92, 0.92, 0.91)$ times of \siped($\frac{\epsilon}{2}$), and algorithms \tpa, \dpa and \bqsa are on average
 ($26.79$, $28.25$, $29.87$), ($16.32$, $15.40$, $11.02$) and ($37.73$, $62.23$, $61.29$)
@@ -662,7 +663,7 @@ The running time from the fastest to the slowest is one-pass algorithms, online 
 For batch algorithms, the running time of \dpa and \tpa decreases or increases with the increase of error bound $\epsilon$, respectively, due to the top-down and bottom-up approaches that they apply. When using \ped or \sed, top-down algorithm usually runs faster than bottom-up algorithm when the error bound $\epsilon$~is large (\eg in \geolife, $\epsilon >10$ metres when using \ped and $\epsilon >30$ metres when using \sed), which means that top-down (bottom-up) algorithm needs to split (merge) the original trajectory fewer (more) times in these cases, vice versa. When using \dad,  top-down algorithms are normally a bit slower than bottom-up algorithms (recall that top-down algorithms have poorer compression ratios compared with bottom-up algorithms, which means that it needs more time to split the raw trajectory into more sub trajectories).
 In addition to error bounds, sampling rates also have impacts on the efficiency of batch algorithms. A dataset with high sampling rate likely needs more merging processes than splitting processes, thus, top-down algorithms run faster than bottom-up algorithms in high sampling datasets when using \ped or \sed.
 
-For online algorithms, \squishe is faster than \bqsa and \opwa at a cost of poorer compression ratios, and it is still a few times slower than one-pass algorithms. \bqsa and \opwa both have poor efficiency as they finally need batch approaches to simplify buffered data, and batch approaches running in a buffer are still time consuming. \textcolor{blue}{\dagots~runs slowly in full datasets, partially because it is implemented in Java, in which the frequent copies of memory waste a lot of time (its C/C++ version is faster than \squishe as reported in \cite{Zhang:Evaluation}) and becomes its bottleneck of efficiency.}
+For online algorithms, \squishe is faster than \bqsa and \opwa at a cost of poorer compression ratios, and it is still a few times slower than one-pass algorithms. \bqsa and \opwa both have poor efficiency as they finally need batch approaches to simplify buffered data, and batch approaches running in a buffer are still time consuming. \textcolor{blue}{\dagots~runs slowly in full datasets, partially because it is implemented in Java, in which the frequent copies of memory waste a lot of time (its C/C++ version is faster than \squishe as reported in \cite{Zhang:Evaluation}) and become its bottleneck of efficiency.}
 
 For one-pass algorithms, \operb, \siped, \cised and \interval show a linear running time that is consistent with their time complexity analyses. They are not very sensitive to error bound $\epsilon$, and also scale well with the increase of trajectory size on all datasets as a data point is processed only one time during the whole process.
 Algorithms \siped, \operb and \interval have similar running time, and algorithm \cised runs a bit slower than them, partially because finding the common intersection of spatial-temporal cones is a heavier work than sectors or ranges. 
@@ -1080,16 +1081,19 @@ One-pass algorithms show a linear running time and they are not very sensitive t
 %
 {\emph{(5)} \sed is queries friendly \myblue{\wrt the \emph{where\_at} query,}  while the others are not. }
 \textcolor{blue}{Note that, \emph{though algorithms using \ped and \dad are error bounded by \ped and \dad, respectively, they are not able to guarantee the error bounds of spatio-temporal queries}. Actually, they might lead to very large query errors.}
-\myblue{Besides, all algorithms and all distance metrics may result in unbound \emph{when\_at} queries.}
+\myblue{Besides, all these algorithms and distance metrics may result in unbound \emph{when\_at} queries, as proved in \cite{Cao:Spatio}.}
 
 
 
 \textcolor{blue}{Comparing with the recent experimental study \cite{Zhang:Evaluation}, this work has the following new or different findings: 
-	(1) compression ratios and efficiency of optimal, batch, online and one-pass algorithms are systematicly evaluated \wrt distance metrics (\ped, \sed and \dad), error bounds and data sizes, as summarized in the above, 
-	(2) aging friendliness and safety are comprehensively evaluated, as reported in Section \ref{sec:exp-data-aging},
+	(1) compression ratios and efficiency of optimal, batch, online and one-pass algorithms \wrt distance metrics (\ped, \sed and \dad), error bounds and data sizes are summarized in the above, 
+	(2) aging friendliness and safety are reported in Section \ref{sec:exp-data-aging},
 	(3) though online algorithm \dagots shows better trade-off between compression ratio and average error \cite{Zhang:Evaluation}, it is not effective in terms of compression ratios. Besides its Java implementation is not efficient in large datasets,  
-	(4) one-pass algorithm \siped ($\epsilon$) is efficient as well as has good compression ratios, hence, it is a good choice in scenarios that only spacial information is concerned, and 
+	(4) one-pass algorithm \siped ($\epsilon$) is efficient as well as has good compression ratios, and 
 	(5) one-pass algorithm \cised, either \cised($\epsilon$) or \cised-W, is better than batch and online algorithms (online algorithm \dagots~is recommended in \cite{Zhang:Evaluation}) in terms of compression ratios and efficiency.}
+
+
+%hence, SIPED is a good choice in scenarios that only spacial information is concerned
 %, and it is suitable to run in both server and end sides. Hence, we strong advise users consider \cised in scenarios that temporal information is concerned.
 %, and they have similar quality (compression error and query error), hence, \cised is the recommended algorithm in scenarios that temporal information is concerned (\eg where\_at query)
 
