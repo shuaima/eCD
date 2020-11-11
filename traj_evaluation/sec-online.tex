@@ -5,7 +5,7 @@ Online \lsa algorithms adopt local checking policies by restricting the distance
 %
 Though these algorithms support the three distance metrics \ped, \sed and \dad, they still have high time and/or space complexities \cite{Liu:BQS}.
 %
-\textcolor{blue}{Besides, online algorithms need to addresses the problem of balancing the trade-off between the energy cost due to communication and the accuracy of the trajectories’ representation \cite{Ghica:DTracking}.}
+\textcolor{blue}{Besides, in environments like Wireless Sensor Networks, online algorithms are also required to address the problem of balancing the trade-off between the energy cost due to communication and the accuracy of the trajectories’ detection and representation \cite{Ghica:DTracking}.}
 %
 To design more efficient online algorithms, techniques typically need to be designed closely coupled with distance metrics.
 Indeed, \bqsa \cite{Liu:BQS} and \squishe \cite{Muckell:Compression} propose to utilize convex hulls and priority queues, respectively, and they speed up trajectory simplification using \ped and \sed, respectively. 
@@ -118,26 +118,26 @@ Thus, \squishe runs in $O(n\log |Q|)$ time and $O(|Q|)$ space.
 \end{example}
 
 \subsubsection{\textcolor{blue}{Algorithm DOTS Using \lissed~\cite{Cao:Dots}}}
-\textcolor{blue}{It is a directed acyclic graph based online trajectory simplification method that supports \lissed. Other than optimal and near optimal algorithms \cite{Chen:Fast,Daescu:metric} that first construct the reachability graph then find a shortest path from it, \dagots~determines part of the shortest path when constructing preceding part of the whole graph \cite{Cao:Dots}.}
+\textcolor{blue}{It is a directed acyclic graph based online trajectory simplification method that supports \lissed. Other than the optimal and near optimal algorithms \cite{Chen:Fast,Daescu:metric} that first construct the reachability graph then find a shortest path from it, \dagots~determines part of the shortest path when constructing preceding part of the whole graph \cite{Cao:Dots}.}
 %, \ie it runs in a recursive manner.
 %before the whole graph is completely constructed, 
 
-\textcolor{blue}{It first shows that in this problem, the reachability graph of an input trajectory finally retrogrades to a tree structure. It also observes that the local approximation error $lissed(P_s,P_{s+k})$ is growing with respect to $k$, thus, it is reasonable to assume that $k$ should not be too large. 
+\textcolor{blue}{It first shows that in this problem, the reachability graph of an input trajectory finally retrogrades to a tree structure. It also observes that the local approximation error $lissed(P_s,P_{s+k})$ is growing with respect to $k$, thus, it is ``reasonable" to assume that $k$ should not be too large. 
 By this assumption, each layer of the tree could be added without feeding the entire trajectory, and the shortest path could also be determined recursively, \ie layer by layer.}
 %
 \textcolor{blue}{For each node (point) in each layer, \dagots~marks those having descendants as \emph{alive} and others as \emph{dead}.
 Initially, the first layer $Q_0$ is $\{P_0\}$, and it is \emph{alive}. }
 %
 \textcolor{blue}{Then, let $c>0$ and $Q_c$ is the current layer under constructing, 
-\dagots~in turn adds point $P_{s+k}$, having a \lissed distance to any point of $Q_{c-1}$ less than error bound, to $Q_c$, until no point can be added to $Q_c$ (remember $k$ should not be too large). After that, it updates the status of each layer that has \emph{alive} points: the parent of an alive point may be adjusted to minimize the total integral square \sed of the path, points without descendants will be marked as \emph{dead}, and those 1-alive-element layers will be decoded and their \emph{alive} points will be output to the simplified trajectory. }
+\dagots~in turn adds point $P_{s+k}$, having a \lissed distance to any point of $Q_{c-1}$ less than error bound, to $Q_c$, until no point can be added to $Q_c$ (remember $k$ should not be too large). After that, it updates the status of each layer that has \emph{alive} points: the parent of an \emph{alive} point may be adjusted to minimize the total integral square \sed of the path, points without descendants will be marked as \emph{dead}, and those 1-alive-element layers will be decoded and their \emph{alive} points will be output to the simplified trajectory. }
 %
 \textcolor{blue}{The time complexity of \dagots~is $O(n^2/K)$, where K is the number of output points, and the space complexity of \dagots~is $O(|Q|^2)$, where $|Q|$ is the size of a layer.}
 
 \begin{figure*}[tb!]
 	\centering
-	\includegraphics[scale=0.8]{Figures/Fig-DOTS.jpg}
+	\includegraphics[scale=0.79]{Figures/Fig-DOTS.jpg}
 	\vspace{-2ex}
-	\caption{\small \textcolor{blue}{Example of algorithm \dagots~using \lissed with error bound of $\epsilon^2$, where (1) left is the supposed reachability graph of trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$, and (2) right is incremental construction of the reachability graph and online decoding of the shortest path. Finally, the trajectory is compressed to four line segments.} }
+	\caption{\small \textcolor{blue}{Example of algorithm \dagots~using \lissed with error bound of $\epsilon^2$, where (1) left is the supposed reachability graph of trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$, and (2) right is the incremental construction of reachability graph and online decoding of the shortest path. Finally, the trajectory is compressed to four line segments.} }
 	\vspace{-1ex}
 	\label{fig:dots}
 \end{figure*}
@@ -150,7 +150,7 @@ Initially, the first layer $Q_0$ is $\{P_0\}$, and it is \emph{alive}. }
 	%
 	(a) \textcolor{blue}{Initially, $P_0$ is added to the first layer $Q_0$, and it's the only element in the layer.}
 	%
-	(b) \textcolor{blue}{Then, points $P_1$, $P_2$ and $P_3$ are in turn added to the second layer $Q_1$. Because $P_0$ does not have any new child point, \dagots~updates the status of $Q_1$, and outputs $P_2$ as it is the only \emph{alive} point in $Q_1$.}
+	(b) \textcolor{blue}{Then, points $P_1$, $P_2$ and $P_3$ are in turn added to the second layer $Q_1$. Because $P_0$ does not have any new child point, \dagots~updates the status of $Q_1$ and outputs $P_2$ as it is the only \emph{alive} point in $Q_1$.}
 	%
 	(c) \textcolor{blue}{The process repeat. Point $P_4$ is added to layer $Q_2$, points $P_5$, $P_6$ and $P_7$ are added to layer $Q_3$, and so on.  }
 	%

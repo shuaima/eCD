@@ -69,7 +69,7 @@ We have implemented the representative algorithms shown in \mytable{tab:summary-
  They are optimal algorithm \opt, batch algorithms \dpa and \tpa, online algorithms  \opwa, \bqsa, \squishe and \myblue{\dagots}, and one-pass algorithms  \operb, \siped, \cised, \intersec and \interval.
 For one-pass algorithms \siped and \cised, we implement two versions of them (half and full $\epsilon$), denoted as \siped($\epsilon$), \siped($\frac{\epsilon}{2}$), \cised($\epsilon$) and \cised($\frac{\epsilon}{2}$). 
 %\textcolor{blue}{The above algorithms all belong to strong simplification that output data points belong to the original trajectories.}
-\textcolor{blue}{Besides, algorithms \operb\cite{Lin:Operb} and \cised\cite{Lin:Cised} both have weak versions, named \operb-A and \cised-W, that allow data interpolations. } %We also implement them.
+\textcolor{blue}{Besides, algorithms \operb\cite{Lin:Operb} and \cised\cite{Lin:Cised} both have weak versions, named \operb-A and \cised-W, that allow data interpolation. } %We also implement them.
 For algorithm \cised($\epsilon$) and \cised($\frac{\epsilon}{2}$), we fixed parameter $m=16$ as evaluated in \cite{Lin:Cised}, \ie 16-edges inscribe regular polygon.
 {For algorithm \operb, we remove its fifth optimization technique to make it fit for the definition of \textcolor{blue}{\emph{tolerance-zone} error measure \cite{Daescu:metric,Barequet:3D,Chen:Space,Imai:Optimal,Melkman:Optimal} (otherwise, it is the \emph{infinite beam} error measure \cite{Daescu:metric,Chen:Space})}.}
 % For algorithm \nopts, we fixed parameter $m=32$.
@@ -154,7 +154,7 @@ The compression ratios of these algorithms under varied error bounds $\epsilon$ 
 %%%%%%%%%%%%%%%%%
 \sstab(1)  {Datasets may have impacts on the compression ratios of \lsa algorithms. Datasets with higher sampling rates typically have better compression ratios for \ped and \sed, while it is opposite for \dad. \textcolor{blue}{When using \dad, the} dataset collected by cars (\eg~\ucar) has better compression ratios than the datasets partially collected by individuals (\eg~\geolife and \mopsi), as cars typically move more regularly than individuals \textcolor{blue}{in directions}. }
 
-\sstab(2) \textcolor{blue}{Data sizes do not have noteworthy impacts on compression ratios.}
+\sstab(2) \textcolor{blue}{Data sizes do not have remarkable impacts on compression ratios.}
 
 \sstab(3) The compression ratios of algorithms using \ped from the best
 to the worst are normally the optimal algorithm \opt, online algorithm \bqsa, one-pass algorithm \siped($\epsilon$), batch algorithms \tpa and \dpa and one-pass algorithm \myblue{\operb-A}, and one-pass algorithms \siped($\frac{\epsilon}{2}$) and \operb.
@@ -311,7 +311,7 @@ This may be related to the moving habits or patterns of moving objects that impl
 That is, a moving object, like an individual or a car, usually keeps moving forward for quite a long time, engendering a sequence of data points distributing in a narrow strip. Under such circumstance, a new data point is quite possibly living in the common intersection of larger sectors/cones/ranges, which further leads to a better compression ratio. 
 %which lets more data points be represented by a result line segment.
 
-\textcolor{blue}{Besides, weak algorithms \operb-A and \cised-W normally have a bit advantages in terms of compression ratios compared with corresponding strong algorithms \operb and \cised in cases that small error bounds (\eg $\epsilon<40 meters$ in these tests) are set.}
+\textcolor{blue}{Besides, weak algorithms \operb-A and \cised-W normally have a bit advantages in terms of compression ratios compared with corresponding strong algorithms \operb and \cised in cases that small error bounds (\eg $\epsilon<40$ meters in these tests) are set.}
 
 
 
@@ -320,7 +320,7 @@ That is, a moving object, like an individual or a car, usually keeps moving forw
 Though \ped, \sed and \dad are different distances, the comparison of their compression ratios is helpful to choose an effective distance metric.
 %whose usages are mainly decided by application requirements
 %
-First, \textcolor{blue}{because \sed saves temporal information while \ped does not (remember the losing of temporal information may lead to unexpected results, \eg unbounded answer-errors to spatio-temporal queries, see Section \ref{sec-exp-query})}, given the same error bound $\epsilon$, the compression ratios of algorithms using \ped are obviously better
+First, \textcolor{blue}{because \sed saves temporal information while \ped does not (also note the losing of temporal information may lead to unexpected results, \eg unbounded answer-errors to spatio-temporal queries, see Section \ref{sec-exp-query})}, given the same error bound $\epsilon$, the compression ratios of algorithms using \ped are obviously better
 than using \sed. More specifically, \emph{the output sizes of using \sed are approximately twice of \ped.}
 %
 As shown in Figures~\ref{fig:cr-ped-epsilon} and~\ref{fig:cr-sed-epsilon}, the output sizes of algorithms \tpa and \dpa
@@ -667,7 +667,7 @@ For online algorithms, \squishe is faster than \bqsa and \opwa at a cost of poor
 
 For one-pass algorithms, \operb, \siped, \cised and \interval show a linear running time that is consistent with their time complexity analyses. They are not very sensitive to error bound $\epsilon$, and also scale well with the increase of trajectory size on all datasets as a data point is processed only one time during the whole process.
 Algorithms \siped, \operb and \interval have similar running time, and algorithm \cised runs a bit slower than them, partially because finding the common intersection of spatial-temporal cones is a heavier work than sectors or ranges. 
-\textcolor{blue}{Besides, strong simplification algorithms have similar running time as weak algorithms.}
+\textcolor{blue}{Besides, weak simplification algorithms have similar running time as strong algorithms.}
 
 
 
@@ -925,9 +925,9 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 
 
 \stitle{\textcolor{blue}{Exp-2: \emph{when\_at} queries.}}
-\textcolor{blue}{For each point $P$ in an original trajectory $\dddot{\mathcal{T}}$, we do a \emph{when\_at} query on the simplified trajectory. Because lots of the original points are not exactly on the route of the simplified trajectory, we first map each original point $P$ to its closest point $P'$ (having the minimal Euclidean distance) on the line segment representing this point \cite{Cao:Spatio}, then we get the expected time $P'.t'$ of $P'$ \wrt this line segment in a way inverse of finding a synchronized point, and calculate the absolute time differ between the actual time $P.t$ and the expected time $P'.t'$ to denote the error of the query.}
+\textcolor{blue}{For each point $P$ in an original trajectory $\dddot{\mathcal{T}}$, we do a \emph{when\_at} query on the simplified trajectory. Because lots of the original points are not exactly on the route of the simplified trajectory, we first map each original point $P$ to its closest point $P'$ (having the minimal Euclidean distance) on the line segment representing this point as in \cite{Cao:Spatio}, then we get the expected time $P'.t'$ of $P'$ \wrt this line segment in a way inverse of finding a synchronized point, and calculate the absolute time differ between the actual time $P.t$ and the expected time $P'.t'$ to denote the error of the query.}
 %
-\textcolor{blue}{The max and average errors of the queries are reported in \mytable{tab:query-when-me} and Figures~\ref{fig:query-when-ped-epsilon}, \ref{fig:query-when-sed-epsilon}, \ref{fig:query-when-dad-epsilon}, \ref{fig:query-when-ped-size},\ref{fig:query-when-sed-size} and \ref{fig:query-when-dad-size}, respectively.}
+\textcolor{blue}{The max and average errors of the queries are reported in \mytable{tab:query-when-me} and Figures~\ref{fig:query-when-ped-epsilon}, \ref{fig:query-when-sed-epsilon}, \ref{fig:query-when-dad-epsilon}, \ref{fig:query-when-ped-size}, \ref{fig:query-when-sed-size} and \ref{fig:query-when-dad-size}, respectively.}
 
 
 
@@ -1032,9 +1032,9 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 	\vspace{-1ex}
 \end{figure*}
 
-\ni \textcolor{blue}{(1) The max time error of \emph{when\_at} queries on simplified trajectories is unbounded, indeed, it depends on the length of time interval between two neighboring points of a simplified trajectory. We will explain this by an example, say, suppose someone moves from the front door, quickly pass through living room and goes to bed for a long sleep. Because this house is not so big, his trajectory is possible simplified to two points, \ie $P_s$ at the front door and $P_e$ on the bed. In this case, a \emph{when\_at} query taking a point $P$ in his living room as input may return the excepted time $t'$ having hours of error \wrt the actual time $P.t$.}
+\ni \textcolor{blue}{(1) The max error of \emph{when\_at} queries on simplified trajectories is unbounded as proved in \cite{Cao:Spatio}. Indeed, the query error is related to the length of the time interval between two neighboring points of a simplified trajectory. We shall explain this by an example, say, suppose someone moves from the front door, quickly pass through living room and goes to bed for a long sleep. Because this house is not so big, his trajectory is possible simplified to two points, \ie $P_s$ at the front door and $P_e$ on the bed. In this case, a \emph{when\_at} query taking a point $P$ in his living room as input may return the excepted time $t'$ having hours of error \wrt the actual time $P.t$.}
 
-\ni \textcolor{blue}{(2) The average error of \emph{when\_at} queries increases with the increasing of error bounds. It is clear that the increasing of error bound will enlarge the average length of time interval between two neighboring points of a simplified trajectory, such that increase the average error of the query. Similarly, algorithms having better compression ratios will result in larger \emph{when\_at} query errors.}
+\ni \textcolor{blue}{(2) The average error of \emph{when\_at} queries increases with the increasing of error bounds. It is clear that the increasing of error bound will enlarge the average length of time interval between two neighboring points of a simplified trajectory, such that increase the average error of the query. Similarly, algorithms having better compression ratios might result in larger \emph{when\_at} query errors.}
 	
 \ni \textcolor{blue}{(3) \sed algorithms have smaller average \emph{when\_at} query errors than \ped algorithms, majorly because \sed introduces smaller distance errors and has poorer compression ratios compared with \ped. \dad algorithms also have smaller average \emph{when\_at} query errors than \ped algorithms, partially because its poorer compression ratios compared with \ped. }
 	
@@ -1081,7 +1081,7 @@ One-pass algorithms show a linear running time and they are not very sensitive t
 %
 {\emph{(5)} \sed is queries friendly \myblue{\wrt the \emph{where\_at} query,}  while the others are not. }
 \textcolor{blue}{Note that, \emph{though algorithms using \ped and \dad are error bounded by \ped and \dad, respectively, they are not able to guarantee the error bounds of spatio-temporal queries}. Actually, they might lead to very large query errors.}
-\myblue{Besides, all these algorithms and distance metrics may result in unbound \emph{when\_at} queries, as proved in \cite{Cao:Spatio}.}
+\myblue{Besides, all these algorithms and distance metrics may result in unbound \emph{when\_at} queries.}
 
 
 

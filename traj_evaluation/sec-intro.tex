@@ -22,13 +22,13 @@ Due to the  limitations (poor compression ratio and data reconstruction overhead
 %\textcolor{blue}{The idea of piece-wise line simplification (\lsa) comes from computational geometry, whose target is to solve the \emph{min-$\#$} problem \cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment}, \ie given a curve and an $\epsilon$, construct an approximate curve with error within $\epsilon$ and having the minimum number of line segments. }
 %
 The idea of piece-wise line simplification (\lsa) comes from graphic and computational geometry, whose target is to approximate a fine piece-wise linear curve with a coarse one \textcolor{blue}{(if all data points of the coarse curve are a subset of the original curve, then it's a strong simplification; otherwise, it's a weak simplification). \lsa has two optimization problems \cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment}, (1) the \emph{min-$\#$} problem: given an $\epsilon$, construct an approximate curve with error within $\epsilon$ and having the minimum number of line segments \cite{Chan:Optimal, Imai:Optimal}. Most \lsa algorithms for trajectory compression \cite{Douglas:Peucker, Hershberger:Speeding, Keogh:online,Liu:BQS, Muckell:Compression, Chen:Trajectory, Chen:Fast, Cao:Spatio,Cao:Dots,Chen:Compression,Ghica:DTracking,Ke:Interval,Lange:Tracking,Lin:Cised,Lin:Operb,Liu:Amnesic,Long:Direction,Meratnia:Spatiotemporal,Trajcevski:DDR,Wu:Graph} solve this problem, and} 
-\textcolor{blue}{(2) the \emph{min-$\epsilon$} problem: given $m$, constructs an approximate curve consisting of at most $m$ line segments with the minimum error \cite{Chan:Optimal, Imai:Optimal}. Algorithms like SQUISH ($\lambda$) \cite{Muckell:SQUISH} and SQUISH-E ($\lambda$) \cite{Muckell:Compression} solve this problem and are the complementary ones to those solving the \emph{min-$\epsilon$} problem.}
+\textcolor{blue}{(2) the \emph{min-$\epsilon$} problem: given $m$, construct an approximate curve consisting of at most $m$ line segments with the minimum error \cite{Chan:Optimal, Imai:Optimal}. Algorithms like SQUISH ($\lambda$) \cite{Muckell:SQUISH} and SQUISH-E ($\lambda$) \cite{Muckell:Compression} solve this problem and are the complementary ones to those solving the \emph{min-$\epsilon$} problem.}
 % that compress a trajectory of size $n$ into a trajectory at most $n/\lambda$ points
 %These methods lack the capability of compressing trajectories while ensuring that errors are within a user-specified bound \cite{Muckell:Compression}.
 %
-Line simplification has wide usage due to its beneficial features: (a) simple and easy to implement, \textcolor{blue}{(b) light and applicable to run on end devices}, and (c) bounded errors (refer to algorithms focusing on the \emph{min-$\#$} problem) with good compression ratios. 
+Line simplification has wide usage due to its beneficial features: (a) simple and easy to implement, \textcolor{blue}{(b) light and applicable to resource-constrained devices}, and (c) bounded errors (refer to algorithms focusing on the \emph{min-$\#$} problem) with good compression ratios. 
 %
-\textcolor{blue}{In this paper, we focus on \lsa algorithms solving the \emph{min-$\#$} problem. For algorithms solving the \emph{min-$\#$} problem, please refer to \cite{Muckell:SQUISH,Muckell:Compression,Zhang:Evaluation}.}
+\textcolor{blue}{In this paper, we focus on \lsa algorithms solving the \emph{min-$\#$} problem. For algorithms solving the \emph{min-$\epsilon$} problem, please refer to \cite{Muckell:SQUISH,Muckell:Compression,Zhang:Evaluation}.}
 %
 %but its number is quite small compared with algorithm solving \emph{min-$\epsilon$} problem.
 %These techniques may be lossless or lossy \cite{Muckell:Compression}.
@@ -92,10 +92,10 @@ widely adopted metrics: \emph{perpendicular Euclidean distances} (\ped), \emph{s
 
 %The distance is originally measured by the \emph{perpendicular Euclidean distances} (\ped), and is constantly enriching over time because of the increasing needs of trajectory applications. 
 
-Originally, \lsa algorithms adopt \ped, {the shortest Euclidean distance from a point to a line segment, as the distance metric, \textcolor{blue}{and most of these algorithms ensure that the maximal distance from the output trajectory to the input trajectory is bounded the a preset \ped error bound. When researchers introduced it to simplify trajectories, they basically treated the input trajectory as a sequence of spatial data points. As the result,} \emph{\lsa algorithms using \ped bring good compression ratios~\cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey} at a cost of losing temporal information of trajectories}.} \textcolor{blue}{Hence, though it is error bounded by \ped, it is \emph{not spatio-temporal query friendly}, \ie a spatio-temporal query like \emph{where\_at}~\cite{Cao:Spatio} on such a simplified trajectory is possible return a point that has a (\sed) distance great larger than the \ped error bound used in the simplification algorithm.}
+Originally, \lsa algorithms adopt \ped, {the shortest Euclidean distance from a point to a line segment, as the distance metric, \textcolor{blue}{and most of these algorithms ensure that the maximal distance from the output trajectory to the input trajectory is bounded by a preset \ped error bound. When researchers introduced it to simplify trajectories, they basically treated the input trajectory as a sequence of spatial data points. As the result,} \emph{\lsa algorithms using \ped bring good compression ratios~\cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey} at a cost of losing temporal information of trajectories}.} \textcolor{blue}{Hence, though it is error bounded by \ped, it is \emph{not spatio-temporal query friendly}, \ie a spatio-temporal query like \emph{where\_at}~\cite{Cao:Spatio} on such a simplified trajectory is possible return a point that has a distance great larger than the \ped error bound used in the simplification algorithm.}
 
 { \sed was then introduced to preserve the temporal information \cite{Meratnia:Spatiotemporal,Cao:Spatio}. 
-The \sed of a point to a line segment is the Euclidean distance between the point and its \emph{synchronized point} \wrt the line segment, the expected position of the moving object on the line segment at the same time \emph{with an assumption that the object moves straightly along the line segment at a uniform speed} \cite{Cao:Spatio}. \textcolor{blue}{Most of these algorithms ensure that the \emph{maximal} \sed from the output trajectory to the input trajectory is bounded by a preset error bound.} 
+The \sed of a point to a line segment is the Euclidean distance between the point and its \emph{synchronized point} \wrt the line segment, the expected position of the moving object on the line segment at the same time \emph{with an assumption that the object moves straightly along the line segment at a uniform speed} \cite{Cao:Spatio}. \textcolor{blue}{Most of these algorithms ensure that the \emph{maximal} \sed from the output trajectory to the input trajectory is bounded by a preset \sed error bound.} 
 They friendly support applications such as spatio-temporal queries, \ie a spatio-temporal query like \emph{where\_at}~\cite{Cao:Spatio} on such a simplified trajectory will return the expected (synchronized) point that has a (\sed) distance less than the error bound used in the simplification algorithm.
 \textcolor{blue}{Obviously, given the same error bound, algorithms using \sed will output more points than \ped as they also save temporal information.}
 %
@@ -192,16 +192,16 @@ It is important for applications such as trajectory clustering and direction-bas
 % .
 
 \stitle{\textcolor{blue}{Quality criteria}}. 
-\textcolor{blue}{When evaluate line simplification algorithms, some quality criteria are required, which are two aspects, the first one comes from the point of view of trajectory simplification itself, including compression ratio, efficiency and simplification errors, where 
-	(1) \emph{compression ratio} is the percentage of data size of the output compared with the input \wrt a \lsa algorithm, 
+\textcolor{blue}{Roughly speaking, the quality criteria of \lsa algorithms are two levels, the first level comes from \lsa itself, including compression ratio, efficiency and simplification errors, where 
+	(1) \emph{compression ratio} is the percentage of data sizes of the simplified trajectories compared with the original trajectories, 
 	(2) \emph{efficiency} is the time needed by a \lsa algorithm to simplify the input trajectories, and
 	(3) \emph{simplification errors} are the \emph{maximal} and \emph{average} distances from the input trajectory to the output trajectory.
-Works in this area all test their algorithms following a part or all of these criteria. It's worth pointing out that some works \cite{Zhang:Evaluation,Cao:Dots,Wu:Graph} also test the compression ratios under average errors, so as to show the performance trade-off between them.}
+Most works in this area test their algorithms following a part or all of these criteria, and it's worth pointing out that some works \cite{Zhang:Evaluation,Cao:Dots,Wu:Graph} also test the compression ratios under average errors, so as to advise the performance trade-off between them.}
 	
 	
-\textcolor{blue}{The second aspect of quality criteria comes from the point of view of trajectory application, such as a ``where\_at" query concerns the errors of its answer, a trajectory clustering method concerns the similarity between the clusters of original and simplified trajectories, and so on. Indeed, every trajectory application is applicable to evaluate the simplified trajectories from its point of view.}	
+\textcolor{blue}{The second level comes from trajectory applications, \eg a ``where\_at" query concerns the errors of its answer, a trajectory clustering method concerns the similarity between the clusters of original and simplified trajectories. Indeed, every trajectory application is applicable to evaluate the simplified trajectories from its point of view.}	
 %
-\textcolor{blue}{In this paper, we choose \emph{spatio-temporal queries} \cite{Cao:Spatio} as the representatives of trajectory applications, because they are well-known and commonly used applications in the management of trajectories.}
+\textcolor{blue}{In this paper, we choose \emph{spatio-temporal queries} \cite{Cao:Spatio} as the representatives of trajectory applications, because they are well-known and commonly used in the management of trajectories.}
 %
 \textcolor{blue}{We use errors, \ie~\emph{query errors}, to denote the qualities, where query errors are the temporal differs (\eg ``when\_at") or spatial distances (\eg ``where\_at") between the original trajectory and the answers to the queries on the simplified trajectories.}
 
@@ -216,9 +216,9 @@ Works in this area all test their algorithms following a part or all of these cr
 The very recent study \cite{Zhang:Evaluation} does evaluate a wide range of trajectory simplification algorithms.
 However, it provides {an experimental study} on compression errors and spatio-temporal query analyses only, and important aspects of trajectory simplification (compression ratios, running time, aging friendliness and safety) are not systematically studied. 
 \textcolor{blue}{More specifically, }
-\textcolor{blue}{(1) the impacts of both the error bound and the size of a trajectory on the running time are not tested;}
+\textcolor{blue}{(1) the impacts of both error bound and the size of a trajectory on running time are not tested;}
 %
-\textcolor{blue}{(2) the impact of the error bound on the compression ratio is not tested; and }
+\textcolor{blue}{(2) the impact of error bound on compression ratio is not tested; and }
 %
 \textcolor{blue}{(3) it does not cover the \emph{data aging} problem.} The simplified trajectories are stored in data stores, as time goes by, less precision may become acceptable for old trajectories \cite{Cao:Spatio}, and they need to be further simplified to coarse trajectories to save storage. However, can these simplified trajectories be further compressed by \lsa algorithms to coarse trajectories while still having bounded errors \wrt the original trajectories? This is referred to as the \emph{data aging} problem, which is initially introduced and partially discussed for algorithms \opt and \dpa only in \cite{Cao:Spatio}.
 
