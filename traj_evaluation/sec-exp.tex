@@ -320,7 +320,7 @@ That is, a moving object, like an individual or a car, usually keeps moving forw
 Though \ped, \sed and \dad are different distances, the comparison of their compression ratios is helpful to choose an effective distance metric.
 %whose usages are mainly decided by application requirements
 %
-First, \textcolor{blue}{because \sed saves temporal information while \ped does not (also note the losing of temporal information may lead to unexpected results, \eg unbounded answer-errors to spatio-temporal queries, see Section \ref{sec-exp-query})}, given the same error bound $\epsilon$, the compression ratios of algorithms using \ped are obviously better
+First, \textcolor{blue}{because \sed saves temporal information while \ped does not (also note the loss of temporal information may lead to unexpected results, \eg unbounded answer-errors to spatio-temporal queries, see Section \ref{sec-exp-query})}, given the same error bound $\epsilon$, the compression ratios of algorithms using \ped are obviously better
 than using \sed. More specifically, \emph{the output sizes of using \sed are approximately twice of \ped.}
 %
 As shown in Figures~\ref{fig:cr-ped-epsilon} and~\ref{fig:cr-sed-epsilon}, the output sizes of algorithms \tpa and \dpa
@@ -332,7 +332,7 @@ $50.88\%$, $64.50\%$) of algorithms \tpa and \dpa using \sed on datasets \dSets,
 This result shows ~\sed saves temporal information at a price of twice more data points.
 
 
-Secondly, \textcolor{blue}{in practice, we find that \sed have obviously better compression ratios than \dad in datasets \geolife and \mopsi and a bit poorer than \dad in \ucar (indeed, it is hard to compare them under absolutely fair conditions, as \sed is a Euclidean distance metric, having a value in $[0, \infty]$ meters, and DAD is a direction metric,  having a value in $[0,360)$ degrees. Alternatively, we suppose there are two practical scenarios, one uses \sed with $\epsilon  \le  100$ meters, and the other uses \dad with $\epsilon \le 60$ degrees, then we compare the performance of them, \eg the performance of \sed with $\epsilon=100/k$ meters \emph{vs.} \dad with $\epsilon=60/k$ degrees ($k \ge 1$). The same below).}
+Secondly, \textcolor{blue}{in practice, we find that \sed has obviously better compression ratios than \dad in datasets \geolife and \mopsi and a bit poorer than \dad in \ucar (indeed, it is hard to compare them under absolutely fair conditions, as \sed is a Euclidean distance metric, having a value in $[0, \infty]$ meters, and DAD is a direction metric,  having a value in $[0,360)$ degrees. Alternatively, we suppose there are two practical scenarios, one uses \sed with $\epsilon  \le  100$ meters, and the other uses \dad with $\epsilon \le 60$ degrees, then we compare the performance of them, \eg the performance of \sed with $\epsilon=100/k$ meters \emph{vs.} \dad with $\epsilon=60/k$ degrees ($k \ge 1$). The same below).}
 This is because some \geolife and \mopsi trajectories are collected by individuals that are in transportation modes of walking, running and riding, and moving objects in those modes may change their directions with a considerable range (\eg large than $60$ degrees) more frequently than cars in urban. Moreover, \geolife and \mopsi have higher sampling rates than \ucar, which capture more direction changes, \ie direction changes in a small time interval.
 
 %It seems that it is a normal phenomenon that a moving object frequently changes its direction with a considerable range (\eg large than $60$ degrees) during a trip.
@@ -970,7 +970,7 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 
 
 \stitle{\textcolor{blue}{Exp-2: \emph{when\_at} queries.}}
-\textcolor{blue}{For each point $P$ in an original trajectory $\dddot{\mathcal{T}}$, we do a \emph{when\_at} query on the simplified trajectory. Because lots of the original points are not exactly on the route of the simplified trajectory, we first map each original point $P$ to its closest point $P'$ (having the minimal Euclidean distance) on the line segment representing this point as in \cite{Cao:Spatio}, then we get the expected time $P'.t'$ of $P'$ \wrt this line segment in a way inverse of finding a synchronized point, and calculate the absolute time differ between the actual time $P.t$ and the expected time $P'.t'$ to denote the error of the query.}
+\textcolor{blue}{For each point $P$ in an original trajectory $\dddot{\mathcal{T}}$, we do a \emph{when\_at} query on the simplified trajectory. Because lots of the original points are not exactly on the route of the simplified trajectory, we first map each original point $P$ to its closest point $P'$ (having the minimal Euclidean distance) on the line segment representing this point as in \cite{Cao:Spatio}, then we get the expected time $P'.t'$ of $P'$ \wrt this line segment in a way inverse of finding a synchronized point, and calculate the absolute time difference between the actual time $P.t$ and the expected time $P'.t'$ to denote the error of the query.}
 %
 \textcolor{blue}{The max and average errors of the queries are reported in \mytable{tab:query-when-me} and Figures~\ref{fig:query-when-ped-epsilon}, \ref{fig:query-when-sed-epsilon}, \ref{fig:query-when-dad-epsilon}, \ref{fig:query-when-ped-size}, \ref{fig:query-when-sed-size} and \ref{fig:query-when-dad-size}, respectively.}
 
@@ -1052,7 +1052,7 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 
 \ni \textcolor{blue}{(2) The average error of \emph{when\_at} queries increases with the increasing of error bounds. It is clear that the increasing of error bound will enlarge the average length of time interval between two neighboring points of a simplified trajectory, such that increase the average error of the query. Similarly, algorithms having better compression ratios might result in larger \emph{when\_at} query errors.}
 	
-\ni \textcolor{blue}{(3) \sed algorithms have smaller average \emph{when\_at} query errors than \ped algorithms, majorly because \sed introduces smaller distance errors and has poorer compression ratios compared with \ped. \dad algorithms also have smaller average \emph{when\_at} query errors than \ped algorithms, partially because its poorer compression ratios compared with \ped. }
+\ni \textcolor{blue}{(3) \sed algorithms have smaller average \emph{when\_at} query errors than \ped algorithms, majorly because \sed introduces smaller distance errors and has poorer compression ratios compared with \ped. \dad algorithms also have smaller average \emph{when\_at} query errors than \ped algorithms, partially because of its poorer compression ratios compared with \ped. }
 	
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1079,7 +1079,7 @@ Top-down algorithms also run faster than bottom-up algorithms in high sampling d
 %
 The full $\epsilon$ \emph{sector/cone/range} combining with a position/direction constraint always have better compression ratios and also larger average errors than the half $\epsilon$ \emph{sector/cone/range}. %and they are comparable with the best sub-optimal algorithms.
 %
-\myblue{Weak simplifications show a bit better compression ratios compared with strong simplifications when the \sed/\ped error bound is set to a small value, \eg less than 40 meters in this tests.}
+\myblue{Weak simplifications show a bit better compression ratios compared with strong simplifications when the \sed/\ped error bound is set to a small value, \eg less than 40 meters in the test.}
 One-pass algorithms show a linear running time and they are not very sensitive to error bound $\epsilon$, and also scale well with the increase of trajectory sizes.
 %The average errors of algorithms as a whole are on the contrary of compression ratios. The optimal algorithm usually is the worst algorithm in term of average error, followed by one pass algorithms and then batch algorithms. Online algorithms have varied average errors, ranging from the best to the worst.
 %
