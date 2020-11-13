@@ -17,6 +17,7 @@ Using three real-life datasets, we conduct five sets of tests to evaluate the ef
 \stitle{Real-life Trajectory Datasets}.
 We use three real-life datasets shown in \mytable{tab:datasets}, namely, Service car trajectory data (\ucar), Geolife trajectory data (\geolife)~\cite{Web:Geolife} and \mopsi trajectory data (\mopsi)~\cite{Web:Mopsi}, to evaluate those \lsa algorithms.
 These data sets come from different sources, where \ucar is collected by cars in urban, and \geolife and \mopsi are a mixing of cars and individuals. They also have {typical sampling rates used in practice, ranging from one point per second to one point per five seconds.}
+\myblue{Occasionally, the time interval between two neighbouring data points is very long, \eg greater than $10^7$ seconds.}
 The data source and sampling rate also affect the performance of \lsa algorithms using certain distance metrics.
 
 %\vspace{0.5ex}
@@ -935,7 +936,7 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 
 \begin{table}
 	%\renewcommand{\arraystretch}{1.2}
-	\caption{\small \textcolor{blue}{The max errors {($\times 10^7$ s)} of \emph{when\_at} queries on compressed trajectories: fixed $\epsilon=40m$.}}
+	\caption{\small \textcolor{blue}{The max errors {($\times 10^6$ s)} of \emph{when\_at} queries on compressed trajectories: fixed $\epsilon=40m$.}}
 	\centering
 	\scriptsize
 	\vspace{-1ex}
@@ -943,19 +944,19 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 		\hline
 		\bf{Alg. (PED)}  &\ucar &\geolife &\mopsi & \bf{Alg. (SED)}  &\ucar &\geolife &\mopsi &\bf{Alg. (DAD)}  &\ucar &\geolife &\mopsi \\
 		\hline
-		{\dpa} &	$3.81$ & $12.6$ &	$9.26  $	&\dpa &$3.81  $ &$14.9  $ & $9.26 $ & \dpa	& $3.81 $	& $12.6 $	& $9.26 $ \\
+		{\dpa} &	$11.2$ & $126$ &	$6.59  $	&\dpa &$11.6  $ &$5.01  $ & $1.84 $ & \dpa	& $17.6 $	& $5.88 $	& $3.99 $ \\
 		\hline
-		{\tpa} &	$6.28$ & $14.7  $ &	$9.26  $	&\tpa 	& $3.81  $& $14.9  $ &$9.26 $ & \tpa	& $ 3.81 $	& $ 12.6 $	& $ 9.26  $ \\
+		{\tpa} &	$26.1$ & $126  $ &	$9.91  $	&\tpa 	& $11.6  $& $5.01  $ &$5.18 $ & \tpa	& $ 17.6 $	& $ 2.90 $	& $ 5.06  $ \\
 		\hline
-		{\bqsa} &	$5.53$ & $13.9 $ &	$ 21.3 $	&\squishe &$3.81  $ & $ 12.6  $ & $9.26 $ & \opwa	& $3.81 $	& $ 12.6$	& $9.26 $ \\
+		{\bqsa} &	$11.6$ & $126 $ &	$ 11.5 $	&\squishe &$11.6  $ & $ 18.3  $ & $2.62 $ & \opwa	& $8.19 $	& $ 4.02$	& $5.06 $ \\
 		\hline
-		{\siped($\epsilon$)} &	$3.81$ & $12.6  $ &	$9.26  $	&\cised($\epsilon$) & $3.81  $ &$ 24.2	  $ &$9.26 $ & \interval	& $3.81 $	& $12.6 $	& $ 9.26 $ \\
+		{\siped($\epsilon$)} &	$11.5$ & $73.7  $ &	$6.65  $	&\cised($\epsilon$) & $ 11.6 $ &$ 39.7	  $ &$5.48 $ & \interval& $8.19 $	& $4.02 $	& $ 5.06 $ \\
 		\hline
-		{\siped($\frac{\epsilon}{2}$)} &	$3.81$ & $12.6 $ &	$ 9.26 $ &\cised($\frac{\epsilon}{2}$) &$ 3.81 $ & \myred{$463$} & $9.26 $& \intersec	& $ 3.81 $	& $ 12.6$	& $ 9.26 $ \\
+		{\siped($\frac{\epsilon}{2}$)} &	$11.5$ & $73.7 $ &	$ 6.68 $ &\cised($\frac{\epsilon}{2}$) &$ 11.6 $ & {$39.7$} & $5.20 $& \intersec	& $ 8.19 $	& $ 2.63 $	& $ 5.06 $ \\
 		\hline
-		{\operb} &	$3.81 $ & $12.6  $ & $9.26  $	& {\dagots} &$3.81$ &$62.7$ & $9.26$ & /&- &- &- \\
+		{\operb} &	$21.6 $ & $75.2 $ & $8.31 $	& {\dagots} &$11.6$ &$18.3$ & $2.91$ & /&- &- &- \\
 		\hline
-		{\operb-A} &	${3.81} $ & ${24.5} $ & ${12.4} $	&  {\cised-W} &$2.82$ &$12.6$ &$4.68$ & / &- &- &- \\
+		{\operb-A} &	${22.1} $ & ${126} $ & ${11.5} $	&  {\cised-W} &$11.6$ &$47.7$ &$5.50$ & / &- &- &- \\
 		\hline
 	\end{tabular}
 	\label{tab:query-when-me}
@@ -982,7 +983,7 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 	\includegraphics[scale = 0.250]{Figures/Exp-when-PED-error-epsilon-service.jpg}\hspace{0.5ex}
 	\includegraphics[scale = 0.250]{Figures/Exp-when-PED-error-epsilon-geolife.jpg}\hspace{0.5ex}
 	\includegraphics[scale = 0.250]{Figures/Exp-when-PED-error-epsilon-mopsi.jpg}
-	\vspace{-1ex}
+	\vspace{-2ex}
 	\caption{\small \textcolor{blue}{Evaluation of \emph{when\_at} queries (PED) on full datasets: varying error bound $\epsilon$.}}
 	\label{fig:query-when-ped-epsilon}
 	\vspace{-1.0ex}
@@ -993,7 +994,7 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 	\includegraphics[scale = 0.250]{Figures/Exp-when-SED-error-epsilon-service.jpg}\hspace{0.5ex}
 	\includegraphics[scale = 0.250]{Figures/Exp-when-SED-error-epsilon-geolife.jpg}\hspace{0.5ex}
 	\includegraphics[scale = 0.250]{Figures/Exp-when-SED-error-epsilon-mopsi.jpg}
-	\vspace{-1ex}
+	\vspace{-2ex}
 	\caption{\small \textcolor{blue}{Evaluation of \emph{when\_at} queries (SED) on full datasets: varying error bound $\epsilon$.}}
 	\label{fig:query-when-sed-epsilon}
 	\vspace{-1.0ex}
@@ -1004,7 +1005,7 @@ As mentioned in \cite{Cao:Spatio}, the answer to \emph{where\_at} query is the e
 	\includegraphics[scale = 0.250]{Figures/Exp-when-DAD-error-epsilon-service.jpg}\hspace{0.5ex}
 	\includegraphics[scale = 0.250]{Figures/Exp-when-DAD-error-epsilon-geolife.jpg}\hspace{0.5ex}
 	\includegraphics[scale = 0.250]{Figures/Exp-when-DAD-error-epsilon-mopsi.jpg}
-	\vspace{-1ex}
+	\vspace{-2ex}
 	\caption{\small \textcolor{blue}{Evaluation of \emph{when\_at} queries (DAD) on full datasets: varying error bound $\epsilon$.}}
 	\label{fig:query-when-dad-epsilon}
 	\vspace{-1.0ex}
