@@ -103,7 +103,7 @@ We test these algorithms under varied error bounds $\epsilon$ and trajectory siz
 
 \subsection{Evaluation Metrics}
 
-{Compression ratios and errors are the most popular metrics to evaluate the effectiveness of \lsa algorithms, and they are also the measures to evaluate the aging safety and aging friendliness of \lsa algorithms.
+{Compression ratios and errors are the most popular metrics to evaluate the effectiveness of \lsa algorithms, and they are also the measures to evaluate the aging friendliness of \lsa algorithms.
 And the running time  is used to evaluate the efficiency of \lsa algorithms.}
 
 \stitle{Compression ratios.}
@@ -685,7 +685,7 @@ The computation time of \dad is faster than \ped and \sed, and the computation t
 {It is also worth pointing out that algorithms \dpa using \ped, \sed and \dad have similar running time in all datasets, though the computation of \ped is much heavier than \sed and \dad. The reason is that \dpa using \ped has the best compression ratios which instead leads to the least splitting processes in the top-down manner. Combining these two factors, \ie the computing of distance/direction deviation and the processing of trajectory splitting, finally, algorithm \dpa using \ped has similar running time as \dpa using \dad or \sed.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{{Evaluation and Analyses of Aging Friendliness and Safety}}
+\subsubsection{{Evaluation and Analyses of Data Aging}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \label{sec:exp-data-aging}
 In this set of tests, we compare the errors and compression ratios of algorithms in data aging. We set $\epsilon_1=40m$ (or $\epsilon_1=30^o$) in the first run and $\epsilon_2=60m$ (or $\epsilon_2=50^o$) in the second run. Besides, we also run these algorithms on the raw trajectories, setting $\epsilon_3=\epsilon_1 + \epsilon_2=100m$ (or $\epsilon_3=80^o$). The max errors are reported in \mytable{tab:aging-me}, and the compression ratios are reported in \mytable{tab:aging-cr} and \mytable{tab:cr}, respectively.
@@ -701,9 +701,9 @@ Note that the causes of this phenomenon are varied. For algorithm \dpa using \pe
 
 
 
-\stitle{Analyses of \lsa algorithms.} \myblue{All algorithms are aging safety, and} \dpa is the only algorithm that is aging friendly \wrt ~\ped and \sed. Indeed, {aging friendly} is a result of the {specific nature} of algorithm \dpa, \ie batch and top-down, that always splits a trajectory into two sub trajectories by the same splitting point when it uses any \ped or \sed larger than the error bound.
+\stitle{Analyses of \lsa algorithms.} \dpa is the only algorithm that is aging friendly \wrt ~\ped and \sed, \myblue{and all algorithms have bounded errors}. Indeed, {aging friendly} is a result of the {specific nature} of algorithm \dpa, \ie batch and top-down, that always splits a trajectory into two sub trajectories by the same splitting point when it uses any \ped or \sed larger than the error bound.
 
-\stitle{Analyses of \lsa distance metrics.} \myblue{All distance metrics are aging safety \wrt any algorithms supporting them.} \dad is not aging friendly \wrt to any algorithm. It is different with \ped and \sed in that, the \dad of a point is closely related to its neighbor point while \ped and \sed are not, thus, once its neighbor point is removed, its \dad is also changed. This character makes it not aging friendly \wrt the \dpa algorithm.
+\stitle{Analyses of \lsa distance metrics.} \dad is not aging friendly \wrt to any algorithm. It is different with \ped and \sed in that, the \dad of a point is closely related to its neighbor point while \ped and \sed are not, thus, once its neighbor point is removed, its \dad is also changed. This character makes it not aging friendly \wrt the \dpa algorithm.
 
 
 \begin{table}
@@ -1084,7 +1084,7 @@ The full $\epsilon$ \emph{sector/cone/range} combining with a position/direction
 One-pass algorithms show a linear running time and they are not very sensitive to error bound $\epsilon$, and also scale well with the increase of trajectory sizes.
 %The average errors of algorithms as a whole are on the contrary of compression ratios. The optimal algorithm usually is the worst algorithm in term of average error, followed by one pass algorithms and then batch algorithms. Online algorithms have varied average errors, ranging from the best to the worst.
 %
-\emph{(5)} {All the tested algorithms have bounded errors in data aging, where the error bounds of \dpa using \ped and \sed are $max\{\epsilon_1, \epsilon_2\}$ and the others are $\epsilon_1 + \epsilon_2$, \myblue{hence, they are all \emph{aging safe}}. Moreover, algorithms \dpa using \ped and \sed are \emph{aging friendly}, while others are not. }
+\emph{(5)} {All the tested algorithms have bounded errors in data aging, where the error bounds of \dpa using \ped and \sed are $max\{\epsilon_1, \epsilon_2\}$ and the others are $\epsilon_1 + \epsilon_2$. Moreover, algorithms \dpa using \ped and \sed are \emph{aging friendly}, while others are not. }
 
 \stitle{Distance Metrics}.
 \emph{(1)} The output sizes of algorithms using \sed are approximately twice of \ped, and in practice (\eg $\epsilon <100$ meters and $\epsilon < 60$ degrees), \ped and \sed usually bring obvious better compression ratios than \dad, especially in high sampling data sets.
@@ -1104,7 +1104,7 @@ One-pass algorithms show a linear running time and they are not very sensitive t
 
 \textcolor{blue}{Comparing with the recent experimental study \cite{Zhang:Evaluation}, this work has the following new findings: 
 	(1) compression ratios and efficiency of optimal, batch, online and one-pass algorithms \wrt distance metrics (\ped, \sed and \dad), error bounds and data sizes are summarized in the above, 
-	(2) aging friendliness and safety are reported in Section \ref{sec:exp-data-aging},
+	(2) aging friendliness and errors are reported in Section \ref{sec:exp-data-aging},
 	(3) though online algorithm \dagots shows better trade-off between compression ratio and average error \cite{Zhang:Evaluation}, it is not effective in terms of compression ratios. Besides, its Java implementation is not efficient in large datasets,  
 	(4) one-pass algorithm \siped ($\epsilon$) is efficient as well as has good compression ratios, and 
 	(5) one-pass algorithm \cised, either \cised($\epsilon$) or \cised-W, is better than batch and online algorithms (online algorithm \dagots~is recommended in \cite{Zhang:Evaluation}) in terms of compression ratios and efficiency.}
