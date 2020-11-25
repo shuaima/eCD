@@ -193,7 +193,7 @@ Thanks for pointing out this!
 
 \textbf{[R1C8]} \emph{ Fig.2 in Page 7 gives an example of reachability graph. However, that graph is incomplete. For example, there is no link between $P_0$ and $P_5$ but they are reachable. This is very misleading. }
 
-Yes, to avoid the misleading, we have moved up point $P_4$ such that the PED distances from $P_4$ to line segments $\overline{P_0P_5}$, $\overline{P_1P_5}$, $\overline{P_2P_5}$ and $\overline{P_3P_5}$ are all larger than the error bound. Besides, all running examples have been revised.
+Yes, to avoid the misleading, in Figures 1-3, 5-8 and 10, we have moved up point $P_4$ such that the PED distances from $P_4$ to line segments $\overline{P_0P_5}$, $\overline{P_1P_5}$, $\overline{P_2P_5}$ and $\overline{P_3P_5}$ are all larger than the error bound. Besides, all running examples have been revised.
 Thanks for your seriousness and meticulousness!
 
 %\begin{center}
@@ -209,7 +209,7 @@ Thanks for your seriousness and meticulousness!
 
 \textbf{[R1C9]} \emph{ The datasets used in the experimental study were rather small. With 20M+ points, there is no need to compress them. Much larger datasets will be more realistic for the topic of trajectory compression.  }
 
-Yes, we have extended dataset UCar from 200 to 1000 trajectories such that it totally has more than {100M} points. Besides, (1) we have already used the full datasets of Geolife and Mopsi, which are widely used in many recent trajectory compression works, \eg Geolife is used in the recent algorithm algorithm CISED [r5] and experimental study [r6], and Mopsi is used in [r5], and (2) some long trajectories in these datasets each has more than {one million} data points which is quite memory consuming as the whole trajectory must be loaded in memory before the bath algorithms start to run. Also, due to the relatively high time complexities of optimal, batch and online algorithms, \eg $O(n^2)$ of both Douglas-Peucker and Theo-Pavlidis, it needs {days} to run the whole tests listed in Section 6. %Thus, an even larger datasets is quite not friendly to the tests.
+Yes, we have extended dataset UCar from 200 to 1000 trajectories such that it totally has more than {100M} points. Besides, (1) we have already used the full datasets of Geolife and Mopsi, which are widely used in many recent trajectory compression works, \eg Geolife is used in the recent algorithm algorithm CISED [r5] and experimental study [r6], and Mopsi is used in [r5], and (2) \emph{the computing complexities of a line simplification algorithm are tightly related to the length (number of points) of the input trajectory rather than the number of trajectories}, and our datasets also include some long trajectories that each has more than {one million} data points which is quite memory consuming as the whole trajectory must be loaded in memory before the optimal and batch algorithms start to run, and time consuming as the optimal and batch algorithms each need {days} to run the whole tests listed in Section 6. %Thus, an even larger datasets is quite not friendly to the tests.
 %Thanks for your advice!
 
 [r5] Lin, X., Jiang, J., Ma, S., Zuo, Y., and Hu, C. One-pass trajectory simplification using the synchronous euclidean distance. VLDBJ 28, 6 (2019), 897–921.
@@ -223,7 +223,7 @@ Indeed, we do consider ALL the points in the original trajectories when calculat
 
 \textbf{[R1C11a]} \emph{ In Page 21 (lines 18-19), it is stated that ``We then choose 10 trajectories from each dataset, and vary the size |T| of a trajectory from 1,000 points to 10,000 points while fixing the error bound $\epsilon = 40$ metres or $\epsilon = 45$ degrees". It is not clear how points are selected. For example, a raw trajectory contains 100 points (p1, p2, ..., p100). If we want to only consider 10 points, do you consider a sub-trajectory of 10 points (say p1, p2, ..., p10) or a trajectory of much lower sampling rate (say p1, p11, p21, ..., p91). Please state it clearly!}
 
-It is the Top-K points of a trajectory (\eg, the Top-100 points are $P_1, P_2, P_3, ..., P_{100}$). We have clarified this in the last paragraph of Section 6.1.
+It is the first K points of a trajectory (\eg, the first 100 points are $P_1, P_2, P_3, ..., P_{100}$). We have clarified this in the last paragraph of Section 6.1.
 
 \textbf{[R1C11b]} \emph{ In Page 21 (lines 44 - 46), it is stated that ``The dataset collected by cars (e.g., UCar) also has better compression ratios than the datasets partially collected by individuals (e.g., Geolife and Mopsi), as cares typically move more regularly than individuals." However, this is different from our everyday observation. Because of the traffic light, cars are not expected to move so regularly. Second, it is different from the observations we could make from Figures 15, 16, 17, 18, 19, and 20. Based on the results reported in those six figures, compression ratios under Geolife and Mopsi are lower than that under UCar, which means the dataset collected by cars has poorer compression ratios. Third, it shall be 'cars' but not 'cares'. }
 
