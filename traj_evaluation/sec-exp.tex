@@ -112,7 +112,7 @@ the compression ratio is $(\sum_{j=1}^{M} |\overline{\mathcal{T}}_j |)/(\sum_{j=
 By this definition, algorithms with lower compression ratios are better.
 
 \stitle{Simplification errors.}
-\myblue{The max (or average) simplification error is the max (or average) value of the distances from every point of the original trajectories to its representing line segment of the simplified trajectories.}
+\myblue{The max (or average) simplification error is the max (respectively average) value of the distances from every point of the original trajectories to its representing line segment of the simplified trajectories.}
 
 
 \eat{
@@ -153,9 +153,10 @@ The compression ratios of these algorithms under varied error bounds $\epsilon$ 
 
 
 %%%%%%%%%%%%%%%%%
-\sstab(1)  {Datasets may have impacts on the compression ratios of \lsa algorithms. Datasets with higher sampling rates typically have better compression ratios for \ped and \sed, while it is opposite for \dad. \textcolor{blue}{When using \dad, the} dataset collected by cars (\eg~\ucar) has better compression ratios than the datasets partially collected by individuals (\eg~\geolife and \mopsi), as cars typically move more regularly than individuals \textcolor{blue}{in directions}. }
+\sstab(1)  {Datasets may have impacts on the compression ratios of \lsa algorithms. Datasets with higher sampling rates typically have better compression ratios for \ped and \sed, while it is opposite for \dad. \textcolor{blue}{When using \dad, the} dataset collected by cars (\eg~\ucar) has better compression ratios than the datasets partially collected by individuals (\eg~\geolife and \mopsi), as cars typically move more regularly than individuals \textcolor{blue}{in directions}.}
+%\myblue{otherwise, it has poorer compression ratios than \geolife and \mopsi, partially because cars have a broad range of speed and they frequently stop because of traffic light}
 
-\sstab(2) \textcolor{blue}{Data sizes do not have remarkable impacts on compression ratios.}
+\sstab(2) \textcolor{blue}{Data sizes do not have remarkable impacts on compression ratios.} \myblue{The reason lies, for an online or one-pass algorithm that is compressing a trajectory, once some distance is greater than the error bound, it is sure to output a line segment and continue to compress the subsequent data points, as a result, data size does not have remarkable impacts on compression ratios; for batch and the optimal algorithms, the tests reveal a similar conclusion.}
 
 \sstab(3) The compression ratios of algorithms using \ped from the best
 to the worst are normally the optimal algorithm \opt, online algorithm \bqsa, one-pass algorithm \siped($\epsilon$), batch algorithms \tpa and \dpa and one-pass algorithm \myblue{\operb-A}, and one-pass algorithms \siped($\frac{\epsilon}{2}$) and \operb.
@@ -672,7 +673,7 @@ The running time from the fastest to the slowest is one-pass algorithms, online 
 For batch algorithms, the running time of \dpa and \tpa decreases or increases with the increase of error bound $\epsilon$, respectively, due to the top-down and bottom-up approaches that they apply. When using \ped or \sed, top-down algorithm usually runs faster than bottom-up algorithm when the error bound $\epsilon$~is large (\eg in \geolife, $\epsilon >10$ metres when using \ped and $\epsilon >30$ metres when using \sed), which means that top-down (bottom-up) algorithm needs to split (merge) the original trajectory fewer (more) times in these cases, vice versa. When using \dad,  top-down algorithms are normally a bit slower than bottom-up algorithms (recall that top-down algorithms have poorer compression ratios compared with bottom-up algorithms, which means that it needs more time to split the raw trajectory into more sub trajectories).
 In addition to error bounds, sampling rates also have impacts on the efficiency of batch algorithms. A dataset with high sampling rate likely needs more merging processes than splitting processes, thus, top-down algorithms run faster than bottom-up algorithms in high sampling datasets when using \ped or \sed.
 
-For online algorithms, \squishe is faster than \bqsa and \opwa at a cost of poorer compression ratios, and it is still a few times slower than one-pass algorithms. \bqsa and \opwa both have poor efficiency as they finally need batch approaches to simplify buffered data, and batch approaches running in a buffer are still time consuming. \textcolor{blue}{\dagots~runs slowly in full datasets, partially because it is implemented in Java, in which the frequent copies of memory waste a lot of time (its C/C++ version is faster than \squishe as reported in \cite{Zhang:Evaluation}) and become its bottleneck of efficiency.}
+For online algorithms, \squishe is faster than \bqsa and \opwa at a cost of poorer compression ratios, and it is still a few times slower than one-pass algorithms. \bqsa and \opwa both have poor efficiency as they finally need batch approaches to simplify buffered data, and batch approaches running in a buffer are still time consuming. \textcolor{blue}{\dagots~runs very slow in full datasets, partially because it is implemented in Java, in which the frequent copying of memory wastes a lot of time and becomes its bottleneck of efficiency.}
 
 For one-pass algorithms, \operb, \siped, \cised and \interval show a linear running time that is consistent with their time complexity analyses. They are not very sensitive to error bound $\epsilon$, and also scale well with the increase of trajectory size on all datasets as a data point is processed only one time during the whole process.
 Algorithms \siped, \operb and \interval have similar running time, and algorithm \cised runs a bit slower than them, partially because finding the common intersection of spatial-temporal cones is a heavier work than sectors or ranges. 
@@ -1053,7 +1054,7 @@ As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{wh
 
 \ni \textcolor{blue}{(1) The max error of \emph{when\_at} queries on simplified trajectories is unbounded as proved in \cite{Cao:Spatio}. Indeed, the query error is related to the length of the time interval between two neighboring points of a simplified trajectory. We shall explain this by an example, say, suppose someone moves from the front door, quickly pass through living room and goes to bed for a long sleep. Because this house is not so big, his trajectory is possible simplified to two points, \ie $P_s$ at the front door and $P_e$ on the bed. In this case, a \emph{when\_at} query taking a point $P$ in his living room as input may return the excepted time $t'$ having hours of error \wrt the actual time $P.t$.}
 
-\ni \textcolor{blue}{(2) The average error of \emph{when\_at} queries normally increases with the increasing of error bounds. It is clear that the increasing of error bound enlarges the average length of time interval between two neighboring points of a simplified trajectory, such that increases the average error of the query. Similarly, algorithms having better compression ratios might result in larger \emph{when\_at} query errors.}
+\ni \textcolor{blue}{(2) The average error of \emph{when\_at} queries normally increases with the increasing of error bounds. It is clear that the increasing of error bound enlarges the average length of time interval between two neighboring points of a simplified trajectory, such that it increases the average error of the query. Similarly, algorithms having better compression ratios might result in larger \emph{when\_at} query errors.}
 	
 \ni \textcolor{blue}{(3) \sed algorithms have smaller average \emph{when\_at} query errors than \ped algorithms, majorly because \sed introduces smaller distance errors and has poorer compression ratios compared with \ped. \dad algorithms also have smaller average \emph{when\_at} query errors than \ped algorithms, partially because of its poorer compression ratios compared with \ped. }
 	
@@ -1076,7 +1077,7 @@ The running time of batch algorithms \dpa and \tpa decreases and increases with 
 Top-down algorithms also run faster than bottom-up algorithms in high sampling datasets when using \ped or \sed.
 %
 \emph{(3)} Online algorithms \opwa and \bqsa usually have better compression ratios than batch algorithms, the worst average errors, and poorer efficiency than batch algorithms. Algorithm \squishe is on the other side of \opwa and \bqsa, 
-\myblue{and algorithm \dagots~has poor compression ratios, the best average errors and varied efficiency. When \dagots~is processing a long trajectory, it needs to frequently copy memory, this will make it even slower than batch algorithms if it is implemented in Java.}
+\myblue{and algorithm \dagots~has poor compression ratios, the best average errors and varied efficiency. In our tests (in Java), when \dagots~is processing a long trajectory, the frequently copying of memory makes it even slower than batch algorithms.}
 %
 \emph{(4)} One-pass algorithms \operb, \siped, \cised, \intersec and \interval have good compression ratios (comparable with the best sub-optimal algorithms), poor average errors and the best efficiency. 
 %
@@ -1106,7 +1107,7 @@ One-pass algorithms show a linear running time and they are not very sensitive t
 
 \textcolor{blue}{Comparing with the recent experimental study \cite{Zhang:Evaluation}, this work has the following new findings: 
 	(1) the compression ratios and average errors of optimal, batch, online and one-pass algorithms \wrt distance metrics (\ped, \sed and \dad), error bounds and data sizes are revealed, as summarized in this section, 
-	(2) the efficiency of algorithms \wrt distance metrics, error bounds and data sizes are also revealed, as summarized in this section. Besides, our tests tell that the running time from the fastest to the slowest is normally \intersec, \interval, \operb, \squishe, \dpa, \opwa, \dagots and \bqsa in all datasets, which is partially different from \cite{Zhang:Evaluation} that is \intersec, \interval, \dpa, \operb, \dagots, \opwa, \squishe and \bqsa, 
+	(2) the efficiency of algorithms \wrt distance metrics, error bounds and data sizes are also revealed, as summarized in this section. Besides, our tests tell that the running times from the fastest to the slowest are normally \intersec, \interval, \operb, \squishe, \dpa, \dagots and \bqsa in all datasets, which is partially different from \cite{Zhang:Evaluation} that are \intersec, \interval, \dpa, \operb, \dagots, \squishe and \bqsa, 
 	(3) aging friendliness and errors are revealed, as reported in Section \ref{sec:exp-data-aging},
 	(4) though online algorithm \dagots shows better trade-off between compression ratio and average error \cite{Zhang:Evaluation}, it is not effective in terms of compression ratios,  
 	(5) one-pass algorithm \siped ($\epsilon$) is efficient as well as has good compression ratios, and 
