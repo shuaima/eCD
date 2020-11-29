@@ -252,8 +252,11 @@ Thanks for pointing out these!
 
 \textbf{[R1C12]} \emph{The impact of error bounds on compression ratios is straightforward. The bigger the error bounds, the better the compression ratio. However, the size of trajectory on the compression ratio is not that straightforward. Can the authors please comment on the observations we could make from Figures 18 -20? }
 
-It seems that data size does not have remarkable impacts on compression ratios. For an online or one-pass algorithm that is compressing a trajectory, once some distance is greater than the error bound, it is sure to output a line segment and continue to compress the subsequent data points. As a result, data size does not have remarkable impacts on compression ratios. For batch and the optimal algorithms, our tests reveal a similar result.
-%More specifically, a long trajectory is connected by a number of sub-trajectories $[\dddot{T}_1,\dddot{T}_2,..., \dddot{T}_m, ]$ that order by time, and each sub-trajectory $\dddot{T}_i, i \in [1,m]$, could be simplified to several line segments. Then suppose this original trajectory is being simplified by some online or one-pass algorithm that runs in an incremental manner, it is reasonable to conclude that the appending of $\dddot{T}_{m+1}$ might have some impacts of the representation (simplification) of $\dddot{T}_{m}$, but it's hard to have impacts on $\dddot{T}_i$ before $\dddot{T}_{m}$.
+It seems that data size does not have remarkable impacts on compression ratios. For an online or one-pass algorithm that is compressing a trajectory, once some distance is greater than the error bound, it is sure to output a line segment and continue to compress the subsequent data points. As a result, data size does not have remarkable impacts on the compression ratios of online and one-pass algorithms. 
+For batch and the optimal algorithms, a long trajectory is connected by a number of sub-trajectories $[\dddot{T}_1,\dddot{T}_2,..., \dddot{T}_m, ]$ that order by time, because each sub-trajectory could be simplified to several relatively fixed line segments and sub-trajectories are relatively independent to each other, data size does not have remarkable impacts on the compression ratios of the optimal and batch algorithms too.
+In a conclusion, data size does not have remarkable impacts on compression ratios. 
+%Our tests reveal a similar result.
+%More specifically,  Then suppose this original trajectory is being simplified by some online or one-pass algorithm that runs in an incremental manner, it is reasonable to conclude that the appending of $\dddot{T}_{m+1}$ might have some impacts of the representation (simplification) of $\dddot{T}_{m}$, but it's hard to have impacts on $\dddot{T}_i$ before $\dddot{T}_{m}$.
 
 We have clarified this observation in the third paragraph of Section 6.3.1 (the 2{nd} item). Thanks!
 
@@ -265,20 +268,29 @@ First of all, this evaluation aims to summarize the state-of-the-art of the erro
 
 (1) we have summarized the major characters of algorithms and distance metrics, and highlight the advantages and limitations of distance metrics at the beginning of the paper (please refer to the ``algorithm taxonomy" and ``distance metrics" parts of Section 1), with respect to your advice of [R1C5]. And yes, PED largely treats a trajectory as a sequence of spatial data points, thus, it has better compression ratios than SED at a price of losing temporal information. This is also claimed in Section 1,
 
-(2) we have objectively evaluated these technologies under the uniform quality criteria (including compression ratios, errors, running time, aging friendliness and query friendliness), and the same setting and parameters. These tests and comparisons are fair, especially under the premise that we have claimed the features, advantages and limitations of those technologies, as shown in (1), and
+(2) we have objectively evaluated these technologies under the uniform quality criteria (including compression ratios, errors, running time, aging friendliness and query friendliness), and the same setting and parameters. Following the common practice in this field, each quality metric is tested separately. These tests and comparisons are fair, especially under the premise that we have claimed the features, advantages and limitations of those technologies, as shown in (1), and
 
-(3) we agree with your that the higher compression ratio is not always the better and a single measure is not enough to determine an algorithm or distance metric, \ie users need to consider multiple metrics to choose a correct algorithm and distance metric so as to satisfy their unique requirements (this is also your advice of [R1C6]).
+(3) we agree with your that the higher compression ratio is not always the better and a single measure is not enough to determine an algorithm or distance metric, \ie \emph{users need to consider multiple metrics to choose a correct algorithm and distance metric} so as to satisfy their unique requirements (this is also your advice of [R1C6]). In other words, users first choose the quality metrics according to the application requirements, then choose an appropriate algorithm according to those metrics.
 
 Accordingly, we have clarified this in the penultimate paragraph of Section 6.3.1, say, ``{because SED saves temporal information while PED does not (remember the loss of temporal information may lead to unexpected results, \eg unbounded answer-errors to spatio-temporal queries)}, given the same error bound $\epsilon$, the compression ratios of algorithms using PED are obviously better than using SED." Also, please refer to the responses to [R1C5] and [R1C6] for more details. Thanks!
 
 \textbf{[R1C14]} \emph{ In Page 27 (lines 44 - 45), it is stated that ``When using DAD, the running time from the smallest to the largest is one-pass algorithms Intersect and Interval, batch algorithms TP and DP, and online algorithm OPW." However, algorithms actually perform slightly different at various datasets. It's not accurate to state that online algorithm OPW is always the worst, as it actually performs much better than TP and DP in the dataset Geolife (as shown in Figure 32(2)).}
 
-Yes, we have revised the statement, and this sentence is replaced by ``When using DAD, one-pass algorithms Intersect and Interval run prominently faster than batch algorithms TP and DP and online algorithm OPW." 
+Yes, OPW performs much better than TP and DP in Geolife with error bound fixed to $45$ degrees, as shown in Figure 32 (33 in the new submission), and it also performs better than DP in UCar and Mopsi when the error bound is small, \eg it's less than 30 degrees, as shown in Figure 29 (30 in the new submission).
+
+We have revised the statement, and this sentence is replaced by ``When using DAD, one-pass algorithms Intersect and Interval run prominently faster than batch algorithms TP and DP and online algorithm OPW." 
 Thanks for pointing out this!
 
 \textbf{[R1C15]} \emph{ When evaluating the running time of different algorithms under various error bounds, different algorithms demonstrate different trends. The authors might want to explain why algorithms change the trends in certain ways (e.g., why error bounds do not have any impact on the running time of SIPED, why TP, OPW, BQS incur longer running time as error bounds increase, why ......).}
 
-Yes, different algorithms demonstrate different trends under various error bounds because of their distinct routines and principles. More specifically, error bounds do not have obvious impacts on the efficiency of SIPED and other one-pass algorithms, because a data point is processed only one time during the whole process; the running time of batch algorithm DP (TP) decreases (increases) with the increase of error bound due to the top-down (bottom-up) approach it applies; and so on. The detailed analysis of these trends are summarized in the ``analyses of LS algorithms" part of Section 6.3.3. 
+Yes, different algorithms demonstrate different trends under various error bounds because of their distinct routines and principles. More specifically,
+for batch algorithms, the running time of DP and TP decreases or increases with the increase of error bound $\epsilon$, respectively, due to the top-down and bottom-up approaches that they apply;
+%
+for online algorithms, BQS and OPW both have poor efficiency as they finally need batch approaches to simplify buffered data. SQUISH-E is faster than BQS and OPW at a cost of poorer compression ratios;
+%
+for one-pass algorithms, SIPED, OPERB, CISED, Interval and Intersect show a linear running time that is consistent with their time complexity analyses. They are not very sensitive to error bound $\epsilon$ and also scale well with the increase of trajectory size on all datasets as a data point is processed only one time during the whole process. 
+
+The detailed analysis of these trends are summarized in the ``analyses of LS algorithms" part of Section 6.3.3. 
 %
 We believe it is helpful for users to understand the characters of these algorithms, and to choose an appropriate algorithm to meet their needs.
 
@@ -292,7 +304,12 @@ Yes, we have added tests on the \emph{``when\_at"} query in Section 6.3.5. Thank
 
 \textbf{[R1C17]} \emph{ Based on the results reported in Figures 33 -38, PED and DAD are actually not proper distance metrics that should be considered when we apply line simplification to compress the trajectories and meanwhile want to preserve the utility of the compressed trajectories. Especially, Figure 21 (avg PED errors under different error bounds) and Figure 33 (avg PED query errors under different error bounds) have different trends (Figure 23 and Figure 35 have different trends too), which further demonstrates that PED and DAD are actually misleading. An algorithm that can achieve good performance in terms of PED/DAD might not be able to guarantee its performance in real applications. }
 
-Yes, a line simplification algorithm using PED or DAD is not able to guarantee the error bounds of spatio-temporal queries, which makes it inappropriate in scenarios that spatio-temporal queries are required. However, they still have their usages, \eg in some trajectory clustering that cares about the shape of a trajectory rather than the detailed positions of an individual. We have highlighted this in the penultimate paragraph of Section 6.3.6. More detailed discussion please refer to [R1C5]. 
+Yes, a line simplification algorithm using PED or DAD is not able to guarantee the error bounds of spatio-temporal queries, which makes it inappropriate in scenarios that spatio-temporal queries are required. However, they still have their usages, \eg in some trajectory clustering that cares about the shape of a trajectory rather than the detailed positions of an individual. More detailed discussion about distance metrics please refer to [R1C5].
+
+In practice, users first choose the key quality metrics according to the application requirements, then choose an appropriate algorithm according to those metrics.
+Thus, we have explained the quality metrics (including compression ratios, errors, running time, aging friendliness and query friendliness) in Section 1, and evaluated line simplification technologies under the uniform quality criteria (Section 6). Our work provides a whole image of line simplification algorithms, such that {users are able to choose correct algorithms and distance metrics} according to multiple metrics that satisfy their unique requirements (the quality criteria problem is also your great advice in [R1C6]). 
+
+We have highlighted this in the penultimate paragraph of Section 6.3.6.  
 Thanks!
 
 \textbf{[R1C18]} \emph{ This paper focuses on applying line simplification for trajectory compression. Given the fact that there are different ways to compress trajectories (e.g., [1], [2]), it might be very helpful to give a brief introduction on different trajectory compression techniques, which could help audience to understand the pros/cons of applying line simplification to compress trajectories. }
