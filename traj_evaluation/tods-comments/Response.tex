@@ -307,7 +307,7 @@ Yes, we have added tests on the \emph{``when\_at"} query in Section 6.3.5. Thank
 Yes, a line simplification algorithm using PED or DAD is not able to guarantee the error bounds of spatio-temporal queries, which makes it inappropriate in scenarios that spatio-temporal queries are required. However, they still have their usages, \eg in some trajectory clustering that cares about the shape of a trajectory rather than the detailed positions of an individual. More detailed discussion about distance metrics please refer to [R1C5].
 
 In practice, users first choose the key quality metrics according to the application requirements, then choose an appropriate algorithm according to those metrics.
-Thus, we have explained the quality metrics (including compression ratios, errors, running time, aging friendliness and query friendliness) in Section 1, and evaluated line simplification technologies under the uniform quality criteria (Section 6). Our work provides a whole image of line simplification algorithms, such that {users are able to choose correct algorithms and distance metrics} according to multiple metrics that satisfy their unique requirements (the quality criteria problem is also your great advice in [R1C6]). 
+Thus, we have explained the quality metrics (including compression ratios, errors, running time, aging friendliness and query friendliness) in Section 1, and evaluated line simplification technologies under the uniform quality criteria in Section 6. Our work provides a whole image of line simplification algorithms, such that {users are able to choose correct algorithms and distance metrics} according to multiple metrics satisfying their unique requirements (the quality criteria problem is also your great advice in [R1C6]). 
 
 We have highlighted this in the penultimate paragraph of Section 6.3.6.  
 Thanks!
@@ -331,7 +331,7 @@ Thanks!
 
 \textbf{[R2D1]} \emph{In page 2, the authors mention that “important aspects of trajectory simplification (compression ratios, running time and aging friendliness) are not systematically studied” for [41]. Not sure which “important aspects” the authors refer to, as I found running time and the trade-off between compression ratios and errors have been reported in [41].}
 
-The ``important aspects" refer to compression ratios, running time and aging friendliness.
+The ``important aspects" refer to compression ratios, running time and aging friendliness (the whole quality criteria please refer to the ``Quality criteria" part of Section 1).
 
 (1) Running time: we have noticed that [41] ([59] in the revised version) does show a table listing \emph{``compression time per trajectory point"} of each algorithm, however, we argue that it is not sufficient to show the efficiency of these algorithms as algorithms have different running time \wrt error bounds, and the running time of many algorithms is not linear to the size of a trajectory (thus it may cost different time on one point when the size of an input trajectory is different). Our tests in Section 3.3.3 also support this argument.
  
@@ -383,7 +383,7 @@ In [41] that implemented in varied languages, the running time of algorithms fro
 However, in our tests (re-implement the methods with a uniform language, Java), the running time from the fastest to the slowest is normally Intersect, Interval, OPERB, \textcolor{blue}{SQUISH-E}, \textcolor{blue}{DP},  \textcolor{blue}{DOTS} and BQS in all datasets, \eg they need 0.59, 1.08, 1.09, \textcolor{blue}{3.44}, \textcolor{blue}{15.72}, \textcolor{blue}{45.71} and 59.42 microseconds respectively to process one data point of the Mopsi dataset (this example data is collected from dataset Mopsi with error bounds of 40 meters and 45 degrees. When processing one point, such an algorithm has the similar running time in Mopsi compared with Geolife, as shown in Figures 28-33). In our tests, DP (15.72) and DOTS (45.71) are much slower, while SQUISH-E (3.44) is much faster, than those (\textcolor{blue}{0.46}, \textcolor{blue}{1.58}, \textcolor{blue}{26.78}) in [41].
 
 
-Besides, our tests also reveal the running time of algorithms with respect to the length of a trajectory (counted in the number of data points), the type of distance metrics and the preset error bounds. Indeed, our tests bring a complete image of the efficiency of those algorithms.
+Besides, our tests also reveal the running time of algorithms with respect to the length of a trajectory (counted in the number of data points), the type of distance metrics and the various of error bounds, which are not systematically studied in [41]. Indeed, our tests bring a complete image of the efficiency of those algorithms.
 
 
 
@@ -396,13 +396,13 @@ We have clarified this in Section 6.3.6, say, ``our tests tell that the running 
 \textbf{[R2D5]} \emph{In Table 1, what are the criteria for the selection of “representative” algorithms? The authors may need to explicitly explain this in this paper.}
 
 We comprehensively consider the performance of algorithms, the supporting of distance metrics and the novelty of their key ideas to select the representative algorithms. More specifically, 
-(1) for optimal algorithms, {as all the optimized optimal algorithms have the same effectiveness using the same distance metric, and essentially work for small size trajectories only, we choose algorithm Optimal that supports PED, SED and DAD as the representative of optimal line simplification algorithms,}
+(1) for optimal algorithms, {because all the optimized optimal algorithms have the same effectiveness using the same distance metric, and algorithm Optimal supports all three distances PED, SED and DAD while others are not, we choose it as the representative of the optimal line simplification algorithms,}
 %
-(2) for batch algorithms, {they basically work for small and medium size trajectories, and we choose top-down algorithm DP and bottom-up algorithm TP that all support PED, SED and DAD as the representatives of batch algorithms,}
+(2) for batch algorithms, {because DP is the typical top-down algorithm and TP is the typical bottom-up algorithm, and they both support PED, SED and DAD, and we choose  them as the representatives of batch algorithms,}
 %
-(3) for online algorithms, we choose algorithms BQS ({the performance optimized online algorithm, specific for PED}), SQUISH-E ({the famous online algorithm, specific for SED}), {DOTS ({the online algorithm using the LISSED, recommended in the recent evaluation work [41]})} and OPW ({because no specific online algorithms have been developed for DAD, we alternatively choose OPW, a well-known online algorithm based on DP that is compatible with DAD}) as the representatives of online algorithms using PED, SED, {LISSED} and DAD, respectively, and
+(3) for online algorithms, because algorithms BQS, SQUISH-E and DOTS are the state-of-the art of online algorithms, in particular, BQS is the performance optimized online algorithm specific for PED, SQUISH-E is the famous online algorithm specific for SED, and {DOTS is the online algorithm using the LISSED and is recommended in the recent evaluation work [41]}, we choose them as the representatives of online algorithms using PED, SED and {LISSED}, respectively. Besides, because no specific online algorithms have been developed for DAD, we alternatively choose OPW, a well-known online algorithm based on DP that is compatible with DAD,} as the representative of online algorithm using DAD, and
 %
-(4) for one-pass algorithms, SIPED, OPERB, CISED, Intersect and Interval are the state-of-the-art of this kind of algorithms. Among them, algorithms OPERB and SIPED are specific to PED, CISED is specific to SED, and Intersect and Interval are specific to DAD. We choose them as the representatives of one-pass algorithms.
+(4) for one-pass algorithms, because SIPED, OPERB, CISED, Intersect and Interval are the state-of-the-art of this kind of algorithms, in particular, algorithms OPERB and SIPED are specific to PED, CISED is specific to SED, and Intersect and Interval are specific to DAD. We choose them as the representatives of one-pass algorithms.
 
 To clarify these, we have added a brief explanation of the criteria after Table 1, and explained the details selections in the top paragraphs of Sections 3, 4.1, 4.2 and 4.3. 
 %Thanks!
@@ -481,7 +481,7 @@ We have revised the second paragraph of section 3 to clarify this. Thanks for po
 
 \emph{[r1] Gill Barequet, Danny Z. Chen, Ovidiu Daescu, Michael T. Goodrich, and Jack Snoeyink. Efficiently approximating polygonal paths in three and higher dimensions. Algorithmica, 33(2):150–167, 2002.}
 
-Yes, we have observed that in areas of image processing, computer graphics and cartography, there is another 3D space, \ie \emph{x-y-z} 3D space, where {\em z} is height, and some works solve the \emph{min-\#} problem in the \emph{x-y-z} 3D space. Among them, authors in [r1] also extend the \textit{sector intersection} method to the \textit{off-line ball-inclusion testing} in the \emph{x-y-z} 3D space, such that they are able to develop efficient near-quadratic-time algorithms in three dimensions for solving the \emph{min-\#} and \emph{min-$\epsilon$} problems.} %
+Yes, we have observed that in areas of image processing, computer graphics and cartography, there is another 3D space, \ie \emph{x-y-z} 3D space, where {\em z} is height, and some works solve the \emph{min-\#} problem in the \emph{x-y-z} 3D space. Among them, authors in [r1] also extend the \textit{sector intersection} method to the \textit{off-line ball-inclusion testing} in the \emph{x-y-z} 3D space, such that they are able to develop efficient near-quadratic-time algorithms in three dimensions for solving the \emph{min-\#} and \emph{min-$\epsilon$} problems. %
 
 We have clarified this, with respect to [r1], in the first paragraph of Section 4.3.3. Thanks!
 
@@ -491,7 +491,7 @@ Sec. 4.2. One aspect that is context-dependent (and often implicitly ignored) in
 \emph{[r2] Oliviu Ghica, Goce Trajcevski, Ouri Wolfson, Ugo Buy, Peter Scheuermann, Fan Zhou, Dennis Vaccaro: Trajectory Data Reduction in Wireless Sensor Networks. IJNGC 1(1) (2010)
 }
 
-{Yes, in Wireless Sensor Networks, online algorithms should address the problem of balancing the trade-off between the energy cost due to communication and the accuracy of the trajectories’ detection and representation [r2].} Besides, the ``freshness” (i.e., the latency) of the simplified data in the sink and/or data server could be controlled by a careful management of the data buffer of an online algorithm [r2].
+{Yes, in Wireless Sensor Networks, online algorithms should address the problem of balancing the trade-off between the energy cost due to communication and the accuracy of the trajectories’ detection and representation [r2].} Besides, the ``freshness” (i.e., the latency) of the simplified data in the sink and/or data server could be controlled by a careful management of the data buffer of an online algorithm [r2]. The freshness of simplified data is related to the buffer size of the simplification algorithm, that is, the smaller of the buffer size, the fresher of the output data. It is also related to the efficiency of the algorithm, that is, if the algorithm needs a shorter time to compress (\eg a one-pass algorithm), then the result data must be fresher.
 
 We have clarified this, with respect to [r2], in the first paragraph of Section 4.2. 
 Thanks!
