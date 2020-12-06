@@ -16,8 +16,8 @@ Using three real-life datasets, we conduct five sets of tests to evaluate the ef
 
 \stitle{Real-life Trajectory Datasets}.
 We use three real-life datasets shown in \mytable{tab:datasets}, namely, Service car trajectory data (\ucar), Geolife trajectory data (\geolife)~\cite{Web:Geolife} and \mopsi trajectory data (\mopsi)~\cite{Web:Mopsi}, to evaluate those \lsa algorithms.
-These data sets come from different sources, where \ucar is collected by cars in urban, and \geolife and \mopsi are a mixing of cars and individuals. They also have {typical sampling rates used in practice, ranging from one point per second to one point per five seconds.}
-\myblue{Occasionally, the time interval between two neighbouring data points is very long, \eg greater than $10^7$ seconds.}
+These data sets come from different sources, where \ucar is collected by cars in urban, and \geolife and \mopsi are a mixing of cars and individuals. They also have typical sampling rates used in practice, ranging from one point per second to one point per five seconds.
+\textcolor{blue}{The time interval between two neighbouring data points is occasionally very long, \eg greater than $10^7$ seconds.}
 The data source and sampling rate also affect the performance of \lsa algorithms using certain distance metrics.
 
 %\vspace{0.5ex}
@@ -68,11 +68,11 @@ The data source and sampling rate also affect the performance of \lsa algorithms
 \stitle{Algorithms and implementation}.
 We have implemented the representative algorithms shown in \mytable{tab:summary-lsa}.
  They are optimal algorithm \opt, batch algorithms \dpa and \tpa, online algorithms  \opwa, \bqsa, \squishe and \myblue{\dagots}, and one-pass algorithms  \operb, \siped, \cised, \intersec and \interval.
-For one-pass algorithms \siped and \cised, we implement two versions of them (half and full $\epsilon$), denoted as \siped($\epsilon$), \siped($\frac{\epsilon}{2}$), \cised($\epsilon$) and \cised($\frac{\epsilon}{2}$). 
+For one-pass algorithms \siped and \cised, we implement two versions of them (half and full $\epsilon$), denoted as \siped($\epsilon$), \siped($\frac{\epsilon}{2}$), \cised($\epsilon$) and \cised($\frac{\epsilon}{2}$).
 %\textcolor{blue}{The above algorithms all belong to strong simplification that output data points belong to the original trajectories.}
-\textcolor{blue}{Besides, algorithms \operb\cite{Lin:Operb} and \cised\cite{Lin:Cised} both have weak versions, named \operb-A and \cised-W, that allow data interpolation. } %We also implement them.
+\textcolor{blue}{Besides, algorithms \operb\cite{Lin:Operb} and \cised\cite{Lin:Cised} both have weak versions, named \operb-A and \cised-W, respectively.} %We also implement them.
 For algorithm \cised($\epsilon$) and \cised($\frac{\epsilon}{2}$), we fixed parameter $m=16$ as evaluated in \cite{Lin:Cised}, \ie 16-edges inscribe regular polygon.
-{For algorithm \operb, we remove its fifth optimization technique to make it fit for the definition of \textcolor{blue}{\emph{tolerance-zone} error measure \cite{Daescu:metric,Barequet:3D,Chen:Space,Imai:Optimal,Melkman:Optimal} (otherwise, it is the \emph{infinite beam} error measure \cite{Daescu:metric,Chen:Space})}.}
+For algorithm \operb, we remove its fifth optimization technique to make it fit for the definition of the \textcolor{blue}{tolerance-zone error measure \cite{Daescu:metric,Barequet:3D,Chen:Space,Imai:Optimal,Melkman:Optimal} (otherwise, it is the \emph{infinite beam} error measure \cite{Daescu:metric,Chen:Space})}.
 % For algorithm \nopts, we fixed parameter $m=32$.
 All algorithms are implemented with Java.
 {All tests are run on an x64-based  PC with 4 Intel(R) Core(TM) {i7-6700 CPU @3.40GHz} and 8GB of memory, and {the max heap size of Java VM is 4GB.}}
@@ -112,7 +112,7 @@ the compression ratio is $(\sum_{j=1}^{M} |\overline{\mathcal{T}}_j |)/(\sum_{j=
 By this definition, algorithms with lower compression ratios are better.
 
 \stitle{Simplification errors.}
-\myblue{The max (or average) simplification error is the max (respectively average) value of the distances from every point of the original trajectories to its representing line segment of the simplified trajectories.}
+\myblue{The max (respectively average) simplification error is the max (respectively average) value of the distances from every point of the original trajectories to its representing line segment of the simplified trajectories.}
 
 
 \eat{
@@ -156,7 +156,7 @@ The compression ratios of these algorithms under varied error bounds $\epsilon$ 
 \sstab(1)  {Datasets may have impacts on the compression ratios of \lsa algorithms. Datasets with higher sampling rates typically have better compression ratios for \ped and \sed, while it is opposite for \dad. \textcolor{blue}{When using \dad, the} dataset collected by cars (\eg~\ucar) has better compression ratios than the datasets partially collected by individuals (\eg~\geolife and \mopsi), as cars typically move more regularly than individuals \textcolor{blue}{in directions}.}
 %\myblue{otherwise, it has poorer compression ratios than \geolife and \mopsi, partially because cars have a broad range of speed and they frequently stop because of traffic light}
 
-\sstab(2) \textcolor{blue}{Data sizes do not have remarkable impacts on compression ratios.} \myblue{The reason lies, for an online or one-pass algorithm that is compressing a trajectory, once some distance is greater than the error bound, it is sure to output a line segment and continue to compress the subsequent data points, as a result, data size does not have remarkable impacts on compression ratios; for batch and the optimal algorithms, the tests reveal a similar conclusion.}
+\sstab(2) \textcolor{blue}{Compression ratios are insensitive to the sizes of trajectories.} \myblue{The reason lies in that once the distance is greater than the error bound, a line segment is produced, and the compression continues to repeat this process, which is essentially irrelevant to the the sizes of trajectories. This is also the key to preserve the error bound for any of optimal, batch, online and one-pass algorithms.}
 
 \sstab(3) The compression ratios of algorithms using \ped from the best
 to the worst are normally the optimal algorithm \opt, online algorithm \bqsa, one-pass algorithm \siped($\epsilon$), batch algorithms \tpa and \dpa and one-pass algorithm \myblue{\operb-A}, and one-pass algorithms \siped($\frac{\epsilon}{2}$) and \operb.
@@ -305,15 +305,15 @@ For batch algorithms, bottom-up algorithm (\tpa) and top-down algorithm (\dpa) h
 
 %\todo{Online: }
 For online algorithms, \bqsa and \opwa are comparable with the best sub-optimal algorithms. This is because \opwa is indeed a combination of \dpa and opening window, and \bqsa is mainly an efficiency optimized \opwa.
-\squishe has the poorest compression ratio among all algorithms using \sed. This is the result of its mechanism: \squishe estimates the lowest \sed error and removes the point with ``predicted to introduce the lowest amount of error into the compression"\cite{Muckell:SQUISH}. Its ``prediction" method is not accurate enough, thus, in order to ensure the error bound, it may ignore too many potential points that could be represented by a line segment. \textcolor{blue}{\dagots~also shows poor compression ratios in these tests. This is related to \lissed, a cumulative error measure that \dagots~uses, in which each point contributes a part of error, such that the \lissed error bound of $\epsilon^2$ may limit this algorithm to ``absorbing" more points into a line segment, even though those points could be absorbed \wrt the  \sed error bound of $\epsilon$.}
+\squishe has the poorest compression ratio among all algorithms using \sed. This is the result of its mechanism: \squishe estimates the lowest \sed error and removes the point with ``predicted to introduce the lowest amount of error into the compression'' \cite{Muckell:SQUISH}. Its ``prediction'' method is not accurate enough, thus, in order to ensure the error bound, it may ignore too many potential points that could be represented by a line segment. \textcolor{blue}{\dagots~also shows poor compression ratios in these tests. This is related to \lissed, a cumulative error measure that \dagots~uses, in which each point contributes to the error, such that the \lissed error bound of $\epsilon^2$ may limit this algorithm to compress more points into a line segment, while those points may be compressed \wrt the  \sed error bound of $\epsilon$.}
 
 %\todo{One pass: half $\epsilon$ vs full $\epsilon$.}
 For one-pass algorithms, the full $\epsilon$ sector/cone/range combining with a position/direction constraint always has better compression ratios than the half $\epsilon$ sector/cone/range versions in all datasets, and they are comparable with the best sub-optimal algorithms.
 This may be related to the moving habits or patterns of moving objects that implied in trajectories.
-That is, a moving object, like an individual or a car, usually keeps moving forward for quite a long time, engendering a sequence of data points distributing in a narrow strip. Under such circumstance, a new data point is quite possibly living in the common intersection of larger sectors/cones/ranges, which further leads to a better compression ratio. 
+That is, a moving object, like an individual or a car, usually keeps moving forward for quite a long time, engendering a sequence of data points distributing in a narrow strip. Under such circumstance, a new data point is quite possibly living in the common intersection of larger sectors/cones/ranges, which further leads to a better compression ratio.
 %which lets more data points be represented by a result line segment.
 
-\textcolor{blue}{Besides, weak algorithms \operb-A and \cised-W normally have a few advantages in terms of compression ratios compared with corresponding strong algorithms \operb and \cised in cases that small error bounds (\eg $\epsilon<40$ meters in these tests) are set.}
+\textcolor{blue}{Moreover, weak algorithms \operb-A and \cised-W typically have a few advantages in terms of compression ratios compared with their strong simplification counterparts \operb and \cised for the cases with relatively small error bounds (\eg $\epsilon<40$ meters in these tests).}
 
 
 
@@ -322,8 +322,10 @@ That is, a moving object, like an individual or a car, usually keeps moving forw
 Though \ped, \sed and \dad are different distances, the comparison of their compression ratios is helpful to choose an effective distance metric.
 %whose usages are mainly decided by application requirements
 %
-First, \textcolor{blue}{because \sed saves temporal information while \ped does not (also note the loss of temporal information may lead to unexpected results, \eg unbounded answer-errors to spatio-temporal queries, see Section \ref{sec-exp-query})}, given the same error bound $\epsilon$, the compression ratios of algorithms using \ped are obviously better
-than using \sed. More specifically, \emph{the output sizes of using \sed are approximately twice of \ped.}
+First,  given the same error bound $\epsilon$, the compression ratios of algorithms using \ped are obviously better
+than using \sed. 
+\textcolor{blue}{This is because \sed saves temporal information while \ped does not}.
+More specifically, \emph{the output sizes of using \sed are approximately twice of \ped.}
 %
 As shown in Figures~\ref{fig:cr-ped-epsilon} and~\ref{fig:cr-sed-epsilon}, the output sizes of algorithms \tpa and \dpa
 using \ped are on average ($43.55\%$, $47.49\%$, $63.15\%$) and ($45.79\%$,
@@ -331,12 +333,13 @@ $50.88\%$, $64.50\%$) of algorithms \tpa and \dpa using \sed on datasets \dSets,
 %
 %and in Figure~\ref{fig:cr-ped-size} and Figure~\ref{fig:cr-sed-size}, the compression ratios of algorithms \opt, \tpa and \dpa using \ped are on average {($56.03\%$, $33.42\%$, $33.12\%$, $72.42\%$),	($55.78\%$, $31.88\%$, $34.27\%$, $69.44\%$) and ($58.09\%$, $34.82\%$,	$40.91\%$, $75.06\%$)} of algorithms \opt, \tpa and \dpa using \sed on datasets \dSets, respectively.
 %
-This result shows ~\sed saves temporal information at a price of twice more data points.
+This result shows ~\sed saves temporal information at a price of twice more data points. \textcolor{blue}{Note as the loss of temporal information may lead to unexpected results, \eg unbounded answer-errors to spatio-temporal queries (see Section \ref{sec-exp-query}), this price is worthwhile for certain applications. }
 
 
-Secondly, \textcolor{blue}{in practice, we find that \sed has obviously better compression ratios than \dad in datasets \geolife and \mopsi and a bit poorer than \dad in \ucar (indeed, it is hard to compare them under absolutely fair conditions, as \sed is a Euclidean distance metric, having a value in $[0, \infty]$ meters, and DAD is a direction metric,  having a value in $[0,360)$ degrees. Alternatively, we suppose there are two practical scenarios, one uses \sed with $\epsilon  \le  100$ meters, and the other uses \dad with $\epsilon \le 60$ degrees, then we compare the performance of them, \eg the performance of \sed with $\epsilon=100/k$ meters \emph{vs.} \dad with $\epsilon=60/k$ degrees ($k \ge 1$). The same below).}
+Secondly, \textcolor{blue}{we find that \sed has obviously better compression ratios than \dad on datasets \geolife and \mopsi and a bit poorer than \dad in \ucar.}
 This is because some \geolife and \mopsi trajectories are collected by individuals that are in transportation modes of walking, running and riding, and moving objects in those modes may change their directions with a considerable range (\eg large than $60$ degrees) more frequently than cars in urban. Moreover, \geolife and \mopsi have higher sampling rates than \ucar, which capture more direction changes, \ie direction changes in a small time interval.
-
+%
+\textcolor{blue}{Indeed, it is hard to compare \sed and \dad under absolutely fair conditions, as \sed is a Euclidean distance metric, having a value in $[0, \infty]$ meters, and DAD is a direction metric,  having a value in $[0,360)$ degrees. Hence, we choose to consider more practical scenarios, \ie one uses \sed with $\epsilon  \le  100$ meters, and the other uses \dad with $\epsilon \le 60$ degrees, and we compare the performance of \sed with $\epsilon=100/k$ meters \emph{vs.} \dad with $\epsilon=60/k$ degrees with $k \ge 1$. We also follow this when comparing \sed and \dad in the sequel.}
 %It seems that it is a normal phenomenon that a moving object frequently changes its direction with a considerable range (\eg large than $60$ degrees) during a trip.
 
 
@@ -596,7 +599,7 @@ For example, in \mopsi, the running time of algorithms
 
 
 
-\sstab (3) When using \sed, the running time of algorithms except \dagots~from the smallest to the largest is one-pass algorithms \cised and \myblue{\cised-W}, online algorithm \squishe, and batch algorithms \tpa and \dpa, while \dagots~has varied running time. In full datasets, \dagots~runs faster than, comparable with and slower than \dpa in datasets \ucar, \geolife and \mopsi, respectively, while in small datasets, it often runs fast than \dpa. 
+\sstab (3) When using \sed, the running time of algorithms except \dagots~from the smallest to the largest is one-pass algorithms \cised and \myblue{\cised-W}, online algorithm \squishe, and batch algorithms \tpa and \dpa, while \dagots~has varied running time. In full datasets, \dagots~runs faster than, comparable with and slower than \dpa in datasets \ucar, \geolife and \mopsi, respectively, while in small datasets, it often runs fast than \dpa.
 Algorithm \cised(${\epsilon}$) is $(1.17, 1.17, 0.91)$ times of \cised($\frac{\epsilon}{2}$), and algorithms \tpa, \dpa and \squishe are on average
  ($13.33$, $15.81$, $13.09$), ($12.93$, $10.64$, $8.79$) and
 ($2.75$, $2.78$, $2.57$) times slower than \cised($\frac{\epsilon}{2}$) on datasets \dSets, respectively.
@@ -604,7 +607,7 @@ Algorithm \cised(${\epsilon}$) is $(1.17, 1.17, 0.91)$ times of \cised($\frac{\e
 For example, in \mopsi, the running time of algorithms
 (\tpa, \dpa, {\dagots}, \squishe, \cised($\epsilon$), \cised($\frac{\epsilon}{2}$), \myblue{\cised-W}) is ($156.6$, $104.8$, \myblue{$361.1$}, $27.2$, $11.6$, $9.7$, \myblue{$9.7$}) seconds when $\epsilon$ = $40m$.
 
-\sstab {(4) When using \dad,} \textcolor{blue}{one-pass algorithms \intersec and \interval run prominently faster than batch algorithms \tpa and \dpa and online algorithm \opwa.}
+\sstab {(4) When using \dad,} \textcolor{blue}{one-pass algorithms \intersec and \interval run much faster than batch algorithms \tpa and \dpa and online algorithm \opwa.}
 %
 %Algorithm \interval is a bit slower than \intersec, and algorithms \tpa and \dpa are on average
 %($6.66$, $13.55$, $12.73$, $12.73$) and ($11.67$, $14.24$, $16.51$, $17.59$)
@@ -673,13 +676,13 @@ The running time from the fastest to the slowest is one-pass algorithms, online 
 For batch algorithms, the running time of \dpa and \tpa decreases or increases with the increase of error bound $\epsilon$, respectively, due to the top-down and bottom-up approaches that they apply. When using \ped or \sed, top-down algorithm usually runs faster than bottom-up algorithm when the error bound $\epsilon$~is large (\eg in \geolife, $\epsilon >10$ metres when using \ped and $\epsilon >30$ metres when using \sed), which means that top-down (bottom-up) algorithm needs to split (merge) the original trajectory fewer (more) times in these cases, vice versa. When using \dad,  top-down algorithms are normally a bit slower than bottom-up algorithms (recall that top-down algorithms have poorer compression ratios compared with bottom-up algorithms, which means that it needs more time to split the raw trajectory into more sub trajectories).
 In addition to error bounds, sampling rates also have impacts on the efficiency of batch algorithms. A dataset with high sampling rate likely needs more merging processes than splitting processes, thus, top-down algorithms run faster than bottom-up algorithms in high sampling datasets when using \ped or \sed.
 
-For online algorithms, \squishe is faster than \bqsa and \opwa at a cost of poorer compression ratios, and it is still a few times slower than one-pass algorithms. \bqsa and \opwa both have poor efficiency as they finally need batch approaches to simplify buffered data, and batch approaches running in a buffer are still time consuming. \textcolor{blue}{\dagots~runs very slow in full datasets, partially because it is implemented in Java, in which the frequent copying of memory wastes a lot of time and becomes its bottleneck of efficiency.}
+For online algorithms, \squishe is faster than \bqsa and \opwa at a cost of poorer compression ratios, and it is still a few times slower than one-pass algorithms. \bqsa and \opwa both have poor efficiency as they finally need batch approaches to simplify buffered data, and batch approaches running in a buffer are still time consuming. \textcolor{blue}{\dagots~runs very slow on the full datasets, partially because its frequent copying of memory wastes a lot of time and becomes its bottleneck of efficiency.}
 
 For one-pass algorithms, \operb, \siped, \cised and \interval show a linear running time that is consistent with their time complexity analyses. They are not very sensitive to error bound $\epsilon$, and also scale well with the increase of trajectory size on all datasets as a data point is processed only one time during the whole process.
-Algorithms \siped, \operb and \interval have similar running time, and algorithm \cised runs a bit slower than them, partially because finding the common intersection of spatial-temporal cones is a heavier work than sectors or ranges. 
+Algorithms \siped, \operb and \interval have similar running time, and algorithm \cised runs a bit slower than them, partially because finding the common intersection of spatial-temporal cones is a heavier work than sectors or ranges.
 
-\textcolor{blue}{As discussed above, different algorithms demonstrate different trends under various error bounds because of their distinct routines and principles.}
-\textcolor{blue}{Besides, weak simplification algorithms have similar running time to their corresponding strong algorithms as they have the similar counterpart.}
+\textcolor{blue}{As we analyzed above, different algorithms show different trends with error bounds because they adopt different routines and principles for trajectory compression.}
+\textcolor{blue}{Further, weak simplification algorithms have similar running time to their corresponding strong simplification algorithms as they share the same key routines for trajectory compression.}
 
 
 
@@ -809,7 +812,7 @@ Note that the causes of this phenomenon are varied. For algorithm \dpa using \pe
 \subsubsection{{Evaluation and Analyses of Queries Friendliness}}
 \label{sec-exp-query}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-We finally evaluate those compressed trajectories from the viewpoint of trajectory application, \ie spatio-temporal query. The well-known spatio-temporal queries are \emph{where\_at, when\_at, range, nearest\_neighbor} and \emph{spatial\_join} \cite{Cao:Spatio,Trajcevski:Uncertainty}. Among them, \emph{where\_at} query, \ie ``\emph{the position $P$ of a moving object at time $t$}" \cite{Cao:Spatio}, is the foundation of \emph{range} and \emph{nearest\_neighbor} queries, \textcolor{blue}{and \emph{when\_at} query, \ie ``\emph{the time $t$ at which a moving object on a trajectory is expected to be at position $P$}" \cite{Cao:Spatio}, is also a critical building block for many applications.}
+We finally evaluate those compressed trajectories from the viewpoint of trajectory application, \ie spatio-temporal query. The well-known spatio-temporal queries are \emph{where\_at, when\_at, range, nearest\_neighbor} and \emph{spatial\_join} \cite{Cao:Spatio,Trajcevski:Uncertainty}. Among them, \emph{where\_at} query, \ie ``\emph{the position $P$ of a moving object at time $t$}'' \cite{Cao:Spatio}, is the foundation of \emph{range} and \emph{nearest\_neighbor} queries, \textcolor{blue}{and \emph{when\_at} query, \ie ``\emph{the time $t$ at which a moving object on a trajectory is expected to be at position $P$}'' \cite{Cao:Spatio}, is also a critical building block for many applications.}
 {Hence, we choose them to evaluate compressed trajectories simplified by \lsa algorithms using \ped, \sed and \dad.
 As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{where\_at} query is the expected position $P'$ of the moving object at time $t$. Indeed, it is the \emph{synchronized point} of $P$ when the query is performed on simplified trajectories.}
 
@@ -974,7 +977,7 @@ As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{wh
 
 
 \stitle{\textcolor{blue}{Exp-2: \emph{when\_at} queries.}}
-\textcolor{blue}{For each point $P$ in an original trajectory $\dddot{\mathcal{T}}$, we do a \emph{when\_at} query on the simplified trajectory. Because lots of the original points are not exactly on the route of the simplified trajectory, we first map each original point $P$ to its closest point $P'$ (having the minimal Euclidean distance) on the line segment representing this point as in \cite{Cao:Spatio}, then we get the expected time $P'.t'$ of $P'$ \wrt this line segment in a way inverse of finding a synchronized point, and calculate the absolute time difference between the actual time $P.t$ and the expected time $P'.t'$ to denote the error of the query.}
+\textcolor{blue}{For each point $P$ in an original trajectory $\dddot{\mathcal{T}}$, we do a \emph{when\_at} query on the simplified trajectory. Since quite a few original data points are not exactly on the line segments of the simplified trajectory, we first map each original point $P$ to its closest point $P'$ having the minimum Euclidean distance on the line segment representing this point along the same way as \cite{Cao:Spatio}, then we get the expected time $P'.t'$ of $P'$ \wrt this line segment in a way inverse to the finding of a synchronized point, and we finally calculate the absolute time difference between the actual time $P.t$ and the expected time $P'.t'$ as the error of the query.}
 %
 \textcolor{blue}{The max and average errors of the queries are reported in \mytable{tab:query-when-me} and Figures~\ref{fig:query-when-ped-epsilon}, \ref{fig:query-when-sed-epsilon}, \ref{fig:query-when-dad-epsilon}, \ref{fig:query-when-ped-size}, \ref{fig:query-when-sed-size} and \ref{fig:query-when-dad-size}, respectively.}
 
@@ -1076,10 +1079,10 @@ The bottom-up (\tpa) and top-down (\dpa) algorithms have the similar compression
 The running time of batch algorithms \dpa and \tpa decreases and increases with the increase of error bound $\epsilon$, respectively. When using \ped or \sed, top-down algorithm \dpa usually runs faster than bottom-up algorithm \tpa when the error bound $\epsilon$~is large  (\eg in \geolife, $\epsilon >10$ metres when using \ped and $\epsilon >30$ metres when using \sed). When using \dad, the top-down algorithm is normally a bit slower than the bottom-up algorithm.
 Top-down algorithms also run faster than bottom-up algorithms in high sampling datasets when using \ped or \sed.
 %
-\emph{(3)} Online algorithms \opwa and \bqsa usually have better compression ratios than batch algorithms, the worst average errors, and poorer efficiency than batch algorithms. Algorithm \squishe is on the other side of \opwa and \bqsa, 
+\emph{(3)} Online algorithms \opwa and \bqsa usually have better compression ratios than batch algorithms, the worst average errors, and poorer efficiency than batch algorithms. Algorithm \squishe is on the other side of \opwa and \bqsa,
 \myblue{and algorithm \dagots~has poor compression ratios, the best average errors and varied efficiency. In our tests (in Java), when \dagots~is processing a long trajectory, the frequently copying of memory makes it even slower than batch algorithms.}
 %
-\emph{(4)} One-pass algorithms \operb, \siped, \cised, \intersec and \interval have good compression ratios (comparable with the best sub-optimal algorithms), poor average errors and the best efficiency. 
+\emph{(4)} One-pass algorithms \operb, \siped, \cised, \intersec and \interval have good compression ratios (comparable with the best sub-optimal algorithms), poor average errors and the best efficiency.
 %
 The full $\epsilon$ \emph{sector/cone/range} combining with a position/direction constraint always have better compression ratios and also larger average errors than the half $\epsilon$ \emph{sector/cone/range}. %and they are comparable with the best sub-optimal algorithms.
 %
@@ -1105,12 +1108,12 @@ One-pass algorithms show a linear running time and they are not very sensitive t
 
 
 
-\textcolor{blue}{Comparing with the recent experimental study \cite{Zhang:Evaluation}, this work has the following new findings: 
-	(1) the compression ratios and average errors of optimal, batch, online and one-pass algorithms \wrt distance metrics (\ped, \sed and \dad), error bounds and data sizes are revealed, as summarized in this section, 
-	(2) the efficiency of algorithms \wrt distance metrics, error bounds and data sizes are also revealed, as summarized in this section. Besides, our tests tell that the running times from the fastest to the slowest are normally \intersec, \interval, \operb, \squishe, \dpa, \dagots and \bqsa in all datasets, which is partially different from \cite{Zhang:Evaluation} that are \intersec, \interval, \dpa, \operb, \dagots, \squishe and \bqsa, 
+\textcolor{blue}{Comparing with the recent experimental study \cite{Zhang:Evaluation}, this work has the following new findings:
+	(1) the compression ratios and average errors of optimal, batch, online and one-pass algorithms \wrt distance metrics (\ped, \sed and \dad), error bounds and data sizes are revealed, as summarized in this section,
+	(2) the efficiency of algorithms \wrt distance metrics, error bounds and data sizes are also revealed, as summarized in this section. Besides, our tests tell that the running times from the fastest to the slowest are normally \intersec, \interval, \operb, \squishe, \dpa, \dagots and \bqsa in all datasets, which is partially different from \cite{Zhang:Evaluation} that are \intersec, \interval, \dpa, \operb, \dagots, \squishe and \bqsa,
 	(3) aging friendliness and errors are revealed, as reported in Section \ref{sec:exp-data-aging},
-	(4) though online algorithm \dagots shows better trade-off between compression ratio and average error \cite{Zhang:Evaluation}, it is not effective in terms of compression ratios,  
-	(5) one-pass algorithm \siped ($\epsilon$) is efficient as well as has good compression ratios, and 
+	(4) though online algorithm \dagots shows better trade-off between compression ratio and average error \cite{Zhang:Evaluation}, it is not effective in terms of compression ratios,
+	(5) one-pass algorithm \siped ($\epsilon$) is efficient as well as has good compression ratios, and
 	(6) one-pass algorithm \cised, either \cised($\epsilon$) or \cised-W, is better than batch and online algorithms (online algorithm \dagots~is recommended in \cite{Zhang:Evaluation}) in terms of compression ratios and efficiency.}
 
 

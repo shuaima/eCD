@@ -16,15 +16,15 @@ There is also algorithm \siped (\emph{sector intersection}) that converts \ped d
 These algorithms are dedicatedly designed  for \ped. {\em Algorithms \operb and \siped have good compression ratios, and, hence, we choose them as the representatives of  one-pass algorithms using \ped}.
 
 
-Algorithm Linear Dead Reckoning (\ldr) for position tracking \cite{Trajcevski:DDR} follows the similar routine as \rwa except that it uses and assumes a velocity ${\vv{v}}$ for each section. \textcolor{blue}{\cite{Trajcevski:DDR} proves that if \ldr uses $\epsilon/2$ as the threshold in position tracking, then its output trajectory has a max error not greater than $\epsilon$ to the original trajectory. Thus, it's a trajectory simplification algorithm as well as a position tracking protocol.}
+Algorithm Linear Dead Reckoning (\ldr) for position tracking \cite{Trajcevski:DDR} follows the similar routine as \rwa except that it uses and assumes a velocity ${\vv{v}}$ for each section. \textcolor{blue}{\cite{Trajcevski:DDR} proves that if \ldr uses $\epsilon/2$ as the threshold in position tracking, then its output trajectory has a max error not greater than $\epsilon$ to the original trajectory. Thus, it can be treated as a trajectory simplification algorithm as well.}
 It has poor compression ratios because both the value and the direction of velocity ${\vv{v}}$ are pre-defined and fixed between two updates, \myblue{and it indeed uses a half $\epsilon$}.
 Recently algorithm \cised~\cite{Lin:Cised} extends the \textit{sector intersection} method \siped from a 2D space to a spatio-temporal 3D space.
 These one-pass algorithms are dedicatedly designed for \sed. {\em As algorithm \cised has a compression ratio close to algorithm \dpa using \sed, we choose it as the representative of one-pass algorithms using \sed}.
 
 
-{Direction range intersection} approaches are similar to  \emph{sector intersection} methods except that they are designed for \dad, {\em we choose \intersec \cite{Long:Direction} and \interval \cite{Ke:Interval} as the representatives of one-pass algorithms using \dad}.
+{Direction range intersection} approaches are similar to  \emph{sector intersection} methods except that they are designed for \dad, and {\em we choose \intersec \cite{Long:Direction} and \interval \cite{Ke:Interval} as the representatives of one-pass algorithms using \dad}.
 
-\textcolor{blue}{Algorithms \siped, \ldr, \operb, \cised and \intersec share a common idea, \ie using a half-$\epsilon$ to implement the strong simplification to ensure the max error will not exceed $\epsilon$, and in the rest of the paper, we will discuss that the half-$\epsilon$ of \siped and \cised could be extended to the full-$\epsilon$ with some small modifications, similar to the way that \interval extends \intersec. }
+\textcolor{blue}{Algorithms \siped, \ldr, \operb, \cised and \intersec share a common idea, \ie using a half-$\epsilon$ to implement the strong simplification to ensure that the max error does not exceed $\epsilon$. In the sequel, we shall discuss that the half-$\epsilon$ of \siped and \cised can be extended to the full-$\epsilon$ with some small modifications, along the similar way that \interval extends \intersec. }
 
 \eat{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
@@ -67,7 +67,7 @@ These one-pass algorithms are dedicatedly designed for \sed. {\em As algorithm \
 
 
 \subsubsection{{Algorithm \operb Using \ped} \cite{Lin:Operb}}
-It designs a local distance checking method to dynamically adjust the direction of line segments to achieve an effective one-pass process. \textcolor{blue}{It has strong and weak versions, called \operb and \operb-A, respectively. \operb-A shares the same routine as \operb except that it applies a lazy output policy and allows data interpolation.}
+It designs a local distance checking method to dynamically adjust the direction of line segments to achieve an effective one-pass process. \textcolor{blue}{It has strong and weak versions, called \operb and \operb-A, respectively. \operb-A shares the same routine as \operb except that it applies a lazy output policy and allows data interpolations.}
 
 Consider an error bound $\epsilon$ and a sub-trajectory $\dddot{\mathcal{T}_s}[P_s,$ $\ldots, P_{s+k}]$.
 \operb dynamically maintains a directed line segment $\mathcal{L}_i$ ($i\in[1,k]$), whose start point is fixed with $P_s$ and its end point is identified (may not in $\{P_s, \ldots, P_{s+i}\}$) to {\em fit} all the previously processed points $\{P_s, \ldots, P_{s+i}\}$.
@@ -179,7 +179,7 @@ line segment $\overline{P_sP_{s+i}}$ is not greater than the error bound $\epsil
 
 \subsubsection{Algorithm \cised Using \sed \cite{Lin:Cised}}
 It develops an idea of \textit{spatio-temporal cone} that extends the \textit{sector intersection} method \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve} from an \textcolor{blue}{\em x-y} 2D space to an \textcolor{blue}{\em x-y-t} spatio-temporal 3D space.
-\textcolor{blue}{Note that in areas of image processing, computer graphics and cartography, there is another 3D space, \ie \emph{x-y-z} 3D space, where {\em z} is height. Some works \cite{Barequet:3D, Eu:Ln3D} solve the \emph{min-\#} problem in the \emph{x-y-z} 3D space, among them, authors in \cite{Barequet:3D} also extend the \textit{sector intersection} method to the \textit{off-line ball-inclusion testing} in the \emph{x-y-z} 3D space, so as to develop efficient near-quadratic-time algorithms in three dimensions for solving the \emph{min-\#} and \emph{min-$\epsilon$} problems.} %
+\textcolor{blue}{Note that for computer graphics and cartography, there is another 3D space, \ie \emph{x-y-z} 3D space, where {\em z} is the height. There are studies \cite{Barequet:3D, Eu:Ln3D} for solving the \emph{min-\#} and \emph{min-$\epsilon$} problems in the \emph{x-y-z} 3D space, \eg \cite{Barequet:3D} extends the \textit{sector intersection} method to the \textit{off-line ball-inclusion testing} in the \emph{x-y-z} 3D space, so as to develop efficient near quadratic time algorithms.} %
 
 Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, any point $P'_{s+i}$ ($0< i \le k$) on the plane $P.t-P_{s+i}.t = 0$ is a synchronized data point of $P_{s+i}$. For all $P'_{s+i}$ in the plane satisfying $|P_{s+i}P'_{s+i}| \le \epsilon$, they form a \textit{synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$} of $P_{s+i}$ with $P_{s+i}$ as its center and $\epsilon$ as its radius.
 %
@@ -187,12 +187,12 @@ A spatio-temporal cone (or simply \textit{cone}) of a data point $P_{s+i}$ ($1\l
 %
 Then, there exists a point $Q$ such that $Q.t = P_{s+k}.t$ and $sed(P_{s+i}, \vv{P_sQ})\le \epsilon$ for each $i \in [1,k]$ if and only if $\bigsqcap_{i=1}^{k}$\cone{(P_s, \mathcal{O}(P_{s+i}, \epsilon))} $\ne \{P_s\}$.
 %
-Like \textit{sector intersection} methods, point $Q$ may also not belong to $\{P_{s}, P_{s+1},$ $\ldots, P_{s+k}\}$. 
-\textcolor{blue}{If point $Q$ not belonging to $\{P_{s}, P_{s+1},$ $\ldots, P_{s+k}\}$ is allowed, then this algorithm is a weak simplification, named \cised-W that uses a full-$\epsilon$ cone.}
+Like \textit{sector intersection} methods, point $Q$ may also not belong to $\{P_{s}, P_{s+1},$ $\ldots, P_{s+k}\}$.
+\textcolor{blue}{If point $Q$ is not necessarily in  $\{P_{s}, P_{s+1},$ $\ldots, P_{s+k}\}$, then this algorithm is a weak simplification, named \cised-W that uses a full-$\epsilon$ cone.}
 If point $Q$ must be $P_{s+i}$ ($1\le i\le k$), then for any point $P_{s+j}$ ($j \in [1, ... i]$), its \sed to line segment $\overline{P_sP_{s+i}}$ is not greater than the error bound $\epsilon$ if
-$\bigsqcap_{j=1}^{i}$\cone{(P_s, P_{s+j}, \epsilon/2)} $\ne \{P_s\}$ as pointed out in \cite{Lin:Cised}. 
+$\bigsqcap_{j=1}^{i}$\cone{(P_s, P_{s+j}, \epsilon/2)} $\ne \{P_s\}$ as pointed out in \cite{Lin:Cised}.
 \textcolor{blue}{This algorithm, named \cised($\frac{\epsilon}{2}$) that uses a half-$\epsilon$ cone, belongs to strong simplification.}
-\textcolor{blue}{Moreover, \cised($\frac{\epsilon}{2}$) can also be extended to \cised(${\epsilon}$), another strong version that uses a full-${\epsilon}$ cone,} by adding such a constraint, \ie $P_{s+i}$ lives in the common intersection of preview full \emph{cones}.
+\textcolor{blue}{Moreover, \cised($\frac{\epsilon}{2}$) can also be extended to \cised(${\epsilon}$), another strong version that uses a full-${\epsilon}$ cone,} by adding a constraint that $P_{s+i}$ lives in the common intersection of preview full \emph{cones}.
 
 In addition, because these spatio-temporal cones have the same apex $P_s$, the checking of their intersection can be computed by a much simpler way, \ie the checking of the intersection of cone projection circles on a plane, and a circle is further approximated with its $m$-edge inscribed regular polygon, whose intersection can be computed more efficiently. %
 
