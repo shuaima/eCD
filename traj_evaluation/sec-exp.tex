@@ -151,29 +151,6 @@ The experimental results are reported in Figure~\ref{fig:cr-ped-size}, Figure~\r
 The compression ratios of these algorithms under varied error bounds $\epsilon$ and trajectory sizes are reported in Figures~\ref{fig:cr-ped-epsilon},~\ref{fig:cr-sed-epsilon},~\ref{fig:cr-dad-epsilon},~\ref{fig:cr-ped-size},~\ref{fig:cr-sed-size} and~\ref{fig:cr-dad-size}.
 {Note that the optimal algorithm using \sed and \dad is not reported in Figures~\ref{fig:cr-ped-epsilon},~\ref{fig:cr-sed-epsilon} and~\ref{fig:cr-dad-epsilon} as it runs out of memory when compressing the full dataset}. We first report our findings.
 
-
-%%%%%%%%%%%%%%%%%
-\sstab(1)  {Datasets may have impacts on the compression ratios of \lsa algorithms. Datasets with higher sampling rates typically have better compression ratios for \ped and \sed, while it is opposite for \dad. \textcolor{blue}{When using \dad, the} dataset collected by cars (\eg~\ucar) has better compression ratios than the datasets partially collected by individuals (\eg~\geolife and \mopsi), as cars typically move more regularly than individuals \textcolor{blue}{in directions}.}
-%\myblue{otherwise, it has poorer compression ratios than \geolife and \mopsi, partially because cars have a broad range of speed and they frequently stop because of traffic light}
-
-\sstab(2) \textcolor{blue}{Compression ratios are insensitive to the sizes of trajectories.} \myblue{The reason lies in that once the distance is greater than the error bound, a line segment is produced, and the compression continues to repeat this process, which is essentially irrelevant to the the sizes of trajectories. This is also the key to preserve the error bound for any of optimal, batch, online and one-pass algorithms.}
-
-\sstab(3) The compression ratios of algorithms using \ped from the best
-to the worst are normally the optimal algorithm \opt, online algorithm \bqsa, one-pass algorithm \siped($\epsilon$), batch algorithms \tpa and \dpa and one-pass algorithm \myblue{\operb-A}, and one-pass algorithms \siped($\frac{\epsilon}{2}$) and \operb.
-The output sizes of algorithms \bqsa and \siped({$\epsilon$}) are on average
-($113.32\%$, $120.22\%$, $120.83\%$) and ($116.04\%$, $124.46\%$, $124.24\%$) of algorithm \opt
-on datasets \dSets, respectively.
-Algorithms \tpa, \dpa and \myblue{\operb-A} are comparable, and their output sizes are on average
-($125.05\%$, $131.01\%$, $138.01\%$), ($130.03\%$, $140.56\%$, $139.00\%$) and \myblue{( $134.16\%$, $137.73\%$, $144.31\%$)} of \opt
-on datasets \dSets, respectively.
-Algorithms \siped($\frac{\epsilon}{2}$) and \operb are comparable, and they are on average
-($136.73\%$, $150.23\%$, $152.29\%$) and ($143.14\%$, $147.80\%$, $152.37\%$) of \opt on datasets \dSets, respectively.
-%
-For example, in \mopsi, the compression ratios of algorithms
-(\opt, \tpa, \dpa, \bqsa, \siped(${\epsilon}$), \siped($\frac{\epsilon}{2}$), \operb, \myblue{\operb-A} ) are ($1.6\%$, $2.2\%$, $2.2\%$, $1.9\%$, $2.0\%$, $2.4\%$, $2.4\%$, \myblue{$2.3\%$}) when $\epsilon$ = $40m$.
-%
-
-
 \begin{figure*}[tb!]
 	\centering
 	%\includegraphics[scale=0.250]{Figures/Exp-PED-CR-epsilon-taxi.jpg}\hspace{0.5ex}
@@ -207,6 +184,66 @@ For example, in \mopsi, the compression ratios of algorithms
 	\label{fig:cr-dad-epsilon}
 	\vspace{-2ex}
 \end{figure*}
+
+
+%%%%%%%%%%%%%%%%%
+\sstab(1)  {Datasets may have impacts on the compression ratios of \lsa algorithms. Datasets with higher sampling rates typically have better compression ratios for \ped and \sed, while it is opposite for \dad. \textcolor{blue}{When using \dad, the} dataset collected by cars (\eg~\ucar) has better compression ratios than the datasets partially collected by individuals (\eg~\geolife and \mopsi), as cars typically move more regularly than individuals \textcolor{blue}{in directions}.}
+%\myblue{otherwise, it has poorer compression ratios than \geolife and \mopsi, partially because cars have a broad range of speed and they frequently stop because of traffic light}
+
+\sstab(2) \textcolor{blue}{Compression ratios are insensitive to the sizes of trajectories.} \myblue{The reason lies in that once the distance is greater than the error bound, a line segment is produced, and the compression continues to repeat this process, which is essentially irrelevant to the the sizes of trajectories. This is also the key to preserve the error bound for any of optimal, batch, online and one-pass algorithms.}
+
+\sstab(3) The compression ratios of algorithms using \ped from the best
+to the worst are normally the optimal algorithm \opt, online algorithm \bqsa, one-pass algorithm \siped($\epsilon$), batch algorithms \tpa and \dpa and one-pass algorithm \myblue{\operb-A}, and one-pass algorithms \siped($\frac{\epsilon}{2}$) and \operb.
+The output sizes of algorithms \bqsa and \siped({$\epsilon$}) are on average
+($113.32\%$, $120.22\%$, $120.83\%$) and ($116.04\%$, $124.46\%$, $124.24\%$) of algorithm \opt
+on datasets \dSets, respectively.
+Algorithms \tpa, \dpa and \myblue{\operb-A} are comparable, and their output sizes are on average
+($125.05\%$, $131.01\%$, $138.01\%$), ($130.03\%$, $140.56\%$, $139.00\%$) and \myblue{( $134.16\%$, $137.73\%$, $144.31\%$)} of \opt
+on datasets \dSets, respectively.
+Algorithms \siped($\frac{\epsilon}{2}$) and \operb are comparable, and they are on average
+($136.73\%$, $150.23\%$, $152.29\%$) and ($143.14\%$, $147.80\%$, $152.37\%$) of \opt on datasets \dSets, respectively.
+%
+For example, in \mopsi, the compression ratios of algorithms
+(\opt, \tpa, \dpa, \bqsa, \siped(${\epsilon}$), \siped($\frac{\epsilon}{2}$), \operb, \myblue{\operb-A} ) are ($1.6\%$, $2.2\%$, $2.2\%$, $1.9\%$, $2.0\%$, $2.4\%$, $2.4\%$, \myblue{$2.3\%$}) when $\epsilon$ = $40m$.
+%
+\begin{figure*}[tb!]
+	\centering
+	%\includegraphics[scale=0.250]{Figures/Exp-PED-CR-size-taxi.jpg}\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-PED-CR-size-service.jpg} 	\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-PED-CR-size-geolife.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.348]{Figures/Exp-PED-CR-size-mopsi.jpg}		
+	\vspace{-2ex}
+	\caption{\small Evaluation of compression ratios (\ped) on small datasets: varying the size of
+		trajectories.}
+	\label{fig:cr-ped-size}
+	\vspace{-2ex}
+\end{figure*}
+\begin{figure*}[tb!]
+	\centering
+	%\includegraphics[scale=0.250]{Figures/Exp-SED-CR-size-taxi.jpg}\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-SED-CR-size-service.jpg} 	\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-SED-CR-size-geolife.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.348]{Figures/Exp-SED-CR-size-mopsi.jpg}		
+	\vspace{-2ex}
+	\caption{\small Evaluation of compression ratios (\sed) on small datasets: varying the size of
+		trajectories.}
+	\label{fig:cr-sed-size}
+	\vspace{-2ex}
+\end{figure*}
+\begin{figure*}[tb!]
+	\centering
+	%\includegraphics[scale=0.50]{Figures/Exp-DAD-CR-size-taxi.jpg}\hspace{0.5ex}
+	\includegraphics[scale=0.52]{Figures/Exp-DAD-CR-size-service.jpg} 	\hspace{0.5ex}
+	\includegraphics[scale=0.52]{Figures/Exp-DAD-CR-size-geolife.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.52]{Figures/Exp-DAD-CR-size-mopsi.jpg}		
+	\vspace{-2ex}
+	\caption{\small Evaluation of compression ratios (\dad) on small datasets: varying the size of trajectories.}
+	\label{fig:cr-dad-size}
+	\vspace{-2ex}
+\end{figure*}
+
+
+
 
 %%%%%%%%%%%%%%%%%
 \sstab(4) The compression ratios of algorithms using \sed from the best
@@ -260,42 +297,6 @@ We then present analyses from the views of \lsa algorithms and distance metrics.
 , followed by batch algorithms. Online algorithms have varied compression ratios, ranging from the worst to the similar with batch and one-pass algorithms.
 }
 
-\begin{figure*}[tb!]
-	\centering
-	%\includegraphics[scale=0.250]{Figures/Exp-PED-CR-size-taxi.jpg}\hspace{0.5ex}
-	\includegraphics[scale=0.250]{Figures/Exp-PED-CR-size-service.jpg} 	\hspace{0.5ex}
-	\includegraphics[scale=0.250]{Figures/Exp-PED-CR-size-geolife.jpg}	\hspace{0.5ex}
-	\includegraphics[scale=0.348]{Figures/Exp-PED-CR-size-mopsi.jpg}		
-	\vspace{-2ex}
-	\caption{\small Evaluation of compression ratios (\ped) on small datasets: varying the size of
-		trajectories.}
-	\label{fig:cr-ped-size}
-	\vspace{-2ex}
-\end{figure*}
-\begin{figure*}[tb!]
-	\centering
-	%\includegraphics[scale=0.250]{Figures/Exp-SED-CR-size-taxi.jpg}\hspace{0.5ex}
-	\includegraphics[scale=0.250]{Figures/Exp-SED-CR-size-service.jpg} 	\hspace{0.5ex}
-	\includegraphics[scale=0.250]{Figures/Exp-SED-CR-size-geolife.jpg}	\hspace{0.5ex}
-	\includegraphics[scale=0.348]{Figures/Exp-SED-CR-size-mopsi.jpg}		
-	\vspace{-2ex}
-	
-	\caption{\small Evaluation of compression ratios (\sed) on small datasets: varying the size of
-		trajectories.}
-	\label{fig:cr-sed-size}
-	\vspace{-2ex}
-\end{figure*}
-\begin{figure*}[tb!]
-	\centering
-	%\includegraphics[scale=0.50]{Figures/Exp-DAD-CR-size-taxi.jpg}\hspace{0.5ex}
-	\includegraphics[scale=0.52]{Figures/Exp-DAD-CR-size-service.jpg} 	\hspace{0.5ex}
-	\includegraphics[scale=0.52]{Figures/Exp-DAD-CR-size-geolife.jpg}	\hspace{0.5ex}
-	\includegraphics[scale=0.52]{Figures/Exp-DAD-CR-size-mopsi.jpg}		
-	\vspace{-2ex}
-	\caption{\small Evaluation of compression ratios (\dad) on small datasets: varying the size of trajectories.}
-	\label{fig:cr-dad-size}
-	\vspace{-2ex}
-\end{figure*}
 
 
 %\todo{Batch: Bottom-up vs Top-down.}
@@ -357,6 +358,7 @@ This is because some \geolife and \mopsi trajectories are collected by individua
 
 
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\vspace{-0.5ex}
 \subsubsection{Evaluation and Analyses of Average Simplification Error}
@@ -367,41 +369,6 @@ We first report our findings.
 
 
 
-\begin{figure*}[tb!]
-	\centering
-	%\includegraphics[scale=0.250]{Figures/Exp-PED-error-epsilon-taxi.jpg} \hspace{0.5ex}
-	\includegraphics[scale=0.250]{Figures/Exp-PED-error-epsilon-service.jpg}	\hspace{0.5ex}
-	\includegraphics[scale=0.250]{Figures/Exp-PED-error-epsilon-geolife.jpg}	\hspace{0.5ex}
-	\includegraphics[scale=0.250]{Figures/Exp-PED-error-epsilon-mopsi.jpg}	
-	\vspace{-2ex}
-	\caption{\small Evaluation of average errors (\ped) on full datasets: varying the error bound $\epsilon$.}
-	\label{fig:ae-ped-epsilon}
-	\vspace{-2ex}
-\end{figure*}
-
-\begin{figure*}[tb!]
-	\centering
-	%\includegraphics[scale=0.250]{Figures/Exp-SED-error-epsilon-taxi.jpg} \hspace{0.5ex}
-	\includegraphics[scale=0.250]{Figures/Exp-SED-error-epsilon-service.jpg}	\hspace{0.5ex}
-	\includegraphics[scale=0.250]{Figures/Exp-SED-error-epsilon-geolife.jpg}	\hspace{0.5ex}
-	\includegraphics[scale=0.250]{Figures/Exp-SED-error-epsilon-mopsi.jpg}		
-	\vspace{-2ex}
-	\caption{\small Evaluation of average errors (\sed) on full datasets: varying the error bound $\epsilon$.}
-	\label{fig:ae-sed-epsilon}
-	\vspace{-2ex}
-\end{figure*}
-
-\begin{figure*}[tb!]
-	\centering
-	%\includegraphics[scale=0.250]{Figures/Exp-DAD-error-epsilon-taxi.jpg} \hspace{0.5ex}
-	\includegraphics[scale=0.348]{Figures/Exp-DAD-error-epsilon-service.jpg}	\hspace{0.5ex}
-	\includegraphics[scale=0.348]{Figures/Exp-DAD-error-epsilon-geolife.jpg}	\hspace{0.5ex}
-	\includegraphics[scale=0.3480]{Figures/Exp-DAD-error-epsilon-mopsi.jpg}	
-	\vspace{-2ex}
-	\caption{\small Evaluation of average errors (\dad) on full datasets: varying the error bound $\epsilon$.}
-	\label{fig:ae-dad-epsilon}
-	\vspace{-2ex}
-\end{figure*}
 
 
 
@@ -432,46 +399,41 @@ Algorithm \bqsa is  on average  {($108.51\%$, $102.06\%$, $104.63\%$, $113.80\%$
 of \opt on datasets \dSets, respectively.
 }
 
-
-
 \begin{figure*}[tb!]
 	\centering
-	%\includegraphics[scale=0.250]{Figures/Exp-PED-error-size-taxi.jpg}\hspace{0.5ex}
-	\includegraphics[scale=0.250]{Figures/Exp-PED-error-size-service.jpg} 	\hspace{0.5ex}
-	\includegraphics[scale=0.250]{Figures/Exp-PED-error-size-geolife.jpg}	\hspace{0.5ex}
-	\includegraphics[scale=0.250]{Figures/Exp-PED-error-size-mopsi.jpg}		
+	%\includegraphics[scale=0.250]{Figures/Exp-PED-error-epsilon-taxi.jpg} \hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-PED-error-epsilon-service.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-PED-error-epsilon-geolife.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-PED-error-epsilon-mopsi.jpg}	
 	\vspace{-2ex}
-	\caption{\small Evaluation of average errors (\ped) on small datasets: varying the size of
-		trajectories.}
-	\label{fig:ae-ped-size}
+	\caption{\small Evaluation of average errors (\ped) on full datasets: varying the error bound $\epsilon$.}
+	\label{fig:ae-ped-epsilon}
+	\vspace{-2ex}
+\end{figure*}
+\begin{figure*}[tb!]
+	\centering
+	%\includegraphics[scale=0.250]{Figures/Exp-SED-error-epsilon-taxi.jpg} \hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-SED-error-epsilon-service.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-SED-error-epsilon-geolife.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-SED-error-epsilon-mopsi.jpg}		
+	\vspace{-2ex}
+	\caption{\small Evaluation of average errors (\sed) on full datasets: varying the error bound $\epsilon$.}
+	\label{fig:ae-sed-epsilon}
+	\vspace{-2ex}
+\end{figure*}
+\begin{figure*}[tb!]
+	\centering
+	%\includegraphics[scale=0.250]{Figures/Exp-DAD-error-epsilon-taxi.jpg} \hspace{0.5ex}
+	\includegraphics[scale=0.348]{Figures/Exp-DAD-error-epsilon-service.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.348]{Figures/Exp-DAD-error-epsilon-geolife.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.3480]{Figures/Exp-DAD-error-epsilon-mopsi.jpg}	
+	\vspace{-2ex}
+	\caption{\small Evaluation of average errors (\dad) on full datasets: varying the error bound $\epsilon$.}
+	\label{fig:ae-dad-epsilon}
 	\vspace{-2ex}
 \end{figure*}
 
-\begin{figure*}[tb!]
-	\centering
-	%\includegraphics[scale=0.250]{Figures/Exp-SED-error-size-taxi.jpg}\hspace{0.5ex}
-	\includegraphics[scale=0.250]{Figures/Exp-SED-error-size-service.jpg} 	\hspace{0.5ex}
-	\includegraphics[scale=0.250]{Figures/Exp-SED-error-size-geolife.jpg}	\hspace{0.5ex}
-	\includegraphics[scale=0.348]{Figures/Exp-SED-error-size-mopsi.jpg}		
-	\vspace{-2ex}
-	\caption{\small Evaluation of average errors (\sed) on small datasets: varying the size of
-		trajectories.}
-	\label{fig:ae-sed-size}
-	\vspace{-2ex}
-\end{figure*}
 
-
-\begin{figure*}[tb!]
-	\centering
-	%\includegraphics[scale=0.50]{Figures/Exp-DAD-error-size-taxi.jpg} \hspace{0.5ex}
-	\includegraphics[scale=0.52]{Figures/Exp-DAD-error-size-service.jpg}	\hspace{0.5ex}
-	\includegraphics[scale=0.52]{Figures/Exp-DAD-error-size-geolife.jpg}	\hspace{0.5ex}
-	\includegraphics[scale=0.52]{Figures/Exp-DAD-error-size-mopsi.jpg}	
-	\vspace{-2ex}
-	\caption{\small Evaluation of average errors (\dad) on small datasets: varying the size of trajectories.}
-	\label{fig:ae-dad-size}
-	\vspace{-2ex}
-\end{figure*}
 
 
 
@@ -500,7 +462,41 @@ Algorithms \tpa, \opwa and \interval are comparable, and they are on average
 {($91.35\%$, $61.45\%$, $73.71\%$), ($91.95\%$, $61.37\%$, $76.17\%$) and ($90.36\%$, $68.23\%$, $163.47\%$)} of \opt on datasets \dSets, respectively.
 Algorithms \intersec and \dpa are on average ($62.03\%$, $76.54\%$, $110.69\%$) and ($82.45\%$, $96.52\%$, $137.95\%$) of \opt on datasets \dSets, respectively.
 
-
+\begin{figure*}[tb!]
+	\centering
+	%\includegraphics[scale=0.250]{Figures/Exp-PED-error-size-taxi.jpg}\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-PED-error-size-service.jpg} 	\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-PED-error-size-geolife.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-PED-error-size-mopsi.jpg}		
+	\vspace{-2ex}
+	\caption{\small Evaluation of average errors (\ped) on small datasets: varying the size of
+		trajectories.}
+	\label{fig:ae-ped-size}
+	\vspace{-2ex}
+\end{figure*}
+\begin{figure*}[tb!]
+	\centering
+	%\includegraphics[scale=0.250]{Figures/Exp-SED-error-size-taxi.jpg}\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-SED-error-size-service.jpg} 	\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-SED-error-size-geolife.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.348]{Figures/Exp-SED-error-size-mopsi.jpg}		
+	\vspace{-2ex}
+	\caption{\small Evaluation of average errors (\sed) on small datasets: varying the size of
+		trajectories.}
+	\label{fig:ae-sed-size}
+	\vspace{-2ex}
+\end{figure*}
+\begin{figure*}[tb!]
+	\centering
+	%\includegraphics[scale=0.50]{Figures/Exp-DAD-error-size-taxi.jpg} \hspace{0.5ex}
+	\includegraphics[scale=0.52]{Figures/Exp-DAD-error-size-service.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.52]{Figures/Exp-DAD-error-size-geolife.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.52]{Figures/Exp-DAD-error-size-mopsi.jpg}	
+	\vspace{-2ex}
+	\caption{\small Evaluation of average errors (\dad) on small datasets: varying the size of trajectories.}
+	\label{fig:ae-dad-size}
+	\vspace{-2ex}
+\end{figure*}
 
 
 We then present analyses from the views of \lsa algorithms and distance metrics.
@@ -703,14 +699,6 @@ In this set of tests, we compare the errors and compression ratios of algorithms
 \ni (3) \mytable{tab:aging-cr} and \mytable{tab:cr} tell that, if algorithms compress data using $\epsilon_1$ and $\epsilon_2$ in turn, then they have a bit poorer compression ratios than directly using $\epsilon_3=\epsilon_1 + \epsilon_2$.
 Note that the causes of this phenomenon are varied. For algorithm \dpa using \ped or \sed, it is caused by the shorten of the final error bound, which is $max\{\epsilon_1, \epsilon_2\}$, less than $\epsilon_3=\epsilon_1 + \epsilon_2$; while for the other algorithms, they lose some compression ratios because of data aging.
 
-%In the contrast, algorithms \dpa using \ped and \sed do not loss that. Hence, given the same final error bound (\eg $100m$) of data aging, algorithm \dpa using \ped (or \sed) shows a bit advantages in terms of compression ratios.
-
-
-
-\stitle{Analyses of \lsa algorithms.} \dpa is the only algorithm that is aging friendly \wrt ~\ped and \sed, \myblue{and all algorithms have bounded errors}. Indeed, {aging friendly} is a result of the {specific nature} of algorithm \dpa, \ie batch and top-down, that always splits a trajectory into two sub trajectories by the same splitting point when it uses any \ped or \sed larger than the error bound.
-
-\stitle{Analyses of \lsa distance metrics.} \dad is not aging friendly \wrt to any algorithm. It is different with \ped and \sed in that, the \dad of a point is closely related to its neighbor point while \ped and \sed are not, thus, once its neighbor point is removed, its \dad is also changed. This character makes it not aging friendly \wrt the \dpa algorithm.
-
 
 \begin{table}
 	%\renewcommand{\arraystretch}{1.2}
@@ -739,7 +727,7 @@ Note that the causes of this phenomenon are varied. For algorithm \dpa using \pe
 	\end{tabular}
 	\label{tab:aging-me}
 
-	\vspace{-2ex}
+	\vspace{-1ex}
 \end{table}
 
 
@@ -749,7 +737,7 @@ Note that the causes of this phenomenon are varied. For algorithm \dpa using \pe
 	\caption{\small The final compression ratios of algorithms in data aging that set $\epsilon_1=40m$ (or $\epsilon_1=30^o$ when using \dad) in the first run and $\epsilon_2=60m$ (or $\epsilon_2=50^o$ when using \dad) in the second run.}
 	\centering
 	\scriptsize
-	\vspace{-1ex}
+	%\vspace{-1ex}
 	\begin{tabular}{|l|c|c|c|l|c|c|c|l|c|c|c|}
 		\hline
 		\bf{Alg. (PED)}  &\ucar &\geolife &\mopsi & \bf{Alg. (SED)}  &\ucar &\geolife &\mopsi &\bf{Alg. (DAD)}  &\ucar &\geolife &\mopsi \\
@@ -770,17 +758,15 @@ Note that the causes of this phenomenon are varied. For algorithm \dpa using \pe
 		\hline
 	\end{tabular}
 	\label{tab:aging-cr}	
-	\vspace{-2ex}
+	\vspace{-1ex}
 \end{table}
-
- 	 	
-   	 	
+  	 	
 \begin{table}
 	%\renewcommand{\arraystretch}{1.2}
 	\caption{\small The compression ratios of algorithms running on the raw trajectories that set $\epsilon_3=\epsilon_1+\epsilon_2=100m$ (or $\epsilon_3=80^o$ when using \dad).}
 	\centering
 	\scriptsize
-	\vspace{-1ex}
+	%\vspace{-1ex}
 	\begin{tabular}{|l|c|c|c|l|c|c|c|l|c|c|c|}
 		\hline
 		\bf{Alg. (PED)}  &\ucar &\geolife &\mopsi & \bf{Alg. (SED)}  &\ucar &\geolife &\mopsi &\bf{Alg. (DAD)}  &\ucar &\geolife &\mopsi \\
@@ -801,36 +787,15 @@ Note that the causes of this phenomenon are varied. For algorithm \dpa using \pe
 		\hline
 	\end{tabular}
 	\label{tab:cr}	
-	\vspace{-2ex}
+	\vspace{-1ex}
 \end{table}
- 	 	
- 	 	
- 	 	
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{{Evaluation and Analyses of Queries Friendliness}}
-\label{sec-exp-query}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-We finally evaluate those compressed trajectories from the viewpoint of trajectory application, \ie spatio-temporal query. The well-known spatio-temporal queries are \emph{where\_at, when\_at, range, nearest\_neighbor} and \emph{spatial\_join} \cite{Cao:Spatio,Trajcevski:Uncertainty}. Among them, \emph{where\_at} query, \ie ``\emph{the position $P$ of a moving object at time $t$}'' \cite{Cao:Spatio}, is the foundation of \emph{range} and \emph{nearest\_neighbor} queries, \textcolor{blue}{and \emph{when\_at} query, \ie ``\emph{the time $t$ at which a moving object on a trajectory is expected to be at position $P$}'' \cite{Cao:Spatio}, is also a critical building block for many applications.}
-{Hence, we choose them to evaluate compressed trajectories simplified by \lsa algorithms using \ped, \sed and \dad.
-As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{where\_at} query is the expected position $P'$ of the moving object at time $t$. Indeed, it is the \emph{synchronized point} of $P$ when the query is performed on simplified trajectories.}
-
-\stitle{\textcolor{blue}{Exp-1: \emph{where\_at} queries.}}
-{We first compress these trajectories using \ped, \sed and \dad, respectively. }
-{Then, for each point $P$ in an original trajectory $\dddot{\mathcal{T}}$, we perform a \emph{where\_at} query on each of its compressed trajectories taking time $P.t$ as input, and calculate the distance between the actual position $P$ and the expected position $P'$ to denote the error of queries.
-}
-%
-{The max and average errors of the queries are reported in \mytable{tab:query-me} and Figures~\ref{fig:query-ped-epsilon}, \ref{fig:query-sed-epsilon}, \ref{fig:query-dad-epsilon}, \ref{fig:query-ped-size},\ref{fig:query-sed-size} and \ref{fig:query-dad-size}, respectively.}
-
-
 
 \begin{table}
 	%\renewcommand{\arraystretch}{1.2}
 	\caption{\small The max errors of \textcolor{blue}{\emph{where\_at}} queries on compressed trajectories: fixed $\epsilon=40m$.}
 	\centering
 	\scriptsize
-	\vspace{-1ex}
+	%\vspace{-1ex}
 	\begin{tabular}{|l|c|c|c|l|c|c|c|}
 		\hline
 		\bf{Alg. (PED)}  &\ucar &\geolife &\mopsi & \bf{Alg. (DAD)}  &\ucar &\geolife &\mopsi \\
@@ -854,8 +819,31 @@ As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{wh
 	\vspace{0.5ex}
 	\\{Note that all algorithms using \sed have the max query errors not more than the error bound, \ie $\epsilon=40m$ here.}
 	\vspace{-1ex}
-\end{table}
+\end{table} 	 	
 
+
+
+%In the contrast, algorithms \dpa using \ped and \sed do not loss that. Hence, given the same final error bound (\eg $100m$) of data aging, algorithm \dpa using \ped (or \sed) shows a bit advantages in terms of compression ratios.
+
+
+
+\stitle{Analyses of \lsa algorithms.} \dpa is the only algorithm that is aging friendly \wrt ~\ped and \sed, \myblue{and all algorithms have bounded errors}. Indeed, {aging friendly} is a result of the {specific nature} of algorithm \dpa, \ie batch and top-down, that always splits a trajectory into two sub trajectories by the same splitting point when it uses any \ped or \sed larger than the error bound.
+
+\stitle{Analyses of \lsa distance metrics.} \dad is not aging friendly \wrt to any algorithm. It is different with \ped and \sed in that, the \dad of a point is closely related to its neighbor point while \ped and \sed are not, thus, once its neighbor point is removed, its \dad is also changed. This character makes it not aging friendly \wrt the \dpa algorithm.
+
+
+
+ 	 	
+ 	 	
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{{Evaluation and Analyses of Queries Friendliness}}
+\label{sec-exp-query}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+We finally evaluate those compressed trajectories from the viewpoint of trajectory application, \ie spatio-temporal query. The well-known spatio-temporal queries are \emph{where\_at, when\_at, range, nearest\_neighbor} and \emph{spatial\_join} \cite{Cao:Spatio,Trajcevski:Uncertainty}. Among them, \emph{where\_at} query, \ie ``\emph{the position $P$ of a moving object at time $t$}'' \cite{Cao:Spatio}, is the foundation of \emph{range} and \emph{nearest\_neighbor} queries, \textcolor{blue}{and \emph{when\_at} query, \ie ``\emph{the time $t$ at which a moving object on a trajectory is expected to be at position $P$}'' \cite{Cao:Spatio}, is also a critical building block for many applications.}
+{Hence, we choose them to evaluate compressed trajectories simplified by \lsa algorithms using \ped, \sed and \dad.
+As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{where\_at} query is the expected position $P'$ of the moving object at time $t$. Indeed, it is the \emph{synchronized point} of $P$ when the query is performed on simplified trajectories.}
 
 \begin{figure*}[tb!]
 	\centering
@@ -867,7 +855,6 @@ As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{wh
 	\label{fig:query-ped-epsilon}
 	\vspace{-1.0ex}
 \end{figure*}
-
 \begin{figure*}[tb!]
 	\centering
 	\includegraphics[scale = 0.250]{Figures/Exp-where-SED-error-epsilon-service.jpg}\hspace{0.5ex}
@@ -878,7 +865,6 @@ As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{wh
 	\label{fig:query-sed-epsilon}
 	\vspace{-1.0ex}
 \end{figure*}
-
 \begin{figure*}[tb!]
 	\centering
 	\includegraphics[scale = 0.250]{Figures/Exp-where-DAD-error-epsilon-service.jpg}\hspace{0.5ex}
@@ -889,6 +875,22 @@ As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{wh
 	\label{fig:query-dad-epsilon}
 	\vspace{-1.0ex}
 \end{figure*}
+
+
+
+\stitle{\textcolor{blue}{Exp-1: \emph{where\_at} queries.}}
+{We first compress these trajectories using \ped, \sed and \dad, respectively. }
+{Then, for each point $P$ in an original trajectory $\dddot{\mathcal{T}}$, we perform a \emph{where\_at} query on each of its compressed trajectories taking time $P.t$ as input, and calculate the distance between the actual position $P$ and the expected position $P'$ to denote the error of queries.
+}
+%
+{The max and average errors of the queries are reported in \mytable{tab:query-me} and Figures~\ref{fig:query-ped-epsilon}, \ref{fig:query-sed-epsilon}, \ref{fig:query-dad-epsilon}, \ref{fig:query-ped-size},\ref{fig:query-sed-size} and \ref{fig:query-dad-size}, respectively.}
+
+
+
+
+
+
+
 
 
 \begin{figure*}[tb!]
@@ -974,16 +976,6 @@ As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{wh
 
 
 
-
-
-\stitle{\textcolor{blue}{Exp-2: \emph{when\_at} queries.}}
-\textcolor{blue}{For each point $P$ in an original trajectory $\dddot{\mathcal{T}}$, we do a \emph{when\_at} query on the simplified trajectory. Since quite a few original data points are not exactly on the line segments of the simplified trajectory, we first map each original point $P$ to its closest point $P'$ having the minimum Euclidean distance on the line segment representing this point along the same way as \cite{Cao:Spatio}, then we get the expected time $P'.t'$ of $P'$ \wrt this line segment in a way inverse to the finding of a synchronized point, and we finally calculate the absolute time difference between the actual time $P.t$ and the expected time $P'.t'$ as the error of the query.}
-%
-\textcolor{blue}{The max and average errors of the queries are reported in \mytable{tab:query-when-me} and Figures~\ref{fig:query-when-ped-epsilon}, \ref{fig:query-when-sed-epsilon}, \ref{fig:query-when-dad-epsilon}, \ref{fig:query-when-ped-size}, \ref{fig:query-when-sed-size} and \ref{fig:query-when-dad-size}, respectively.}
-
-
-
-
 \begin{figure*}[tb!]
 	\centering
 	\includegraphics[scale = 0.350]{Figures/Exp-when-PED-error-epsilon-service.jpg}\hspace{0.5ex}
@@ -994,7 +986,6 @@ As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{wh
 	\label{fig:query-when-ped-epsilon}
 	\vspace{-1.0ex}
 \end{figure*}
-
 \begin{figure*}[tb!]
 	\centering
 	\includegraphics[scale = 0.350]{Figures/Exp-when-SED-error-epsilon-service.jpg}\hspace{0.5ex}
@@ -1005,7 +996,6 @@ As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{wh
 	\label{fig:query-when-sed-epsilon}
 	\vspace{-1.0ex}
 \end{figure*}
-
 \begin{figure*}[tb!]
 	\centering
 	\includegraphics[scale = 0.350]{Figures/Exp-when-DAD-error-epsilon-service.jpg}\hspace{0.5ex}
@@ -1016,6 +1006,16 @@ As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{wh
 	\label{fig:query-when-dad-epsilon}
 	\vspace{-1.0ex}
 \end{figure*}
+
+\stitle{\textcolor{blue}{Exp-2: \emph{when\_at} queries.}}
+\textcolor{blue}{For each point $P$ in an original trajectory $\dddot{\mathcal{T}}$, we do a \emph{when\_at} query on the simplified trajectory. Since quite a few original data points are not exactly on the line segments of the simplified trajectory, we first map each original point $P$ to its closest point $P'$ having the minimum Euclidean distance on the line segment representing this point along the same way as \cite{Cao:Spatio}, then we get the expected time $P'.t'$ of $P'$ \wrt this line segment in a way inverse to the finding of a synchronized point, and we finally calculate the absolute time difference between the actual time $P.t$ and the expected time $P'.t'$ as the error of the query.}
+%
+\textcolor{blue}{The max and average errors of the queries are reported in \mytable{tab:query-when-me} and Figures~\ref{fig:query-when-ped-epsilon}, \ref{fig:query-when-sed-epsilon}, \ref{fig:query-when-dad-epsilon}, \ref{fig:query-when-ped-size}, \ref{fig:query-when-sed-size} and \ref{fig:query-when-dad-size}, respectively.}
+
+
+
+
+
 
 
 
