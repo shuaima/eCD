@@ -57,7 +57,7 @@
 
 Prof. {Chris Jermaine} \\
 Editor-in-Chief		\\
-ACM TODS	\\
+ACM Transactions on Database Systems (TODS)	\\
 
 
 
@@ -67,17 +67,17 @@ Attached please find a revised version of our submission to
 TODS, \emph{Error Bounded Line Simplification Algorithms for Trajectory Compression: An Experimental Evaluation}.
 
 
- This paper has been substantially revised. In particular, we have 
-	(a) added the algorithm \kw{CISED}-{W} that allows data interpolations (namely, weak simplification) for evaluation,
-	(b) added the algorithm \kw{DOTS} that uses the Local Integral Square SED (LISSED) as the error measure for evaluation,
+ This article has been substantially revised. In particular, we have 
+	(a) added the weak simplification algorithms OPERB-A and \kw{CISED}-{W} that allow data interpolations for evaluation,
+	(b) added the online algorithm \kw{DOTS} that uses the Local Integral Square SED (LISSED) as the error measure for evaluation,
 	(c) added a new set of experimental tests on an additional application, named ``when\_at'' queries,
 	(d) adopted a larger dataset of UCar in the experimental studies, 
 	(e) added a brief introduction to the semantic based trajectory compression methods in the appendix,
     (f) added an explanation on \emph{why map-matching} is not considered as a pre-processing step of trajectory simplification, and
-    (g)  refined the entire paper to improve its readability.
+    (g)  refined the entire article to improve its readability.
 
 
-We would like to thank all the referees for their thorough reading of our paper and for their valuable comments.
+We would like to thank all the referees for their thorough reading of our article and for their valuable comments.
 
 Below please find our detailed responses to the comments.
 
@@ -94,41 +94,45 @@ Below please find our detailed responses to the comments.
 \textbf{[R1C1]} \emph{What is ``min-\# problem" mentioned in Section 1 (second paragraph)?}
 
 
-The \emph{$min-\#$ problem} of trajectory simplification is, given a curve (\ie an original trajectory) and an $\epsilon$, to construct an approximate curve with error within $\epsilon$ and, at the same time, having the minimum number of line segments.
+The \emph{$min-\#$ problem} of trajectory simplification is, given a curve (\ie an original trajectory) and an error bound $\epsilon$, to construct an approximate curve that has the error bounded within $\epsilon$ and the minimum number of line segments.
 
-We have explained it in Section 1 (the second paragraph), together with an explanation of the \emph{min-$\epsilon$} problem (which is the response to R3C4(3), that is, given $m$, construct an approximate curve consisting of at most $m$ line segments with the minimum error).
+We have explained it in Section 1 (the second paragraph), together with an explanation of the \emph{min-$\epsilon$} problem (which is further required by R3C4(3), that is, given $m$, construct an approximate curve consisting of at most $m$ line segments with the minimum error).
 Thanks for pointing out this!
 
 \textbf{[R1C2]} \emph{It is stated in the paper that ``The idea of piece-wise line simplification (LS) comes from computational geometry, whose target is to approximate a fine piece-wise linear curve with a coarse one (whose corresponding data points are a subset of the original one), such that the maximum distance of the former to the latter is bounded by a user specified threshold." This is actually misleading. Line simplification actually could be performed by using points other than original ones to represent the original line. The authors did mention those algorithms which consider points outside the original trajectories in the appendix. However, to make sure the correctness of the statements, it's better to mention that in the beginning of the paper. In addition, it is necessary to explain why this paper only considers the line simplification algorithms that consider the original points only. }
 
-Yes, line simplification could use points other than the original ones to represent the original line. Indeed, there are \emph{strong simplification} that outputs data points only belonging to the input trajectory, and \emph{weak simplification} that allows inserting new data points into the output trajectory.
+Yes, line simplification can use extra data points, not necessarily the original ones, to represent the original trajectory. Indeed, there are \emph{strong simplification} that outputs data points that must belong to the original input trajectory, and \emph{weak simplification} that allows to interpolate new data points in the simplified trajectory.
 
-(1) We have corrected the statements at the beginning of the paper (the second paragraph of Section 1), where ``(whose corresponding data points are a subset of the original one)" is replaced by ``(in computer graphics, it is basic that a planar curve is defined by a sequence of data points. If all data points of the coarse curve are a subset of the original curve, then it's a strong simplification; otherwise, it's a weak simplification)".
+(1) We have corrected the statements at the beginning of the article (the second paragraph of Section 1), where ``(whose corresponding data points are a subset of the original one)" is replaced by ``If all data points of the coarse curve are a
+subset of the original curve, then it is referred to as strong simplification; otherwise, it is referred to
+as weak simplification [56])''.
 
-(2) Now, this paper has covered both strong and weak simplifications, and we have tested and analyzed ``weak simplification" algorithms (OPERB-A and CISED-W) in Section 6.
+(2) Now, this article has covered both strong and weak simplifications, and we have tested and analyzed ``weak simplification" algorithms (OPERB-A and CISED-W) in Section 6.
 
 Thanks for pointing out this!
 
 \textbf{[R1C3]} \emph{For trajectories that capture the moving objects' movement along the road network, the points are normally mapped to road networks. In other words, it is not necessary to use piece-wise line representation. It looks like the authors have not considered this case, which is actually one of the most common cases. Can the authors please explain why map-matching step is not considered even for trajectories that capture the movements in road networks?}
 
 %step 1, two kinds of compression methods, orthogonal to each other.
-Yes, for a moving object in urban, its trajectory could be mapped onto the road network, and we have also observed that there is a kind of trajectory compression called road-aware trajectory compression [Song:Press, Gotsman:Dilution] that matches data points onto roads and is used to compress trajectories for objects moving along the road network (we have introduced these works in Appendix ``Additional Trajectory Compression Algorithms"). The road-aware trajectory compression belongs to semantic-based trajectory compression, which is orthogonal to line simplification, \ie for trajectories that capture the moving objects' movement along the road network, they can be compressed by some road-aware trajectory compression method (including the map-matching step), or alternatively by some line simplification method (does not need the map-matching step). Both methods are technically applicable to this scenario.
+Yes, for a moving object in urban areas, its trajectory could be mapped onto the road network. We have also observed that there is a classes of trajectory compression called road-aware trajectory compression [Song:Press, Gotsman:Dilution] that matches data points onto roads  for the objects moving along the road networks, and  have introduced these works in the appendix. The road-aware trajectory compression belongs to semantic based trajectory compression, which is orthogonal to line simplification, \ie for trajectories that capture the moving objects' movement along the road network, they can be compressed by some road-aware trajectory compression method that involves the map-matching step, or alternatively by some line simplification method that does not need the map-matching step. %Both methods are technically applicable to this scenario.
 
 %For road-aware trajectory compression, it is able to represent a trajectory basing on long paths (a path is a sequence of roads connected one by one) and further mine the frequency patterns, so as to get the overall compression of trajectories; For line simplification, it is light ...
 
-We next specifically explain, in this evaluation, ``\emph{why map-matching step is not considered even for trajectories that capture the movements in road networks}?"
+We next specifically explain, in this evaluation, ``\emph{why map-matching step is not considered even for trajectories that capture the movements in road networks}?''
 The reasons are two folds.
 % Indeed, this question is related to ``why this paper focuses on line simplification and let alone map-matching".
 
-(1) line simplification is light and efficient, and is suitable to run on those resource-constrained end devices, on which map-matching is inefficient or even not applicable: A line representation of a trajectory is equivalent to a sequence of data points; and line simplification is light and easy to implement, and does not require extra information like road networks. These features together make it suitable to run on those resource-constrained end devices, which is a great advantage in practice. As we know, trajectory simplification is better performed as early as possible, \ie it's better to run trajectory simplification on mobile devices that collect GPS points, such that not only storage of data servers but also network bandwidth between mobile devices and data servers is saved. In this case, line simplification is a better choice than road-aware method as it is more suitable for those end devices, and map-matching is not necessary a step of the trajectory simplification (on end devices).
+(1) Line simplification is light, efficient and easy to implement. It is suitable to run on those resource-constrained end devices, on which map-matching is heavy or even not applicable, as it does not require any extra information like road networks. As we know, trajectory simplification is typically better to be performed as early as possible. That is, it would be better to run trajectory simplification on mobile devices that collect GPS points, such that not only the storage of data servers but also the network bandwidth between mobile devices and data servers is saved. In this case, line simplification without map-matching is a better choice than road-aware method.
 
-(2) it is a convenient, and somehow indispensable, way to directly represent the trajectory by line segments at the first (even on the sever-side): Moving objects often move in areas where no fine or up-to-date road network information is available, \eg the dataset Geolife includes some moving object alternately taking cars, trains and airplanes, and by feet, part of its data points are not on any road or they are on roads whose information is currently not available. In these cases, if we roughly match the trajectory onto road network at the beginning, then it might introduce errors caused by mis-map-matching. However, if we save the (simplified) line representation of the trajectory, then once the road network is available or updated, it can also conveniently be matched onto roads at the time we need. For the similar reason, some road-aware works have already applied this strategy, \eg the dilution-matching-encoding  method [Gotsman:Dilution], which first simplifies the trajectories by some line simplification method, then maps the simplified trajectories onto roads.
+(2) It is a convenient, and somehow indispensable, way to directly represent the trajectory by line segments at the first (even on the sever-side). Moving objects often move in areas where no fine or up-to-date road network information is available, \eg the dataset Geolife includes some moving object alternately taking cars, trains and airplanes, and by feet, and a part of its data points are not on any road or they are on roads whose information is not available. In these cases, if we roughly match the trajectory onto road network at the beginning, then it might introduce new errors caused by map-matching. However, if we save the (simplified) line representation of the trajectory, then once the road network is available or updated, it can also conveniently be matched onto roads at the time that we need later. Indeed some road-aware studies have already applied this strategy, \eg the dilution-matching-encoding  method [Gotsman:Dilution], which first simplifies the trajectories by some line simplification method, then maps the simplified trajectories onto roads.
 %Anyway, it is an effective and even indispensable way to directly represent the trajectory by (simplified) line segments at the first (even on the sever-side).
 %An line representation (original or simplified) of a trajectory can be matched onto road networks at anytime.
 
-Thus, even for trajectories that capture the movements in road networks, we will compress the trajectories by some line simplification method and do not consider the map-matching step (if needed, it could be the subsequent step of line simplification), and in this evaluation, \emph{we focus on line simplification and let alone semantic-based trajectory compression methods (including road-aware methods based on map-matching)}.
 
-We have clarified this in the second paragraph of Section 1, say, {``It is a great benefit that line simplification is suitable to run on resource-constrained end devices, such that the trajectories could be simplified at the early time, meaning not only the storage of data servers but also the network bandwidth between the end devices and the data servers is saved. Besides, line simplification could combine with other technologies, like the dilution-matching-encoding method that maps the simplified trajectories to road networks, then mine and use high frequency patterns of compressed trajectories instead of roads, so as to further improve the effectiveness of trajectory compression."} Moreover, a discussion of additional trajectory compression methods (including the road-aware trajectory compression) is provided in the appendix.
+That is, in this article, we are considering the methods that require no extra knowledge for trajectory simplification, where there already exist quite a few materials to cover. We have further clarified this in the second paragraph of Section 1. Thanks for raising this question!
+%Thus, even for trajectories that capture the movements in road networks, we will compress the trajectories by some line simplification method and do not consider the map-matching step (if needed, it could be the subsequent step of line simplification), and in this evaluation, \emph{we focus on line simplification and let alone semantic-based trajectory compression methods (including road-aware methods based on map-matching)}.
+
+%, say, {``It is a great benefit that line simplification is suitable to run on resource-constrained end devices, such that the trajectories could be simplified at the early time, meaning not only the storage of data servers but also the network bandwidth between the end devices and the data servers is saved. Besides, line simplification could combine with other technologies, like the dilution-matching-encoding method that maps the simplified trajectories to road networks, then mine and use high frequency patterns of compressed trajectories instead of roads, so as to further improve the effectiveness of trajectory compression."} Moreover, a discussion of additional trajectory compression methods (including the road-aware trajectory compression) is provided in the appendix.
 
 %To clearify this, we have added a brief introduction to map-matching-based trajectory compression techniques in ``Appendix: Additional Trajectory Compression Algorithms".
 
@@ -143,8 +147,7 @@ GeoInformatica, 2015.
 
 \textbf{[R1C4]} \emph{ In Page 6 (line 19), it is stated ``all points in the simplified trajectory belong to the original trajectory"? Why? If the error bound is the requirement, why we are not allowed to introduce new points, if it helps to improve the compression rate without violating the error bound defined? This is related to my comment C1. }
 
-Yes, we have allowed interpolating new points into the output trajectories, and we have replaced the sentence ``all points in the simplified trajectory belong to the original trajectory" by ``{data interpolation is allowed." You can find it in the last paragraph of Section 2, also refer to [R1C2] for more details.
-	%Thank you!
+Yes, we have allowed interpolating new points into the output trajectories, and we have corrected this in the last paragraph of Section 2 (please also refer to [R1C2] for more details). Thank you!
 
 
 \textbf{[R1C5]} \emph{The three distance metrics used in this paper are mainly for line simplification. However, if we apply line simplification to compress trajectories, some of the metrics are no longer that useful. For example, perpendicular distance metric (PED) does not consider temporal dimension, which means the error bounds based on PED consider spatial distances only. However, temporal dimension is very important to trajectories. I think it is necessary to revisit the metrics and highlight their limitations. Particularly, the error-bounds provided by these metrics could be misleading as the metrics do not fully reflect the loss of information. }
@@ -182,7 +185,7 @@ For PED and DAD, authors in [Cao:Reduction] have also proved that PED is not spa
 (a) the first level comes from trajectory simplification itself, including compression ratio, efficiency and errors of simplification. Most works in this area test their algorithms following a part or all of these criteria, and
 (b) the second level is from trajectory applications, \eg spatio-temporal queries, map-matching, trajectory clustering, anonymous and so on. Indeed, every trajectory application is applicable to evaluate the simplified trajectories from its point of view, \eg spatio-temporal queries concern the answer-errors and a map-matching or a trajectory clustering method concerns the accuracy.
 
-In this paper, we first follow the mainstream works in this area and test the compression ratios, efficiency and errors of simplification algorithms.
+In this article, we first follow the mainstream works in this area and test the compression ratios, efficiency and errors of simplification algorithms.
 Besides, as the data aging problem is a potential challenge to the management of trajectory, thus, the average and max errors of trajectory simplification algorithms as well as distance metrics in data aging are also tested.
 %
 Then for trajectory applications, we choose spatio-temporal queries as the representatives as they are well-known and commonly used in the management of trajectories.
@@ -268,7 +271,7 @@ We have clarified this observation in the third paragraph of Section 6.3.1 (the 
 
 First of all, this evaluation aims to summarize the state-of-the-art of the error bounded trajectory simplification algorithms and distance metrics, analyze the features of them and highlight the advantages and limitations of each kind of technologies, and also conduct a systematic experimental study under a uniform quality criteria (including compression ratios, errors, running time, aging friendliness and query friendliness) for large-scale trajectory data, so as to provide a full picture of line simplification algorithms and distance metrics to users. In this context,
 
-(1) we have summarized the major characters of algorithms and distance metrics, and highlight the advantages and limitations of distance metrics at the beginning of the paper (please refer to the ``algorithm taxonomy" and ``distance metrics" parts of Section 1), with respect to your advice of [R1C5]. And yes, PED largely treats a trajectory as a sequence of spatial data points, thus, it has better compression ratios than SED at a price of losing temporal information. This is also claimed in Section 1,
+(1) we have summarized the major characters of algorithms and distance metrics, and highlight the advantages and limitations of distance metrics at the beginning of the article (please refer to the ``algorithm taxonomy" and ``distance metrics" parts of Section 1), with respect to your advice of [R1C5]. And yes, PED largely treats a trajectory as a sequence of spatial data points, thus, it has better compression ratios than SED at a price of losing temporal information. This is also claimed in Section 1,
 
 (2) we have objectively evaluated these technologies under the uniform quality criteria (including compression ratios, errors, running time, aging friendliness and query friendliness), and the same setting and parameters. Following the common practice in this field, each quality metric is tested separately. These tests and comparisons are fair, especially under the premise that we have claimed the features, advantages and limitations of those technologies, as shown in (1), and
 
@@ -475,7 +478,7 @@ We have summarized these at the end of Section 6.3.6. Thanks for pointing out th
 \textbf{[R3C1a]} \emph{
 Sec. 4.1. The min-\# optimal version from [4] has different complexities depending on whether the polyline is open or closed (as well as convex vs. concave). The authors have not properly brought this in context.}
 
-Yes, [4] proves the \emph{min-$\#$} problem (using PED) for a general polygonal curve can be solved in $O(n^2)$ time by using the \textit{sector intersection} mechanism, and for some special curve, either open or closed (if there is an edge joining the first and the last points, then it is closed, otherwise, it is open) polygonal curve that forms part of a convex polygon, this problem can be solved in $O(n)$ time. Note that, in general, a trajectory is not necessary a convex or closed polygonal curve, instead, it is often open and concave. Thus, the best optimal algorithm for trajectory simplification using PED still has $O(n^2)$ time.}
+Yes, [4] proves the \emph{min-$\#$} problem (using PED) for a general polygonal curve can be solved in $O(n^2)$ time by using the \textit{sector intersection} mechanism, and for some special curve, either open or closed (if there is an edge joining the first and the last points, then it is closed, otherwise, it is open) polygonal curve that forms part of a convex polygon, this problem can be solved in $O(n)$ time. Note that, in general, a trajectory is not necessary a convex or closed polygonal curve, instead, it is often open and concave. Thus, the best optimal algorithm for trajectory simplification using PED still has $O(n^2)$ time.
 
 We have revised the second paragraph of section 3 to clarify this. Thanks for pointing out this!
 
