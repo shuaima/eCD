@@ -67,11 +67,11 @@ Attached please find a revised version of our submission to
 TODS, \emph{Error Bounded Line Simplification Algorithms for Trajectory Compression: An Experimental Evaluation}.
 
 
- This article has been substantially revised. In particular, we have 
+ This article has been substantially revised. In particular, we have
 	(a) added the weak simplification algorithms OPERB-A and \kw{CISED}-{W} that allow data interpolations for evaluation,
 	(b) added the online algorithm \kw{DOTS} that uses the Local Integral Square SED (LISSED) as the error measure for evaluation,
 	(c) added a new set of experimental tests on an additional application, named ``when\_at'' queries,
-	(d) adopted a larger dataset of UCar in the experimental studies, 
+	(d) adopted a larger dataset of UCar in the experimental studies,
 	(e) added a brief introduction to the semantic based trajectory compression methods in the appendix,
     (f) added an explanation on \emph{why map-matching} is not considered as a pre-processing step of trajectory simplification, and
     (g)  refined the entire article to improve its readability.
@@ -139,8 +139,7 @@ That is, in this article, we are considering the methods that require no extra k
 
 [Song:Press] R. Song, W. Sun, B. Zheng, and Y. Zheng. Press: A novel framework of trajectory compression in road networks. PVLDB, 7(9):661--672, 2014.
 
-[Gotsman:Dilution] R. Gotsman and Y. Kanza. A dilution-matching-encoding compaction of trajectories over road networks.
-GeoInformatica, 2015.
+[Gotsman:Dilution] R. Gotsman and Y. Kanza. A dilution-matching-encoding compaction of trajectories over road networks. GeoInformatica 19(2), 331--364, 2015.
 
 %[r3] H. Elmeleegy, A. K. Elmagarmid, E. Cecchet and W. G. Aref. Online Piece-wise Linear Approximation of Numerical Streams with Precision Guarantees. PVLDB, 2009.
 
@@ -152,52 +151,53 @@ Yes, we have allowed interpolating new points into the output trajectories, and 
 
 \textbf{[R1C5]} \emph{The three distance metrics used in this paper are mainly for line simplification. However, if we apply line simplification to compress trajectories, some of the metrics are no longer that useful. For example, perpendicular distance metric (PED) does not consider temporal dimension, which means the error bounds based on PED consider spatial distances only. However, temporal dimension is very important to trajectories. I think it is necessary to revisit the metrics and highlight their limitations. Particularly, the error-bounds provided by these metrics could be misleading as the metrics do not fully reflect the loss of information. }
 
-Yes, when researchers introduce PED to simplify trajectories, they initially treat the input trajectory as a sequence of spatial data points. As the result, \emph{line simplification algorithms using PED bring good compression ratios at a cost of losing temporal information of trajectories}. Hence, though it is error bounded by PED, it is not spatio-temporal \emph{query friendly}, \ie a spatio-temporal query like \emph{where\_at} on such a simplified trajectory possibly returns a point that has a distance great larger than the PED error bound used in the simplification.
-{In spite of that, PED still has its usages, \eg trajectory simplification using PED often serves as a pre-processing step of trajectory clustering that is the base of applications like traffic pattern recognition and urban planning [Zhao:Clustering, Mazimpaka:Mining], where rather the shapes of trajectories than the detailed positions of individuals are concerned.}
+(1) Yes! When PED is introduced to simplify trajectories, the input trajectory is treated as a sequence of spatial data points, and line simplification algorithms using PED bring good compression ratios at a cost of losing temporal information of trajectories. Hence, it is not spatio-temporal \emph{query friendly}.
+However, PED still has its usages, \eg trajectory simplification using PED often serves as a pre-processing step of trajectory clustering that is the base of applications like traffic pattern recognition and urban planning [Zhao:Clustering, Mazimpaka:Mining].
 
-The SED of a point to a line segment is the Euclidean distance between the point and its \emph{synchronized point} \wrt the line segment, the expected position of the moving object on the line segment at the same time \emph{with an assumption that the object moves straightly along the line segment at a uniform speed}. {Most of these algorithms ensure that the \emph{maximal} SED from the output trajectory to the input trajectory is bounded by a preset SED error bound.}
-They friendly support spatio-temporal queries like \emph{where\_at}, that is, a \emph{where\_at} query on such a simplified trajectory will return the expected (synchronized) point that has a distance less than the error bound used in the simplification algorithm.
-{Obviously, given the same error bound, algorithms using SED will output more points than PED as they also save temporal information.}
+(2) The SED of a point to a line segment is the Euclidean distance between the point and its \emph{synchronized point} \wrt the line segment, the expected position of the moving object on the line segment at the same time \emph{with an assumption that the object moves straightly along the line segment at a uniform speed}. {Most of these algorithms ensure that the \emph{maximal} SED from the output trajectory to the input trajectory is bounded by a SED error bound.}
+They friendly support spatio-temporal queries like \emph{where\_at}. {Note that given the same error bound, algorithms using SED typically produce more points than PED as they preserve temporal information.}
 
-DAD is the direction deviation of the moving object, and
+(3) DAD is the direction deviation of the moving object, and
 the temporal information is also lost when using DAD, therefore, it is \emph{not spatio-temporal query friendly} too. Nevertheless, it is important for applications such as direction-based trajectory clustering and query processing [Long:Direction].
 
-To clarify this, we have revised the descriptions of distance metrics PED, SED and DAD, and also highlighted their limitations, in the part of ``distance metrics", in Section 1. Thanks!
+To clarify this, we have revised the introduction of distance metrics PED, SED and DAD, and have also highlighted their limitations in the part of ``distance metrics'' of Section 1. Thanks!
 
-[Zhao:Clustering] Zhao, L., and Shi, G. A trajectory clustering method based on douglas-peucker compression and density for marine traffic pattern recognition. Ocean Engineering 172 (2019), 456â€?67.
+[Zhao:Clustering] Zhao, L., and Shi, G. A trajectory clustering method based on douglas-peucker compression and density for marine traffic pattern recognition. Ocean Engineering 172 (2019), 456--467.
 
-[Mazimpaka:Mining] Mazimpaka, J. D., and Timpf, S. Trajectory data mining: A review of methods and applications. Journal of Spatial Information Science 13 (2016), 61â€?9.
+[Mazimpaka:Mining] Mazimpaka, J. D., and Timpf, S. Trajectory data mining: A review of methods and applications. Journal of Spatial Information Science 13 (2016), 61--99.
 
-[Long:Direction] Long, C., Wong, R. C.-W., and Jagadish, H. Direction-preserving trajectory simplification. PVLDB 6, 10 (2013), 949â€?60.
+[Long:Direction] Long, C., Wong, R. C.-W., and Jagadish, H. Direction-preserving trajectory simplification. PVLDB 6, 10 (2013), 949--960.
 
 \textbf{[R1C6]} \emph{ The reason that we decide to store the trajectories (or the compressed version of raw trajectories to save storage space) is mainly to support some applications if required later, which might not require $100\%$ accuracy. For example, in order to find out the witness of a fatal car accident, police might want to locate all the drivers who pass by a specific location within a given time window by querying the trajectories. I am not very sure whether the error bounds based on different distance metrics are still valid for specific types of queries. {This survey does not consider the applications to be supported by the compressed trajectories at all. However, personally I think it is very important.} The authors did include one set of experiments towards the end of the paper. However, I think it is very important to explain the criteria of trajectory compression in the beginning of the paper, to offer the audience a complete image. In this paper, what are the key considerations when we compress trajectories? Is the compression ratio the only requirement? Is it necessary to support certain applications with error bounds? }
 
 
-These comments are largely talking about two kinds of related questions. First, whether the error bounded line simplification algorithms coupling with distance metrics are still valid for specific types of applications? Secondly, what's the quality criteria of the evaluation? We should answer these questions one by one.
+These comments are largely talking about two kinds of related questions. First, whether the error bounded line simplification algorithms coupling with distance metrics are still valid for specific types of applications? Secondly, what is the quality criteria of the evaluation? We should answer these questions one by one.
 
-(1) \emph{The error bounded line simplification algorithms coupling with different distance metrics not only reduce data sizes such that the storage, network and computing resources are saved, but also support their specific applications}. For SED, authors in [Cao:Reduction] have proved that the SED-simplified trajectories are answer-error-bound for spatio-temporal queries (\emph{query friendly} in short) of \emph{where\_at}, \emph{intersect} and \emph{nearest\_neighbor}, \ie if the simplification is SED-error bounded by $\epsilon$, then the answer to such a query on the simplified trajectory is also error bounded by $\epsilon$.
-Besides, the example in your comment, say, ``\emph{in order to find out the witness of a fatal car accident, police might want to locate all the drivers who pass by a specific location within a given time window by querying the trajectories}", is indeed a case of the spatio-tempporal \emph{intersect} query (also called a spatio-temporal \emph{range} query) [Cao:Reduction], defined in $intersect$ ($T$, \emph{Poly}, $t_1$, $t_2$), that returns \emph{true} if the trajectory $T$ intersects the polygon \emph{Poly} between the times $t_1$ and $t_2$. Obviously, it's supported by the error-bounded line simplification algorithms using SED.
+(1) \emph{The error bounded line simplification algorithms coupling with different distance metrics not only reduce data sizes such that the storage, network and computing resources are saved, but also support their specific applications}. For SED, authors in [Cao:Reduction] have proved that the SED-simplified trajectories are answer-error-bound for spatio-temporal queries (\emph{query friendly} in short) of \emph{where\_at}, \emph{intersect} and \emph{nearest\_neighbor}.  %\ie if the simplification is SED-error bounded by $\epsilon$, then the answer to such a query on the simplified trajectory is also error bounded by $\epsilon$. Besides, the example in your comment, say, ``\emph{in order to find out the witness of a fatal car accident, police might want to locate all the drivers who pass by a specific location within a given time window by querying the trajectories}", is indeed a case of the spatio-tempporal \emph{intersect} query (also called a spatio-temporal \emph{range} query) [Cao:Reduction], defined in $intersect$ ($T$, \emph{Poly}, $t_1$, $t_2$), that returns \emph{true} if the trajectory $T$ intersects the polygon \emph{Poly} between the times $t_1$ and $t_2$. Obviously, it's supported by the error-bounded line simplification algorithms using SED.
 
-For PED and DAD, authors in [Cao:Reduction] have also proved that PED is not spatio-temporal query friendly, and PED or SED neither is friendly to the ``when\_at" query. Though DAD is not discussed in [Cao:Reduction] (DAD is developed after the publish of [Cao:Reduction]), it's obviously not spatio-temporal query friendly too. Our tests in Section 6.3.5 also support these statements. Nevertheless, \emph{the error bounded line simplification using PED or DAD also has it usages}, \eg it's often the pre-processing step of trajectory clustering that is the base of applications like urban plan and traffic pattern recognition [Zhao:Clustering, Mazimpaka:Mining], where rather the shape of a trajectory than the exact positions of the individual are concerned.
+For PED and DAD, authors in [Cao:Reduction] have also proved that PED is not spatio-temporal query friendly, and PED or SED neither is friendly to the ``when\_at" query. Though DAD is not discussed in [Cao:Reduction] (DAD is developed after the publish of [Cao:Reduction]), it is not spatio-temporal query friendly too. Our tests in Section 6.3.5 also support these statements. Nevertheless, \emph{the error bounded line simplification using PED or DAD also has it usages}, \eg it's often the pre-processing step of trajectory clustering that is the base of applications like urban plan and traffic pattern recognition [Zhao:Clustering, Mazimpaka:Mining]. %, where rather the shape of a trajectory than the exact positions of the individual are concerned.
+
+
+Indeed, different applications may have different requirements, and the purpose of this evaluation is exactly to provide guidelines on how to choose appropriate algorithms and distance metrics for practical applications.
 
 
 (2) {Yes, it is important to explain the criteria of trajectory compression to offer the audience a complete image.} Thus, \emph{we have added a part of content named ``Quality criteria"} in Section 1. Indeed, when we talking about the quality criteria of trajectory simplification, there are two levels,
 (a) the first level comes from trajectory simplification itself, including compression ratio, efficiency and errors of simplification. Most works in this area test their algorithms following a part or all of these criteria, and
-(b) the second level is from trajectory applications, \eg spatio-temporal queries, map-matching, trajectory clustering, anonymous and so on. Indeed, every trajectory application is applicable to evaluate the simplified trajectories from its point of view, \eg spatio-temporal queries concern the answer-errors and a map-matching or a trajectory clustering method concerns the accuracy.
+(b) the second level is from trajectory applications, \eg spatio-temporal queries, map-matching, trajectory clustering, anonymous and so on. Indeed, every trajectory application may have its own requirements to choose the right simplified trajectories, \eg spatio-temporal queries concern more about the answer-errors and a map-matching or a trajectory clustering method concerns more aobut the accuracy.
 
 In this article, we first follow the mainstream works in this area and test the compression ratios, efficiency and errors of simplification algorithms.
 Besides, as the data aging problem is a potential challenge to the management of trajectory, thus, the average and max errors of trajectory simplification algorithms as well as distance metrics in data aging are also tested.
 %
 Then for trajectory applications, we choose spatio-temporal queries as the representatives as they are well-known and commonly used in the management of trajectories.
-More specifically, we have evaluated line simplification algorithms and distance metrics with respect to spatio-temporal queries \emph{where\_at} and \emph{when\_at}, two fundamental blocks of spatio-temporal queries. Note that [Cao:Reduction] have proved that ``the errors of the \emph{intersect} and \emph{nearest\_neighbor} query types are bounded if and only if the error of \emph{where\_at} is bounded", which indicates that the \emph{where\_at} query is one of the keys to test spatio-temporal queries; and \emph{when\_at} is another important functional block that is often discussed in comparing with \emph{where\_at}.
+More specifically, we have evaluated line simplification algorithms and distance metrics with respect to spatio-temporal queries \emph{where\_at} and \emph{when\_at}, two fundamental blocks of spatio-temporal queries. Note that [Cao:Reduction] have proved that ``the errors of the \emph{intersect} and \emph{nearest\_neighbor} query types are bounded if and only if the error of \emph{where\_at} is bounded", which indicates that the \emph{where\_at} query is one of the keys to test spatio-temporal queries; and \emph{when\_at} is another important functional block that is often discussed when comparing with \emph{where\_at}.
 
-For the last three sub-questions, we believe these are the key considerations when we compress trajectories; compression ratio is not the only requirement as mentioned above; and it is surely necessary to support certain applications with error bounds, \eg spatio-temporal queries of \emph{where\_at}, \emph{intersect} and \emph{nearest\_neighbor}.
-
-
-We have clarified these in the ``distance metrics" and ``quality criteria" parts of Section 1, and added tests about \emph{when\_at} in Section 6.3.5. Thanks for your great advice!
+(3) For the last three sub-questions, we believe these are the key considerations when we compress trajectories. Compression ratios are surely not the only requirement as mentioned above, but it is a very important metric to support certain applications with error bounds, \eg spatio-temporal queries of \emph{where\_at}, \emph{intersect} and \emph{nearest\_neighbor}.
 
 
-[Cao:Reduction] Cao, H., Wolfson, O., and Trajcevski, G. Spatio-temporal data reduction with deterministic error bounds. VLDBJ 15, 3 (2006), 211â€?28.
+We have clarified these in the bullets of ``distance metrics'' and ``quality criteria'' of Section 1, and added new tests about \emph{when\_at} in Section 6.3.5. Thanks for your great advice!
+
+
+[Cao:Reduction] Cao, H., Wolfson, O., and Trajcevski, G. Spatio-temporal data reduction with deterministic error bounds. VLDBJ 15, 3 (2006), 211--228.
 
 
 
@@ -212,8 +212,8 @@ Thanks for pointing out this!
 
 \textbf{[R1C8]} \emph{ Fig.2 in Page 7 gives an example of reachability graph. However, that graph is incomplete. For example, there is no link between $P_0$ and $P_5$ but they are reachable. This is very misleading. }
 
-Yes, to avoid the misleading, in Figures 1-3, 5-8 and 10, we have moved up the point $P_4$ such that, in Figure 2, the PED distances from $P_4$ to line segments $\overline{P_0P_5}$, $\overline{P_1P_5}$, $\overline{P_2P_5}$ and $\overline{P_3P_5}$ are clearly all larger than the error bound. Besides, all running examples have been revised.
-Thanks for your seriousness and meticulousness!
+Yes, to avoid the misleading, we have moved up the point $P_4$ in Figures 1-3, 5-8 and 10 such that the PED distances from $P_4$ to line segments $\overline{P_0P_5}$, $\overline{P_1P_5}$, $\overline{P_2P_5}$ and $\overline{P_3P_5}$ are clearly all larger than the error bound. Besides, all running examples have been revised.
+Thanks for raising this issue!
 
 %\begin{center}
 %	%\includegraphics[width=1.\textwidth]{example-image}
@@ -228,18 +228,18 @@ Thanks for your seriousness and meticulousness!
 
 \textbf{[R1C9]} \emph{ The datasets used in the experimental study were rather small. With 20M+ points, there is no need to compress them. Much larger datasets will be more realistic for the topic of trajectory compression.  }
 
-First, we would like to say, \emph{the computing complexities of a line simplification algorithm are tightly related to the length (number of points) of the input trajectory rather than the number of trajectories}, and our datasets have already included some long trajectories that each has more than {one million} data points which is quite memory consuming as the whole trajectory must be loaded in memory before the optimal and batch algorithms start to run, and time consuming as each batch algorithm needs {days} to run the whole tests listed in Section 6.
+First, the computing complexities of a line simplification algorithm are tightly related to the length (number of points) of the input trajectory rather than the number of trajectories, and our datasets have already included long trajectories that each has more than {one million} data points. The is quite memory consuming for optimal and batch algorithms  as they need to load the entire trajectory into memory, and time consuming for batch algorithms as they need {days} to finish the tests, as shown in Section 6.
 
-Secondly, yes, we have extended dataset UCar from 200 to 1000 trajectories such that it totally has more than {100M} points (a data point has tens of bytes, including object id, latitude, longitude, height, time and other information). Besides, we have already used the full datasets of Geolife and Mopsi, which are widely used in many recent trajectory compression works, \eg Geolife is used in the recent algorithm algorithm CISED [Lin:CISED] and experimental study [Zhang:Evaluation], and Mopsi is used in [Lin:CISED].  %Thus, an even larger datasets is quite not friendly to the tests.
+Second, we have extended dataset UCar from 200 to 1000 trajectories such that it has more than {100M} points in total (a data point has tens of bytes, including object id, latitude, longitude, height, time and other information). Besides, we have already used the full datasets of Geolife and Mopsi, which are widely used in many recent trajectory compression studies, \eg Geolife is used in the recent algorithm algorithm CISED [Lin:CISED] and experimental study [Zhang:Evaluation], and Mopsi is used in [Lin:CISED].  %Thus, an even larger datasets is quite not friendly to the tests.
 %Thanks for your advice!
 
-[Lin:CISED] Lin, X., Jiang, J., Ma, S., Zuo, Y., and Hu, C. One-pass trajectory simplification using the synchronous euclidean distance. VLDBJ 28, 6 (2019), 897 â€?21.
+[Lin:CISED] Lin, X., Jiang, J., Ma, S., Zuo, Y., and Hu, C. One-pass trajectory simplification using the synchronous euclidean distance. VLDBJ 28, 6 (2019), 897 --921.
 
-[Zhang:Evaluation] Zhang, D., Ding, M., Yang, D., Liu, Y., Fan, J., and Shen, H. T. Trajectory simplification: An experimental study and quality analysis. PVLDB 9, 11 (2018), 934â€?46.
+[Zhang:Evaluation] Zhang, D., Ding, M., Yang, D., Liu, Y., Fan, J., and Shen, H. T. Trajectory simplification: An experimental study and quality analysis. PVLDB 9, 11 (2018), 934--946.
 
 \textbf{[R1C10]} \emph{The average errors introduced in Page 20 are derived based on ONLY points contained in a line segment of a piece-wise line representation. Why? Why not consider all the points in the original trajectories? }
 
-Indeed, we do consider ALL the points in the original trajectories when calculate the average errors. To clarify this, we have revised the description of ``average errors" in Section 6.2 to a more clear statement ``{The average simplification error is the average value of the distances from every point of the original trajectories to its representing line segment of the simplified trajectories.}" Thanks for pointing out this!
+Indeed, we do consider ALL the points in the original trajectories when calculate the average errors. To clarify this, we have revised the description of ``average errors" in Section 6.2  to ``{The average simplification error is the average value of the distances from every point of the original trajectories to its representing line segment of the simplified trajectories}''. Thanks for pointing out this!
 
 
 \textbf{[R1C11a]} \emph{ In Page 21 (lines 18-19), it is stated that ``We then choose 10 trajectories from each dataset, and vary the size |T| of a trajectory from 1,000 points to 10,000 points while fixing the error bound $\epsilon = 40$ metres or $\epsilon = 45$ degrees". It is not clear how points are selected. For example, a raw trajectory contains 100 points (p1, p2, ..., p100). If we want to only consider 10 points, do you consider a sub-trajectory of 10 points (say p1, p2, ..., p10) or a trajectory of much lower sampling rate (say p1, p11, p21, ..., p91). Please state it clearly!}
@@ -248,64 +248,68 @@ It is the first K points of a trajectory (\eg, the first 100 points are $P_1, P_
 
 \textbf{[R1C11b]} \emph{ In Page 21 (lines 44 - 46), it is stated that ``The dataset collected by cars (e.g., UCar) also has better compression ratios than the datasets partially collected by individuals (e.g., Geolife and Mopsi), as cares typically move more regularly than individuals." However, this is different from our everyday observation. Because of the traffic light, cars are not expected to move so regularly. Second, it is different from the observations we could make from Figures 15, 16, 17, 18, 19, and 20. Based on the results reported in those six figures, compression ratios under Geolife and Mopsi are lower than that under UCar, which means the dataset collected by cars has poorer compression ratios. Third, it shall be 'cars' but not 'cares'. }
 
-Here, the word ``regular", with respect to the movement of a car or an individual, has two meanings, say, ``regular in speed" and ``regular in direction". Roughly speaking, cars are expected to move more regular in direction (because they move along the roads) than individuals, while individuals move more regular in speed than cars (because cars have a broad range of speed and they frequently stop because of traffic light).
-And partially because of these as well as the relatively lower average sampling rate of dataset UCar, it has poorer compression ratios than datasets Geolife and Mopsi when using Euclidean distance metrics PED and SED, as shown in Figures 16, 17, 19 and 20 (corresponding to Figures 15, 16, 18 and 19 of the previous manuscript). However, when using the direction metric DAD (recall cars are regular in direction), dataset UCar does have better compression ratios than Geolife and Mopsi, as shown in Figures 18 and 21 (corresponding to Figures 17 and 20 of the previous manuscript).
+Here, the word ``regular'' with respect to the movement of a car or an individual has two meanings: (1) regular in speed and regular in direction. Roughly speaking, cars are expected to move more regular in direction (because they move along the roads) than individuals, while individuals move more regular in speed than cars (because cars have a broad range of speed and they frequently stop due to various situations, \eg traffic lights).
+And partially due to these as well as the relatively lower average sampling rate of dataset UCar, it has poorer compression ratios than datasets Geolife and Mopsi when using Euclidean distance metrics PED and SED, as shown in Figures 16, 17, 19 and 20 (corresponding to Figures 15, 16, 18 and 19 in the previous manuscript). However, when using the direction metric DAD (recall cars are regular in direction), dataset UCar does have better compression ratios than Geolife and Mopsi, as shown in Figures 18 and 21 (corresponding to Figures 17 and 20 of the previous manuscript).
 
-To clarify this, we have revised the sentence ``The dataset collected by cars (e.g., UCar) also has better compression ratios than the datasets partially collected by individuals (e.g., Geolife and Mopsi), as cares typically move more regularly than individuals" to ``\textcolor{blue}{When using DAD,} the dataset collected by cars (e.g., UCar) has better compression ratios than the datasets partially collected by individuals (e.g., Geolife and Mopsi), as cars typically move more regularly than individuals \textcolor{blue}{in directions}" in the second paragraph of Section 6.3.1.
+To clarify this, we have revised the sentence ``The dataset collected by cars (e.g., UCar) also has better compression ratios than the datasets partially collected by individuals (e.g., Geolife and Mopsi), as cares typically move more regularly than individuals'' to ``\textcolor{blue}{When using DAD,} the dataset collected by cars (e.g., UCar) has better compression ratios than the datasets partially collected by individuals (e.g., Geolife and Mopsi), as cars typically move more regularly than individuals \textcolor{blue}{in directions}'' in the second paragraph of Section 6.3.1.
 Thanks for pointing out these!
 
 
 \textbf{[R1C12]} \emph{The impact of error bounds on compression ratios is straightforward. The bigger the error bounds, the better the compression ratio. However, the size of trajectory on the compression ratio is not that straightforward. Can the authors please comment on the observations we could make from Figures 18 -20? }
 
-It seems that data size does not have remarkable impacts on compression ratios. For an online or one-pass algorithm that is compressing a trajectory, once some distance is greater than the error bound, it is sure to output a line segment and continue to compress the subsequent data points. As a result, data size does not have remarkable impacts on the compression ratios of online and one-pass algorithms.
-For batch and the optimal algorithms, a long trajectory is connected by a number of sub-trajectories $[\dddot{T}_1,\dddot{T}_2,..., \dddot{T}_m, ]$ that order by time, because each sub-trajectory could be simplified to several relatively fixed line segments and sub-trajectories are relatively independent to each other, data size does not have remarkable impacts on the compression ratios of the optimal and batch algorithms too.
-In a conclusion, data size does not have remarkable impacts on compression ratios.
+Yes, data size does not have significant impacts on compression ratios. (1) For an online or one-pass algorithm that is compressing a trajectory, once some distance is greater than the error bound, it is sure to output a line segment and continue to compress the subsequent data points. As a result, the data size does not have much impacts on the compression ratios of online and one-pass algorithms.
+(2) For batch and the optimal algorithms, a long trajectory is connected by a number of sub-trajectories $[\dddot{T}_1,\dddot{T}_2,..., \dddot{T}_m, ]$ that order by time. As each sub-trajectory could be simplified to several relatively fixed line segments and sub-trajectories are relatively independent to each other, the data size also does not have much impacts on the compression ratios.
+
+
 %Our tests reveal a similar result.
 %More specifically,  Then suppose this original trajectory is being simplified by some online or one-pass algorithm that runs in an incremental manner, it is reasonable to conclude that the appending of $\dddot{T}_{m+1}$ might have some impacts of the representation (simplification) of $\dddot{T}_{m}$, but it's hard to have impacts on $\dddot{T}_i$ before $\dddot{T}_{m}$.
 
-We have clarified this observation in the third paragraph of Section 6.3.1 (the 2{nd} item). Thanks!
+We have clarified this in the third paragraph of Section 6.3.1 (the 2{nd} item). Thanks!
 
 
 
 \textbf{[R1C13]} \emph{ In Page 23 (lines 24 - 31), it is stated that ``given the same error bound $\epsilon$, the compression ratios of algorithms using PED are obviously better than using SED". This is actually misleading. Although the observation is that algorithms using PED could achieve higher compression ratios, the statement ignores the fact the PED does not consider the temporal dimension at all while SED does. The comparison is not fair at all! If the higher compression ratio is achieved by ignoring the error in the temporal dimension, it has to be stated clearly.}
 
-First of all, this evaluation aims to summarize the state-of-the-art of the error bounded trajectory simplification algorithms and distance metrics, analyze the features of them and highlight the advantages and limitations of each kind of technologies, and also conduct a systematic experimental study under a uniform quality criteria (including compression ratios, errors, running time, aging friendliness and query friendliness) for large-scale trajectory data, so as to provide a full picture of line simplification algorithms and distance metrics to users. In this context,
 
-(1) we have summarized the major characters of algorithms and distance metrics, and highlight the advantages and limitations of distance metrics at the beginning of the article (please refer to the ``algorithm taxonomy" and ``distance metrics" parts of Section 1), with respect to your advice of [R1C5]. And yes, PED largely treats a trajectory as a sequence of spatial data points, thus, it has better compression ratios than SED at a price of losing temporal information. This is also claimed in Section 1,
 
-(2) we have objectively evaluated these technologies under the uniform quality criteria (including compression ratios, errors, running time, aging friendliness and query friendliness), and the same setting and parameters. Following the common practice in this field, each quality metric is tested separately. These tests and comparisons are fair, especially under the premise that we have claimed the features, advantages and limitations of those technologies, as shown in (1), and
+Recall that different applications may have different requirements, and the purpose of this evaluation is exactly to
+provide guidelines on how to choose appropriate algorithms and distance metrics for practical applications.
+That is, this evaluation aims to summarize the state-of-the-art of the error bounded trajectory simplification algorithms and distance metrics, analyze the features of them and highlight the advantages and limitations of each kind of technologies, and also conduct a systematic experimental study under a uniform quality criteria (including compression ratios, errors, running time, aging friendliness and query friendliness) for large-scale trajectory data, so as to provide a full picture of line simplification algorithms and distance metrics to users. 
 
-(3) we agree with your that the higher compression ratio is not always the better and a single measure is not enough to determine an algorithm or distance metric, \ie \emph{users need to consider multiple metrics to choose a correct algorithm and distance metric} so as to satisfy their unique requirements (this is also your advice of [R1C6]). In other words, users first choose the quality metrics according to the application requirements, then choose an appropriate algorithm according to those metrics.
+(1) We have summarized the major characters of algorithms and distance metrics, and highlight the advantages and limitations of distance metrics at the beginning of the article (please refer to the ``algorithm taxonomy'' and ``distance metrics" parts of Section 1), with respect to your advice of [R1C5]. And yes, PED largely treats a trajectory as a sequence of spatial data points, thus, it has better compression ratios than SED at a price of losing temporal information. This is also explained in Section 1,
 
-Accordingly, we have clarified this in the penultimate paragraph of Section 6.3.1, say, ``{because SED saves temporal information while PED does not (remember the loss of temporal information may lead to unexpected results, \eg unbounded answer-errors to spatio-temporal queries)}, given the same error bound $\epsilon$, the compression ratios of algorithms using PED are obviously better than using SED." Also, please refer to the responses to [R1C5] and [R1C6] for more details. Thanks!
+(2) We have objectively evaluated these technologies under the uniform quality criteria (including compression ratios, errors, running time, aging friendliness and query friendliness), and the same setting and parameters. {\em Following the common practice in this field}, each quality metric is tested separately. These tests and comparisons are fair, especially under the premise that we have claimed the features, advantages and limitations of those technologies. %, as shown in (1), and
+
+(3) We agree with your that the higher compression ratio is not always the better and a single measure is not enough to determine an algorithm or distance metric, \ie \emph{users need to consider multiple metrics to choose a correct algorithm and distance metric} so as to satisfy their unique requirements (this is also your advice of [R1C6]). In other words, users need to first choose a proper quality metric according to the application requirements, then choose an appropriate algorithm \wrt the quality metric.
+
+Accordingly, we have clarified this in the penultimate paragraph of Section 6.3.1. Please also refer to the responses to [R1C5] and [R1C6] for more details. Thanks!
 
 \textbf{[R1C14]} \emph{ In Page 27 (lines 44 - 45), it is stated that ``When using DAD, the running time from the smallest to the largest is one-pass algorithms Intersect and Interval, batch algorithms TP and DP, and online algorithm OPW." However, algorithms actually perform slightly different at various datasets. It's not accurate to state that online algorithm OPW is always the worst, as it actually performs much better than TP and DP in the dataset Geolife (as shown in Figure 32(2)).}
 
-Yes, OPW performs much better than TP and DP in Geolife with error bound fixed to $45$ degrees, as shown in Figure 32 (33 in the new submission), and it also performs better than DP in UCar and Mopsi when the error bound is small, \eg it's less than 30 degrees, as shown in Figure 29 (30 in the new submission).
+Yes, OPW performs much better than TP and DP in Geolife with the error bound fixed to $45$ degrees, as shown in Figure 32 (33 in this new submission), and it also performs better than DP in UCar and Mopsi when the error bound is small, \eg it's less than 30 degrees, as shown in Figure 29 (30 in this new submission).
 
-We have revised the statement, and this sentence is replaced by ``When using DAD, one-pass algorithms Intersect and Interval run prominently faster than batch algorithms TP and DP and online algorithm OPW."
+We have revised the statement, and this sentence is replaced by ``When using DAD, one-pass algorithms Intersect and Interval run prominently faster than batch algorithms TP and DP and online algorithm OPW''.
 Thanks for pointing out this!
 
 \textbf{[R1C15]} \emph{ When evaluating the running time of different algorithms under various error bounds, different algorithms demonstrate different trends. The authors might want to explain why algorithms change the trends in certain ways (e.g., why error bounds do not have any impact on the running time of SIPED, why TP, OPW, BQS incur longer running time as error bounds increase, why ......).}
 
-Yes, different algorithms demonstrate different trends under various error bounds because of their distinct routines and principles. More specifically,
-for batch algorithms, the running time of DP and TP decreases or increases with the increase of error bound $\epsilon$, respectively, due to the top-down and bottom-up approaches that they apply;
+Yes, different algorithms demonstrate different trends under various error bounds as they have different routines and principles for trajectory simplification. (1)  For batch algorithms, the running time of DP and TP decreases or increases with the increase of error bound $\epsilon$, respectively, due to the top-down and bottom-up approaches that they apply.
 %
-for online algorithms, BQS and OPW both have poor efficiency as they finally need batch approaches to simplify buffered data. SQUISH-E is faster than BQS and OPW at a cost of poorer compression ratios;
+(2) For online algorithms, BQS and OPW both have poor efficiency as they finally need batch approaches to simplify buffered data. SQUISH-E is faster than BQS and OPW at a cost of poorer compression ratios.
 %
-for one-pass algorithms, SIPED, OPERB, CISED, Interval and Intersect show a linear running time that is consistent with their time complexity analyses. They are not very sensitive to error bound $\epsilon$ and also scale well with the increase of trajectory size on all datasets as a data point is processed only one time during the whole process.
+(3) For one-pass algorithms, SIPED, OPERB, CISED, Interval and Intersect show a linear running time that is consistent with their time complexity analyses. They are not very sensitive to error bound $\epsilon$ and also scale well with the increase of trajectory size on all datasets as a data point is processed only one time during the whole process.
 
-The detailed analysis of these trends are summarized in the ``analyses of LS algorithms" part of Section 6.3.3.
+We have provided a detailed analysis of these trends, summarized in the ``analyses of LS algorithms" part of Section 6.3.3.
 %
 We believe it is helpful for users to understand the characters of these algorithms, and to choose an appropriate algorithm to meet their needs.
 
 \textbf{[R1C16a]} \emph{ Figures 33 - 38 report the average errors of where\_at queries based on trajectories compressed using different line simplification algorithms. The title of 'Evaluation of spatio-temporal queries' is misleading as only one type of queries is considered.}
 
-Yes, we have revised the title of ''Evaluation of spatio-temporal queries" to ``Evaluation of \emph{where\_at} queries". Thanks for pointing out this!
+Yes, we have revised the title of ''Evaluation of spatio-temporal queries" to ``Evaluation of \emph{where\_at} queries". Thanks!
 
 \textbf{[R1C16b]} \emph{In addition, it is necessary to consider \emph{when\_at} query as it is a critical building block for many applications too.}
 
-Yes, we have added tests on the \emph{``when\_at"} query in Section 6.3.5. Thanks for your advice!
+Yes, we have added tests on the \emph{``when\_at"} query in Section 6.3.5. Thanks for the suggestion!
 
 \textbf{[R1C17]} \emph{ Based on the results reported in Figures 33 -38, PED and DAD are actually not proper distance metrics that should be considered when we apply line simplification to compress the trajectories and meanwhile want to preserve the utility of the compressed trajectories. Especially, Figure 21 (avg PED errors under different error bounds) and Figure 33 (avg PED query errors under different error bounds) have different trends (Figure 23 and Figure 35 have different trends too), which further demonstrates that PED and DAD are actually misleading. An algorithm that can achieve good performance in terms of PED/DAD might not be able to guarantee its performance in real applications. }
 
@@ -319,12 +323,12 @@ Thanks!
 
 \textbf{[R1C18]} \emph{ This paper focuses on applying line simplification for trajectory compression. Given the fact that there are different ways to compress trajectories (e.g., [1], [2]), it might be very helpful to give a brief introduction on different trajectory compression techniques, which could help audience to understand the pros/cons of applying line simplification to compress trajectories. }
 
-\emph{ [1] CiNCT: Compression and Retrieval for Massive Vehicular Trajectories via Relative Movement Labeling. Satoshi Koide, Yukihiro Tadokoro, Chuan Xiao, Yoshiharu Ishikawa. ICDE'2018.}
+\emph{ [1] CiNCT: Compression and Retrieval for Massive Vehicular Trajectories via Relative Movement Labeling. Satoshi Koide, Yukihiro Tadokoro, Chuan Xiao, Yoshiharu Ishikawa. In ICDE, 2018.}
 
-\emph{ [2] COMPRESS: A Comprehensive Framework of Trajectory Compression in Road Networks. Yunheng Han, Weiwei Sun, Baihua Zheng. TODS 2017.}
+\emph{ [2] COMPRESS: A Comprehensive Framework of Trajectory Compression in Road Networks. Yunheng Han, Weiwei Sun, Baihua Zheng. TODS 42, 2, 11:1¨C11:49, 2017.}
 
 
-{Yes, we have added an introduction to the semantic-based methods (including methods based on road networks) in ``Appendix: Additional Trajectory Compression Algorithms", and these two articles are covered. Thanks!}
+{Yes, we have added an introduction to the semantic-based methods (including methods based on road networks) in the appendix. Thanks!}
 %The relationship between them and line simplification is also discussed.
 
 %******************* reviewer 2 ***********************************************
