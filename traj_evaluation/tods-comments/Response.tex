@@ -338,19 +338,17 @@ Thanks!
 
 \line(1,0){100}
 
-\textbf{[R2D1]} \emph{In page 2, the authors mention that â€œimportant aspects of trajectory simplification (compression ratios, running time and aging friendliness) are not systematically studiedâ€?for [41]. Not sure which â€œimportant aspectsâ€?the authors refer to, as I found running time and the trade-off between compression ratios and errors have been reported in [41].}
+\textbf{[R2D1]} \emph{In page 2, the authors mention that ``important aspects of trajectory simplification (compression ratios, running time and aging friendliness) are not systematically studied'' for [41]. Not sure which ``important aspects'' the authors refer to, as I found running time and the trade-off between compression ratios and errors have been reported in [41].}
 
-The ``important aspects" refer to compression ratios, running time and aging friendliness (the whole quality criteria of line simplification please refer to the ``Quality criteria" part of Section 1).
+(1) Running time: [41] ([59] in this revised version) does show a table listing \emph{``compression time per trajectory point''} of each algorithm.  However, the efficiency of these algorithms \wrt error bounds and trajectory sizes is not reported. Further, those algorithms are not programmed in the same language - this is somehow unfair for comparing their efficiency.
 
-(1) Running time: we have noticed that [41] ([59] in the revised version) does show a table listing \emph{``compression time per trajectory point"} of each algorithm, however, we argue that it is not sufficient to show the efficiency of these algorithms as algorithms have different running time \wrt error bounds, and the running time of many algorithms is not linear to the size of a trajectory (thus it may cost different time on one point when the size of an input trajectory is different). Our tests in Section 3.3.3 also support this argument.
-
-(2) Compression ratios: it does report the relationship between compression ratios and average errors (note, they are average errors, not error bounds), however, both the compression ratios and the average errors are not separately tested \wrt error bounds.
+(2) Compression ratios: [41] ([59] in this revised version)  does report the relationship between compression ratios and errors. However, both the compression ratios, the average errors and trajectory sizes are not separately tested \wrt error bounds.
 
 (3) Aging friendliness: the data aging problem is not covered in [41].
 
-Besides, some important algorithms, \eg CISED and SIPED, are not covered in [41] (CISED is published after [41]), Thus, it is not sufficient to guide users to choose an appropriate algorithm and set a reasonable error bound.
+(4) Some important algorithms, \eg CISED and SIPED, are not covered in [41] (CISED is published after [41]).
 
-We have revised the motivation part of the manuscript to clarify this.
+We have revised the motivation part of the manuscript to clarify these.
 Thanks for pointing out this!
 
 
@@ -363,36 +361,38 @@ Thanks for pointing out this!
 
 \textbf{[R2D2]} \emph{In page 3: $\epsilon_1$ and $\epsilon_2$ appeared without explanation.}
 
-Yes, we have fixed it, say, ``{where $\epsilon_1$ and $\epsilon_2$ are the error bounds set in the first and second times of simplification, respectively.}"
+Yes, we have fixed it, {where $\epsilon_1$ and $\epsilon_2$ are the error bounds set in the first and second times of simplification, respectively}.
 Thanks!
 
-\textbf{[R2D3]} \emph{ In page 4: Itâ€™s better to move the comparison with [41] to the motivation part, in order to assure the necessity of a new empirical study.}
+\textbf{[R2D3]} \emph{ In page 4: It's better to move the comparison with [41] to the motivation part, in order to assure the necessity of a new empirical study.}
 
-Yes, we have moved some comparisons with [41] to the motivation part, say, the very recent study [41] does evaluate a wide range of trajectory simplification algorithms.
-However, it provides {an experimental study} on compression errors and spatio-temporal query analyses only, and important aspects of trajectory simplification (compression ratios, running time, aging friendliness and safety) are not systematically studied.
-{More specifically,}
-{(1) it has a limited evaluation on running time: it reports the \emph{compression time per trajectory point} of each algorithm on full datasets, however, an algorithm has different running time \wrt error bounds and the running time of many algorithms are not linear to the size of a trajectory (thus it may cost different time on one point when the input trajectories have different sizes), meaning the impacts of both the sizes of trajectories and the error bounds on the running time should be tested;}
+Yes, we have moved the comparisons with [41] to the motivation part. Thanks for your advice!
+%say, the very recent study [41] does evaluate a wide range of trajectory simplification algorithms.
+%However, it provides {an experimental study} on compression errors and spatio-temporal query analyses only, and important aspects of trajectory simplification (compression ratios, running time, aging friendliness and safety) are not systematically studied.
+%{More specifically,}
+%{(1) it has a limited evaluation on running time: it reports the \emph{compression time per trajectory point} of each algorithm on full datasets, however, an algorithm has different running time \wrt error bounds and the running time of many algorithms are not linear to the size of a trajectory (thus it may cost different time on one point when the input trajectories have different sizes), meaning the impacts of both the sizes of trajectories and the error bounds on the running time should be tested;}
 %
-{(2) it has a limited evaluation on compression ratios: it does report the relationship between compression ratios and average errors, but the impacts of the error bounds on the compression ratios are not separately tested; and }
+%{(2) it has a limited evaluation on compression ratios: it does report the relationship between compression ratios and average errors, but the impacts of the error bounds on the compression ratios are not separately tested; and }
 %
-(3) it does not cover the \emph{data aging} problem.
+%(3) it does not cover the \emph{data aging} problem.
 %
-{Besides, some important algorithms, \eg optimal algorithms using PED and SED and one-pass algorithms SIPED and CISED, are not investigated in [41].
+%{Besides, some important algorithms, \eg optimal algorithms using PED and SED and one-pass algorithms SIPED and CISED, are not investigated in [41].
 %
 
 
-Thanks for your advice!
+
 %that is helpful to elaborate the motivation of the work
 
 \textbf{[R2D4]} \emph{The authors mention that one of the main contributions is to re-implement the methods with Java. So compared with the running time results reported in [41], any new or different findings are revealed?}
 
 
 Yes, compared with [41], we have found different results \wrt running time.
-In [41] that implemented in varied languages, the running times of algorithms from the fastest to the slowest are Intersect, Interval, \textcolor{blue}{DP}, OPERB, \textcolor{blue}{DOTS}, \textcolor{blue}{SQUISH-E} and BQS, \eg they need 0.28, 0.29, \textcolor{blue}{0.46}, 0.9, \textcolor{blue}{1.58}, \textcolor{blue}{26.78} and 729.49 microseconds respectively to process one data point of the Geolife dataset.
-However, in our tests (re-implement the methods with a uniform language, Java), the running times from the fastest to the slowest are normally Intersect, Interval, OPERB, \textcolor{blue}{SQUISH-E}, \textcolor{blue}{DP},  \textcolor{blue}{DOTS} and BQS in all datasets, \eg they need 0.59, 1.08, 1.09, \textcolor{blue}{3.44}, \textcolor{blue}{15.72}, \textcolor{blue}{45.71} and 59.42 microseconds respectively to process one data point of the Mopsi dataset (this example data is collected from dataset Mopsi with error bound of 40 meters or 45 degrees. When processing one point, such an algorithm has the similar running time in Mopsi compared with Geolife, as shown in Figures 28-33). In our tests, DP (15.72) and DOTS (45.71) are much slower, while SQUISH-E (3.44) is much faster, than those (\textcolor{blue}{0.46}, \textcolor{blue}{1.58}, \textcolor{blue}{26.78}) in [41].
+
+In [41], the running times of algorithms from the fastest to the slowest are Intersect, Interval, \textcolor{blue}{DP}, OPERB, \textcolor{blue}{DOTS}, \textcolor{blue}{SQUISH-E} and BQS, \eg they need 0.28, 0.29, \textcolor{blue}{0.46}, 0.9, \textcolor{blue}{1.58}, \textcolor{blue}{26.78} and 729.49 microseconds respectively to process one data point of the Geolife dataset.
+However, in our tests (re-implement the methods with a uniform language, Java), the running time from the fastest to the slowest is typically Intersect, Interval, OPERB, \textcolor{blue}{SQUISH-E}, \textcolor{blue}{DP},  \textcolor{blue}{DOTS} and BQS in all datasets, \eg they need 0.59, 1.08, 1.09, \textcolor{blue}{3.44}, \textcolor{blue}{15.72}, \textcolor{blue}{45.71} and 59.42 microseconds respectively to process one data point of the Mopsi dataset (this example data is collected from dataset Mopsi with error bound of 40 meters or 45 degrees. When processing one point, such an algorithm has the similar running time in Mopsi compared with Geolife, as shown in Figures 28-33). In our tests, DP (15.72) and DOTS (45.71) are much slower, while SQUISH-E (3.44) is much faster, than those (\textcolor{blue}{0.46}, \textcolor{blue}{1.58}, \textcolor{blue}{26.78}) reported in [41].
 
 
-Besides, our tests also reveal the running time of algorithms with respect to the length of a trajectory (counted in the number of data points), the type of distance metrics and the various of error bounds, that are not systematically studied in [41]. Indeed, our tests bring a complete image of the efficiency of those algorithms.
+Moreover, our tests also reveal that the findings of the running time of algorithms with respect to the length of a trajectory (counted in the number of data points), the type of distance metrics and the various of error bounds, that are not systematically studied in [41]. 
 
 
 
@@ -402,14 +402,14 @@ We have clarified this in Section 6.3.6, say, ``our tests tell that the running 
 %First of all, we re-implement the methods with the same language, Java, for a fair comparison.
 
 
-\textbf{[R2D5]} \emph{In Table 1, what are the criteria for the selection of â€œrepresentativeâ€?algorithms? The authors may need to explicitly explain this in this paper.}
+\textbf{[R2D5]} \emph{In Table 1, what are the criteria for the selection of ``representative'' algorithms? The authors may need to explicitly explain this in this paper.}
 
-We comprehensively consider the performance of algorithms, the supporting of distance metrics and the novelty of their key ideas to select the representative algorithms. More specifically,
+We consider the performance of algorithms, the supporting of distance metrics and the novelty of their key ideas to select the representative algorithms. More specifically,
 (1) for optimal algorithms, {because all the optimized optimal algorithms have the same effectiveness using the same distance metric, and algorithm Optimal supports all three distances PED, SED and DAD while others are not, we choose it as the representative of the optimal line simplification algorithms,}
 %
-(2) for batch algorithms, {because DP is the typical top-down algorithm and TP is the typical bottom-up algorithm, and they both support PED, SED and DAD, and we choose  them as the representatives of batch algorithms,}
+(2) for batch algorithms, {because DP is the typical top-down algorithm and TP is the typical bottom-up algorithm, and they both support PED, SED and DAD, and we choose  both of them as the representatives of batch algorithms,}
 %
-(3) for online algorithms, because algorithms BQS, SQUISH-E and DOTS are the state-of-the art of online algorithms, in particular, BQS is the performance optimized online algorithm specific for PED, SQUISH-E is the famous online algorithm specific for SED, and {DOTS is the online algorithm using LISSED and is recommended in the recent evaluation work [41]}, we choose them as the representatives of online algorithms using PED, SED and {LISSED}, respectively. Besides, because no specific online algorithms have been developed for DAD, we alternatively choose OPW, a well-known online algorithm based on DP that is compatible with DAD,} as the representative of online algorithm using DAD, such that each distance metric has at least a representative algorithm, and
+(3) for online algorithms, because algorithms BQS, SQUISH-E and DOTS are the state-of-the art of online algorithms, in particular, BQS is the performance optimized online algorithm specific for PED, SQUISH-E is the famous online algorithm specific for SED, and {DOTS is the online algorithm using LISSED and is recommended in the recent evaluation work [41]}, we choose them as the representatives of online algorithms using PED, SED and {LISSED}, respectively. Besides, because no specific online algorithms have been developed for DAD, we alternatively choose OPW, a well-known online algorithm based on DP that is compatible with DAD, as the representative of online algorithm using DAD, such that each distance metric has at least a representative algorithm, and
 %
 (4) for one-pass algorithms, because SIPED, OPERB, CISED, Intersect and Interval are the state-of-the-art of this kind of algorithms, in particular, algorithms OPERB and SIPED are specific to PED, CISED is specific to SED, and Intersect and Interval are specific to DAD. We choose them as the representatives of one-pass algorithms.
 
@@ -418,34 +418,36 @@ To clarify these, we have added a brief explanation of the criteria after Table 
 
 \textbf{[R2D6]} \emph{Obviously, data aging is a very important contribution in this paper, because it was not examined in [41]. However, the situation becomes very awkward when most of the existing algorithms are not data aging friendly. Among all the methods in Table 1, only DP (with SED and PED as the distance measure) is data aging friendly. (1) {If a user considers data aging is important, then he/she has no choice but to use DP}. (2) {The authors may need to provide more convincing arguments for the necessity of examining data aging}.}
 
-We should first explain much clearer the \emph{data aging problem} and the \emph{aging friendliness property} of line simplification algorithms.
-%
+We should first explain better the \emph{data aging problem} and the \emph{aging friendliness property} of line simplification.
+
 As stated in [Cao 2006], the older the information gets, the less precision may be necessary. Thus it is possible that the coarseness of the trajectory approximation is allowed to increase as time progresses. In this context, the \emph{data aging problem} is of obtaining a lower level of precision from a higher one [Cao 2006], more specifically, \emph{what is the right way to get the coarser trajectory? What line simplification algorithms should we use in the first and second rounds of simplifications? If the first round of simplification uses algorithm $A_1$, can we use algorithm $A_2$ in the second round of simplification? How to set the parameter of error bounds in these simplifications? And after multiple times of simplifications, does the coarse trajectory still have bounded errors \wrt the original trajectory?} These problems are initiated by and partially solved in [Cao 2006] that focuses on the optimal algorithms and the DP algorithm in data aging.
 %The \emph{data aging} problem is rather an important requirement derived from the management of trajectory data;
 Then, the \emph{aging friendliness property} of simplification algorithms is,  given a simplification algorithm $\mathcal{A}$ and a distance function/metric $\mathcal{M}$, algorithm $\mathcal{A}$ is \emph{aging friendly} with respect to  $\mathcal{M}$ if for every $\epsilon_1$ and every $\epsilon_2$ such that $\epsilon_1 <\epsilon_2$, and
 for every trajectory $T$ , $S_A(T, \epsilon_2,\mathcal{M}) = S_A(S_A(T, \epsilon_1,\mathcal{M}), \epsilon_2, \mathcal{M})$ [Cao 2006]. [Cao 2006] also proves that algorithm DP is aging friendly.
 
-We next answer the two questions you mentioned above.
+We next answer the two questions that you raised above.
 
 
 
-(1) \underline{``If a user considers data aging is important, then he/she has no choice but to use DP"}: This argue is somehow inaccurate. Indeed, yes, data aging is important; and no, users do not necessary use aging friendly algorithms (DP) in all cases. The reason is,
-\emph{data aging} is rather an important requirement derived from the management of trajectory data that cares about the broad problems related to ``obtaining a lower level of precision from a higher one" as mentioned above, while aging friendliness is just a special feature of some algorithms that could not satisfy all needs. For example, in practical, the raw trajectory may be simplified by some algorithm other than DP and then uploaded to data server, or the data is first simplified by DP but due to the large data size and for the efficiency consideration, users do not want to re-compress these trajectories by DP. In these cases, can users use any other algorithm in the second round of simplification? How to set the parameter of error bounds in these simplifications? And after multiple times of simplifications, do the coarse trajectories still have bounded errors \wrt the original trajectory? These questions are all belonging to the data aging problem while they are out the scope of the aging friendliness.
-In a word, data aging is a broad problem, while aging friendliness is a property of some algorithms in data aging, they are not equivalent. Thus, when we talk about data aging, it is does not mean we have to choose the \emph{aging friendly} algorithm (DP) to compress trajectories --- though given the same error bounds, it may bring better compression ratios in data aging; and sometimes, even we choose DP in the second round of simplification, the aging friendly property may not be promised in case that the first round uses algorithms other than DP, or the start and end points are changed due to the increasing of data size.
+(1) \underline{``If a user considers data aging is important, then he/she has no choice but to use DP"}: This argue is somehow inaccurate. Indeed, yes, data aging is important. However, users do not necessary use aging friendly algorithms (DP) in all cases. The reason is,
+\emph{data aging} is rather an important requirement derived from the management of trajectory data that cares about the broad problems related to ``obtaining a lower level of precision from a higher one" as mentioned above, while aging friendliness is just a special feature of some algorithms that satisfy or not. For example, in practical, the raw trajectory may be simplified by some algorithm other than DP and then uploaded to data server, or the data is first simplified by DP but due to the large data size and for the efficiency consideration, users do not want to re-compress these trajectories by DP. In these cases, can users use any other algorithm in the second round of simplification? How to set the parameter of error bounds in these simplifications? And after multiple times of simplifications, do the coarse trajectories still have bounded errors \wrt the original trajectory? These questions all belong to the data aging problem while they are beyond the scope of the aging friendliness.
+
+In short, data aging is a broad problem, while aging friendliness is a property of some algorithms in data aging, they are not equivalent. Thus, when we talk about data aging, it is does not mean we have to choose the \emph{aging friendly} algorithm (DP) to compress trajectories --- though given the same error bounds, it may bring better compression ratios in data aging; and sometimes, even we choose DP in the second round of simplification, the aging friendly property may not be promised in the case that the first round uses algorithms other than DP, or the start and end points are changed due to the increasing of data sizes.
 %Also notice that compression ratios is only one consideration on choosing an algorithm, say, there are also errors and efficiency that impact the selection of a line simplification algorithm.
 %That is to say, any algorithm could be used in data aging.
 
-(2) \underline{``The authors may need to provide more convincing arguments for the necessity of examining data aging"}: Majorly, we have proved two important things \wrt data aging, (a) most algorithms are not \emph{aging friendly} (Section 5.1), and (b) all algorithms are error bounded in data aging (Section 5.2), \ie let $\mathcal{A}$ be a line simplification algorithm,  $\mathcal{M}$ be a distance metric, and $\epsilon_1>0$ and $\epsilon_2>0$ be error bounds, the error between the original trajectory $\dddot{\mathcal{T}}$ and the simplified trajectory $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M})$ are not more than $\epsilon_1+ \epsilon_2$. Which means that, in data aging, \emph{one can freely re-compress trajectories by any algorithm as long as he uses the same distance metric.} The aging friendliness and the bounded errors of algorithms (Table 3) are two important findings of the work, these together provide a full picture of the data aging problem, and let user know how to choose an algorithm and set the parameter of error bound in data aging.
+(2) \underline{``The authors may need to provide more convincing arguments for the necessity of examining data aging"}: We have mainly proved two important things \wrt data aging, (a) most algorithms are not \emph{aging friendly} (Section 5.1), and (b) all algorithms are error bounded in data aging (Section 5.2), \ie let $\mathcal{A}$ be a line simplification algorithm,  $\mathcal{M}$ be a distance metric, and $\epsilon_1>0$ and $\epsilon_2>0$ be error bounds, the error between the original trajectory $\dddot{\mathcal{T}}$ and the simplified trajectory $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M})$ are not more than $\epsilon_1+ \epsilon_2$. Which means that, in data aging, \emph{one can freely re-compress trajectories by any algorithm as long as he uses the same distance metric.} The aging friendliness and the bounded errors of algorithms (Table 3) are two important findings of our study, these together provide a full picture of the data aging problem, and provide users on how to choose an algorithm and set the parameter of the error bound in data aging.
 %, and also serves as the reason of examining data aging
 
 We have clarified these in the first paragraph of Section 5, and the last paragraphs of Sections 5.1 and 5.2. Thanks for pointing out this!
 
-[Cao 2006] Cao, H., Wolfson, O., and Trajcevski, G. Spatio-temporal data reduction with deterministic error bounds. VLDBJ 15, 3 (2006), 211â€?28.
+[Cao 2006] Cao, H., Wolfson, O., and Trajcevski, G. Spatio-temporal data reduction with deterministic error bounds. VLDBJ 15, 3 (2006), 211--228.
 
 
 \textbf{[R2D7]} \emph{In this paper, only three types of distance measure PED, SED and DAD are presented and compared. The other distance measures are briefly touched in the Appendix. Question here is that method like Dots is recommended for online compression in [41] as it shows better trade-off in terms of compression ratio and error. So when recommending users with suitable compression algorithms, would the guidance be biased if the authors exclude certain existing methods?}
 
-Yes, we have included the local integral square SED (LISSED) and evaluated algorithms OptLISSED, MRPA, DOTS and OLTS using LISSED in the revised version. In particular, we have (1) briefly introduced LISSED in Section 2, after the definition of the Synchronous Euclidean Distance (SED), (2) selected DOTS as the representative of these algorithms and described it in Section 4.2.4, and (3) tested DOTS and reported our findings about DOTS and LISSED in Section 6.
+Yes, we have included the local integral square SED (LISSED). %and evaluated algorithms OptLISSED, MRPA, DOTS and OLTS using LISSED in the revised version. 
+In particular, we have (1) briefly introduced LISSED in Section 2 after the definition of the Synchronous Euclidean Distance (SED) and algorithms OptLISSED, MRPA, DOTS and OLTS using LISSED in Section 4,   (2) chosen DOTS as the representative of these algorithms and described it in Section 4.2.4, and (3) tested and reported our findings on DOTS and LISSED in Section 6.
 
 Thanks for your advice!
 
@@ -453,7 +455,7 @@ Thanks for your advice!
 
 \textbf{[R2D8]} \emph{In page 23: the authors mentioned that â€œin practice, SED has obviously better compression ratios than DAD..â€? This is confusing to me because the distance unit for SED is meter and unit for DAD is degree. How can they be compared? It seems like the effect of epsilon=100m in SED is similar to epsilon=60 degree in DAD?}
 
-As you have mentioned, SED is a Euclidean distance metric, having a value in $[0, \infty]$, and DAD is a direction metric, having a value in $[0, 360]$ degrees, hence, it is hard to compare them under absolutely fair conditions. However, we believe it is helpful to give readers an intuitive impression about the performance of DAD compared with SED. Thus, we alternatively suppose there are two practical scenarios, one uses SED with $\epsilon  \le  100$ meters, and the other uses DAD with $\epsilon \le 60$ degrees, then we compare the performance of them, \eg the performance of SED with $\epsilon=100/k$ meters vs. that of DAD with $\epsilon=60/k$ degrees ($k\ge 1$).
+As you have mentioned, SED is a Euclidean distance metric, having a value in $[0, \infty]$, and DAD is a direction metric, having a value in $[0, 360]$ degrees. Hence, it is hard to compare them under absolutely fair conditions. However, we believe it is helpful to give readers an intuitive impression on the performance of DAD compared with SED. Thus, we alternatively consider two practical scenarios: one uses SED with $\epsilon  \le  100$ meters and the other uses DAD with $\epsilon \le 60$ degrees, and then we compare the performance of them, \eg the performance of SED with $\epsilon=100/k$ meters vs. that of DAD with $\epsilon=60/k$ degrees ($k\ge 1$).
 
 
 {We have revised the last paragraph of Section 6.3.1 to clarify this. }
@@ -465,8 +467,8 @@ Comparing with the recent experimental study [41], this work has the following n
 (1) the compression ratios and average errors of optimal, batch, online and one-pass algorithms \wrt distance metrics (PED, SED and DAD), error bounds and data sizes are revealed, as summarized in Section 6.3.6,
 (2) the efficiency of algorithms \wrt distance metrics, error bounds and data sizes are also revealed, as summarized Section 6.3.6. Besides, our tests tell that the running times from the fastest to the slowest are normally Intersect, Interval, OPERB, SQUISH-E, DP, DOTS and BQS in all datasets, which is partially different from [41] that are Intersect, Interval, DP, OPERB, DOTS, SQUISH-E and BQS,
 (3) aging friendliness and errors are revealed, as reported in Section 6.3.4,
-(4) though online algorithm DOTS shows better trade-off between compression ratio and average error [41], it is not effective in terms of compression ratios,
-(5) one-pass algorithm SIPED ($\epsilon$) is efficient as well as has good compression ratios, and
+(4) though online algorithm DOTS shows better trade-off between compression ratios and average errors [41], it is not effective in terms of compression ratios,
+(5) one-pass algorithm SIPED ($\epsilon$) is efficient and has good compression ratios, and
 (6) one-pass algorithm CISED, either CISED($\epsilon$) or CISED-W, is better than batch and online algorithms (online algorithm DOTS~is recommended in [41]) in terms of compression ratios and efficiency.
 
 We have summarized these at the end of Section 6.3.6. Thanks for pointing out this!
@@ -482,17 +484,17 @@ We have summarized these at the end of Section 6.3.6. Thanks for pointing out th
 \textbf{[R3C1a]} \emph{
 Sec. 4.1. The min-\# optimal version from [4] has different complexities depending on whether the polyline is open or closed (as well as convex vs. concave). The authors have not properly brought this in context.}
 
-Yes, [4] proves the \emph{min-$\#$} problem (using PED) for a general polygonal curve can be solved in $O(n^2)$ time by using the \textit{sector intersection} mechanism, and for some special curve, either open or closed (if there is an edge joining the first and the last points, then it is closed, otherwise, it is open) polygonal curve that forms part of a convex polygon, this problem can be solved in $O(n)$ time. Note that, in general, a trajectory is not necessary a convex or closed polygonal curve, instead, it is often open and concave. Thus, the best optimal algorithm for trajectory simplification using PED still has $O(n^2)$ time.
+Yes, [4] proves the \emph{min-$\#$} problem (using PED) for a general polygonal curve can be solved in $O(n^2)$ time by using the \textit{sector intersection} mechanism, and for some special curve, either open or closed (if there is an edge joining the first and the last points, then it is closed, otherwise, it is open) polygonal curve that forms  a part of a convex polygon, this problem can be solved in $O(n)$ time. In general, a trajectory is not necessary a convex or closed polygonal curve, instead, it is often open and concave. Thus, the best optimal algorithm for trajectory simplification using PED still has $O(n^2)$ time.
 
 We have revised the second paragraph of section 3 to clarify this. Thanks for pointing out this!
 
 \textbf{[R3C1b]} \emph{Also, in multiple places, the authors are bringing the notion of the ``3D" - however, they do not mention the reference [r1] which was the first one to extend the algorithm in [4] to 3D. }
 
-\emph{[r1] Gill Barequet, Danny Z. Chen, Ovidiu Daescu, Michael T. Goodrich, and Jack Snoeyink. Efficiently approximating polygonal paths in three and higher dimensions. Algorithmica, 33(2):150â€?67, 2002.}
+\emph{[r1] Gill Barequet, Danny Z. Chen, Ovidiu Daescu, Michael T. Goodrich, and Jack Snoeyink. Efficiently approximating polygonal paths in three and higher dimensions. Algorithmica, 33(2):150--167, 2002.}
 
-Yes, we have observed that in areas of image processing, computer graphics and cartography, there is another 3D space, \ie \emph{x-y-z} 3D space, where {\em z} is height, and some works solve the \emph{min-\#} problem in the \emph{x-y-z} 3D space. Among them, authors in [r1] also extend the \textit{sector intersection} method to the \textit{off-line ball-inclusion testing} in the \emph{x-y-z} 3D space, such that they are able to develop efficient near-quadratic-time algorithms in three dimensions for solving the \emph{min-\#} and \emph{min-$\epsilon$} problems. %
+Yes, in computer graphics and cartography, there is another 3D space, \ie \emph{x-y-z} 3D space, where {\em z} is height, and some works solve the \emph{min-\#} problem in the \emph{x-y-z} 3D space. Among them, authors in [r1] also extend the \textit{sector intersection} method to the \textit{off-line ball-inclusion testing} in the \emph{x-y-z} 3D space, such that they are able to develop efficient near-quadratic-time algorithms in three dimensions for solving the \emph{min-\#} and \emph{min-$\epsilon$} problems. %
 
-We have clarified this, with respect to [r1], in the first paragraph of Section 4.3.3. Thanks!
+We have clarified this in the first paragraph of Section 4.3.3. Thanks!
 
 \textbf{[R3C2]} \emph{
 Sec. 4.2. One aspect that is context-dependent (and often implicitly ignored) in online algorithms, is the communication overhead (which, in turn, may imply energy consumption in sensor networks); along with the complementary aspect of ``freshness" of the compressed data in the respective sink. Please see [r2] below.}
@@ -509,16 +511,16 @@ Thanks!
 Sec. 4.3. Actually [13] does provide a kind of a taxonomy, and it would be nice to compare it with the present article. }
 
 Indeed, our taxonomy (batch, online and one-pass sub-optimal line simplification algorithms) is equivalent to [13] (respectively, offline, online and real-time algorithms).
-We prefer the words ``batch" and ``one-pass" in that ``batch" is a customary name in trajectory compression and ``one-pass" better catches the common feature of the applied \emph{distance checking policies} of those algorithms. Besides, a one-pass algorithm is of course real-time.
+We prefer the words ``batch" and ``one-pass" in that ``batch'' is a traditional name in trajectory compression and ``one-pass'' catches  better the common feature of the applied \emph{distance checking policies} of those algorithms.
 
 We have clarified this in the 3rd paragraph of Section 1 (algorithm taxonomy).
 Thanks for your advice!
 
 \textbf{[R3C3b]} \emph{Also, [37] has a claim/proof that if the online version uses $\varepsilon$ as an error-bound in the LDR, then the final outcome is an equivalent to a compression of $2 \cdot \varepsilon$ applied to the entire historic trajectory (if it were available). This, in a sense, is a form of a justification for the use of $\varepsilon$/2 in works like CISED ([14]).}
 
-{Yes, [37] proves that if LDR uses $\epsilon/2$ as the error-bound in position tracking, then its output trajectory has a max error not greater than $\epsilon$ to the original trajectory. Thus, it's a trajectory simplification algorithm as well as a position tracking protocol.} Besides, its idea of half $\epsilon$ is earlier than CISED and Intersect.
+{Yes, [37] proves that if LDR uses $\epsilon/2$ as the error-bound in position tracking, then its output trajectory has a max error not greater than $\epsilon$ to the original trajectory. Thus, it is a trajectory simplification algorithm as well as a position tracking protocol.} Besides, its idea of half $\epsilon$ is earlier than CISED and Intersect.
 
-We have stated this in the 3rd and 5th paragraphs of Section 4.3. Thanks!
+We have clarified this in the 3rd and 5th paragraphs of Section 4.3. Thanks!
 %Thanks for pointing out this!
 
 \textbf{[R3C4]} \emph{
@@ -535,9 +537,9 @@ Namely, [28] considers what happens with compression if the trajectories are con
 
 
 
-(1) Yes, the \emph{min-\#} problem of trajectory simplification is, given a curve (\ie an original trajectory) and an $\epsilon$, to construct an approximate curve with error within $\epsilon$ and, at the same time, having the minimum number of line segments. We have explained it in Section 1 (the second paragraph).
+(1) Yes, the \emph{min-\#} problem of trajectory simplification has now been explained in Section 1 (the second paragraph).
 
-(2) Yes, we have replaced the sentence to ``light and applicable to resource-constrained devices", in Section 1 (the second paragraph).
+(2) Yes, we have replaced the sentence to ``light and applicable to resource-constrained devices'' in Section 1 (the second paragraph).
 
 (3) Yes, we have revised these sentences to ``the \emph{min-$\epsilon$} problem: given $m$, constructs an approximate curve consisting of at most $m$ line segments with the minimum error. Algorithms like SQUISH ($\lambda$) and SQUISH-E ($\lambda$) solve this problem and are the complementary ones to those solving the \emph{min-$\#$} problem." Besides, the introduction to the \emph{min-$\epsilon$} problem is moved to the second paragraph of Section 1.
 
