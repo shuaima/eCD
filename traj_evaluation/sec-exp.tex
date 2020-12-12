@@ -190,7 +190,7 @@ The compression ratios of these algorithms under varied error bounds $\epsilon$ 
 \sstab(1)  {Datasets may have impacts on the compression ratios of \lsa algorithms. Datasets with higher sampling rates typically have better compression ratios for \ped and \sed, while it is opposite for \dad. \textcolor{blue}{When using \dad, the} dataset collected by cars (\eg~\ucar) has better compression ratios than the datasets partially collected by individuals (\eg~\geolife and \mopsi), as cars typically move more regularly than individuals \textcolor{blue}{in directions}.}
 %\myblue{otherwise, it has poorer compression ratios than \geolife and \mopsi, partially because cars have a broad range of speed and they frequently stop because of traffic light}
 
-\sstab(2) \textcolor{blue}{Compression ratios are insensitive to the sizes of trajectories.} \myblue{The reason lies in that once the distance is greater than the error bound, a line segment is produced, and the compression continues to repeat this process, which is essentially irrelevant to the sizes of trajectories. This is also the key to preserve the error bound for any of optimal, batch, online and one-pass algorithms.}
+\sstab(2) \textcolor{blue}{Compression ratios are insensitive to the sizes of trajectories.} \myblue{The reason lies in that once the distance is greater than the error bound, a line segment is produced, and the compression continues to repeat this process, which is essentially irrelevant to the sizes of trajectories. This is also the key to preserve the error bound for any of the optimal, batch, online and one-pass algorithms.}
 
 \sstab(3) The compression ratios of algorithms using \ped from the best
 to the worst are normally the optimal algorithm \opt, online algorithm \bqsa, one-pass algorithm \siped($\epsilon$), batch algorithms \tpa and \dpa and one-pass algorithm \myblue{\operb-A}, and one-pass algorithms \siped($\frac{\epsilon}{2}$) and \operb.
@@ -300,7 +300,7 @@ We then present analyses from the views of \lsa algorithms and distance metrics.
 
 
 %\todo{Batch: Bottom-up vs Top-down.}
-For batch algorithms, bottom-up algorithm (\tpa) and top-down algorithm (\dpa) have the similar compression ratios when using \ped and \sed. However, when using \dad, bottom-up methods have obviously better compression ratios than top-down methods.  As we know that top-down algorithms split a long trajectory $[P_s, ..., P_e]$ into two sub trajectories by finding out a splitting point $P_i (s<i<e)$ that has the max position deviation (or whose line segment $\vv{P_{i-1}P_{i}}$ has the max direction deviation) to line segment $\vv{P_sP_{e}}$. Though this strategy works well with \ped and \sed, a point with the max direction deviation may not be a reasonable splitting point in the direction-aware scenario. Thus it leads to a poorer compression ratio. However, bottom-up methods do not have this weakness as they always merge neighbouring points.
+For batch algorithms, bottom-up algorithm (\tpa) and top-down algorithm (\dpa) have the similar compression ratios when using \ped and \sed. However, when using \dad, bottom-up methods have obviously better compression ratios than top-down methods.  As we know that top-down algorithms split a long trajectory $[P_s, ..., P_e]$ into two sub-trajectories by finding out a splitting point $P_i (s<i<e)$ that has the max position deviation (or whose line segment $\vv{P_{i-1}P_{i}}$ has the max direction deviation) to line segment $\vv{P_sP_{e}}$. Though this strategy works well with \ped and \sed, a point with the max direction deviation may not be a reasonable splitting point in the direction-aware scenario. Thus it leads to a poorer compression ratio. However, bottom-up methods do not have this weakness as they always merge neighbouring points.
 
 
 
@@ -595,7 +595,7 @@ For example, in \mopsi, the running time of algorithms
 
 
 
-\sstab (3) When using \sed, the running time of algorithms except \dagots~from the smallest to the largest is one-pass algorithms \cised and \myblue{\cised-W}, online algorithm \squishe, and batch algorithms \tpa and \dpa, while \dagots~has varied running time. In full datasets, \dagots~runs faster than, comparable with and slower than \dpa in datasets \ucar, \geolife and \mopsi, respectively, while in small datasets, it often runs fast than \dpa.
+\sstab (3) When using \sed, the running time of algorithms except \dagots~from the smallest to the largest is one-pass algorithms \cised and \myblue{\cised-W}, online algorithm \squishe, and batch algorithms \tpa and \dpa, while \dagots~has varied running time. In full datasets, \dagots~runs faster than, comparable with and slower than \dpa in datasets \ucar, \geolife and \mopsi, respectively, while in small datasets, it often runs faster than \dpa.
 Algorithm \cised(${\epsilon}$) is $(1.17, 1.17, 0.91)$ times of \cised($\frac{\epsilon}{2}$), and algorithms \tpa, \dpa and \squishe are on average
  ($13.33$, $15.81$, $13.09$), ($12.93$, $10.64$, $8.79$) and
 ($2.75$, $2.78$, $2.57$) times slower than \cised($\frac{\epsilon}{2}$) on datasets \dSets, respectively.
@@ -669,7 +669,7 @@ We then present analyses from the views of \lsa algorithms and distance metrics.
 \stitle{Analyses of \lsa algorithms.}
 The running time from the fastest to the slowest is one-pass algorithms, online and batch algorithms, and optimal algorithms.
 
-For batch algorithms, the running time of \dpa and \tpa decreases or increases with the increase of error bound $\epsilon$, respectively, due to the top-down and bottom-up approaches that they apply. When using \ped or \sed, top-down algorithm usually runs faster than bottom-up algorithm when the error bound $\epsilon$~is large (\eg in \geolife, $\epsilon >10$ metres when using \ped and $\epsilon >30$ metres when using \sed), which means that top-down (bottom-up) algorithm needs to split (merge) the original trajectory fewer (more) times in these cases, vice versa. When using \dad,  top-down algorithms are normally a bit slower than bottom-up algorithms (recall that top-down algorithms have poorer compression ratios compared with bottom-up algorithms, which means that it needs more time to split the raw trajectory into more sub trajectories).
+For batch algorithms, the running time of \dpa and \tpa decreases or increases with the increase of error bound $\epsilon$, respectively, due to the top-down and bottom-up approaches that they apply. When using \ped or \sed, top-down algorithm usually runs faster than bottom-up algorithm when the error bound $\epsilon$~is large (\eg in \geolife, $\epsilon >10$ metres when using \ped and $\epsilon >30$ metres when using \sed), which means that top-down (bottom-up) algorithm needs to split (merge) the original trajectory fewer (more) times in these cases, vice versa. When using \dad,  top-down algorithms are normally a bit slower than bottom-up algorithms (recall that top-down algorithms have poorer compression ratios compared with bottom-up algorithms, which means that it needs more time to split the raw trajectory into more sub-trajectories).
 In addition to error bounds, sampling rates also have impacts on the efficiency of batch algorithms. A dataset with high sampling rate likely needs more merging processes than splitting processes, thus, top-down algorithms run faster than bottom-up algorithms in high sampling datasets when using \ped or \sed.
 
 For online algorithms, \squishe is faster than \bqsa and \opwa at a cost of poorer compression ratios, and it is still a few times slower than one-pass algorithms. \bqsa and \opwa both have poor efficiency as they finally need batch approaches to simplify buffered data, and batch approaches running in a buffer are still time consuming. \textcolor{blue}{\dagots~runs very slow on the full datasets, partially because its frequent copying of memory wastes a lot of time and becomes its bottleneck of efficiency.}
@@ -827,7 +827,7 @@ Note that the causes of this phenomenon are varied. For algorithm \dpa using \pe
 
 
 
-\stitle{Analyses of \lsa algorithms.} \dpa is the only algorithm that is aging friendly \wrt ~\ped and \sed, \myblue{and all algorithms have bounded errors}. Indeed, {aging friendly} is a result of the {specific nature} of algorithm \dpa, \ie batch and top-down, that always splits a trajectory into two sub trajectories by the same splitting point when it uses any \ped or \sed larger than the error bound.
+\stitle{Analyses of \lsa algorithms.} \dpa is the only algorithm that is aging friendly \wrt ~\ped and \sed, \myblue{and all algorithms have bounded errors}. Indeed, {aging friendliness} is a result of the {specific nature} of algorithm \dpa, \ie batch and top-down, that always splits a trajectory into two sub-trajectories by the same splitting point when it uses any \ped or \sed larger than the error bound.
 
 \stitle{Analyses of \lsa distance metrics.} \dad is not aging friendly \wrt to any algorithm. It is different with \ped and \sed in that, the \dad of a point is closely related to its neighbor point while \ped and \sed are not, thus, once its neighbor point is removed, its \dad is also changed. This character makes it not aging friendly \wrt the \dpa algorithm.
 
@@ -1059,7 +1059,7 @@ As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{wh
 
 \ni \textcolor{blue}{(2) The average error of \emph{when\_at} queries normally increases with the increment of error bounds. This is obvious as the increment of error bounds enlarges the average length of the time interval between two neighboring points in a simplified trajectory, which leads to the increase of the average error of \emph{when\_at} queries. Similarly, the algorithms having better compression ratios typically have larger errors for \emph{when\_at} queries.}
 	
-\ni \textcolor{blue}{(3) \sed algorithms have smaller average \emph{when\_at} query errors than \ped algorithms, majorly because \sed introduces smaller distance errors and has relatively worse compression ratios compared with \ped. \dad algorithms also have smaller average \emph{when\_at} query errors than \ped algorithms, partially because of its relatively worse  compression ratios compared with \ped. }
+\ni \textcolor{blue}{(3) \sed algorithms have smaller average \emph{when\_at} query errors than \ped algorithms, majorly because \sed introduces smaller distance errors and has relatively worse compression ratios compared with \ped. \dad algorithms also have smaller average \emph{when\_at} query errors than \ped algorithms, partially because of their relatively worse  compression ratios compared with \ped. }
 	
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1080,7 +1080,7 @@ The running time of batch algorithms \dpa and \tpa decreases and increases with 
 Top-down algorithms also run faster than bottom-up algorithms in high sampling datasets when using \ped or \sed.
 %
 \emph{(3)} Online algorithms \opwa and \bqsa usually have better compression ratios than batch algorithms, the worst average errors, and poorer efficiency than batch algorithms. Algorithm \squishe is on the other side of \opwa and \bqsa,
-\myblue{and algorithm \dagots~has poor compression ratios, the best average errors and varied efficiency. In our tests (in Java), when \dagots~is processing a long trajectory, the frequently copying of memory makes it even slower than batch algorithms.}
+\myblue{and algorithm \dagots~has poor compression ratios, the best average errors and varied efficiency. In our tests (in Java), when \dagots~is processing a long trajectory, the frequent copying of memory makes it even slower than batch algorithms.}
 %
 \emph{(4)} One-pass algorithms \operb, \siped, \cised, \intersec and \interval have good compression ratios (comparable with the best sub-optimal algorithms), poor average errors and the best efficiency.
 %

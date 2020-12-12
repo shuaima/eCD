@@ -17,7 +17,7 @@ With the increasing popularity of GPS sensors on various mobile devices, such as
 %Fortunately, these issues can be resolved or greatly alleviated by the trajectory compression techniques \cite{Douglas:Peucker, Hershberger:Speeding, Meratnia:Spatiotemporal, Liu:BQS, Muckell:Compression, Chen:Trajectory, Chen:Fast, Keogh:online, Cao:Spatio, Shi:Survey, Richter:Semantic ,Long:Direction, Song:PRESS, Nibali:Trajic}.
 
 
-Due to the  limitations (poor compression ratios and data reconstruction overheads) of lossless compression, lossy compression techniques have become the mainstream of trajectory compression \cite{Lin:Operb,Zhang:Evaluation}. Quite a few lossy trajectory compression techniques, most notably the piece-wise line simplification \cite{Keogh:online,Liu:BQS, Muckell:Compression, Chen:Trajectory, Chen:Fast, Cao:Spatio,Shi:Survey,Cao:Dots,Chen:Compression,Ghica:DTracking,Ke:Interval,Lange:Tracking,Lin:Cised,Lin:Operb,Liu:Amnesic,Long:Direction,Meratnia:Spatiotemporal,Muckell:SQUISH,Trajcevski:DDR} have been developed.
+Due to the  limitations (poor compression ratios and data reconstruction overheads) of lossless compression, lossy compression techniques have become the mainstream of trajectory compression \cite{Lin:Operb,Zhang:Evaluation}. Quite a few lossy trajectory compression techniques, most notably the piece-wise line simplification \cite{Keogh:online,Liu:BQS, Muckell:Compression, Chen:Trajectory, Chen:Fast, Cao:Spatio,Shi:Survey,Cao:Dots,Chen:Compression,Ghica:DTracking,Ke:Interval,Lange:Tracking,Lin:Cised,Lin:Operb,Liu:Amnesic,Long:Direction,Meratnia:Spatiotemporal,Muckell:SQUISH,Trajcevski:DDR},  have been developed.
 %,
 %\textcolor{blue}{The idea of piece-wise line simplification (\lsa) comes from computational geometry, whose target is to solve the \emph{min-$\#$} problem \cite{Chan:Optimal, Imai:Optimal,Pavlidis:Segment}, \ie given a curve and an $\epsilon$, construct an approximate curve with error within $\epsilon$ and having the minimum number of line segments. }
 %
@@ -26,7 +26,7 @@ The idea of piece-wise line simplification (\lsa) comes from graphic and computa
 % that compress a trajectory of size $n$ into a trajectory at most $n/\lambda$ points
 %These methods lack the capability of compressing trajectories while ensuring that errors are within a user-specified bound \cite{Muckell:Compression}.
 %
-Line simplification has wide usage due to its beneficial features: (a) simple and easy to implement, \textcolor{blue}{(b) light and applicable to resource-constrained devices}, and (c) bounded errors (algorithms for the \emph{min-$\#$} problem) with good compression ratios.
+Line simplification has a wide usage due to its beneficial features: (a) simple and easy to implement, \textcolor{blue}{(b) light and applicable to resource-constrained devices}, and (c) bounded errors (algorithms for the \emph{min-$\#$} problem) with good compression ratios.
 %
 \textcolor{blue}{It is a great advantage that \lsa is suitable to run on resource-constrained end devices, such that the trajectories could be simplified at the early time, to save not only the storage of data servers, but also the network bandwidth between the end devices and the data servers. \lsa could also be combined with other techniques, such as dilution-matching-encoding \cite{Gotsman:Compaction} that maps the simplified trajectories to road networks, and discovers the high frequency patterns of compressed trajectories instead of roads to further improve the effectiveness of trajectory compression.}
 %
@@ -69,7 +69,7 @@ Hence, \textit{compression sub-optimal} algorithms have been developed and/or in
 \stitle{Distance metrics}.
 Trajectory simplification algorithms are closely coupled with distance metrics,
 and different techniques are typically needed for different distance metrics. We consider three
-widely adopted metrics: \emph{perpendicular Euclidean distances} (\ped), \emph{synchronous Euclidean distances} (\sed) and \emph{direction-aware distances}.
+widely adopted metrics: \emph{perpendicular Euclidean distances} (\ped), \emph{synchronous Euclidean distances} (\sed) and \emph{direction-aware distances} (\dad).
 
 
 
@@ -201,7 +201,7 @@ It is important for applications such as trajectory clustering and direction-bas
 They are commonly used for quality evaluations, \eg \cite{Muckell:Compression, Liu:BQS, Lin:Cised, Long:Direction, Zhang:Evaluation}.}%, and it is worth pointing out that some works \cite{Zhang:Evaluation,Cao:Dots} also test the compression ratios under average errors, so as to advise the performance trade-off between them.}
 	
 	
-\textcolor{blue}{The second level comes from applications, \eg a ``where\_at'' query \cite{Cao:Spatio,Trajcevski:Uncertainty} concerns the errors of its answer, and a trajectory clustering method concerns the similarity between the clusters of the original and simplified trajectories. Indeed, each application may have its own points of view for evaluations.}	
+\textcolor{blue}{The second level comes from applications, \eg a ``where\_at'' query \cite{Cao:Spatio,Trajcevski:Uncertainty} concerns the errors of its answer, and a trajectory clustering method concerns the similarity between the clusters of the original and simplified trajectories. Indeed, each application may have its own point of view for evaluations.}	
 %
 \textcolor{blue}{Here we choose \emph{spatio-temporal queries} \cite{Cao:Spatio,Trajcevski:Uncertainty} as the representatives of trajectory applications because they are commonly used in the management of trajectories.}
 %
@@ -242,7 +242,7 @@ Note that online and one-pass algorithms are typically designed for a specific d
 %online algorithms \bqsa and \squishe,  and
 %one-pass algorithms \operb, \siped, \cised and \interval.
 
-\stab (2) {We study the data aging problem of \lsa algorithms and distance metrics from the views of \emph{aging friendliness}, and prove that (a) only algorithms running in both batch and top-down manners and using \ped and/or \sed are \emph{aging friendly}, having an error bound of $\max{\{\epsilon_1, \epsilon_2\}}$ \wrt the original trajectory, \textcolor{blue}{where $\epsilon_1$ and $\epsilon_2$ are the error bounds set in the first and second times of simplification, respectively}, and (b) other algorithms have an error bound of ${\epsilon_1+\epsilon_2}$ for data aging. These together provide a full picture of the data aging problem.}
+\stab (2) {We study the data aging problem of \lsa algorithms and distance metrics from the view of \emph{aging friendliness}, and prove that (a) only algorithms running in both batch and top-down manners and using \ped and/or \sed are \emph{aging friendly}, having an error bound of $\max{\{\epsilon_1, \epsilon_2\}}$ \wrt the original trajectory, \textcolor{blue}{where $\epsilon_1$ and $\epsilon_2$ are the error bounds set in the first and second times of simplification, respectively}, and (b) other algorithms have an error bound of ${\epsilon_1+\epsilon_2}$ for data aging. These together provide a full picture of the data aging problem.}
 
 \stab (3) Using real-life trajectory datasets, we systematically evaluate and analyze the performance (compression ratio, average error, running time, {aging friendliness and query friendliness}) of error bounded line simplification algorithms with respect to {distance metrics,} trajectory sizes and error bounds.
 Our study reveals the characteristics of these algorithms, which lead to guidelines for practitioners to choose appropriate algorithms and distance metrics for specific applications.
