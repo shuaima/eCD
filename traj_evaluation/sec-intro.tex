@@ -28,7 +28,7 @@ The idea of piece-wise line simplification (\lsa) comes from graphic and computa
 %
 Line simplification has a wide usage due to its beneficial features: (a) simple and easy to implement, \textcolor{blue}{(b) light and applicable to resource-constrained devices}, and (c) bounded errors (algorithms for the \emph{min-$\#$} problem) with good compression ratios.
 %
-\textcolor{blue}{It is a great advantage that \lsa is suitable to run on resource-constrained end devices, such that the trajectories could be simplified at the early time, to save not only the storage of data servers, but also the network bandwidth between the end devices and the data servers. \lsa could also be combined with other techniques, such as dilution-matching-encoding \cite{Gotsman:Compaction} that maps the simplified trajectories to road networks, and discovers the high frequency patterns of compressed trajectories instead of roads to further improve the effectiveness of trajectory compression.}
+\textcolor{blue}{It is a great advantage that \lsa is suitable to run on resource-constrained end devices, such that the trajectories could be simplified at the early time, to save not only the storage of data servers, but also the network bandwidth between the end devices and the data servers. \lsa could also be combined with other techniques, such as dilution-matching-encoding \cite{Gotsman:Compaction} that maps the simplified trajectories to road networks, and discovers the high frequency patterns of compressed trajectories to further improve the effectiveness of trajectory compression.}
 %
 \textcolor{blue}{In this article, we focus on the error bounded \lsa algorithms that solve the \emph{min-$\#$} problem and require no extra knowledge, together with a brief discussion of semantic based  compression methods.  Please also refer to \cite{Muckell:SQUISH,Muckell:Compression,Zhang:Evaluation} for the algorithms that solve the \emph{min-$\epsilon$} problem, which are essentially not error bounded.}
 %
@@ -94,7 +94,7 @@ widely adopted metrics: \emph{perpendicular Euclidean distances} (\ped), \emph{s
 
 %The distance is originally measured by the \emph{perpendicular Euclidean distances} (\ped), and is constantly enriching over time because of the increasing needs of trajectory applications.
 
-Originally, \lsa algorithms adopt \ped, {the shortest Euclidean distance from a point to a line segment, as the distance metric, \textcolor{blue}{and ensure that the maximal distance from the output trajectory to the input trajectory is bounded by a \ped error bound. In this way, a trajectory is basically treated as a sequence of spatial data points. As a result,} \emph{\lsa algorithms using \ped bring good compression ratios~\cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey} at a cost of losing temporal information of trajectories}.} \textcolor{blue}{Hence, \ped is \emph{not spatio-temporal query friendly}, \ie a spatio-temporal query like \emph{where\_at}~\cite{Cao:Spatio} on such a simplified trajectory may return a point with a distance great larger than the \ped error bound adopted in the simplification algorithms. }
+Originally, \lsa algorithms adopt \ped, {the shortest Euclidean distance from a point to a line segment, as the distance metric, \textcolor{blue}{and ensure that the maximal distance from the output trajectory to the input trajectory is bounded by a \ped error bound. Here a trajectory is basically treated as a sequence of spatial data points. } \emph{\lsa algorithms using \ped bring good compression ratios~\cite{Douglas:Peucker, Hershberger:Speeding, Liu:BQS, Muckell:Compression, Chen:Trajectory, Cao:Spatio, Shi:Survey} at a cost of losing temporal information of trajectories}.} \textcolor{blue}{Hence, \ped is \emph{not spatio-temporal query friendly}, \ie a spatio-temporal query like \emph{where\_at}~\cite{Cao:Spatio} on such a simplified trajectory may return a point with a distance great larger than the \ped error bound adopted in the simplification algorithm. }
 \myblue{However, \ped remains useful, \eg trajectory simplification using \ped can serve as a pre-processing step of trajectory clustering that is the base of applications like traffic pattern recognition and urban planning \cite{Mazimpaka:Mining, Zhao:Clustering}, where  the shapes of trajectories rather than the detailed positions of individuals are concerned.}
 
 { \sed is then introduced to preserve the temporal information \cite{Meratnia:Spatiotemporal,Cao:Spatio}.
@@ -108,7 +108,7 @@ The \sed of a point to a line segment is the Euclidean distance between the poin
 
 \dad is introduced to preserve the direction information of moving objects~\cite{Long:Direction, Zhang:Evaluation}, and is initially called the \emph{direction-based measurement} in \cite{Long:Direction}.
 It is important for applications such as trajectory clustering and direction-based query processing \cite{Long:Direction,Long:Mining}.
-\textcolor{blue}{Different from \ped and \sed, \dad is the direction deviation of a moving object, measured by angulars rather than Euclidean distances.}
+\textcolor{blue}{Different from \ped and \sed, \dad is the direction deviation of a moving object, measured by angles rather than Euclidean distances.}
 \textcolor{blue}{However, the temporal information is not preserved for \dad. Hence, it is not friendly for spatio-temporal queries as well.}
 
 
@@ -194,7 +194,7 @@ It is important for applications such as trajectory clustering and direction-bas
 % .
 
 \stitle{\textcolor{blue}{Quality criteria}}.
-\textcolor{blue}{Quality criteria are needed to evaluate \lsa algorithms, which roughly come from two levels. The first level comes from \lsa itself, including compression ratios, efficiency and simplification errors:
+\textcolor{blue}{Quality criteria are needed to evaluate \lsa algorithms from two levels. The first level comes from \lsa itself, including compression ratios, efficiency and simplification errors:
 	(1) \emph{compression ratios} are the ratios of the data sizes of the simplified trajectories to the original trajectories,
 	(2) \emph{efficiency} is the time taken by \lsa algorithms to compress trajectories, and
 	(3) \emph{simplification errors} are the \emph{maximal} and \emph{average} distances between the simplified trajectories and the original trajectories.
@@ -205,7 +205,7 @@ They are commonly used for quality evaluations, \eg \cite{Muckell:Compression, L
 %
 \textcolor{blue}{Here we choose \emph{spatio-temporal queries} \cite{Cao:Spatio,Trajcevski:Uncertainty} as the representatives of trajectory applications because they are commonly used in the management of trajectories.}
 %
-\textcolor{blue}{We use \emph{query} errors to evaluate the qualities, such that query errors are the temporal differences (\eg ``when\_at'') or spatial distances (\eg ``where\_at'') of the answers  between the original and simplified trajectories.}
+\textcolor{blue}{We use \emph{query} errors to evaluate the qualities, which are the temporal differences (\eg ``when\_at'') or spatial distances (\eg ``where\_at'') of the answers  between the original and simplified trajectories.}
 
 
 

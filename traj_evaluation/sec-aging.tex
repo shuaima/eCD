@@ -3,7 +3,7 @@
 \label{sec-aging}
 
 Suppose that we have compressed a trajectory $\dddot{\mathcal{T}_0}$ to $\overline{\mathcal{T}}_1$ using any \lsa algorithm $\mathcal{A}$ with an error bound $\epsilon_1$. As time evolves, we may need to further compress $\overline{\mathcal{T}}_1$ to an even coarser trajectory $\overline{\mathcal{T}}_2$.
-What is the relationship among $\overline{\mathcal{T}}_2$, $\overline{\mathcal{T}}_1$ and $\dddot{\mathcal{T}_0}$? And what is the right way to get the coarser trajectory $\overline{\mathcal{T}}_2$?
+What are the relationships among $\overline{\mathcal{T}}_2$, $\overline{\mathcal{T}}_1$ and $\dddot{\mathcal{T}_0}$? And what is the right way to get the coarser trajectory $\overline{\mathcal{T}}_2$?
 \myblue{What line simplification algorithms should we use in the first and second rounds of simplifications? If the first round of simplification uses algorithm $\mathcal{A}_1$, can we use algorithm $\mathcal{A}_2$ in the second round? How to set the parameter of error bounds in these simplifications? And after multiple rounds of simplifications, does the coarse trajectory still have bounded errors \wrt the original trajectory?}
 %
 This section is to answer these questions from the views of friendliness \cite{Cao:Spatio} (Section \ref{sec-aging-friend}) and errors (Section \ref{sec-aging-safe}).
@@ -195,7 +195,7 @@ This section focuses on these problems and discusses the error between the simpl
 
 \begin{proposition}
 	\label{theo-aging-error-dp}
-	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, for distance metric $\mathcal{M}$ of \ped and \sed, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M})$ is $max(\epsilon_1, \epsilon_2)$.
+	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, for distance metric $\mathcal{M}$ of \ped and \sed, the error bound between the original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=DP(DP(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M})$ is $max(\epsilon_1, \epsilon_2)$.
 \end{proposition}
 
 \begin{proof} We consider two cases: $\epsilon_2 \ge \epsilon_1$ and $\epsilon_2 < \epsilon_1$.
@@ -224,7 +224,7 @@ Combining (1) with (2), we have the conclusion.
 
 \begin{proposition}
 	\label{theo-aging-distance}
-	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, for any \lsa algorithm $\mathcal{A}$ and distance metric $\mathcal{M}$ of \ped, \sed and \dad other than \dpa using \ped and \sed, the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M})$ is $\epsilon_1+ \epsilon_2$.
+	Given error bounds $\epsilon_1>0$ and $\epsilon_2>0$, for any \lsa algorithm $\mathcal{A}$ and distance metric $\mathcal{M}$ of \ped, \sed and \dad other than \dpa using \ped and \sed, the error bound between the original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M})$ is $\epsilon_1+ \epsilon_2$.
 \end{proposition}
 
 \begin{proof} 	We shall prove this by showing that the error bound is neither more than $\epsilon_1+ \epsilon_2$  nor less than $\epsilon_1+ \epsilon_2$,
@@ -236,7 +236,7 @@ from which we have that the error bound is exactly $\epsilon_1+ \epsilon_2$.
 	If it is \dad, then obviously the error between $\overline{P_kP_{k+1}}$ and $\overline{P_sP_t}$ is not more than $\epsilon_1+ \epsilon_2$.
 	
 	(2) We then prove that the  error bound is not less than $\epsilon_1+ \epsilon_2$.
-	If $\mathcal{A}$ is a top-down algorithm using \dad, then from Figure~\ref{fig:aging-dp-dad}-(2) we can find that the error from $\overline{P_3P_4}$ to $\overline{P_0P_4}$ is $\angle{P_3P_4P_0} = \angle{P_3P_4P_2} + \angle{P_2P_4P_0}$, whose bound is not less than $\epsilon_1 + \epsilon_2$, thus the error bound between original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M})$ is not less than $\epsilon_1+ \epsilon_2$.
+	If $\mathcal{A}$ is a top-down algorithm using \dad, then from Figure~\ref{fig:aging-dp-dad}-(2) we can find that the error from $\overline{P_3P_4}$ to $\overline{P_0P_4}$ is $\angle{P_3P_4P_0} = \angle{P_3P_4P_2} + \angle{P_2P_4P_0}$, whose bound is not less than $\epsilon_1 + \epsilon_2$, thus the error bound between the original trajectory $\dddot{\mathcal{T}}$ and simplified trajectory $\overline{\mathcal{T}}=\mathcal{A}(\mathcal{A}(\dddot{\mathcal{T}}, \epsilon_1, \mathcal{M}), \epsilon_2, \mathcal{M})$ is not less than $\epsilon_1+ \epsilon_2$.
 	If $\mathcal{A}$ is a bottom-up or incremental algorithm, either online or one-pass, then from Figure~\ref{fig:aging-pavlidis}-(2) or Figure~\ref{fig:aging-incre} we also have the conclusion.
 	
 	

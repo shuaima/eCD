@@ -16,7 +16,7 @@ There is also algorithm \siped (\emph{sector intersection}) that converts \ped d
 These algorithms are dedicatedly designed  for \ped. {\em Algorithms \operb and \siped have good compression ratios, and, hence, we choose them as the representatives of  one-pass algorithms using \ped}.
 
 
-Algorithm Linear Dead Reckoning (\ldr) for position tracking \cite{Trajcevski:DDR} follows the similar routine as \rwa except that it uses and assumes a velocity ${\vv{v}}$ for each section. \textcolor{blue}{\cite{Trajcevski:DDR} proves that if \ldr uses $\epsilon/2$ as the threshold in position tracking, then its output trajectory has a max error not greater than $\epsilon$ to the original trajectory. Thus, it can be treated as a trajectory simplification algorithm as well.}
+Algorithm Linear Dead Reckoning (\ldr) for position tracking \cite{Trajcevski:DDR} follows the similar routine as \rwa except that it uses \sed and assumes a velocity ${\vv{v}}$ for each section. \textcolor{blue}{\cite{Trajcevski:DDR} proves that if \ldr uses $\epsilon/2$ as the threshold in position tracking, then its output trajectory has a max error not greater than $\epsilon$ to the original trajectory. Thus, it can be treated as a trajectory simplification algorithm as well.}
 It has poor compression ratios because both the value and the direction of velocity ${\vv{v}}$ are pre-defined and fixed between two updates, \myblue{and it indeed uses a half $\epsilon$}.
 Recently algorithm \cised~\cite{Lin:Cised} extends the \textit{sector intersection} method \siped from a 2D space to a spatio-temporal 3D space.
 These one-pass algorithms are dedicatedly designed for \sed. {\em As algorithm \cised has a compression ratio close to algorithm \dpa using \sed, we choose it as the representative of one-pass algorithms using \sed}.
@@ -136,7 +136,7 @@ Optimizations are developed to achieve better compression ratios.
 
 
 \subsubsection{Algorithm \siped Using \ped \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve}}
-It develops a concept of ``Sector'' \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve}, which converts the distance tolerance into an angle change tolerance for checking  points.
+It develops a concept of ``Sector'' \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve}, which converts the distance tolerance into the angle change tolerance for checking  points.
 
 Given a sequence of points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$,
 for the start data point $P_s$, any point $P_{s+i}$ and $|\vv{P_sP_{s+i}}|>\epsilon$ ($i\in[1, k]$), there are two directed lines $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ such that $ped(P_{s+i}, \vv{P_sP^u_{s+i}})$ $=$ $ped(P_{s+i}, \vv{P_sP^l_{s+i}}) = \epsilon$ and either ($\vv{P_sP^l_{s+i}}.\theta < \vv{P_sP^u_{s+i}}.\theta ~and~\vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta <\pi$) or ($\vv{P_sP^l_{s+i}}.\theta > \vv{P_sP^u_{s+i}}.\theta ~and~ \vv{P_sP^u_{s+i}}.\theta - \vv{P_sP^l_{s+i}}.\theta < -\pi)$. Indeed, they form a \emph{sector} \sector{(P_s, P_{s+i}, \epsilon)} that takes $P_s$ as the center point and $\vv{P_sP^u_{s+i}}$ and $\vv{P_sP^l_{s+i}}$ as the borderlines.
@@ -153,7 +153,7 @@ In practice, it is a good choice to set the point $Q$ as the point among all poi
 
 
 The original \siped uses a half sector, $\frac{\epsilon}{2}$-\sector, which may limit its compression performance. However, it can further be extended to a full ${\epsilon}$-\sector ~ by adding a constraint. That is, for any point $P_{s+j}$ ($j \in [1, ... i]$), its \ped to
-line segment $\overline{P_sP_{s+i}}$ is not greater than the error bound $\epsilon$ if $ P_{s+i} \ne {P_s}$ and $P_{s+i}\in \bigsqcap_{j=1}^{i-1}$\sector{(P_s, P_{s+j}, \epsilon)}, \ie $P_{s+i}$ lives in the common intersection of preview full \emph{sectors}.
+line segment $\overline{P_sP_{s+i}}$ is not greater than the error bound $\epsilon$ if $ P_{s+i} \ne {P_s}$ and $P_{s+i}\in \bigsqcap_{j=1}^{i-1}$\sector{(P_s, P_{s+j}, \epsilon)}, \ie $P_{s+i}$ lives in the common intersection of the preview full \emph{sectors}.
 
 
 
@@ -192,7 +192,7 @@ Like \textit{sector intersection} methods, point $Q$ may also not belong to $\{P
 If point $Q$ must be $P_{s+i}$ ($1\le i\le k$), then for any point $P_{s+j}$ ($j \in [1, ... i]$), its \sed to line segment $\overline{P_sP_{s+i}}$ is not greater than the error bound $\epsilon$ if
 $\bigsqcap_{j=1}^{i}$\cone{(P_s, P_{s+j}, \epsilon/2)} $\ne \{P_s\}$ as pointed out in \cite{Lin:Cised}.
 \textcolor{blue}{This algorithm, named \cised($\frac{\epsilon}{2}$) that uses a half-$\epsilon$ cone, belongs to strong simplification.}
-\textcolor{blue}{Moreover, \cised($\frac{\epsilon}{2}$) can also be extended to \cised(${\epsilon}$), another strong version that uses a full-${\epsilon}$ cone,} by adding a constraint that $P_{s+i}$ lives in the common intersection of preview full \emph{cones}.
+\textcolor{blue}{Moreover, \cised($\frac{\epsilon}{2}$) can also be extended to \cised(${\epsilon}$), another strong version that uses a full-${\epsilon}$ cone,} by adding a constraint that $P_{s+i}$ lives in the common intersection of the preview full \emph{cones}.
 
 In addition, because these spatio-temporal cones have the same apex $P_s$, the checking of their intersection can be computed by a much simpler way, \ie the checking of the intersection of cone projection circles on a plane, and a circle is further approximated with its $m$-edge inscribed regular polygon, whose intersection can be computed more efficiently. %
 
@@ -256,16 +256,16 @@ Given a direction line segment $\mathcal{L}$ and an angle $\epsilon$, the \emph{
 The {common intersection} of \emph{direction ranges} of directed line segments $\{\vv{P_sP_{s+1}}, \vv{P_{s+1}P_{s+2}}, ..., \vv{P_{s+k-1}P_{s+k}}\}$ \wrt $\epsilon$ is $\bigsqcap_{i=1}^{k}Range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon)$.
 %denoted by $ComSub(\{\vv{P_sP_{s+1}}, \vv{P_{s+1}P_{s+2}}, ..., \vv{P_{s+k-1}P_{s+k}}\}, \epsilon)$,
 
-Algorithm \intersec\cite{Long:Direction} uses a half range, and shows that if the {common intersection} $\bigsqcap_{i=1}^{k}range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon/2)$ is not empty, then the angular between $\vv{P_{s+i-1}P_{s+i}}$ and $\vv{P_sP_{s+k}}$ for all $i\in [1, k]$ is not larger than $\epsilon$.
+Algorithm \intersec\cite{Long:Direction} uses a half range, and shows that if the {common intersection} $\bigsqcap_{i=1}^{k}range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon/2)$ is not empty, then the angle between $\vv{P_{s+i-1}P_{s+i}}$ and $\vv{P_sP_{s+k}}$ for all $i\in [1, k]$ is not larger than $\epsilon$.
 %
-Recently, algorithm \interval \cite{Ke:Interval} extends \intersec from half to full ranges, by showing that if the {common intersection} $\bigsqcap_{i=1}^{k}range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon)$ is not empty and $\vv{P_sP_{s+k}}.\theta$ falls in the {common intersection}, then the angular between $\vv{P_{s+i-1}P_{s+i}}$ and $\vv{P_sP_{s+k}}$ for all $i\in [1, k]$ is not larger than $\epsilon$.
+Recently, algorithm \interval \cite{Ke:Interval} extends \intersec from half to full ranges, by showing that if the {common intersection} $\bigsqcap_{i=1}^{k}range(\vv{P_{s+i-1} P_{s+i}}.\theta, \epsilon)$ is not empty and $\vv{P_sP_{s+k}}.\theta$ falls in the {common intersection}, then the angle between $\vv{P_{s+i-1}P_{s+i}}$ and $\vv{P_sP_{s+k}}$ for all $i\in [1, k]$ is not larger than $\epsilon$.
 
 
 \begin{example}
 	\label{exm-alg-interval}
 	Figure~\ref{fig:interval} is a running example of the \emph{interval} method taking as input the same trajectory $\dddot{\mathcal{T}}[P_0, \ldots, P_{10}]$. At the beginning, $P_0$ is the first start point, and points $P_1$, $P_2$, $P_3$, etc., each has a \emph{direction range} $Range(\vv{P_0P_1}, \epsilon)$, $Range(\vv{P_1P_2}, \epsilon)$, $Range(\vv{P_2P_3}, \epsilon)$, etc., respectively.
 	%
-	Because $\bigsqcap_{i=1}^{4}Range(\vv{P_{0+i-1}P_{0+i}}, \epsilon) \ne \phi$ and $\vv{P_0P_{4}}.\theta$ falls in the \emph{common subinterval}, and $\bigsqcap_{i=1}^{5}Range(\vv{P_{0+i-1}P_{0+i}}, \epsilon) = \phi$, $\vv{P_0P_4}$ is output and $P_4$ becomes the start point of the next section.
+	Because $\bigsqcap_{i=1}^{4}Range(\vv{P_{0+i-1}P_{0+i}}, \epsilon) \ne \phi$ and $\vv{P_0P_{4}}.\theta$ falls in the \emph{common sub-interval}, and $\bigsqcap_{i=1}^{5}Range(\vv{P_{0+i-1}P_{0+i}}, \epsilon) = \phi$, $\vv{P_0P_4}$ is output and $P_4$ becomes the start point of the next section.
 	At last, the algorithm outputs two continuous line segments $\vv{P_0P_4}$ and $\vv{P_4P_{10}}$.
 \end{example}
 

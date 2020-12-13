@@ -4,7 +4,7 @@
 \label{sec-exp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 In this section, we present extensive and systematic experimental studies and analyses of twelve representative \lsa algorithms.
-Using three real-life datasets, we conduct five sets of tests to evaluate the effectiveness in terms of compression ratios and errors, efficiency (running time), data aging and query friendliness of these representative algorithms using distance metrics \ped, \sed and \dad, and the impacts of error bounds $\epsilon$ and trajectory sizes.
+Using three real-life datasets, we conduct five sets of tests to evaluate the effectiveness in terms of compression ratios and errors, efficiency (running time), aging friendliness and query friendliness of these representative algorithms using distance metrics \ped, \sed and \dad, and the impacts of error bounds $\epsilon$ and trajectory sizes.
 %
 %(1) the effectiveness of these algorithms, and
 %(2) the efficiency of them.
@@ -15,13 +15,13 @@ Using three real-life datasets, we conduct five sets of tests to evaluate the ef
 %We first introduce the settings of our experimental study.
 
 \stitle{Real-life Trajectory Datasets}.
-We use three real-life datasets shown in \mytable{tab:datasets}, namely, Service car trajectory data (\ucar), Geolife trajectory data (\geolife)~\cite{Web:Geolife} and \mopsi trajectory data (\mopsi)~\cite{Web:Mopsi}, to evaluate those \lsa algorithms.
+We use three real-life datasets shown in \mytable{tab:datasets}, namely, Service car trajectory data (\ucar)~\cite{Lin:Cised}, Geolife trajectory data (\geolife)~\cite{Web:Geolife} and \mopsi trajectory data (\mopsi)~\cite{Web:Mopsi}, to evaluate those \lsa algorithms.
 These data sets come from different sources, where \ucar is collected by cars in urban, and \geolife and \mopsi are a mixing of cars and individuals. They also have typical sampling rates used in practice, ranging from one point per second to one point per five seconds.
 \textcolor{blue}{The time interval between two neighbouring data points is occasionally very long, \eg greater than $10^7$ seconds.}
 The data source and sampling rate also affect the performance of \lsa algorithms using certain distance metrics.
 
 %\vspace{0.5ex}
-\ni {(1) \ucar is the GPS trajectories collected by a Chinese car rental company during Apr. 2015 to Nov. 2015. Most routes are located in big cities. The sampling rate is one point per $3$--$5$ seconds, and each trajectory has around $114.1K$ points.}
+\ni {(1) \ucar (also called ServiceCar in \cite{Lin:Cised}) is the GPS trajectories collected by a Chinese car rental company during Apr. 2015 to Nov. 2015. Most routes are located in big cities. The sampling rate is one point per $3$--$5$ seconds, and each trajectory has around $114.1K$ points.}
 %.We randomly chose $1,000$ cars from them
 
 %\vspace{0.5ex}
@@ -44,7 +44,7 @@ The data source and sampling rate also affect the performance of \lsa algorithms
 		%\truck	&10,368	    &1-60	    &$\sim71.9$     &746M \\	\hline
 		%\ucar	&11,000	    &3-5	    &$\sim119.1$   &1.31G\\		\hline
 		%
-		\ucar	&\myblue{1000}	    &3-5	&$\sim114.0$K   &\myblue{114.0M} 	\\	\hline
+		\ucar \cite{Lin:Cised}	&\myblue{1000}	    &3-5	&$\sim114.0$K   &\myblue{114.0M} 	\\	\hline
 		\geolife \cite{Web:Geolife}&182	    &1-5	&$\sim131.4$K   &24.2M	\\	\hline
 		\mopsi \cite{Web:Mopsi}  &51	    	&2	    &$\sim153.9$K   &7.9M	\\	\hline
 		%\act	& 10	    &1	    &$\sim11.8$    &112.8K	\\	\hline
@@ -71,7 +71,7 @@ We have implemented the representative algorithms shown in \mytable{tab:summary-
 For one-pass algorithms \siped and \cised, we implement two versions of them (half and full $\epsilon$), denoted as \siped($\epsilon$), \siped($\frac{\epsilon}{2}$), \cised($\epsilon$) and \cised($\frac{\epsilon}{2}$).
 %\textcolor{blue}{The above algorithms all belong to strong simplification that output data points belong to the original trajectories.}
 \textcolor{blue}{Besides, algorithms \operb\cite{Lin:Operb} and \cised\cite{Lin:Cised} both have weak versions, named \operb-A and \cised-W, respectively.} %We also implement them.
-For algorithm \cised($\epsilon$) and \cised($\frac{\epsilon}{2}$), we fixed parameter $m=16$ as evaluated in \cite{Lin:Cised}, \ie 16-edges inscribe regular polygon.
+For algorithm \cised, we fixed parameter $m=16$ as evaluated in \cite{Lin:Cised}, \ie 16-edges inscribe regular polygon.
 For algorithm \operb, we remove its fifth optimization technique to make it fit for the definition of the \textcolor{blue}{tolerance-zone error measure \cite{Daescu:metric,Barequet:3D,Chen:Space,Imai:Optimal,Melkman:Optimal} (otherwise, it is the \emph{infinite beam} error measure \cite{Daescu:metric,Chen:Space})}.
 % For algorithm \nopts, we fixed parameter $m=32$.
 All algorithms are implemented with Java.
@@ -334,10 +334,10 @@ $50.88\%$, $64.50\%$) of algorithms \tpa and \dpa using \sed on datasets \dSets,
 %
 %and in Figure~\ref{fig:cr-ped-size} and Figure~\ref{fig:cr-sed-size}, the compression ratios of algorithms \opt, \tpa and \dpa using \ped are on average {($56.03\%$, $33.42\%$, $33.12\%$, $72.42\%$),	($55.78\%$, $31.88\%$, $34.27\%$, $69.44\%$) and ($58.09\%$, $34.82\%$,	$40.91\%$, $75.06\%$)} of algorithms \opt, \tpa and \dpa using \sed on datasets \dSets, respectively.
 %
-This result shows ~\sed saves temporal information at a price of twice more data points. \textcolor{blue}{Note as the loss of temporal information may lead to unexpected results, \eg unbounded answer-errors to spatio-temporal queries (see Section \ref{sec-exp-query}), this price is worthwhile for certain applications. }
+This result shows ~\sed saves temporal information at a price of twice more data points. \textcolor{blue}{Although the loss of temporal information may lead to unexpected results, \eg unbounded answer-errors to spatio-temporal queries (see Section \ref{sec-exp-query}), this price is worthwhile for certain applications. }
 
 
-Secondly, \textcolor{blue}{we find that \sed has obviously better compression ratios than \dad on datasets \geolife and \mopsi and a bit poorer than \dad in \ucar.}
+Secondly, \textcolor{blue}{we find that \sed has obviously better compression ratios than \dad on datasets \geolife and \mopsi, and a bit poorer than \dad in \ucar.}
 This is because some \geolife and \mopsi trajectories are collected by individuals that are in transportation modes of walking, running and riding, and moving objects in those modes may change their directions with a considerable range (\eg large than $60$ degrees) more frequently than cars in urban. Moreover, \geolife and \mopsi have higher sampling rates than \ucar, which capture more direction changes, \ie direction changes in a small time interval.
 %
 \textcolor{blue}{Indeed, it is hard to compare \sed and \dad under absolutely fair conditions, as \sed is a Euclidean distance metric, having a value in $[0, \infty]$ meters, and DAD is a direction metric,  having a value in $[0,360)$ degrees. Hence, we choose to consider more practical scenarios, \ie one uses \sed with $\epsilon  \le  100$ meters, and the other uses \dad with $\epsilon \le 60$ degrees, and we compare the performance of \sed with $\epsilon=100/k$ meters \emph{vs.} \dad with $\epsilon=60/k$ degrees with $k \ge 1$. We also follow this when comparing \sed and \dad in the sequel.}
@@ -792,7 +792,7 @@ Note that the causes of this phenomenon are varied. For algorithm \dpa using \pe
 
 \begin{table}
 	%\renewcommand{\arraystretch}{1.2}
-	\caption{\small The max errors of \textcolor{blue}{\emph{where\_at}} queries on compressed trajectories: fixed $\epsilon=40m$.}
+	\caption{\small The max errors of \textcolor{blue}{\emph{where\_at}} queries on the compressed trajectories: fixed $\epsilon=40m$ or $30^o$ when using \dad.}
 	\centering
 	\scriptsize
 	%\vspace{-1ex}
@@ -938,13 +938,13 @@ As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{wh
 \ni (2) When using \sed, the max query errors of all algorithms are clear not more than the error bounds, and the average query errors are consistent with those compression errors shown in Section~\ref{sec-ae}.
 
 
-\ni (3) When using \dad, the max query errors of all algorithms are more than $10^6$ meters in dataset \ucar, and more than $10^5$ meters in datasets \geolife and \mopsi, respectively, also significantly larger than the error bound (40 meters in \mytable{tab:query-me}). Moreover, compared with using \ped, it has more points having query errors larger than error bounds, thus, it has the largest average query errors in all algorithms and all datasets.
+\ni (3) When using \dad, the max query errors of all algorithms are more than $10^6$ meters in dataset \ucar, and more than $10^5$ meters in datasets \geolife and \mopsi, respectively, also significantly larger than the error bound (40 meters in \mytable{tab:query-me}). Moreover, compared with using \ped, it has few points having query errors larger than error bounds, thus, it has the smallest average query errors in all algorithms and all datasets.
 
 
 
 \begin{table}
 	%\renewcommand{\arraystretch}{1.2}
-	\caption{\small \textcolor{blue}{The max errors {($\times 10^6$ s)} of \emph{when\_at} queries on compressed trajectories: fixed $\epsilon=40m$.}}
+	\caption{\small \textcolor{blue}{The max errors {($\times 10^6$ s)} of \emph{when\_at} queries on compressed trajectories: fixed $\epsilon=40m$ or $30^o$ when using \dad.}}
 	\centering
 	\scriptsize
 	\vspace{-1ex}
