@@ -1,0 +1,161 @@
+\documentclass{letter}
+\usepackage{geometry}
+
+% duan
+\usepackage{xspace}
+\usepackage{color}
+\usepackage{amsfonts}
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage{multirow,amsmath, array,colortbl}
+
+
+\newcommand{\marked}[1]{\textcolor{red}{#1}}
+
+\newcommand{\kw}[1]{{\ensuremath {\mathsf{#1}}}\xspace}
+
+\geometry{left=2.0cm, right=2.0cm, top=2.5cm, bottom=2.5cm}
+\newcommand{\ie}{\emph{i.e.,}\xspace}
+\newcommand{\eg}{\emph{e.g.,}\xspace}
+\newcommand{\wrt}{\emph{w.r.t.}\xspace}
+\newcommand{\aka}{\emph{a.k.a.}\xspace}
+\newcommand{\kwlog}{\emph{w.l.o.g.}\xspace}
+\newcommand{\etal}{\emph{et al.}\xspace}
+\newcommand{\sstab}{\rule{0pt}{8pt}\\[-2.4ex]}
+
+\newcommand{\topk}[1]{\kw{top}--\kw{#1}}
+\newcommand{\topdown}{\kw{topDown}}
+\newcommand{\extsubgraph}{\kw{compADS^+}}
+\newcommand{\drfds}{\kw{FIDES^+}}
+\newcommand{\extsubgraphold}{\kw{compADS}}
+\newcommand{\findtimax}{\kw{maxTInterval}}
+\newcommand{\findtimin}{\kw{minTInterval}}
+\newcommand{\meden}{\kw{MEDEN}}
+
+\newcommand{\tranformgraph}{\kw{convertAG}}
+\newcommand{\mergecc}{\kw{strongMerging}}
+\newcommand{\strongpruning}{\kw{strongPruning}}
+\newcommand{\boundedprobing}{\kw{boundedProbing}}
+
+\newcommand{\AFPR}{\kw{AFP}-\kw{reduction}}
+\newcommand{\nwm}{{\sc nwm}\xspace}
+
+
+\newcommand{\cone}[1]{{$\mathcal{C}{#1}$}}
+\renewcommand{\circle}[1]{{$\mathcal{O}{#1}$}}
+\newcommand{\pcircle}[1]{{$\mathcal{O}^c{#1}$}}
+
+\newcommand{\vv}{\overrightarrow}
+
+
+\newcommand{\todo}[1]{\textcolor{red}{Todo...#1}}
+\begin{document}
+
+
+
+
+
+Prof. {Chris Jermaine} \\
+Editor-in-Chief		\\
+ACM Transactions on Database Systems (TODS)	\\
+
+
+
+Dear Prof. Jermaine,
+
+Attached please find a revised version of our submission to TODS, \emph{Error Bounded Line Simplification Algorithms for Trajectory Compression: An Experimental Evaluation}.
+
+
+ This article has been substantially revised. In particular, we have
+
+
+
+We would like to thank all the referees \textcolor{blue}{and the handling Associate Editor} for their thorough reading of our article and for their valuable comments.
+
+Below please find our detailed responses to the comments.
+
+
+
+
+
+%******************* reviewer 3 ***********************************************
+\line(1,0){500}
+
+\textbf{Response to the comments of Reviewer 3.}
+
+\line(1,0){100}
+
+\textbf{[R3C1]} \emph{
+To clarify the terminology (and history): throughout the paper, the authors are using the terms "simplification" and "compression" interchangeably. This is often the case in the existing literature too - however, it does not do justice to the history. Namely: (a) to begin with, simplification is quite older than computational geometry (and computer science per se') because it traces its origins in the cartography, a few centuries before inventing the computers; (b) in its original sense, simplification is but one aspect of the problem called "data generalization" in cartography. Namely, often times in practice one would deliberately change the outcomes of a compression/simplification because certain properties (e.g., visibility of objects on the compressed map which, due to a compression ratio and available area would vanish) need to be preserved. Thus, in addition to compressing the spatial (and spatio-temporal) data, there are operators such as "smoothing", "aggregation", etc. - please see [R1] below. Also, the authors may want to check the tutorial on data compression at MDM 2016 [R2]. As an example: one of the main reasons for popularity of the Douglas-Peucker algorithm (despite its higher complexity) is that it generates outputs which are "visually appealing...".}
+%
+\emph{The authors may want to mention a couple of sentences along these lines in the Introduction, just for the sake of clarifying the scope and context of the work for the readers.}
+
+\emph{[R1] Robert Weibel. Generalization of spatial data: Principles and selected algorithms. In Algorithmic Foundations of Geographic Information Systems. LNCS Springer Verlag, 1997.}
+
+
+\emph{[R2] Goce Trajcevski. Compression of Spatio-temporal Data - Advanced Seminar. IEEE MDM 2016 (slides available at: http://mdmconferences.org/mdm2016/proadvsem.html)}
+
+
+
+
+
+
+
+\textbf{[R3C2]} \emph{Again, for historical "fairness" - often times, the methodologies cited in [10] and [48] in the paper, are jointly referred to as "Ramer-Douglas-Peucker" (part of the reason being that [48] came about the same time as [10], but the authors of [10] were not aware and independently developed an extremely similar idea which, although published (officially) later, became more widely popular). The authors mention both works (and list them in the table) - so they may as well say a few words about this issue.}
+
+
+
+
+
+
+\textbf{[R3C3]} \emph{p.6, l.27: Firstly, the definition should be "Point" (not "Points"). Secondly (and more importantly) - the authors state: "...at longitude x and latitude y at time t . Note that these data points can be viewed as points in the x-y-t 3D Euclidean space." This requires a bit of a discussion. To begin with, (latitude, longitude) (augmented with "altitude" in practice) are the most frequent format of recording the point/location data, due to the popular technology. However: (1) to begin with, geo-spatial data is defined by standards (e.g., World Geodetic System 84 (WGS84) coordinates), and the popular GPS-based values are part/consequence of it (e.g., they can be geocentric vs. geodetic); (2) In reality, there is no such thing as Euclidean ones, however, many applications do use them. But, the catch is that when transforming data from (latitude, longitude) to Eucledian (x, y) - there is always an error due to the, so called, map projection (see [R3] below).}
+%	
+\emph{Hence, for consistency, the authors are advised to change the definition so that:}
+%	
+\emph{(a) it says: "... in a suitable coordinate system."}
+%	
+\emph{(b) provide a couple of sentences of a discussion on coordinate system and practice/use.}
+
+\emph{[R3] Hargitai, Henrik; Wang, Jue; Stooke, Philip J.; Karachevtseva, Irina; Kereszturi, Akos; Gede, Mátyás (2017), "Map Projections in Planetary Cartography", Lecture Notes in Geoinformation and Cartography, Springer International Publishing}
+
+
+\textbf{[R3C4]} \emph{An important recent reference should be included. Namely, while some of the cited works have considered the issue of uncertainty, the work in [R4] is actually focusing on the problem of compressing uncertain trajectories. Thus, in the opinion of this reviewer, for completeness sake, the authors should discuss this context (if nowhere else, then in the "Conclusion", identifying that this is beyond the scope of their current paper. }
+
+\emph{[R4] Tianyi Li, Ruikai Huang, Lu Chen, Christian S. Jensen, Torben Bach Pedersen:
+	Compression of Uncertain Trajectories in Road Networks. PVLDB, 2020}
+
+[R4] first maps a raw uncertain trajectory onto a road network so as to get a set of candidate network-constrained uncertain trajectories. Among them, the one that has the highest probability would be chosenas the network-constrained accurate trajectory, which is encoded by TED method and then compressed to reduce the data size. Obviously, [R4] is a road network-embedded compression. 
+
+%Besides, an effective indexing structure and filtering techniques are provided to accelerate query processing.
+
+We have introduced it in the appendix ``Semantic Based Trajectory Compression Algorithms". Thank you!
+
+
+\textbf{[R3C5]} \emph{The authors are cautined to read/edit the manuscript very carefully. There are (not too many, but still) typos that need to be corrected. But a couple of examples:}
+  \emph{(1) in multiple places: ``Analyses'' $\rightarrow$ ``Analysis'';}
+  \emph{(2) p.6, l.36: The sentence ``Note that here ...'' is unfinished/incomplete;}
+  \emph{(3) may want to avoid starting a sentence with ``And...''}
+
+
+(1) Yes, we have corrected some ``analyses'' to ``analysis'' in Pages 4, 5, 24, 27, 30, 32 and 34.
+
+(2) Yes, we have revised the sentence ``Note that here there is...'' to ``Note that there is...'' in p.6, l.36.
+
+(3) Yes, we have revised two sentences starting with ``And'', in Pages 23 and 29.
+
+Thanks for your advice!
+
+\line(1,0){500}
+
+
+
+Your sincerely,
+
+Anonymous authors
+%Xuelian Lin, Shuai Ma, Yanchen Hou, Yihao Fu,  and Tianyu Wo
+
+%\bibliographystyle{abbrv}
+%\bibliography{sec-ref}
+
+
+\end{document}
