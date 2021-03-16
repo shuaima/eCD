@@ -151,6 +151,55 @@ The experimental results are reported in Figure~\ref{fig:cr-ped-size}, Figure~\r
 The compression ratios of these algorithms under varied error bounds $\epsilon$ and trajectory sizes are reported in Figures~\ref{fig:cr-ped-epsilon},~\ref{fig:cr-sed-epsilon},~\ref{fig:cr-dad-epsilon},~\ref{fig:cr-ped-size},~\ref{fig:cr-sed-size} and~\ref{fig:cr-dad-size}.
 {Note that the optimal algorithm using \sed and \dad is not reported in Figures~\ref{fig:cr-ped-epsilon},~\ref{fig:cr-sed-epsilon} and~\ref{fig:cr-dad-epsilon} as it runs out of memory when compressing the full dataset}. We first report our findings.
 
+
+%%%%%%%%%%%%%%%%%
+\sstab(1)  {Datasets may have impacts on the compression ratios of \lsa algorithms. Datasets with higher sampling rates typically have better compression ratios for \ped and \sed, while it is opposite for \dad. {When using \dad, the} dataset collected by cars (\eg~\ucar) has better compression ratios than the datasets partially collected by individuals (\eg~\geolife and \mopsi), as cars typically move more regularly than individuals {in directions}.}
+%{otherwise, it has poorer compression ratios than \geolife and \mopsi, partially because cars have a broad range of speed and they frequently stop because of traffic light}
+
+\sstab(2) {Compression ratios are insensitive to the sizes of trajectories.} {The reason lies in that once the distance is greater than the error bound, a line segment is produced, and the compression continues to repeat this process, which is essentially irrelevant to the sizes of trajectories. This is also the key to preserve the error bound for any of the optimal, batch, online and one-pass algorithms.}
+
+
+
+
+\sstab(3) The compression ratios of algorithms using \ped from the best
+to the worst are normally the optimal algorithm \opt, online algorithm \bqsa, one-pass algorithm \siped($\epsilon$), batch algorithms \tpa and \dpa and one-pass algorithm {\operb-A}, and one-pass algorithms \siped($\frac{\epsilon}{2}$) and \operb.
+The output sizes of algorithms \bqsa and \siped({$\epsilon$}) are on average
+($113.32\%$, $120.22\%$, $120.83\%$) and ($116.04\%$, $124.46\%$, $124.24\%$) of algorithm \opt
+on datasets \dSets, respectively.
+Algorithms \tpa, \dpa and {\operb-A} are comparable, and their output sizes are on average
+($125.05\%$, $131.01\%$, $138.01\%$), ($130.03\%$, $140.56\%$, $139.00\%$) and {( $134.16\%$, $137.73\%$, $144.31\%$)} of \opt
+on datasets \dSets, respectively.
+Algorithms \siped($\frac{\epsilon}{2}$) and \operb are comparable, and they are on average
+($136.73\%$, $150.23\%$, $152.29\%$) and ($143.14\%$, $147.80\%$, $152.37\%$) of \opt on datasets \dSets, respectively.
+%
+For example, in \mopsi, the compression ratios of algorithms
+(\opt, \tpa, \dpa, \bqsa, \siped(${\epsilon}$), \siped($\frac{\epsilon}{2}$), \operb, {\operb-A} ) are ($1.6\%$, $2.2\%$, $2.2\%$, $1.9\%$, $2.0\%$, $2.4\%$, $2.4\%$, {$2.3\%$}) when $\epsilon$ = $40m$.
+%
+
+
+%%%%%%%%%%%%%%%%%
+\sstab(4) The compression ratios of algorithms using \sed from the best
+to the worst are normally the \opt algorithm, one-pass algorithms {\cised-W} and \cised($\epsilon$), batch algorithms \tpa and
+\dpa, one-pass algorithm \cised($\frac{\epsilon}{2}$), and online algorithm {\dagots} and \squishe.
+%
+{Algorithms \tpa and \dpa are comparable, and they are on average
+($125.23\%$, $143.92\%$, $128.63\%$) and ($123.93\%$, $141.46\%$, $121.14\%$)
+ of algorithm \opt on datasets \dSets, respectively.}
+%
+{Algorithms {\cised-W}, \cised(${\epsilon}$), \cised($\frac{\epsilon}{2}$), \squishe and {\dagots} are on average {($100.98\%, 108.16\%, 110.15\%$)}, ($109.27\%$, $110.13\%$, $115.90\%$,), ($134.35\%$, $159.30\%$, $136.06\%$), ($165.94\%$, $225.68\%$, $206.90\%$) and {$(140.98\%, 200.36\%, 198.73\%)$}
+ of \opt on \dSets, respectively.}
+%
+For example, in \mopsi, the compression ratios of algorithms
+(\tpa, \dpa, \squishe, {\dagots}, \cised(${\epsilon}$), \cised($\frac{\epsilon}{2}$),  {\cised-W})
+are ($3.45\%$, $3.41\%$, $5.75\%$, {$5.34\%$}, $3.02\%$, $3.86\%$,  {$2.96\%$}), respectively, when $\epsilon$ = $40m$.
+%
+%Algorithms \tpa and \dpa are comparable, and they are on average ($122.69\%$, $129.08\%$, $131.97\%$, $131.01\%$) and ($121.36\%$, $129.27\%$, $130.11\%$, $126.21\%$) of the near optimal algorithm \nopts on datasets \dSets, respectively.
+%Algorithms \cised and \squishe are on average ($132.07\%$, $139.67\%$, $146.56\%$, $135.10\%$) and ($164.47\%$, $189.87\%$, $213.30\%$, $186.72\%$) of \nopts on datasets \dSets, respectively.
+%
+%For example, in \mopsi, the compression ratios of algorithms (\nopts, \tpa, \dpa, \squishe, \cised) are ($2.62\%$, $3.45\%$, $3.41\%$, $5.75\%$, $3.86\%$), respectively, when $\epsilon$ = $40m$.
+%
+
+
 \begin{figure*}[tb!]
 	\centering
 	%\includegraphics[scale=0.250]{Figures/Exp-PED-CR-epsilon-taxi.jpg}\hspace{0.5ex}
@@ -186,26 +235,25 @@ The compression ratios of these algorithms under varied error bounds $\epsilon$ 
 \end{figure*}
 
 
+
+
 %%%%%%%%%%%%%%%%%
-\sstab(1)  {Datasets may have impacts on the compression ratios of \lsa algorithms. Datasets with higher sampling rates typically have better compression ratios for \ped and \sed, while it is opposite for \dad. {When using \dad, the} dataset collected by cars (\eg~\ucar) has better compression ratios than the datasets partially collected by individuals (\eg~\geolife and \mopsi), as cars typically move more regularly than individuals {in directions}.}
-%{otherwise, it has poorer compression ratios than \geolife and \mopsi, partially because cars have a broad range of speed and they frequently stop because of traffic light}
-
-\sstab(2) {Compression ratios are insensitive to the sizes of trajectories.} {The reason lies in that once the distance is greater than the error bound, a line segment is produced, and the compression continues to repeat this process, which is essentially irrelevant to the sizes of trajectories. This is also the key to preserve the error bound for any of the optimal, batch, online and one-pass algorithms.}
-
-\sstab(3) The compression ratios of algorithms using \ped from the best
-to the worst are normally the optimal algorithm \opt, online algorithm \bqsa, one-pass algorithm \siped($\epsilon$), batch algorithms \tpa and \dpa and one-pass algorithm {\operb-A}, and one-pass algorithms \siped($\frac{\epsilon}{2}$) and \operb.
-The output sizes of algorithms \bqsa and \siped({$\epsilon$}) are on average
-($113.32\%$, $120.22\%$, $120.83\%$) and ($116.04\%$, $124.46\%$, $124.24\%$) of algorithm \opt
-on datasets \dSets, respectively.
-Algorithms \tpa, \dpa and {\operb-A} are comparable, and their output sizes are on average
-($125.05\%$, $131.01\%$, $138.01\%$), ($130.03\%$, $140.56\%$, $139.00\%$) and {( $134.16\%$, $137.73\%$, $144.31\%$)} of \opt
-on datasets \dSets, respectively.
-Algorithms \siped($\frac{\epsilon}{2}$) and \operb are comparable, and they are on average
-($136.73\%$, $150.23\%$, $152.29\%$) and ($143.14\%$, $147.80\%$, $152.37\%$) of \opt on datasets \dSets, respectively.
+\sstab(5) The compression ratios of algorithms using \dad from the best
+to the worst are the \opt algorithm, batch algorithm \tpa and
+one-pass algorithm \interval, online algorithm \opwa, one-pass algorithm \intersec and batch algorithm \dpa.
 %
-For example, in \mopsi, the compression ratios of algorithms
-(\opt, \tpa, \dpa, \bqsa, \siped(${\epsilon}$), \siped($\frac{\epsilon}{2}$), \operb, {\operb-A} ) are ($1.6\%$, $2.2\%$, $2.2\%$, $1.9\%$, $2.0\%$, $2.4\%$, $2.4\%$, {$2.3\%$}) when $\epsilon$ = $40m$.
+{Algorithms \tpa, \opwa and \interval are comparable, and are on average
+($102.91\%$, $102.27\%$, $106.88\%$), ($116.09\%$, $107.11\%$, $115.42\%$) and ($101.98\%$, $103.52\%$, $103.43\%$)
+ of algorithm \opt on datasets \dSets, respectively.}
 %
+{Algorithms \intersec and \dpa are on average ($156.00\%$, $121.20\%$, $230.52\%$) and ($283.93\%$, $143.79\%$, $278.89\%$)
+ of algorithm \opt on datasets \dSets, respectively.}
+%
+For example, in \mopsi, the compression ratios of algorithms (\tpa, \dpa, \opwa, \interval, \intersec)
+are ($13.3\%$, $23.1\%$, $14.12\%$, $13.7\%$, $18.96\%$), respectively, when $\epsilon$ = $45$ degrees.
+%
+
+
 \begin{figure*}[tb!]
 	\centering
 	%\includegraphics[scale=0.250]{Figures/Exp-PED-CR-size-taxi.jpg}\hspace{0.5ex}
@@ -241,48 +289,6 @@ For example, in \mopsi, the compression ratios of algorithms
 	\label{fig:cr-dad-size}
 	\vspace{-2ex}
 \end{figure*}
-
-
-
-
-%%%%%%%%%%%%%%%%%
-\sstab(4) The compression ratios of algorithms using \sed from the best
-to the worst are normally the \opt algorithm, one-pass algorithms {\cised-W} and \cised($\epsilon$), batch algorithms \tpa and
-\dpa, one-pass algorithm \cised($\frac{\epsilon}{2}$), and online algorithm {\dagots} and \squishe.
-%
-{Algorithms \tpa and \dpa are comparable, and they are on average
-($125.23\%$, $143.92\%$, $128.63\%$) and ($123.93\%$, $141.46\%$, $121.14\%$)
- of algorithm \opt on datasets \dSets, respectively.}
-%
-{Algorithms {\cised-W}, \cised(${\epsilon}$), \cised($\frac{\epsilon}{2}$), \squishe and {\dagots} are on average {($100.98\%, 108.16\%, 110.15\%$)}, ($109.27\%$, $110.13\%$, $115.90\%$,), ($134.35\%$, $159.30\%$, $136.06\%$), ($165.94\%$, $225.68\%$, $206.90\%$) and {$(140.98\%, 200.36\%, 198.73\%)$}
- of \opt on \dSets, respectively.}
-%
-For example, in \mopsi, the compression ratios of algorithms
-(\tpa, \dpa, \squishe, {\dagots}, \cised(${\epsilon}$), \cised($\frac{\epsilon}{2}$),  {\cised-W})
-are ($3.45\%$, $3.41\%$, $5.75\%$, {$5.34\%$}, $3.02\%$, $3.86\%$,  {$2.96\%$}), respectively, when $\epsilon$ = $40m$.
-%
-%Algorithms \tpa and \dpa are comparable, and they are on average ($122.69\%$, $129.08\%$, $131.97\%$, $131.01\%$) and ($121.36\%$, $129.27\%$, $130.11\%$, $126.21\%$) of the near optimal algorithm \nopts on datasets \dSets, respectively.
-%Algorithms \cised and \squishe are on average ($132.07\%$, $139.67\%$, $146.56\%$, $135.10\%$) and ($164.47\%$, $189.87\%$, $213.30\%$, $186.72\%$) of \nopts on datasets \dSets, respectively.
-%
-%For example, in \mopsi, the compression ratios of algorithms (\nopts, \tpa, \dpa, \squishe, \cised) are ($2.62\%$, $3.45\%$, $3.41\%$, $5.75\%$, $3.86\%$), respectively, when $\epsilon$ = $40m$.
-%
-
-%%%%%%%%%%%%%%%%%
-\sstab(5) The compression ratios of algorithms using \dad from the best
-to the worst are the \opt algorithm, batch algorithm \tpa and
-one-pass algorithm \interval, online algorithm \opwa, one-pass algorithm \intersec and batch algorithm \dpa.
-%
-{Algorithms \tpa, \opwa and \interval are comparable, and are on average
-($102.91\%$, $102.27\%$, $106.88\%$), ($116.09\%$, $107.11\%$, $115.42\%$) and ($101.98\%$, $103.52\%$, $103.43\%$)
- of algorithm \opt on datasets \dSets, respectively.}
-%
-{Algorithms \intersec and \dpa are on average ($156.00\%$, $121.20\%$, $230.52\%$) and ($283.93\%$, $143.79\%$, $278.89\%$)
- of algorithm \opt on datasets \dSets, respectively.}
-%
-For example, in \mopsi, the compression ratios of algorithms (\tpa, \dpa, \opwa, \interval, \intersec)
-are ($13.3\%$, $23.1\%$, $14.12\%$, $13.7\%$, $18.96\%$), respectively, when $\epsilon$ = $45$ degrees.
-%
-
 
 
 
@@ -541,6 +547,40 @@ In practice (\eg $\epsilon = 60$ meters and $\epsilon = 45$ degrees), the averag
 \subsubsection{Evaluation and \myblue{Analysis} of Efficiency}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+	\begin{figure*}[tb!]
+	\centering
+	%\includegraphics[scale=0.250]{Figures/Exp-PED-time-epsilon-taxi.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-PED-time-epsilon-service.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-PED-time-epsilon-geolife.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-PED-time-epsilon-mopsi.jpg}	
+	\vspace{-2ex}
+	\caption{\small Evaluation of running time (\ped) on full datasets: varying the error bound $\epsilon$.}\label{fig:time-epsilon-ped}
+	\vspace{-2ex}
+\end{figure*}
+
+\begin{figure*}[tb!]
+	\centering
+	%\includegraphics[scale=0.250]{Figures/Exp-SED-time-epsilon-taxi.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-SED-time-epsilon-service.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-SED-time-epsilon-geolife.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-SED-time-epsilon-mopsi.jpg}	
+	\vspace{-2ex}
+	\caption{\small Evaluation of running time (\sed) on full datasets: varying the error bound $\epsilon$.}\label{fig:time-epsilon-sed}
+	\vspace{-2ex}
+\end{figure*}
+
+\begin{figure*}[tb!]
+	\centering
+	%\includegraphics[scale=0.250]{Figures/Exp-DAD-time-epsilon-taxi.jpg}\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-DAD-time-epsilon-service.jpg} 	\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-DAD-time-epsilon-geolife.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.250]{Figures/Exp-DAD-time-epsilon-mopsi.jpg}		
+	\vspace{-2ex}
+	\caption{\small Evaluation of running time (\dad) on full datasets: varying the error bound $\epsilon$.}\label{fig:time-epsilon-dad}
+	\vspace{-2ex}
+\end{figure*}
+
+
 In this set of tests, we compare the efficiency of these algorithms.
 The results are reported in Figures~\ref{fig:time-epsilon-ped},~\ref{fig:time-epsilon-sed},~\ref{fig:time-epsilon-dad},~\ref{fig:time-size-ped},~\ref{fig:time-size-sed} and~\ref{fig:time-size-dad}.
 Note that even on the small datasets, \emph{the running time of algorithm \opt  is thousands of times slower than one-pass algorithms}. As it is not clear to show all these algorithms in a single figure, only the results of sub-optimal algorithms are shown in these figures.
@@ -551,40 +591,7 @@ We first report our findings.
 \sstab (1) {Datasets do not have obvious impacts on the running time of \lsa algorithms except \dagots. }
 
 	
-	
-	
-	\begin{figure*}[tb!]
-		\centering
-		%\includegraphics[scale=0.250]{Figures/Exp-PED-time-epsilon-taxi.jpg}	\hspace{0.5ex}
-		\includegraphics[scale=0.250]{Figures/Exp-PED-time-epsilon-service.jpg}	\hspace{0.5ex}
-		\includegraphics[scale=0.250]{Figures/Exp-PED-time-epsilon-geolife.jpg}	\hspace{0.5ex}
-		\includegraphics[scale=0.250]{Figures/Exp-PED-time-epsilon-mopsi.jpg}	
-		\vspace{-2ex}
-		\caption{\small Evaluation of running time (\ped) on full datasets: varying the error bound $\epsilon$.}\label{fig:time-epsilon-ped}
-		\vspace{-2ex}
-	\end{figure*}
-	
-	\begin{figure*}[tb!]
-		\centering
-		%\includegraphics[scale=0.250]{Figures/Exp-SED-time-epsilon-taxi.jpg}	\hspace{0.5ex}
-		\includegraphics[scale=0.250]{Figures/Exp-SED-time-epsilon-service.jpg}	\hspace{0.5ex}
-		\includegraphics[scale=0.250]{Figures/Exp-SED-time-epsilon-geolife.jpg}	\hspace{0.5ex}
-		\includegraphics[scale=0.250]{Figures/Exp-SED-time-epsilon-mopsi.jpg}	
-		\vspace{-2ex}
-		\caption{\small Evaluation of running time (\sed) on full datasets: varying the error bound $\epsilon$.}\label{fig:time-epsilon-sed}
-		\vspace{-2ex}
-	\end{figure*}
-	
-	\begin{figure*}[tb!]
-		\centering
-		%\includegraphics[scale=0.250]{Figures/Exp-DAD-time-epsilon-taxi.jpg}\hspace{0.5ex}
-		\includegraphics[scale=0.250]{Figures/Exp-DAD-time-epsilon-service.jpg} 	\hspace{0.5ex}
-		\includegraphics[scale=0.250]{Figures/Exp-DAD-time-epsilon-geolife.jpg}	\hspace{0.5ex}
-		\includegraphics[scale=0.250]{Figures/Exp-DAD-time-epsilon-mopsi.jpg}		
-		\vspace{-2ex}
-		\caption{\small Evaluation of running time (\dad) on full datasets: varying the error bound $\epsilon$.}\label{fig:time-epsilon-dad}
-		\vspace{-2ex}
-	\end{figure*}
+
 
 \sstab (2) When using \ped, in most cases, the running time from the smallest to the largest is one-pass algorithms \siped, \operb and {\operb-A}, batch algorithms \tpa and \dpa, and online algorithm \bqsa.
 Algorithms \siped($\frac{\epsilon}{2}$), {\operb} and {\operb-A} are comparable, algorithm \siped(${\epsilon}$) is $(0.92, 0.92, 0.91)$ times of \siped($\frac{\epsilon}{2}$), and algorithms \tpa, \dpa and \bqsa are on average
@@ -593,31 +600,6 @@ times slower than one-pass algorithm \siped($\frac{\epsilon}{2}$) on datasets \d
 For example, in \mopsi, the running time of algorithms
 (\tpa, \dpa, \bqsa, \siped(${\epsilon}$), \siped($\frac{\epsilon}{2}$), \operb, {\operb-A} ) is ($232.9$, $124.2$, $469.4$, $6.89$, $7.6$, $8.6$, {$9.4$}) seconds when $\epsilon$ = $40m$.
 
-
-
-
-
-\sstab (3) When using \sed, the running time of algorithms except \dagots~from the smallest to the largest is one-pass algorithms \cised and {\cised-W}, online algorithm \squishe, and batch algorithms \tpa and \dpa, while \dagots~has varied running time. In full datasets, \dagots~runs faster than, comparable with and slower than \dpa in datasets \ucar, \geolife and \mopsi, respectively, while in small datasets, it often runs faster than \dpa.
-Algorithm \cised(${\epsilon}$) is $(1.17, 1.17, 0.91)$ times of \cised($\frac{\epsilon}{2}$), and algorithms \tpa, \dpa and \squishe are on average
- ($13.33$, $15.81$, $13.09$), ($12.93$, $10.64$, $8.79$) and
-($2.75$, $2.78$, $2.57$) times slower than \cised($\frac{\epsilon}{2}$) on datasets \dSets, respectively.
-%
-For example, in \mopsi, the running time of algorithms
-(\tpa, \dpa, {\dagots}, \squishe, \cised($\epsilon$), \cised($\frac{\epsilon}{2}$), {\cised-W}) is ($156.6$, $104.8$, {$361.1$}, $27.2$, $11.6$, $9.7$, {$9.7$}) seconds when $\epsilon$ = $40m$.
-
-\sstab {(4) When using \dad,} {one-pass algorithms \intersec and \interval run much faster than batch algorithms \tpa and \dpa and online algorithm \opwa.}
-%
-%Algorithm \interval is a bit slower than \intersec, and algorithms \tpa and \dpa are on average
-%($6.66$, $13.55$, $12.73$, $12.73$) and ($11.67$, $14.24$, $16.51$, $17.59$)
-%times slower than \interval on datasets \dSets, respectively.
-%
-Algorithm \interval is $(1.80, 1.84, 1.81)$ times slower than \intersec, and algorithms \tpa, \dpa and \opwa are on average
-($24.63$, $23.53$, $23.23$), ($25.49$, $30.11$, $31.72$) and ($39.29$, $147.85$, $80.09$)
-times slower than \intersec on datasets \dSets, respectively.
-%
-For example, the running time of algorithms
-(\tpa, \dpa, \opwa, \interval, \intersec) is ($105.57$, $152.53$, $240.40$, $8.57$, $4.69$) seconds in \mopsi when
-$\epsilon=45$ degrees, respectively.
 
 
 
@@ -655,6 +637,34 @@ $\epsilon=45$ degrees, respectively.
 \end{figure*}
 
 
+\sstab (3) When using \sed, the running time of algorithms except \dagots~from the smallest to the largest is one-pass algorithms \cised and {\cised-W}, online algorithm \squishe, and batch algorithms \tpa and \dpa, while \dagots~has varied running time. In full datasets, \dagots~runs faster than, comparable with and slower than \dpa in datasets \ucar, \geolife and \mopsi, respectively, while in small datasets, it often runs faster than \dpa.
+Algorithm \cised(${\epsilon}$) is $(1.17, 1.17, 0.91)$ times of \cised($\frac{\epsilon}{2}$), and algorithms \tpa, \dpa and \squishe are on average
+ ($13.33$, $15.81$, $13.09$), ($12.93$, $10.64$, $8.79$) and
+($2.75$, $2.78$, $2.57$) times slower than \cised($\frac{\epsilon}{2}$) on datasets \dSets, respectively.
+%
+For example, in \mopsi, the running time of algorithms
+(\tpa, \dpa, {\dagots}, \squishe, \cised($\epsilon$), \cised($\frac{\epsilon}{2}$), {\cised-W}) is ($156.6$, $104.8$, {$361.1$}, $27.2$, $11.6$, $9.7$, {$9.7$}) seconds when $\epsilon$ = $40m$.
+
+
+
+
+
+
+\sstab {(4) When using \dad,} {one-pass algorithms \intersec and \interval run much faster than batch algorithms \tpa and \dpa and online algorithm \opwa.}
+%
+%Algorithm \interval is a bit slower than \intersec, and algorithms \tpa and \dpa are on average
+%($6.66$, $13.55$, $12.73$, $12.73$) and ($11.67$, $14.24$, $16.51$, $17.59$)
+%times slower than \interval on datasets \dSets, respectively.
+%
+Algorithm \interval is $(1.80, 1.84, 1.81)$ times slower than \intersec, and algorithms \tpa, \dpa and \opwa are on average
+($24.63$, $23.53$, $23.23$), ($25.49$, $30.11$, $31.72$) and ($39.29$, $147.85$, $80.09$)
+times slower than \intersec on datasets \dSets, respectively.
+%
+For example, the running time of algorithms
+(\tpa, \dpa, \opwa, \interval, \intersec) is ($105.57$, $152.53$, $240.40$, $8.57$, $4.69$) seconds in \mopsi when
+$\epsilon=45$ degrees, respectively.
+
+
 %\sstab (2) When using \ped, the running time from the smallest to the largest are one-pass algorithms \siped and \operb, and batch and online algorithms \tpa, \dpa and \bqsa. Algorithms \siped and \operb are comparable. Algorithms \tpa, \dpa and \bqsa are comparable, and they are on average \textcolor{red}{($3.8$--$5.3$, $3.5$--$4.8$, $4.6$--$7.2$, $6.2$--$8.4$)} times slower than the one-pass algorithms \siped and \operb on datasets \dSets, respectively.
 
 %\sstab (3) When using \sed, the running time from the smallest to the largest are one-pass algorithm \cised, online algorithm \squishe, and batch algorithms \tpa and \dpa.  Algorithms \squishe, \tpa and \dpa are on average \textcolor{red}{($9.6$--$17.6$, $8.8$--$15.4$, $8.4$--$16.3$, $9.0$--$14.4$)}, \textcolor{red}{($9.6$--$17.6$, $8.8$--$15.4$, $8.4$--$16.3$, $9.0$--$14.4$)} and \textcolor{red}{($9.6$--$17.6$, $8.8$--$15.4$, $8.4$--$16.3$, $9.0$--$14.4$)} times slower than \cised on datasets \dSets, respectively.
@@ -663,8 +673,6 @@ $\epsilon=45$ degrees, respectively.
 
 
 We then present analyses from the views of \lsa algorithms and distance metrics.
-
-
 
 
 
@@ -789,8 +797,20 @@ Note that the causes of this phenomenon are varied. For algorithm \dpa using \pe
 		\hline
 	\end{tabular}
 	\label{tab:cr}	
-	\vspace{-1ex}
+	\vspace{-2ex}
 \end{table}
+
+
+
+%In the contrast, algorithms \dpa using \ped and \sed do not loss that. Hence, given the same final error bound (\eg $100m$) of data aging, algorithm \dpa using \ped (or \sed) shows a bit advantages in terms of compression ratios.
+
+
+
+\stitle{Analyses of \lsa algorithms.} \dpa is the only algorithm that is aging friendly \wrt ~\ped and \sed, {and all algorithms have bounded errors}. Indeed, {aging friendliness} is a result of the {specific nature} of algorithm \dpa, \ie batch and top-down, that always splits a trajectory into two sub-trajectories by the same splitting point when it uses any \ped or \sed larger than the error bound.
+
+\stitle{Analyses of \lsa distance metrics.} \dad is not aging friendly \wrt to any algorithm. It is different with \ped and \sed in that, the \dad of a point is closely related to its neighbor point while \ped and \sed are not, thus, once its neighbor point is removed, its \dad is also changed. This character makes it not aging friendly \wrt the \dpa algorithm.
+
+
 
 \begin{table}
 	%\renewcommand{\arraystretch}{1.2}
@@ -825,19 +845,6 @@ Note that the causes of this phenomenon are varied. For algorithm \dpa using \pe
 
 
 
-%In the contrast, algorithms \dpa using \ped and \sed do not loss that. Hence, given the same final error bound (\eg $100m$) of data aging, algorithm \dpa using \ped (or \sed) shows a bit advantages in terms of compression ratios.
-
-
-
-\stitle{Analyses of \lsa algorithms.} \dpa is the only algorithm that is aging friendly \wrt ~\ped and \sed, {and all algorithms have bounded errors}. Indeed, {aging friendliness} is a result of the {specific nature} of algorithm \dpa, \ie batch and top-down, that always splits a trajectory into two sub-trajectories by the same splitting point when it uses any \ped or \sed larger than the error bound.
-
-\stitle{Analyses of \lsa distance metrics.} \dad is not aging friendly \wrt to any algorithm. It is different with \ped and \sed in that, the \dad of a point is closely related to its neighbor point while \ped and \sed are not, thus, once its neighbor point is removed, its \dad is also changed. This character makes it not aging friendly \wrt the \dpa algorithm.
-
-
-
- 	 	
- 	 	
-
 \begin{figure*}[tb!]
 	\centering
 	\includegraphics[scale = 0.25]{Figures/Exp-where-PED-error-epsilon-service.jpg}\hspace{0.5ex}
@@ -870,6 +877,9 @@ Note that the causes of this phenomenon are varied. For algorithm \dpa using \pe
 \end{figure*}
 
 
+
+ 	 	
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{{Evaluation and \myblue{Analysis} of Queries Friendliness}}
 \label{sec-exp-query}
@@ -886,11 +896,6 @@ As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{wh
 }
 %
 {The max and average errors of the queries are reported in \mytable{tab:query-me} and Figures~\ref{fig:query-ped-epsilon}, \ref{fig:query-sed-epsilon}, \ref{fig:query-dad-epsilon}, \ref{fig:query-ped-size},\ref{fig:query-sed-size} and \ref{fig:query-dad-size}, respectively.}
-
-
-
-
-
 
 
 
@@ -932,8 +937,6 @@ As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{wh
 \end{figure*}
 
 
-
-
 \ni (1) When using \ped, the max query errors of all algorithms are more than $10^6$ meters in all datasets, significantly larger than the error bound (40 meters in \mytable{tab:query-me}). The large max errors also lead to larger average query errors, \ie they are greater than error bounds in all datasets.
 
 
@@ -941,6 +944,19 @@ As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{wh
 
 
 \ni (3) When using \dad, the max query errors of all algorithms are more than $10^6$ meters in dataset \ucar, and more than $10^5$ meters in datasets \geolife and \mopsi, respectively, also significantly larger than the error bound (40 meters in \mytable{tab:query-me}). Moreover, compared with using \ped, it has few points having query errors larger than error bounds, thus, it has the smallest average query errors in all algorithms and all datasets.
+
+
+
+\stitle{{Exp-2: \emph{when\_at} queries.}}
+{For each point $P$ in an original trajectory $\dddot{\mathcal{T}}$, we do a \emph{when\_at} query on the simplified trajectory. Since quite a few original data points are not exactly on the line segments of the simplified trajectory, we first map each original point $P$ to its closest point $P'$ having the minimum Euclidean distance on the line segment representing this point along the same way as \cite{Cao:Spatio}, then we get the expected time $P'.t'$ of $P'$ \wrt this line segment in a way inverse to the finding of a synchronized point, and we finally calculate the absolute time difference between the actual time $P.t$ and the expected time $P'.t'$ as the error of the query.}
+%
+{The max and average errors of the queries are reported in \mytable{tab:query-when-me} and Figures~\ref{fig:query-when-ped-epsilon}, \ref{fig:query-when-sed-epsilon}, \ref{fig:query-when-dad-epsilon}, \ref{fig:query-when-ped-size}, \ref{fig:query-when-sed-size} and \ref{fig:query-when-dad-size}, respectively.}
+
+
+
+\ni {(1) The max error of \emph{when\_at} queries on simplified trajectories is unbounded as proved in \cite{Cao:Spatio}. Indeed, the query error is related to the length of the time interval between two neighboring points of a simplified trajectory. We explain this with an example. Suppose that one moves from the front door, quickly passes through the living room, and goes to bed for a long sleep. Since the house is not big, the trajectory is possible simplified to two points, \ie $P_s$ in the front door and $P_e$ on the bed. In this case, a \emph{when\_at} query taking a point $P$ in his living room as input may return the excepted time $t'$ with an error of several hours to the actual time $P.t$.}
+
+
 
 
 
@@ -977,6 +993,8 @@ As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{wh
 
 
 
+\ni {(2) The average error of \emph{when\_at} queries normally increases with the increment of error bounds. This is obvious as the increment of error bounds enlarges the average length of the time interval between two neighboring points in a simplified trajectory, which leads to the increase of the average error of \emph{when\_at} queries. Similarly, the algorithms having better compression ratios typically have larger errors for \emph{when\_at} queries.}
+
 
 \begin{figure*}[tb!]
 	\centering
@@ -1009,60 +1027,15 @@ As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{wh
 	\vspace{-1.0ex}
 \end{figure*}
 
-\stitle{{Exp-2: \emph{when\_at} queries.}}
-{For each point $P$ in an original trajectory $\dddot{\mathcal{T}}$, we do a \emph{when\_at} query on the simplified trajectory. Since quite a few original data points are not exactly on the line segments of the simplified trajectory, we first map each original point $P$ to its closest point $P'$ having the minimum Euclidean distance on the line segment representing this point along the same way as \cite{Cao:Spatio}, then we get the expected time $P'.t'$ of $P'$ \wrt this line segment in a way inverse to the finding of a synchronized point, and we finally calculate the absolute time difference between the actual time $P.t$ and the expected time $P'.t'$ as the error of the query.}
-%
-{The max and average errors of the queries are reported in \mytable{tab:query-when-me} and Figures~\ref{fig:query-when-ped-epsilon}, \ref{fig:query-when-sed-epsilon}, \ref{fig:query-when-dad-epsilon}, \ref{fig:query-when-ped-size}, \ref{fig:query-when-sed-size} and \ref{fig:query-when-dad-size}, respectively.}
-
-
-
-
-
-
-
-
-\begin{figure*}[tb!]
-	\centering
-	\includegraphics[scale=0.350]{Figures/Exp-when-PED-error-size-service.jpg} 	\hspace{0.5ex}
-	\includegraphics[scale=0.350]{Figures/Exp-when-PED-error-size-geolife.jpg}	\hspace{0.5ex}
-	\includegraphics[scale=0.350]{Figures/Exp-when-PED-error-size-mopsi.jpg}		
-	\vspace{-2ex}
-	\caption{\small {Evaluation of \emph{when\_at} queries (\ped) on small datasets: varying the size of
-		trajectories.}}
-	\label{fig:query-when-ped-size}
-	\vspace{-1ex}
-\end{figure*}
-
-\begin{figure*}[tb!]
-	\centering
-	\includegraphics[scale=0.350]{Figures/Exp-when-SED-error-size-service.jpg} 	\hspace{0.5ex}
-	\includegraphics[scale=0.350]{Figures/Exp-when-SED-error-size-geolife.jpg}	\hspace{0.5ex}
-	\includegraphics[scale=0.350]{Figures/Exp-when-SED-error-size-mopsi.jpg}		
-	\vspace{-2ex}
-	\caption{\small {Evaluation of \emph{when\_at} queries (\sed) on small datasets: varying the size of
-		trajectories.}}
-	\label{fig:query-when-sed-size}
-	\vspace{-1ex}
-\end{figure*}
-
-
-\begin{figure*}[tb!]
-	\centering
-	\includegraphics[scale=0.350]{Figures/Exp-when-DAD-error-size-service.jpg}	\hspace{0.5ex}
-	\includegraphics[scale=0.350]{Figures/Exp-when-DAD-error-size-geolife.jpg}	\hspace{0.5ex}
-	\includegraphics[scale=0.350]{Figures/Exp-when-DAD-error-size-mopsi.jpg}	
-	\vspace{-2ex}
-	\caption{\small {Evaluation of \emph{when\_at} queries (\dad) on small datasets: varying the size of trajectories.}}
-	\label{fig:query-when-dad-size}
-	\vspace{-1ex}
-\end{figure*}
-
-\ni {(1) The max error of \emph{when\_at} queries on simplified trajectories is unbounded as proved in \cite{Cao:Spatio}. Indeed, the query error is related to the length of the time interval between two neighboring points of a simplified trajectory. We explain this with an example. Suppose that one moves from the front door, quickly passes through the living room, and goes to bed for a long sleep. Since the house is not big, the trajectory is possible simplified to two points, \ie $P_s$ in the front door and $P_e$ on the bed. In this case, a \emph{when\_at} query taking a point $P$ in his living room as input may return the excepted time $t'$ with an error of several hours to the actual time $P.t$.}
-
-\ni {(2) The average error of \emph{when\_at} queries normally increases with the increment of error bounds. This is obvious as the increment of error bounds enlarges the average length of the time interval between two neighboring points in a simplified trajectory, which leads to the increase of the average error of \emph{when\_at} queries. Similarly, the algorithms having better compression ratios typically have larger errors for \emph{when\_at} queries.}
-	
 \ni {(3) \sed algorithms have smaller average \emph{when\_at} query errors than \ped algorithms, majorly because \sed introduces smaller distance errors and has relatively worse compression ratios compared with \ped. \dad algorithms also have smaller average \emph{when\_at} query errors than \ped algorithms, partially because of their relatively worse  compression ratios compared with \ped. }
-	
+
+
+
+
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\stitle{Summary}.
@@ -1093,6 +1066,43 @@ One-pass algorithms show a linear running time and they are not very sensitive t
 %The average errors of algorithms as a whole are on the contrary of compression ratios. The optimal algorithm usually is the worst algorithm in term of average error, followed by one pass algorithms and then batch algorithms. Online algorithms have varied average errors, ranging from the best to the worst.
 %
 \emph{(5)} {All the tested algorithms have bounded errors in data aging, where the error bounds of \dpa using \ped and \sed are $max\{\epsilon_1, \epsilon_2\}$ and the others are $\epsilon_1 + \epsilon_2$. Moreover, algorithms \dpa using \ped and \sed are \emph{aging friendly}, while others are not. }
+
+
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.350]{Figures/Exp-when-PED-error-size-service.jpg} 	\hspace{0.5ex}
+	\includegraphics[scale=0.350]{Figures/Exp-when-PED-error-size-geolife.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.350]{Figures/Exp-when-PED-error-size-mopsi.jpg}		
+	\vspace{-2ex}
+	\caption{\small {Evaluation of \emph{when\_at} queries (\ped) on small datasets: varying the size of
+			trajectories.}}
+	\label{fig:query-when-ped-size}
+	\vspace{-1ex}
+\end{figure*}
+
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.350]{Figures/Exp-when-SED-error-size-service.jpg} 	\hspace{0.5ex}
+	\includegraphics[scale=0.350]{Figures/Exp-when-SED-error-size-geolife.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.350]{Figures/Exp-when-SED-error-size-mopsi.jpg}		
+	\vspace{-2ex}
+	\caption{\small {Evaluation of \emph{when\_at} queries (\sed) on small datasets: varying the size of
+			trajectories.}}
+	\label{fig:query-when-sed-size}
+	\vspace{-1ex}
+\end{figure*}
+
+
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[scale=0.350]{Figures/Exp-when-DAD-error-size-service.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.350]{Figures/Exp-when-DAD-error-size-geolife.jpg}	\hspace{0.5ex}
+	\includegraphics[scale=0.350]{Figures/Exp-when-DAD-error-size-mopsi.jpg}	
+	\vspace{-2ex}
+	\caption{\small {Evaluation of \emph{when\_at} queries (\dad) on small datasets: varying the size of trajectories.}}
+	\label{fig:query-when-dad-size}
+	\vspace{-1ex}
+\end{figure*}
 
 \stitle{Distance Metrics}.
 \emph{(1)} The output sizes of algorithms using \sed are approximately twice of \ped, and in practice (\eg $\epsilon <100$ meters and $\epsilon < 60$ degrees), \ped and \sed usually bring obvious better compression ratios than \dad, especially in high sampling data sets.
