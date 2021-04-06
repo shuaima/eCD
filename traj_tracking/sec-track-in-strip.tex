@@ -8,10 +8,6 @@
 \label{sec:strip}
 
 
-Currently, position tracking and trajectory tracking methods both use \sed as the distance metric to check data points and confirm the actual position of a moving object at time $t$ lives in a circle around the excepting position of the moving object at that time.
-However, as mentioned in Section~\ref{sec-intro}, there is a need of tracking a moving object in strip areas.
-%Though \sed is currently the only distance metric used in tracking moving objects, we argue that another distance metric, \ped that is wildly used in trajectory simplification and always has remarkable better compression ratios than \sed, is also important in tracking moving objects that confirms moving objects lives in strip areas, \eg a school boy is expected on his way home no matter the speed of his movement.
-This section introduces a \ped-based method that tracks a moving object in strip areas.
 
 
 %\subsection{Position tracking in strip areas}
@@ -22,99 +18,11 @@ This section introduces a \ped-based method that tracks a moving object in strip
 \subsection{\ped, sector and trajectory simplification}
 \label{sec:sector-in-simp}
 
-Though \ped is not seemed in position and trajectory tracking, it is familiar in trajectory simplification, where an error-bounded algorithm using \ped always ensures that the original data points live in strip-like areas built from the simplified trajectory. 
-%Actually, it is the first distance metric of trajectory simplification, earlier than \sed. 
-Thus, \textit{\ped is the potential distance metric to track a moving object in strip areas.}
-%
-Next, for data simplification using \ped, the most efficient and effective way to check the data points is undoubted \textit{sector intersection} \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve}, which is originally developed in fields of computational geometry and cartography to efficient simplifies the border lines of a geometric or cartographic shape in digital format, yet is applicable to simplify trajectories as pointed out in \cite{Lin:Cised}. Here, a \emph{sector} is largely a simplified version of a spatio-temporal cone projected on an $x$--$y$ 2D space that the temporal information is ignored, that converts the \ped distance tolerance into an angle tolerance for efficiently checking the successive data points.
-
-Given a sequence of points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$,
-for the start data point $P_s$, any point $P_{s+i}$ and $|\overline{P_sP_{s+i}}|>\epsilon$ ($i\in[1, k]$), there are two directed lines $\overline{P_sP^u_{s+i}}$ and $\overline{P_sP^l_{s+i}}$ such that $ped(P_{s+i}, \overline{P_sP^u_{s+i}})$ $=$ $ped(P_{s+i}, \overline{P_sP^l_{s+i}}) = \epsilon$ and either ($\overline{P_sP^l_{s+i}}.\theta < \overline{P_sP^u_{s+i}}.\theta ~and~\overline{P_sP^u_{s+i}}.\theta - \overline{P_sP^l_{s+i}}.\theta <\pi$) or ($\overline{P_sP^l_{s+i}}.\theta > \overline{P_sP^u_{s+i}}.\theta ~and~ \overline{P_sP^u_{s+i}}.\theta - \overline{P_sP^l_{s+i}}.\theta < -\pi)$. Indeed, they form a \emph{sector} \sector{(P_s, P_{s+i}, \epsilon)} that takes $P_s$ as the center point and $\overline{P_sP^u_{s+i}}$ and $\overline{P_sP^l_{s+i}}$ as the borderlines (Figure~\ref{fig:sleeve}-(1)).
-%
-Then, like the checking of the common intersection of spatio-temporal cones in \cised, these sector-based algorithms check the common intersection of sectors, \ie $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon)} $\ne \{P_s\}$ \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}, to find out whether the sub-trajectory can be represented by a line segment $\overline{P_sQ}$ \wrt error bound $\epsilon$, where $Q$ is a point that may not belong to the sub-trajectory. However, if $Q$ must be $P_{s+k}$, the last point of the sub-trajectory, \eg $P_3$ in Figure~\ref{fig:sleeve}-(2), then (1) the full-$\epsilon$ sectors should be replaced by half-$\epsilon$ sectors, and (2) $P_{s+k}$ should be one of the points having the furthest distances to $P_s$, \ie $|P_sP_{s+k}| \ge l_{m}$, where $l_{m}=max\{|P_sP_{s+i}|\}$~for each $i \in (0, k)$. 
-%
-
-\begin{figure}[tb!]
-	\centering
-	\includegraphics[scale=1.0]{figures/Fig-Sleeve.png}
-	\vspace{-2ex}
-	\caption{\small Examples of sectors and their intersection.}
-	\vspace{-2ex}
-	\label{fig:sleeve}
-\end{figure}
 
 
 \subsection{Tracking by sectors}
 
-Similar as the spatio-temporal cone of \sed used to track trajectory in a circular area, the sector of \ped is applicable to track a moving object in a strip area. 
 
-
-%, that is, for any data point $P_{s+i}$ ($i \in [1, ... k]$), its perpendicular Euclidean distance to line segment $\overline{P_sP_{s+k}}$ is not greater than the error bound $\epsilon$.
-
-\begin{theorem}
-	\label{theo-half-sector}
-	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, the trajectory can be tracked in a strip area by an approach based on the intersection of sectors.
-\end{theorem}
-
-Because the half-$\epsilon$ sector approach of \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve} may limit the performance of compression ratio, we also extend it to full-$\epsilon$ sectors for better performance.
-
-\begin{theorem}
-	\label{theo-full-sector}
-	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $ped(P_{s+i}, \overline{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if line segment $\overline{P_sP_{s+k}}$ passes through $\bigsqcap_{i=1}^{k-1}$\sector{(P_s, P_{s+i}, \epsilon)} - \{$P_s$\} ~and~ $|P_sP_{s+k}| \ge \sqrt{l_{m}^2 - \epsilon^2}$, where $l_{m} = max\{|P_sP_{s+i}|\}$ for each $i \in (0, k)$.
-\end{theorem}
-
-Theorem \ref{theo-full-sector} tells that full-$\epsilon$ sector approach with constrains that (1) $\overline{P_sP_{s+k}}$ lives in the common intersection of the preview full-$\epsilon$ sectors and (2) $|P_sP_{s+k}|$ is longer than $\sqrt{l_{m}^2 -\epsilon^2}$, is applicable to simplify and track a moving object in a strip area. Because the full-$\epsilon$ sector and $|P_sP_{s+k}| \ge \sqrt{l_{m}^2 - \epsilon^2}$ are looser constraints than the half-$\epsilon$ sector and $|P_sP_{s+k}| \ge l_{m}$ used in \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}, this new approach is sure of bringing a better compression ratio.
-
-\eat{%%%%%%%%%%%%%%%%%%%
-\begin{theorem}
-	\label{theo-sector-vs}
-	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, if $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$, then $\overline{P_sP_{s+k}}$ passes through $\bigsqcap_{i=1}^{k-1}$\sector{(P_s, P_{s+i}, \epsilon)}-$\{P_s\}$; and the opposite is not necessarily true.
-\end{theorem}
-
-
-Theorem \ref{theo-sector-vs} tells that the full-$\epsilon$ sector approach also brings a better effectiveness than the half-$\epsilon$ sector, hence it is the dominant way to develop trajectory simplification/tracking algorithms.
-}%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Algorithm: Traj tracking based on section intersection using full sectors.
-\begin{figure}[tb!]   
-	\begin{center}
-		{\small
-			\begin{minipage}{3.3in}
-				\myhrule
-				%\vspace{-1ex}
-				\mat{0ex}{
-					{\bf Algorithm}~\sitt $(\dddot{\mathcal{T}}[P_0,\ldots,P_n],~\epsilon)$\\
-					%	\sstab
-					\bcc \hspace{1ex}\= $P_s := P_0$; ~~~~$\mathcal{S}^*$ := \kw{getSector}($P_s$, $P_{s+1}$, $\epsilon$); \\
-					\icc \hspace{1ex}\= $\vv{v}.\theta:=\overline{P_{s}P_{s+1}}.\theta$;  \\
-					\icc \hspace{1ex}\= update ($P_{s}, \vv{v}$); 	\\
-					\icc \hspace{1ex}\= $l_{m} := |P_sP_{s+1}|$; ~~~~$i:= 2$;  	\\
-					\icc \hspace{1ex}\= while $i \le n$ do \\
-					\icc \>\hspace{3ex} if $\overline{P_sP_{i}}$ ~does not pass~ $\mathcal{S}^*$ or $|P_sP_{i}| < \sqrt{l_{m}^2 - \epsilon^2}$ ~then \\ % // updates velocity and location \\
-					\icc \>\hspace{7ex}    $P_s := P_{i-1}$; ~~~~$\mathcal{S}^*$ := $\emptyset$; ~~~~$l_{m} := 0$;\\
-					\icc \>\hspace{7ex}    $\vv{v}.\theta:=\overline{P_{s}P_{i}}.\theta$;  \\
-					\icc \>\hspace{7ex}    update ($P_{s}, \vv{v}$); 	\\
-					\icc \>\hspace{3ex} else if $ped(P_i, \vv{v}) \ge \epsilon $ ~then  \\ %$\overline{P_sP_{i}}$ ~passes~ $\mathcal{S}^*$ ~and~ $|P_sP_{i}| > l_{m} - \epsilon$ \\ \hspace{9ex} ~and~
-					\icc \>\hspace{7ex}    $\vv{v}.\theta:=\overline{P_sP_{i}}.\theta$; \\
-					\icc \>\hspace{7ex}    update ($\vv{v}$); \\
-					\icc \>\hspace{3ex} if $\mathcal{S}^*=\emptyset$ ~then~ $\mathcal{S}^*:=$ \kw{getSector}($P_s$, $P_{i}$, $\epsilon$); \\
-					\icc \>\hspace{3ex} else $\mathcal{S}^*$ := $\mathcal{S}^*\bigsqcap$ \kw{getSector}($P_s$, $P_{i}$, $\epsilon$);\\
-					\icc \>\hspace{3ex} $l_{m} := \max\{|P_sP_{i}|, l_{m}\}$; ~~~~$i$ := $i +1$;\\
-					\icc \>\hspace{0ex} update ($P_{n}$); 
-				}
-				\vspace{-2ex}
-				\myhrule
-			\end{minipage}
-		}
-	\end{center}
-	\vspace{-2ex}
-	\caption{\small Trajectory tracking based on sector.}
-	\label{alg:sitt}
-	\vspace{-1ex}
-\end{figure}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Implementation}
 
@@ -122,18 +30,7 @@ We then present a one-pass trajectory tracking algorithm based on full-$\epsilon
 %
 During tracking, the moving object is in a strip around the velocity. And after simplification, those removed points are located in $2\epsilon$--width strips around those saved points.
 
-\begin{figure}[tb!]
-	\centering
-	\includegraphics[scale=1.0]{figures/Fig-SITT.png}
-	\vspace{-2ex}
-	\caption{\small A running example of trajectory tracking by \sitt.  }
-	\vspace{-2ex}
-	\label{fig:sitt}
-\end{figure}
 
-\begin{example}
-Figure~\ref{fig:sitt} is a running example of \sitt taking the same input as Figure~\ref{fig:citt}. It uses full-$\epsilon$ sectors, (1) $P_4$ lives in the common intersection of \sector{_{1}}, \sector{_{2}} and \sector{_{3}} and it has a \ped distance larger than $\epsilon$ to $\vec{v_1}$, thus, \sitt updates the velocity from $\vec{v_1}$ to $\vec{v_4}$ and the process goes on, and (2) $P_5$ is outside of the common intersection of the preview sectors, thus, $P_4$ serves as the new start point, and an update is triggered. Finally, \sitt sends three points, $P_0, P_4$ and $P_8$, and three velocities, $\vec{v_1}$, $\vec{v_4}$ and $\vec{v_5}$, to the MOD server. 
-\end{example}
 
 
 
