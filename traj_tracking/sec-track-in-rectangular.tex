@@ -19,28 +19,24 @@ Like the circular area related to \sed, a rectangle-like area is also related to
 
 \stitle{Binary Euclidean distances of \sed and \ped}, shortly \bed (\sed, \ped), is the combination of distance metrics \sed and \ped where their error bounds are set separately to $\epsilon_{sed}$ and $\epsilon_{ped}$, such that (1) if $\epsilon_{ped} \ge \epsilon_{sed}$, then it falls back to the \sed, \ie tracking in a circular area, as shown in {Figure~\ref{fig:areas}-(1)};
 %
-(2) if $\epsilon_{ped} << \epsilon_{sed}$, then its effect is actually approximate to a \ped. Through \ped is not seemed in position and trajectory tracking, it is familiar in trajectory simplification that always ensures that the original data points live in strip-like areas built around the simplified trajectory. Otherwise, 
+(2) if $\epsilon_{ped} << \epsilon_{sed}$, then its effect is actually approximate to a \ped, which is familiar in trajectory simplification, but not seemed in position and trajectory tracking, that always ensures that the original data points live in strip-like areas built around the simplified trajectory, as shown in {Figure~\ref{fig:areas}-(2). Otherwise, 
 %
 (3) it is the double effects of \ped and \sed, and forms a rectangle-like shape whose short sides are replaced by circular arcs of \sed as shown in {Figure~\ref{fig:areas}-(3)}. 
 
-%By combining \sed and \ped, we get a 
+
 The shape of a rectangle-like area is controlled by two independent parameters, $\epsilon_{ped}$ and $\epsilon_{sed}$, thus, by carefully setting them, we not only build such rectangle-line areas that satisfy the needs of varied applications but also balance two performance metrics, the compression ratios and the errors of spatio-temporal queries, of trajectory simplification/tracking algorithms. 
-For the same example of ``the school boy on his way home" mentioned in Section \ref{sec-intro}, if we only use \ped, then we get a simplified trajectory having a good compression ratio and a unbounded query error; if we only use \sed, then we get a poorer compression ratio and a bounded query error. However, if we combine them, \ie~use the \bed, then we could get a medium compression ratio and a bounded query error.
+%For the same example of ``the school boy on his way home'' mentioned in Section \ref{sec-intro}, if we only use \ped with a fixed ``$\epsilon$'', then we get a simplified trajectory having a good compression ratio and a unbounded query error; if we only use \sed with the same ``$\epsilon$'', then we get a poorer compression ratio and a bounded query error. However, if we combine them, \ie~use the \bed, then we could get a medium compression ratio and a bounded query error.
 
-\todo{sector}
 
-Though \ped is not seemed in position and trajectory tracking, it is familiar in trajectory simplification, where an error-bounded algorithm using \ped always ensures that the original data points live in strip-like areas built from the simplified trajectory. 
-%Actually, it is the first distance metric of trajectory simplification, earlier than \sed. 
-Thus, \textit{\ped is the potential distance metric to track a moving object in strip areas.}
 %
-Next, for data simplification using \ped, the most efficient and effective way to check the data points is undoubted \textit{sector intersection} \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve}, which is originally developed in fields of computational geometry and cartography to efficient simplifies the border lines of a geometric or cartographic shape in digital format, yet is applicable to simplify trajectories as pointed out in \cite{Lin:Cised}. Here, a \emph{sector} is largely a simplified version of a spatio-temporal cone projected on an $x$--$y$ 2D space that the temporal information is ignored, that converts the \ped distance tolerance into an angle tolerance for efficiently checking the successive data points.
 
-\todo{to be deleted?}
+
+\eat{ %%%%%%%%%%%%%%
 Given a sequence of points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error bound $\epsilon$,
 for the start data point $P_s$, any point $P_{s+i}$ and $|\overline{P_sP_{s+i}}|>\epsilon$ ($i\in[1, k]$), there are two directed lines $\overline{P_sP^u_{s+i}}$ and $\overline{P_sP^l_{s+i}}$ such that $ped(P_{s+i}, \overline{P_sP^u_{s+i}})$ $=$ $ped(P_{s+i}, \overline{P_sP^l_{s+i}}) = \epsilon$ and either ($\overline{P_sP^l_{s+i}}.\theta < \overline{P_sP^u_{s+i}}.\theta ~and~\overline{P_sP^u_{s+i}}.\theta - \overline{P_sP^l_{s+i}}.\theta <\pi$) or ($\overline{P_sP^l_{s+i}}.\theta > \overline{P_sP^u_{s+i}}.\theta ~and~ \overline{P_sP^u_{s+i}}.\theta - \overline{P_sP^l_{s+i}}.\theta < -\pi)$. Indeed, they form a \emph{sector} \sector{(P_s, P_{s+i}, \epsilon)} that takes $P_s$ as the center point and $\overline{P_sP^u_{s+i}}$ and $\overline{P_sP^l_{s+i}}$ as the borderlines (Figure~\ref{fig:sleeve}-(1)).
 %
 Then, like the checking of the common intersection of spatio-temporal cones in \cised, these sector-based algorithms check the common intersection of sectors, \ie $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon)} $\ne \{P_s\}$ \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}, to find out whether the sub-trajectory can be represented by a line segment $\overline{P_sQ}$ \wrt error bound $\epsilon$, where $Q$ is a point that may not belong to the sub-trajectory. However, if $Q$ must be $P_{s+k}$, the last point of the sub-trajectory, \eg $P_3$ in Figure~\ref{fig:sleeve}-(2), then (1) the full-$\epsilon$ sectors should be replaced by half-$\epsilon$ sectors, and (2) $P_{s+k}$ should be one of the points having the furthest distances to $P_s$, \ie $|P_sP_{s+k}| \ge l_{m}$, where $l_{m}=max\{|P_sP_{s+i}|\}$~for each $i \in (0, k)$. 
-%
+}%eaten
 
 \begin{figure}[tb!]
 	\centering
@@ -54,10 +50,15 @@ Then, like the checking of the common intersection of spatio-temporal cones in \
 
 \subsection{Tracking with cones and sectors}
 
-Similar as the spatio-temporal cone of \sed used to track trajectory in a circular area, the sector of \ped is applicable to track a moving object in a strip area. 
+
+%\ped is familiar in trajectory simplification, where an error-bounded algorithm using \ped always ensures that the original data points live in strip-like areas built from the simplified trajectory. 
+%Though \ped is not seemed in position and trajectory tracking, indeed, the sector built from \ped is applicable to track a moving object in a strip area, like the spatio-temporal cone built from \sed that is used to track trajectory in a circular area.
 
 
-%, that is, for any data point $P_{s+i}$ ($i \in [1, ... k]$), its perpendicular Euclidean distance to line segment $\overline{P_sP_{s+k}}$ is not greater than the error bound $\epsilon$.
+First, similar as the spatio-temporal cones built from \sed are used in simplifying trajectory in circular areas, a mechanism based on sectors built from \ped is used to simplify trajectory in strip areas. Here, a \emph{sector} is largely a simplified version of a spatio-temporal cone projected on an $x$--$y$ 2D space that the temporal information is ignored, that converts the \ped distance tolerance into an angle tolerance for efficiently checking the successive data points. 
+Then \textit{sector intersection} \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve}, originally developed in fields of computational geometry and cartography to efficient simplifies the border lines of a geometric or cartographic shape in digital format, is an efficient and effective way to simplify trajectories as pointed out in \cite{Lin:Cised}.
+We next demonstrate that it is also applicable to track trajectory in strip areas.
+
 
 \begin{theorem}
 	\label{theo-half-sector}
@@ -85,7 +86,10 @@ Theorem \ref{theo-full-sector} tells that full-$\epsilon$ sector approach with c
 
 
 
-\myblue{Is there an effective and efficient trajectory algorithm implementing \bed that tracks a moving object in a rectangle-like area? Theorem \ref{theo-binary} is the answer to this question.}
+
+
+%\myblue{Is there an effective and efficient trajectory algorithm implementing \bed that tracks a moving object in a rectangle-like area? Theorem \ref{theo-binary} is the answer to this question.}
+Second, by combining cones and sectors, we are able to efficiently track trajectory in rectangle-like areas.
 
 \begin{theorem}
 	\label{theo-binary}
@@ -147,7 +151,7 @@ We now present the algorithm of \underline{B}inary \underline{I}ntersection for 
 \bitt is a position tracking algorithm as well as a trajectory simplification algorithm, and it ensures that any removed point is located in a rectangle-like area around its expected position \wrt a velocity of position tracking or a line segment connecting two neighboring points of the simplified trajectory. 
 %\eg $P_2$ is in the rectangle-like area around its synchronized point $P'_2$ \wrt line segment $\overline{P_0P_4}$
 %
-\bitt is also the super version of \citt and \sitt, that is, if $\epsilon_{sed} >> \epsilon_{ped}$, then ``$\overline{P_sP_{i}}$ does not pass $\mathcal{R}^*$" of line 7 and ``$sed(P_i, \vv{v}) \ge \epsilon_{sed}$" of line 11 are always false, thus \bitt falls back to \sitt. {Similarly, if $\epsilon_{sed} \le \epsilon_{ped}$, then it falls back to \citt.} 
+\bitt is also the super version of \citt, that is, if $\epsilon_{sed} \le \epsilon_{ped}$, then it falls back to \citt. Similarly, if $\epsilon_{sed} >> \epsilon_{ped}$, then ``$\overline{P_sP_{i}}$ does not pass $\mathcal{R}^*$'' of line 7 and ``$sed(P_i, \vv{v}) \ge \epsilon_{sed}$'' of line 11 are always false, thus \bitt degenerates to \underline{S}ector \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (\sitt in short) that tracks trajectory in strip areas.
 
 
 \begin{example}
@@ -186,8 +190,8 @@ We now present the algorithm of \underline{B}inary \underline{I}ntersection for 
 
 
 \stitle{Correctness and complexity.} 
-The correctness of algorithm \bitt follows from Theorems \ref{theo-full-cone}, \ref{theo-full-sector} and \ref{theo-binary}.
-It is also easy to find that it has a linear time complexity like \citt and \sitt.
+\myblue{The correctness of algorithm \bitt follows from Theorems \ref{theo-full-cone}, \ref{theo-full-sector} and \ref{theo-binary}.
+It is also easy to find that it has a linear time complexity like \citt and \sitt.}
 
 
 %\stitle{Discuss.} Relations to position tracking and traj simplification. 
