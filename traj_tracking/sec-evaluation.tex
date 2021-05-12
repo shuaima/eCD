@@ -5,53 +5,7 @@
 \section{Experimental Study}
 \label{sec-exp}
 
-\eat{
-\begin{table*}[!ht]
-	\renewcommand{\arraystretch}{1.20}
-	\caption{\small Real-life Trajectory Datasets}
-	\vspace{-1.5ex}
-	\centering
-	\footnotesize
-	%\scriptsize
-	\begin{tabular}{|l|c|c|c|r|}
-		\hline
-		\bf{ Data Sets}& \bf{Number\ of Trajectories}     &\bf {Sampling Rates\ (s)}   &\bf{Points Per Trajectory\ (K)}    &\bf {Total points} \\
-		\hline
-		\sercar	&1,000	    &3-5	    &$\sim114.0$   &114M\\
-		\hline
-		\geolife &182	    &1-5	    &$\sim131.4$   &24.2M\\
-		\hline
-		\mopsi &51	    	&2	    &$\sim153.9$     &7.9M\\
-		\hline
-	\end{tabular}
-	\label{tab:datasets}
-	\vspace{-2ex}
-\end{table*}
-}
 
-\begin{table}[!ht]
-	\renewcommand{\arraystretch}{1.20}
-	\caption{\small Real-life Trajectory Datasets}
-	\vspace{-1.5ex}
-	\centering
-	\footnotesize
-	%\scriptsize
-	\begin{tabular}{|l|c|c|r|}
-		\hline
-		\bf{ Properties of Data Sets} & \sercar      &\geolife   &\mopsi \\
-		\hline
-		{Number\ of Trajectories}	&1,000	    &182	    & 51  \\
-		\hline
-		 {Sampling Rates\ (s)} &3-5  & 1-5 & 2 \\
-		\hline
-		{Points Per Trajectory\ (K)}  &	$\sim114.0$    &$\sim131.4$	    & $\sim153.9$ \\
-		\hline
-		 {Total points (M)} &114   	    	&24.2    &7.9\\
-		\hline
-	\end{tabular}
-	\label{tab:datasets}
-	\vspace{-2ex}
-\end{table}
 
 
 In this section, we present an extensive experimental study of our one-pass trajectory tracking algorithms (\citt, \sitt and \bitt) compared with the
@@ -80,9 +34,9 @@ The sampling rate was one point per $2$ seconds, and each trajectory has around 
 \stitle{Metrics.}
 Following the main stream \cite{Trajcevski:LDRH, Lange:GRTS, Lange:Tracking, Lin:Cised, Zhang:Evaluation}, we use \emph{messages}, \emph{compression ratio}, \emph{average error} and \emph{running time} to evaluate algorithms.
 
- \ni \emph{(1) Total messages}. It is the ratio of the total number of messages (velocities and data points) \wrt the total number of the original trajectory points
+ \ni \emph{(1) Message ratio}. It is ``the total number of messages (both velocity and location messages)'' divided by ``the total number of the original trajectory points''.
  
- \ni \emph{(2) Compression ratio}. It is defined as follows: Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piecewise line representations $\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$, the compression ratio of an algorithm is $(\sum_{j=1}^{M} |\overline{\mathcal{T}}_j |)/(\sum_{j=1}^{M} |\dddot{\mathcal{T}}_j |)$.
+ \ni \emph{(2) Compression ratio}. It is defined as follows: Given a set of trajectories $\{\dddot{\mathcal{T}_1}, \ldots, \dddot{\mathcal{T}_M}\}$ and their piece-wise line representations $\{\overline{\mathcal{T}_1}, \ldots, \overline{\mathcal{T}_M}\}$, the compression ratio of an algorithm is $(\sum_{j=1}^{M} |\overline{\mathcal{T}}_j |)/(\sum_{j=1}^{M} |\dddot{\mathcal{T}}_j |)$.
  By the definition, \emph{algorithms with lower compression ratios are better}.
  
  \ni \emph{(3) Average error}. It is the average value of the distances from every point of the original trajectories to its representing line segment of the simplified trajectories.
@@ -94,6 +48,55 @@ We implement five tracking algorithms, \ie our \citt, \sitt and \bitt, \ldrh (th
 All algorithms were implemented with Java.
 All tests were run on an {x64-based  PC with 8 Intel(R) Core(TM) i5-6500 CPU @ 3.20GHz and 8GB of memory.
 %, and each test was repeated over 3 times and the average is reported here.
+
+\eat{
+	\begin{table*}[!ht]
+		\renewcommand{\arraystretch}{1.20}
+		\caption{\small Real-life Trajectory Datasets}
+		\vspace{-1.5ex}
+		\centering
+		\footnotesize
+		%\scriptsize
+		\begin{tabular}{|l|c|c|c|r|}
+			\hline
+			\bf{ Data Sets}& \bf{Number\ of Trajectories}     &\bf {Sampling Rates\ (s)}   &\bf{Points Per Trajectory\ (K)}    &\bf {Total points} \\
+			\hline
+			\sercar	&1,000	    &3-5	    &$\sim114.0$   &114M\\
+			\hline
+			\geolife &182	    &1-5	    &$\sim131.4$   &24.2M\\
+			\hline
+			\mopsi &51	    	&2	    &$\sim153.9$     &7.9M\\
+			\hline
+		\end{tabular}
+		\label{tab:datasets}
+		\vspace{-2ex}
+	\end{table*}
+}
+
+\begin{table}[tb!]
+	\renewcommand{\arraystretch}{1.20}
+	\caption{\small Real-life Trajectory Datasets}
+	\vspace{-1.5ex}
+	\centering
+	\footnotesize
+	%\scriptsize
+	\begin{tabular}{|l|c|c|r|}
+		\hline
+		\bf{ Properties of Data Sets} & \sercar      &\geolife   &\mopsi \\
+		\hline
+		{Number\ of Trajectories}	&1,000	    &182	    & 51  \\
+		\hline
+		{Sampling Rates\ (s)} &3-5  & 1-5 & 2 \\
+		\hline
+		{Points Per Trajectory\ (K)}  &	$\sim114.0$    &$\sim131.4$	    & $\sim153.9$ \\
+		\hline
+		{Total points (M)} &114   	    	&24.2    &7.9\\
+		\hline
+	\end{tabular}
+	\label{tab:datasets}
+	\vspace{-2ex}
+\end{table}
+
 
 
 \subsection{Experimental Results}

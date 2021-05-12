@@ -56,7 +56,7 @@ Then, like the checking of the common intersection of spatio-temporal cones in \
 %Though \ped is not seemed in position and trajectory tracking, indeed, the sector built from \ped is applicable to track a moving object in a strip area, like the spatio-temporal cone built from \sed that is used to track trajectory in a circular area.
 
 
-First, similar as the spatio-temporal cones built from \sed are used in simplifying trajectory in circular areas, a mechanism based on sectors built from \ped is used to simplify trajectory in strip areas. Here, a \emph{sector} is largely a simplified version of a spatio-temporal cone projected on an $x$--$y$ 2D space that the temporal information is ignored, that converts the \ped distance tolerance into an angle tolerance for efficiently checking the successive data points. 
+First, similar as the spatio-temporal cones built from \sed are used in simplifying trajectory in circular areas, a mechanism based on sectors built from \ped is used to simplify trajectory in strip areas. As shown in Figure \ref{fig:sleeve}, a \emph{sector} is largely a simplified version of a spatio-temporal cone projected on an $x$--$y$ 2D space that the temporal information is ignored, that converts the \ped distance tolerance into an angle tolerance for efficiently checking the successive data points. 
 Then \textit{sector intersection} \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve}, originally developed in fields of computational geometry and cartography to efficient simplifies the border lines of a geometric or cartographic shape in digital format, is an efficient and effective way to simplify trajectories as pointed out in \cite{Lin:Cised}.
 We next demonstrate that it is also applicable to track trajectory in strip areas.
 
@@ -66,14 +66,16 @@ We next demonstrate that it is also applicable to track trajectory in strip area
 	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, the trajectory can be tracked in a strip area by an approach based on the intersection of sectors.
 \end{theorem}
 
-Because the half-$\epsilon$ sector approach of \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve} may limit the performance of compression ratio, we also extend it to full-$\epsilon$ sectors for better performance.
+Because the sector intersection approach of \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve} uses a half-$\epsilon$ sector (Figure \ref{fig:sleeve}-(2)) that may limit the performance of compression ratio, we also extend it to the full-$\epsilon$ sector (Figure \ref{fig:sleeve}-(1)) for better performance.
 
 \begin{theorem}
 	\label{theo-full-sector}
 	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $ped(P_{s+i}, \overline{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if line segment $\overline{P_sP_{s+k}}$ passes through $\bigsqcap_{i=1}^{k-1}$\sector{(P_s, P_{s+i}, \epsilon)} - \{$P_s$\} ~and~ $|P_sP_{s+k}| \ge \sqrt{l_{m}^2 - \epsilon^2}$, where $l_{m} = max\{|P_sP_{s+i}|\}$ for each $i \in (0, k)$.
 \end{theorem}
 
-Theorem \ref{theo-full-sector} tells that full-$\epsilon$ sector approach with constrains that (1) $\overline{P_sP_{s+k}}$ lives in the common intersection of the preview full-$\epsilon$ sectors and (2) $|P_sP_{s+k}|$ is longer than $\sqrt{l_{m}^2 -\epsilon^2}$, is applicable to simplify and track a moving object in a strip area. Because the full-$\epsilon$ sector and $|P_sP_{s+k}| \ge \sqrt{l_{m}^2 - \epsilon^2}$ are looser constraints than the half-$\epsilon$ sector and $|P_sP_{s+k}| \ge l_{m}$ used in \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}, this new approach is sure of bringing a better compression ratio.
+Theorem \ref{theo-full-sector} tells that the full-$\epsilon$ sector approach with constrains that (1) $\overline{P_sP_{s+k}}$ lives in the common intersection of the preview full-$\epsilon$ sectors and (2) $|P_sP_{s+k}|$ is longer than $\sqrt{l_{m}^2 -\epsilon^2}$, is applicable to simplify and track a moving object in a strip area. The full-$\epsilon$ sector and $|P_sP_{s+k}| \ge \sqrt{l_{m}^2 - \epsilon^2}$ are looser constraints than the half-$\epsilon$ sector and $|P_sP_{s+k}| \ge l_{m}$ used in \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}, hence, this new approach is sure of bringing a better compression ratio.
+%\myblue{Is there an effective and efficient trajectory algorithm implementing \bed that tracks a moving object in a rectangle-like area? Theorem \ref{theo-binary} is the answer to this question.}
+Next, by combining cones and sectors, we are able to efficiently track trajectory in rectangle-like areas.
 
 \eat{%%%%%%%%%%%%%%%%%%%
 	\begin{theorem}
@@ -84,13 +86,6 @@ Theorem \ref{theo-full-sector} tells that full-$\epsilon$ sector approach with c
 	
 	Theorem \ref{theo-sector-vs} tells that the full-$\epsilon$ sector approach also brings a better effectiveness than the half-$\epsilon$ sector, hence it is the dominant way to develop trajectory simplification/tracking algorithms.
 }%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-
-
-%\myblue{Is there an effective and efficient trajectory algorithm implementing \bed that tracks a moving object in a rectangle-like area? Theorem \ref{theo-binary} is the answer to this question.}
-Second, by combining cones and sectors, we are able to efficiently track trajectory in rectangle-like areas.
 
 \begin{theorem}
 	\label{theo-binary}
@@ -152,23 +147,7 @@ We now present the algorithm of \underline{B}inary \underline{I}ntersection for 
 \bitt is a position tracking algorithm as well as a trajectory simplification algorithm, and it ensures that any removed point is located in a rectangle-like area around its expected position \wrt a velocity of position tracking or a line segment connecting two neighboring points of the simplified trajectory. 
 %\eg $P_2$ is in the rectangle-like area around its synchronized point $P'_2$ \wrt line segment $\overline{P_0P_4}$
 %
-\bitt is also the super version of \citt, that is, if $\epsilon_{sed} \le \epsilon_{ped}$, then it falls back to \citt. Similarly, if $\epsilon_{sed} >> \epsilon_{ped}$, then ``$\overline{P_sP_{i}}$ does not pass $\mathcal{R}^*$'' of line 7 and ``$sed(P_i, \vv{v}) \ge \epsilon_{sed}$'' of line 11 are always false, thus \bitt degenerates to \underline{S}ector \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (\sitt in short) that tracks trajectory in strip areas.
-
-
-\begin{example}
-	Figure~\ref{fig:sitt} is a running example of \sitt taking the same input as Figure~\ref{fig:citt}. It uses full-$\epsilon$ sectors, (1) $P_4$ lives in the common intersection of \sector{_{1}}, \sector{_{2}} and \sector{_{3}} and it has a \ped distance larger than $\epsilon$ to $\vec{v_1}$, thus, \sitt updates the velocity from $\vec{v_1}$ to $\vec{v_4}$ and the process goes on, and (2) $P_5$ is outside of the common intersection of the preview sectors, thus, $P_4$ serves as the new start point, and an update is triggered. Finally, \sitt sends three points, $P_0, P_4$ and $P_8$, and three velocities, $\vec{v_1}$, $\vec{v_4}$ and $\vec{v_5}$, to the MOD server. 
-\end{example}
-
-\begin{figure}[tb!]
-	\centering
-	\includegraphics[scale=1.0]{figures/Fig-SITT.png}
-	\vspace{-2ex}
-	\caption{\small A running example of trajectory tracking by \sitt.  }
-	\vspace{-2ex}
-	\label{fig:sitt}
-\end{figure}
-
-
+\bitt is the super version of \citt, \ie it falls back to \citt when $\epsilon_{sed} \le \epsilon_{ped}$.
 
 \begin{example}
 	Figure~\ref{fig:bitt} is a running example of \bitt. It takes as inputs the same trajectory as the above, the same $\epsilon_{sed}$ as Figure~\ref{fig:citt} and an $\epsilon_{ped}$ of half that of Figure~\ref{fig:sitt}. Because its $\epsilon_{sed}$ is the same as Figure~\ref{fig:citt}, its effectiveness is also the same as Figure~\ref{fig:citt}. For the purpose of clearness, we do not show those cones in the figure.
@@ -185,6 +164,26 @@ We now present the algorithm of \underline{B}inary \underline{I}ntersection for 
 	\vspace{-2ex}
 	\label{fig:bitt}
 \end{figure}
+
+\stitle{Remark}. If $\epsilon_{sed} >> \epsilon_{ped}$, then ``$\overline{P_sP_{i}}$ does not pass $\mathcal{R}^*$'' of line 7 and ``$sed(P_i, \vv{v}) \ge \epsilon_{sed}$'' of line 11 are always false, thus \bitt degenerates to \underline{S}ector \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (\sitt in short) that tracks trajectory in strip areas.
+
+
+\begin{example}
+	Figure~\ref{fig:sitt} is a running example of \sitt taking the same input as Figure~\ref{fig:citt}. It uses full-$\epsilon$ sectors, (1) $P_4$ lives in the common intersection of \sector{_{1}}, \sector{_{2}} and \sector{_{3}} and it has a \ped distance larger than $\epsilon$ to $\vec{v_1}$, thus, \sitt updates the velocity from $\vec{v_1}$ to $\vec{v_4}$ and the process goes on, and (2) $P_5$ is outside of the common intersection of the preview sectors, thus, $P_4$ serves as the new start point, and an update is triggered. Finally, \sitt sends three points, $P_0, P_4$ and $P_8$, and three velocities, $\vec{v_1}$, $\vec{v_4}$ and $\vec{v_5}$, to the MOD server. 
+\end{example}
+
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=1.0]{figures/Fig-SITT.png}
+	\vspace{-2ex}
+	\caption{\small A running example of trajectory tracking by \sitt.  }
+	\vspace{-1ex}
+	\label{fig:sitt}
+\end{figure}
+
+
+
+
 
 
 
