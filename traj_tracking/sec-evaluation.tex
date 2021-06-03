@@ -257,7 +257,7 @@ We varied the error bound (either $\epsilon_{sed}$ or $\epsilon_{ped}$) of \citt
 The results are reported in Figures~\ref{fig:compression-ratio}, \ref{fig:total-message}, \ref{fig:sed-error}, \ref{fig:ped-error} and \ref{fig:running-time}.
 
 
-\stitle{Compression ratios.} We first report and discuss compression ratios as shown in Figure~\ref{fig:compression-ratio}.
+\stitle{Compression ratios.} We first report and analyze the compression ratios from Figure~\ref{fig:compression-ratio}.
 
 \ni (1) When increasing $\epsilon_{sed}$ and $\epsilon_{ped}$, the compression ratios of all these algorithms decrease on all datasets.
 
@@ -270,7 +270,7 @@ For example, when $\epsilon = 40$ meters, \ie~$\epsilon_{sed} = 40$ meters for \
 	
 
 
-\stitle{Message ratios.} We then report and discuss message ratios as shown in Figure~\ref{fig:total-message}.
+\stitle{Message ratios.} We then report and and analyze the message ratios from Figure~\ref{fig:total-message}.
 
 %To evaluate the impacts of distance metrics and error bounds on messages of \citt, \sitt and \bitt vs. \ldrh and \grts, we varied the error bound (either $\epsilon_{sed}$ or $\epsilon_{ped}$) from $10$ meters to $200$ meters on the entire three datasets, respectively. 
 
@@ -284,26 +284,28 @@ For example, when $\epsilon = 40$ meters, \ie~$\epsilon_{sed} = 40$ meters for \
 \ni (3) \citt has a medium amount of messages (including \emph{position-velocity-messages} and \emph{velocity-messages}) and \bitt is between \citt and \sitt in this test.
 
 
-\ni (4) \todo.\grts has the least velocities update ratio. This is because \grts only updates the velocities messages when the buffer is cleared, and mainly transmits position information.
+\ni (4) \grts has more messages than \citt. Recall that \grts has \emph{position-messages} and \emph{position-velocity-messages}, while \citt has \emph{velocity-messages} and \emph{position-velocity-messages}. From Figure \ref{fig:compression-ratio} we know that \grts has a similar compression ratio as \citt, meaning \grts has the similar number of \emph{position-messages} as the \emph{position-velocity-messages} of \citt. Besides, the  number of \emph{position-velocity-messages} of \grts (\todo{on average $(?\%, ?\%, ?\%)$} of the total messages \wrt datasets (\mopsi, \sercar, \geolife), respectively) is usually a bit larger than the \emph{velocity-messages} of \citt (on average $(60.41\%, 57.31\%, 52.80\%)$ of the total messages \wrt datasets (\mopsi, \sercar, \geolife), respectively). As a result, \grts has more total messages than \citt.
+
+%This is because \grts only updates the velocities messages when the buffer is cleared, and mainly transmits position information.
 
 
 
 
-\stitle{Average errors.}
+\stitle{Average errors.} We next report and analyze the average errors from Figures~\ref{fig:sed-error} and \ref{fig:ped-error}.
 
 %The results are reported in Figures~\ref{fig:sed-error} and Figure~\ref{fig:ped-error}.
 \ni (1) Average errors increase with the increase of $\epsilon_{sed}$ and $\epsilon_{ped}$.
 
-\ni (2) The average sed errors of these algorithms from the largest to the smallest are \sitt, \grts (\citt) and \ldrh. Among them, the average sed errors of \citt is very close to \grts.
-The average sed errors of algorithms \citt and \sitt are on average
+\ni (2) The average \sed errors of these algorithms from the largest to the smallest are \sitt, \grts (\citt) and \ldrh. Among them, the average \sed error of \citt is very close to \grts.
+The average \sed errors of algorithms \citt and \sitt are on average
 ($412.7\%$, $222.8\%$, $350.1\%$)
 and ($842.0\%$, $857.5\%$, $1452.5\%$)
 of \ldrh and ($103.1\%$, $98.4\%$, $100.5\%$) and
 ($209.9\%$, $442.9\%$, $414.0\%$)
 of \grts on datasets (\mopsi, \sercar, \geolife), respectively.
 
-\ni (3) The average ped errors of these algorithms from the largest to the smallest are \sitt, \grts (\citt) and \ldrh. Among them, the average ped errors of \citt is very close to \grts.
-The average ped errors of algorithms \citt and \sitt are on average
+\ni (3) The average \ped errors of these algorithms from the largest to the smallest are \sitt, \grts (\citt) and \ldrh. Among them, the average \ped errors of \citt is very close to \grts.
+The average \ped errors of algorithms \citt and \sitt are on average
 ($452.2\%$, $278.1\%$, $388.9\%$)
 and ($550.5\%$, $517.0\%$, $589.0\%$)
 of \ldrh and ($102.0\%$, $98.3\%$, $99.7\%$) and
@@ -313,19 +315,21 @@ of \grts on datasets (\mopsi, \sercar, \geolife), respectively.
 
 
 
-
-\stitle{Running time.}
 %%%%%%%%%%%%%%%%% running time
 %In this part of experiments, we compare the running time of our algorithms \citt, \sitt and \bitt with \ldrh and \grts.
 %The results are reported in Figure~\ref{fig:running-time}. 
+\stitle{Running time.} We finally report and analyze the running time.
 Since the running time of \grts is thousands of times slower than other algorithms, it is not shown in Figure~\ref{fig:running-time}.
 
-\ni (1) The running times of these algorithms from the largest to the smallest are \grts, \bitt, \citt, \sitt and \ldrh, on all datasets.
-The average running times of algorithms \citt and \sitt are on average
+\ni (1) The running time of these algorithms from the largest to the smallest are \grts, \bitt, \citt, \sitt and \ldrh on all datasets.
+The average running time of algorithms \citt and \sitt is on average
 ($378.8\%$, $363.2\%$, $296.4\%$)
 and ($331.5\%$, $294.1\%$, $256.4\%$)
 of \ldrh and ($0.607\%$, $21.7\%$, $0.704\%$) and
 ($0.529\%$, $18.1\%$, $0.623\%$)
 of \grts on datasets (\mopsi, \sercar, \geolife), respectively.
 
-\ni (2) The running time of \bitt is approximately the sum of \citt and \sitt. Because it contains the judgment conditions in \citt and \sitt.
+\ni (2) The running time of \bitt is approximately the sum of \citt and \sitt, because it combines the logic of \citt and \sitt.
+
+\subsubsection{Summary and discuss.}
+\todo.
