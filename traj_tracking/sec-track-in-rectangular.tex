@@ -147,7 +147,8 @@ We now present the algorithm of \underline{B}inary \underline{I}ntersection for 
 \bitt is a position tracking algorithm as well as a trajectory simplification algorithm, and it ensures that any removed point is located in a rectangle-like area around its expected position \wrt a velocity of position tracking or a line segment connecting two neighboring points of the simplified trajectory. 
 %\eg $P_2$ is in the rectangle-like area around its synchronized point $P'_2$ \wrt line segment $\overline{P_0P_4}$
 %
-\bitt is the super version of \citt, \ie it falls back to \citt when $\epsilon_{sed} \le \epsilon_{ped}$.
+\bitt like \citt also reports two kinds of messages, \ie \emph{velocity-messages} $\vv{v}$ and \emph{position-velocity-messages} ($P_s$, $\vv{v}$), to the MOD server. 
+Indeed, \bitt is the super version of \citt, \ie it falls back to \citt when $\epsilon_{sed} \le \epsilon_{ped}$.
 
 \begin{example}
 	Figure~\ref{fig:bitt} is a running example of \bitt. It takes as inputs the same trajectory as the above, the same $\epsilon_{sed}$ as Figure~\ref{fig:citt} and an $\epsilon_{ped}$ of half that of Figure~\ref{fig:sitt}. Because its $\epsilon_{sed}$ is the same as Figure~\ref{fig:citt}, its effectiveness is also the same as Figure~\ref{fig:citt}. For the purpose of clearness, we do not show those cones in the figure.
@@ -167,7 +168,7 @@ We now present the algorithm of \underline{B}inary \underline{I}ntersection for 
 
 \stitle{Remark}. If $\epsilon_{sed} >> \epsilon_{ped}$, then ``$\overline{P_sP_{i}}$ does not pass $\mathcal{R}^*$'' of line 7 and ``$sed(P_i, \vv{v}) \ge \epsilon_{sed}$'' of line 11 are always false, thus \bitt degenerates to \underline{S}ector \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (\sitt in short) that tracks trajectory in strip areas.
 
-
+\eat{%%%%%%%%%sitt
 \begin{example}
 	Figure~\ref{fig:sitt} is a running example of \sitt taking the same input as Figure~\ref{fig:citt}. It uses full-$\epsilon$ sectors, (1) $P_4$ lives in the common intersection of \sector{_{1}}, \sector{_{2}} and \sector{_{3}} and it has a \ped distance larger than $\epsilon$ to $\vec{v_1}$, thus, \sitt updates the velocity from $\vec{v_1}$ to $\vec{v_4}$ and the process goes on, and (2) $P_5$ is outside of the common intersection of the preview sectors, thus, $P_4$ serves as the new start point, and an update is triggered. Finally, \sitt sends three points, $P_0, P_4$ and $P_8$, and three velocities, $\vec{v_1}$, $\vec{v_4}$ and $\vec{v_5}$, to the MOD server. 
 \end{example}
@@ -181,7 +182,7 @@ We now present the algorithm of \underline{B}inary \underline{I}ntersection for 
 	\label{fig:sitt}
 \end{figure}
 
-
+}%%%%%%%%%%%%%%eat sitt
 
 
 
@@ -190,8 +191,8 @@ We now present the algorithm of \underline{B}inary \underline{I}ntersection for 
 
 
 \stitle{Correctness and complexity.} 
-\myblue{The correctness of algorithm \bitt follows from Theorems \ref{theo-full-cone}, \ref{theo-full-sector} and \ref{theo-binary}.
-It is also easy to find that it has a linear time complexity like \citt and \sitt.}
+{The correctness of algorithm \bitt follows from Theorems \ref{theo-full-cone}, \ref{theo-full-sector} and \ref{theo-binary}.
+It is also easy to find that it has a linear time complexity like \citt.}
 
 
 %\stitle{Discuss.} Relations to position tracking and traj simplification. 
