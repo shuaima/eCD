@@ -8,16 +8,38 @@
 
 In this section, we summarize position tracking and trajectory tracking methods. For trajectory simplification, please refer to \cite{Zhang:Evaluation, Lin:Cised} for more details.
 
-\subsection{\textcolor{blue}{Position Tracking}}
+\subsection{{Position Tracking}}
+
+Location-aware applications, \eg car navigation or fleet management systems, need to know the current positions of moving objects. 
+This location information is collected by protocols like querying protocols that pull information by the receiver and reporting protocols that push information by the sender \cite{Leonhardi:Comparison}.
+The querying protocols transmit lesser data than reporting protocols at a price that they do not collect the whole trajectories of moving objects.
+Paper \cite{Leonhardi:Comparison} classifies reporting protocols into simple, time-based, distance-based and dead-reckoning approaches. Among them, the dead-reckoning approach, \textcolor{blue}{\eg} LDR \cite{Wolfson:PositionTracking, Wolfson:PlainDR}, performs very well, where the update costs can be reduced by up to $85\%$ \cite{Wolfson:PositionTracking}. The current position tracking methods (\ldrh and \grts) and our methods all modify or integrate the LDR approach.
+
+Besides, there are also road-based approaches \cite{Civilis:Techniques, Civilis:RoadTracking, Wolfson:RoadTracking} which assume that the movement of a moving object is restricted by the road network, and hence, they track the locations on roads. \cite{Wolfson:RoadTracking} is such an approach and it is reported that when the distance threshold is 0.05 miles, the performance of it is $43\%$ better than the plain LDR \cite{Wolfson:PlainDR}. 
+In paper \cite{Civilis:Techniques}, the authors modified the road network and introduced acceleration on the basis of the predecessors to improve the performance of road-based position tracking.
+
+\eat{%%%%%%%%%%%%%%%%%%
 In the paper [6], the authors discussed different location tracking protocols and compared the effectiveness and efficiency of these protocols. Different location tracking algorithms are based on different metrics, for example, these algorithms can be divided into distance-based algorithms and road-based algorithms.
 The representative algorithm in distance-based position tracking algorithms is LDR. In the paper [9], LDR algorithm is used to model the management of moving objects. The advantages of the LDR algorithm are simple implementation and fast processing speed. But the result of this kind of algorithm is not very good, it needs to spend a lot of network bandwidth. 
 In the papers [13, 15], the authors proposed different adaptive dead reckoning algorithms. These adaptive dead reckoning algorithms improve the performance of plain dead reckoning algorithms, but there are still some efficiency problems.
-Another type of algorithm is the road-based algorithm. The update policy of road-based algorithm is different from the distance-based algorithm. It assumes that the movement of the moving object is related to the road on the map and uses this to track the location. For example, in the paper [14], the authors proposed a deviation location update policy. The policy predicts that after the location is updated, the moving object will continue to move on the same street. And when the position of the moving object exceeds a given threshold from the predicted position, it will also be updated. Therefore, the algorithm ensures that the position error of the moving object is bounded. They found that when the threshold is 0.05 miles, the performance is 43% better than the distance policy. Their algorithm assumes that map matching is always valid. If this is not the case, the algorithm will fail. In the paper [2], the authors modified the road network and introduced acceleration on the basis of the predecessors to improve the performance of the road-based algorithm.
-\subsection{\textcolor{blue}{trajectory tracking}}
+Another type of algorithm is the road-based algorithm. The update policy of road-based algorithm is different from the distance-based algorithm. It assumes that the movement of the moving object is related to the road on the map and uses this to track the location. For example, in the paper [14], the authors proposed a deviation location update policy. The policy predicts that after the location is updated, the moving object will continue to move on the same street. And when the position of the moving object exceeds a given threshold from the predicted position, it will also be updated. Therefore, the algorithm ensures that the position error of the moving object is bounded. They found that when the threshold is 0.05 miles, the performance is 43\% better than the distance policy. Their algorithm assumes that map matching is always valid. If this is not the case, the algorithm will fail. In the paper [2], the authors modified the road network and introduced acceleration on the basis of the predecessors to improve the performance of the road-based algorithm.
+}%%%%%%%%%%%%%%%%%%%%
+
+\subsection{{trajectory tracking}}
+\textit{Trajectory tracking} \cite{Lange:Tracking} is a combination of \textit{position tracking} \cite{Wolfson:PositionTracking,Leonhardi:Comparison} and \textit{trajectory simplification} \cite{Lin:Cised,Zhang:Evaluation}. 
+%
+The authors of \cite{Trajcevski:LDRH} first find that the position tracking algorithm \ldr with a small modification, \ie using a half error bound in distance checking, is also applicable to simplify the trajectory of the moving object. The modified \ldr, called \ldrh in \cite{Lange:Tracking}, is the first trajectory tracking algorithm. It is one-pass and easy to implement. However, it suffers in effectiveness in terms of compression and message ratios. 
+%
+\grts~\cite{Lange:GRTS,Lange:Tracking} is developed to improve the effectiveness of trajectory tracking by separating position tracking and trajectory simplification into two sub-processes such that the trajectory is buffered and effectively compressed by some existing simplification algorithm. Indeed, it introduces time and space complexities.
+
+Both \ldrh and \grts track moving objects in floating circular shapes, while our algorithms are able to track moving objects in floating circular, strip and rectangle-like shapes. Moreover, our algorithms like \ldrh implement position tracking and trajectory simplification in one routine. Hence, they are one-pass and efficient, and do not need any buffer. Besides, we simplify trajectories by effective approaches, \ie cone intersection and sector intersection, such that we get better effectiveness than \ldrh.
+
+
+\eat{%%%%%%%%%%%%%%%%%%%%%%%
 In the paper [11], the authors proposed the LDRH algorithm. This algorithm modifies the LDR algorithm and makes it applicable to trajectory tracking. The LDRH algorithm is a one-pass algorithm with good running speed, but the compression effect is not ideal.
 Another representative trajectory tracking algorithm is GRTS[4, 5]. GRTS has good compression ratio, and can be used in combination with different compression algorithms to directly balance the computational cost and compression ratio. But the GRTS algorithm has certain disadvantages: 1. GRTS algorithm requires a buffer, which brings storage limitations. 2. GRTS separates compression and position tracking. 
 
 why not integrate one-pass algorithms with GRTS? 1. One pass algorithm does not need a buffer, but GRTS requires a buffer. 2. A one-pass algorithm runs in a manner similar with LDR, which inspires us to develop effective and efficient trajectory tracking methods that combine compression and position tracking into a consistent algorithm, and run in one-pass manner.
-
+}%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
