@@ -149,7 +149,7 @@ Given an error bound $\epsilon$, the moving object sends its initial location $P
 After that, because the actual speed of it may be varied and different from the supposed speed of $|\vv{v}|$, the moving object periodically collects its actual position by sampling its on-board sensor, \eg GPS, and compares the actual position of time $t$ with the expected position of time $t$ extrapolated from the initial position $P_s$ and the velocity $\vv{v}$. 
 If the deviation from its actual position to the expected position (\ie the synchronous Euclidean distance) is not more than $\epsilon$, then the object does not transmit any new updates to MOD, otherwise, an update of new ($P_s$, $\vv{v}$) will be sent.
 %
-By this way, though the MOD server receives less position information about a moving object, it still knows the expected position of the moving object with a bounded error of $\epsilon$ to its actual position. The \ldr mechanism ensures that no message is sent as long as the actual position $P$ is in the circular area around the excepted position $P'$ with a radius of $\epsilon$. That is, \emph{\ldr tracks a moving object in a floating circle having a velocity of $\vv{v}$.}
+By this way, though the MOD server receives less position information about a moving object, it still knows the expected position of the moving object with a bounded error of $\epsilon$ to its actual position. The \ldr mechanism ensures that no message is sent as long as the actual position $P$ is in the circular area around the excepted position $P'$ with a radius of $\epsilon$. That is, \emph{\ldr tracks a moving object in a floating circular area having a velocity of $\vv{v}$.}
 
 \begin{figure}[tb!]
 	\centering
@@ -208,59 +208,6 @@ Initially, the start point $P_s$ is set to $P_0$ and the velocity $\vec{v}$ is s
 
 
 
-
-\subsection{Trajectory simplification based on spatio-temporal cones}
-
-The recent trajectory simplification algorithm using \sed, namely \cised \cite{Lin:Cised}, is one-pass and also has a good effectiveness in terms of compression ratios. \cised uses a local synchronous distance checking approach based on a concept of \textit{spatio-temporal cone}, defined in a 3D Cartesian coordinate system whose $x$-axis, $y$-axis and $t$-axis are longitude, latitude and time, respectively, that converts the \sed distance tolerance into cones intersection for testing the successive points. This mechanism is potential to be extended for trajectory tracking with good effectiveness and efficiency.
-
-\stitle{Spatio-temporal cone (\cone{}) \cite{Lin:Cised}}. 
-Given a start point $P_s$ of sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, P_{s+k}]$ and an error bound $\epsilon$, the spatio-temporal cone (or simply \textit{cone}) of a data point $P_{s+i}$ ($1\le i\le k$) in $\dddot{\mathcal{T}_s}$ \wrt $P_s$ and $\epsilon$, denoted as \cone{(P_s, P_{s+i}, \epsilon)}, or \cone{_{s+i}} in short, is an oblique circular cone such that point $P_s$ is its apex and the synchronous circle $\mathcal{O}(P_{s+i}, \epsilon)$ of point $P_{s+i}$, or \circle{_{s+i}} in short, a circle on the plane $P.t-P_{s+i}.t = 0$ such that $P_{s+i}$ is its center and $\epsilon$ is its radius, is its base (Figure~\ref{fig:cis}).
-
-\eat{%%%%%%%%%%%
-	\begin{example}
-		\label{exm-circles-cones}
-		Figure~\ref{fig:cis} shows 
-		(1) two synchronous circles, \circle{(P_{s+i}, \epsilon)} of point $P_{s+i}$ and \circle{(P_{s+k}, \epsilon)} of point $P_{s+k}$.
-		It is easy to see that for any point in the area of a circle \circle{(P_{s+i}, \epsilon)}, its distance to $P_{s+i}$ is not greater than $\epsilon$, 
-		and (2) two example spatio-temporal cones, \cone{(P_s, P_{s+i}, \epsilon)} {(purple)} and \cone{(P_s, P_{s+k}, \epsilon)} (red), with the same apex $P_s$ and error bound $\epsilon$. %\eop
-	\end{example}
-}%%%%%%%%%%%
-
-%Note that in this definition, a \emph{synchronous circle} $\mathcal{O}(P_i, \epsilon)$ is only defined by a central point $P_i$ and a constant $\epsilon$. Indeed, it is nothing to do with any start point $P_s$ or end point $P_e$.
-
-
-%\textcolor{blue}{We define \textit{synchronous circles and Spatio-temporal cones} in a \emph{x-y-t} 3D coordinate system, and build the connection between \textit{synchronous circles} and \textit{synchronous distances}.}
-
-
-
-\begin{figure}[tb!]
-	\centering
-	\includegraphics[scale=0.88]{figures/Fig-CIS.png}
-	\vspace{-2ex}
-	\caption{\small Examples of spatio-temporal cones in a 3D Cartesian coordinate system taking point $P_s$ as the origin, where (1) $P_{s+i}$ and $P_{s+k}$ are two points, (2) \circle{_{s+i}} and \circle{_{s+k}} are two synchronous circles, (3) \cone{_{s+i}} and \cone{_{s+k}} are two spatio-temporal cones.}
-	\vspace{-1ex}
-	\label{fig:cis}
-\end{figure}
-%, (4) $Q$ is a point in synchronous circle \circle{_{s+k}}, and (5) $P'_{s+i}$ is the intersection point of line $\protect\overline{P_sQ}$ and synchronous circle \circle{_{s+i}}
-
-Based on the spatio-temporal cone, authors in \cite{Lin:Cised} prove that the \sed distance tolerance can be checked by finding the common intersection of spatio-temporal cones  (half-$\epsilon$) built from points of a sub-trajectory $[P_s,...,P_{s+k}]$, \ie ``{given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P_{s+i}, \overline{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if  $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$}."
-In other words, if these cones do have a common intersection, then line segment $\overline{P_sP_{s+k}}$ can represent the sub-trajectory. And for efficiency consideration, \cised projects those cones on a plane, \eg plane $t=P_{s+1}.t$, so as to convert the checking of cones intersection into a much simpler way, \ie~\textit{checking of circles intersection on the plane} (Figure~\ref{fig:cis}).
-For the same reason, a circle is further approximated by its inscribe \emph{regular polygon} $\mathcal{R}$ and the intersecting of circles is approximated by the intersecting of these polygons, which can be computed in linear time.
-%
-%Note that though the cone intersection approach outperform the counterpart of \ldr and \ldrh, it is still not introduced to trajectory tracking.
-
-\eat{%%%%%%%%%%%%%%%%%% Delete because of the page limitation.
-	Figure~\ref{fig:cised} is a running example of \cised. In this case, it outperforms \ldrh in terms of compression ratio.
-	
-	\begin{figure}[tb!]
-		\centering
-		\includegraphics[scale=0.9]{figures/Fig-CISED-SH.png}
-		\vspace{-1ex}
-		\caption{\small A running example of \cised. In the first section, cones are projected on plane $P_1.t$, where (1) the projection circles of \circle{_{1}},\circle{_{2}},\circle{_{3}} and \circle{_{4}} have common intersection, and (2) it does not intersected with the projection circle of \circle{_{5}}. Thus, $P_4$ is output, and it serves as the new start point of the next section. Finally, the same trajectory is simplified to four points $\{P_0, P_4, P_7, P_8\}$.}
-		\vspace{-2ex}
-		\label{fig:cised}
-	\end{figure}
-}%%%%%%%%%%%%%%%%%%%%%%
 
 
 
