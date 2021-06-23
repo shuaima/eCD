@@ -4,25 +4,29 @@
 %%% TeX-master: "www2019"
 %%% End:
 
-\section{Tracking in rectangular and rectangle-like areas}
+\section{Tracking in beams}
 \label{sec:rectangle}
 Currently, position tracking and trajectory tracking methods both use \sed as the distance metric to check data points and confirm the actual position of a moving object at time $t$ lives in a circle around the excepting position of the moving object at that time.
-{However, as mentioned in Section~\ref{sec-intro}, there is a need of tracking a moving object in other areas, \eg a rectangular or rectangle-like area.}
+{However, as mentioned in Section~\ref{sec-intro}, there is a need of tracking a moving object in other areas, \eg an infinite or finite beam.}
 %Note that, though it is possible to track a moving object in a rectangular area, it is really hard to design such a shape without introducing a new distance metric other than the well-known metrics \sed and \ped, and at the same time develop an efficient algorithm for that (\todo{appendix}).
 %Alternatively, this section defines a rectangle-like area that subtly makes use of \ped and \sed, and then develops such an effective and efficient trajectory tracking algorithm.
 %
 %, and (2) a circular or strip area is indeed a special case of a rectangle-like area.
 %as in \cite{Lin:Dual}, 
 
-\subsection{Building rectangle and rectangle-like areas}
+\subsection{Building infinite and finite beams}
 
-Like the circular area related to \sed, a rectangle-like area is also related to a Euclidean distance metric, namely the binary Euclidean distances of \sed and \ped.
+Just as a \emph{disc} is defined by \sed, a \emph{infinite beam} is defined by \ped. More specifically, if a moving object has a \ped not larger than a threshold $\epsilon_{ped}$ to a line $\mathcal{L}$, then its potential area of activity is in a \emph{infinite beam} (also called ``parallel strip'' \cite{Chen:Space,Daescu:metric} in the field of computational geometry. If the line is replaced by a line segment, then this area is called ``tolerance-zone'' \cite{Imai:Optimal}) around the line.
+For a \emph{finite beam}, it can be defined by a new Euclidean distance metric, we call it the binary Euclidean distances of \sed and \ped.
 
-\stitle{Binary Euclidean distances of \red and \ped}, shortly \bed (\red, \ped), is the combination of distance metrics \red and \ped, where the \red of point $p$ \wrt line segment $\mathcal{L}$, $red(P, \mathcal{L})$, is the Euclidean distance from the perpendicular point $P^*$ of point $P$ \wrt~$\mathcal{L}$ to the synchronized point $P'$ of point $P$ \wrt~$\mathcal{L}$. For example, in Figure \ref{fig:concepts}, $red(P_4, \overline{P_0P_8})$ = $|P^*_4P'_4|$. Indeed, a \bed (\red, \ped) with error bounds of ($\epsilon_{red}$, $\epsilon_{ped}$) forms a rectangle whose width and height are $2\epsilon_{red}$ and $2\epsilon_{ped}$, respectively.
-
+\eat{%%%%%%%%%%%%%%%%%%%%
+\stitle{Rectangular area and binary Euclidean distances of \red and \ped (\bed (\red, \ped) in short)}. \bed (\red, \ped) is the combination of distance metrics \red and \ped, where the \red (Radial Euclidean Distance) of point $P$ \wrt line segment $\mathcal{L}$, $red(P, \mathcal{L})$, is the Euclidean distance from the perpendicular point $P^*$ of point $P$ \wrt~$\mathcal{L}$ to the synchronized point $P'$ of point $P$ \wrt~$\mathcal{L}$. For example, in Figure \ref{fig:concepts}, $red(P_4, \overline{P_0P_8})$ = $|P^*_4P'_4|$. Indeed, a \bed (\red, \ped) with error bounds of ($\epsilon_{red}$, $\epsilon_{ped}$) forms a rectangle whose width and height are $2\epsilon_{red}$ and $2\epsilon_{ped}$, respectively.
+}%%%%%%%%%%%%%%%%%%%%%
 %their error bounds are set separately to $\epsilon_{red}$ and $\epsilon_{ped}$;
 
-\stitle{Binary Euclidean distances of \sed and \ped}, shortly \bed (\sed, \ped), is the combination of distance metrics \sed and \ped where their error bounds are set separately to $\epsilon_{sed}$ and $\epsilon_{ped}$, $\epsilon_{sed} > \epsilon_{ped}$, such that it forms a rectangle-like shape whose short sides are circular arcs with a radius of $\epsilon_{sed}$, as shown in {Figure~\ref{fig:areas}-(3)}. 
+\stitle{Binary Euclidean distances of \sed and \ped}, shortly \bed (\sed, \ped), is the combination of distance metrics \sed and \ped where their error bounds are set separately to $\epsilon_{sed}$ and $\epsilon_{ped}$, satisfying $\epsilon_{sed} > \epsilon_{ped}$. 
+
+%, whose (1) end sides are circular arcs taking the synchronized point as it center and $\epsilon_{sed}$ as its radius, and (2) . \todo{ped, floating, line segment}
 
 %(1) if $\epsilon_{ped} \ge \epsilon_{sed}$, then it falls back to the \sed, \ie tracking in a circular area, as shown in {Figure~\ref{fig:areas}-(1)};
 %
@@ -30,11 +34,9 @@ Like the circular area related to \sed, a rectangle-like area is also related to
 %
 %(3) it is the double effects of \ped and \sed, and forms a rectangle-like shape whose short sides are replaced by circular arcs of \sed as shown in {Figure~\ref{fig:areas}-(3)}. 
 
-
-The shape of a rectangle-like area is controlled by two independent parameters, $\epsilon_{ped}$ and $\epsilon_{sed}$, thus, by carefully setting them, we not only build such rectangle-line areas that satisfy the needs of varied applications but also balance two performance metrics, the compression ratios and the errors of spatio-temporal queries, of trajectory simplification/tracking algorithms. 
+As shown in {Figure~\ref{fig:areas}-(3)}, given a start point $P_s$ and a velocity $\vv{v}$, the \emph{finite beam} at time $t$ ($t>P_s.t$) is a shape built from a \emph{infinite beam} defined by \ped coupling with a \emph{disc} defined by \sed.
+Because \ped is a special case of \bed (where $\epsilon_{sed}=\infty$), the \emph{infinite beam} is also a special case of the \emph{finite beam}. Moreover, the shape of a \emph{finite beam} is controlled by two independent parameters, $\epsilon_{ped}$ and $\epsilon_{sed}$, thus, by carefully setting them, we not only build such areas that satisfy the needs of varied applications but also balance two performance metrics, the compression ratios and compression errors, of trajectory simplification/tracking algorithms. 
 %For the same example of ``the school boy on his way home'' mentioned in Section \ref{sec-intro}, if we only use \ped with a fixed ``$\epsilon$'', then we get a simplified trajectory having a good compression ratio and a unbounded query error; if we only use \sed with the same ``$\epsilon$'', then we get a poorer compression ratio and a bounded query error. However, if we combine them, \ie~use the \bed, then we could get a medium compression ratio and a bounded query error.
-
-
 
 
 
@@ -43,7 +45,7 @@ Given a sequence of points $[P_{s}, P_{s+1}, \ldots, P_{s+k}]$ and an error boun
 for the start data point $P_s$, any point $P_{s+i}$ and $|\overline{P_sP_{s+i}}|>\epsilon$ ($i\in[1, k]$), there are two directed lines $\overline{P_sP^u_{s+i}}$ and $\overline{P_sP^l_{s+i}}$ such that $ped(P_{s+i}, \overline{P_sP^u_{s+i}})$ $=$ $ped(P_{s+i}, \overline{P_sP^l_{s+i}}) = \epsilon$ and either ($\overline{P_sP^l_{s+i}}.\theta < \overline{P_sP^u_{s+i}}.\theta ~and~\overline{P_sP^u_{s+i}}.\theta - \overline{P_sP^l_{s+i}}.\theta <\pi$) or ($\overline{P_sP^l_{s+i}}.\theta > \overline{P_sP^u_{s+i}}.\theta ~and~ \overline{P_sP^u_{s+i}}.\theta - \overline{P_sP^l_{s+i}}.\theta < -\pi)$. Indeed, they form a \emph{sector} \sector{(P_s, P_{s+i}, \epsilon)} that takes $P_s$ as the center point and $\overline{P_sP^u_{s+i}}$ and $\overline{P_sP^l_{s+i}}$ as the borderlines (Figure~\ref{fig:sleeve}-(1)).
 %
 Then, like the checking of the common intersection of spatio-temporal cones in \cised, these sector-based algorithms check the common intersection of sectors, \ie $\bigsqcap_{i=1}^{k}$\sector{(P_s, P_{s+i}, \epsilon)} $\ne \{P_s\}$ \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}, to find out whether the sub-trajectory can be represented by a line segment $\overline{P_sQ}$ \wrt error bound $\epsilon$, where $Q$ is a point that may not belong to the sub-trajectory. However, if $Q$ must be $P_{s+k}$, the last point of the sub-trajectory, \eg $P_3$ in Figure~\ref{fig:sleeve}-(2), then (1) the full-$\epsilon$ sectors should be replaced by half-$\epsilon$ sectors, and (2) $P_{s+k}$ should be one of the points having the furthest distances to $P_s$, \ie $|P_sP_{s+k}| \ge l_{m}$, where $l_{m}=max\{|P_sP_{s+i}|\}$~for each $i \in (0, k)$. 
-}%eaten
+}%%%%%%%%%%%%%%%%%%%%%%eaten
 
 \begin{figure}[tb!]
 	\centering
@@ -54,38 +56,40 @@ Then, like the checking of the common intersection of spatio-temporal cones in \
 	\label{fig:sleeve}
 \end{figure}
 
-\subsection{The basic tracking approaches}
-By using \bed, we are able to track the position of a moving object and simplify its trajectory in a rectangular or rectangle-like area, where the position tracking algorithm is the modified \ldr (mLDR in short) and the trajectory simplification algorithm is the modified open/sliding window approach \cite{Meratnia:Spatiotemporal} (mOPW in short), in which the \sed used in these algorithms is replaced by \bed, either (\sed, \ped) or (\red, \ped). 
+\subsection{Basic tracking approaches}
+By using \bed, we are able to track the position of a moving object and simplify its trajectory in a infinite or finite beam, where the position tracking algorithm is the modified \ldr (mLDR in short) and the trajectory simplification algorithm is the modified open/sliding window approach \cite{Meratnia:Spatiotemporal} (mOPW in short), in which the \sed used in these algorithms is replaced by \ped or \bed (\sed, \ped). 
 %
-The mLDR and mOPW could also be integrated into \grts~\cite{Lange:GRTS}, \ie~\grts using \bed, such that we can track a trajectory in a rectangular or rectangle-like area in one framework.
+The mLDR and mOPW could also be integrated into \grts~\cite{Lange:GRTS}, \ie~\grts using \ped or \bed (mGRTS in short), such that we can track a trajectory in a infinite or finite beam in one framework.
 %
-Due to the effectiveness beneficial of mOPW, the \grts using \bed should also be effective in terms of compression ratio. Meanwhile, it is not efficient or space-saving enough. 
+Due to the effectiveness beneficial of mOPW, the mGRTS should also be effective in terms of compression ratio. Meanwhile, it is not efficient or space-saving enough. 
 
-We next try to develop effective and efficient trajectory tracking algorithms. We finally find such an approach for rectangle-like areas, while much work is still needed for rectangular areas.
 
-\subsection{Efficiently tracking in rectangle-like areas}
+
+\subsection{Efficient tracking approaches}
 \label{sec:track_cone_sector}
+
+%Targeting at developing effective and efficient trajectory tracking algorithms, we finally find such an approach for strip and strip-like areas.
 
 %\ped is familiar in trajectory simplification, where an error-bounded algorithm using \ped always ensures that the original data points live in strip-like areas built from the simplified trajectory. 
 %Though \ped is not seemed in position and trajectory tracking, indeed, the sector built from \ped is applicable to track a moving object in a strip area, like the spatio-temporal cone built from \sed that is used to track trajectory in a circular area.
 
 
-First, similar as the spatio-temporal cones built from \sed are used in simplifying trajectory in circular areas, a efficient mechanism based on sectors built from \ped is used to simplify trajectory in strip areas. As shown in Figure \ref{fig:sleeve}, a \emph{sector} is largely a simplified version of a spatio-temporal cone projected on an $x$--$y$ 2D space that the temporal information is ignored, that converts the \ped distance tolerance into an angle tolerance for efficiently checking the successive data points. 
+Similar as the spatio-temporal cones built from \sed are used in efficiently simplifying trajectory in circular areas, a efficient mechanism based on sectors built from \ped is used to simplify trajectory in \emph{infinite beams}. As shown in Figure \ref{fig:sleeve}, a \emph{sector} is largely a simplified version of a spatio-temporal cone projected on an $x$--$y$ 2D space that the temporal information is ignored, that converts the \ped distance tolerance into an angle tolerance for efficiently checking the successive data points. 
 Then \textit{sector intersection} \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve}, originally developed in fields of computational geometry and cartography to efficient simplifies the border lines of a geometric or cartographic shape in digital format, is an efficient and effective way to simplify trajectories as pointed out in \cite{Lin:Cised}.
-We next demonstrate that it is also applicable to track trajectory in strip areas.
+We next demonstrate that it is also applicable to track trajectory in \emph{infinite beams}.
 
 
 \begin{proposition}
 	\label{theo-half-sector}
-	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, the trajectory can be tracked in a strip area by an approach based on the intersection of sectors.
+	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, the trajectory can be tracked in an infinite beam by an approach based on the intersection of sectors.
 \end{proposition}
 
 \begin{proof}
 Trajectory tracking is the combination of trajectory simplification and position tracking.
 %
-(1) Trajectory simplification: It can be simplified in strip-like areas as illustrated in Section \ref{sec:track_cone_sector};
+(1) Trajectory simplification: It can be simplified in infinite beams as illustrated above;
 %
-(2) Position tracking: If it can be represented by a line segment by the intersection of sectors, then there is sure a $\vv{v}$ living in the common intersection of sectors, \eg $\vv{v}$ on $P_sP_{s+i}$, such that it is applicable to track the position in strip areas.
+(2) Position tracking: If it can be represented by a line segment by the intersection of sectors, then there is sure a $\vv{v}$ living in the common intersection of sectors, \eg $\vv{v}$ on $P_sP_{s+i}$, such that it is applicable to track the position in infinite beams.
 %
 Combine (1) and (2), we have the conclusion.
 \end{proof}
@@ -130,9 +134,9 @@ Next, it is easy to find that if $|P_sP_{s+k}| > \sqrt{l_m^2 - \epsilon^2}$ then
 	\eop
 }%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Proposition \ref{theo-full-sector} tells that the full-$\epsilon$ sector approach with constrains that (1) $\overline{P_sP_{s+k}}$ lives in the common intersection of the preview full-$\epsilon$ sectors and (2) $|P_sP_{s+k}|$ is longer than $\sqrt{l_{m}^2 -\epsilon^2}$, is applicable to simplify and track a moving object in a strip area. The full-$\epsilon$ sector and $|P_sP_{s+k}| \ge \sqrt{l_{m}^2 - \epsilon^2}$ are looser constraints than the half-$\epsilon$ sector and $|P_sP_{s+k}| \ge l_{m}$ used in \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}, hence, this new approach is sure of bringing a better compression ratio.
+Proposition \ref{theo-full-sector} tells that the full-$\epsilon$ sector approach with constrains that (1) $\overline{P_sP_{s+k}}$ lives in the common intersection of the preview full-$\epsilon$ sectors and (2) $|P_sP_{s+k}|$ is longer than $\sqrt{l_{m}^2 -\epsilon^2}$, is applicable to simplify and track a moving object in an infinite beam. The full-$\epsilon$ sector and $|P_sP_{s+k}| \ge \sqrt{l_{m}^2 - \epsilon^2}$ are looser constraints than the half-$\epsilon$ sector and $|P_sP_{s+k}| \ge l_{m}$ used in \cite{Williams:Longest, Sklansky:Cone,Zhao:Sleeve}, hence, this new approach is sure of bringing a better compression ratio.
 %\myblue{Is there an effective and efficient trajectory algorithm implementing \bed that tracks a moving object in a rectangle-like area? Theorem \ref{theo-binary} is the answer to this question.}
-Next, by combining cones and sectors, we are able to efficiently track trajectory in rectangle-like areas.
+Next, by combining cones and sectors, we are able to efficiently track trajectory in \emph{finite beams}.
 
 \eat{%%%%%%%%%%%%%%%%%%%
 	\begin{theorem}
@@ -146,20 +150,20 @@ Next, by combining cones and sectors, we are able to efficiently track trajector
 
 \begin{proposition}
 	\label{theo-binary}
-	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and two error bounds $\epsilon_{sed}$ and $\epsilon_{ped}$ satisfying $\epsilon_{sed} > \epsilon_{ped}$, it can be tracked in rectangle-like areas by combining sectors and spatio-temporal cones.
+	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and two error bounds $\epsilon_{sed}$ and $\epsilon_{ped}$ satisfying $\epsilon_{sed} > \epsilon_{ped}$, it can be tracked in finite beams by combining sectors and spatio-temporal cones.
 \end{proposition}
 
 \begin{proof}
-Given a sub-trajectory $[P_s,...,P_{s+k}]$ and two error bounds $\epsilon_{sed}$ and $\epsilon_{ped}$ satisfying $\epsilon_{sed} > \epsilon_{ped}$, from Theorems~\ref{theo-ldrh-cised} and \ref{theo-half-sector}, we know this sub-trajectory can be tracked in a circular and a strip areas, respectively.  
+Given a sub-trajectory $[P_s,...,P_{s+k}]$ and two error bounds $\epsilon_{sed}$ and $\epsilon_{ped}$ satisfying $\epsilon_{sed} > \epsilon_{ped}$, from Theorems~\ref{theo-ldrh-cised} and \ref{theo-half-sector}, we know this sub-trajectory can be tracked in a disc and an infinite beam, respectively.  
 %
-(1) Trajectory simplification: Let $\overline{P_sP_{s+i}}, i\in (0,k],$ be the line segment representing sub-trajectory $[P_s,...,P_{s+i}]$, because $\epsilon_{sed} > \epsilon_{ped}$, these areas indeed form a rectangle-like area, \ie this sub-trajectory can be simplified in rectangle-like areas by combining sectors and spatio-temporal cones.
+(1) Trajectory simplification: Let $\overline{P_sP_{s+i}}, i\in (0,k],$ be the line segment representing sub-trajectory $[P_s,...,P_{s+i}]$, because $\epsilon_{sed} > \epsilon_{ped}$, these areas indeed form a finite beam, \ie this sub-trajectory can be simplified in finite beams by combining sectors and spatio-temporal cones.
 %
-(2) Position tracking: If the sub-trajectory $[P_s,...,P_{s+i}]$ can be represented by line segment $\overline{P_sP_{s+i}}$ by the intersections of sectors and cones, then there is sure a velocity $\vv{v}$ living in the common intersections of cones and sectors, such that it is applicable to track the position of the moving object in a rectangular-like area \wrt the $P_s$ and $\vec{v}$. 
+(2) Position tracking: If the sub-trajectory $[P_s,...,P_{s+i}]$ can be represented by line segment $\overline{P_sP_{s+i}}$ by the intersections of sectors and cones, then there is sure a velocity $\vv{v}$ living in the common intersections of cones and sectors, such that it is applicable to track the position of the moving object in a finite beam \wrt the $P_s$ and $\vec{v}$. 
 Combine (1) and (2) we have the conclusion.
 \end{proof}
 
 
-To track the positions and at the same time simplify the trajectory in a rectangle-like area, it is important to make sure that during the processing of a sub-trajectory $[P_s,...,P_{s+k}]$, there are the same start point $P_s$ and the same velocity $\vec{v}$ for each technique of spatio-temporal cones, sectors, and position tracking of \ped and \sed, such that a strip and a circle \wrt a velocity $\vec{v}$ or a line segment $\overline{P_sP_{s+i}}$, $0<i\le k$, exactly form a rectangle-like area. This is the guideline to develop such a trajectory tracking algorithm. 
+To track the positions and at the same time simplify the trajectory in a \emph{finite beam}, it is important to make sure that during the processing of a sub-trajectory $[P_s,...,P_{s+k}]$, there are the same start point $P_s$ and the same velocity $\vec{v}$ for each technique of spatio-temporal cones, sectors, and position tracking of \ped and \sed, such that an \emph{infinite beam} and a floating \emph{disc} \wrt start point $P_s$ a velocity $\vec{v}$, exactly form a floating \emph{finite beam}. This is the guideline to develop such a trajectory tracking algorithm. 
 
 
 
@@ -206,12 +210,12 @@ To track the positions and at the same time simplify the trajectory in a rectang
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Algorithm of tracking in rectangle-like areas}
-We now present the algorithm of \underline{B}inary \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (BITT) that tracks moving objects in a rectangle-like area of \bed (\sed, \ped) (see Figure~\ref{alg:bitt}). 
+\subsection{Algorithm}
+We now present the algorithm of \underline{B}inary \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (BITT) that tracks moving objects in a finite beam of \bed (\sed, \ped) (see Figure~\ref{alg:bitt}). 
 %
 \bitt is the double checks of cone intersection and sector intersection for each point for the purpose of trajectory simplification, and the double checks of \sed and \ped distance deviations for position tracking. In addition to that, it uses a uniform velocity $\vv{v}$ for position tracking of both \sed and \ped such that either deviation of \ped or \sed distance will cause an update of velocity $\vv{v}$. 
 %
-\bitt is a position tracking algorithm as well as a trajectory simplification algorithm, and it ensures that any removed point is located in a rectangle-like area around its expected position \wrt a velocity of position tracking or a line segment connecting two neighboring points of the simplified trajectory. 
+\bitt is a position tracking algorithm as well as a trajectory simplification algorithm, and it ensures that any removed point is located in a finite beam around its expected position \wrt a velocity of position tracking or a line segment connecting two neighboring points of the simplified trajectory. 
 %\eg $P_2$ is in the rectangle-like area around its synchronized point $P'_2$ \wrt line segment $\overline{P_0P_4}$
 %
 \bitt like \citt also reports two kinds of messages, \ie \emph{velocity-messages} $\vv{v}$ and \emph{position-velocity-messages} ($P_s$, $\vv{v}$), to the MOD server. 
@@ -254,13 +258,9 @@ Indeed, \bitt is the super version of \citt, \ie it falls back to \citt when $\e
 
 
 
-
-
-
 \stitle{Correctness and complexity.} 
 {The correctness of algorithm \bitt follows from Propositions \ref{theo-full-cone}, \ref{theo-full-sector} and \ref{theo-binary}.
 It is also easy to find that it has a linear time complexity like \citt.}
 
-\eat{%%%%%%%%%%%%%
-\stitle{Remark}. If $\epsilon_{sed} >> \epsilon_{ped}$, then ``$\overline{P_sP_{i}}$ does not pass $\mathcal{R}^*$'' of line 7 and ``$sed(P_i, \vv{v}) \ge \epsilon_{sed}$'' of line 11 are always false, thus \bitt degenerates to \underline{S}ector \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (\sitt in short) that tracks trajectory in strip areas.
-}%%%%%%%%%%%%%%%
+
+\stitle{Remark}. If $\epsilon_{sed} >> \epsilon_{ped}$, then ``$\overline{P_sP_{i}}$ does not pass $\mathcal{R}^*$'' of line 7 and ``$sed(P_i, \vv{v}) \ge \epsilon_{sed}$'' of line 11 are always false, thus \bitt degenerates to \underline{S}ector \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (\sitt in short) that tracks trajectory in \emph{infinite beams}.

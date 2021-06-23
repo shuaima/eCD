@@ -1,4 +1,4 @@
-\section{Effective and efficient tracking in a circular area}
+\section{Effective and efficient tracking in a floating disc}
 %\section{Tracking in a circular area}
 \label{sec:circle}
 
@@ -40,8 +40,8 @@ Given a start point $P_s$ of sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, 
 \end{figure}
 %, (4) $Q$ is a point in synchronous circle \circle{_{s+k}}, and (5) $P'_{s+i}$ is the intersection point of line $\protect\overline{P_sQ}$ and synchronous circle \circle{_{s+i}}
 
-Based on the spatio-temporal cone, authors in \cite{Lin:Cised} prove that the \sed distance tolerance can be checked by finding the common intersection of spatio-temporal cones  (half-$\epsilon$) built from points of a sub-trajectory $[P_s,...,P_{s+k}]$, \ie ``{given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P_{s+i}, \overline{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if  $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$}."
-In other words, if these cones do have a common intersection, then line segment $\overline{P_sP_{s+k}}$ can represent the sub-trajectory. And for efficiency consideration, \cised projects those cones on a plane, \eg plane $t=P_{s+1}.t$, so as to convert the checking of cones intersection into a much simpler way, \ie~\textit{checking of circles intersection on the plane} (Figure~\ref{fig:cis}).
+Based on the spatio-temporal cones, authors in \cite{Lin:Cised} prove that the \sed distance tolerance can be checked by finding the common intersection of spatio-temporal cones (half-$\epsilon$) built from points of a sub-trajectory $[P_s,...,P_{s+k}]$, \ie ``{given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P_{s+i}, \overline{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if  $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$}''.
+In other words, if these cones do have a common intersection, then line segment $\overline{P_sP_{s+k}}$ is able to represent the sub-trajectory. And for efficiency consideration, \cised projects those cones on a plane, \eg plane $t=P_{s+1}.t$, so as to convert the checking of cones intersection into a much simpler way, \ie~\textit{checking of circles intersection on the plane} (Figure~\ref{fig:cis}).
 For the same reason, a circle is further approximated by its inscribe \emph{regular polygon} $\mathcal{R}$ and the intersecting of circles is approximated by the intersecting of these polygons, which can be computed in linear time.
 %
 %Note that though the cone intersection approach outperform the counterpart of \ldr and \ldrh, it is still not introduced to trajectory tracking.
@@ -73,7 +73,7 @@ Given a sub-trajectory $\dddot{\mathcal{T}}_s[P_s,...,P_{s+k}]$ and an error bou
 
 \begin{proof}
 If $\dddot{\mathcal{T}}_s$ can be represented by line segment $\overline{P_sP_{s+k}}$ by algorithm \ldrh, then we have $|P_{s+i}P'_{s+i}| < \epsilon/2$ for each $i \in (0, k)$, where $P'_{s+i}$ is the expected position (synchronized point) of $P_{s+i}$ \wrt the initial velocity $\vv{v}$ of \ldrh.
-From the view of the ``x-y-t" 3D space, $\vv{v}$ must be in the common intersection of  $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)}, in other words, we have $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$, meaning this sub-trajectory can be represented by approaches based on the spatio-temporal cones.
+From the view of the ``x-y-t'' 3D space, $\vv{v}$ must be in the common intersection of  $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)}, in other words, we have $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$, meaning this sub-trajectory can be represented by approaches based on the spatio-temporal cones.
 \end{proof}
 
 Proposition \ref{theo-ldrh-cised} tells that (1) {approaches based on the spatio-temporal cone are also applicable to do trajectory tracking in a circular area}, and (2) \ldrh is just a special case of and has a worse effectiveness than approaches based on spatio-temporal cones. \ldrh assumes an initial velocity before the simplification or tracking of a sub-trajectory, while the spatio-temporal cone based methods do not, instead, it has an ability to find out the potentially feasible velocities to fit the movement of the object when it simplifies the sub-trajectory. Thus, the latter is sure a more effective way to develop one-pass trajectory tracking algorithms. 

@@ -140,7 +140,7 @@ Given a trajectory \trajec{T}$\left[P_0, \dots, P_n\right]$ and a pre-specified 
 \stitle{Trajectory tracking}. It is a method implementing both trajectory simplification and position tracking.
 }%%%%%%%%%%End EAT
 
-\subsection{Position tracking in a circular area}
+\subsection{Position tracking in a floating disc}
 
 \textit{Position tracking} aims at informing the MOD about the current position of an object. Currently, the most simple yet efficient position tracking protocols is linear dead reckoning (\ldr) \cite{ Wolfson:PositionTracking}, which is essentially an agreement between a given moving object and the MOD server whose purpose is to let the MOD server track a moving object with less communication between them at an expense of imprecise of position within an error bound $\epsilon$.  
 
@@ -149,7 +149,7 @@ Given an error bound $\epsilon$, the moving object sends its initial location $P
 After that, because the actual speed of it may be varied and different from the supposed speed of $|\vv{v}|$, the moving object periodically collects its actual position by sampling its on-board sensor, \eg GPS, and compares the actual position of time $t$ with the expected position of time $t$ extrapolated from the initial position $P_s$ and the velocity $\vv{v}$. 
 If the deviation from its actual position to the expected position (\ie the synchronous Euclidean distance) is not more than $\epsilon$, then the object does not transmit any new updates to MOD, otherwise, an update of new ($P_s$, $\vv{v}$) will be sent.
 %
-By this way, though the MOD server receives less position information about a moving object, it still knows the expected position of the moving object with a bounded error of $\epsilon$ to its actual position. The \ldr mechanism ensures that no message is sent as long as the actual position $P$ is in the circular area around the excepted position $P'$ with a radius of $\epsilon$. That is, \emph{\ldr tracks a moving object in a floating circular area having a velocity of $\vv{v}$.}
+By this way, though the MOD server receives less position information about a moving object, it still knows the expected position of the moving object with a bounded error of $\epsilon$ to its actual position. The \ldr mechanism ensures that no message is sent as long as the actual position $P$ is in a circular area around the excepted position $P'$ with a radius of $\epsilon$. That is, \emph{\ldr tracks a moving object in a floating disc having a velocity of $\vv{v}$.}
 
 \begin{figure}[tb!]
 	\centering
@@ -174,7 +174,7 @@ Initially, point $P_0$ is set as $P_s$ and $\vec{v}$ is set to $\vec{v}_0$. Then
 
 
 
-\subsection{Trajectory tracking in a circular area}
+\subsection{Trajectory tracking in a floating disc}
 \textit{Trajectory tracking} aims to implement both position tracking and trajectory simplification in one routine \cite{Lange:Tracking}. Currently, the one-pass trajectory tracking algorithm is a variation of \ldr, originally developed in \cite{Trajcevski:LDRH} and formally named as linear dead reckoning with half $\epsilon$ (\ldrh) in \cite{Lange:Tracking}.
 %
 Authors in \cite{Trajcevski:LDRH} proved that \ldr with some small variations is also a line simplification algorithm. Thus, \ldrh supports both position tracking and trajectory simplification, meaning it is a trajectory tracking algorithm.
