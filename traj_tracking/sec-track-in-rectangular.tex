@@ -6,7 +6,7 @@
 
 \section{Tracking in beams}
 \label{sec:rectangle}
-Currently, position tracking and trajectory tracking methods both use \sed as the distance metric to check data points and confirm the actual position of a moving object at time $t$ lives in a circle around the excepting position of the moving object at that time.
+Currently, position tracking and trajectory tracking methods both use \sed as the distance metric to check data points and confirm the actual position of a moving object at time $t$ lives inside a circle around the excepting position of the moving object at that time.
 {However, as mentioned in Section~\ref{sec-intro}, there is a need of tracking a moving object in other areas, \eg an infinite or finite beam.}
 %Note that, though it is possible to track a moving object in a rectangular area, it is really hard to design such a shape without introducing a new distance metric other than the well-known metrics \sed and \ped, and at the same time develop an efficient algorithm for that (\todo{appendix}).
 %Alternatively, this section defines a rectangle-like area that subtly makes use of \ped and \sed, and then develops such an effective and efficient trajectory tracking algorithm.
@@ -57,24 +57,25 @@ Then, like the checking of the common intersection of spatio-temporal cones in \
 \end{figure}
 
 \subsection{Basic tracking approaches}
-By using \bed, we are able to track the position of a moving object and simplify its trajectory in a infinite or finite beam, where the position tracking algorithm is the modified \ldr (mLDR in short) and the trajectory simplification algorithm is the modified open/sliding window approach \cite{Meratnia:Spatiotemporal} (mOPW in short), in which the \sed used in these algorithms is replaced by \ped or \bed (\sed, \ped). 
+By using \bed, we are able to track the position of a moving object and simplify its trajectory in a infinite or finite beam, where the position tracking algorithm is the modified \ldr~\cite{Wolfson:PositionTracking} (mLDR in short) and the trajectory simplification algorithm is the modified open/sliding window approach \cite{Meratnia:Spatiotemporal} (mOPW in short), in which the \sed metric used in these algorithms is replaced by \ped or \bed (\sed, \ped). 
 %
 The mLDR and mOPW could also be integrated into \grts~\cite{Lange:GRTS}, \ie~\grts using \ped or \bed (mGRTS in short), such that we can track a trajectory in a infinite or finite beam in one framework.
 %
-Due to the effectiveness beneficial of mOPW, the mGRTS should also be effective in terms of compression ratio. Meanwhile, it is not efficient or space-saving enough. 
+%The algorithms of mLDR, mOPW and mGRTS please refer to \cite{Wolfson:PositionTracking, Meratnia:Spatiotemporal, Lange:GRTS}.
+%
+Due to the effectiveness beneficial of mOPW, the mGRTS should also be effective in terms of compression ratio. At the same time, it is still not efficient or space-saving enough. 
 
 
 
 \subsection{Efficient tracking approaches}
 \label{sec:track_cone_sector}
 
-%Targeting at developing effective and efficient trajectory tracking algorithms, we finally find such an approach for strip and strip-like areas.
-
 %\ped is familiar in trajectory simplification, where an error-bounded algorithm using \ped always ensures that the original data points live in strip-like areas built from the simplified trajectory. 
 %Though \ped is not seemed in position and trajectory tracking, indeed, the sector built from \ped is applicable to track a moving object in a strip area, like the spatio-temporal cone built from \sed that is used to track trajectory in a circular area.
 
-
-Similar as the spatio-temporal cones built from \sed are used in efficiently simplifying trajectory in circular areas, a efficient mechanism based on sectors built from \ped is used to simplify trajectory in \emph{infinite beams}. As shown in Figure \ref{fig:sleeve}, a \emph{sector} is largely a simplified version of a spatio-temporal cone projected on an $x$--$y$ 2D space that the temporal information is ignored, that converts the \ped distance tolerance into an angle tolerance for efficiently checking the successive data points. 
+We next explore effective and efficient trajectory tracking algorithms for infinite and finite beams.
+%
+Similar as the spatio-temporal cones built from \sed are used in efficiently simplifying trajectory in circular areas, an efficient mechanism based on sectors built from \ped is used to simplify trajectory in \emph{infinite beams}. As shown in Figure \ref{fig:sleeve}, a \emph{sector} is largely a simplified version of a spatio-temporal cone projected on an $x$--$y$ 2D space that the temporal information is ignored, that converts the \ped distance tolerance into an angle tolerance for efficiently checking the successive data points. 
 Then \textit{sector intersection} \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve}, originally developed in fields of computational geometry and cartography to efficient simplifies the border lines of a geometric or cartographic shape in digital format, is an efficient and effective way to simplify trajectories as pointed out in \cite{Lin:Cised}.
 We next demonstrate that it is also applicable to track trajectory in \emph{infinite beams}.
 
