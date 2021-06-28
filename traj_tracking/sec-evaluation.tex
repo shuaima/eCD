@@ -197,7 +197,7 @@ Following the main stream \cite{Trajcevski:LDRH, Lange:GRTS, Lange:Tracking, Lin
 
 \subsubsection{Evaluation of~algorithm \bitt}
 %%%%%%%%%%%% messages
-This section test the impacts of \ped and \sed (\ie the shapes of finite beams) on algorithm \bitt. We varied error bounds $\epsilon_{sed}$ and $\epsilon_{ped}$ from $10$ meters to $200$ meters on the entire three datasets, respectively. The results are reported in Figures~\ref{fig:bitt-compression-ratio}, \ref{fig:bitt-total-message}, \ref{fig:bitt-sed-error} and \ref{fig:bitt-ped-error}.
+This section test the impacts of \ped and \sed (\ie the shapes of finite beams) on algorithm \bitt. We varied error bounds $\epsilon_{sed}$ and $\epsilon_{ped}$ from $10$ meters to $200$ meters satisfying $\epsilon_{sed} \ge \epsilon_{ped}$ on the entire three datasets, respectively. The results are reported in Figures~\ref{fig:bitt-compression-ratio}, \ref{fig:bitt-total-message}, \ref{fig:bitt-sed-error} and \ref{fig:bitt-ped-error}.
 
 %\stitle{Message and compression ratios}. Figures~\ref{fig:bitt-total-message} and \ref{fig:bitt-compression-ratio} tell 
 
@@ -291,28 +291,58 @@ For example, when $\epsilon = 40$ meters, \ie~$\epsilon_{sed} = 40$ meters for \
 
 
 
-\stitle{Errors.} We next report and analyze the max and average errors from Figures~\ref{fig:sed-error} and \ref{fig:ped-error} and Table \todo{X}.
+\stitle{Errors.} We next report and analyze the maximal and average errors from Table~\ref{tab:max-error} and Figures~\ref{fig:sed-error} and \ref{fig:ped-error}.
 
 %The results are reported in Figures~\ref{fig:sed-error} and Figure~\ref{fig:ped-error}.
-\ni (1) Average errors increase with the increase of $\epsilon_{sed}$ and $\epsilon_{ped}$.
 
-\ni (2) The average \sed errors of these algorithms from the largest to the smallest are \sitt, \grts (\citt) and \ldrh. Among them, the average \sed error of \citt is very close to \grts. \todo{\bitt}
-The average \sed errors of algorithms \citt and \sitt are on average
-($412.7\%$, $222.8\%$, $350.1\%$)
-and ($842.0\%$, $857.5\%$, $1452.5\%$)
-of \ldrh and ($103.1\%$, $98.4\%$, $100.5\%$) and
-($209.9\%$, $442.9\%$, $414.0\%$)
-of \grts on datasets (\mopsi, \sercar, \geolife), respectively.
+\ni (1) The maximal \ped and \sed errors of these algorithms are not larger than the error bounds we set in these tests, except the maximal \sed error of \sitt, as \sitt is bounded by \ped, not by \sed. These tests also confirm that if an algorithm is bounded by a \sed threshold, then it must be bounded by \ped with the same threshold.
 
-\ni (3) The average \ped errors of these algorithms from the largest to the smallest are \sitt, \grts (\citt) and \ldrh. Among them, the average \ped errors of \citt is very close to \grts. \todo{\bitt}
-The average \ped errors of algorithms \citt and \sitt are on average
-($452.2\%$, $278.1\%$, $388.9\%$)
+\ni (2) The average errors increase with the increase of $\epsilon_{sed}$ and $\epsilon_{ped}$.
+
+\ni (3) The average \sed errors of these algorithms from the largest to the smallest are \sitt, \citt (also \grts and \bitt) and \ldrh. The average \sed errors of algorithms \grts, \citt \bitt and \sitt are on average
+($400.6\%$, $226.3\%$, $348.6\%$), ($412.7\%$, $222.8\%$, $350.1\%$), ($307.9\%$, $242.6\%$, $336.3\%$) and ($842.0\%$, $857.5\%$, $1452.5\%$)
+of \ldrh on datasets (\mopsi, \sercar, \geolife), respectively.
+
+\ni (4) The average \sed errors of \bitt are equal to or less than compression effective algorithms \grts and \citt, through it actually uses a larger \sed error bound, \ie~1.6 times of \sed threshold of \grts and \citt in these tests.
+
+\ni (5) The average \ped errors of these algorithms from the largest to the smallest are \sitt, \grts (also \citt), \bitt and \ldrh. Among them, the average \ped errors of \citt is very close to \grts. The average \ped errors of algorithms \grts, \citt, \bitt and \sitt are on average
+($443.7\%$, $ 283.0\%$, $ 390.2\%$), ($452.2\%$, $278.1\%$, $388.9\%$), ($ 268.2\%$, $ 201.5\%$, $ 256.1\%$)
 and ($550.5\%$, $517.0\%$, $589.0\%$)
-of \ldrh and ($102.0\%$, $98.3\%$, $99.7\%$) and
-($123.9\%$, $187.0\%$, $150.9\%$)
-of \grts on datasets (\mopsi, \sercar, \geolife), respectively.
+of \ldrh on datasets (\mopsi, \sercar, \geolife), respectively.
+
+\ni (6) The average \ped errors of \bitt are obviously less than compression effective algorithms \grts, \citt and \sitt, because it actually uses a smaller \ped error bound, \ie~$0.5$ times \ped of \sitt (recall the \ped error bound of \sitt is set to the same value of the \sed error bound of \grts and \citt) in these tests.
 
 
+
+\begin{table}[tb!]
+	\renewcommand{\arraystretch}{1.20}
+	\caption{\small The maximal errors}
+	\vspace{-1.5ex}
+	\centering
+	\footnotesize
+	%\scriptsize
+	\begin{tabular}{|l|c|c|c|c|c|c|}
+		\hline
+		\multirow{2}*{\bf{Alg.}\hspace{-1ex}} & \multicolumn{3}{c|}{Max SED error} & \multicolumn{3}{c|}{Max PED error} \\
+		\cline{2-7}
+		 &\hspace{-1ex}\sercar\hspace{-1ex}&\hspace{-1ex}\geolife&\hspace{-1ex}\mopsi  &\hspace{-1ex}\sercar\hspace{-1ex}&\hspace{-1ex}\geolife&\hspace{-1ex}\mopsi \\
+		\hline
+		\ldrh\hspace{-1ex}& 56.81 &	59.24 &	57.93 &	56.51 &	57.74 &	56.05 \\
+		\hline
+		\grts\hspace{-1ex}	&60.00 & 60.00 &	60.00 &	59.99 &	60.00 &	60.00\\
+		\hline 
+		\citt\hspace{-1ex}	&60.00 &	60.00 &	59.99 &	59.95 &	59.98 &	59.93 \\
+		\hline 
+		\bitt &	95.94 &	96.00 &	95.98 &	30.00  &	30.00 &	30.00 \\
+		\hline
+		\sitt\hspace{-1ex} & \hspace{-1ex}$1.40\times 10^6$ & \hspace{-1ex}$5.26\times 10^6$	& \hspace{-1ex}$1.92\times 10^6$ &	60.00 &	60.00 &	60.00 \\
+		\hline
+		
+		
+	\end{tabular}
+	\label{tab:max-error}
+	\vspace{-2ex}
+\end{table}
 
 
 %%%%%%%%%%%%%%%%% running time
@@ -326,13 +356,10 @@ Since the running time of \grts is hundreds of times slower than other algorithm
 \ni (2) The running time of \bitt is approximately the sum of \citt and \sitt, because it combines the logic of \citt and \sitt.
 
 \ni (3) The running time of these algorithms from the largest to the smallest are \grts, \bitt, \citt, \sitt and \ldrh on all datasets.
-The average running time of algorithms \citt and \sitt is on average
-($378.8\%$, $363.2\%$, $296.4\%$)
+The average running time of algorithms \grts, \citt, \bitt and \sitt is on average
+($116600.1\%$, $2549.6\%$, $69657.1\%$), ($378.8\%$, $363.2\%$, $296.4\%$), ($702.8\%$, $632.9\%$, $496.1\%$)
 and ($331.5\%$, $294.1\%$, $256.4\%$)
-of \ldrh and ($0.607\%$, $21.7\%$, $0.704\%$) and
-($0.529\%$, $18.1\%$, $0.623\%$)
-of \grts on datasets (\mopsi, \sercar, \geolife), respectively.
-
+of \ldrh on datasets (\mopsi, \sercar, \geolife), respectively.
 
 
 \subsubsection{Summary.} % and discuss
