@@ -706,8 +706,6 @@ In this set of tests, we compare the errors and compression ratios of algorithms
 
 \ni (2) Algorithm \dpa using \dad and other algorithms have max error less than $\epsilon_1 + \epsilon_2 = 100m$ or $\epsilon_1 + \epsilon_2 = 80^o$, which is consistent with Theorem ~\ref{theo-aging-distance}.
 
-\ni (3) \mytable{tab:aging-cr} and \mytable{tab:cr} tell that, if algorithms compress data using $\epsilon_1$ and $\epsilon_2$ in turn, then they have a bit poorer compression ratios than directly using $\epsilon_3=\epsilon_1 + \epsilon_2$.
-Note that the causes of this phenomenon are varied. For algorithm \dpa using \ped or \sed, it is caused by the shorten of the final error bound, which is $max\{\epsilon_1, \epsilon_2\}$, less than $\epsilon_3=\epsilon_1 + \epsilon_2$; while for the other algorithms, they lose some compression ratios because of data aging.
 
 
 \begin{table}
@@ -804,44 +802,14 @@ Note that the causes of this phenomenon are varied. For algorithm \dpa using \pe
 
 %In the contrast, algorithms \dpa using \ped and \sed do not loss that. Hence, given the same final error bound (\eg $100m$) of data aging, algorithm \dpa using \ped (or \sed) shows a bit advantages in terms of compression ratios.
 
-
-
-\stitle{Analyses of \lsa algorithms.} \dpa is the only algorithm that is aging friendly \wrt ~\ped and \sed, {and all algorithms have bounded errors}. Indeed, {aging friendliness} is a result of the {specific nature} of algorithm \dpa, \ie batch and top-down, that always splits a trajectory into two sub-trajectories by the same splitting point when it uses any \ped or \sed larger than the error bound.
-
-\stitle{Analyses of \lsa distance metrics.} \dad is not aging friendly \wrt to any algorithm. It is different with \ped and \sed in that, the \dad of a point is closely related to its neighbor point while \ped and \sed are not, thus, once its neighbor point is removed, its \dad is also changed. This character makes it not aging friendly \wrt the \dpa algorithm.
+\ni (3) \mytable{tab:aging-cr} and \mytable{tab:cr} tell that, if algorithms compress data using $\epsilon_1$ and $\epsilon_2$ in turn, then they have a bit poorer compression ratios than directly using $\epsilon_3=\epsilon_1 + \epsilon_2$.
+Note that the causes of this phenomenon are varied. For algorithm \dpa using \ped or \sed, it is caused by the shorten of the final error bound, which is $max\{\epsilon_1, \epsilon_2\}$, less than $\epsilon_3=\epsilon_1 + \epsilon_2$; while for the other algorithms, they lose some compression ratios because of data aging.
 
 
 
-\begin{table}
-	%\renewcommand{\arraystretch}{1.2}
-	\caption{\small The max errors of {\emph{where\_at}} queries on the compressed trajectories: fixed $\epsilon=40m$ or $30^o$ when using \dad.}
-	\centering
-	\scriptsize
-	%\vspace{-1ex}
-	\begin{tabular}{|l|c|c|c|l|c|c|c|}
-		\hline
-		\bf{Alg. (PED)}  &\ucar &\geolife &\mopsi & \bf{Alg. (DAD)}  &\ucar &\geolife &\mopsi \\
-		\hline
-		{\dpa} &	$3.48 \times 10^6$ & $1.83 \times 10^6$ &	$5.03 \times 10^6$	& \dpa	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $4.87 \times 10^5$ \\
-		\hline
-		{\tpa} &	$3.51 \times 10^6$ & $1.91 \times 10^6$ &	$5.03 \times 10^6$	& \tpa	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $5.01 \times 10^5$ \\
-		\hline
-		{\bqsa} &	$3.51 \times 10^6$ & $1.94 \times 10^6$ &	$1.40 \times 10^6$	& \opwa	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $5.01 \times 10^5$ \\
-		\hline
-		{\siped($\epsilon$)} &	$3.51 \times 10^6$ & $1.02 \times 10^6$ &	$1.39 \times 10^6$	& \interval	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $5.01 \times 10^5$ \\
-		\hline
-		{\siped($\epsilon/2$)} &	$3.50 \times 10^6$ & $1.02 \times 10^6$ &	$1.39 \times 10^6$	& \intersec	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $4.18 \times 10^5$ \\
-		\hline
-		{\operb} &	$3.50 \times 10^6$ & $1.56 \times 10^6$ &	$1.39 \times 10^6$	& / & -  & - & -  \\
-		\hline
-		{\operb-A} &	${7.50\times 10^6} $ & ${1.84\times 10^6} $ & ${5.03\times 10^6} $ & / &- &- &- \\
-		\hline
-	\end{tabular}
-	\label{tab:query-me}
-	\vspace{0.5ex}
-	\\{Note that all algorithms using \sed have the max query errors not more than the error bound, \ie $\epsilon=40m$ here.}
-	\vspace{-1ex}
-\end{table} 	 	
+
+
+ 	
 
 
 
@@ -877,7 +845,9 @@ Note that the causes of this phenomenon are varied. For algorithm \dpa using \pe
 \end{figure*}
 
 
+\stitle{Analyses of \lsa algorithms.} \dpa is the only algorithm that is aging friendly \wrt ~\ped and \sed, {and all algorithms have bounded errors}. Indeed, {aging friendliness} is a result of the {specific nature} of algorithm \dpa, \ie batch and top-down, that always splits a trajectory into two sub-trajectories by the same splitting point when it uses any \ped or \sed larger than the error bound.
 
+\stitle{Analyses of \lsa distance metrics.} \dad is not aging friendly \wrt to any algorithm. It is different with \ped and \sed in that, the \dad of a point is closely related to its neighbor point while \ped and \sed are not, thus, once its neighbor point is removed, its \dad is also changed. This character makes it not aging friendly \wrt the \dpa algorithm.
  	 	
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -889,13 +859,14 @@ We finally evaluate those compressed trajectories from the viewpoint of trajecto
 As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{where\_at} query is the expected position $P'$ of the moving object at time $t$. Indeed, it is the \emph{synchronized point} of $P$ when the query is performed on simplified trajectories.}
 
 
-
 \stitle{{Exp-1: \emph{where\_at} queries.}}
 {We first compress these trajectories using \ped, \sed and \dad, respectively. }
 {Then, for each point $P$ in an original trajectory $\dddot{\mathcal{T}}$, we perform a \emph{where\_at} query on each of its compressed trajectories taking time $P.t$ as input, and calculate the distance between the actual position $P$ and the expected position $P'$ to denote the error of queries.
 }
 %
 {The max and average errors of the queries are reported in \mytable{tab:query-me} and Figures~\ref{fig:query-ped-epsilon}, \ref{fig:query-sed-epsilon}, \ref{fig:query-dad-epsilon}, \ref{fig:query-ped-size},\ref{fig:query-sed-size} and \ref{fig:query-dad-size}, respectively.}
+
+
 
 
 
@@ -957,7 +928,36 @@ As mentioned in \cite{Cao:Spatio,Trajcevski:Uncertainty}, the answer to \emph{wh
 \ni {(1) The max error of \emph{when\_at} queries on simplified trajectories is unbounded as proved in \cite{Cao:Spatio}. Indeed, the query error is related to the length of the time interval between two neighboring points of a simplified trajectory. We explain this with an example. Suppose that one moves from the front door, quickly passes through the living room, and goes to bed for a long sleep. Since the house is not big, the trajectory is possible simplified to two points, \ie $P_s$ in the front door and $P_e$ on the bed. In this case, a \emph{when\_at} query taking a point $P$ in his living room as input may return the excepted time $t'$ with an error of several hours to the actual time $P.t$.}
 
 
-
+\begin{table}
+	%\renewcommand{\arraystretch}{1.2}
+	\caption{\small The max errors of {\emph{where\_at}} queries on the compressed trajectories: fixed $\epsilon=40m$ or $30^o$ when using \dad.}
+	\centering
+	\scriptsize
+	%\vspace{-1ex}
+	\begin{tabular}{|l|c|c|c|l|c|c|c|}
+		\hline
+		\bf{Alg. (PED)}  &\ucar &\geolife &\mopsi & \bf{Alg. (DAD)}  &\ucar &\geolife &\mopsi \\
+		\hline
+		{\dpa} &	$3.48 \times 10^6$ & $1.83 \times 10^6$ &	$5.03 \times 10^6$	& \dpa	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $4.87 \times 10^5$ \\
+		\hline
+		{\tpa} &	$3.51 \times 10^6$ & $1.91 \times 10^6$ &	$5.03 \times 10^6$	& \tpa	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $5.01 \times 10^5$ \\
+		\hline
+		{\bqsa} &	$3.51 \times 10^6$ & $1.94 \times 10^6$ &	$1.40 \times 10^6$	& \opwa	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $5.01 \times 10^5$ \\
+		\hline
+		{\siped($\epsilon$)} &	$3.51 \times 10^6$ & $1.02 \times 10^6$ &	$1.39 \times 10^6$	& \interval	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $5.01 \times 10^5$ \\
+		\hline
+		{\siped($\epsilon/2$)} &	$3.50 \times 10^6$ & $1.02 \times 10^6$ &	$1.39 \times 10^6$	& \intersec	& $2.76 \times 10^6$	& $7.91 \times 10^5$	& $4.18 \times 10^5$ \\
+		\hline
+		{\operb} &	$3.50 \times 10^6$ & $1.56 \times 10^6$ &	$1.39 \times 10^6$	& / & -  & - & -  \\
+		\hline
+		{\operb-A} &	${7.50\times 10^6} $ & ${1.84\times 10^6} $ & ${5.03\times 10^6} $ & / &- &- &- \\
+		\hline
+	\end{tabular}
+	\label{tab:query-me}
+	\vspace{0.5ex}
+	\\{Note that all algorithms using \sed have the max query errors not more than the error bound, \ie $\epsilon=40m$ here.}
+	\vspace{-1ex}
+\end{table} 	
 
 
 \begin{table}
