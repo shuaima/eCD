@@ -5,9 +5,9 @@
 %%% End:
 
 
-\documentclass[sigconf]{acmart}
+\documentclass[sigconf,nonacm]{acmart}
+\special{papersize=8.5in,11in}
 
-% \documentclass[sigconf,review]{acmart-edbt2019}
 % \usepackage{polyglossia}
 \usepackage{booktabs} % For formal tables
 
@@ -92,38 +92,22 @@
 \newcommand{\myblue}[1]{\textcolor{blue}{#1}}
 
 
-% Copyright
-%\setcopyright{none}
-\setcopyright{acmcopyright}
-%\setcopyright{acmlicensed}
-%\setcopyright{rightsretained}
-%\setcopyright{usgov}
-%\setcopyright{usgovmixed}
-%\setcopyright{cagov}
-%\setcopyright{cagovmixed}
 
-
-
-
-
-% Copyright
-\setcopyright{rightsretained}
-
-% DOI
-%\acmDOI{10.475/123_4}
-
-% ISBN
-\acmISBN{XXX-X-XXXXX-XXX-X}
-
-%Conference
-%\acmConference[WWW 2019]{International World Wide Web Conference}{May 13-17, 2019}{San Francisco, California, USA}
-%\acmYear{2019}
-
-\settopmatter{printacmref=false, printccs=false, printfolios=false}
-
-\pagestyle{empty} % removes running headers
-
-
+%%%%%%%%%%%%%%%%%%%vldb commands
+\newcommand\vldbdoi{XX.XX/XXX.XX}
+\newcommand\vldbpages{XXX-XXX}
+% issue-specific
+\newcommand\vldbvolume{14}
+\newcommand\vldbissue{1}
+\newcommand\vldbyear{2020}
+% should be fine as it is
+\newcommand\vldbauthors{\authors}
+\newcommand\vldbtitle{\shorttitle}
+% leave empty if no availability url should be set
+\newcommand\vldbavailabilityurl{http://vldb.org/pvldb/format_vol14.html}
+% whether page numbers should be shown or not, use 'plain' for review versions, 'empty' for camera ready
+\newcommand\vldbpagestyle{plain}
+%%%%%%%%%%%%%%%%%%%%%%vldb end
 
 \begin{document}
 
@@ -139,34 +123,36 @@
 % \subtitle{Extended Abstract}
 %\subtitlenote{The full version of the author's guide is available as  \texttt{acmart.pdf} document}
 
-
+\eat{%%%%%%%%%%%%%%%%for anony
  \author{Xuelian Lin, Yihao Fu, Yanchen Hou and Shuai Ma$^*$}
  \affiliation{%
-   \institution{National Key Laboratory of Software Development Environment, Beihang University}
+   \institution{State Key Laboratory of Software Development Environment, Beihang University}
    \streetaddress{37th XueYuan Road}
    \city{Beijing}
    \country{China}
    \postcode{100191}
  }
  \email{{linxl, fuyh, houyc, mashuai}@buaa.edu.cn}
-
-%\author{Anonymous Author(s)}
-%\affiliation{%
-%  \institution{Institution}
-%  \streetaddress{Street address}
-%  \city{City}
-%  \country{Country}
-%  \postcode{postcode}
-%}
-%\email{email}
+}%%%%%%%%%%%%%End eat
 
 
+\author{Anonymous Author(s)}
+\affiliation{%
+  \institution{Institution}
+  \streetaddress{Street address}
+  \city{City}
+  \country{Country}
+  \postcode{postcode}
+}
+\email{emails}
 
 
+
+\pagestyle{empty} % removes running headers
 
 % The default list of authors is too long for headers.
-% \renewcommand{\shortauthors}{J. Jiang et al.}
-\renewcommand{\shortauthors}{XXX et al.}
+%\renewcommand{\shortauthors}{J. Jiang et al.}
+%\renewcommand{\shortauthors}{XXX et al.}
 
 
 \begin{abstract}
@@ -178,8 +164,6 @@ To solve these problems, this paper presents three novel one-pass trajectory tra
 %
 Using three real-life trajectory datasets, we experimentally show that our approaches are both efficient and effective that outperform \ldrh and \grts, and are feasible to track a moving object in such an area.
 \end{abstract}
-
-%\ldrh and \grts are such algorithms. 
 
 
 
@@ -223,21 +207,47 @@ Using three real-life trajectory datasets, we experimentally show that our appro
 
 \maketitle
 
+%%% do not modify the following VLDB block %%
+%%% VLDB block start %%%
+\pagestyle{\vldbpagestyle}
+\begingroup\small\noindent\raggedright\textbf{PVLDB Reference Format:}\\
+\vldbauthors. \vldbtitle. PVLDB, \vldbvolume(\vldbissue): \vldbpages, \vldbyear.\\
+\href{https://doi.org/\vldbdoi}{doi:\vldbdoi}
+\endgroup
+\begingroup
+\renewcommand\thefootnote{}\footnote{\noindent
+	This work is licensed under the Creative Commons BY-NC-ND 4.0 International License. Visit \url{https://creativecommons.org/licenses/by-nc-nd/4.0/} to view a copy of this license. For any use beyond those covered by this license, obtain permission by emailing \href{mailto:info@vldb.org}{info@vldb.org}. Copyright is held by the owner/author(s). Publication rights licensed to the VLDB Endowment. \\
+	\raggedright Proceedings of the VLDB Endowment, Vol. \vldbvolume, No. \vldbissue\ %
+	ISSN 2150-8097. \\
+	\href{https://doi.org/\vldbdoi}{doi:\vldbdoi} \\
+}\addtocounter{footnote}{-1}\endgroup
+%%% VLDB block end %%%
+
+%%% do not modify the following VLDB block %%
+%%% VLDB block start %%%
+%\ifdefempty{\vldbavailabilityurl}{}{
+%\vspace{.3cm}
+%\begingroup\small\noindent\raggedright\textbf{PVLDB Artifact Availability:}\\
+%The source code, data, and/or other artifacts have been made available at \url{\vldbavailabilityurl}.
+%\endgroup
+%}
+%%% VLDB block end %%%
+
+
+
 \input{sec-intro}
 \input{sec-preliminary}
 \input{sec-track-in-cicular}
-%\input{sec-track-in-strip}
 \input{sec-track-in-rectangular}
-%\input{sec-track-in-rectangle-like}
 \input{sec-evaluation}
 \input{sec-related}
 \input{sec-conclusion}
 %\input{sec-appendix-proof}
 
-\eat{
+\eat{%%%%%%%%%%%%%%%%
 	\section*{Acknowledgments}
-	This work is supported in part by NSFC (U1636210), NSFC ({61421003}) and Beijing Advanced Innovation Center for Big Data and Brain Computing.
-}
+	This work is supported in part by NSFC (U1636210), NSFC ({61421003}) and SKLSDE (2020ZX-31).
+}%%%%%%%%%%%%%%%%%%
 
 \balance
 \bibliographystyle{ACM-Reference-Format}
