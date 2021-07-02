@@ -1,0 +1,43 @@
+%\vspace{-1ex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Using three real-life trajectory datasets, we have systematically evaluated and analyzed error bounded \lsa algorithms for trajectory compression, including \emph{both compression optimal and sub-optimal methods that use \ped, \sed and/or \dad},  in terms of compression ratios, errors, efficiency, aging friendliness and query friendliness.
+
+
+Our experimental studies and analyses show the following.
+%First of all,
+
+
+\stitle{(1) Choice of \lsa algorithms}. Optimal algorithms bring the best compression ratios, however, their efficiency is obviously poorer than sub-optimal algorithms. The optimal simplified trajectory algorithms are essentially impractical from the perspective of applications, especially in cases when the input data set is large or computing resources are limited.
+
+For compression sub-optimal algorithms, the output sizes of algorithms \bqsa and \siped($\epsilon$) using \ped, \cised($\epsilon$) {and \cised-W} using \sed, and \tpa and \interval using \dad are approximately $103\%$--$124\%$, $101\%$--$115\%$ and $102\%$--$107\%$ of the optimal algorithms, respectively. Batch algorithms using \ped and \sed also have good compression ratios. Thus, they are the alternates of the optimal algorithms.
+%
+More specifically, in case compression ratios are the first consideration, then algorithms \bqsa and \siped($\epsilon$) using \ped, \cised($\epsilon$) {and \cised-W} using \sed, and \tpa and \interval using \dad are good candidates.
+%
+In case average errors are concerned, then {online algorithm \dagots}~and batch algorithms are good candidates as one-pass algorithms and online algorithms \opwa and \bqsa all have relatively large average errors. % and algorithm \squishe has really limited compression ratios
+%
+In case running time is the most important factor or computing resources are limited, then one-pass algorithms are the best candidates.
+%
+Indeed, \emph{one-pass algorithms run fast and require fewer resources, and have better or comparable compression ratios compared with batch and online algorithms. Hence, they are the prominent trajectory compression algorithms when average errors are not the main concern.}
+
+{Besides, algorithms \dpa using \ped and \sed are aging friendly, which makes them have a bit better compression ratios in data aging given the same final error bound. Hence, \dpa is a good choice in scenario of data aging when compression ratios are the first consideration. Also remember that in data aging, each run of algorithm \dpa should take as input the whole raw/simplified trajectory and these trajectories must have the same start and end data points, otherwise, the \emph{aging friendliness} of them would not be guaranteed.}
+
+\stitle{(2) Choice of distance metrics}. Users essentially choose a distance metric of \ped, \sed and \dad based on the needs of applications, \eg~\sed is the only distance metric that is query friendly {\wrt~the \emph{where\_at}, \emph{range} and \emph{nearest\_neighbor} queries. Hence, it is the best choice for such applications, and all of them are not friendly \wrt the \emph{when\_at} query.}
+%
+Further, the choice of a distance metric has impacts on the performance.
+For compression ratios, the use of synchronized distance \sed saves temporal information of trajectories with a cost of approximately double-sized outputs compared with using \ped in all datasets; \ped has obviously better compression ratios than \dad in all datasets, and \sed is also better than \dad in high sampling datasets.
+%For average error, algorithms using \dad will bring larger position error than algorithms using \ped and \sed.
+For efficiency, the computation time of \ped and \sed is 2.3 and 1.7 times of \dad, respectively.
+%\sed and \dad in batch algorithms \dpa and \tpa run a bit faster than \ped, and \sed enabled one-pass algorithm \cised runs a bit slower than \ped (or \dad) enabled one-pass algorithm \siped and \operb (or \interval).
+
+
+%In the future of trajectory simplification, there are some work worthy of exploration:
+%(1) The combination of trajectory simplification algorithms with other algorithms, \eg Map-Matching and Position Tracking, and
+%(2) The impacts of simplified trajectory on trajectory data mining and trajectory data services.
+
+%
+%(1) The effectiveness of sub-optimal algorithms remains a small room to be improved as their outputs are approximately $120\%$--$150\%$ of the optimal algorithms,
+%
+%(3) The combination of trajectory simplification algorithms with other fundamental algorithms, such as location track, event detection, \etc.
