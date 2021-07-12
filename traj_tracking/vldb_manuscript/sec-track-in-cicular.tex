@@ -1,4 +1,4 @@
-\section{Effective and efficient tracking in a floating disc}
+\section{Effective and efficient tracking in floating discs}
 %\section{Tracking in a circular area}
 \label{sec:circle}
 
@@ -30,14 +30,7 @@ Given a start point $P_s$ of sub-trajectory $\dddot{\mathcal{T}}_s[P_s, \ldots, 
 
 
 
-\begin{figure}[tb!]
-	\centering
-	\includegraphics[scale=0.88]{figures/Fig-CIS.png}
-	\vspace{-2ex}
-	\caption{\small Examples of spatio-temporal cones in a 3D Cartesian coordinate system taking point $P_s$ as the origin, where (1) $P_{s+i}$ and $P_{s+k}$ are two points, (2) \circle{_{s+i}} and \circle{_{s+k}} are two synchronous circles, (3) \cone{_{s+i}} and \cone{_{s+k}} are two spatio-temporal cones.}
-	\vspace{-1ex}
-	\label{fig:cis}
-\end{figure}
+
 %, (4) $Q$ is a point in synchronous circle \circle{_{s+k}}, and (5) $P'_{s+i}$ is the intersection point of line $\protect\overline{P_sQ}$ and synchronous circle \circle{_{s+i}}
 
 Based on the spatio-temporal cones, authors in \cite{Lin:Cised} prove that the \sed distance tolerance can be checked by finding the common intersection of spatio-temporal cones (half-$\epsilon$) built from points of a sub-trajectory $[P_s,...,P_{s+k}]$, \ie ``{given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P_{s+i}, \overline{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if  $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$}''.
@@ -80,10 +73,19 @@ Proposition \ref{theo-ldrh-cised} tells that (1) {approaches based on the spatio
 %
 Moreover, observe that the half-$\epsilon$ cone in the above is still a little conservative, we next extend it to a full-$\epsilon$ cone.% plus certain constrain to get an even better effectiveness.
 
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[scale=0.88]{figures/Fig-CIS.png}
+	\vspace{-2ex}
+	\caption{\small Examples of spatio-temporal cones in a 3D Cartesian coordinate system taking point $P_s$ as the origin, where (1) $P_{s+i}$ and $P_{s+k}$ are two points, (2) \circle{_{s+i}} and \circle{_{s+k}} are two synchronous circles, (3) \cone{_{s+i}} and \cone{_{s+k}} are two spatio-temporal cones.}
+	\vspace{-1ex}
+	\label{fig:cis}
+\end{figure}
+
 
 \begin{proposition}
 	\label{theo-full-cone}
-	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P_{s+i}, \overline{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if $\overline{P_sP_{s+k}}$ passes through $\bigsqcap_{i=1}^{k-1}$\cone{(P_s, P_{s+i}, \epsilon)} - \{$P_s$\}.
+	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, $sed(P_{s+i}, \overline{P_sP_{s+k}})\le \epsilon$ for each $i \in [1,k]$ if~ $\overline{P_sP_{s+k}}$ passes through  the common intersection $\bigsqcap_{i=1}^{k-1}$\cone{(P_s, P_{s+i}, \epsilon)} - \{$P_s$\}.
 \end{proposition}
 
 \begin{proof}
@@ -95,7 +97,7 @@ Proposition \ref{theo-full-cone} tells that full-$\epsilon$ spatio-temporal cone
 
 \begin{proposition}
 	\label{theo-cone-vs}
-	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, if $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$, then $\overline{P_sP_{s+k}}$ passes through $\bigsqcap_{i=1}^{k-1}$\cone{(P_s, P_{s+i}, \epsilon)}-$\{P_s\}$; and the opposite is not necessarily true.
+	Given a sub-trajectory $[P_s,...,P_{s+k}]$ and an error bound $\epsilon$, if $\bigsqcap_{i=1}^{k}$\cone{(P_s, P_{s+i}, \epsilon/2)} $\ne \{P_s\}$, then $\overline{P_sP_{s+k}}$ passes through the common intersection $\bigsqcap_{i=1}^{k-1}$\cone{(P_s, P_{s+i}, \epsilon)}-$\{P_s\}$; and the opposite is not necessarily true.
 \end{proposition}
 
 \begin{proof}
@@ -113,7 +115,7 @@ Proposition \ref{theo-cone-vs} tells that, given the same sub-trajectory and sta
 %as shown in Proposition \ref{theo-ldrh-cised}
 
 \subsection{Algorithm}
-We then provide a one-pass trajectory tracking algorithm based on spatio-temporal cone, named \underline{C}one \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (\citt). This algorithm runs on mobile devices and uses full-$\epsilon$ spatio-temporal cones. In a nutshell, when a distance deviation of position tracking occurs, unlike \ldr and \ldrh, algorithm \citt does not roughly send an update of a new start position $P_s$ and a new velocity $\vv{v}$, \ie a \emph{position-velocity-message} ($P_s$, $\vv{v}$), to the MOD server. Instead, it tries to finds out a new feasible velocity $\vv{v}$ by the intersection of spatio-temporal cones such that only the new velocity $\vv{v}$ is sent to the MOD server while the start point $P_s$ keeps the same. 
+We then provide a one-pass trajectory tracking algorithm based on spatio-temporal cone, named \underline{C}one \underline{I}ntersection for \underline{T}rajectory \underline{T}racking (\citt). This algorithm uses full-$\epsilon$ spatio-temporal cones and can run on mobile devices. In a nutshell, when a distance deviation of position tracking occurs, unlike \ldr and \ldrh, algorithm \citt does not roughly send an update of a new start position $P_s$ and a new velocity $\vv{v}$, \ie a \emph{position-velocity-message} ($P_s$, $\vv{v}$), to the MOD server. Instead, it tries to finds out a new feasible velocity $\vv{v}$ by the intersection of spatio-temporal cones such that only the new velocity $\vv{v}$ is sent to the MOD server while the start point $P_s$ keeps the same. 
 Thus, there are two kinds of messages in \citt, a) \emph{velocity-messages} that only report the new velocity information  $\vv{v}$ and b) \emph{position-velocity-messages} that report the new position and velocity information ($P_s$, $\vv{v}$) when no velocity is feasible for the current start position.
 By this way, a line segment of \citt is potential to represent a longer sub-trajectory compared with \ldrh, therefor the storage and network bandwidth are saved.
 
