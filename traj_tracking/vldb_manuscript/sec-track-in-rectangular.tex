@@ -16,15 +16,17 @@ Currently, position tracking and trajectory tracking methods both use \sed as th
 
 \subsection{Building infinite and finite beams}
 
-Just as a \emph{disc} is defined by \sed, a \emph{infinite beam} is defined by \ped. More specifically, if a moving object has a \ped not larger than a threshold $\epsilon_{ped}$ to a line $\mathcal{L}$, then its potential area of activity is in a \emph{infinite beam} (also called ``parallel strip'' \cite{Chen:Space,Daescu:metric} in the field of computational geometry. If the line is replaced by a line segment, then this area is called ``tolerance-zone'' \cite{Imai:Optimal}) around the line.
-For a \emph{finite beam}, it can be defined by a new Euclidean distance metric, we call it the binary Euclidean distances of \sed and \ped.
+Just as a \emph{disc} is defined by \sed, a \emph{infinite beam} is defined by \ped. More specifically, if a moving object has a \ped not larger than a threshold $\epsilon_{ped}$ to a line $\mathcal{L}$, then its potential area of activity is inside an \emph{infinite beam} (also called ``parallel strip'' \cite{Chen:Space,Daescu:metric} in the field of computational geometry. If the line is replaced by a line segment, then this area is called ``tolerance-zone'' \cite{Imai:Optimal}) around the line.
+
+For a \emph{finite beam}, things are getting a little more complicated as it cannot be defined by any single distance metric of \ped or \sed. 
+Thus, we develop a new distance metric for it, \ie the binary Euclidean distances of \sed and \ped.
 
 \eat{%%%%%%%%%%%%%%%%%%%%
 \stitle{Rectangular area and binary Euclidean distances of \red and \ped (\bed (\red, \ped) in short)}. \bed (\red, \ped) is the combination of distance metrics \red and \ped, where the \red (Radial Euclidean Distance) of point $P$ \wrt line segment $\mathcal{L}$, $red(P, \mathcal{L})$, is the Euclidean distance from the perpendicular point $P^*$ of point $P$ \wrt~$\mathcal{L}$ to the synchronized point $P'$ of point $P$ \wrt~$\mathcal{L}$. For example, in Figure \ref{fig:concepts}, $red(P_4, \overline{P_0P_8})$ = $|P^*_4P'_4|$. Indeed, a \bed (\red, \ped) with error bounds of ($\epsilon_{red}$, $\epsilon_{ped}$) forms a rectangle whose width and height are $2\epsilon_{red}$ and $2\epsilon_{ped}$, respectively.
 }%%%%%%%%%%%%%%%%%%%%%
 %their error bounds are set separately to $\epsilon_{red}$ and $\epsilon_{ped}$;
 
-\stitle{Binary Euclidean distances of \sed and \ped}, shortly \bed (\sed, \ped), is the combination of distance metrics \sed and \ped where their error bounds are set separately to $\epsilon_{sed}$ and $\epsilon_{ped}$, satisfying $\epsilon_{sed} > \epsilon_{ped}$. 
+\stitle{Binary Euclidean distances of \sed and \ped}, shortly \bed (\sed, \ped), is the combination of distance metrics \sed and \ped where their error bounds are separately set to $\epsilon_{sed}$ and $\epsilon_{ped}$, satisfying $\epsilon_{sed} > \epsilon_{ped}$. 
 
 %, whose (1) end sides are circular arcs taking the synchronized point as it center and $\epsilon_{sed}$ as its radius, and (2) . \todo{ped, floating, line segment}
 
@@ -34,8 +36,8 @@ For a \emph{finite beam}, it can be defined by a new Euclidean distance metric, 
 %
 %(3) it is the double effects of \ped and \sed, and forms a rectangle-like shape whose short sides are replaced by circular arcs of \sed as shown in {Figure~\ref{fig:areas}-(3)}. 
 
-As shown in {Figure~\ref{fig:areas}-(3)}, given a start point $P_s$ and a velocity $\vv{v}$, the \emph{finite beam} at time $t$ ($t>P_s.t$) is a shape built from a \emph{infinite beam} defined by \ped coupling with a \emph{disc} defined by \sed.
-Because \ped is a special case of \bed (where $\epsilon_{sed}=\infty$), the \emph{infinite beam} is also a special case of the \emph{finite beam}. Moreover, the shape of a \emph{finite beam} is controlled by two independent parameters, $\epsilon_{ped}$ and $\epsilon_{sed}$, thus, by carefully setting them, we not only build such areas that satisfy the needs of varied applications but also balance two performance metrics, the compression ratios and compression errors, of trajectory simplification/tracking algorithms. 
+As shown in {Figure~\ref{fig:areas}-(3)}, given a start point $P_s$ and a velocity $\vv{v}$, the \emph{finite beam} at time $t$ ($t>P_s.t$) is a shape built from an \emph{infinite beam} defined by \ped coupling with a floating \emph{disc} defined by \sed.
+Because \ped is a special case of \bed (where $\epsilon_{sed}=\infty$), the \emph{infinite beam} is also a special case of the \emph{finite beam}. Moreover, the shape of a \emph{finite beam} is controlled by two independent parameters, $\epsilon_{ped}$ and $\epsilon_{sed}$, thus, by carefully setting them, we not only build such areas that satisfy the needs of varied applications but also balance two performance metrics, the compression ratios and compression errors, of trajectory simplification/tracking. 
 %For the same example of ``the school boy on his way home'' mentioned in Section \ref{sec-intro}, if we only use \ped with a fixed ``$\epsilon$'', then we get a simplified trajectory having a good compression ratio and a unbounded query error; if we only use \sed with the same ``$\epsilon$'', then we get a poorer compression ratio and a bounded query error. However, if we combine them, \ie~use the \bed, then we could get a medium compression ratio and a bounded query error.
 
 
@@ -76,7 +78,7 @@ Due to the effectiveness beneficial of mOPW, the mGRTS should also be effective 
 
 We next explore effective and efficient trajectory tracking algorithms for infinite and finite beams.
 %
-Similar as the spatio-temporal cones built from \sed are used in efficiently simplifying trajectory in circular areas, an efficient mechanism based on sectors built from \ped is used to simplify trajectory in \emph{infinite beams}. As shown in Figure \ref{fig:sleeve}, a \emph{sector} is largely a simplified version of a spatio-temporal cone projected on an $x$--$y$ 2D space that the temporal information is ignored, that converts the \ped distance tolerance into an angle tolerance for efficiently checking the successive data points. 
+Similar as the spatio-temporal cones built from \sed are used in efficiently simplifying trajectory in circular areas, an efficient mechanism based on sectors built from \ped is applicable to simplify trajectory in \emph{infinite beams}. As shown in Figure \ref{fig:sleeve}, a \emph{sector} is largely a simplified version of a spatio-temporal cone projected on an $x$--$y$ 2D space that the temporal information is ignored, that converts the \ped distance tolerance into an angle tolerance for efficiently checking the successive data points. 
 Then \textit{sector intersection} \cite{Williams:Longest, Sklansky:Cone, Dunham:Cone, Zhao:Sleeve}, originally developed in fields of computational geometry and cartography to efficient simplifies the border lines of a geometric or cartographic shape in digital format, is an efficient and effective way to simplify trajectories as pointed out in \cite{Lin:Cised}.
 We next demonstrate that it is also applicable to track trajectory in \emph{infinite beams}.
 
@@ -156,16 +158,21 @@ Next, by combining cones and sectors, we are able to efficiently track trajector
 \end{proposition}
 
 \begin{proof}
-Given a sub-trajectory $[P_s,...,P_{s+k}]$ and two error bounds $\epsilon_{sed}$ and $\epsilon_{ped}$ satisfying $\epsilon_{sed} > \epsilon_{ped}$, from Theorems~\ref{theo-ldrh-cised} and \ref{theo-half-sector}, we know this sub-trajectory can be tracked in a disc and an infinite beam, respectively.  
+Given a sub-trajectory $[P_s,...,P_{s+k}]$ and two error bounds $\epsilon_{sed}$ and $\epsilon_{ped}$ satisfying $\epsilon_{sed} > \epsilon_{ped}$, from Propositions~\ref{theo-ldrh-cised} and \ref{theo-half-sector}, we know this sub-trajectory can be tracked in a floating disc and an infinite beam, respectively.  
 %
-(1) Trajectory simplification: Let $\overline{P_sP_{s+i}}, i\in (0,k],$ be the line segment representing sub-trajectory $[P_s,...,P_{s+i}]$, because $\epsilon_{sed} > \epsilon_{ped}$, these areas indeed form a finite beam, \ie this sub-trajectory can be simplified in finite beams by combining sectors and spatio-temporal cones.
-%
-(2) Position tracking: If the sub-trajectory $[P_s,...,P_{s+i}]$ can be represented by line segment $\overline{P_sP_{s+i}}$ by the intersections of sectors and cones, then there is sure a velocity $\vv{v}$ living in the common intersections of cones and sectors, such that it is applicable to track the position of the moving object in a finite beam \wrt the $P_s$ and $\vec{v}$. 
+If we let $P_s$ be the same start point and $\vec{v}$ be the same velocity for each technique of sectors, spatio-temporal cones, and position tracking \wrt~\ped and \sed, such that the \emph{infinite beam} and the floating \emph{disc} \wrt the start point $P_s$ and the velocity $\vec{v}$, exactly form a floating \emph{finite beam}, then
+(1) trajectory simplification: the sub-trajectory $[P_s,...,P_{s+k}]$ can be represented by $\overline{P_sP_{s+k}}$ as long as $\overline{P_sP_{s+k}}$ passes through the common intersection of $\bigsqcap_{i=1}^{k-1}$\cone{(P_s, P_{s+i}, \epsilon)} - \{$P_s$\} and the common intersection of $\bigsqcap_{i=1}^{k-1}$\sector{(P_s, P_{s+i}, \epsilon)} - \{$P_s$\}, and satisfying~ $|P_sP_{s+k}| \ge \sqrt{l_{m}^2 - \epsilon^2}$,
+\ie this sub-trajectory can be simplified \wrt a floating finite beam by combining sectors and spatio-temporal cones.
+(2) position tracking: if the sub-trajectory $[P_s,...,P_{s+k}]$ can be represented by line segment $\overline{P_sP_{s+k}}$ by the intersections of sectors and cones, then there is sure a velocity $\vv{v}$ living in the common intersections of cones and sectors, such that it is applicable to track the position of the object in the floating finite beam \wrt the $P_s$ and $\vec{v}$. 
 Combine (1) and (2) we have the conclusion.
 \end{proof}
 
+%(1) trajectory simplification: Let $\overline{P_sP_{s+i}}, i\in (0,k],$ be the line segment representing sub-trajectory $[P_s,...,P_{s+i}]$, because $\epsilon_{sed} > \epsilon_{ped}$, these areas indeed form a finite beam, \ie this sub-trajectory can be simplified in finite beams by combining sectors and spatio-temporal cones.
+%
+%(2) position tracking: If the sub-trajectory $[P_s,...,P_{s+i}]$ can be represented by line segment $\overline{P_sP_{s+i}}$ by the intersections of sectors and cones, then there is sure a velocity $\vv{v}$ living in the common intersections of cones and sectors, such that it is applicable to track the position of the moving object in a finite beam \wrt the $P_s$ and $\vec{v}$. 
 
-To track the positions and at the same time simplify the trajectory in a \emph{finite beam}, it is important to make sure that during the processing of a sub-trajectory $[P_s,...,P_{s+k}]$, there are the same start point $P_s$ and the same velocity $\vec{v}$ for each technique of spatio-temporal cones, sectors, and position tracking of \ped and \sed, such that an \emph{infinite beam} and a floating \emph{disc} \wrt start point $P_s$ a velocity $\vec{v}$, exactly form a floating \emph{finite beam}. This is the guideline to develop such a trajectory tracking algorithm. 
+
+Note that, to track the positions and at the same time simplify the trajectory in a \emph{finite beam}, it is important to make sure that during the processing of a sub-trajectory $[P_s,...,P_{s+k}]$, there are the same start point $P_s$ and the same velocity $\vec{v}$ for each technique of spatio-temporal cones, sectors, and position tracking of \ped and \sed, such that an \emph{infinite beam} and a floating \emph{disc} \wrt start point $P_s$ and velocity $\vec{v}$, exactly form a floating \emph{finite beam}. This is the guideline to develop such a trajectory tracking algorithm. 
 
 
 
@@ -233,7 +240,7 @@ Indeed, \bitt is the super version of \citt, \ie it falls back to \citt when $\e
 \begin{figure}[tb!]
 	\centering
 	\includegraphics[scale=1.0]{figures/Fig-BITT.png}
-	\vspace{-1ex}
+	\vspace{-2ex}
 	\caption{\small A running example of trajectory tracking by \bitt. In this case, the spatio-temporal cones and their intersections are the same as Figure~\ref{fig:citt}, thus they are not shown here for clearness.  }
 	\vspace{-2ex}
 	\label{fig:bitt}
