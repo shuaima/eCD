@@ -18,17 +18,17 @@ Among them, the impacts of error bounds and distance metrics on messages, errors
 
 \subsection{Experimental setting}
 
-\stitle{Real-life Trajectory Datasets}. We use three reallife datasets ServiceCar, GeoLife and Mopsi shown in Table \ref{tab:datasets} to test our solutions.
+\stitle{Real-life Trajectory Datasets}. We use three reallife datasets shown in Table \ref{tab:datasets} to test our solutions.
 
 \vspace{0.5ex}
-\ni \emph{(1) Service car trajectory data} (\sercar) is the GPS trajectories collected by a Chinese car rental company during Apr. 2015 to Nov. 2015. The sampling rate was one point per $3$--$5$ seconds, and
+\ni \emph{(1) Service car trajectory data} (\sercar~\cite{Lin:Cised}) is the GPS trajectories collected by a Chinese car rental company during Apr. 2015 to Nov. 2015. The sampling rate was one point per $3$--$5$ seconds, and
 each trajectory has around $114.1K$ points.
 
 \vspace{0.5ex}
-\ni \emph{(2) GeoLife trajectory data} (\geolife) is the GPS trajectories collected in GeoLife project by 182 users in a period from Apr. 2007 to Oct. 2011. These trajectories have a variety of sampling rates, among which 91\% are logged in each 1-5 seconds per point. %or each 5-10 meters
+\ni \emph{(2) GeoLife trajectory data} (\geolife~\cite{Web:GeoLife}) is the GPS trajectories collected in GeoLife project by 182 users in a period from Apr. 2007 to Oct. 2011. These trajectories have a variety of sampling rates, among which 91\% are logged in each 1-5 seconds per point. %or each 5-10 meters
 
 \vspace{0.5ex}
-\ni \emph{(3) Mopsi trajectory data} (\mopsi) is the GPS trajectories collected in Mopsi project by 51 users in a period from 2008 to 2014. Most routes are in Joensuu region, Finland.
+\ni \emph{(3) Mopsi trajectory data} (\mopsi~\cite{Web:Mopsi}) is the GPS trajectories collected in Mopsi project by 51 users in a period from 2008 to 2014. Routes exist on every continent. Most routes are in Joensuu region, Finland.
 The sampling rate was one point per $2$ seconds, and each trajectory has around $153.9K$ points.
 
 \eat{
@@ -43,11 +43,11 @@ The sampling rate was one point per $2$ seconds, and each trajectory has around 
 			\hline
 			\bf{ Data Sets}& \bf{Number\ of Trajectories}     &\bf {Sampling Rates\ (s)}   &\bf{Points Per Trajectory\ (K)}    &\bf {Total points} \\
 			\hline
-			\sercar	&1,000	    &3-5	    &$\sim114.0$   &114M\\
+			\sercar~\cite{Lin:Cised}	&1,000	    &3-5	    &$\sim114.0$   &114M\\
 			\hline
-			\geolife &182	    &1-5	    &$\sim131.4$   &24.2M\\
+			\geolife~\cite{Web:GeoLife} &182	    &1-5	    &$\sim131.4$   &24.2M\\
 			\hline
-			\mopsi &51	    	&2	    &$\sim153.9$     &7.9M\\
+			\mopsi~\cite{Web:Mopsi} &51	    	&2	    &$\sim153.9$     &7.9M\\
 			\hline
 		\end{tabular}
 		\label{tab:datasets}
@@ -64,7 +64,7 @@ The sampling rate was one point per $2$ seconds, and each trajectory has around 
 	%\scriptsize
 	\begin{tabular}{|l|c|c|r|}
 		\hline
-		\bf{ Properties of Data Sets} & \sercar      &\geolife   &\mopsi \\
+		\bf{ Properties of Data Sets} & \sercar~\cite{Lin:Cised}      &\geolife~\cite{Web:GeoLife}   &\mopsi~\cite{Web:Mopsi} \\
 		\hline
 		{Number\ of Trajectories}	&1,000	    &182	    & 51  \\
 		\hline
@@ -76,12 +76,12 @@ The sampling rate was one point per $2$ seconds, and each trajectory has around 
 		\hline
 	\end{tabular}
 	\label{tab:datasets}
-	\vspace{-2ex}
+	\vspace{-1ex}
 \end{table}
 
 
 \stitle{Algorithms and implementation}.
-We implement five tracking algorithms, \ie our \citt, \sitt and \bitt, \ldrh \cite{Trajcevski:LDRH} (the first and the most efficient trajectory tracking algorithm) and \grts~\cite{Lange:GRTS,Lange:Tracking} (the most effective tracking algorithm).
+We implement five tracking algorithms, \ie our \citt, \sitt and \bitt, \ldrh \cite{Trajcevski:LDRH} (\emph{the first and the most efficient trajectory tracking algorithm}) and \grts~\cite{Lange:GRTS,Lange:Tracking} (\emph{the most effective tracking algorithm}).
 All algorithms were implemented with Java.
 All tests were run on an {x64-based  PC with 8 Intel(R) Core(TM) i5-6500 CPU @ 3.20GHz and 8GB of memory.
 	%, and each test was repeated over 3 times and the average is reported here.
@@ -180,7 +180,7 @@ Following the main stream \cite{Trajcevski:LDRH, Lange:GRTS, Lange:Tracking, Lin
 	\vspace{-2ex}
 	\caption{\small Evaluation of message ratios: varying error bounds $\epsilon_{sed}$ and $\epsilon_{ped}$.}
 	\label{fig:total-message}
-	\vspace{-1ex}
+	\vspace{-2ex}
 \end{figure*}
 
 \eat{%%%%%%%%%%%%%%%%%%%%velocity messages
@@ -204,6 +204,7 @@ Following the main stream \cite{Trajcevski:LDRH, Lange:GRTS, Lange:Tracking, Lin
 %%%%%%%%%%%% messages
 This section test the impacts of \ped and \sed (\ie the shapes of finite beams) on algorithm \bitt. We varied error bounds $\epsilon_{sed}$ and $\epsilon_{ped}$ from $10$ meters to $200$ meters satisfying $\epsilon_{sed} \ge \epsilon_{ped}$ on the entire three datasets, respectively. The results are reported in Figures~\ref{fig:bitt-compression-ratio}, \ref{fig:bitt-total-message}, \ref{fig:bitt-sed-error} and \ref{fig:bitt-ped-error}.
 
+
 %\stitle{Message and compression ratios}. Figures~\ref{fig:bitt-total-message} and \ref{fig:bitt-compression-ratio} tell 
 
 \ni (1) Both message and compression ratios decrease with the increase of $\epsilon_{sed}$ and $\epsilon_{ped}$, respectively. It is clear that when the tracking area becomes larger, \bitt is more tolerant of the distance deviation of a moving object, hence, fewer messages are transmitted and fewer data points are saved.
@@ -224,9 +225,9 @@ Otherwise, \bitt has the number of \emph{position-velocity-messages} between \ci
 
 
 \subsubsection{Comparing algorithms \bitt, \sitt and \citt with \ldrh and \grts.}
-This section compares our algorithms \citt, \sitt and \bitt with algorithms \ldrh and \grts.
-We varied the error bound (either $\epsilon_{sed}$ or $\epsilon_{ped}$) of \citt, \sitt, \ldrh and \grts from $10$ meters to $200$ meters on the entire three datasets, respectively. 
-{For \bitt, its performance depends on the shape of the finite beam, \ie given the same area, it varies \wrt the ratio between $\epsilon_{ped}$ and $\epsilon_{sed}$. {Without losing generality}, we set its $\epsilon_{ped}$ to {$0.5$} times the $\epsilon_{ped}$ of \sitt and its $\epsilon_{sed}$ to {$1.6$} times the $\epsilon_{sed}$ of \citt, \grts and \ldrh, such that \emph{the area of the finite beam of algorithm \bitt is $3.147\times\epsilon_{sed}^2$, which is approximate to $3.142\times\epsilon_{sed}^2$, the area of the circular tracking region of algorithms \ldrh, \grts and \citt}.
+This section compares our algorithms \citt, \sitt and \bitt with \ldrh and \grts.
+We varied the error bound (either $\epsilon_{sed}$ or $\epsilon_{ped}$) of algorithms \citt, \sitt, \ldrh and \grts from $10$ meters to $200$ meters on the entire datasets, respectively. 
+{For \bitt, its performance depends on the shape of the finite beam, \ie given the same area, it varies with respect to $\frac{\epsilon_{ped}}{\epsilon_{sed}}$. {Without losing generality}, we set its $\epsilon_{ped}$ to {$0.5$} times the $\epsilon_{ped}$ of \sitt and its $\epsilon_{sed}$ to {$1.6$} times the $\epsilon_{sed}$ of \citt, \grts and \ldrh, such that \emph{the area of the finite beam of algorithm \bitt is $3.147\times\epsilon_{sed}^2$, which is approximate to $3.142\times\epsilon_{sed}^2$, the area of disc of algorithms \ldrh, \grts and \citt}.
 %~\wrt the given $\epsilon_{sed}$.}
 %
 The results are reported in Figures~\ref{fig:compression-ratio}, \ref{fig:total-message}, \ref{fig:sed-error}, \ref{fig:ped-error} and \ref{fig:running-time}.
@@ -262,7 +263,7 @@ The results are reported in Figures~\ref{fig:compression-ratio}, \ref{fig:total-
 	\vspace{-2ex}
 	\caption{\small Evaluation of running time: varying error bounds $\epsilon_{sed}$ and $\epsilon_{ped}$.}
 	\label{fig:running-time}
-	\vspace{-1ex}
+	\vspace{-2ex}
 \end{figure*}
 
 
@@ -355,10 +356,9 @@ of \ldrh on datasets (\mopsi, \sercar, \geolife), respectively.
 %%%%%%%%%%%%%%%%% running time
 %In this part of experiments, we compare the running time of our algorithms \citt, \sitt and \bitt with \ldrh and \grts.
 %The results are reported in Figure~\ref{fig:running-time}. 
-\stitle{Running time.} We finally report and analyze the running time.
-Since the running time of \grts is hundreds of times slower than other algorithms, it is not shown in Figure~\ref{fig:running-time}.
+\stitle{Running time.} We finally report and analyze the running time. The results are shown in Figure~\ref{fig:running-time} (since \emph{the running time of \grts is hundreds of times slower than other algorithms}, it is not shown).
 
-\ni (1) The error bound $\epsilon$ has few impacts on running time of \citt, \sitt, \bitt and \ldrh.
+\ni (1) The error bound $\epsilon$ has few impacts on running time of algorithms \citt, \sitt, \bitt and \ldrh.
 
 \ni (2) The running time of \bitt is approximately the sum of \citt and \sitt, because it combines the logic of \citt and \sitt.
 
@@ -372,8 +372,8 @@ of \ldrh on datasets (\mopsi, \sercar, \geolife), respectively.
 \subsubsection{Summary.} % and discuss
 From these tests we find the followings.
 
-\sstab\emph{(1) Compression ratios}. The optimal \sitt algorithm has the best compression ratios among all the algorithms. Algorithm \bitt and \citt are comparable with \grts.
-They are all better than \ldrh.
+\sstab\emph{(1) Compression ratios}. Algorithm \sitt using \ped has the best compression ratios among all the algorithms at the price of unbound \sed errors. Algorithms \bitt and \citt are comparable with \grts.
+They are all obviously better than \ldrh.
 
 \sstab\emph{(2) Message ratios}. The message numbers from the largest to the smallest are \ldrh, \grts, \citt, \bitt and \sitt.
 
