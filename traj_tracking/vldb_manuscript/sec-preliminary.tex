@@ -155,10 +155,10 @@ By this way, though the MOD server receives less position information about a mo
 
 \begin{figure}[tb!]
 	\centering
-	\includegraphics[scale=0.9]{figures/Fig-LDR.png}
+	\includegraphics[scale=0.93]{figures/Fig-LDR.png}
 	\vspace{-1ex}
 	\caption{\small A running example of position tracking by \ldr. }
-	\vspace{-2ex}
+	\vspace{-1ex}
 	\label{fig:ldr}
 \end{figure}
 
@@ -177,9 +177,10 @@ Initially, point $P_0$ is set as $P_s$ and $\vec{v}$ is set to $\vec{v}_0$. Then
 
 
 \subsection{Trajectory tracking in a floating disc}
-\textit{Trajectory tracking} aims to implement both position tracking and trajectory simplification in one routine \cite{Lange:Tracking}. Currently, the one-pass trajectory tracking algorithm is a variation of \ldr, originally developed in \cite{Trajcevski:LDRH} and formally named as linear dead reckoning with half $\epsilon$ (\ldrh) in \cite{Lange:Tracking}.
+\textit{Trajectory tracking} aims to implement both position tracking and trajectory simplification in one routine \cite{Lange:Tracking}. 
+The first trajectory tracking algorithm is a variation of \ldr, originally developed in \cite{Trajcevski:LDRH} and formally named as linear dead reckoning with half $\epsilon$ (\ldrh) in \cite{Lange:Tracking}, which indeed uses a half $\epsilon$ in distance checking.
 %
-Authors in \cite{Trajcevski:LDRH} proved that \ldr with some small variations is also a line simplification algorithm. Thus, \ldrh supports both position tracking and trajectory simplification, meaning it is a trajectory tracking algorithm.
+%Authors in \cite{Trajcevski:LDRH} proved that \ldr with some small variations, using a half $\epsilon$ in distance checking, is also a line simplification algorithm. Thus, \ldrh supports both position tracking and trajectory simplification, meaning it is a trajectory tracking algorithm.
 
 Given an error bound $\epsilon$, \ldrh runs the same routine as \ldr except that (1) it uses half $\epsilon$ as the threshold in distance checking; (2) when the current point $P_k$ has a \sed larger than $\epsilon/2$ to its expected location (synchronous data point), it sends the preview point $P_{k-1}$ and a new $\vv{v}$ to the MOD server and continues trajectory tracking taking $P_{k-1}$ as the new start point. \ldrh is simple and efficient, having a linear time and a constant space. However, it has a poor effectiveness in terms of compression ratio, as the half $\epsilon$ is conservative, and more important, the algorithm is sensitive to the initial velocity which is set at the updating time but it is hard to be appropriate when the process goes on.
 
